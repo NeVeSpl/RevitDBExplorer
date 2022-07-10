@@ -66,6 +66,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Domain\DataModel\MemberAccessors\Curve\Curve_GetEndPoint.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\Element\Element_GetDependentElements.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\Element\Element_GetPhaseStatus.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\IHaveFactoryMethod.cs" />
