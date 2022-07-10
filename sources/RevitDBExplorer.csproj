@@ -1,0 +1,141 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{BB69E885-0617-4556-A983-FD783C6669BA}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>RevitDBExplorer</RootNamespace>
+    <AssemblyName>RevitDBExplorer</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+    <LangVersion>10.0</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="DocXml, Version=3.4.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\LoxSmoke.DocXml.3.4.5\lib\netstandard2.0\DocXml.dll</HintPath>
+    </Reference>
+    <Reference Include="RevitAPI">
+      <HintPath>..\binaries\revit\2023\RevitAPI.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="RevitAPIUI">
+      <HintPath>..\binaries\revit\2023\RevitAPIUI.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Domain\DataModel\MemberAccessors\IHaveFactoryMethod.cs" />
+    <Compile Include="Domain\DataModel\MemberAccessors\IMemberAccessor.cs" />
+    <Compile Include="Domain\DataModel\SnoopableMember.cs" />
+    <Compile Include="Domain\DataModel\MemberAccessors\MemberAccessorFactory.cs" />
+    <Compile Include="Domain\DataModel\ValueTypes\Base\IHaveFactoryMethod.cs" />
+    <Compile Include="Domain\DataModel\ValueTypes\Base\IValueType.cs" />
+    <Compile Include="Domain\DataModel\ValueTypes\Base\ValueType.cs" />
+    <Compile Include="Domain\DataModel\ValueTypes\Base\ValueTypeFactory.cs" />
+    <Compile Include="Domain\DataModel\ValueTypes\BoolType.cs" />
+    <Compile Include="Domain\DataModel\ValueTypes\BoundingBoxXYZType.cs" />
+    <Compile Include="Domain\DataModel\ValueTypes\CategoryType.cs" />
+    <Compile Include="Domain\DataModel\ValueTypes\ColorType.cs" />
+    <Compile Include="Domain\DataModel\ValueTypes\DoubleType.cs" />
+    <Compile Include="Domain\DataModel\ValueTypes\ElementIdType.cs" />
+    <Compile Include="Domain\DataModel\ValueTypes\ElementType.cs" />
+    <Compile Include="Domain\DataModel\ValueTypes\EnumType.cs" />
+    <Compile Include="Domain\DataModel\ValueTypes\FamilyParameterType.cs" />
+    <Compile Include="Domain\DataModel\MemberAccessors\Element\Element_Geometry.cs" />
+    <Compile Include="Domain\DataModel\ValueTypes\GuidType.cs" />
+    <Compile Include="Domain\DataModel\ValueTypes\IntType.cs" />
+    <Compile Include="Domain\DataModel\ValueTypes\ObjectType.cs" />
+    <Compile Include="Domain\DataModel\ValueTypes\ParameterType.cs" />
+    <Compile Include="Domain\DataModel\ValueTypes\UVType.cs" />
+    <Compile Include="Domain\RevitDocumentationReader.cs" />
+    <Compile Include="Extensions\System\IntPtrExtensions.cs" />
+    <Compile Include="Extensions\System\Reflection\PropertyInfoExtensions.cs" />
+    <Compile Include="Extensions\System\Runtime.CompilerServices\IsExternalInit .cs" />
+    <Compile Include="ViewModels\SnoopableCategoryTreeVM.cs" />
+    <Compile Include="ViewModels\SnoopableObjectTreeVM.cs" />
+    <Compile Include="ViewModels\TreeViewItemVM.cs" />
+    <Compile Include="WPF\Converters\PercentageOfValueConverter.cs" />
+    <Compile Include="Domain\DataModel\ValueTypes\ParameterMapType.cs" />
+    <Compile Include="Domain\DataModel\ValueTypes\ParameterSetType.cs" />
+    <Compile Include="Domain\DataModel\ValueTypes\StringType.cs" />
+    <Compile Include="Domain\DataModel\ValueTypes\XYZType.cs" />
+    <Compile Include="Domain\ExternalExecutor.cs" />
+    <Compile Include="Domain\Labels.cs" />
+    <Compile Include="Domain\Selectors.cs" />
+    <Compile Include="Extensions\System\ObjectExtensions.cs" />
+    <Compile Include="Extensions\System\TypeExtensions.cs" />
+    <Compile Include="WPF\BaseViewModel.cs" />
+    <None Include="packages.config" />
+    <Page Include="MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="Application.cs" />
+    <Compile Include="Command.cs" />
+    <Compile Include="Domain\DataModel\MemberAccessors\MemberAccessorByRef.cs" />
+    <Compile Include="Domain\DataModel\SnoopableObject.cs" />
+    <Compile Include="MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Page Include="Resources\VectorGraphic.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\RDBE.Icon.32.b.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\RDBE.ico" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

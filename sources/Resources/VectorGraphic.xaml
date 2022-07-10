@@ -1,0 +1,81 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- All vector graphics are under following license:
+         https://github.com/Templarian/MaterialDesign/blob/master/LICENSE
+    -->
+
+
+    <StreamGeometry x:Key="vWrench" >M22.7,19L13.6,9.9C14.5,7.6 14,4.9 12.1,3C10.1,1 7.1,0.6 4.7,1.7L9,6L6,9L1.6,4.7C0.4,7.1 0.9,10.1 2.9,12.1C4.8,14 7.5,14.5 9.8,13.6L18.9,22.7C19.3,23.1 19.9,23.1 20.3,22.7L22.6,20.4C23.1,20 23.1,19.3 22.7,19Z</StreamGeometry>
+    <StreamGeometry x:Key="vCubeOutline" >M21,16.5C21,16.88 20.79,17.21 20.47,17.38L12.57,21.82C12.41,21.94 12.21,22 12,22C11.79,22 11.59,21.94 11.43,21.82L3.53,17.38C3.21,17.21 3,16.88 3,16.5V7.5C3,7.12 3.21,6.79 3.53,6.62L11.43,2.18C11.59,2.06 11.79,2 12,2C12.21,2 12.41,2.06 12.57,2.18L20.47,6.62C20.79,6.79 21,7.12 21,7.5V16.5M12,4.15L6.04,7.5L12,10.85L17.96,7.5L12,4.15M5,15.91L11,19.29V12.58L5,9.21V15.91M19,15.91V9.21L13,12.58V19.29L19,15.91Z</StreamGeometry>
+    <StreamGeometry x:Key="vSelectionSearch" >M19.27 18.9C19.7 18.21 19.95 17.38 19.95 16.5C19.95 14 17.95 12 15.46 12S10.96 14 10.96 16.5 12.96 21 15.46 21C16.33 21 17.15 20.75 17.84 20.32L20.96 23.39L22.35 22L19.27 18.9M15.46 19C14.07 19 12.96 17.88 12.96 16.5S14.07 14 15.46 14 17.95 15.12 17.95 16.5 16.84 19 15.46 19M22 14H21.45C21.12 13.19 20.62 12.47 20 11.86V10H22V14M20 4H17V2H20C21.11 2 22 2.9 22 4V7H20V4M14 4H10V2H14V4M4 2H7V4H4V7H2V4C2 2.89 2.9 2 4 2M12 22H10V20C10.5 20.82 11.2 21.5 12 22M4 20H7V22H4C2.9 22 2 21.11 2 20V17H4V20M4 14H2V10H4V14Z</StreamGeometry>
+    <StreamGeometry x:Key="vDatabase">M12,3C7.58,3 4,4.79 4,7C4,9.21 7.58,11 12,11C16.42,11 20,9.21 20,7C20,4.79 16.42,3 12,3M4,9V12C4,14.21 7.58,16 12,16C16.42,16 20,14.21 20,12V9C20,11.21 16.42,13 12,13C7.58,13 4,11.21 4,9M4,14V17C4,19.21 7.58,21 12,21C16.42,21 20,19.21 20,17V14C20,16.21 16.42,18 12,18C7.58,18 4,16.21 4,14Z</StreamGeometry>
+    <StreamGeometry x:Key="vBorderAllVariant">M3,21V3H21V21H3M5,5V19H19V5H5Z</StreamGeometry>
+    <StreamGeometry x:Key="vBorderTopVariant" >M19,21H21V19H19M15,21H17V19H15M19,17H21V15H19M3,5H21V3H3M19,13H21V11H19M19,9H21V7H19M3,9H5V7H3M3,13H5V11H3M3,21H5V19H3M3,17H5V15H3M11,21H13V19H11M7,21H9V19H7V21Z</StreamGeometry>
+    <StreamGeometry x:Key="vLinkVariant">M10.59,13.41C11,13.8 11,14.44 10.59,14.83C10.2,15.22 9.56,15.22 9.17,14.83C7.22,12.88 7.22,9.71 9.17,7.76V7.76L12.71,4.22C14.66,2.27 17.83,2.27 19.78,4.22C21.73,6.17 21.73,9.34 19.78,11.29L18.29,12.78C18.3,11.96 18.17,11.14 17.89,10.36L18.36,9.88C19.54,8.71 19.54,6.81 18.36,5.64C17.19,4.46 15.29,4.46 14.12,5.64L10.59,9.17C9.41,10.34 9.41,12.24 10.59,13.41M13.41,9.17C13.8,8.78 14.44,8.78 14.83,9.17C16.78,11.12 16.78,14.29 14.83,16.24V16.24L11.29,19.78C9.34,21.73 6.17,21.73 4.22,19.78C2.27,17.83 2.27,14.66 4.22,12.71L5.71,11.22C5.7,12.04 5.83,12.86 6.11,13.65L5.64,14.12C4.46,15.29 4.46,17.19 5.64,18.36C6.81,19.54 8.71,19.54 9.88,18.36L13.41,14.83C14.59,13.66 14.59,11.76 13.41,10.59C13,10.2 13,9.56 13.41,9.17Z</StreamGeometry>
+    <StreamGeometry x:Key="vGraph" >M19.5 17C19.37 17 19.24 17 19.11 17.04L17.5 13.79C17.95 13.34 18.25 12.71 18.25 12C18.25 10.62 17.13 9.5 15.75 9.5C15.62 9.5 15.5 9.5 15.36 9.54L13.73 6.29C14.21 5.84 14.5 5.21 14.5 4.5C14.5 3.12 13.38 2 12 2S9.5 3.12 9.5 4.5C9.5 5.21 9.79 5.84 10.26 6.29L8.64 9.54C8.5 9.5 8.38 9.5 8.25 9.5C6.87 9.5 5.75 10.62 5.75 12C5.75 12.71 6.05 13.34 6.5 13.79L4.89 17.04C4.76 17 4.63 17 4.5 17C3.12 17 2 18.12 2 19.5C2 20.88 3.12 22 4.5 22S7 20.88 7 19.5C7 18.8 6.71 18.16 6.24 17.71L7.86 14.46C8 14.5 8.12 14.5 8.25 14.5C8.38 14.5 8.5 14.5 8.64 14.46L10.27 17.71C9.8 18.16 9.5 18.8 9.5 19.5C9.5 20.88 10.62 22 12 22S14.5 20.88 14.5 19.5C14.5 18.12 13.38 17 12 17C11.87 17 11.74 17 11.61 17.04L10 13.79C10.46 13.34 10.75 12.71 10.75 12S10.46 10.66 10 10.21L11.61 6.96C11.74 7 11.87 7 12 7S12.26 7 12.39 6.96L14 10.21C13.55 10.66 13.25 11.3 13.25 12C13.25 13.38 14.37 14.5 15.75 14.5C15.88 14.5 16 14.5 16.14 14.46L17.77 17.71C17.3 18.16 17 18.8 17 19.5C17 20.88 18.12 22 19.5 22S22 20.88 22 19.5C22 18.12 20.88 17 19.5 17Z</StreamGeometry>
+    <StreamGeometry x:Key="vPanoramaOutline" >M21 4H3C1.9 4 1 4.9 1 6V18C1 19.1 1.9 20 3 20H21C22.1 20 23 19.1 23 18V6C23 4.9 22.1 4 21 4M21 18H3V6H21V18M14.5 11L11 15.5L8.5 12.5L5 17H19L14.5 11Z</StreamGeometry>
+    <StreamGeometry x:Key="vFileDocumentOutline" >M6,2A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2H6M6,4H13V9H18V20H6V4M8,12V14H16V12H8M8,16V18H13V16H8Z</StreamGeometry>
+    <StreamGeometry x:Key="vApplication" >M21 2H3C1.9 2 1 2.9 1 4V20C1 21.1 1.9 22 3 22H21C22.1 22 23 21.1 23 20V4C23 2.9 22.1 2 21 2M21 7H3V4H21V7Z</StreamGeometry>
+
+    <Style x:Key="IconProperty" TargetType="Path">
+        <Setter Property="Data" Value="{StaticResource vWrench}"/>
+        <Setter Property="Fill" Value="black"/>
+        <Setter Property="Stretch" Value="Uniform"/>
+        <Setter Property="Width" Value="10"/>
+    </Style>
+
+     <Style x:Key="IconMethod" TargetType="Path">
+        <Setter Property="Data" Value="{StaticResource vCubeOutline}"/>
+        <Setter Property="Fill" Value="black"/>
+        <Setter Property="Stretch" Value="Uniform"/>
+        <Setter Property="Width" Value="10"/>
+    </Style>
+
+    <Style x:Key="IconSelection" TargetType="Path">
+        <Setter Property="Data" Value="{StaticResource vSelectionSearch}"/>
+        <Setter Property="Fill" Value="black"/>
+        <Setter Property="Stretch" Value="Uniform"/>    
+    </Style>
+    <Style x:Key="IconDb" TargetType="Path">
+        <Setter Property="Data" Value="{StaticResource vDatabase}"/>
+        <Setter Property="Fill" Value="black"/>
+        <Setter Property="Stretch" Value="Uniform"/>
+    </Style>
+    <Style x:Key="IconPickFace" TargetType="Path">
+        <Setter Property="Data" Value="{StaticResource vBorderAllVariant}"/>
+        <Setter Property="Fill" Value="black"/>
+        <Setter Property="Stretch" Value="Uniform"/>
+    </Style>
+    <Style x:Key="IconPickEdge" TargetType="Path">
+        <Setter Property="Data" Value="{StaticResource vBorderTopVariant}"/>
+        <Setter Property="Fill" Value="black"/>
+        <Setter Property="Stretch" Value="Uniform"/>
+    </Style>
+    <Style x:Key="IconLinkedElement" TargetType="Path">
+        <Setter Property="Data" Value="{StaticResource vLinkVariant}"/>
+        <Setter Property="Fill" Value="black"/>
+        <Setter Property="Stretch" Value="Uniform"/>
+    </Style>
+    <Style x:Key="IconDependentElements" TargetType="Path">
+        <Setter Property="Data" Value="{StaticResource vGraph}"/>
+        <Setter Property="Fill" Value="black"/>
+        <Setter Property="Stretch" Value="Uniform"/>
+    </Style>
+    <Style x:Key="IconActiveView" TargetType="Path">
+        <Setter Property="Data" Value="{StaticResource vPanoramaOutline}"/>
+        <Setter Property="Fill" Value="black"/>
+        <Setter Property="Stretch" Value="Uniform"/>
+    </Style>
+    <Style x:Key="IconActiveDocument" TargetType="Path">
+        <Setter Property="Data" Value="{StaticResource vFileDocumentOutline}"/>
+        <Setter Property="Fill" Value="black"/>
+        <Setter Property="Stretch" Value="Uniform"/>
+    </Style>
+    <Style x:Key="IconApplication" TargetType="Path">
+        <Setter Property="Data" Value="{StaticResource vApplication}"/>
+        <Setter Property="Fill" Value="black"/>
+        <Setter Property="Stretch" Value="Uniform"/>
+    </Style>
+</ResourceDictionary>
+                    
