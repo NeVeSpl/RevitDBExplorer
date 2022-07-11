@@ -2,24 +2,21 @@
 using System.Linq;
 using Autodesk.Revit.DB;
 
+// (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
+
 namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
-    internal class Element_GetPhaseStatus : IMemberAccessor, IHaveFactoryMethod
+    internal class Element_GetPhaseStatus : MemberAccessorByType<Element>, IHaveFactoryMethod
     {
-        string IHaveFactoryMethod.TypeAndMemberName => "Element.GetPhaseStatus";
+        public override string MemberName => nameof(Element.GetPhaseStatus);
         IMemberAccessor IHaveFactoryMethod.Create() => new Element_GetPhaseStatus();
 
-        public ReadResult Read(Document document, object @object)
-        {
-            bool canBeSnooped = !document.Phases.IsEmpty;
-            return new ReadResult("[ElementOnPhaseStatus]", "ElementOnPhaseStatus", canBeSnooped);
-        }
 
-        public IEnumerable<SnoopableObject> Snooop(Document document, object @object)
+        protected override bool CanBeSnoooped(Document document, Element element) => !document.Phases.IsEmpty;
+        protected override string GetLabel(Document document, Element element) => "[ElementOnPhaseStatus]";
+        protected override IEnumerable<SnoopableObject> Snooop(Document document, Element element)
         {
-            var element = @object as Element;
-
-            var elementOnPhaseStatuses = document.Phases.OfType<Phase>().Select(x => new SnoopableObject(element.GetPhaseStatus(x.Id), document, x.Name));
+            var elementOnPhaseStatuses = document.Phases.OfType<Phase>().Select(x => new SnoopableObject(element.GetPhaseStatus(x.Id), document, $"Phase: {x.Name}"));
             return elementOnPhaseStatuses;
         }
     }

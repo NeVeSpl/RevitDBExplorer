@@ -84,7 +84,7 @@ namespace RevitDBExplorer.Domain.DataModel
         }
         public IEnumerable<SnoopableObject> Snooop(UIApplication app)
         {
-            return memberAccessor.Snooop(parent.Document, parent.Object);
+            return memberAccessor.Snoop(parent.Document, parent.Object);
         }
     }
 }

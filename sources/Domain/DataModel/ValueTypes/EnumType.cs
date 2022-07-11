@@ -10,11 +10,11 @@ namespace RevitDBExplorer.Domain.DataModel.ValueTypes
             return new EnumType();
         }
 
-        //public override string TypeName => $"{value?.GetType()?.Name}";
+        
         protected override bool CanBeSnoooped(Enum enumValue) => false;
         protected override string ToLabel(Enum enumValue)
         {
-            return $"{TypeName}.{enumValue}";
+            return $"{enumValue?.GetType()?.Name}.{enumValue}";
         }
     }
 }

@@ -9,7 +9,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
     internal interface IMemberAccessor
     {
         ReadResult Read(Document document, object @object);      
-        IEnumerable<SnoopableObject> Snooop(Document document, object @object);
+        IEnumerable<SnoopableObject> Snoop(Document document, object @object);
     }
 
     readonly ref struct ReadResult

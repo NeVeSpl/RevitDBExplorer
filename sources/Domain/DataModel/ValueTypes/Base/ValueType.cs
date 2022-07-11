@@ -20,7 +20,16 @@ namespace RevitDBExplorer.Domain.DataModel.ValueTypes.Base
 
 
         public Type Type => type;
-        public virtual string TypeName => value is not null ? $"{value?.GetType()?.Name}" : $"{Type.Name}";
+        public virtual string TypeName
+        {
+            get
+            {
+                var finalType = value?.GetType()?.Name ?? Type.Name;
+
+                return $"{Type.Name}"+ (finalType != Type.Name ? $"({finalType})" : "");
+            }
+        }
+
         public virtual IValueType SetValue(Document document, object value)
         {
             if (value == null)

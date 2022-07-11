@@ -36,7 +36,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
             value.SetValue(document, result);
             return new ReadResult(value.ValueAsString, value.TypeName, value.CanBeSnooped, null);
         }
-        public IEnumerable<SnoopableObject> Snooop(Document document, object @object)
+        public IEnumerable<SnoopableObject> Snoop(Document document, object @object)
         {
             return value.Snoop(document);
         }

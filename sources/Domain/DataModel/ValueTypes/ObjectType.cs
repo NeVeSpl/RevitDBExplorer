@@ -17,7 +17,7 @@ namespace RevitDBExplorer.Domain.DataModel.ValueTypes
         }
 
 
-        public override string TypeName => base.TypeName != "Object" ? $"[{base.TypeName}]" : $"[{type.Name}]";
+        public override string TypeName => base.TypeName != "Object" ? base.TypeName : $"Object({type.Name})";
         protected override bool CanBeSnoooped(object @object) => @object is not null;
         protected override string ToLabel(object @object)
         {

@@ -67,10 +67,22 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Domain\DataModel\MemberAccessors\Curve\Curve_GetEndPoint.cs" />
+    <Compile Include="Domain\DataModel\MemberAccessors\Document\Document_Close.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\Element\Element_GetDependentElements.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\Element\Element_GetPhaseStatus.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\IHaveFactoryMethod.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\IMemberAccessor.cs" />
+    <Compile Include="Domain\DataModel\MemberAccessors\MemberAccessorByType.cs" />
+    <Compile Include="Domain\DataModel\MemberAccessors\PlanViewRange\PlanViewRange_GetLevelId.cs" />
+    <Compile Include="Domain\DataModel\MemberAccessors\PlanViewRange\PlanViewRange_GetOffset.cs" />
+    <Compile Include="Domain\DataModel\MemberAccessors\PrintManager\PrintManager_SubmitPrint.cs" />
+    <Compile Include="Domain\DataModel\MemberAccessors\ScheduleDefinition\ScheduleDefinition_GetField.cs" />
+    <Compile Include="Domain\DataModel\MemberAccessors\TableData\TableData_GetSectionData.cs" />
+    <Compile Include="Domain\DataModel\MemberAccessors\ViewCropRegionShapeManager\ViewCropRegionShapeManager_GetSplitRegionOffset.cs" />
+    <Compile Include="Domain\DataModel\MemberAccessors\View\View_GetTemplateParameterIds.cs" />
+    <Compile Include="Domain\DataModel\MemberAccessors\View\View_GetNonControlledTemplateParameterIds.cs" />
+    <Compile Include="Domain\DataModel\MemberAccessors\View\View_GetFilterVisibility.cs" />
+    <Compile Include="Domain\DataModel\MemberAccessors\View\View_GetFilterOverrides.cs" />
     <Compile Include="Domain\DataModel\SnoopableMember.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\MemberAccessorFactory.cs" />
     <Compile Include="Domain\DataModel\ValueTypes\Base\IHaveFactoryMethod.cs" />
@@ -84,6 +96,7 @@
     <Compile Include="Domain\DataModel\ValueTypes\DoubleType.cs" />
     <Compile Include="Domain\DataModel\ValueTypes\ElementIdType.cs" />
     <Compile Include="Domain\DataModel\ValueTypes\ElementType.cs" />
+    <Compile Include="Domain\DataModel\ValueTypes\IEnumerableType.cs" />
     <Compile Include="Domain\DataModel\ValueTypes\EnumType.cs" />
     <Compile Include="Domain\DataModel\ValueTypes\FamilyParameterType.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\Element\Element_Geometry.cs" />
@@ -91,6 +104,7 @@
     <Compile Include="Domain\DataModel\ValueTypes\IntType.cs" />
     <Compile Include="Domain\DataModel\ValueTypes\ObjectType.cs" />
     <Compile Include="Domain\DataModel\ValueTypes\ParameterType.cs" />
+    <Compile Include="Domain\DataModel\ValueTypes\ScheduleFieldType.cs" />
     <Compile Include="Domain\DataModel\ValueTypes\UVType.cs" />
     <Compile Include="Domain\RevitDocumentationReader.cs" />
     <Compile Include="Extensions\System\IntPtrExtensions.cs" />

@@ -44,7 +44,7 @@ namespace RevitDBExplorer.Domain.DataModel
             this.name = name ?? Labels.GetNameForObject(@object?.GetType(), @object, document);
             this.typeName = @object?.GetType().Name;
 
-            if (@object is IEnumerable enumerable)
+            if (@object is IEnumerable enumerable && @object is not string)
             {
                 items = new List<SnoopableObject>();
                 foreach (var item in enumerable)

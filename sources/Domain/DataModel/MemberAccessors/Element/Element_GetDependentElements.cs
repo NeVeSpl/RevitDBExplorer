@@ -2,23 +2,22 @@
 using System.Linq;
 using Autodesk.Revit.DB;
 
+// (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
+
 namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
-    internal class Element_GetDependentElements : IMemberAccessor, IHaveFactoryMethod
+    internal class Element_GetDependentElements : MemberAccessorByType<Element>, IHaveFactoryMethod
     {
-        string IHaveFactoryMethod.TypeAndMemberName => "Element.GetDependentElements";
+        public override string MemberName => nameof(Element.GetDependentElements);
         IMemberAccessor IHaveFactoryMethod.Create() => new Element_GetDependentElements();
 
-        public ReadResult Read(Document document, object @object)
-        {
-            return new ReadResult("[Element]", "IList<ElementId>", true);
-        }
 
-        public IEnumerable<SnoopableObject> Snooop(Document document, object @object)
+        protected override bool CanBeSnoooped(Document document, Element element) => true;
+        protected override string GetLabel(Document document, Element element) => "[Element]";
+        protected override IEnumerable<SnoopableObject> Snooop(Document document, Element element)
         {
-            var element = @object as Element;
             var ids = element.GetDependentElements(null);
-            if  (ids.Any())
+            if (ids.Any())
             {
                 var elements = new FilteredElementCollector(document, ids).WhereElementIsNotElementType().ToElements();
                 return elements.Select(x => new SnoopableObject(x, document));
