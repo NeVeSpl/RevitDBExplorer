@@ -21,9 +21,9 @@ namespace RevitDBExplorer.Domain
                 {
                     ex = ex.InnerException;
                 }
-            }
+            }            
 
-            return ex.InnerException == null ? $"{ex.Message}" : $"{ex.Message} ({ex.InnerException.Message})";
+            return String.IsNullOrEmpty(ex.InnerException?.Message) ? $"{ex.Message}" : $"{ex.Message} ({ex.InnerException.Message})";
         }
     }
 }

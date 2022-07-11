@@ -13,6 +13,7 @@ namespace RevitDBExplorer.Domain.DataModel.ValueTypes
         protected override bool CanBeSnoooped(string stringValue) => false;
         protected override string ToLabel(string stringValue)
         {
+            if (stringValue == "") return "<empty>";
             return stringValue;
         }
     }

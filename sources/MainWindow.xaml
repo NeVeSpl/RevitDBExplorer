@@ -123,7 +123,7 @@
                         <Style.Resources>
                             <VisualBrush x:Key="CueBannerBrush" AlignmentX="Left" AlignmentY="Center" Stretch="None">
                                 <VisualBrush.Visual>
-                                    <Label Content="Filter by property/method name" Foreground="Gray" />
+                                    <Label Content="Filter list by property/method name" Foreground="Gray" />
                                 </VisualBrush.Visual>
                             </VisualBrush>
                         </Style.Resources>
