@@ -24,6 +24,7 @@ namespace RevitDBExplorer.Domain.DataModel.ValueTypes.Base
             new ColorType(),
 
             //
+            new BindingMapType(),
             new ScheduleFieldType(),
             new ParameterType(),
             new FamilyParameterType(),

@@ -30,18 +30,8 @@ namespace RevitDBExplorer.Domain.DataModel.ValueTypes
         {
             var type = enumerable.GetType();
             var typeName = type.Name;
-            Type firstItemType = null;
-            bool isEnum = false;
 
-            foreach (var item in enumerable)
-            {
-                firstItemType = item.GetType();
-                isEnum = typeof(IEnumerable).IsAssignableFrom(firstItemType) && item is not string;
-
-                break;
-            }
-
-            if (!isEnum)
+            if (type.FullName.StartsWith("System"))
             {
                 typeName = "";
             }
@@ -52,9 +42,10 @@ namespace RevitDBExplorer.Domain.DataModel.ValueTypes
                 return $"{typeName}[{args.First().Name}]";
             }
 
-            if (firstItemType != null)          
+            foreach (var item in enumerable)
             {
-                return $"{typeName}[{firstItemType.Name}]";                
+                var firstItemType = item.GetType();
+                return $"{typeName}[{firstItemType.Name}]";               
             }
 
             return $"{typeName}[]";
@@ -67,7 +58,7 @@ namespace RevitDBExplorer.Domain.DataModel.ValueTypes
             {
                 if (item is ElementId id)
                 {
-                    var element = document.GetElement(id);
+                    var element = document.GetElementOrCategory(id);
                     if (element != null)
                     {
                         yield return new SnoopableObject(element, document);

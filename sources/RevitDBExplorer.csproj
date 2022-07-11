@@ -89,6 +89,7 @@
     <Compile Include="Domain\DataModel\ValueTypes\Base\IValueType.cs" />
     <Compile Include="Domain\DataModel\ValueTypes\Base\ValueType.cs" />
     <Compile Include="Domain\DataModel\ValueTypes\Base\ValueTypeFactory.cs" />
+    <Compile Include="Domain\DataModel\ValueTypes\BindingMapType.cs" />
     <Compile Include="Domain\DataModel\ValueTypes\BoolType.cs" />
     <Compile Include="Domain\DataModel\ValueTypes\BoundingBoxXYZType.cs" />
     <Compile Include="Domain\DataModel\ValueTypes\CategoryType.cs" />
@@ -107,6 +108,7 @@
     <Compile Include="Domain\DataModel\ValueTypes\ScheduleFieldType.cs" />
     <Compile Include="Domain\DataModel\ValueTypes\UVType.cs" />
     <Compile Include="Domain\RevitDocumentationReader.cs" />
+    <Compile Include="Extensions\Autodesk.Revit.DB\DocumentExtensions.cs" />
     <Compile Include="Extensions\System\IntPtrExtensions.cs" />
     <Compile Include="Extensions\System\Reflection\PropertyInfoExtensions.cs" />
     <Compile Include="Extensions\System\Runtime.CompilerServices\IsExternalInit .cs" />

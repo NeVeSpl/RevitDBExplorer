@@ -13,6 +13,7 @@ namespace RevitDBExplorer.Domain.DataModel.ValueTypes
         }
 
 
+        private bool canBeSnoooped;
         private Element element;
 
         public override IValueType SetValue(Document document, object value)
@@ -20,11 +21,13 @@ namespace RevitDBExplorer.Domain.DataModel.ValueTypes
             base.SetValue(document, value);
             if (value is ElementId id)
             {
-                element = document.GetElement(id);
+                var elementOrCat = document.GetElementOrCategory(id);
+                canBeSnoooped = elementOrCat != null;
+                element = elementOrCat as Element;
             }
             return this;
         }
-        protected override bool CanBeSnoooped(ElementId id) => element is not null;
+        protected override bool CanBeSnoooped(ElementId id) => canBeSnoooped;
         protected override string ToLabel(ElementId id)
         {
             if (id == ElementId.InvalidElementId) return ElementId.InvalidElementId.ToString();
@@ -40,7 +43,7 @@ namespace RevitDBExplorer.Domain.DataModel.ValueTypes
         }
         protected override IEnumerable<SnoopableObject> Snooop(Document document, ElementId id)
         {
-            var freshElement = document.GetElement(id) ?? element;
+            var freshElement = document.GetElementOrCategory(id);
             if (freshElement != null)
             {
                 yield return new SnoopableObject(freshElement, document);

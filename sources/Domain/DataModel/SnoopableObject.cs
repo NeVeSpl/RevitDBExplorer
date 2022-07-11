@@ -37,19 +37,26 @@ namespace RevitDBExplorer.Domain.DataModel
         public IEnumerable<SnoopableObject> Items => items;
 
 
-        public SnoopableObject(object @object, Document document, string name = null)
+        public SnoopableObject(object @object, Document document, string name = null, IEnumerable<SnoopableObject> subObjects = null)
         {
             this.@object = @object;
             this.document = document;
             this.name = name ?? Labels.GetNameForObject(@object?.GetType(), @object, document);
             this.typeName = @object?.GetType().Name;
 
-            if (@object is IEnumerable enumerable && @object is not string)
+            if (subObjects != null)
             {
-                items = new List<SnoopableObject>();
-                foreach (var item in enumerable)
+                items = new List<SnoopableObject>(subObjects) ;
+            }
+            else
+            {
+                if (@object is IEnumerable enumerable && @object is not string)
                 {
-                    items.Add(new SnoopableObject(item, document));
+                    items = new List<SnoopableObject>();
+                    foreach (var item in enumerable)
+                    {
+                        items.Add(new SnoopableObject(item, document));
+                    }
                 }
             }
         }
