@@ -9,6 +9,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
     internal class Element_GetPhaseStatus : MemberAccessorByType<Element>, IHaveFactoryMethod
     {
         public override string MemberName => nameof(Element.GetPhaseStatus);
+        public override string MemberParams => typeof(ElementId).Name;
         IMemberAccessor IHaveFactoryMethod.Create() => new Element_GetPhaseStatus();
 
 

@@ -9,6 +9,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
     internal class ViewCropRegionShapeManager_GetSplitRegionOffset : MemberAccessorByType<ViewCropRegionShapeManager>, IHaveFactoryMethod
     {
         public override string MemberName => nameof(ViewCropRegionShapeManager.GetSplitRegionOffset);
+        public override string MemberParams => typeof(int).Name;
         IMemberAccessor IHaveFactoryMethod.Create() => new ViewCropRegionShapeManager_GetSplitRegionOffset();
 
 

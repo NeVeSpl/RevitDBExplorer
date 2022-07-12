@@ -9,6 +9,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
     internal class ScheduleDefinition_GetField : MemberAccessorByType<ScheduleDefinition>, IHaveFactoryMethod
     {
         public override string MemberName => nameof(ScheduleDefinition.GetField);
+        public override string MemberParams => typeof(int).Name;
         IMemberAccessor IHaveFactoryMethod.Create() => new ScheduleDefinition_GetField();
 
 

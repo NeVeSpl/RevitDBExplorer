@@ -10,6 +10,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
     internal class View_GetFilterOverrides : MemberAccessorByType<View>, IHaveFactoryMethod
     {
         public override string MemberName => nameof(View.GetFilterOverrides);
+        public override string MemberParams => typeof(ElementId).Name;
         IMemberAccessor IHaveFactoryMethod.Create() => new View_GetFilterOverrides();
 
 

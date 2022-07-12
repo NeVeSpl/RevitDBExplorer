@@ -10,6 +10,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
     internal class PlanViewRange_GetLevelId : MemberAccessorByType<PlanViewRange>, IHaveFactoryMethod
     {
         public override string MemberName => nameof(PlanViewRange.GetLevelId);
+        public override string MemberParams => typeof(PlanViewPlane).Name;
         IMemberAccessor IHaveFactoryMethod.Create() => new PlanViewRange_GetLevelId();
 
 

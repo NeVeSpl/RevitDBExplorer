@@ -8,7 +8,8 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
     internal class Document_PlanTopology : MemberAccessorByType<Document>, IHaveFactoryMethod
     {
-        public override string MemberName => "PlanTopology";
+        public override string MemberName => "PlanTopologies";
+        public override string MemberParams => typeof(Phase).Name;
         IMemberAccessor IHaveFactoryMethod.Create() => new Document_PlanTopology();
 
 

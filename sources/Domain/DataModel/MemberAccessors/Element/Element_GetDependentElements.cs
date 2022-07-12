@@ -9,6 +9,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
     internal class Element_GetDependentElements : MemberAccessorByType<Element>, IHaveFactoryMethod
     {
         public override string MemberName => nameof(Element.GetDependentElements);
+        public override string MemberParams => typeof(ElementFilter).Name;
         IMemberAccessor IHaveFactoryMethod.Create() => new Element_GetDependentElements();
 
 

@@ -10,6 +10,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
     internal class TableData_GetSectionData : MemberAccessorByType<TableData>, IHaveFactoryMethod
     {
         public override string MemberName => nameof(TableData.GetSectionData);
+        public override string MemberParams => typeof(SectionType).Name;
         IMemberAccessor IHaveFactoryMethod.Create() => new TableData_GetSectionData();
 
 

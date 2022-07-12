@@ -7,6 +7,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
     internal class PrintManager_SubmitPrint : MemberAccessorByType<PrintManager>, IHaveFactoryMethod
     {
         public override string MemberName => nameof(PrintManager.SubmitPrint);
+
         IMemberAccessor IHaveFactoryMethod.Create() => new PrintManager_SubmitPrint();
 
 

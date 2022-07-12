@@ -7,6 +7,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
     internal class Document_Close : MemberAccessorByType<Document>, IHaveFactoryMethod
     {
         public override string MemberName => nameof(Document.Close);
+        public override string MemberParams => "";
         IMemberAccessor IHaveFactoryMethod.Create() => new Document_Close();
 
       

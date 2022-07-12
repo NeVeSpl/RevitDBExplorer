@@ -23,8 +23,9 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 
         public static IMemberAccessor Create(string memberName, Type declaringType, MethodInfo getMethod, MethodInfo setMethod)
         {
-            if (MemberAccessorFactoriesLookup.TryGetValue($"{declaringType.Name}.{memberName}", out IHaveFactoryMethod factory))
-            {
+            var signature = String.Join(",", getMethod.GetParameters().Select(p => p.ParameterType.Name).ToArray());
+            if (MemberAccessorFactoriesLookup.TryGetValue($"{declaringType.Name}.{memberName}({signature})", out IHaveFactoryMethod factory))
+            {  
                 return factory.Create();
             }
 

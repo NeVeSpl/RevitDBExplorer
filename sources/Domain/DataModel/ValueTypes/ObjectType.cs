@@ -32,7 +32,7 @@ namespace RevitDBExplorer.Domain.DataModel.ValueTypes
 
 
 
-        private static readonly string[] propertyThatContainsName = new[]  { "Name", "Title" };
+        private static readonly string[] propertyThatContainsName = new[]  { "Name", "Title", "SchemaName", "FieldName" };
         private static string GetNameForObjectFromProperty(object obj)
         {
             foreach (var propName in propertyThatContainsName)

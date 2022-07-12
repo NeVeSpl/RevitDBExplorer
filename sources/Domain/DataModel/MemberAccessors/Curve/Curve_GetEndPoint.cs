@@ -8,6 +8,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
     internal class Curve_GetEndPoint : MemberAccessorByType<Curve>, IHaveFactoryMethod
     {
         public override string MemberName => nameof(Curve.GetEndPoint);
+        public override string MemberParams => typeof(int).Name;
         IMemberAccessor IHaveFactoryMethod.Create() => new Curve_GetEndPoint();
 
 

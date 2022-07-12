@@ -9,7 +9,8 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
     internal abstract class MemberAccessorByType<T> : IMemberAccessor where T : class
     {
         public abstract string MemberName { get; }
-        public virtual string TypeAndMemberName => $"{typeof(T).Name}.{MemberName}";
+        public abstract string MemberParams { get; }
+        public virtual string TypeAndMemberName => $"{typeof(T).Name}.{MemberName}({MemberParams})";
 
         public ReadResult Read(Document document, object @object)
         {

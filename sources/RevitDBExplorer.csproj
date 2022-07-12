@@ -78,7 +78,7 @@
     <Compile Include="Domain\DataModel\MemberAccessors\MemberAccessorByType.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\PlanViewRange\PlanViewRange_GetLevelId.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\PlanViewRange\PlanViewRange_GetOffset.cs" />
-    <Compile Include="Domain\DataModel\MemberAccessors\PrintManager\PrintManager_SubmitPrint.cs" />
+    <None Include="Domain\DataModel\MemberAccessors\PrintManager\PrintManager_SubmitPrint.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\ScheduleDefinition\ScheduleDefinition_GetField.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\TableData\TableData_GetSectionData.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\ViewCropRegionShapeManager\ViewCropRegionShapeManager_GetSplitRegionOffset.cs" />

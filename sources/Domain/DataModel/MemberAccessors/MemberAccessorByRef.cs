@@ -71,6 +71,14 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
                     {
                         argument = doc.ActiveView;
                     }
+                    if (paramsDef[i].ParameterType == typeof(SpatialElementBoundaryOptions))
+                    {
+                        argument = new SpatialElementBoundaryOptions()
+                        {
+                            StoreFreeBoundaryFaces = true,
+                            SpatialElementBoundaryLocation = SpatialElementBoundaryLocation.Center
+                        };
+                    }
 
                     if (argument is null)
                     {

@@ -8,6 +8,8 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
     internal class AssetProperties_Item : MemberAccessorByType<AssetProperties>, IHaveFactoryMethod
     {
         public override string MemberName => "Item";
+        public override string MemberParams => typeof(int).Name;
+
         IMemberAccessor IHaveFactoryMethod.Create() => new AssetProperties_Item();
 
 

@@ -9,6 +9,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
     internal class View_GetTemplateParameterIds : MemberAccessorByType<View>, IHaveFactoryMethod
     {
         public override string MemberName => nameof(View.GetTemplateParameterIds);
+        public override string MemberParams => "";
         IMemberAccessor IHaveFactoryMethod.Create() => new View_GetTemplateParameterIds();
 
       

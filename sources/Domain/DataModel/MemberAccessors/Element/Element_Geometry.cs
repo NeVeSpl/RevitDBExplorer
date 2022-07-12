@@ -9,6 +9,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
     internal sealed class Element_Geometry : MemberAccessorByType<Element>, IHaveFactoryMethod
     {    
         public override string MemberName => "Geometry";
+        public override string MemberParams => typeof(Options).Name;
         IMemberAccessor IHaveFactoryMethod.Create()
         {
             return new Element_Geometry();
