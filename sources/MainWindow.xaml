@@ -20,8 +20,9 @@
         </Grid.Resources>
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="0.27*" />
-            <ColumnDefinition Width="0.73*" />
+            <ColumnDefinition Width="270" />
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
@@ -29,7 +30,7 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
 
-        <UniformGrid Grid.ColumnSpan="2" Columns="9" Margin="0 0 0 2">
+        <UniformGrid Grid.ColumnSpan="3" Columns="10" Margin="0 0 0 2">
             <UniformGrid.Resources>
                 <Style TargetType="Button">
                     <Setter Property="Background" Value="Transparent"/>
@@ -64,7 +65,10 @@
             </Button>
             <Button  Click="Button_Click" Tag="DependentElements" Margin="2 0 0 0" ToolTip="Snoop dependent elements of already selected elements in Revit">
                 <Path Style="{StaticResource IconDependentElements}" />
-            </Button>            
+            </Button>
+            <Button  Click="Button_Click" Tag="Schemas" Margin="2 0 0 0" ToolTip="Snoop Extensible Storage framework schemas in memory">
+                <Path Style="{StaticResource IconSchemas}" />
+            </Button>
         </UniformGrid>
 
         <TreeView Grid.Row="2" Grid.Column="0" ItemsSource="{Binding TreeItems}" Margin="0 0 2 0" SelectedItemChanged="TreeView_SelectedItemChanged">
@@ -114,7 +118,7 @@
             </TreeView.ItemContainerStyle>
         </TreeView>
 
-        <Grid Grid.Row="1" Grid.Column="1" Margin="0 3 0 5 " >
+        <Grid Grid.Row="1" Grid.Column="2" Margin="0 3 0 5 " >
             
         <TextBox Name="txtUserEntry"  Text="{Binding ListItemsFilterPhrase, Mode=TwoWay, Delay=100, UpdateSourceTrigger=PropertyChanged}"   >
                 <TextBox.Style>
@@ -144,7 +148,9 @@
 
         </Grid>
 
-        <ListView Grid.Row="2" Grid.Column="1" ItemsSource="{Binding ListItems}" d:ItemsSource="{d:SampleData ItemCount=5}" SelectionMode="Single" SelectedItem="{Binding ListViewSelectedItem}" MouseLeftButtonUp="ListView_MouseLeftButtonUp" AlternationCount="2" >
+        <GridSplitter Grid.Row="2" Grid.Column="1" Background="LightGray"  Width="2" Margin="0 0 2 0" HorizontalAlignment="Left" VerticalAlignment="Stretch"/>
+
+        <ListView Grid.Row="2" Grid.Column="2" ItemsSource="{Binding ListItems}" d:ItemsSource="{d:SampleData ItemCount=5}" SelectionMode="Single" SelectedItem="{Binding ListViewSelectedItem}" MouseLeftButtonUp="ListView_MouseLeftButtonUp" AlternationCount="2" >
             <ListView.Resources>
                 <ContextMenu x:Key="ItemContextMenu">
                     <MenuItem Header="Copy" Click="ListViewMenuItemCopy_Click" />

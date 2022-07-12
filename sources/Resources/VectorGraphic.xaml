@@ -17,6 +17,7 @@
     <StreamGeometry x:Key="vPanoramaOutline" >M21 4H3C1.9 4 1 4.9 1 6V18C1 19.1 1.9 20 3 20H21C22.1 20 23 19.1 23 18V6C23 4.9 22.1 4 21 4M21 18H3V6H21V18M14.5 11L11 15.5L8.5 12.5L5 17H19L14.5 11Z</StreamGeometry>
     <StreamGeometry x:Key="vFileDocumentOutline" >M6,2A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2H6M6,4H13V9H18V20H6V4M8,12V14H16V12H8M8,16V18H13V16H8Z</StreamGeometry>
     <StreamGeometry x:Key="vApplication" >M21 2H3C1.9 2 1 2.9 1 4V20C1 21.1 1.9 22 3 22H21C22.1 22 23 21.1 23 20V4C23 2.9 22.1 2 21 2M21 7H3V4H21V7Z</StreamGeometry>
+    <StreamGeometry x:Key="vFileCabinet" >M14,8H10V6H14V8M20,4V20C20,21.11 19.11,22 18,22H6C4.89,22 4,21.11 4,20V4A2,2 0 0,1 6,2H18C19.11,2 20,2.9 20,4M18,13H6V20H18V13M18,4H6V11H18V4M14,15H10V17H14V15Z</StreamGeometry>
 
     <Style x:Key="IconProperty" TargetType="Path">
         <Setter Property="Data" Value="{StaticResource vWrench}"/>
@@ -74,6 +75,11 @@
     </Style>
     <Style x:Key="IconApplication" TargetType="Path">
         <Setter Property="Data" Value="{StaticResource vApplication}"/>
+        <Setter Property="Fill" Value="black"/>
+        <Setter Property="Stretch" Value="Uniform"/>
+    </Style>
+    <Style x:Key="IconSchemas" TargetType="Path">
+        <Setter Property="Data" Value="{StaticResource vFileCabinet}"/>
         <Setter Property="Fill" Value="black"/>
         <Setter Property="Stretch" Value="Uniform"/>
     </Style>

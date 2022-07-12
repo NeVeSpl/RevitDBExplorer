@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Autodesk.Revit.DB;
+using Autodesk.Revit.DB.ExtensibleStorage;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.UI.Selection;
 using RevitDBExplorer.Domain.DataModel;
@@ -18,7 +19,8 @@ namespace RevitDBExplorer.Domain
         DependentElements,
         ActiveView,
         ActiveDocument,
-        Application
+        Application,
+        Schemas
     }
 
     internal static class Selectors
@@ -36,6 +38,7 @@ namespace RevitDBExplorer.Domain
                 Selector.Application => SnoopApplication(uiApplication),
                 Selector.ActiveDocument => SnoopActiveDocument(uiApplication),
                 Selector.ActiveView => SnoopActiveView(uiApplication),
+                Selector.Schemas => SnoopSchemas(uiApplication),
                 _ => throw new NotImplementedException()
             };
             return result ?? Enumerable.Empty<SnoopableObject>();
@@ -139,6 +142,10 @@ namespace RevitDBExplorer.Domain
         private static IEnumerable<SnoopableObject> SnoopApplication(UIApplication app)
         {
             yield return new SnoopableObject(app.Application, null);
+        }
+        private static IEnumerable<SnoopableObject> SnoopSchemas(UIApplication app)
+        {
+            return Schema.ListSchemas().Select(x => new SnoopableObject(x, null));
         }
         private static IEnumerable<SnoopableObject> SnoopActiveDocument(UIApplication app)
         {

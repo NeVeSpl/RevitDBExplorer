@@ -154,7 +154,7 @@ namespace RevitDBExplorer
 
             if (snoopableMember != null)
             {
-                Clipboard.SetDataObject($"{snoopableMember.Name}: {snoopableMember.Value}");
+                Clipboard.SetDataObject($"{snoopableMember.Name}= {snoopableMember.Value}");
             }
         }
 
