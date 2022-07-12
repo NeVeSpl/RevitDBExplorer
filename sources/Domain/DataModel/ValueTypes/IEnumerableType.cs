@@ -39,7 +39,7 @@ namespace RevitDBExplorer.Domain.DataModel.ValueTypes
             if (type.IsGenericType)
             {
                 var args = type.GetGenericArguments();
-                return $"{typeName}[{args.First().Name}]";
+                return $"{typeName}[{String.Join(",", args.Select(x => x.Name))}]";
             }
 
             foreach (var item in enumerable)
