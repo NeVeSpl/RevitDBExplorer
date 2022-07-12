@@ -5,7 +5,11 @@ using RevitDBExplorer.Domain.DataModel.ValueTypes.Base;
 namespace RevitDBExplorer.Domain
 {
     internal static class Labels
-    {        
+    {
+        public static string GetNameForObject(object @object, Document document)
+        {
+            return GetNameForObject(@object.GetType(), @object, document);
+        }
         public static string GetNameForObject(Type type, object @object, Document document)
         {
             var valueType = ValueTypeFactory.Create(type);

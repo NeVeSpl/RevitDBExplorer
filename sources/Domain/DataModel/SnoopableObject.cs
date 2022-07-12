@@ -1,9 +1,12 @@
 ﻿using System.Collections;
+using System.Linq;
 using System.Collections.Generic;
 using System.Reflection;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
+using RevitDBExplorer.Domain.DataModel.MemberAccessors;
 using RevitDBExplorer.WPF;
+using RevitDBExplorer.Domain.DataModel.Streams;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
@@ -41,7 +44,7 @@ namespace RevitDBExplorer.Domain.DataModel
         {
             this.@object = @object;
             this.document = document;
-            this.name = name ?? Labels.GetNameForObject(@object?.GetType(), @object, document);
+            this.name = name ?? Labels.GetNameForObject(@object, document);
             this.typeName = @object?.GetType().Name;
 
             if (subObjects != null)
@@ -82,8 +85,9 @@ namespace RevitDBExplorer.Domain.DataModel
                 }
 
                 var comments = RevitDocumentationReader.GetPropertyComments(prop);
+                var memberAccessor = MemberAccessorFactory.Create(prop.Name, prop.DeclaringType, getMethod, null);
 
-                var member = new SnoopableMember(this, SnoopableMember.Kind.Property, prop.Name, prop.DeclaringType, getMethod, null, comments);
+                var member = new SnoopableMember(this, SnoopableMember.Kind.Property, prop.Name, prop.DeclaringType, memberAccessor, comments);
                 member.ReadValue(document, @object);
                 yield return member;
             }
@@ -96,13 +100,20 @@ namespace RevitDBExplorer.Domain.DataModel
                 if (method.DeclaringType == typeof(object)) continue;
 
                 var comments = RevitDocumentationReader.GetMethodComments(method);
-
-                var member = new SnoopableMember(this, SnoopableMember.Kind.Method, method.Name, method.DeclaringType, method, null, comments);
+                var memberAccessor = MemberAccessorFactory.Create(method.Name, method.DeclaringType, method, null);
+                var member = new SnoopableMember(this, SnoopableMember.Kind.Method, method.Name, method.DeclaringType, memberAccessor, comments);
                 member.ReadValue(document, @object);
 
                 if (!member.HasExceptionCouldNotResolveAllArguments)
                     yield return member;
             }
+            
+
+            foreach (var member in new PartUtilsStream().Stream(this))
+            {                
+                member.ReadValue(document, @object);
+                yield return member;
+            }            
         }
     }
 }

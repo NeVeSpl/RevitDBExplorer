@@ -47,16 +47,15 @@ namespace RevitDBExplorer.Domain.DataModel
         public string ValueTypeName => valueTypeName;
         public bool CanBeSnooped => canBeSnooped;
         public DocXml Documentation => documentation;
-
-
-        public SnoopableMember(SnoopableObject parent, Kind memberKind, string name, Type declaringType, MethodInfo getMethod, MethodInfo setMethod, DocXml comments)
+        
+        public SnoopableMember(SnoopableObject parent, Kind memberKind, string name, Type declaringType, IMemberAccessor memberAccessor, DocXml comments)
         {
             this.parent = parent;
             this.memberKind = memberKind;
             this.name = name;
             this.declaringType = declaringType;
             this.declaringTypeLevel = declaringType.NumberOfBaseTypes();
-            this.memberAccessor = MemberAccessorFactory.Create(name, declaringType, getMethod, null);
+            this.memberAccessor = memberAccessor;
             this.documentation = comments;
         }
 
