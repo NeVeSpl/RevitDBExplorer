@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Linq.Expressions;
 using Autodesk.Revit.DB;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
@@ -8,9 +8,8 @@ using Autodesk.Revit.DB;
 namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
     internal class TableData_GetSectionData : MemberAccessorByType<TableData>, IHaveFactoryMethod
-    {
-        public override string MemberName => nameof(TableData.GetSectionData);
-        public override string MemberParams => typeof(SectionType).Name;
+    {        
+        protected override IEnumerable<LambdaExpression> HandledMembers { get { yield return (TableData x, SectionType s) => x.GetSectionData(s); } }
         IMemberAccessor IHaveFactoryMethod.Create() => new TableData_GetSectionData();
 
 

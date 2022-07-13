@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq.Expressions;
 using Autodesk.Revit.DB;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
@@ -7,9 +7,8 @@ using Autodesk.Revit.DB;
 namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
     internal class ViewCropRegionShapeManager_GetSplitRegionOffset : MemberAccessorByType<ViewCropRegionShapeManager>, IHaveFactoryMethod
-    {
-        public override string MemberName => nameof(ViewCropRegionShapeManager.GetSplitRegionOffset);
-        public override string MemberParams => typeof(int).Name;
+    {    
+        protected override IEnumerable<LambdaExpression> HandledMembers { get { yield return (ViewCropRegionShapeManager x) => x.GetSplitRegionOffset(69); } }
         IMemberAccessor IHaveFactoryMethod.Create() => new ViewCropRegionShapeManager_GetSplitRegionOffset();
 
 

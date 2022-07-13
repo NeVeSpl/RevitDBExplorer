@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using Autodesk.Revit.DB;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
@@ -7,9 +8,8 @@ using Autodesk.Revit.DB;
 namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
     internal class Element_GetDependentElements : MemberAccessorByType<Element>, IHaveFactoryMethod
-    {
-        public override string MemberName => nameof(Element.GetDependentElements);
-        public override string MemberParams => typeof(ElementFilter).Name;
+    {       
+        protected override IEnumerable<LambdaExpression> HandledMembers { get { yield return (Element x, ElementFilter ef) => x.GetDependentElements(ef); } }
         IMemberAccessor IHaveFactoryMethod.Create() => new Element_GetDependentElements();
 
 

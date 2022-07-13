@@ -98,7 +98,7 @@ namespace RevitDBExplorer.Domain.DataModel
                 if (method.ReturnType == typeof(void)) continue;
                 if (method.IsSpecialName) continue;
                 if (method.DeclaringType == typeof(object)) continue;
-                if (method.Name == "SubmitPrint") continue;
+               
 
                 var comments = RevitDocumentationReader.GetMethodComments(method);
                 var memberAccessor = MemberAccessorFactory.Create(method.Name, method.DeclaringType, method, null);

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using Autodesk.Revit.DB;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
@@ -7,9 +8,8 @@ using Autodesk.Revit.DB;
 namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
     internal class View_GetTemplateParameterIds : MemberAccessorByType<View>, IHaveFactoryMethod
-    {
-        public override string MemberName => nameof(View.GetTemplateParameterIds);
-        public override string MemberParams => "";
+    {        
+        protected override IEnumerable<LambdaExpression> HandledMembers { get { yield return (View x) => x.GetTemplateParameterIds(); } }
         IMemberAccessor IHaveFactoryMethod.Create() => new View_GetTemplateParameterIds();
 
       

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using Autodesk.Revit.DB;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
@@ -7,9 +8,8 @@ using Autodesk.Revit.DB;
 namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
     internal sealed class Element_Geometry : MemberAccessorByType<Element>, IHaveFactoryMethod
-    {    
-        public override string MemberName => "Geometry";
-        public override string MemberParams => typeof(Options).Name;
+    {          
+        protected override IEnumerable<LambdaExpression> HandledMembers { get { yield return (Element x, Options o) => x.get_Geometry(o); } }
         IMemberAccessor IHaveFactoryMethod.Create()
         {
             return new Element_Geometry();

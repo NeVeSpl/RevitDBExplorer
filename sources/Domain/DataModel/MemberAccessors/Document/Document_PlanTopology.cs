@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using Autodesk.Revit.DB;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
@@ -7,9 +8,8 @@ using Autodesk.Revit.DB;
 namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
     internal class Document_PlanTopology : MemberAccessorByType<Document>, IHaveFactoryMethod
-    {
-        public override string MemberName => "PlanTopologies";
-        public override string MemberParams => typeof(Phase).Name;
+    {       
+        protected override IEnumerable<LambdaExpression> HandledMembers { get { yield return (Document x, Phase phase) => x.get_PlanTopologies(phase); } }
         IMemberAccessor IHaveFactoryMethod.Create() => new Document_PlanTopology();
 
 

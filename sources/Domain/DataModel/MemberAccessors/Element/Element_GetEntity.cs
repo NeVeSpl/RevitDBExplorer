@@ -1,6 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reflection;
+﻿using System.Collections.Generic;
+using System.Linq.Expressions;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.ExtensibleStorage;
 
@@ -10,10 +9,8 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
     internal class Element_GetEntity : MemberAccessorByType<Element>, IHaveFactoryMethod
     {
-        public override string MemberName => nameof(Element.GetEntity);
-        public override string MemberParams => typeof(Schema).Name;
-        IMemberAccessor IHaveFactoryMethod.Create() => new Element_GetEntity();       
-
+        protected override IEnumerable<LambdaExpression> HandledMembers { get { yield return (Element x, Schema s) => x.GetEntity(s); } }
+        IMemberAccessor IHaveFactoryMethod.Create() => new Element_GetEntity();   
 
 
         protected override bool CanBeSnoooped(Document document, Element element)

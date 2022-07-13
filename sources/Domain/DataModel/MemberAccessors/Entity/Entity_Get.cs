@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Reflection;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.ExtensibleStorage;
@@ -10,9 +11,8 @@ using Autodesk.Revit.DB.ExtensibleStorage;
 namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
     internal class Entity_Get : MemberAccessorByType<Entity>, IHaveFactoryMethod
-    {
-        public override string MemberName => nameof(Entity.Get);
-        public override string MemberParams => typeof(Field).Name;
+    {       
+        protected override IEnumerable<LambdaExpression> HandledMembers { get { yield return (Entity x, Field f) => x.Get<object>(f); } }
         IMemberAccessor IHaveFactoryMethod.Create() => new Entity_Get();
 
 

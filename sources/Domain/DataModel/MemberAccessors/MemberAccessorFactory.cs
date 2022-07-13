@@ -17,14 +17,13 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
             var types = type.Assembly.GetTypes().Where(p => type.IsAssignableFrom(p) && !p.IsInterface).ToList();
             var memberAccessorFactories = types.Select(x => Activator.CreateInstance(x) as IHaveFactoryMethod);
 
-            MemberAccessorFactoriesLookup = memberAccessorFactories.ToDictionary(x => x.TypeAndMemberName);
+            MemberAccessorFactoriesLookup = memberAccessorFactories.SelectMany(x => x.GetHandledMembers(), (factory, key) => (factory, key)).ToDictionary(x => x.key, x => x.factory);
         }
 
 
         public static IMemberAccessor Create(string memberName, Type declaringType, MethodInfo getMethod, MethodInfo setMethod)
-        {
-            var signature = String.Join(",", getMethod.GetParameters().Select(p => p.ParameterType.Name).ToArray());
-            if (MemberAccessorFactoriesLookup.TryGetValue($"{declaringType.Name}.{memberName}({signature})", out IHaveFactoryMethod factory))
+        {            
+            if (MemberAccessorFactoriesLookup.TryGetValue(getMethod.GetUniqueId(), out IHaveFactoryMethod factory))
             {  
                 return factory.Create();
             }

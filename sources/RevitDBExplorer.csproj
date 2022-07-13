@@ -80,7 +80,7 @@
     <Compile Include="Domain\DataModel\MemberAccessors\MemberAccessorByType.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\PlanViewRange\PlanViewRange_GetLevelId.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\PlanViewRange\PlanViewRange_GetOffset.cs" />
-    <None Include="Domain\DataModel\MemberAccessors\PrintManager\PrintManager_SubmitPrint.cs" />
+    <Compile Include="Domain\DataModel\MemberAccessors\PrintManager\PrintManager_SubmitPrint.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\ScheduleDefinition\ScheduleDefinition_GetField.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\TableData\TableData_GetSectionData.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\ViewCropRegionShapeManager\ViewCropRegionShapeManager_GetSplitRegionOffset.cs" />
@@ -116,6 +116,7 @@
     <Compile Include="Domain\RevitDocumentationReader.cs" />
     <Compile Include="Extensions\Autodesk.Revit.DB\DocumentExtensions.cs" />
     <Compile Include="Extensions\System\IntPtrExtensions.cs" />
+    <Compile Include="Extensions\System\Reflection\MethodInfoExtensions.cs" />
     <Compile Include="Extensions\System\Reflection\PropertyInfoExtensions.cs" />
     <Compile Include="Extensions\System\Runtime.CompilerServices\IsExternalInit .cs" />
     <Compile Include="ViewModels\SnoopableCategoryTreeVM.cs" />

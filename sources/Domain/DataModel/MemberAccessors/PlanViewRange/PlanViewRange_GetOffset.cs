@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Linq.Expressions;
 using Autodesk.Revit.DB;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
@@ -8,9 +8,8 @@ using Autodesk.Revit.DB;
 namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
     internal class PlanViewRange_GetOffset : MemberAccessorByType<PlanViewRange>, IHaveFactoryMethod
-    {
-        public override string MemberName => nameof(PlanViewRange.GetOffset);
-        public override string MemberParams => typeof(PlanViewPlane).Name;
+    {        
+        protected override IEnumerable<LambdaExpression> HandledMembers { get { yield return (PlanViewRange x, PlanViewPlane p) => x.GetOffset(p); } }
         IMemberAccessor IHaveFactoryMethod.Create() => new PlanViewRange_GetOffset();
 
 

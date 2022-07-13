@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq.Expressions;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.Visual;
 
@@ -6,10 +7,10 @@ using Autodesk.Revit.DB.Visual;
 namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
     internal class AssetProperties_Item : MemberAccessorByType<AssetProperties>, IHaveFactoryMethod
-    {
-        public override string MemberName => "Item";
-        public override string MemberParams => typeof(int).Name;
-
+    {        
+        //public override string MemberName => "Item";
+        //public override string MemberParams => typeof(int).Name;
+        protected override IEnumerable<LambdaExpression> HandledMembers { get { yield return (AssetProperties x) => x[0]; } }
         IMemberAccessor IHaveFactoryMethod.Create() => new AssetProperties_Item();
 
 

@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
+using System.Linq.Expressions;
 using Autodesk.Revit.DB;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
@@ -7,9 +7,8 @@ using Autodesk.Revit.DB;
 namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
     internal class ScheduleDefinition_GetField : MemberAccessorByType<ScheduleDefinition>, IHaveFactoryMethod
-    {
-        public override string MemberName => nameof(ScheduleDefinition.GetField);
-        public override string MemberParams => typeof(int).Name;
+    {       
+        protected override IEnumerable<LambdaExpression> HandledMembers { get { yield return (ScheduleDefinition x) => x.GetField(7); } }
         IMemberAccessor IHaveFactoryMethod.Create() => new ScheduleDefinition_GetField();
 
 
