@@ -44,7 +44,6 @@ namespace RevitDBExplorer.Domain.DataModel
         public SnoopableObject(object @object, Document document, int index) : this(@object, document, null, null)
         {
             this.index = index;
-            //this.name = $"[{index}] " + name;
         }
         public SnoopableObject(object @object, Document document, SnoopableObject child) : this(@object, document, null, new[] {child})
         {

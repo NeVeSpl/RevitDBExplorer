@@ -8,7 +8,7 @@
         xmlns:converters="clr-namespace:RevitDBExplorer.WPF.Converters"
         mc:Ignorable="d"
         WindowStartupLocation="CenterOwner"
-        Title="Revit database explorer and editor" Height="850" Width="900" Icon="/RevitDBExplorer;component/Resources/RDBE.ico" Closed="Window_Closed" PreviewKeyDown="Window_PreviewKeyDown">
+        Title="Revit database explorer and editor" Height="797" Width="839" Icon="/RevitDBExplorer;component/Resources/RDBE.ico" Closed="Window_Closed" PreviewKeyDown="Window_PreviewKeyDown">
     <Grid Margin="2">
         <Grid.Resources>
             <ResourceDictionary>
@@ -17,6 +17,7 @@
                 </ResourceDictionary.MergedDictionaries>
                 <converters:PercentageOfValueConverter x:Key="PercentageOfValueConverter"/>
                 <converters:FeetToMetersConverter x:Key="FeetToMetersConverter"/>
+                <converters:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
             </ResourceDictionary>
         </Grid.Resources>
 
@@ -163,7 +164,7 @@
 
         <GridSplitter Grid.Row="2" Grid.Column="1" Background="LightGray"  Width="2" Margin="0 0 2 0" HorizontalAlignment="Left" VerticalAlignment="Stretch"/>
 
-        <ListView Grid.Row="2" Grid.Column="2" ItemsSource="{Binding ListItems}" d:ItemsSource="{d:SampleData ItemCount=5}" SelectionMode="Single" SelectedItem="{Binding ListViewSelectedItem}" MouseLeftButtonUp="ListView_MouseLeftButtonUp" AlternationCount="2" >
+        <ListView Grid.Row="2" Grid.Column="2" ItemsSource="{Binding ListItems}" d:ItemsSource="{d:SampleData ItemCount=5}" SelectionMode="Single" SelectedItem="{Binding ListViewSelectedItem}" MouseLeftButtonUp="ListView_MouseLeftButtonUp" AlternationCount="2" ToolTipService.ShowDuration="50000">
             <ListView.Resources>
                 <ContextMenu x:Key="ItemContextMenu">
                     <MenuItem Header="Copy" Click="ListViewMenuItemCopy_Click" />
@@ -172,11 +173,29 @@
                 <Style TargetType="{x:Type ListViewItem}">
                     <Setter Property="ToolTip">
                         <Setter.Value>
-                            <UniformGrid Columns="1">
-                                <TextBlock Text="{Binding Documentation.Summary}"/>
-                                <!--<TextBlock Text="{Binding Documentation.Remarks}"/>-->
+                            <StackPanel Orientation="Vertical"  MaxWidth="727">
+                                <TextBlock >
+                                    <Run Foreground="#0000FF" Text="{Binding Documentation.ReturnType, Mode=OneWay}" /> <Run Foreground="#745320" Text="{Binding Documentation.Name, Mode=OneWay}" /><Run Foreground="#21377F" Text="{Binding Documentation.Invocation, Mode=OneWay}" />
+                                    <LineBreak/>
+                                </TextBlock>
 
-                            </UniformGrid>
+                                <TextBlock TextWrapping="Wrap" Visibility="{Binding Documentation.Summary, Converter={StaticResource StringToVisibilityConverter}}">  
+                                    <Run Text="{Binding Documentation.Summary, Mode=OneWay}" Foreground="Black"/><LineBreak/>
+                                </TextBlock>
+                                <TextBlock TextWrapping="Wrap" Visibility="{Binding Documentation.Returns, Converter={StaticResource StringToVisibilityConverter}}">
+                                    <Run Text="Returns:" /><LineBreak/>
+                                    <Run Text=" " /><Run Text="{Binding Documentation.Returns, Mode=OneWay}" Foreground="Black" /><LineBreak/>
+                                </TextBlock>
+                                <TextBlock TextWrapping="Wrap" Visibility="{Binding Documentation.Remarks, Converter={StaticResource StringToVisibilityConverter}}">
+                                    <Run Text="Remarks:" /><LineBreak/>
+                                    <Run Text=" " /><Run Text="{Binding Documentation.Remarks, Mode=OneWay}" Foreground="Black"/><LineBreak/>
+                                </TextBlock>
+                                <TextBlock TextWrapping="Wrap">
+                                    <Run Text="Accessor:" /><LineBreak/>
+                                    <Run Text=" " /><Run Text="{Binding ValueTypeName, Mode=OneWay}"  />
+                                </TextBlock>
+
+                            </StackPanel>
                         </Setter.Value>
                     </Setter>
                     <Setter Property="ContextMenu" Value="{StaticResource ItemContextMenu}" />
@@ -193,7 +212,7 @@
 
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Name" Width="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListView}}, Path=ActualWidth, Converter={StaticResource PercentageOfValueConverter}, ConverterParameter=27}">
+                    <GridViewColumn Header="Name" Width="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListView}}, Path=ActualWidth, Converter={StaticResource PercentageOfValueConverter}, ConverterParameter=37}">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
@@ -219,7 +238,7 @@
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
 
-                    <GridViewColumn Header="Value" Width="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListView}}, Path=ActualWidth, Converter={StaticResource PercentageOfValueConverter}, ConverterParameter=55}"  >
+                    <GridViewColumn Header="Value" Width="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListView}}, Path=ActualWidth, Converter={StaticResource PercentageOfValueConverter}, ConverterParameter=61}"  >
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock x:Name="cTextBlock" Text="{Binding Value}" TextWrapping="NoWrap" >
@@ -243,7 +262,7 @@
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
 
-                    <GridViewColumn Header="Type" Width="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListView}}, Path=ActualWidth, Converter={StaticResource PercentageOfValueConverter}, ConverterParameter=17}" DisplayMemberBinding="{Binding ValueTypeName}" />
+                    <!--<GridViewColumn Header="Type" Width="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListView}}, Path=ActualWidth, Converter={StaticResource PercentageOfValueConverter}, ConverterParameter=17}" DisplayMemberBinding="{Binding ValueTypeName}" />-->
                 </GridView>
             </ListView.View>
 

@@ -137,6 +137,7 @@
     <Compile Include="Extensions\System\ObjectExtensions.cs" />
     <Compile Include="Extensions\System\TypeExtensions.cs" />
     <Compile Include="WPF\BaseViewModel.cs" />
+    <Compile Include="WPF\Converters\StringToVisibilityConverter.cs" />
     <None Include="packages.config" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
