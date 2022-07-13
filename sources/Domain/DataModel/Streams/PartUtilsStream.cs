@@ -38,7 +38,7 @@ namespace RevitDBExplorer.Domain.DataModel.Streams
             {
                 foreach (var item in partUtilsForElement)
                 {
-                    yield return new SnoopableMember(snoopableObject, SnoopableMember.Kind.Method, item.Item1, typeof(PartUtils), item.Item2, null);
+                    yield return new SnoopableMember(snoopableObject, SnoopableMember.Kind.StaticMethod, item.Item1, typeof(PartUtils), item.Item2, null);
                 }
             }
 
@@ -46,7 +46,7 @@ namespace RevitDBExplorer.Domain.DataModel.Streams
             {
                 foreach (var item in partUtilsForPart)
                 {
-                    yield return new SnoopableMember(snoopableObject, SnoopableMember.Kind.Method, item.Item1, typeof(PartUtils), item.Item2, null);
+                    yield return new SnoopableMember(snoopableObject, SnoopableMember.Kind.StaticMethod, item.Item1, typeof(PartUtils), item.Item2, null);
                 }
             }
         }

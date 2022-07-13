@@ -173,11 +173,19 @@ namespace RevitDBExplorer
             var items = objects.GroupBy(x => x.TypeName).Select(x => new SnoopableCategoryTreeVM(x.Key, x)).OrderBy(x => x.Name);
 
             TreeItems = new(items);
-            if ((objects.Count > 0 && objects.Count < 7) || (TreeItems.Count() == 1))
+            if ((objects.Count > 0 && objects.Count < 29) || (TreeItems.Count() == 1))
             {
-                var category = TreeItems.First();
-                category.IsExpanded = true;
-                var firstObject = category.Items.First();
+                // Expand
+                foreach (var cat in TreeItems)
+                {
+                    cat.IsExpanded = true;
+                    foreach (var sub in (cat.Items ?? Enumerable.Empty<TreeViewItemVM>()))
+                    {
+                        sub.IsExpanded = true;
+                    }
+                }       
+                // Select
+                var firstObject = TreeItems.First().Items.First();
                 if (firstObject.Items?.Any() == true)
                 {
                     firstObject.IsExpanded = true;

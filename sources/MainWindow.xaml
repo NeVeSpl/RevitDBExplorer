@@ -78,7 +78,7 @@
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="{Binding Name, Mode=OneWay}" />
                         <TextBlock Text=" [" Foreground="Blue" />
-                        <TextBlock Text="{Binding Items.Count}" Foreground="Blue" />
+                        <TextBlock Text="{Binding Count}" Foreground="Blue" />
                         <TextBlock Text="]" Foreground="Blue" />
                     </StackPanel>
                 </HierarchicalDataTemplate>

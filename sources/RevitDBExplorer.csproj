@@ -78,6 +78,7 @@
     <Compile Include="Domain\DataModel\MemberAccessors\IMemberAccessor.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\MemberAccessorByFunc.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\MemberAccessorByType.cs" />
+    <Compile Include="Domain\DataModel\MemberAccessors\MemberAccessorForPrimitive.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\PlanViewRange\PlanViewRange_GetLevelId.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\PlanViewRange\PlanViewRange_GetOffset.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\PrintManager\PrintManager_SubmitPrint.cs" />

@@ -21,7 +21,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
         }
 
 
-        public static IMemberAccessor Create(string memberName, Type declaringType, MethodInfo getMethod, MethodInfo setMethod)
+        public static IMemberAccessor Create(MethodInfo getMethod, MethodInfo setMethod)
         {            
             if (MemberAccessorFactoriesLookup.TryGetValue(getMethod.GetUniqueId(), out IHaveFactoryMethod factory))
             {  

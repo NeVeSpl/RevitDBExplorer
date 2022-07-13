@@ -17,7 +17,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
         protected override string GetLabel(Document document, Element element) => "[ElementOnPhaseStatus]";
         protected override IEnumerable<SnoopableObject> Snooop(Document document, Element element)
         {
-            var elementOnPhaseStatuses = document.Phases.OfType<Phase>().Select(x => new SnoopableObject(element.GetPhaseStatus(x.Id), document, $"Phase: {x.Name}"));
+            var elementOnPhaseStatuses = document.Phases.OfType<Phase>().Select(x => new SnoopableObject(x, document, new SnoopableObject(element.GetPhaseStatus(x.Id), document)));
             return elementOnPhaseStatuses;
         }
     }

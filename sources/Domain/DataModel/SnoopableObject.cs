@@ -7,6 +7,7 @@ using Autodesk.Revit.UI;
 using RevitDBExplorer.Domain.DataModel.MemberAccessors;
 using RevitDBExplorer.WPF;
 using RevitDBExplorer.Domain.DataModel.Streams;
+using System;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
@@ -39,7 +40,10 @@ namespace RevitDBExplorer.Domain.DataModel
         public Document Document => document;
         public IEnumerable<SnoopableObject> Items => items;
 
+        public SnoopableObject(object @object, Document document, SnoopableObject child) : this(@object, document, null, new[] {child})
+        {
 
+        }
         public SnoopableObject(object @object, Document document, string name = null, IEnumerable<SnoopableObject> subObjects = null)
         {
             this.@object = @object;
@@ -49,7 +53,7 @@ namespace RevitDBExplorer.Domain.DataModel
 
             if (subObjects != null)
             {
-                items = new List<SnoopableObject>(subObjects) ;
+                items = new List<SnoopableObject>(subObjects);
             }
             else
             {
@@ -69,6 +73,14 @@ namespace RevitDBExplorer.Domain.DataModel
         {
             var type = @object.GetType();
 
+            if ((type.IsEnum) || (type.IsPrimitive) || (type == typeof(string)))
+            {              
+                var member = new SnoopableMember(this, SnoopableMember.Kind.Property, "Value", type, new MemberAccessorForPrimitive(type), null);
+                member.ReadValue(document, @object);
+                yield return member;
+                yield break;
+            }
+
             var properties = type.GetProperties(BindingFlags.Instance | BindingFlags.Public);
             foreach (var prop in properties)
             {
@@ -85,7 +97,7 @@ namespace RevitDBExplorer.Domain.DataModel
                 }
 
                 var comments = RevitDocumentationReader.GetPropertyComments(prop);
-                var memberAccessor = MemberAccessorFactory.Create(prop.Name, prop.DeclaringType, getMethod, null);
+                var memberAccessor = MemberAccessorFactory.Create(getMethod, null);
 
                 var member = new SnoopableMember(this, SnoopableMember.Kind.Property, prop.Name, prop.DeclaringType, memberAccessor, comments);
                 member.ReadValue(document, @object);
@@ -101,7 +113,7 @@ namespace RevitDBExplorer.Domain.DataModel
                
 
                 var comments = RevitDocumentationReader.GetMethodComments(method);
-                var memberAccessor = MemberAccessorFactory.Create(method.Name, method.DeclaringType, method, null);
+                var memberAccessor = MemberAccessorFactory.Create(method, null);
                 var member = new SnoopableMember(this, SnoopableMember.Kind.Method, method.Name, method.DeclaringType, memberAccessor, comments);
                 member.ReadValue(document, @object);
 
