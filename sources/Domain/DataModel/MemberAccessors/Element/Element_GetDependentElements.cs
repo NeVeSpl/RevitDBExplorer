@@ -14,7 +14,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 
 
         protected override bool CanBeSnoooped(Document document, Element element) => true;
-        protected override string GetLabel(Document document, Element element) => "[Element]";
+        protected override string GetLabel(Document document, Element element) => $"[{nameof(Element)}]";
         protected override IEnumerable<SnoopableObject> Snooop(Document document, Element element)
         {
             var ids = element.GetDependentElements(null);

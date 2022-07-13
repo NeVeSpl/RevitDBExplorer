@@ -14,7 +14,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 
 
         protected override bool CanBeSnoooped(Document document, Document value) => false;// document.Phases.Size > 0;
-        protected override string GetLabel(Document document, Document value) => "[Phase:PlanTopology]";
+        protected override string GetLabel(Document document, Document value) => $"[{nameof(PlanTopology)}]";
 
         protected override IEnumerable<SnoopableObject> Snooop(Document document, Document value)
         {

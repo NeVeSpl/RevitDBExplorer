@@ -26,7 +26,7 @@ namespace RevitDBExplorer.Domain.DataModel.ValueTypes
                 var definition = iterator.Key;
                 var binding = iterator.Current;
 
-                yield return new SnoopableObject(definition, document, null, new [] { new SnoopableObject(binding, document) });
+                yield return new SnoopableObject(definition, document, new SnoopableObject(binding, document));
             }
         }
     }

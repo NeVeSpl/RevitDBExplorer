@@ -24,7 +24,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
         }
         protected override string GetLabel(Document document, Element element)
         {          
-            return "[Entity]";
+            return $"[{nameof(Entity)}]";
         }
         protected override IEnumerable<SnoopableObject> Snooop(Document document, Element element)
         {
@@ -36,7 +36,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
                 var entity = element.GetEntity(schema);
                 if (!entity.IsValid()) continue;
 
-                yield return new SnoopableObject(schema, document, null, new[] { new SnoopableObject(entity, document) });
+                yield return new SnoopableObject(schema, document, new SnoopableObject(entity, document));
             }         
         }       
     }

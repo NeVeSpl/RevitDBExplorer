@@ -182,7 +182,11 @@ namespace RevitDBExplorer
                     foreach (var sub in (cat.Items ?? Enumerable.Empty<TreeViewItemVM>()))
                     {
                         sub.IsExpanded = true;
-                    }
+                        foreach (var subsub in (sub.Items ?? Enumerable.Empty<TreeViewItemVM>()))
+                        {
+                            //subsub.IsExpanded = true;
+                        }
+                    }                   
                 }       
                 // Select
                 var firstObject = TreeItems.First().Items.First();

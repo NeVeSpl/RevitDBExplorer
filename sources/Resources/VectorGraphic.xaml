@@ -18,6 +18,8 @@
     <StreamGeometry x:Key="vFileDocumentOutline" >M6,2A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2H6M6,4H13V9H18V20H6V4M8,12V14H16V12H8M8,16V18H13V16H8Z</StreamGeometry>
     <StreamGeometry x:Key="vApplication" >M21 2H3C1.9 2 1 2.9 1 4V20C1 21.1 1.9 22 3 22H21C22.1 22 23 21.1 23 20V4C23 2.9 22.1 2 21 2M21 7H3V4H21V7Z</StreamGeometry>
     <StreamGeometry x:Key="vFileCabinet" >M14,8H10V6H14V8M20,4V20C20,21.11 19.11,22 18,22H6C4.89,22 4,21.11 4,20V4A2,2 0 0,1 6,2H18C19.11,2 20,2.9 20,4M18,13H6V20H18V13M18,4H6V11H18V4M14,15H10V17H14V15Z</StreamGeometry>
+    <StreamGeometry x:Key="vCube" >M21,16.5C21,16.88 20.79,17.21 20.47,17.38L12.57,21.82C12.41,21.94 12.21,22 12,22C11.79,22 11.59,21.94 11.43,21.82L3.53,17.38C3.21,17.21 3,16.88 3,16.5V7.5C3,7.12 3.21,6.79 3.53,6.62L11.43,2.18C11.59,2.06 11.79,2 12,2C12.21,2 12.41,2.06 12.57,2.18L20.47,6.62C20.79,6.79 21,7.12 21,7.5V16.5M12,4.15L6.04,7.5L12,10.85L17.96,7.5L12,4.15Z</StreamGeometry>
+
 
     <Style x:Key="IconProperty" TargetType="Path">
         <Setter Property="Data" Value="{StaticResource vWrench}"/>
@@ -28,6 +30,13 @@
 
      <Style x:Key="IconMethod" TargetType="Path">
         <Setter Property="Data" Value="{StaticResource vCubeOutline}"/>
+        <Setter Property="Fill" Value="black"/>
+        <Setter Property="Stretch" Value="Uniform"/>
+        <Setter Property="Width" Value="10"/>
+    </Style>
+    
+    <Style x:Key="IconMethodStatic" TargetType="Path">
+        <Setter Property="Data" Value="{StaticResource vCube}"/>
         <Setter Property="Fill" Value="black"/>
         <Setter Property="Stretch" Value="Uniform"/>
         <Setter Property="Width" Value="10"/>

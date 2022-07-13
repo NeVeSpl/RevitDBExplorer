@@ -14,7 +14,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 
 
         protected override bool CanBeSnoooped(Document document, PlanViewRange viewRange) => true;
-        protected override string GetLabel(Document document, PlanViewRange viewRange) => "[Level]";
+        protected override string GetLabel(Document document, PlanViewRange viewRange) => $"[{nameof(Level)}]";
         protected override IEnumerable<SnoopableObject> Snooop(Document document, PlanViewRange viewRange)
         {
             foreach (PlanViewPlane type in Enum.GetValues(typeof(PlanViewPlane)))
@@ -23,11 +23,11 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
                 if (levelId is not null && levelId != ElementId.InvalidElementId)
                 {
                     var level = document.GetElement(levelId) as Level;
-                    yield return new SnoopableObject(level, document, type.ToString());                  
+                    yield return new SnoopableObject(type, document, new SnoopableObject(level, document));                  
                 }
                 else
                 {
-                    yield return new SnoopableObject(levelId, document, type.ToString());                   
+                    yield return new SnoopableObject(type, document, new SnoopableObject(levelId, document));                   
                 }
             }
         }

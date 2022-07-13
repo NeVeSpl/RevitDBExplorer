@@ -39,7 +39,7 @@ namespace RevitDBExplorer.Domain.DataModel.ValueTypes
             if (type.IsGenericType)
             {
                 var args = type.GetGenericArguments();
-                return $"{typeName}[{String.Join(",", args.Select(x => x.Name))}]";
+                return $"{typeName}[{String.Join(", ", args.Select(x => x.Name))}]";
             }
 
             foreach (var item in enumerable)
@@ -54,8 +54,10 @@ namespace RevitDBExplorer.Domain.DataModel.ValueTypes
 
         protected override IEnumerable<SnoopableObject> Snooop(Document document, IEnumerable enumerable)
         {
+            int index = -1;
             foreach (var item in enumerable)
             {
+                index++;
                 if (item is ElementId id)
                 {
                     var element = document.GetElementOrCategory(id);
@@ -66,7 +68,7 @@ namespace RevitDBExplorer.Domain.DataModel.ValueTypes
                 }
                 else
                 {
-                    yield return new SnoopableObject(item, document);
+                    yield return new SnoopableObject(item, document, index);
                 }
             }
         }

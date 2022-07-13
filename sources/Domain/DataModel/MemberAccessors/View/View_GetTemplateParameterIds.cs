@@ -18,7 +18,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
             bool canBesnooped = !view.Document.IsFamilyDocument && view.IsTemplate && view.GetTemplateParameterIds().Count > 0;
             return canBesnooped;
         }
-        protected override string GetLabel(Document document, View value) => "[Parameter]";
+        protected override string GetLabel(Document document, View value) => $"[{nameof(Parameter)}]";
         protected override IEnumerable<SnoopableObject> Snooop(Document document, View view)
         {
             var templateParameterIds = view.GetTemplateParameterIds().ToLookup(x => x);

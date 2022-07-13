@@ -12,7 +12,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
         IMemberAccessor IHaveFactoryMethod.Create() => new Curve_GetEndPoint();
 
 
-        protected override bool CanBeSnoooped(Document document, Curve curve) => curve is not null && curve.IsBound;
+        protected override bool CanBeSnoooped(Document document, Curve curve) => curve.IsBound;
         protected override string GetLabel(Document document, Curve curve)
         {
             var p0 = curve.GetEndPoint(0);

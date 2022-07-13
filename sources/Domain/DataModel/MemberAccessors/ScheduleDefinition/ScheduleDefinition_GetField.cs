@@ -14,10 +14,10 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 
         protected override bool CanBeSnoooped(Document document, ScheduleDefinition scheduleDefinition)
         {
-            bool canBesnooped = scheduleDefinition is not null && scheduleDefinition.GetFieldCount() > 0;
+            bool canBesnooped = scheduleDefinition.GetFieldCount() > 0;
             return canBesnooped;
         }
-        protected override string GetLabel(Document document, ScheduleDefinition scheduleDefinition) => "[ScheduleField]";
+        protected override string GetLabel(Document document, ScheduleDefinition scheduleDefinition) => $"[{nameof(ScheduleField)}]";
         protected override IEnumerable<SnoopableObject> Snooop(Document document, ScheduleDefinition scheduleDefinition)
         {
             for (var i = 0; i < scheduleDefinition.GetFieldCount(); i++)

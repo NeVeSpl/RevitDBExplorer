@@ -82,18 +82,30 @@
                         <TextBlock Text="]" Foreground="Blue" />
                     </StackPanel>
                 </HierarchicalDataTemplate>
-                
-                <HierarchicalDataTemplate DataType="{x:Type viewModels:SnoopableObjectTreeVM}" ItemsSource="{Binding Items}">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock>             
-                                <Run Text="{Binding Object.Name, Mode=OneWay}" /> 
-                                <!--<Run Text="{Binding RevitId}" />-->
-                        </TextBlock>
 
+                <HierarchicalDataTemplate DataType="{x:Type viewModels:SnoopableObjectTreeVM}" ItemsSource="{Binding Items}">
+                    <StackPanel Orientation="Horizontal">                       
+                        <TextBlock>             
+                             <Run Text="{Binding Index, Mode=OneWay}"  x:Name="cIndex">
+                                 <Run.Style>
+                                     <Style TargetType="{x:Type Run}">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Path=IsSelected, Mode=TwoWay}"  Value="True">
+                                                <Setter Property="Foreground" Value="White"/>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding Path=IsSelected, Mode=TwoWay}"  Value="False">
+                                                <Setter Property="Foreground" Value="Gray"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                     </Style>
+                                 </Run.Style>
+                              </Run>
+                             <Run Text="{Binding Object.Name, Mode=OneWay}" />
+                        </TextBlock>
                     </StackPanel>
                 </HierarchicalDataTemplate>
             </TreeView.Resources>
-            
+
             <TreeView.ItemContainerStyle>
                 <Style TargetType="{x:Type TreeViewItem}">
                     <Setter Property="BorderThickness" Value="1" />
@@ -102,7 +114,7 @@
                     <Setter Property="IsEnabled" Value="{Binding Path=IsEnabled, Mode=TwoWay}"/>
                     <Setter Property="IsExpanded" Value="{Binding Path=IsExpanded, Mode=TwoWay}" />
                     <Setter Property="Padding" Value="1 0 1 0"/>
-                    <Style.Triggers>                        
+                    <Style.Triggers>
                         <Trigger Property="IsSelected" Value="True">
                             <Setter Property="BorderBrush" Value="#A9274C5E" />
                         </Trigger>
@@ -120,8 +132,8 @@
         </TreeView>
 
         <Grid Grid.Row="1" Grid.Column="2" Margin="0 3 0 5 " >
-            
-        <TextBox Name="txtUserEntry"  Text="{Binding ListItemsFilterPhrase, Mode=TwoWay, Delay=100, UpdateSourceTrigger=PropertyChanged}"   >
+
+            <TextBox Name="txtUserEntry"  Text="{Binding ListItemsFilterPhrase, Mode=TwoWay, Delay=100, UpdateSourceTrigger=PropertyChanged}"   >
                 <TextBox.Style>
                     <!--source: https://stackoverflow.com/a/33539781/1147478-->
                     <Style TargetType="TextBox" xmlns:sys="clr-namespace:System;assembly=mscorlib">
@@ -156,7 +168,7 @@
                 <ContextMenu x:Key="ItemContextMenu">
                     <MenuItem Header="Copy" Click="ListViewMenuItemCopy_Click" />
                 </ContextMenu>
-                
+
                 <Style TargetType="{x:Type ListViewItem}">
                     <Setter Property="ToolTip">
                         <Setter.Value>
@@ -167,7 +179,7 @@
                             </UniformGrid>
                         </Setter.Value>
                     </Setter>
-                    <Setter Property="ContextMenu" Value="{StaticResource ItemContextMenu}" />                    
+                    <Setter Property="ContextMenu" Value="{StaticResource ItemContextMenu}" />
                     <Style.Triggers>
                         <Trigger Property="ItemsControl.AlternationIndex" Value="0">
                             <Setter Property="Background" Value="white"></Setter>
@@ -185,18 +197,22 @@
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
-                                    <Path x:Name="cMemberIconProperty" Style="{StaticResource IconProperty}" Margin="-1 1 4 0" Visibility="Collapsed"/>
-                                    <Path x:Name="cMemberIconMethod" Style="{StaticResource IconMethod}" Margin="-1 1 4 0" Visibility="Collapsed"/>
+                                    <Path x:Name="cMemberIconProperty" Style="{StaticResource IconProperty}" Margin="0 1 4 0" Visibility="Collapsed"/>
+                                    <Path x:Name="cMemberIconMethod" Style="{StaticResource IconMethod}" Margin="0 1 4 0" Visibility="Collapsed"/>
+                                    <Path x:Name="cMemberIconMethodStatic" Style="{StaticResource IconMethodStatic}" Margin="0 1 4 0" Visibility="Collapsed"/>
                                     <TextBlock x:Name="cTextBlock" Text="{Binding Name}"  />
                                 </StackPanel>
 
                                 <DataTemplate.Triggers>
 
                                     <DataTrigger Binding="{Binding MemberKind}" Value="Method">
-                                        <Setter TargetName="cMemberIconMethod" Property="Visibility" Value="Visible"/>                                        
+                                        <Setter TargetName="cMemberIconMethod" Property="Visibility" Value="Visible"/>
                                     </DataTrigger>
                                     <DataTrigger Binding="{Binding MemberKind}" Value="Property">
                                         <Setter TargetName="cMemberIconProperty" Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding MemberKind}" Value="StaticMethod">
+                                        <Setter TargetName="cMemberIconMethodStatic" Property="Visibility" Value="Visible"/>
                                     </DataTrigger>
                                 </DataTemplate.Triggers>
                             </DataTemplate>
@@ -226,11 +242,11 @@
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    
+
                     <GridViewColumn Header="Type" Width="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListView}}, Path=ActualWidth, Converter={StaticResource PercentageOfValueConverter}, ConverterParameter=17}" DisplayMemberBinding="{Binding ValueTypeName}" />
                 </GridView>
             </ListView.View>
-            
+
             <ListView.GroupStyle>
                 <GroupStyle>
                     <GroupStyle.HeaderTemplate>

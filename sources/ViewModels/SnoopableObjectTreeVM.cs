@@ -6,7 +6,14 @@ namespace RevitDBExplorer.ViewModels
 {
     internal class SnoopableObjectTreeVM : TreeViewItemVM
     {
-        public SnoopableObject Object { get; }      
+        public SnoopableObject Object { get; }     
+        public string Index
+        {
+            get
+            {
+                return Object.Index != -1 ? $"[{Object.Index}]" : "";
+            }
+        }
 
 
         public SnoopableObjectTreeVM(SnoopableObject @object)

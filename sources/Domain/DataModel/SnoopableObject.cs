@@ -1,13 +1,11 @@
 ﻿using System.Collections;
-using System.Linq;
 using System.Collections.Generic;
 using System.Reflection;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using RevitDBExplorer.Domain.DataModel.MemberAccessors;
-using RevitDBExplorer.WPF;
 using RevitDBExplorer.Domain.DataModel.Streams;
-using System;
+using RevitDBExplorer.WPF;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
@@ -20,6 +18,7 @@ namespace RevitDBExplorer.Domain.DataModel
         private readonly string name;
         private readonly string typeName;
         private readonly List<SnoopableObject> items;
+        private readonly int index = -1;
 
 
         public object Object => @object;
@@ -29,7 +28,7 @@ namespace RevitDBExplorer.Domain.DataModel
             {
                 return name;
             }
-        }
+        }        
         public string TypeName
         {
             get
@@ -39,7 +38,14 @@ namespace RevitDBExplorer.Domain.DataModel
         }
         public Document Document => document;
         public IEnumerable<SnoopableObject> Items => items;
+        public int Index => index;
 
+
+        public SnoopableObject(object @object, Document document, int index) : this(@object, document, null, null)
+        {
+            this.index = index;
+            //this.name = $"[{index}] " + name;
+        }
         public SnoopableObject(object @object, Document document, SnoopableObject child) : this(@object, document, null, new[] {child})
         {
 
@@ -47,7 +53,7 @@ namespace RevitDBExplorer.Domain.DataModel
         public SnoopableObject(object @object, Document document, string name = null, IEnumerable<SnoopableObject> subObjects = null)
         {
             this.@object = @object;
-            this.document = document;
+            this.document = document;            
             this.name = name ?? Labels.GetNameForObject(@object, document);
             this.typeName = @object?.GetType().Name;
 
@@ -57,7 +63,7 @@ namespace RevitDBExplorer.Domain.DataModel
             }
             else
             {
-                if (@object is IEnumerable enumerable && @object is not string)
+                if (@object is IEnumerable enumerable && @object is not string && @object is not IDictionary)
                 {
                     items = new List<SnoopableObject>();
                     foreach (var item in enumerable)
@@ -71,15 +77,23 @@ namespace RevitDBExplorer.Domain.DataModel
 
         public IEnumerable<SnoopableMember> GetMembers(UIApplication app)
         {
-            var type = @object.GetType();
-
-            if ((type.IsEnum) || (type.IsPrimitive) || (type == typeof(string)))
-            {              
-                var member = new SnoopableMember(this, SnoopableMember.Kind.Property, "Value", type, new MemberAccessorForPrimitive(type), null);
-                member.ReadValue(document, @object);
-                yield return member;
+            if (@object == null)
+            {
                 yield break;
             }
+
+            var type = @object.GetType();
+
+            var systemTypeStream = new SystemTypeStream();            
+            foreach (var member in systemTypeStream.Stream(this))
+            {
+                member.ReadValue(document, @object);
+                yield return member;
+            }
+            if (systemTypeStream.EndStream)
+            { 
+                yield break;
+            }            
 
             var properties = type.GetProperties(BindingFlags.Instance | BindingFlags.Public);
             foreach (var prop in properties)
@@ -119,8 +133,7 @@ namespace RevitDBExplorer.Domain.DataModel
 
                 if (!member.HasExceptionCouldNotResolveAllArguments)
                     yield return member;
-            }
-            
+            }            
 
             foreach (var member in new PartUtilsStream().Stream(this))
             {                

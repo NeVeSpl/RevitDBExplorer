@@ -18,12 +18,12 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
             bool canBesnooped = !view.Document.IsFamilyDocument && view.AreGraphicsOverridesAllowed() && view.GetFilters().Count > 0;
             return canBesnooped;
         }
-        protected override string GetLabel(Document document, View value) => "[OverrideGraphicSettings]";
+        protected override string GetLabel(Document document, View value) => $"[{nameof(OverrideGraphicSettings)}]";
         protected override IEnumerable<SnoopableObject> Snooop(Document document, View view)
         {
             var filters = new FilteredElementCollector(document, view.GetFilters()).WhereElementIsNotElementType().ToElements();
 
-            return filters.Select(x => new SnoopableObject(view.GetFilterOverrides(x.Id), document, x.Name));
+            return filters.Select(x => new SnoopableObject(x, document, new SnoopableObject(view.GetFilterOverrides(x.Id), document)));
         }
     }
 }

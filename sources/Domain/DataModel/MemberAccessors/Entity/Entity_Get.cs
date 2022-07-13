@@ -7,7 +7,6 @@ using Autodesk.Revit.DB.ExtensibleStorage;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
-
 namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
     internal class Entity_Get : MemberAccessorByType<Entity>, IHaveFactoryMethod
@@ -16,17 +15,14 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
         IMemberAccessor IHaveFactoryMethod.Create() => new Entity_Get();
 
 
-
         protected override bool CanBeSnoooped(Document document, Entity entity)
         {
             return entity.IsValid() && entity.Schema.ReadAccessGranted() && entity.Schema.ListFields().Count > 0;
         }
-
         protected override string GetLabel(Document document, Entity entity)
         {
             return "[Extensible storage values]";
         }
-
         protected override IEnumerable<SnoopableObject> Snooop(Document document, Entity entity)
         {
             var fields = entity.Schema.ListFields();
@@ -53,7 +49,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
                     parameters = new object[] { field };
                 }
                 var value = closedGenericGet.Invoke(entity, parameters);
-                yield return new SnoopableObject(field, document, null, new[] { new SnoopableObject(value, document) });
+                yield return new SnoopableObject(field, document, new SnoopableObject(value, document));
             }
         }
 

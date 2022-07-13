@@ -49,7 +49,7 @@ namespace RevitDBExplorer.ViewModels
                 }
                 else
                 {
-                    Items = new ObservableCollection<TreeViewItemVM>(items.OrderBy(x => x.Name).Select(x => new SnoopableObjectTreeVM(x)));
+                    Items = new ObservableCollection<TreeViewItemVM>(items.OrderBy(x => x.Index).ThenBy(x => x.Name).Select(x => new SnoopableObjectTreeVM(x)));
                 }
             }
         }

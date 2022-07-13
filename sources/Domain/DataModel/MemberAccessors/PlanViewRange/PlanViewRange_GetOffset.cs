@@ -20,7 +20,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
             foreach (PlanViewPlane type in Enum.GetValues(typeof(PlanViewPlane)))
             {
                 var offset = viewRange.GetOffset(type);               
-                yield return new SnoopableObject(offset, document, type.ToString());               
+                yield return new SnoopableObject(type, document, new SnoopableObject(offset, document));               
             }
         }
     }

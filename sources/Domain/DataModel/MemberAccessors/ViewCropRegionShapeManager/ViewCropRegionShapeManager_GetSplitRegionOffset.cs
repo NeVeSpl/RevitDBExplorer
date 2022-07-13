@@ -13,12 +13,12 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 
 
         protected override bool CanBeSnoooped(Document document, ViewCropRegionShapeManager manager) => manager.NumberOfSplitRegions > 1;
-        protected override string GetLabel(Document document, ViewCropRegionShapeManager manager) => "[XYZ]";
+        protected override string GetLabel(Document document, ViewCropRegionShapeManager manager) => $"[{nameof(XYZ)}]";
         protected override IEnumerable<SnoopableObject> Snooop(Document document, ViewCropRegionShapeManager manager)
         {            
             for (var i = 0; i < manager.NumberOfSplitRegions; i++)
             {
-                yield return new SnoopableObject(manager.GetSplitRegionOffset(i), document, $"[{i}]");
+                yield return new SnoopableObject(manager.GetSplitRegionOffset(i), document, i);
             }    
         }
     }

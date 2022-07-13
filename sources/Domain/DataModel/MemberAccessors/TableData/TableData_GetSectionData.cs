@@ -15,17 +15,17 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 
         protected override bool CanBeSnoooped(Document document, TableData tableData)
         {
-            bool canBesnooped = tableData is not null && tableData.NumberOfSections > 0;
+            bool canBesnooped = tableData.NumberOfSections > 0;
             return canBesnooped;
         }
-        protected override string GetLabel(Document document, TableData tableData) => "[TableSectionData]";
+        protected override string GetLabel(Document document, TableData tableData) => $"[{nameof(TableSectionData)}]";
         protected override IEnumerable<SnoopableObject> Snooop(Document document, TableData tableData)
         {
             foreach (SectionType type in Enum.GetValues(typeof(SectionType)))
             {
                 var sectionData = tableData.GetSectionData(type);
                 if (sectionData is null) continue;
-                yield return new SnoopableObject(sectionData, document, type.ToString());
+                yield return new SnoopableObject(type, document, new SnoopableObject(sectionData, document));
             }
         }
     }

@@ -24,28 +24,32 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 
             return canBeSnooped;
         }
-        protected override string GetLabel(Document document, Element element) => "[GeometryElement]";
+        protected override string GetLabel(Document document, Element element) => $"[{nameof(GeometryElement)}]";
         protected override IEnumerable<SnoopableObject> Snooop(Document document, Element element)
         {
-            var options = new List<Options>();
+            var optionsForActiveView = new List<Options>();
             if (document.ActiveView != null)
             {
-                options.Add(new Options() { View = document.ActiveView, IncludeNonVisibleObjects = true });
-                options.Add(new Options() { View = document.ActiveView, IncludeNonVisibleObjects = false });
+                optionsForActiveView.Add(new Options() { View = document.ActiveView, IncludeNonVisibleObjects = false });
+                optionsForActiveView.Add(new Options() { View = document.ActiveView, IncludeNonVisibleObjects = true });
+                yield return new SnoopableObject(null, document, "Active view: " + document.ActiveView.Name, GetGeometry(document, element, optionsForActiveView));
             }
 
+            var options = new List<Options>();
             foreach (ViewDetailLevel level in Enum.GetValues(typeof(ViewDetailLevel)))
             {
-                options.Add(new Options() { DetailLevel = level, IncludeNonVisibleObjects = true });
                 options.Add(new Options() { DetailLevel = level, IncludeNonVisibleObjects = false });
+                options.Add(new Options() { DetailLevel = level, IncludeNonVisibleObjects = true });
             }
+            yield return new SnoopableObject(null, document, "Undefined view", GetGeometry(document, element, options));
+        }
 
+        private IEnumerable<SnoopableObject> GetGeometry(Document document, Element element, IEnumerable<Options> options)
+        {
             foreach (var option in options)
             {
                 var result = element.get_Geometry(option);
-                var viewName = option.View?.Name ?? "null";
-
-                var snoopableObject = new SnoopableObject(result, document, $"{viewName}, {option.DetailLevel}" + (option.IncludeNonVisibleObjects ? ", include non-visible objects" : ""));
+                var snoopableObject = new SnoopableObject(result, document, $"{option.DetailLevel}" + (option.IncludeNonVisibleObjects ? ", include non-visible objects" : ""));
                 yield return snoopableObject;
             }
         }

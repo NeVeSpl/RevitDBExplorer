@@ -79,6 +79,7 @@
     <Compile Include="Domain\DataModel\MemberAccessors\MemberAccessorByFunc.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\MemberAccessorByType.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\MemberAccessorForPrimitive.cs" />
+    <Compile Include="Domain\DataModel\MemberAccessors\MemberAccessorWithConst.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\PlanViewRange\PlanViewRange_GetLevelId.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\PlanViewRange\PlanViewRange_GetOffset.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\PrintManager\PrintManager_SubmitPrint.cs" />
@@ -92,6 +93,7 @@
     <Compile Include="Domain\DataModel\SnoopableMember.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\MemberAccessorFactory.cs" />
     <Compile Include="Domain\DataModel\Streams\PartUtilsStream.cs" />
+    <Compile Include="Domain\DataModel\Streams\SystemTypeStream.cs" />
     <Compile Include="Domain\DataModel\ValueTypes\Base\IHaveFactoryMethod.cs" />
     <Compile Include="Domain\DataModel\ValueTypes\Base\IValueType.cs" />
     <Compile Include="Domain\DataModel\ValueTypes\Base\ValueType.cs" />
