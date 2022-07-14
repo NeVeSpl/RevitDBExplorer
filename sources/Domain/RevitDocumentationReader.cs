@@ -18,7 +18,10 @@ namespace RevitDBExplorer.Domain
         {
             var assemblyPath = typeof(Element).Assembly.Location;
             var assemblyXmlDocPath = Path.ChangeExtension(assemblyPath, "xml");
-            docXml = new DocXmlReader(assemblyXmlDocPath);
+            if (File.Exists(assemblyXmlDocPath))
+            {
+                docXml = new DocXmlReader(assemblyXmlDocPath);
+            }
         }
 
         //public static DocXml GetTypeComments(Type type)
@@ -28,11 +31,11 @@ namespace RevitDBExplorer.Domain
         //}
         public static DocXml GetPropertyComments(PropertyInfo info)
         {
-            var memberComments = docXml.GetMemberComments(info);
+            var memberComments = docXml?.GetMemberComments(info);
             var doc = new DocXml()
             {
-                Summary = CleanString(memberComments.Summary),              
-                Remarks = CleanString(memberComments.Remarks),
+                Summary = CleanString(memberComments?.Summary),              
+                Remarks = CleanString(memberComments?.Remarks),
                 ReturnType = info.PropertyType.ToCSharpString(),
                 Name = info.Name,
                 Invocation = " { get; }"
@@ -41,12 +44,12 @@ namespace RevitDBExplorer.Domain
         }
         public static DocXml GetMethodComments(MethodInfo info)
         {
-            var methodComments = docXml.GetMethodComments(info);
+            var methodComments = docXml?.GetMethodComments(info);
             var doc = new DocXml()
             {
-                Summary = CleanString(methodComments.Summary),
-                Returns = CleanString(methodComments.Returns),
-                Remarks = CleanString(methodComments.Remarks),
+                Summary = CleanString(methodComments?.Summary),
+                Returns = CleanString(methodComments?.Returns),
+                Remarks = CleanString(methodComments?.Remarks),
                 ReturnType = info.ReturnType.ToCSharpString(),
                 Name = info.Name,
                 Invocation = "(" + String.Join(",", info.GetParameters().Select(p => $"{p.ParameterType.ToCSharpString()} {p.Name}").ToArray()) + ")"
@@ -56,7 +59,7 @@ namespace RevitDBExplorer.Domain
 
         private static string CleanString(string input)
         {
-            string result = input?.Trim()?.Replace(System.Environment.NewLine, "");
+            string result = input?.Trim()?.Replace(System.Environment.NewLine, "").StripTags();
             return result;
         }
     }

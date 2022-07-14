@@ -24,7 +24,7 @@ namespace RevitDBExplorer.Domain.DataModel
         private string value;
         private string valueTypeName;
         private bool canBeSnooped;
-        private DocXml documentation;
+        private Lazy<DocXml> documentation;
 
 
         public Kind MemberKind => memberKind;
@@ -46,9 +46,9 @@ namespace RevitDBExplorer.Domain.DataModel
         }
         public string ValueTypeName => valueTypeName;
         public bool CanBeSnooped => canBeSnooped;
-        public DocXml Documentation => documentation;
+        public DocXml Documentation => documentation?.Value;
         
-        public SnoopableMember(SnoopableObject parent, Kind memberKind, string name, Type declaringType, IMemberAccessor memberAccessor, DocXml comments)
+        public SnoopableMember(SnoopableObject parent, Kind memberKind, string name, Type declaringType, IMemberAccessor memberAccessor, Func<DocXml> commentsFactoryMethod)
         {
             this.parent = parent;
             this.memberKind = memberKind;
@@ -56,7 +56,10 @@ namespace RevitDBExplorer.Domain.DataModel
             this.declaringType = declaringType;
             this.declaringTypeLevel = declaringType.NumberOfBaseTypes();
             this.memberAccessor = memberAccessor;
-            this.documentation = comments;
+            if (commentsFactoryMethod != null)
+            {
+                this.documentation = new Lazy<DocXml>(commentsFactoryMethod);
+            }
         }
 
 

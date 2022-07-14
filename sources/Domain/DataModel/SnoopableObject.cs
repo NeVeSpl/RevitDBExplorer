@@ -109,7 +109,7 @@ namespace RevitDBExplorer.Domain.DataModel
                     continue;
                 }
 
-                var comments = RevitDocumentationReader.GetPropertyComments(prop);
+                var comments = () => RevitDocumentationReader.GetPropertyComments(prop);
                 var memberAccessor = MemberAccessorFactory.Create(getMethod, null);
 
                 var member = new SnoopableMember(this, SnoopableMember.Kind.Property, prop.Name, prop.DeclaringType, memberAccessor, comments);
@@ -125,7 +125,7 @@ namespace RevitDBExplorer.Domain.DataModel
                 if (method.DeclaringType == typeof(object)) continue;
                
 
-                var comments = RevitDocumentationReader.GetMethodComments(method);
+                var comments = () => RevitDocumentationReader.GetMethodComments(method);
                 var memberAccessor = MemberAccessorFactory.Create(method, null);
                 var member = new SnoopableMember(this, SnoopableMember.Kind.Method, method.Name, method.DeclaringType, memberAccessor, comments);
                 member.ReadValue(document, @object);
