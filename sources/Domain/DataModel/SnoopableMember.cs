@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reflection;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using RevitDBExplorer.Domain.DataModel.MemberAccessors;
@@ -48,7 +47,7 @@ namespace RevitDBExplorer.Domain.DataModel
         public bool CanBeSnooped => canBeSnooped;
         public DocXml Documentation => documentation?.Value;
         
-        public SnoopableMember(SnoopableObject parent, Kind memberKind, string name, Type declaringType, IMemberAccessor memberAccessor, Func<DocXml> commentsFactoryMethod)
+        public SnoopableMember(SnoopableObject parent, Kind memberKind, string name, Type declaringType, IMemberAccessor memberAccessor, Func<DocXml> documentationFactoryMethod)
         {
             this.parent = parent;
             this.memberKind = memberKind;
@@ -56,9 +55,9 @@ namespace RevitDBExplorer.Domain.DataModel
             this.declaringType = declaringType;
             this.declaringTypeLevel = declaringType.NumberOfBaseTypes();
             this.memberAccessor = memberAccessor;
-            if (commentsFactoryMethod != null)
+            if (documentationFactoryMethod != null)
             {
-                this.documentation = new Lazy<DocXml>(commentsFactoryMethod);
+                this.documentation = new Lazy<DocXml>(documentationFactoryMethod);
             }
         }
 

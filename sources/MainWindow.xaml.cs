@@ -22,7 +22,9 @@ namespace RevitDBExplorer
         private ObservableCollection<SnoopableCategoryTreeVM> treeItems = new();
         private ObservableCollection<SnoopableMember> listItems = new();
         private SnoopableMember listViewSelectedItem = null;
-        private string listItemsFilterPhrase = String.Empty;
+        private string listItemsFilterPhrase = string.Empty;
+        private string databaseQuery = string.Empty;
+        private string databaseQueryToolTip = string.Empty;
 
         public ObservableCollection<SnoopableCategoryTreeVM> TreeItems
         {
@@ -76,6 +78,32 @@ namespace RevitDBExplorer
                 OnPropertyChanged();
             }
         }
+        public string DatabaseQuery
+        {
+            get
+            {
+                return databaseQuery;
+            }
+            set
+            {
+                databaseQuery = value;
+                TryQueryDatabase(value);
+                OnPropertyChanged();
+            }
+        }
+        public string DatabaseQueryToolTip
+        {
+            get
+            {
+                return databaseQueryToolTip;
+            }
+            set
+            {
+                databaseQueryToolTip = value;               
+                OnPropertyChanged();
+            }
+        }
+
 
         public MainWindow()
         {
@@ -88,7 +116,7 @@ namespace RevitDBExplorer
         }
 
 
-        private async void Button_Click(object sender, RoutedEventArgs e)
+        private async void SelectorButton_Click(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -120,6 +148,10 @@ namespace RevitDBExplorer
                 {                    
                     var snoopableMembers = await ExternalExecutor.ExecuteInRevitContextAsync(x => snoopableObjectVM.Object.GetMembers(x).ToList());
                     PopulateListView(snoopableMembers);
+                }
+                else
+                {
+                    ListItems = null;
                 }
             }
             catch (Exception ex)
@@ -221,11 +253,33 @@ namespace RevitDBExplorer
             return true;
         }
 
+        private async void TryQueryDatabase(string query)
+        {
+            try
+            {
+                var snoopableObjects = await ExternalExecutor.ExecuteInRevitContextAsync(uiApp =>
+                {
+                    var document = uiApp?.ActiveUIDocument?.Document;
+
+                    if (document == null) return Enumerable.Empty<SnoopableObject>().ToList();
+
+                    var result = RevitDatabaseQueryParser.Parse(document, query);
+                    DatabaseQueryToolTip = result.RevitAPIQuery + ".ToElements();";                    
+                    return result.Collector.ToElements().Select(x => new SnoopableObject(x, document)).ToList();
+                });
+                PopulateTreeView(snoopableObjects);
+            }
+            catch (Exception ex)
+            {
+                ShowErrorMsg("RevitDatabaseQueryParser.Parse", ex);
+            }
+        }
+
         private void Window_Closed(object sender, EventArgs e)
         {
             Application.RevitWindowHandle.BringWindowToFront();
         }
-        private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
+        private void Window_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Escape)
             {

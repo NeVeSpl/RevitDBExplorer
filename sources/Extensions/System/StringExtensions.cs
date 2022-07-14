@@ -32,5 +32,13 @@
             }
             return new string(array, 0, arrayIndex);
         }
+
+        /// <summary>
+        /// source: https://stackoverflow.com/questions/6219454/efficient-way-to-remove-all-whitespace-from-string/30732794#30732794
+        /// </summary>
+        public static string RemoveWhitespace(this string str)
+        {
+            return string.Join("", str.Split(default(string[]), StringSplitOptions.RemoveEmptyEntries));
+        }
     }
 }

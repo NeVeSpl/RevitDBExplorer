@@ -23,6 +23,7 @@ namespace RevitDBExplorer
 
             ExternalExecutor.CreateExternalEvent();
             RevitDocumentationReader.Init();
+            RevitDatabaseQueryParser.Init();
 
             return Result.Succeeded;
         }
