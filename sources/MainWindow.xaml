@@ -32,7 +32,7 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
 
-        <UniformGrid Grid.ColumnSpan="3" Columns="11" Margin="0 0 0 2">
+        <UniformGrid Grid.ColumnSpan="3" Columns="12" Margin="0 0 0 2">
             <UniformGrid.Resources>
                 <Style TargetType="Button">
                     <Setter Property="Background" Value="Transparent"/>
@@ -68,11 +68,30 @@
             <Button Click="SelectorButton_Click" Tag="DependentElements" Margin="2 0 0 0" ToolTip="Snoop dependent elements of already selected elements in Revit">
                 <Path Style="{StaticResource IconDependentElements}" />
             </Button>
-            <Button Click="SelectorButton_Click" Tag="Schemas" Margin="2 0 0 0" ToolTip="Snoop Extensible Storage framework schemas in memory">
+            <Button Click="SelectorButton_Click" Tag="Schemas" Margin="2 0 0 0" ToolTip="Snoop Extensible Storage framework schemas located in memory">
                 <Path Style="{StaticResource IconSchemas}" />
             </Button>
-            <Button Click="SelectorButton_Click" Tag="Categories" Margin="2 0 0 0" ToolTip="Snoop categories that may be used in a ParameterFilterElement">
+            <Button Click="SelectorButton_Click"  Margin="2 0 0 0" Tag="FilterableCategories" ToolTip="Snoop categories that may be used in a ParameterFilterElement">
                 <Path Style="{StaticResource IconCategories}" />
+                <!--<Button.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Get all filterable categories" Click="SelectorButton_Click" Tag="FilterableCategories" ToolTip="Snoop categories that may be used in a ParameterFilterElement"/>
+                        <MenuItem Header="Get all filterable parameters in common" Click="SelectorButton_Click" Tag="FilterableParameters" ToolTip="Snoop parameters that may be used in a ParameterFilterElement"/>
+                    </ContextMenu>
+                </Button.ContextMenu>-->
+            </Button>
+            <Button Click="SubMenuButton_Click"  Margin="2 0 0 0" ToolTip="Snoop Forge types">
+                <Path Style="{StaticResource IconForge}" />
+                <Button.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="ParameterUtils.GetAllBuiltInGroups()" Click="SelectorButton_Click" Tag="ForgeParameterUtilsGetAllBuiltInGroups"/>
+                        <MenuItem Header="ParameterUtils.GetAllBuiltInParameters()" Click="SelectorButton_Click" Tag="ForgeParameterUtilsGetAllBuiltInParameters"/>
+                        <MenuItem Header="UnitUtils.GetAllMeasurableSpecs()" Click="SelectorButton_Click" Tag="ForgeUnitUtilsGetAllMeasurableSpecs"/>
+                        <MenuItem Header="UnitUtils.GetAllUnits()" Click="SelectorButton_Click" Tag="ForgeUnitUtilsGetAllUnits"/>
+                        <MenuItem Header="UnitUtils.GetAllDisciplines()" Click="SelectorButton_Click" Tag="ForgeUnitUtilsGetAllDisciplines"/>
+                        <MenuItem Header="SpecUtils.GetAllSpecs()" Click="SelectorButton_Click" Tag="ForgeSpecUtilsGetAllSpecs"/>
+                    </ContextMenu>
+                </Button.ContextMenu>
             </Button>
         </UniformGrid>
 

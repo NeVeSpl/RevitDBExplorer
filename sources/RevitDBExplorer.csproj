@@ -77,6 +77,7 @@
     <Compile Include="Domain\DataModel\MemberAccessors\Element\Element_GetEntity.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\Element\Element_GetPhaseStatus.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\Entity\Entity_Get.cs" />
+    <Compile Include="Domain\DataModel\MemberAccessors\ForgeTypeId\ForgeTypeId_Clear.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\IHaveFactoryMethod.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\IMemberAccessor.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\MemberAccessorByFunc.cs" />
@@ -95,6 +96,7 @@
     <Compile Include="Domain\DataModel\MemberAccessors\View\View_GetFilterOverrides.cs" />
     <Compile Include="Domain\DataModel\SnoopableMember.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\MemberAccessorFactory.cs" />
+    <Compile Include="Domain\DataModel\Streams\ForgeTypeIdStream.cs" />
     <Compile Include="Domain\DataModel\Streams\PartUtilsStream.cs" />
     <Compile Include="Domain\DataModel\Streams\SystemTypeStream.cs" />
     <Compile Include="Domain\DataModel\ValueTypes\Base\IHaveFactoryMethod.cs" />
@@ -110,6 +112,7 @@
     <Compile Include="Domain\DataModel\ValueTypes\DoubleType.cs" />
     <Compile Include="Domain\DataModel\ValueTypes\ElementIdType.cs" />
     <Compile Include="Domain\DataModel\ValueTypes\ElementType.cs" />
+    <Compile Include="Domain\DataModel\ValueTypes\ForgeTypeIdType.cs" />
     <Compile Include="Domain\DataModel\ValueTypes\IEnumerableType.cs" />
     <Compile Include="Domain\DataModel\ValueTypes\EnumType.cs" />
     <Compile Include="Domain\DataModel\ValueTypes\FamilyParameterType.cs" />

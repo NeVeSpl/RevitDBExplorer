@@ -66,6 +66,9 @@ namespace RevitDBExplorer.Domain
 
     public class DocXml
     {
+        public static readonly DocXml Empty = new DocXml();
+
+
         public string Summary    { get; init; }
         public string Returns    { get; init; }
         public string Remarks    { get; init; }

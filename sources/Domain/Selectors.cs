@@ -21,7 +21,14 @@ namespace RevitDBExplorer.Domain
         ActiveDocument,
         Application,
         Schemas,
-        Categories
+        FilterableCategories,
+        FilterableParameters,
+        ForgeParameterUtilsGetAllBuiltInGroups,
+        ForgeParameterUtilsGetAllBuiltInParameters,
+        ForgeUnitUtilsGetAllMeasurableSpecs,
+        ForgeUnitUtilsGetAllUnits,
+        ForgeUnitUtilsGetAllDisciplines,
+        ForgeSpecUtilsGetAllSpecs,
     }
 
     internal static class Selectors
@@ -40,7 +47,14 @@ namespace RevitDBExplorer.Domain
                 Selector.ActiveDocument => SnoopActiveDocument(uiApplication),
                 Selector.ActiveView => SnoopActiveView(uiApplication),
                 Selector.Schemas => SnoopSchemas(uiApplication),
-                Selector.Categories => SnoopCategories(uiApplication),
+                Selector.FilterableCategories => SnoopCategories(uiApplication),
+                Selector.FilterableParameters => SnoopParameters(uiApplication),
+                Selector.ForgeParameterUtilsGetAllBuiltInGroups => SnoopForge(selector),
+                Selector.ForgeParameterUtilsGetAllBuiltInParameters => SnoopForge(selector),
+                Selector.ForgeUnitUtilsGetAllMeasurableSpecs => SnoopForge(selector),
+                Selector.ForgeUnitUtilsGetAllUnits => SnoopForge(selector),
+                Selector.ForgeUnitUtilsGetAllDisciplines => SnoopForge(selector),
+                Selector.ForgeSpecUtilsGetAllSpecs => SnoopForge(selector),
                 _ => throw new NotImplementedException()
             };
             return result ?? Enumerable.Empty<SnoopableObject>();
@@ -161,6 +175,27 @@ namespace RevitDBExplorer.Domain
            
             return categorries.Select(x => new SnoopableObject(x, document));
         }
+        private static IEnumerable<SnoopableObject> SnoopParameters(UIApplication app)
+        {
+            var document = app?.ActiveUIDocument?.Document;
+
+            if (document == null) yield break;
+
+            var categoryIds = ParameterFilterUtilities.GetAllFilterableCategories();
+            var categorries = categoryIds.Select(x => Category.GetCategory(document, x)).Where(x => x is not null).ToList();
+            foreach(var category in categorries)
+            {
+                var paramIds = ParameterFilterUtilities.GetFilterableParametersInCommon(document, new[] {category.Id });
+                IEnumerable<SnoopableObject> snoopableParameters = Enumerable.Empty<SnoopableObject>();
+                if (paramIds.Any())
+                {
+                    var parameters = new FilteredElementCollector(document).WherePasses(new ElementIdSetFilter(paramIds)).ToList();
+                    snoopableParameters = parameters.Select(x => new SnoopableObject(x, document));
+                 }
+
+                yield return new SnoopableObject(category, document, null, snoopableParameters);
+            }
+        }
         private static IEnumerable<SnoopableObject> SnoopActiveDocument(UIApplication app)
         {
             var document = app?.ActiveUIDocument?.Document;
@@ -177,6 +212,19 @@ namespace RevitDBExplorer.Domain
             if (view == null) yield break;
 
             yield return new SnoopableObject(view, document);
-        }        
+        }
+        private static IEnumerable<SnoopableObject> SnoopForge(Selector selector)
+        {
+            IList<ForgeTypeId> ids = selector switch
+            {
+                Selector.ForgeParameterUtilsGetAllBuiltInGroups => ParameterUtils.GetAllBuiltInGroups(),
+                Selector.ForgeParameterUtilsGetAllBuiltInParameters => ParameterUtils.GetAllBuiltInParameters(),
+                Selector.ForgeUnitUtilsGetAllMeasurableSpecs => UnitUtils.GetAllMeasurableSpecs(),
+                Selector.ForgeUnitUtilsGetAllUnits => UnitUtils.GetAllUnits(),
+                Selector.ForgeUnitUtilsGetAllDisciplines => UnitUtils.GetAllDisciplines(),
+                Selector.ForgeSpecUtilsGetAllSpecs => SpecUtils.GetAllSpecs(),
+            };
+            return ids.Select(x => new SnoopableObject(x, null));
+        }
     }
 }

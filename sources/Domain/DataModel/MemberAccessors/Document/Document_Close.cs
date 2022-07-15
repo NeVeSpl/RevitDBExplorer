@@ -13,6 +13,6 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 
       
         protected override bool CanBeSnoooped(Document document, Document value) => false;
-        protected override string GetLabel(Document document, Document value) => "cannot be done";       
+        protected override string GetLabel(Document document, Document value) => "'cannot be done' - Colin";       
     }
 }

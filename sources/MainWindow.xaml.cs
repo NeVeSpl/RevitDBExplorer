@@ -120,7 +120,7 @@ namespace RevitDBExplorer
         {
             try
             {
-                var tag = ((Button)sender).Tag as string;
+                var tag = ((Control)sender).Tag as string;
                 var selector = (Selector)Enum.Parse(typeof(Selector), tag);
                 if (selector == Selector.PickEdge || selector ==  Selector.PickFace)
                 {
@@ -275,6 +275,17 @@ namespace RevitDBExplorer
             }
         }
 
+        private void SubMenuButton_Click(object sender, RoutedEventArgs e)
+        {
+            var contextMenu = ContextMenuService.GetContextMenu(sender as DependencyObject);
+            if (contextMenu == null)
+            {
+                return;
+            }
+            contextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.Bottom;
+            contextMenu.PlacementTarget = sender as UIElement;
+            contextMenu.IsOpen = true;
+        }
         private void Window_Closed(object sender, EventArgs e)
         {
             Application.RevitWindowHandle.BringWindowToFront();
@@ -297,6 +308,8 @@ namespace RevitDBExplorer
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        #endregion        
+        #endregion
+
+       
     }
 }

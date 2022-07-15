@@ -22,6 +22,7 @@ namespace RevitDBExplorer.Domain.DataModel.ValueTypes.Base
             new XYZType(),
             new UVType(),
             new ColorType(),
+            new ForgeTypeIdType(),
 
             //            
             new BindingMapType(),

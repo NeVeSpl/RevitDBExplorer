@@ -45,7 +45,7 @@ namespace RevitDBExplorer.Domain.DataModel
         }
         public string ValueTypeName => valueTypeName;
         public bool CanBeSnooped => canBeSnooped;
-        public DocXml Documentation => documentation?.Value;
+        public DocXml Documentation => documentation?.Value ?? DocXml.Empty;
         
         public SnoopableMember(SnoopableObject parent, Kind memberKind, string name, Type declaringType, IMemberAccessor memberAccessor, Func<DocXml> documentationFactoryMethod)
         {

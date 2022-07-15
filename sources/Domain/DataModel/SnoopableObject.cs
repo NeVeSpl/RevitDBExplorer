@@ -132,7 +132,13 @@ namespace RevitDBExplorer.Domain.DataModel
 
                 if (!member.HasExceptionCouldNotResolveAllArguments)
                     yield return member;
-            }            
+            }              
+
+            foreach (var member in new ForgeTypeIdStream().Stream(this))
+            {
+                member.ReadValue(document, @object);
+                yield return member;
+            }
 
             foreach (var member in new PartUtilsStream().Stream(this))
             {                
