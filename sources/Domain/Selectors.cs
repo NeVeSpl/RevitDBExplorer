@@ -20,7 +20,8 @@ namespace RevitDBExplorer.Domain
         ActiveView,
         ActiveDocument,
         Application,
-        Schemas
+        Schemas,
+        Categories
     }
 
     internal static class Selectors
@@ -39,6 +40,7 @@ namespace RevitDBExplorer.Domain
                 Selector.ActiveDocument => SnoopActiveDocument(uiApplication),
                 Selector.ActiveView => SnoopActiveView(uiApplication),
                 Selector.Schemas => SnoopSchemas(uiApplication),
+                Selector.Categories => SnoopCategories(uiApplication),
                 _ => throw new NotImplementedException()
             };
             return result ?? Enumerable.Empty<SnoopableObject>();
@@ -113,6 +115,7 @@ namespace RevitDBExplorer.Domain
                 // User can cancel picking
                 yield break;
             }
+        
 
             var representation = reference.ConvertToStableRepresentation(document).Split(':')[0];
             var parsedReference = Reference.ParseFromStableRepresentation(document, representation);
@@ -146,6 +149,17 @@ namespace RevitDBExplorer.Domain
         private static IEnumerable<SnoopableObject> SnoopSchemas(UIApplication app)
         {
             return Schema.ListSchemas().Select(x => new SnoopableObject(x, null));
+        }
+        private static IEnumerable<SnoopableObject> SnoopCategories(UIApplication app)
+        {
+            var document = app?.ActiveUIDocument?.Document;
+
+            if (document == null) return null;
+
+            var ids = ParameterFilterUtilities.GetAllFilterableCategories();
+            var categorries = ids.Select(x => Category.GetCategory(document, x)).Where(x => x is not null).ToList();
+           
+            return categorries.Select(x => new SnoopableObject(x, document));
         }
         private static IEnumerable<SnoopableObject> SnoopActiveDocument(UIApplication app)
         {

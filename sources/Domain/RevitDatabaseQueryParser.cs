@@ -7,6 +7,8 @@ using Autodesk.Revit.DB.Mechanical;
 using Autodesk.Revit.DB.Structure;
 using SimMetrics.Net;
 
+// (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
+
 namespace RevitDBExplorer.Domain
 {
     internal static class RevitDatabaseQueryParser
@@ -44,16 +46,14 @@ namespace RevitDBExplorer.Domain
             var enums = Enum.GetValues(typeof(BuiltInCategory));
             Categories = new List<(string, object)>(enums.Length);
 
-
-            // alternative: ParameterFilterUtilities.GetAllFilterableCategories            
-            foreach (BuiltInCategory category in enums)
+            
+            var allFilterableCategories =  ParameterFilterUtilities.GetAllFilterableCategories();            
+            foreach (ElementId categoryId in allFilterableCategories)
             {
-                if (Category.IsBuiltInCategoryValid(category))
-                {
-                    var label = LabelUtils.GetLabelFor(category);
-                    Categories.Add((label.ToLower().RemoveWhitespace(), category));
-                    Categories.Add((category.ToString().ToLower().RemoveWhitespace(), category));
-                }
+                var category = (BuiltInCategory)categoryId.IntegerValue;
+                var label = LabelUtils.GetLabelFor(category);
+                Categories.Add((label.ToLower().RemoveWhitespace(), category));
+                Categories.Add((category.ToString().ToLower().RemoveWhitespace(), category));                
             }
 
             var elementType = typeof(Element);
@@ -69,7 +69,7 @@ namespace RevitDBExplorer.Domain
         public static Result Parse(Document document, string query)
         {
             var commands = ParseQuery(query);
-
+            
             var c1 = CreateCollector(document, commands);
             var c2 = WhereElementIsElementTypeOrNot(c1, commands);
             var c3 = OfClass(c2, commands);
@@ -167,7 +167,7 @@ namespace RevitDBExplorer.Domain
             {
                 var cmd = commands.Where(x => x.Type == CmdType.Category).First();
                 var c = token.Collector.OfCategory(cmd.ArgumentAsCategory);
-                var s = token.RevitAPIQuery + $".OfCategory({cmd.ArgumentAsCategory})";
+                var s = token.RevitAPIQuery + $".OfCategory(BuiltInCategory.{cmd.ArgumentAsCategory})";
                 return new Result(c, s);
             }
             

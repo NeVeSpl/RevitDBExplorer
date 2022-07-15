@@ -32,7 +32,7 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
 
-        <UniformGrid Grid.ColumnSpan="3" Columns="10" Margin="0 0 0 2">
+        <UniformGrid Grid.ColumnSpan="3" Columns="11" Margin="0 0 0 2">
             <UniformGrid.Resources>
                 <Style TargetType="Button">
                     <Setter Property="Background" Value="Transparent"/>
@@ -71,9 +71,9 @@
             <Button Click="SelectorButton_Click" Tag="Schemas" Margin="2 0 0 0" ToolTip="Snoop Extensible Storage framework schemas in memory">
                 <Path Style="{StaticResource IconSchemas}" />
             </Button>
-            <!--<Button Click="SelectorButton_Click" Tag="Schemas" Margin="2 0 0 0" ToolTip="Snoop Extensible Storage framework schemas in memory">
+            <Button Click="SelectorButton_Click" Tag="Categories" Margin="2 0 0 0" ToolTip="Snoop categories that may be used in a ParameterFilterElement">
                 <Path Style="{StaticResource IconCategories}" />
-            </Button>-->
+            </Button>
         </UniformGrid>
 
         <TreeView Grid.Row="2" Grid.Column="0" ItemsSource="{Binding TreeItems}" Margin="0 0 2 0" SelectedItemChanged="TreeView_SelectedItemChanged" VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling">

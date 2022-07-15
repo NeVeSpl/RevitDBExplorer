@@ -21,7 +21,7 @@ namespace RevitDBExplorer.Domain
         {
             if (ex.InnerException != null)
             {
-                if (ex.Message == "Exception has been thrown by the target of an invocation.")
+                if ((ex.Message == "Exception has been thrown by the target of an invocation.") && (!String.IsNullOrEmpty(ex.InnerException?.Message)))
                 {
                     ex = ex.InnerException;
                 }

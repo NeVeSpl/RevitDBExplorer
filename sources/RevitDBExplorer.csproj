@@ -104,6 +104,7 @@
     <Compile Include="Domain\DataModel\ValueTypes\BindingMapType.cs" />
     <Compile Include="Domain\DataModel\ValueTypes\BoolType.cs" />
     <Compile Include="Domain\DataModel\ValueTypes\BoundingBoxXYZType.cs" />
+    <Compile Include="Domain\DataModel\ValueTypes\CategoryNameMapType.cs" />
     <Compile Include="Domain\DataModel\ValueTypes\CategoryType.cs" />
     <Compile Include="Domain\DataModel\ValueTypes\ColorType.cs" />
     <Compile Include="Domain\DataModel\ValueTypes\DoubleType.cs" />
