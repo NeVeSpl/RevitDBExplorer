@@ -28,7 +28,7 @@ namespace RevitDBExplorer.Domain.DataModel.Streams
                 var genericArgs = type.GetGenericArguments();
                 if (genericArgs.Length == 1)
                 {
-                    itemType = genericArgs[1];
+                    itemType = genericArgs[0];
                 }
 
                 for (int i = 0; i < list.Count; i++)
