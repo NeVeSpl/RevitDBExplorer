@@ -15,6 +15,14 @@ Yet another [RevitLookup](https://github.com/jeremytammik/RevitLookup) clone. Re
 - [easier access to Element.Geometry](#geometry)
 - [more data exposed from Rebar](#more-data-exposed-from-rebar)
 
+## Installation
+
+- Go to the Releases section.
+- Download and run MSI file.
+
+
+## Features
+
 ### possibility to query Revit database from UI
 
 It is a very early version of this feature, but it can interpret words separated by `,` as ids, Revit classes, and categories. It builds from them FilteredElementCollector (which syntax is available in a tooltip). The table with all available options/grammar is below the example.
@@ -25,7 +33,7 @@ keywords/text | Interpretation | translates to in Revit Api
 ----------|------------| ----
 `,`, `;` | seperates phrases/commands
 `:` | reserved, not used right now
-`active`, `active view` | select elements from active view | FilteredElementCollector(document, document.ActiveView.Id)
+`active`, `active view` | select elements from active view | FilteredElementCollector(doc, doc.ActiveView.Id)
 `type`, `element type`  | select only types | .WhereElementIsElementType()
 `element`, `not element type` | select only elements | .WhereElementIsNotElementType()
 e.g. `123456` - number | select elements with given ids  | FilteredElementCollector(document, new [] {new ElementId(123456)})
@@ -73,6 +81,10 @@ We all love (or hate) ForgeTypeId, RDBE exposes all data related to a given id s
 ![snooping-Extensible-Storage-framework-schemas](documentation/examples/snooping-Extensible-Storage-framework-schemas.png)
 
 ### more natural access to Extensible Storage entities
+
+You get access to Extensible Storage data exactly like through Api, by invoking: GetEntity().
+
+![more-natural-access-to-Extensible-Storage-entities](documentation/examples/more-natural-access-to-Extensible-Storage-entities.gif)
 
 ### <a name="geometry"></a>easier access to Element.Geometry
 
