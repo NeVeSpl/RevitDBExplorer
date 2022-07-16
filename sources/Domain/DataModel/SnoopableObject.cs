@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using Autodesk.Revit.DB;
+using Autodesk.Revit.DB.ExtensibleStorage;
 using Autodesk.Revit.UI;
 using RevitDBExplorer.Domain.DataModel.MemberAccessors;
 using RevitDBExplorer.Domain.DataModel.Streams;
@@ -132,7 +133,15 @@ namespace RevitDBExplorer.Domain.DataModel
 
                 if (!member.HasExceptionCouldNotResolveAllArguments)
                     yield return member;
-            }              
+            }
+
+            if (@object is Schema)
+            {
+                var memberAccessor = new Schema_GetAllElements();
+                var member = new SnoopableMember(this, SnoopableMember.Kind.StaticMethod, "Get all elements that have entity of this schema", typeof(Schema), memberAccessor, null);
+                member.ReadValue(document, @object);
+                yield return member;
+            }
 
             foreach (var member in new ForgeTypeIdStream().Stream(this))
             {

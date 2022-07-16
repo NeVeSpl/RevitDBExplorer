@@ -82,7 +82,7 @@ We all love (or hate) ForgeTypeId, RDBE exposes all data related to a given id s
 
 ### more natural access to Extensible Storage entities
 
-You get access to Extensible Storage data exactly like through Api, by invoking: GetEntity().
+You get access to Extensible Storage data exactly like through Api, by invoking: Element.GetEntity(). In contrast to Revit Lookup, you will only see entities that you can read and really exist in a given element. (Revit Lookup shows an exception when cannot access entity even when a entity does not exist in a given element....)
 
 ![more-natural-access-to-Extensible-Storage-entities](documentation/examples/more-natural-access-to-Extensible-Storage-entities.gif)
 

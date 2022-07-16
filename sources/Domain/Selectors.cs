@@ -162,7 +162,7 @@ namespace RevitDBExplorer.Domain
         }
         private static IEnumerable<SnoopableObject> SnoopSchemas(UIApplication app)
         {
-            return Schema.ListSchemas().Select(x => new SnoopableObject(x, null));
+            return Schema.ListSchemas().Select(x => new SnoopableObject(x, app?.ActiveUIDocument?.Document));
         }
         private static IEnumerable<SnoopableObject> SnoopCategories(UIApplication app)
         {
