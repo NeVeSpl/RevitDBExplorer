@@ -12,7 +12,7 @@ Yet another [RevitLookup](https://github.com/jeremytammik/RevitLookup) clone. Re
 - [snooping all categories that may be used in a ParameterFilterElement](#snooping-all-categories-that-may-be-used-in-a-ParameterFilterElement)
 - [snooping Extensible Storage framework schemas](#snooping-Extensible-Storage-framework-schemas)
 - [more natural access to Extensible Storage entities](#more-natural-access-to-Extensible-Storage-entities)
-- [easier access to Element.Geometry](#easier-access-to-Element.Geometry)
+- [easier access to Element.Geometry](#geometry)
 - [more data exposed from Rebar](#more-data-exposed-from-rebar)
 
 ### possibility to query Revit database from UI
@@ -21,7 +21,7 @@ Yet another [RevitLookup](https://github.com/jeremytammik/RevitLookup) clone. Re
 
 ### filterable tree of elements
 
-### elements of Family, FamilySymbol, FamilyInstance are grouped by category in tree
+### <a name="grouping"></a>elements of Family, FamilySymbol, FamilyInstance are grouped by category in tree
 
 ### tooltips with Revit documentation
 
@@ -45,7 +45,7 @@ We all love (or hate) ForgeTypeId, RDBE exposes all data related to a given id s
 
 ### more natural access to Extensible Storage entities
 
-### easier access to Element.Geometry
+### <a name="geometry"></a>easier access to Element.Geometry
 
 ![easier-access-to-Element.Geometry](documentation/examples/easier-access-to-Element.Geometry.gif)
 
