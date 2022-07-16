@@ -53,7 +53,7 @@ namespace RevitDBExplorer.Domain.DataModel.Streams
                 };
             ForParameter = new StaticMember[]
                 {
-                    //new (typeof(ParameterUtils), nameof(ParameterUtils.GetParameterTypeId), new MemberAccessorByFunc<Parameter, ForgeTypeId>((doc, parameter) => ParameterUtils.GetParameterTypeId(parameter))),
+                    new (typeof(UnitFormatUtils), nameof(UnitFormatUtils.Format), new MemberAccessorByFunc<Parameter, string>((doc, parameter) => UnitFormatUtils.Format(doc.GetUnits(), parameter.Definition?.GetDataType(), parameter.AsDouble(), false)), null),
                 };
         }
 
@@ -77,6 +77,18 @@ namespace RevitDBExplorer.Domain.DataModel.Streams
                 {
                     var member = new SnoopableMember(snoopableObject, SnoopableMember.Kind.StaticMethod, item.MemberName, item.DeclaringType, item.MemberAccessor, null);
                     yield return member;
+                }
+            }
+            if (snoopableObject.Object is Parameter par)
+            {
+                foreach (var item in ForParameter)
+                {
+                    var dataType = par.Definition?.GetDataType();
+                    if (UnitUtils.IsMeasurableSpec(dataType))
+                    {
+                        var member = new SnoopableMember(snoopableObject, SnoopableMember.Kind.StaticMethod, item.MemberName, item.DeclaringType, item.MemberAccessor, null);
+                        yield return member;
+                    }
                 }
             }
         }
