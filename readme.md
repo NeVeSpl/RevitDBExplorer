@@ -12,6 +12,7 @@ Yet another [RevitLookup](https://github.com/jeremytammik/RevitLookup) clone. Re
 - [snooping all categories that may be used in a ParameterFilterElement](#snooping-all-categories-that-may-be-used-in-a-ParameterFilterElement)
 - [snooping Extensible Storage framework schemas](#snooping-Extensible-Storage-framework-schemas)
 - [more natural access to Extensible Storage entities](#more-natural-access-to-Extensible-Storage-entities)
+- [find every element that has an entity of a given schema](#find-every-element-that-has-an-entity-of-a-given-schema)
 - [easier access to Element.Geometry](#geometry)
 - [more data exposed from Rebar](#more-data-exposed-from-rebar)
 
@@ -85,6 +86,10 @@ We all love (or hate) ForgeTypeId, RDBE exposes all data related to a given id s
 You get access to Extensible Storage data exactly like through Api, by invoking: Element.GetEntity(). In contrast to Revit Lookup, you will only see entities that you can read and really exist in a given element. (Revit Lookup shows an exception when cannot access entity even when a entity does not exist in a given element....)
 
 ![more-natural-access-to-Extensible-Storage-entities](documentation/examples/more-natural-access-to-Extensible-Storage-entities.gif)
+
+### find every element that has an entity of a given schema
+
+![you-can-get-every-element-that-has-an-entity-of-a-given-schema](documentation/examples/you-can-get-every-element-that-has-an-entity-of-a-given-schema.png)
 
 ### <a name="geometry"></a>easier access to Element.Geometry
 
