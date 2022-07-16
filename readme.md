@@ -25,6 +25,10 @@ Yet another [RevitLookup](https://github.com/jeremytammik/RevitLookup) clone. Re
 
 ### tooltips with Revit documentation
 
+They are problems with loading some of tooltips, but most of them should work.
+
+![tooltips-with-Revit-documentations](documentation/examples/tooltips-with-Revit-documentation.png)
+
 ### extensive support for ForgeTypeId
 
 We all love (or hate) ForgeTypeId, RDBE exposes all data related to a given id scattered through many utils.
