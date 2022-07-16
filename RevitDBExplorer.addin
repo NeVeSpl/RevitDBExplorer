@@ -5,7 +5,7 @@
 	   <Assembly>G:\RevitDBExplorer\sources\bin\Debug\RevitDBExplorer.dll</Assembly>
        <FullClassName>RevitDBExplorer.Application</FullClassName>   
        <AddInId>E3D524F2-B266-41A6-8F93-9EF5274B9A20</AddInId>
-    <VendorId>NeVeS</VendorId>
-    <VendorDescription>NeVeS, Inc, https://github.com/NeVeSpl/</VendorDescription>
+    <VendorId>RDBE</VendorId>
+    <VendorDescription>https://github.com/NeVeSpl/RevitDBExplorer</VendorDescription>
  </AddIn>
 </RevitAddIns>
