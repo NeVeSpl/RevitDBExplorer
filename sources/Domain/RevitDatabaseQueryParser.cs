@@ -38,6 +38,8 @@ namespace RevitDBExplorer.Domain
             typeof(SpaceTagType).FullName,
             typeof(AreaTagType).FullName,
             typeof(TrussType).FullName,
+            typeof(Element).FullName,
+            typeof(ElementType).FullName,
         };
 
 
@@ -106,9 +108,12 @@ namespace RevitDBExplorer.Domain
                         elementids.Add(new ElementId(intId));
                     }
                 }
-                var c = new FilteredElementCollector(document, elementids);
-                var s = "new FilteredElementCollector(document, new [] {" + String.Join(", ", elementids.Select(x => $"new ElementId({x.IntegerValue})")) + "})";
-                return new Result(c, s);
+                if (elementids.Any())
+                {
+                    var c = new FilteredElementCollector(document, elementids);
+                    var s = "new FilteredElementCollector(document, new [] {" + String.Join(", ", elementids.Select(x => $"new ElementId({x.IntegerValue})")) + "})";
+                    return new Result(c, s);
+                }
             }
 
             {
@@ -221,7 +226,11 @@ namespace RevitDBExplorer.Domain
                 var splitted = cmd.Split(new[] { ':' }, 2, System.StringSplitOptions.RemoveEmptyEntries);
                 if (splitted.Length == 1)
                 {
-                    Type = InterfereCmdType(splitted[0]);
+                    Type = InterpretCmdType(splitted[0]);
+                    if (Type == CmdType.WhoKnows)
+                    {
+                        Type = InterfereCmdType(splitted[0]);
+                    }
                     Argument = splitted[0].Trim();
                 }
                 else
@@ -267,7 +276,7 @@ namespace RevitDBExplorer.Domain
                     }
                 }
 
-                return InterpretCmdType(strType);
+                return CmdType.WhoKnows;
             }
             private CmdType InterpretCmdType(string strType)
             {
@@ -275,12 +284,12 @@ namespace RevitDBExplorer.Domain
                 switch (needle)
                 {
                     case "active":
-                    case "view":
+                    //case "view":
                     case "activeview":
                         return CmdType.ActiveView;
-                    case "id":
-                    case "ids":
-                        return CmdType.Id;
+                    //case "id":
+                    //case "ids":
+                    //    return CmdType.Id;
                     case "elementtype":
                     case "notelement":
                     case "type":
@@ -290,11 +299,11 @@ namespace RevitDBExplorer.Domain
                     case "notelementtype":
                     case "elements":
                         return CmdType.NotElementType;
-                    case "category":
-                    case "cat":
-                        return CmdType.Category;
-                    case "class":
-                        return CmdType.Class;
+                    //case "category":
+                    //case "cat":
+                    //    return CmdType.Category;
+                    //case "class":
+                    //    return CmdType.Class;
                 }
 
                 return CmdType.WhoKnows;
