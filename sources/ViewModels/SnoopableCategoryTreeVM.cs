@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows.Data;
 using Autodesk.Revit.DB;
 using RevitDBExplorer.Domain.DataModel;
 
@@ -36,21 +38,43 @@ namespace RevitDBExplorer.ViewModels
             }
         }
 
-        public SnoopableCategoryTreeVM(string name, IEnumerable<SnoopableObject> items)
+        public SnoopableCategoryTreeVM(string name, IEnumerable<SnoopableObject> items, Predicate<object> itemFilter)
         {
             Name = name;
             Count = items.Count();
             if (items?.Any() == true)
             {
-                if ((Count > 73 && (name == nameof(FamilyInstance) || name == nameof(Element))))
+                if ((Count > 67 && (name == nameof(FamilyInstance) || name == nameof(Element) || name == nameof(FamilySymbol))))
                 {
-                    var groupedItems = items.GroupBy(x => (x.Object as Element).Category?.Id).Select(x => new SnoopableCategoryTreeVM(GetLabelFor(x.Key), x)).ToList();
+                    var groupedItems = items.GroupBy(x => (x.Object as Element).Category?.Id).Select(x => new SnoopableCategoryTreeVM(GetLabelFor(x.Key), x, itemFilter)).ToList();
                     Items = new ObservableCollection<TreeViewItemVM>(groupedItems.OrderBy(x => x.Name));
                 }
-                else
+                if (Count > 61 && (name == nameof(Family)))
+                {
+                    var groupedItems = items.GroupBy(x => (x.Object as Family).FamilyCategoryId).Select(x => new SnoopableCategoryTreeVM(GetLabelFor(x.Key), x, itemFilter)).ToList();
+                    Items = new ObservableCollection<TreeViewItemVM>(groupedItems.OrderBy(x => x.Name));
+                }
+                if (Items == null)                
                 {
                     Items = new ObservableCollection<TreeViewItemVM>(items.OrderBy(x => x.Index).ThenBy(x => x.Name).Select(x => new SnoopableObjectTreeVM(x)));
                 }
+
+                var lcv = (ListCollectionView)CollectionViewSource.GetDefaultView(Items);
+                lcv.Filter = itemFilter;
+            }
+        }
+
+        public void Refresh()
+        {
+            if (Items != null)
+            {
+                var collectionView = CollectionViewSource.GetDefaultView(Items);
+                collectionView.Refresh();
+                foreach (SnoopableCategoryTreeVM item in Items.OfType<SnoopableCategoryTreeVM>())
+                {
+                    item.Refresh();
+                }
+                Count = collectionView.Cast<object>().Count(); 
             }
         }
 
@@ -61,6 +85,6 @@ namespace RevitDBExplorer.ViewModels
                 return LabelUtils.GetLabelFor((BuiltInCategory)categoryId.IntegerValue);
             }
             return "[invalid category]";
-        }
+        }        
     }
 }

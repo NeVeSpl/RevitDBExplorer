@@ -23,6 +23,7 @@ namespace RevitDBExplorer
         private ObservableCollection<SnoopableMember> listItems = new();
         private SnoopableMember listViewSelectedItem = null;
         private string listItemsFilterPhrase = string.Empty;
+        private string treeItemsFilterPhrase = string.Empty;
         private string databaseQuery = string.Empty;
         private string databaseQueryToolTip = string.Empty;
 
@@ -71,10 +72,20 @@ namespace RevitDBExplorer
             set
             {
                 listItemsFilterPhrase = value;
-                if (ListItems != null)
-                {
-                    CollectionViewSource.GetDefaultView(ListItems).Refresh();
-                }
+                FilterListView();                
+                OnPropertyChanged();
+            }
+        }
+        public string TreeItemsFilterPhrase
+        {
+            get
+            {
+                return treeItemsFilterPhrase;
+            }
+            set
+            {
+                treeItemsFilterPhrase = value;
+                FilterTreeView();
                 OnPropertyChanged();
             }
         }
@@ -119,7 +130,11 @@ namespace RevitDBExplorer
         private async void SelectorButton_Click(object sender, RoutedEventArgs e)
         {
             try
-            {
+            {                
+                ResetTreeItems();
+                ResetListItems();
+                ResetDatabaseQuery();
+
                 var tag = ((Control)sender).Tag as string;
                 var selector = (Selector)Enum.Parse(typeof(Selector), tag);
                 if (selector == Selector.PickEdge || selector ==  Selector.PickFace)
@@ -130,8 +145,8 @@ namespace RevitDBExplorer
                 if (selector == Selector.PickEdge || selector == Selector.PickFace)
                 {
                     //this.WindowState = WindowState.Normal;
-                }
-                ListItems = null;
+                }       
+                
                 PopulateTreeView(snoopableObjects);
             }
             catch (Exception ex)
@@ -151,12 +166,12 @@ namespace RevitDBExplorer
                 }
                 else
                 {
-                    ListItems = null;
+                    ResetListItems();
                 }
             }
             catch (Exception ex)
             {
-                ListItems = null;
+                ResetListItems();
                 ShowErrorMsg( "SnoopableObject.GetMembers", ex);
             }
         }
@@ -177,32 +192,35 @@ namespace RevitDBExplorer
                 ShowErrorMsg("SnoopableMember.Snooop", ex);
             }
         }
-        private void ListViewMenuItemCopy_Click(object sender, RoutedEventArgs e)
+        private async void TryQueryDatabase(string query)
         {
-            var menuItem = e.Source as MenuItem;
-            var menu = menuItem.Parent as ContextMenu;
-            var item = menu.PlacementTarget as ListViewItem;
-            var snoopableMember = item.DataContext as SnoopableMember;
-
-            if (snoopableMember != null)
+            try
             {
-                Clipboard.SetDataObject($"{snoopableMember.Name}= {snoopableMember.Value}");
-            }
-        }
+                ResetTreeItems();
+                ResetListItems();
 
-        private static void ShowErrorMsg(string title, Exception ex)
-        {
-            var dialog = new TaskDialog(title);
-            dialog.MainInstruction = Labels.GetLabelForException(ex);
-            dialog.MainContent = ex.StackTrace;
-            dialog.CommonButtons = TaskDialogCommonButtons.Ok;
-            dialog.DefaultButton = TaskDialogResult.Ok;
-            dialog.MainIcon = TaskDialogIcon.TaskDialogIconError;
-            dialog.Show();            
-        }
+                var snoopableObjects = await ExternalExecutor.ExecuteInRevitContextAsync(uiApp =>
+                {
+                    var document = uiApp?.ActiveUIDocument?.Document;
+
+                    if (document == null) return Enumerable.Empty<SnoopableObject>().ToList();
+
+                    var result = RevitDatabaseQueryParser.Parse(document, query);
+                    DatabaseQueryToolTip = result.RevitAPIQuery + ".ToElements();";
+                    return result.Collector.ToElements().Select(x => new SnoopableObject(x, document)).ToList();
+                });
+                PopulateTreeView(snoopableObjects);
+            }
+            catch (Exception ex)
+            {
+                ShowErrorMsg("RevitDatabaseQueryParser.Parse", ex);
+            }
+        }        
+
+        
         private void PopulateTreeView(IList<SnoopableObject> objects)
         {
-            var items = objects.GroupBy(x => x.TypeName).Select(x => new SnoopableCategoryTreeVM(x.Key, x)).OrderBy(x => x.Name);
+            var items = objects.GroupBy(x => x.TypeName).Select(x => new SnoopableCategoryTreeVM(x.Key, x, TreeViewFilter)).OrderBy(x => x.Name);
 
             TreeItems = new(items);
             if ((objects.Count > 0 && objects.Count < 29) || (TreeItems.Count() == 1))
@@ -228,9 +246,9 @@ namespace RevitDBExplorer
                     firstObject.Items.First().IsSelected = true;
                 }
                 firstObject.IsSelected = true;                
-            }
+            }           
         }
-        private void PopulateListView(List<SnoopableMember> members)
+        private void PopulateListView(IList<SnoopableMember> members)
         {
             ListItems = new(members);
 
@@ -242,40 +260,72 @@ namespace RevitDBExplorer
             lcv.SortDescriptions.Add(new SortDescription(nameof(SnoopableMember.Name), ListSortDirection.Ascending));
             lcv.Filter = ListViewFilter;
         }
-
         private bool ListViewFilter(object item)
         {
             if (item is SnoopableMember snoopableMember)
             {
-                if (snoopableMember.Name.IndexOf(listItemsFilterPhrase, StringComparison.OrdinalIgnoreCase) >= 0) return true;
-                return false;
+                return snoopableMember.Name.IndexOf(listItemsFilterPhrase, StringComparison.OrdinalIgnoreCase) >= 0;
             }
             return true;
         }
-
-        private async void TryQueryDatabase(string query)
+        private bool TreeViewFilter(object item)
         {
-            try
+            if (item is SnoopableObjectTreeVM snoopableObjectVM)
             {
-                var snoopableObjects = await ExternalExecutor.ExecuteInRevitContextAsync(uiApp =>
-                {
-                    var document = uiApp?.ActiveUIDocument?.Document;
-
-                    if (document == null) return Enumerable.Empty<SnoopableObject>().ToList();
-
-                    var result = RevitDatabaseQueryParser.Parse(document, query);
-                    DatabaseQueryToolTip = result.RevitAPIQuery + ".ToElements();";                    
-                    return result.Collector.ToElements().Select(x => new SnoopableObject(x, document)).ToList();
-                });
-                PopulateTreeView(snoopableObjects);
+                return snoopableObjectVM.Object.Name.IndexOf(treeItemsFilterPhrase, StringComparison.OrdinalIgnoreCase) >= 0;
             }
-            catch (Exception ex)
+            return true;
+        }
+        
+        private void FilterListView()
+        {
+            if (ListItems != null)
             {
-                ShowErrorMsg("RevitDatabaseQueryParser.Parse", ex);
+                CollectionViewSource.GetDefaultView(ListItems).Refresh();
             }
         }
+        private void FilterTreeView()
+        {
+            if (TreeItems != null)
+            {
+                foreach (var item in TreeItems)
+                {
+                    item.Refresh();
+                }
+            }
+        }       
+        
+        private void ResetListItems()
+        {
+            PopulateListView(System.Array.Empty<SnoopableMember>());
+        }
+        private void ResetTreeItems()
+        {
+            treeItemsFilterPhrase = "";
+            OnPropertyChanged(nameof(TreeItemsFilterPhrase));
+            PopulateTreeView(System.Array.Empty<SnoopableObject>());             
+        }
+        private void ResetDatabaseQuery()
+        {
+            databaseQuery = "";
+            OnPropertyChanged(nameof(DatabaseQuery));
+            DatabaseQueryToolTip = "";
+        }
 
-        private void SubMenuButton_Click(object sender, RoutedEventArgs e)
+
+        private void ListViewMenuItemCopy_Click(object sender, RoutedEventArgs e)
+        {
+            var menuItem = e.Source as MenuItem;
+            var menu = menuItem.Parent as ContextMenu;
+            var item = menu.PlacementTarget as ListViewItem;
+            var snoopableMember = item.DataContext as SnoopableMember;
+
+            if (snoopableMember != null)
+            {
+                Clipboard.SetDataObject($"{snoopableMember.Name}= {snoopableMember.Value}");
+            }
+        }
+        private void ButtonWithSubMenu_Click(object sender, RoutedEventArgs e)
         {
             var contextMenu = ContextMenuService.GetContextMenu(sender as DependencyObject);
             if (contextMenu == null)
@@ -298,6 +348,18 @@ namespace RevitDBExplorer
             }
         }
 
+        private static void ShowErrorMsg(string title, Exception ex)
+        {
+            var dialog = new TaskDialog(title)
+            {
+                MainInstruction = Labels.GetLabelForException(ex),
+                MainContent = ex.StackTrace,
+                CommonButtons = TaskDialogCommonButtons.Ok,
+                DefaultButton = TaskDialogResult.Ok,
+                MainIcon = TaskDialogIcon.TaskDialogIconError
+            };
+            dialog.Show();
+        }
 
         #region INotifyPropertyChanged
 
@@ -308,8 +370,6 @@ namespace RevitDBExplorer
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        #endregion
-
-       
+        #endregion       
     }
 }
