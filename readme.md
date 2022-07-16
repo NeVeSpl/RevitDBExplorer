@@ -19,9 +19,15 @@ Yet another [RevitLookup](https://github.com/jeremytammik/RevitLookup) clone. Re
 
 ### filterable list of properties and metohds 
 
+![filterable-list-of-properties-and-metohds](documentation/examples/filterable-list-of-properties-and-metohds.gif)
+
 ### filterable tree of elements
 
-### <a name="grouping"></a>elements of Family, FamilySymbol, FamilyInstance are grouped by category in tree
+![filterable-tree-of-elements](documentation/examples/filterable-tree-of-elements.gif)
+
+### <a name="grouping"></a>elements of Family, FamilySymbol, FamilyInstance are grouped by category in the tree
+
+![grouping](documentation/examples/grouping.png)
 
 ### tooltips with Revit documentation
 
