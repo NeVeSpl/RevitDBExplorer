@@ -18,7 +18,7 @@ Yet another [RevitLookup](https://github.com/jeremytammik/RevitLookup) clone. Re
 
 ## Installation
 
-- MSI instalator you will find in [Releases section](https://github.com/NeVeSpl/RevitDBExplorer/releases/latest) atached as an asset.
+- You will find the latest available MSI instalator in [Releases section](https://github.com/NeVeSpl/RevitDBExplorer/releases/latest) atached as an asset.
 
 
 ## Features
