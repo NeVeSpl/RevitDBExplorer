@@ -10,37 +10,44 @@ jobs:
 
   build:
   
-    runs-on: windows-latest  
+    runs-on: windows-latest 
 
     steps:
     - name: Checkout
       uses: actions/checkout@v3
       with:
-        fetch-depth: 0
-  
-    - name: Install .NET 4.8
-      uses: actions/setup-dotnet@v2
-      with:
-        dotnet-version: 4.8.x
+        fetch-depth: 0 
 
     - name: Setup MSBuild.exe
-      uses: microsoft/setup-msbuild@v1.0.2
+      uses: microsoft/setup-msbuild@v1.1
       
-    - name: Restore dependencies
-      run: dotnet restore
+    - name: Setup NuGet
+      uses: NuGet/setup-nuget@v1.0.6
+
+    - name: Restore Packages
+      run: nuget restore RevitDBExplorer.sln       
       
-    - name: Build
-      run: dotnet build --no-restore   
-    
-    - name: Code sign a file with pfx certificate
-      uses: Dana-Prajea/code-sign-action@v4
-      with:   
-        certificate: "${{ secrets.BASE64_ENCODED_PFX }}" 
-        folder:  RevitDBExplorer/sources/bin/Release  
-        recursive: false
-        password: "${{ secrets.PFX_KEY }}"
-
-
+    - name: Build Solution      
+      run: |
+          msbuild /p:Configuration=Release  
+          
+    - name: Create Code Signing Certificate
+      run: |
+          New-Item -ItemType directory -Path certificate
+          Set-Content -Path certificate\certificate.txt -Value '${{ secrets.BASE64_ENCODED_PFX }}'
+          certutil -decode certificate\certificate.txt certificate\certificate.pfx
+          
+    - name: Sign
+      run: |
+          & 'C:/Program Files (x86)/Windows Kits/10/bin/10.0.17763.0/x86/signtool.exe' sign /f certificate\certificate.pfx /p '${{ secrets.PFX_KEY }}' /t http://timestamp.comodoca.com/authenticode sources/bin/Release/RevitDBExplorer.dll      
+   
+   
+        
+    - name: Upload a Build Artifact
+      uses: actions/upload-artifact@v3.1.0
+      with:
+        name: Bundle
+        path: "sources/bin/Release"  
 
 
     
