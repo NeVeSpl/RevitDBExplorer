@@ -27,7 +27,8 @@ jobs:
     - name: Restore Packages
       run: nuget restore RevitDBExplorer.sln       
       
-    - name: Build Solution      
+    - name: Build Project    
+      working-directory: sources/
       run: |
           msbuild /p:Configuration=Release  
           
@@ -37,17 +38,33 @@ jobs:
           Set-Content -Path certificate\certificate.txt -Value '${{ secrets.BASE64_ENCODED_PFX }}'
           certutil -decode certificate\certificate.txt certificate\certificate.pfx
           
-    - name: Sign
+    - name: Sign RevitDBExplorer.dll
       run: |
           & 'C:/Program Files (x86)/Windows Kits/10/bin/10.0.17763.0/x86/signtool.exe' sign /f certificate\certificate.pfx /p '${{ secrets.PFX_KEY }}' /t http://timestamp.comodoca.com/authenticode sources/bin/Release/RevitDBExplorer.dll      
    
-   
-        
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v3.1.0
       with:
-        name: Bundle
-        path: "sources/bin/Release"  
-
-
-    
+        name: Build
+        path: "sources/bin/Release"    
+   
+    - name: Build SetupBuilder.exe   
+      working-directory: setup/
+      run: msbuild /p:Configuration=Release /p:BuildProjectReferences=false
+          
+    - name: Run SetupBuilder.exe
+      working-directory: setup/bin/Release/
+      run: |
+          ./SetupBuilder.exe   
+          
+    - name: Sign *.msi
+      run: |  
+          & 'C:/Program Files (x86)/Windows Kits/10/bin/10.0.17763.0/x86/signtool.exe' sign /f certificate\certificate.pfx /p '${{ secrets.PFX_KEY }}' /t http://timestamp.comodoca.com/authenticode setup/bin/Release/*.msi  
+          
+    - name: Upload a Build Artifact
+      uses: actions/upload-artifact@v3.1.0
+      with:
+        name: Setup
+        path: setup/bin/Release/*.msi
+  
+        

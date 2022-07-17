@@ -11,7 +11,7 @@ namespace SetupBuilder
     {
         static void Main(string[] args)
         {
-            var fileVersionInfo = FileVersionInfo.GetVersionInfo("RevitDBExplorer.dll");
+            var fileVersionInfo = FileVersionInfo.GetVersionInfo(@"..\..\..\sources\bin\Release\RevitDBExplorer.dll");
             var productVersion = fileVersionInfo.ProductVersion;
 
             var project = new Project()
