@@ -2,3 +2,5 @@ packages/
 sources/bin/
 sources/obj/
 .vs/
+setup/obj/
+setup/bin/

@@ -7,12 +7,12 @@ using System.Windows;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("RevitDBExplorer")]
+[assembly: AssemblyTitle("Revit database explorer")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("RevitDBExplorer")]
-[assembly: AssemblyCopyright("Copyright ©  2022")]
+[assembly: AssemblyCompany("https://github.com/NeVeSpl/RevitDBExplorer")]
+[assembly: AssemblyProduct("Revit database explorer")]
+[assembly: AssemblyCopyright("(c) Revit Database Explorer")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

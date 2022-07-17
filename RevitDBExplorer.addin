@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RevitAddIns>
  <AddIn Type="Application">
-       <Name>RevitDBExplorer</Name>
-	   <Assembly>G:\RevitDBExplorer\sources\bin\Debug\RevitDBExplorer.dll</Assembly>
+       <Name>Revit database explorer</Name>
+	   <Assembly>RevitDBExplorer\RevitDBExplorer.dll</Assembly>
        <FullClassName>RevitDBExplorer.Application</FullClassName>   
        <AddInId>E3D524F2-B266-41A6-8F93-9EF5274B9A20</AddInId>
     <VendorId>RDBE</VendorId>

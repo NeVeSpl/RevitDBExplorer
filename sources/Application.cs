@@ -18,7 +18,7 @@ namespace RevitDBExplorer
             var panel = application.CreateRibbonPanel("RevitDBExplorer");
             var cmdType = typeof(Command);
             var pushButtonData = new PushButtonData(cmdType.FullName, "Revit DB Explorer", cmdType.Assembly.Location, cmdType.FullName);
-            pushButtonData.LargeImage = new BitmapImage(new Uri("pack://application:,,,/RevitDBExplorer;component/Resources/RDBE.Icon.32.b.png", UriKind.RelativeOrAbsolute));
+            pushButtonData.LargeImage = new BitmapImage(new Uri("pack://application:,,,/RevitDBExplorer;component/Resources/RDBE.Icon.32.png", UriKind.RelativeOrAbsolute));
             panel.AddItem(pushButtonData);
 
             ExternalExecutor.CreateExternalEvent();

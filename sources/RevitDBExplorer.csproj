@@ -183,11 +183,18 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\RDBE.Icon.32.b.png" />
+    <Resource Include="..\documentation\images\RDBE.ico">
+      <Link>Resources\RDBE.ico</Link>
+    </Resource>
+    <Resource Include="..\documentation\images\RDBE.Icon.32.png">
+      <Link>Resources\RDBE.Icon.32.png</Link>
+    </Resource>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\RDBE.ico" />
+    <None Include="..\RevitDBExplorer.addin">
+      <Link>RevitDBExplorer.addin</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
