@@ -151,6 +151,7 @@
     <Compile Include="ViewModels\SnoopableCategoryTreeVM.cs" />
     <Compile Include="ViewModels\SnoopableObjectTreeVM.cs" />
     <Compile Include="ViewModels\TreeViewItemVM.cs" />
+    <Compile Include="WPF\Converters\EnumToVisibilityConverter.cs" />
     <Compile Include="WPF\Converters\FeetToMetersConverter.cs" />
     <Compile Include="WPF\Converters\PercentageOfValueConverter.cs" />
     <Compile Include="Domain\DataModel\ValueTypes\ParameterMapType.cs" />
