@@ -11,6 +11,7 @@ using System.Windows.Input;
 using Autodesk.Revit.UI;
 using RevitDBExplorer.Domain;
 using RevitDBExplorer.Domain.DataModel;
+using RevitDBExplorer.Properties;
 using RevitDBExplorer.ViewModels;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
@@ -347,6 +348,12 @@ namespace RevitDBExplorer
                 Close();
             }
         }
+        private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            AppSettings.Default.MainWindowHeight = Height;
+            AppSettings.Default.MainWindowWidth = Width;
+            AppSettings.Default.Save();
+        }
 
         private static void ShowErrorMsg(string title, Exception ex)
         {
@@ -370,6 +377,8 @@ namespace RevitDBExplorer
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        #endregion       
+        #endregion
+
+        
     }
 }

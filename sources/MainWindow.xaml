@@ -6,9 +6,16 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
         xmlns:viewModels="clr-namespace:RevitDBExplorer.ViewModels"
         xmlns:converters="clr-namespace:RevitDBExplorer.WPF.Converters"
+        xmlns:ext="clr-namespace:RevitDBExplorer.WPF.MarkupExtensions"
         mc:Ignorable="d"
         WindowStartupLocation="CenterOwner"
-        Title="Revit database explorer and editor" Height="797" Width="839" Icon="/RevitDBExplorer;component/Resources/RDBE.ico" Closed="Window_Closed" KeyDown="Window_KeyDown">
+        Title="Revit database explorer and editor"
+        MinHeight="383" Height="{ext:SettingBinding MainWindowHeight}"
+        MinWidth="643" Width="{ext:SettingBinding MainWindowWidth}" 
+        Icon="/RevitDBExplorer;component/Resources/RDBE.ico" 
+        Closed="Window_Closed"
+        KeyDown="Window_KeyDown" SizeChanged="Window_SizeChanged"        
+        >
     <Grid Margin="2">
         <Grid.Resources>
             <ResourceDictionary>
@@ -280,7 +287,7 @@
 
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Name" Width="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListView}}, Path=ActualWidth, Converter={StaticResource PercentageOfValueConverter}, ConverterParameter=37}">
+                    <GridViewColumn Header="Name" Width="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListView}}, Path=ActualWidth, Converter={StaticResource PercentageOfValueConverter}, ConverterParameter=38}">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
@@ -306,7 +313,7 @@
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
 
-                    <GridViewColumn Header="Value" Width="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListView}}, Path=ActualWidth, Converter={StaticResource PercentageOfValueConverter}, ConverterParameter=61}"  >
+                    <GridViewColumn Header="Value" Width="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListView}}, Path=ActualWidth, Converter={StaticResource PercentageOfValueConverter}, ConverterParameter=62}"  >
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock x:Name="cTextBlock" Text="{Binding Value}" TextWrapping="NoWrap" >

@@ -143,6 +143,11 @@
     <Compile Include="Extensions\System\Reflection\PropertyInfoExtensions.cs" />
     <Compile Include="Extensions\System\Runtime.CompilerServices\IsExternalInit .cs" />
     <Compile Include="Extensions\System\StringExtensions.cs" />
+    <Compile Include="Properties\AppSettings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>AppSettings.settings</DependentUpon>
+    </Compile>
     <Compile Include="ViewModels\SnoopableCategoryTreeVM.cs" />
     <Compile Include="ViewModels\SnoopableObjectTreeVM.cs" />
     <Compile Include="ViewModels\TreeViewItemVM.cs" />
@@ -159,7 +164,12 @@
     <Compile Include="Extensions\System\TypeExtensions.cs" />
     <Compile Include="WPF\BaseViewModel.cs" />
     <Compile Include="WPF\Converters\StringToVisibilityConverter.cs" />
+    <Compile Include="WPF\MarkupExtensions\SettingBindingExtension.cs" />
     <None Include="packages.config" />
+    <None Include="Properties\AppSettings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>AppSettings.Designer.cs</LastGenOutput>
+    </None>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

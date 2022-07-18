@@ -8,7 +8,7 @@ namespace RevitDBExplorer.WPF.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            double hostControlWidth = Math.Max((double.Parse(value.ToString())) - 30, 10);
+            double hostControlWidth = Math.Max((double.Parse(value.ToString())) - 36, 10);
             double percentage = (int.Parse(parameter.ToString())) / 100.0;
             double result = hostControlWidth * percentage;
             return result;
