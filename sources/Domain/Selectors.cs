@@ -7,6 +7,8 @@ using Autodesk.Revit.UI;
 using Autodesk.Revit.UI.Selection;
 using RevitDBExplorer.Domain.DataModel;
 
+// (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
+
 namespace RevitDBExplorer.Domain
 {
     public enum Selector
@@ -205,16 +207,16 @@ namespace RevitDBExplorer.Domain
             yield return new SnoopableObject(document, document);
         }
         private static IEnumerable<SnoopableObject> SnoopActiveView(UIApplication app)
-        {
-            var document = app?.ActiveUIDocument?.Document;
-            var view = document?.ActiveView;
+        {            
+            var view = app?.ActiveUIDocument?.Document?.ActiveView;
 
             if (view == null) yield break;
 
-            yield return new SnoopableObject(view, document);
+            yield return new SnoopableObject(view, view.Document);
         }
         private static IEnumerable<SnoopableObject> SnoopForge(Selector selector)
         {
+#pragma warning disable CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
             IList<ForgeTypeId> ids = selector switch
             {
                 Selector.ForgeParameterUtilsGetAllBuiltInGroups => ParameterUtils.GetAllBuiltInGroups(),
@@ -224,6 +226,7 @@ namespace RevitDBExplorer.Domain
                 Selector.ForgeUnitUtilsGetAllDisciplines => UnitUtils.GetAllDisciplines(),
                 Selector.ForgeSpecUtilsGetAllSpecs => SpecUtils.GetAllSpecs(),
             };
+#pragma warning restore CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
             return ids.Select(x => new SnoopableObject(x, null));
         }
     }

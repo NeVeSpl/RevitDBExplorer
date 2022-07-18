@@ -8,11 +8,11 @@ namespace RevitDBExplorer.Domain
 {
     internal static class Labels
     {
-        public static string GetNameForObject(object @object, Document document)
+        public static string GetLabelForObject(object @object, Document document)
         {
-            return GetNameForObject(@object.GetType(), @object, document);
+            return GetLabelForObject(@object.GetType(), @object, document);
         }
-        public static string GetNameForObject(Type type, object @object, Document document)
+        public static string GetLabelForObject(Type type, object @object, Document document)
         {
             var valueType = ValueTypeFactory.Create(type);
             valueType.SetValue(document, @object);           

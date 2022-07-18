@@ -20,30 +20,33 @@ namespace RevitDBExplorer.Domain
             var request = new Request<T>(command);
             ExternalEventHandler.Queue.Enqueue(request);
             externalEvent.Raise();
-            return request.CompletionSource.Task;
+            return request.Task;
         }
 
 
         private class Request<T> : IRequest
         {
-            public readonly Func<UIApplication, T> Command;
-            public readonly TaskCompletionSource<T> CompletionSource = new();
+            private readonly Func<UIApplication, T> command;
+            private readonly TaskCompletionSource<T> completionSource = new();
+            public Task<T> Task => completionSource.Task;
+
 
             public Request(Func<UIApplication, T> command)
             {
-                Command = command;
+                this.command = command;
             }
 
-            public void ExecuteCommand(UIApplication app)
+
+            void IRequest.ExecuteCommand(UIApplication app)
             {
                 try
                 {
-                    var result = Command.Invoke(app);
-                    CompletionSource.SetResult(result);
+                    var result = command.Invoke(app);
+                    completionSource.SetResult(result);
                 }
                 catch (Exception e)
                 {
-                    CompletionSource.SetException(e);
+                    completionSource.SetException(e);
                 }
             }
         }

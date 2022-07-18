@@ -55,7 +55,7 @@ namespace RevitDBExplorer.Domain.DataModel
         {
             this.@object = @object;
             this.document = document;            
-            this.name = name ?? Labels.GetNameForObject(@object, document);
+            this.name = name ?? Labels.GetLabelForObject(@object, document);
             this.typeName = @object?.GetType().GetCSharpName();
 
             if (subObjects != null)

@@ -44,12 +44,10 @@ namespace RevitDBExplorer.Domain
 
 
         static RevitDatabaseQueryParser()
-        {
-            var enums = Enum.GetValues(typeof(BuiltInCategory));
-            Categories = new List<(string, object)>(enums.Length);
+        {   
+            var allFilterableCategories =  ParameterFilterUtilities.GetAllFilterableCategories();
+            Categories = new List<(string, object)>(allFilterableCategories.Count);
 
-            
-            var allFilterableCategories =  ParameterFilterUtilities.GetAllFilterableCategories();            
             foreach (ElementId categoryId in allFilterableCategories)
             {
                 var category = (BuiltInCategory)categoryId.IntegerValue;
