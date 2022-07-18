@@ -29,7 +29,7 @@ namespace RevitDBExplorer.Domain.DataModel.ValueTypes
         protected override string ToLabel(IEnumerable enumerable)
         {
             var type = enumerable.GetType();
-            var typeName = type.Name;
+            var typeName = type.GetCSharpName();
 
             if (type.FullName.StartsWith("System"))
             {
@@ -39,13 +39,13 @@ namespace RevitDBExplorer.Domain.DataModel.ValueTypes
             if (type.IsGenericType)
             {
                 var args = type.GetGenericArguments();
-                return $"{typeName}[{String.Join(", ", args.Select(x => x.Name))}]";
+                return $"{typeName}[{String.Join(", ", args.Select(x => x.GetCSharpName()))}]";
             }
 
             foreach (var item in enumerable)
             {
                 var firstItemType = item.GetType();
-                return $"{typeName}[{firstItemType.Name}]";               
+                return $"{typeName}[{firstItemType.GetCSharpName()}]";               
             }
 
             return $"{typeName}[]";

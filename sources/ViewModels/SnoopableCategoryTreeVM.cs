@@ -4,7 +4,10 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Data;
 using Autodesk.Revit.DB;
+using RevitDBExplorer.Domain;
 using RevitDBExplorer.Domain.DataModel;
+
+// (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
 namespace RevitDBExplorer.ViewModels
 {
@@ -38,6 +41,7 @@ namespace RevitDBExplorer.ViewModels
             }
         }
 
+
         public SnoopableCategoryTreeVM(string name, IEnumerable<SnoopableObject> items, Predicate<object> itemFilter)
         {
             Name = name;
@@ -46,12 +50,12 @@ namespace RevitDBExplorer.ViewModels
             {
                 if ((Count > 67 && (name == nameof(FamilyInstance) || name == nameof(Element) || name == nameof(FamilySymbol))))
                 {
-                    var groupedItems = items.GroupBy(x => (x.Object as Element).Category?.Id).Select(x => new SnoopableCategoryTreeVM(GetLabelFor(x.Key), x, itemFilter)).ToList();
+                    var groupedItems = items.GroupBy(x => (x.Object as Element).Category?.Id).Select(x => new SnoopableCategoryTreeVM(Labels.GetLabelForCategory(x.Key), x, itemFilter)).ToList();
                     Items = new ObservableCollection<TreeViewItemVM>(groupedItems.OrderBy(x => x.Name));
                 }
                 if (Count > 61 && (name == nameof(Family)))
                 {
-                    var groupedItems = items.GroupBy(x => (x.Object as Family).FamilyCategoryId).Select(x => new SnoopableCategoryTreeVM(GetLabelFor(x.Key), x, itemFilter)).ToList();
+                    var groupedItems = items.GroupBy(x => (x.Object as Family).FamilyCategoryId).Select(x => new SnoopableCategoryTreeVM(Labels.GetLabelForCategory(x.Key), x, itemFilter)).ToList();
                     Items = new ObservableCollection<TreeViewItemVM>(groupedItems.OrderBy(x => x.Name));
                 }
                 if (Items == null)                
@@ -63,6 +67,7 @@ namespace RevitDBExplorer.ViewModels
                 lcv.Filter = itemFilter;
             }
         }
+
 
         public void Refresh()
         {
@@ -76,15 +81,6 @@ namespace RevitDBExplorer.ViewModels
                 }
                 Count = collectionView.Cast<object>().Count(); 
             }
-        }
-
-        private static string GetLabelFor(ElementId categoryId)
-        {
-            if ((categoryId != null) && (Category.IsBuiltInCategoryValid((BuiltInCategory)categoryId.IntegerValue)))
-            {
-                return LabelUtils.GetLabelFor((BuiltInCategory)categoryId.IntegerValue);
-            }
-            return "[invalid category]";
-        }        
+        }            
     }
 }

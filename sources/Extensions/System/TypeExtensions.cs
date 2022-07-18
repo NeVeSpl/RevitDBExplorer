@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
+// (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
+
 namespace System
 {
     internal static class TypeExtensions
@@ -26,7 +28,6 @@ namespace System
         }
 
 
-
         static readonly Dictionary<Type, string> primitiveTypes = new Dictionary<Type, string>
         {
             { typeof(bool), "bool" },
@@ -46,9 +47,12 @@ namespace System
             { typeof(void), "void" },
         };
 
-        public static string ToCSharpString(this Type type)
+
+        /// <summary>
+        /// source: https://stackoverflow.com/questions/2579734/get-the-type-name
+        /// </summary>
+        public static string GetCSharpName(this Type type)
         {
-            //https://stackoverflow.com/questions/2579734/get-the-type-name
             string result;
             if (primitiveTypes.TryGetValue(type, out result))
             {
@@ -72,7 +76,7 @@ namespace System
             }
 
             result = result.Substring(0, result.IndexOf("`"));
-            return result + "<" + string.Join(", ", type.GetGenericArguments().Select(ToCSharpString)) + ">";
+            return result + "<" + string.Join(", ", type.GetGenericArguments().Select(GetCSharpName)) + ">";
         }
     }
 }

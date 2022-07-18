@@ -17,12 +17,12 @@ namespace RevitDBExplorer.Domain.DataModel.ValueTypes
         }
 
 
-        public override string TypeName => base.TypeName != "Object" ? base.TypeName : $"Object({type.Name})";
+        public override string TypeName => base.TypeName != "Object" ? base.TypeName : $"Object({type.GetCSharpName()})";
         protected override bool CanBeSnoooped(object @object) => @object is not null;
         protected override string ToLabel(object @object)
         {
             string name = GetNameForObjectFromProperty(@object);
-            string typeName = @object.GetType()?.Name;     
+            string typeName = @object.GetType()?.GetCSharpName();     
             return $"{typeName}: {name}";
         }
         protected override IEnumerable<SnoopableObject> Snooop(Document document, object @object)

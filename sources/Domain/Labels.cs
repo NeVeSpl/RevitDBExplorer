@@ -2,6 +2,8 @@
 using Autodesk.Revit.DB;
 using RevitDBExplorer.Domain.DataModel.ValueTypes.Base;
 
+// (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
+
 namespace RevitDBExplorer.Domain
 {
     internal static class Labels
@@ -28,6 +30,14 @@ namespace RevitDBExplorer.Domain
             }            
 
             return String.IsNullOrEmpty(ex.InnerException?.Message) ? $"{ex.Message}" : $"{ex.Message} ({ex.InnerException.Message})";
+        }
+        public static string GetLabelForCategory(ElementId categoryId)
+        {
+            if ((categoryId != null) && (Category.IsBuiltInCategoryValid((BuiltInCategory)categoryId.IntegerValue)))
+            {
+                return LabelUtils.GetLabelFor((BuiltInCategory)categoryId.IntegerValue);
+            }
+            return "[invalid category]";
         }
     }
 }

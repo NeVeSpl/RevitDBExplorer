@@ -2,12 +2,14 @@
 using System.Linq;
 using RevitDBExplorer.Domain.DataModel;
 
+// (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
+
 namespace RevitDBExplorer.ViewModels
 {
     internal class SnoopableObjectTreeVM : TreeViewItemVM
     {
         public SnoopableObject Object { get; }     
-        public string Index
+        public string Prefix
         {
             get
             {

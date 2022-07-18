@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using Autodesk.Revit.DB;
@@ -55,7 +56,7 @@ namespace RevitDBExplorer.Domain.DataModel
             this.@object = @object;
             this.document = document;            
             this.name = name ?? Labels.GetNameForObject(@object, document);
-            this.typeName = @object?.GetType().Name;
+            this.typeName = @object?.GetType().GetCSharpName();
 
             if (subObjects != null)
             {

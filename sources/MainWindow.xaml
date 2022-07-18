@@ -184,7 +184,7 @@
                 <HierarchicalDataTemplate DataType="{x:Type viewModels:SnoopableObjectTreeVM}" ItemsSource="{Binding Items}">
                     <StackPanel Orientation="Horizontal">                       
                         <TextBlock>             
-                             <Run Text="{Binding Index, Mode=OneWay}"  x:Name="cIndex">
+                             <Run Text="{Binding Prefix, Mode=OneWay}"  x:Name="cIndex">
                                  <Run.Style>
                                      <Style TargetType="{x:Type Run}">
                                         <Style.Triggers>

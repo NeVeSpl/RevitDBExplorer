@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-// (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
+﻿// (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
 namespace Autodesk.Revit.DB
 {
@@ -13,14 +11,13 @@ namespace Autodesk.Revit.DB
             {
                 return element;
             }
-            else
+           
+            var category = Category.GetCategory(document, id);
+            if (category != null)
             {
-                var category = Category.GetCategory(document, id);
-                if (category != null)
-                {
-                    return category;
-                }
+                return category;
             }
+            
             return null;
         }
     }

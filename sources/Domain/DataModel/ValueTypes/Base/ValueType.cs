@@ -24,7 +24,7 @@ namespace RevitDBExplorer.Domain.DataModel.ValueTypes.Base
         {
             get
             {
-                var finalType = value?.GetType()?.Name ?? Type.Name;
+                var finalType = value?.GetType()?.GetCSharpName() ?? Type.Name;
 
                 return $"{Type.Name}"+ (finalType != Type.Name ? $"({finalType})" : "");
             }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.Windows.Media.Imaging;
 using Autodesk.Revit.UI;
 using RevitDBExplorer.Domain;
@@ -17,7 +16,7 @@ namespace RevitDBExplorer
 
             var panel = application.CreateRibbonPanel("RevitDBExplorer");
             var cmdType = typeof(Command);
-            var pushButtonData = new PushButtonData(cmdType.FullName, "Revit DB Explorer", cmdType.Assembly.Location, cmdType.FullName);
+            var pushButtonData = new PushButtonData(cmdType.FullName, "Revit DB\r\nExplorer", cmdType.Assembly.Location, cmdType.FullName);
             pushButtonData.LargeImage = new BitmapImage(new Uri("pack://application:,,,/RevitDBExplorer;component/Resources/RDBE.Icon.32.png", UriKind.RelativeOrAbsolute));
             panel.AddItem(pushButtonData);
 

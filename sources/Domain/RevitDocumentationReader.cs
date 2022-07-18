@@ -36,7 +36,7 @@ namespace RevitDBExplorer.Domain
             {
                 Summary = CleanString(memberComments?.Summary),              
                 Remarks = CleanString(memberComments?.Remarks),
-                ReturnType = info.PropertyType.ToCSharpString(),
+                ReturnType = info.PropertyType.GetCSharpName(),
                 Name = info.Name,
                 Invocation = " { get; }"
             };
@@ -50,9 +50,9 @@ namespace RevitDBExplorer.Domain
                 Summary = CleanString(methodComments?.Summary),
                 Returns = CleanString(methodComments?.Returns),
                 Remarks = CleanString(methodComments?.Remarks),
-                ReturnType = info.ReturnType.ToCSharpString(),
+                ReturnType = info.ReturnType.GetCSharpName(),
                 Name = info.Name,
-                Invocation = "(" + String.Join(",", info.GetParameters().Select(p => $"{p.ParameterType.ToCSharpString()} {p.Name}").ToArray()) + ")"
+                Invocation = "(" + String.Join(",", info.GetParameters().Select(p => $"{p.ParameterType.GetCSharpName()} {p.Name}").ToArray()) + ")"
         };
             return doc;
         }
