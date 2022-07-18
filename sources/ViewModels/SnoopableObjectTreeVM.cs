@@ -13,7 +13,15 @@ namespace RevitDBExplorer.ViewModels
         {
             get
             {
-                return Object.Index != -1 ? $"[{Object.Index}]" : "";
+                if (Object.Index != -1)
+                {
+                    return $"[{Object.Index}]";
+                }
+                if (!string.IsNullOrEmpty(Object.NamePrefix))
+                {
+                    return Object.NamePrefix;
+                }
+                return  "";
             }
         }
 

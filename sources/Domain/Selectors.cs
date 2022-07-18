@@ -195,7 +195,7 @@ namespace RevitDBExplorer.Domain
                     snoopableParameters = parameters.Select(x => new SnoopableObject(x, document));
                  }
 
-                yield return new SnoopableObject(category, document, null, snoopableParameters);
+                yield return new SnoopableObject(category, document, snoopableParameters);
             }
         }
         private static IEnumerable<SnoopableObject> SnoopActiveDocument(UIApplication app)

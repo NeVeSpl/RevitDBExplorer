@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Autodesk.Revit.DB;
 using RevitDBExplorer.Domain.DataModel.ValueTypes.Base;
 
@@ -6,21 +7,17 @@ using RevitDBExplorer.Domain.DataModel.ValueTypes.Base;
 
 namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
-
-    delegate TReturn FuncWithCtx<TInput, TReturn>(Document document, TInput @object) where TInput : class;
-
     internal class MemberAccessorByFunc<TInput, TReturn> : IMemberAccessor where TInput : class
     {
         private readonly IValueType value;
-        private readonly FuncWithCtx<TInput, TReturn> get;
+        private readonly Func<Document, TInput, TReturn> get;
 
 
-        public MemberAccessorByFunc(FuncWithCtx<TInput, TReturn> get)
+        public MemberAccessorByFunc(Func<Document, TInput, TReturn> get)
         {
             this.get = get;
             this.value = ValueTypeFactory.Create(typeof(TReturn));
         }
-
 
 
         public ReadResult Read(Document document, object @object)

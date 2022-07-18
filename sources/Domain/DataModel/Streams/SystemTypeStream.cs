@@ -2,24 +2,27 @@
 using System.Collections;
 using System.Collections.Generic;
 using RevitDBExplorer.Domain.DataModel.MemberAccessors;
+using RevitDBExplorer.Domain.DataModel.Streams.Base;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
 namespace RevitDBExplorer.Domain.DataModel.Streams
 {
-    internal sealed class SystemTypeStream
+    internal sealed class SystemTypeStream : BaseStream
     {
-        public bool EndStream { get; private set; } = false;
+        private bool shouldEndAllStreaming = false;
+        public override bool ShouldEndAllStreaming() => shouldEndAllStreaming;
 
-        public IEnumerable<SnoopableMember> Stream(SnoopableObject snoopableObject)
+
+        public override IEnumerable<SnoopableMember> Stream(SnoopableObject snoopableObject)
         {
             var type = snoopableObject.Object.GetType();
 
             if ((type.IsEnum) || (type.IsPrimitive) || (type == typeof(string)))
             {
-                var member = new SnoopableMember(snoopableObject, SnoopableMember.Kind.Property, "Value", type, new MemberAccessorForPrimitive(type), null);                
+                var member = new SnoopableMember(snoopableObject, SnoopableMember.Kind.Property, "Value", type, new MemberAccessorForConstValue(type, snoopableObject.Document, snoopableObject.Object), null);                
                 yield return member;
-                EndStream = true;                
+                shouldEndAllStreaming = true;                
             }
 
             if (snoopableObject.Object is IList list)
@@ -33,10 +36,10 @@ namespace RevitDBExplorer.Domain.DataModel.Streams
 
                 for (int i = 0; i < list.Count; i++)
                 {                   
-                    var member = new SnoopableMember(snoopableObject, SnoopableMember.Kind.Property, i.ToString(), type, new MemberAccessorWithConst(itemType, snoopableObject.Document, list[i]), null);
+                    var member = new SnoopableMember(snoopableObject, SnoopableMember.Kind.Property, i.ToString(), type, new MemberAccessorForConstValue(itemType, snoopableObject.Document, list[i]), null);
                     yield return member;
                 }
-                EndStream = true;
+                shouldEndAllStreaming = true;
             }
 
             if (snoopableObject.Object is IDictionary dict)
@@ -50,10 +53,10 @@ namespace RevitDBExplorer.Domain.DataModel.Streams
 
                 foreach (DictionaryEntry item in dict)
                 {
-                    var member = new SnoopableMember(snoopableObject, SnoopableMember.Kind.Property, item.Key.ToString(), type, new MemberAccessorWithConst(itemType, snoopableObject.Document, item.Value), null);                   
+                    var member = new SnoopableMember(snoopableObject, SnoopableMember.Kind.Property, item.Key.ToString(), type, new MemberAccessorForConstValue(itemType, snoopableObject.Document, item.Value), null);                   
                     yield return member;
                 }
-                EndStream = true;
+                shouldEndAllStreaming = true;
             }
         }
     }

@@ -68,7 +68,7 @@ namespace RevitDBExplorer.Domain.DataModel.ValueTypes
                 }
                 else
                 {
-                    yield return new SnoopableObject(item, document, index);
+                    yield return new SnoopableObject(item, document) { Index = index };
                 }
             }
         }

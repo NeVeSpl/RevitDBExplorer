@@ -262,14 +262,14 @@ namespace RevitDBExplorer.Domain
                 }
                 if (maxScore >= 0.69)
                 {
-                    if (result is Type)
+                    if (result is Type type)
                     {
-                        ArgumentAsType = (Type)result;
+                        ArgumentAsType = type;
                         return CmdType.Class;
                     }
-                    if (result is BuiltInCategory)
+                    if (result is BuiltInCategory category)
                     {
-                        ArgumentAsCategory = (BuiltInCategory)result;
+                        ArgumentAsCategory = category;
                         return CmdType.Category;
                     }
                 }

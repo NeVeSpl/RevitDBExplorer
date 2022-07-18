@@ -25,7 +25,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
                 foreach (Phase phase in document.Phases)
                 {
                     var topologies = document.get_PlanTopologies(phase).OfType<PlanTopology>().Select(x => new SnoopableObject(x, document));
-                    yield return new SnoopableObject(phase, document, null, topologies);                    
+                    yield return new SnoopableObject(phase, document, topologies);                    
                 }
             }
             finally

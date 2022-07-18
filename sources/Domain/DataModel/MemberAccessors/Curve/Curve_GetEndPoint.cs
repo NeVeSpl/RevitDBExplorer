@@ -26,8 +26,8 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
             var p0 = curve.GetEndPoint(0);
             var p1 = curve.GetEndPoint(1);
 
-            yield return new SnoopableObject(p0, document, "[0] Start");
-            yield return new SnoopableObject(p1, document, "[1] End");
+            yield return new SnoopableObject(p0, document) { Index = 0, Name = "Start"};
+            yield return new SnoopableObject(p1, document) { Index = 1, Name = "End" };
         }
     }
 }

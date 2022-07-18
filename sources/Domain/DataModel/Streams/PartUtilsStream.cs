@@ -1,44 +1,46 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Autodesk.Revit.DB;
 using RevitDBExplorer.Domain.DataModel.MemberAccessors;
+using RevitDBExplorer.Domain.DataModel.Streams.Base;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
 namespace RevitDBExplorer.Domain.DataModel.Streams
 {
-    internal sealed class PartUtilsStream
+    internal sealed class PartUtilsStream : BaseStream
     {
-        private static readonly (string, IMemberAccessor)[] partUtilsForElement = new (string, IMemberAccessor)[0];
-        private static readonly (string, IMemberAccessor)[] partUtilsForPart = new (string, IMemberAccessor)[0];
+        private static readonly IEnumerable<ISnoopableMemberTemplate> partUtilsForElement = Enumerable.Empty<ISnoopableMemberTemplate>();
+        private static readonly IEnumerable<ISnoopableMemberTemplate> partUtilsForPart = Enumerable.Empty<ISnoopableMemberTemplate>();
 
         static PartUtilsStream()
         {
-            partUtilsForElement = new (string, IMemberAccessor)[]
+            partUtilsForElement = new ISnoopableMemberTemplate[]
                 {
-                    (nameof(PartUtils.AreElementsValidForCreateParts), new MemberAccessorByFunc<Element, bool>((doc, target) => PartUtils.AreElementsValidForCreateParts(doc, new[] { target.Id }))),
-                    (nameof(PartUtils.GetAssociatedPartMaker), new MemberAccessorByFunc<Element, PartMaker>((doc, target) => PartUtils.GetAssociatedPartMaker(doc,  target.Id))),
-                    (nameof(PartUtils.HasAssociatedParts), new MemberAccessorByFunc<Element, bool>((doc, target) => PartUtils.HasAssociatedParts(doc, target.Id))),
-                    (nameof(PartUtils.IsValidForCreateParts), new MemberAccessorByFunc<Element, bool>((doc, target) => PartUtils.IsValidForCreateParts(doc, new LinkElementId(target.Id)))),
+                    new SnoopableMemberTemplate<Element, bool>((doc, target) => PartUtils.AreElementsValidForCreateParts(doc, new[] { target.Id })),
+                    new SnoopableMemberTemplate<Element, PartMaker>((doc, target) => PartUtils.GetAssociatedPartMaker(doc,  target.Id)),
+                    new SnoopableMemberTemplate<Element, bool>((doc, target) => PartUtils.HasAssociatedParts(doc, target.Id)),
+                    new SnoopableMemberTemplate<Element, bool>((doc, target) => PartUtils.IsValidForCreateParts(doc, new LinkElementId(target.Id))),
                 };
-            partUtilsForPart = new (string, IMemberAccessor)[]
+            partUtilsForPart = new ISnoopableMemberTemplate[]
                 {
-                    (nameof(PartUtils.ArePartsValidForDivide), new MemberAccessorByFunc<Part, bool>((doc, target) => PartUtils.ArePartsValidForDivide(doc, new[] { target.Id }))),
-                    (nameof(PartUtils.ArePartsValidForMerge), new MemberAccessorByFunc<Part, bool>((doc, target) => PartUtils.ArePartsValidForMerge(doc, new[] { target.Id }))),
-                    (nameof(PartUtils.GetChainLengthToOriginal), new MemberAccessorByFunc<Part, int>((doc, target) => PartUtils.GetChainLengthToOriginal(target))),
+                    new SnoopableMemberTemplate<Part, bool>((doc, target) => PartUtils.ArePartsValidForDivide(doc, new[] { target.Id })),
+                    new SnoopableMemberTemplate<Part, bool>((doc, target) => PartUtils.ArePartsValidForMerge(doc, new[] { target.Id })),
+                    new SnoopableMemberTemplate<Part, int>((doc, target) => PartUtils.GetChainLengthToOriginal(target)),
 
-                    (nameof(PartUtils.GetMergedParts), new MemberAccessorByFunc<Part, IEnumerable<ElementId>>((doc, target) => PartUtils.GetMergedParts(target))),
-                    (nameof(PartUtils.IsMergedPart), new MemberAccessorByFunc<Part, bool>((doc, target) => PartUtils.IsMergedPart(target))),
-                    (nameof(PartUtils.IsPartDerivedFromLink), new MemberAccessorByFunc<Part, bool>((doc, target) => PartUtils.IsPartDerivedFromLink(target))),
+                    new SnoopableMemberTemplate<Part, IEnumerable<ElementId>>((doc, target) => PartUtils.GetMergedParts(target)),
+                    new SnoopableMemberTemplate<Part, bool>((doc, target) => PartUtils.IsMergedPart(target)),
+                    new SnoopableMemberTemplate<Part, bool>((doc, target) => PartUtils.IsPartDerivedFromLink(target)),
                 };
         }
 
-        public IEnumerable<SnoopableMember> Stream(SnoopableObject snoopableObject)
+        public override IEnumerable<SnoopableMember> Stream(SnoopableObject snoopableObject)
         {
             if (snoopableObject.Object is Element)
             {
                 foreach (var item in partUtilsForElement)
                 {
-                    yield return new SnoopableMember(snoopableObject, SnoopableMember.Kind.StaticMethod, item.Item1, typeof(PartUtils), item.Item2, null);
+                    yield return new SnoopableMember(snoopableObject, SnoopableMember.Kind.StaticMethod, item.MemberName, item.DeclaringType, item.MemberAccessor, null);
                 }
             }
 
@@ -46,7 +48,7 @@ namespace RevitDBExplorer.Domain.DataModel.Streams
             {
                 foreach (var item in partUtilsForPart)
                 {
-                    yield return new SnoopableMember(snoopableObject, SnoopableMember.Kind.StaticMethod, item.Item1, typeof(PartUtils), item.Item2, null);
+                    yield return new SnoopableMember(snoopableObject, SnoopableMember.Kind.StaticMethod, item.MemberName, item.DeclaringType, item.MemberAccessor, null);
                 }
             }
         }

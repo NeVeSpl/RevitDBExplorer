@@ -7,6 +7,7 @@ using Autodesk.Revit.DB.ExtensibleStorage;
 using Autodesk.Revit.UI;
 using RevitDBExplorer.Domain.DataModel.MemberAccessors;
 using RevitDBExplorer.Domain.DataModel.Streams;
+using RevitDBExplorer.Domain.DataModel.Streams.Base;
 using RevitDBExplorer.WPF;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
@@ -14,49 +15,28 @@ using RevitDBExplorer.WPF;
 namespace RevitDBExplorer.Domain.DataModel
 {
     internal class SnoopableObject : BaseViewModel
-    {
-        private readonly object @object;
-        private readonly Document document;
-        private readonly string name;
-        private readonly string typeName;
-        private readonly List<SnoopableObject> items;
-        private readonly int index = -1;
+    {        
+        private readonly List<SnoopableObject> items;         
 
-
-        public object Object => @object;
-        public string Name
-        {
-            get
-            {
-                return name;
-            }
-        }        
-        public string TypeName
-        {
-            get
-            {
-                return typeName;
-            }
-        }
-        public Document Document => document;
+        public object Object { get; }
+        public Document Document { get; }
+        public string Name { get; init; }
+        public string NamePrefix { get; init; }
+        public string TypeName { get; }       
         public IEnumerable<SnoopableObject> Items => items;
-        public int Index => index;
+        public int Index { get; init; } = -1;
 
-
-        public SnoopableObject(object @object, Document document, int index) : this(@object, document, null, null)
-        {
-            this.index = index;
-        }
-        public SnoopableObject(object @object, Document document, SnoopableObject child) : this(@object, document, null, new[] {child})
+        
+        public SnoopableObject(object @object, Document document, SnoopableObject child) : this(@object, document, new[] {child})
         {
 
         }
-        public SnoopableObject(object @object, Document document, string name = null, IEnumerable<SnoopableObject> subObjects = null)
+        public SnoopableObject(object @object, Document document, IEnumerable<SnoopableObject> subObjects = null)
         {
-            this.@object = @object;
-            this.document = document;            
-            this.name = name ?? Labels.GetLabelForObject(@object, document);
-            this.typeName = @object?.GetType().GetCSharpName();
+            this.Object = @object;
+            this.Document = document;            
+            this.Name = @object is not null ? Labels.GetLabelForObject(@object, document) : "";
+            this.TypeName = @object?.GetType().GetCSharpName();
 
             if (subObjects != null)
             {
@@ -75,26 +55,44 @@ namespace RevitDBExplorer.Domain.DataModel
             }
         }
 
-
+                
         public IEnumerable<SnoopableMember> GetMembers(UIApplication app)
         {
-            if (@object == null)
+            if (Object == null)
             {
                 yield break;
             }
-
-            var type = @object.GetType();
-
-            var systemTypeStream = new SystemTypeStream();            
-            foreach (var member in systemTypeStream.Stream(this))
+            foreach (var member in GetMembersFromStreams(app))
             {
-                member.ReadValue(document, @object);
-                yield return member;
+                member.ReadValue(Document, Object);
+                if (!member.HasExceptionCouldNotResolveAllArguments)
+                {
+                    yield return member;
+                }
             }
-            if (systemTypeStream.EndStream)
-            { 
-                yield break;
-            }            
+        }
+
+        private static readonly BaseStream[] Streams = new BaseStream[]
+        {
+            new SystemTypeStream(),
+            new ForgeTypeIdStream(),
+            new PartUtilsStream()
+        };
+        private IEnumerable<SnoopableMember> GetMembersFromStreams(UIApplication app)
+        {
+            var type = Object.GetType();
+
+            foreach (var stream in Streams)
+            {
+                foreach (var member in stream.Stream(this))
+                {
+                    yield return member;
+                }
+                if (stream.ShouldEndAllStreaming())
+                {
+                    yield break;
+                }
+            }
 
             var properties = type.GetProperties(BindingFlags.Instance | BindingFlags.Public);
             foreach (var prop in properties)
@@ -105,7 +103,6 @@ namespace RevitDBExplorer.Domain.DataModel
                 }
 
                 var getMethod = prop.GetGetGetMethod();
-
                 if (getMethod == null)
                 {
                     continue;
@@ -113,9 +110,7 @@ namespace RevitDBExplorer.Domain.DataModel
 
                 var comments = () => RevitDocumentationReader.GetPropertyComments(prop);
                 var memberAccessor = MemberAccessorFactory.Create(getMethod, null);
-
-                var member = new SnoopableMember(this, SnoopableMember.Kind.Property, prop.Name, prop.DeclaringType, memberAccessor, comments);
-                member.ReadValue(document, @object);
+                var member = new SnoopableMember(this, SnoopableMember.Kind.Property, prop.Name, prop.DeclaringType, memberAccessor, comments);              
                 yield return member;
             }
 
@@ -124,37 +119,21 @@ namespace RevitDBExplorer.Domain.DataModel
             {
                 if (method.ReturnType == typeof(void)) continue;
                 if (method.IsSpecialName) continue;
-                if (method.DeclaringType == typeof(object)) continue;
-               
+                if (method.DeclaringType == typeof(object)) continue;               
 
                 var comments = () => RevitDocumentationReader.GetMethodComments(method);
                 var memberAccessor = MemberAccessorFactory.Create(method, null);
                 var member = new SnoopableMember(this, SnoopableMember.Kind.Method, method.Name, method.DeclaringType, memberAccessor, comments);
-                member.ReadValue(document, @object);
-
-                if (!member.HasExceptionCouldNotResolveAllArguments)
-                    yield return member;
+                 yield return member;
             }
 
-            if (@object is Schema)
+            if (Object is Schema)
             {
                 var memberAccessor = new Schema_GetAllElements();
                 var member = new SnoopableMember(this, SnoopableMember.Kind.StaticMethod, "Get all elements that have entity of this schema", typeof(Schema), memberAccessor, null);
-                member.ReadValue(document, @object);
+              
                 yield return member;
             }
-
-            foreach (var member in new ForgeTypeIdStream().Stream(this))
-            {
-                member.ReadValue(document, @object);
-                yield return member;
-            }
-
-            foreach (var member in new PartUtilsStream().Stream(this))
-            {                
-                member.ReadValue(document, @object);
-                yield return member;
-            }            
         }
     }
 }

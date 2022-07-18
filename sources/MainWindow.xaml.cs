@@ -121,6 +121,8 @@ namespace RevitDBExplorer
         {
             InitializeComponent();
             this.DataContext = this;
+            var ver = GetType().Assembly.GetName().Version;
+            Title += $" - v{ver.Major}.{ver.Minor}.{ver.Build}";
         }
         public MainWindow(IList<SnoopableObject> objects) : this()
         {
@@ -159,9 +161,8 @@ namespace RevitDBExplorer
         {
             try
             {
-                var snoopableObjectVM = e.NewValue as SnoopableObjectTreeVM;
-                if (snoopableObjectVM != null)
-                {                    
+                if (e.NewValue is SnoopableObjectTreeVM snoopableObjectVM)
+                {
                     var snoopableMembers = await ExternalExecutor.ExecuteInRevitContextAsync(x => snoopableObjectVM.Object.GetMembers(x).ToList());
                     PopulateListView(snoopableMembers);
                 }
@@ -319,9 +320,8 @@ namespace RevitDBExplorer
             var menuItem = e.Source as MenuItem;
             var menu = menuItem.Parent as ContextMenu;
             var item = menu.PlacementTarget as ListViewItem;
-            var snoopableMember = item.DataContext as SnoopableMember;
 
-            if (snoopableMember != null)
+            if (item.DataContext is SnoopableMember snoopableMember)
             {
                 Clipboard.SetDataObject($"{snoopableMember.Name}= {snoopableMember.Value}");
             }

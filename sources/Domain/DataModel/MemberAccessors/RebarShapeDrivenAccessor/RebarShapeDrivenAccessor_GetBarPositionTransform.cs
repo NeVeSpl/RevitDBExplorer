@@ -21,7 +21,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
             for (int i = 0; i < rebar.ArrayLength; ++i)
             {
                 var transform = rebar.GetBarPositionTransform(i);
-                yield return new SnoopableObject(null, document, $"barPositionIndex: {i}", new[] { new SnoopableObject(transform, document) });
+                yield return new SnoopableObject(null, document, new[] { new SnoopableObject(transform, document) }) { Name = $"barPositionIndex: {i}" };
             }           
         }
     }

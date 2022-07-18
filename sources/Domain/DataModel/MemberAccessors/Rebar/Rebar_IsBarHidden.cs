@@ -21,7 +21,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
             for (int i = 0; i < rebar.NumberOfBarPositions; ++i)
             {
                 var result = rebar.IsBarHidden(document.ActiveView, i);
-                yield return new SnoopableObject(null, document, $"{i}", new[] { new SnoopableObject(result, document) });
+                yield return new SnoopableObject(null, document, new[] { new SnoopableObject(result, document) }) { Name = $"{i}" };
             }
         }
     }
