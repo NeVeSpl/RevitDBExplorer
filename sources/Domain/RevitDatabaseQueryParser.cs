@@ -15,7 +15,7 @@ namespace RevitDBExplorer.Domain
     {
         static readonly List<(string, object)> Categories;
         static readonly List<(string, object)> Classes;
-        static readonly HashSet<string> ClassesBlackList = new HashSet<string>
+        static readonly HashSet<string> ClassesBlackList = new()
         {
             //typeof(Material),
             //typeof(CurveElement).FullName,
@@ -98,7 +98,7 @@ namespace RevitDBExplorer.Domain
             if (commands.Any(x => x.Type == CmdType.Id))
             {
                 var ids = commands.Where(x => x.Type == CmdType.Id).Select(x => x.Argument);
-                List<ElementId> elementids = new List<ElementId>();
+                List<ElementId> elementids = new();
                 foreach (var id in ids)
                 {
                     if (int.TryParse(id, out int intId))
@@ -122,7 +122,7 @@ namespace RevitDBExplorer.Domain
         }
         private static Result WhereElementIsElementTypeOrNot(Result token, List<Command> commands)
         {
-            HashSet<CmdType> quickFilters = new HashSet<CmdType>() { CmdType.ElementType, CmdType.NotElementType, CmdType.Category, CmdType.Class };
+            HashSet<CmdType> quickFilters = new() { CmdType.ElementType, CmdType.NotElementType, CmdType.Category, CmdType.Class };
             if (commands.Any(x => quickFilters.Contains(x.Type)))
             {
                 var isElementTypePresent = commands.Any(x => x.Type == CmdType.ElementType);
@@ -183,9 +183,16 @@ namespace RevitDBExplorer.Domain
                 var cmd = commands.Where(x => x.Type == CmdType.WhoKnows).First(); 
                 var rules = new[]
                 {
+#if R2022
+                    ParameterFilterRuleFactory.CreateContainsRule(new ElementId(BuiltInParameter.ALL_MODEL_TYPE_NAME), cmd.Argument, false),
+                    ParameterFilterRuleFactory.CreateContainsRule(new ElementId(BuiltInParameter.ALL_MODEL_MARK), cmd.Argument, false),
+                    ParameterFilterRuleFactory.CreateContainsRule(new ElementId(BuiltInParameter.ELEM_FAMILY_AND_TYPE_PARAM), cmd.Argument, false),
+#endif
+#if R2023
                     ParameterFilterRuleFactory.CreateContainsRule(new ElementId(BuiltInParameter.ALL_MODEL_TYPE_NAME), cmd.Argument),
                     ParameterFilterRuleFactory.CreateContainsRule(new ElementId(BuiltInParameter.ALL_MODEL_MARK), cmd.Argument),
                     ParameterFilterRuleFactory.CreateContainsRule(new ElementId(BuiltInParameter.ELEM_FAMILY_AND_TYPE_PARAM), cmd.Argument),
+#endif
                 };
                 
                 var or = new LogicalOrFilter(rules.Select(x => new ElementParameterFilter(x, false)).ToList<ElementFilter>());               

@@ -8,7 +8,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
-using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using RevitDBExplorer.Domain;
 using RevitDBExplorer.Domain.DataModel;
@@ -123,7 +122,7 @@ namespace RevitDBExplorer
             InitializeComponent();
             this.DataContext = this;
             var ver = GetType().Assembly.GetName().Version;
-            var revit_ver = typeof(Element).Assembly.GetName().Version;
+            var revit_ver = typeof(Autodesk.Revit.DB.Element).Assembly.GetName().Version;
             Title += $" 20{revit_ver.Major} - v{ver.Major}.{ver.Minor}.{ver.Build}";            
         }
         public MainWindow(IList<SnoopableObject> objects) : this()

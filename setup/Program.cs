@@ -11,7 +11,7 @@ namespace SetupBuilder
     {
         static void Main(string[] args)
         {
-            var fileVersionInfo = FileVersionInfo.GetVersionInfo(@"..\..\..\sources\bin\Release\RevitDBExplorer.dll");
+            var fileVersionInfo = FileVersionInfo.GetVersionInfo($@"..\..\..\sources\bin\R2023\RevitDBExplorer.dll");
             var productVersion = fileVersionInfo.ProductVersion;
 
             var project = new Project()
@@ -24,7 +24,7 @@ namespace SetupBuilder
                 InstallScope = InstallScope.perMachine,
                 MajorUpgrade = MajorUpgrade.Default,
                 Version = new Version(productVersion),
-                OutFileName = $"RevitDBExplorer.{productVersion}",
+                OutFileName = $"RevitDBExplorer",
                 BackgroundImage = "Resources\\BackgroundImage.png",
                 BannerImage = "Resources\\BannerImage.png"
             };
@@ -36,18 +36,22 @@ namespace SetupBuilder
                 ProductIcon = "Resources\\RDBE.ico"
             };
 
-            string installationDir = @"%AppDataFolder%\Autodesk\Revit\Addins\2023";
-            string[] files = new string[] { "DocXml.dll", "RevitDBExplorer.dll", "SimMetrics.Net.dll" };
-
             project.Dirs = new Dir[]
             {
-                new Dir(installationDir, new File(@"..\..\..\sources\bin\Release\RevitDBExplorer.addin"),
-                new Dir( "RevitDBExplorer",  files.Select(x => new File($@"..\..\..\sources\bin\Release\{x}")).ToArray())
-                )
+                new Dir(@"%AppDataFolder%\Autodesk\Revit\Addins", CreateDirFor("2022"), CreateDirFor("2023"))
             };
 
             project.RemoveDialogsBetween(NativeDialogs.WelcomeDlg, NativeDialogs.InstallDirDlg);
             Compiler.BuildMsi(project);
         }
-    }
+
+        readonly static string[] files = new string[] { "DocXml.dll", "RevitDBExplorer.dll", "SimMetrics.Net.dll" };
+        static Dir CreateDirFor(string year)
+        {
+            return new Dir(year,
+                           new File($@"..\..\..\sources\bin\R{year}\RevitDBExplorer.addin"),
+                           new Dir("RevitDBExplorer", files.Select(x => new File($@"..\..\..\sources\bin\R{year}\{x}")).ToArray())
+                   );
+        }
+    }    
 }

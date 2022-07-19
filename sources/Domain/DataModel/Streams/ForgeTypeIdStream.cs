@@ -9,7 +9,7 @@ namespace RevitDBExplorer.Domain.DataModel.Streams
 {
     internal class ForgeTypeIdStream : BaseStream
     {
-        private static readonly HashSet<ForgeTypeId> AllDisciplines = new HashSet<ForgeTypeId>(UnitUtils.GetAllDisciplines());
+        private static readonly HashSet<ForgeTypeId> AllDisciplines = new(UnitUtils.GetAllDisciplines());
         private static readonly IEnumerable<ISnoopableMemberTemplate> ForForgeTypeId = Enumerable.Empty<ISnoopableMemberTemplate>();
         private static readonly IEnumerable<ISnoopableMemberTemplate> ForCategory = Enumerable.Empty<ISnoopableMemberTemplate>();
         private static readonly IEnumerable<ISnoopableMemberTemplate> ForParameter = Enumerable.Empty<ISnoopableMemberTemplate>();
@@ -49,7 +49,7 @@ namespace RevitDBExplorer.Domain.DataModel.Streams
                 };
             ForCategory = new ISnoopableMemberTemplate[]
                 {
-                    new SnoopableMemberTemplate<Category, ForgeTypeId>((doc, category) => Category.GetBuiltInCategoryTypeId(category.BuiltInCategory)),
+                    new SnoopableMemberTemplate<Category, ForgeTypeId>((doc, category) => Category.GetBuiltInCategoryTypeId((BuiltInCategory)category.Id.IntegerValue)),
                 };
             ForParameter = new ISnoopableMemberTemplate[]
                 {
