@@ -123,6 +123,7 @@
     <Compile Include="Domain\DataModel\ValueTypes\CategoryNameMapType.cs" />
     <Compile Include="Domain\DataModel\ValueTypes\CategoryType.cs" />
     <Compile Include="Domain\DataModel\ValueTypes\ColorType.cs" />
+    <Compile Include="Domain\DataModel\ValueTypes\DoubleNullableType.cs" />
     <Compile Include="Domain\DataModel\ValueTypes\DoubleType.cs" />
     <Compile Include="Domain\DataModel\ValueTypes\ElementIdType.cs" />
     <Compile Include="Domain\DataModel\ValueTypes\ElementType.cs" />
