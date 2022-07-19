@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using Autodesk.Revit.DB;
-using Autodesk.Revit.DB.ExtensibleStorage;
 using Autodesk.Revit.UI;
 using RevitDBExplorer.Domain.DataModel.MemberAccessors;
 using RevitDBExplorer.Domain.DataModel.Streams;
@@ -76,7 +75,8 @@ namespace RevitDBExplorer.Domain.DataModel
         {
             new SystemTypeStream(),
             new ForgeTypeIdStream(),
-            new PartUtilsStream()
+            new PartUtilsStream(),
+            new SchemaTypeStream(),
         };
         private IEnumerable<SnoopableMember> GetMembersFromStreams(UIApplication app)
         {
@@ -125,14 +125,6 @@ namespace RevitDBExplorer.Domain.DataModel
                 var memberAccessor = MemberAccessorFactory.Create(method, null);
                 var member = new SnoopableMember(this, SnoopableMember.Kind.Method, method.Name, method.DeclaringType, memberAccessor, comments);
                  yield return member;
-            }
-
-            if (Object is Schema)
-            {
-                var memberAccessor = new Schema_GetAllElements();
-                var member = new SnoopableMember(this, SnoopableMember.Kind.StaticMethod, "Get all elements that have entity of this schema", typeof(Schema), memberAccessor, null);
-              
-                yield return member;
             }
         }
     }

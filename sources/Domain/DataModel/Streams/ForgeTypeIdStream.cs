@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Autodesk.Revit.DB;
-using RevitDBExplorer.Domain.DataModel.MemberAccessors;
 using RevitDBExplorer.Domain.DataModel.Streams.Base;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
@@ -54,43 +53,16 @@ namespace RevitDBExplorer.Domain.DataModel.Streams
                 };
             ForParameter = new ISnoopableMemberTemplate[]
                 {
-                    new SnoopableMemberTemplate<Parameter, string>((doc, parameter) => UnitFormatUtils.Format(doc.GetUnits(), parameter.Definition.GetDataType(), parameter.AsDouble(), false)),
-                };
+                    new SnoopableMemberTemplate<Parameter, string>((doc, parameter) => UnitFormatUtils.Format(doc.GetUnits(), parameter.Definition.GetDataType(), parameter.AsDouble(), false), x => UnitUtils.IsMeasurableSpec(x.Definition?.GetDataType())),
+                };            
         }
 
-        public override IEnumerable<SnoopableMember> Stream(SnoopableObject snoopableObject)
-        {            
-            if (snoopableObject.Object is ForgeTypeId id)
-            {
-                foreach (var item in ForForgeTypeId)
-                {
-                    if (item.ShouldBeCreated(id))
-                    {
-                        var member = new SnoopableMember(snoopableObject, SnoopableMember.Kind.StaticMethod, item.MemberName, item.DeclaringType, item.MemberAccessor, null);
-                        yield return member;
-                    }
-                }
-            }
-            if (snoopableObject.Object is Category _)
-            {
-                foreach (var item in ForCategory)
-                {
-                    var member = new SnoopableMember(snoopableObject, SnoopableMember.Kind.StaticMethod, item.MemberName, item.DeclaringType, item.MemberAccessor, null);
-                    yield return member;
-                }
-            }
-            if (snoopableObject.Object is Parameter par)
-            {
-                foreach (var item in ForParameter)
-                {
-                    var dataType = par.Definition?.GetDataType();
-                    if (UnitUtils.IsMeasurableSpec(dataType))
-                    {
-                        var member = new SnoopableMember(snoopableObject, SnoopableMember.Kind.StaticMethod, item.MemberName, item.DeclaringType, item.MemberAccessor, null);
-                        yield return member;
-                    }
-                }
-            }
+
+        public ForgeTypeIdStream()
+        {
+            RegisterTemplates(typeof(ForgeTypeId), ForForgeTypeId);
+            RegisterTemplates(typeof(Category), ForCategory);
+            RegisterTemplates(typeof(Parameter), ForParameter);
         }
     }
 }

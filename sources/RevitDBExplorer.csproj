@@ -69,7 +69,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Domain\DataModel\MemberAccessors\SnoopableMemberTemplate.cs" />
+    <Compile Include="Domain\DataModel\Streams\Base\SnoopableMemberTemplate.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\AssetProperties\AssetProperties_Item.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\Curve\Curve_GetEndPoint.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\Document\Document_Close.cs" />
@@ -111,6 +111,7 @@
     <Compile Include="Domain\DataModel\Streams\ForgeTypeIdStream.cs" />
     <Compile Include="Domain\DataModel\Streams\Base\BaseStream.cs" />
     <Compile Include="Domain\DataModel\Streams\PartUtilsStream.cs" />
+    <Compile Include="Domain\DataModel\Streams\SchemaTypeStream.cs" />
     <Compile Include="Domain\DataModel\Streams\SystemTypeStream.cs" />
     <Compile Include="Domain\DataModel\ValueTypes\Base\IHaveFactoryMethod.cs" />
     <Compile Include="Domain\DataModel\ValueTypes\Base\IValueType.cs" />

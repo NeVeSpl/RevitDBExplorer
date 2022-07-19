@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Autodesk.Revit.DB;
-using RevitDBExplorer.Domain.DataModel.MemberAccessors;
 using RevitDBExplorer.Domain.DataModel.Streams.Base;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
@@ -31,26 +30,14 @@ namespace RevitDBExplorer.Domain.DataModel.Streams
                     new SnoopableMemberTemplate<Part, IEnumerable<ElementId>>((doc, target) => PartUtils.GetMergedParts(target)),
                     new SnoopableMemberTemplate<Part, bool>((doc, target) => PartUtils.IsMergedPart(target)),
                     new SnoopableMemberTemplate<Part, bool>((doc, target) => PartUtils.IsPartDerivedFromLink(target)),
-                };
+                };            
         }
 
-        public override IEnumerable<SnoopableMember> Stream(SnoopableObject snoopableObject)
-        {
-            if (snoopableObject.Object is Element)
-            {
-                foreach (var item in partUtilsForElement)
-                {
-                    yield return new SnoopableMember(snoopableObject, SnoopableMember.Kind.StaticMethod, item.MemberName, item.DeclaringType, item.MemberAccessor, null);
-                }
-            }
 
-            if (snoopableObject.Object is Part)
-            {
-                foreach (var item in partUtilsForPart)
-                {
-                    yield return new SnoopableMember(snoopableObject, SnoopableMember.Kind.StaticMethod, item.MemberName, item.DeclaringType, item.MemberAccessor, null);
-                }
-            }
+        public PartUtilsStream()
+        {
+            RegisterTemplates(typeof(Element), partUtilsForElement);
+            RegisterTemplates(typeof(Part), partUtilsForPart);
         }
     }
 }

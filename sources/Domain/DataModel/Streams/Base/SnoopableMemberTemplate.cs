@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Linq.Expressions;
 using Autodesk.Revit.DB;
+using RevitDBExplorer.Domain.DataModel.MemberAccessors;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
-namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
+namespace RevitDBExplorer.Domain.DataModel.Streams.Base
 {
     internal interface ISnoopableMemberTemplate
     {
@@ -29,13 +30,26 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
             MemberName = methodCallExpression.Method.Name;
             DeclaringType = methodCallExpression.Method.DeclaringType;
             MemberAccessor = new MemberAccessorByFunc<TInput, TReturn>(compiledGetter);
+            ShouldBeCreated = Wrap(shouldBeCreated);
+        }       
+        public SnoopableMemberTemplate(Type declaringType, string memberName, IMemberAccessor memberAccessor, Func<TInput, bool> shouldBeCreated = null)
+        {
+            DeclaringType = declaringType;
+            MemberName = memberName;
+            MemberAccessor = memberAccessor;
+            ShouldBeCreated = Wrap(shouldBeCreated);
+        }
+
+
+        private Func<object, bool> Wrap(Func<TInput, bool> shouldBeCreated)
+        {
             if (shouldBeCreated != null)
             {
-                ShouldBeCreated = (x) => shouldBeCreated(x as TInput);
+                return (x) => shouldBeCreated(x as TInput);
             }
             else
             {
-                ShouldBeCreated = (x) => true;
+                return (x) => true;
             }
         }
     }
