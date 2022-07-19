@@ -62,12 +62,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\sources\RevitDBExplorer.csproj">
-      <Project>{bb69e885-0617-4556-a983-fd783c6669ba}</Project>
-      <Name>RevitDBExplorer</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="..\documentation\images\BackgroundImage.png">
       <Link>Resources\BackgroundImage.png</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
