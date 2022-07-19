@@ -27,10 +27,15 @@ jobs:
     - name: Restore Packages
       run: nuget restore RevitDBExplorer.sln       
       
-    - name: Build Project    
+    - name: Build Project for R2022     
       working-directory: sources/
       run: |
-          msbuild /p:Configuration=Release  
+          msbuild /p:Configuration=R2022 
+          
+    - name: Build Project for R2023     
+      working-directory: sources/
+      run: |
+          msbuild /p:Configuration=R2023
           
     - name: Create Code Signing Certificate
       run: |
@@ -46,7 +51,7 @@ jobs:
       uses: actions/upload-artifact@v3.1.0
       with:
         name: Build
-        path: "sources/bin/Release"    
+        path: "sources/bin/"    
    
     - name: Build SetupBuilder.exe   
       working-directory: setup/
@@ -65,6 +70,6 @@ jobs:
       uses: actions/upload-artifact@v3.1.0
       with:
         name: Setup
-        path: setup/bin/Release/*.msi
+        path: setup/bin/Release/RevitDBExplorer.msi
   
         
