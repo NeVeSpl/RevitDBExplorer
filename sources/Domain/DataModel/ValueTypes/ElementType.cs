@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using Autodesk.Revit.DB;
 using RevitDBExplorer.Domain.DataModel.ValueTypes.Base;
 
+// (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
+
 namespace RevitDBExplorer.Domain.DataModel.ValueTypes
 {
     internal sealed class ElementType : Base.ValueType<Element>, IHaveFactoryMethod
@@ -16,7 +18,7 @@ namespace RevitDBExplorer.Domain.DataModel.ValueTypes
         protected override bool CanBeSnoooped(Element element) => element is not null;
         protected override string ToLabel(Element element)
         {  
-            var elementName = String.IsNullOrEmpty(element.Name) ? "<???>" : element.Name;
+            var elementName = String.IsNullOrEmpty(element.Name) ? $"{element.GetType().GetCSharpName()} : <???>" : element.Name;
             if ((element is Wall) || (element is Floor) || (element is FamilyInstance))
             {
                 var parameter = element.get_Parameter(BuiltInParameter.ELEM_FAMILY_AND_TYPE_PARAM);

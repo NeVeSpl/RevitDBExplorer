@@ -14,10 +14,7 @@ namespace RevitDBExplorer.Domain.DataModel
         public enum Kind { Property, Method, StaticMethod }
 
         private readonly SnoopableObject parent;
-        private readonly Kind memberKind;
-        private readonly string name;
-        private readonly Type declaringType;
-        private readonly int declaringTypeLevel;
+        private readonly Type declaringType;      
         private readonly IMemberAccessor memberAccessor;
         private Exception valueAccessException;
         private string value;
@@ -26,10 +23,10 @@ namespace RevitDBExplorer.Domain.DataModel
         private Lazy<DocXml> documentation;
 
 
-        public Kind MemberKind => memberKind;
-        public string Name => name;
+        public Kind MemberKind { get; }
+        public string Name { get; }
         public string DeclaringType => declaringType.Name;
-        public int DeclaringTypeLevel => declaringTypeLevel;
+        public int DeclaringTypeLevel { get; }
         public bool HasException => valueAccessException is not null;
         public bool HasExceptionCouldNotResolveAllArguments => valueAccessException is CouldNotResolveAllArgumentsException;
         public string Value
@@ -47,13 +44,14 @@ namespace RevitDBExplorer.Domain.DataModel
         public bool CanBeSnooped => canBeSnooped;
         public DocXml Documentation => documentation?.Value ?? DocXml.Empty;
         
+
         public SnoopableMember(SnoopableObject parent, Kind memberKind, string name, Type declaringType, IMemberAccessor memberAccessor, Func<DocXml> documentationFactoryMethod)
         {
             this.parent = parent;
-            this.memberKind = memberKind;
-            this.name = name;
+            this.MemberKind = memberKind;
+            this.Name = name;
             this.declaringType = declaringType;
-            this.declaringTypeLevel = declaringType.NumberOfBaseTypes();
+            this.DeclaringTypeLevel = declaringType.NumberOfBaseTypes();
             this.memberAccessor = memberAccessor;
             if (documentationFactoryMethod != null)
             {
@@ -62,6 +60,10 @@ namespace RevitDBExplorer.Domain.DataModel
         }
 
 
+        public void ReadValue()
+        {
+            ReadValue(parent.Document, parent.Object);
+        }
         public void ReadValue(Document document, object @object)
         {
             try
@@ -82,6 +84,9 @@ namespace RevitDBExplorer.Domain.DataModel
             {
                 valueAccessException = ex;
             }
+            OnPropertyChanged(nameof(Value));
+            OnPropertyChanged(nameof(ValueTypeName));
+            OnPropertyChanged(nameof(CanBeSnooped));
         }
         public IEnumerable<SnoopableObject> Snooop(UIApplication app)
         {

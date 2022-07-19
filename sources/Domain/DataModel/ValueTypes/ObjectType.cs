@@ -11,12 +11,13 @@ namespace RevitDBExplorer.Domain.DataModel.ValueTypes
     {
         private readonly Type type;
 
+
         public ObjectType(Type type)
         {
             this.type = type;
         }
 
-
+        // in case if a value is null, we use ObjectType knowledge about the value type
         public override string TypeName => base.TypeName != "Object" ? base.TypeName : $"Object({type.GetCSharpName()})";
         protected override bool CanBeSnoooped(object @object) => @object is not null;
         protected override string ToLabel(object @object)
@@ -29,7 +30,6 @@ namespace RevitDBExplorer.Domain.DataModel.ValueTypes
         {
             yield return new SnoopableObject(@object, document);
         }
-
 
 
         private static readonly string[] propertyThatContainsName = new[]  { "Name", "Title", "SchemaName", "FieldName" };

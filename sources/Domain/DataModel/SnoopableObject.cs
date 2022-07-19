@@ -127,5 +127,11 @@ namespace RevitDBExplorer.Domain.DataModel
                  yield return member;
             }
         }
+
+
+        public static SnoopableObject CreateKeyValuePair(Document document, object key, object value)
+        {
+            return new SnoopableObject(key, document, new SnoopableObject(value, document) { NamePrefix = "value:" }) { NamePrefix = "key:" };
+        }
     }
 }

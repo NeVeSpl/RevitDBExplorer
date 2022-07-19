@@ -12,21 +12,16 @@ namespace RevitDBExplorer.Domain.DataModel.ValueTypes.Base
         private static readonly Type type = typeof(T);
         private T value;
 
-
-        public ValueType()
-        {
-
-        }
-
-
+        
         public Type Type => type;
         public virtual string TypeName
         {
             get
             {
-                var finalType = value?.GetType()?.GetCSharpName() ?? Type.Name;
+                var containerTypeName = Type.GetCSharpName();
+                var valueType = value?.GetType()?.GetCSharpName() ?? containerTypeName;
 
-                return $"{Type.Name}"+ (finalType != Type.Name ? $"({finalType})" : "");
+                return $"{containerTypeName}"+ (valueType != containerTypeName ? $"({valueType})" : "");
             }
         }
 

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Autodesk.Revit.DB;
 using RevitDBExplorer.Domain.DataModel.ValueTypes.Base;
 
@@ -16,8 +15,7 @@ namespace RevitDBExplorer.Domain.DataModel.ValueTypes
 
 
         protected override bool CanBeSnoooped(BindingMap map) => map is not null && !map.IsEmpty;
-        protected override string ToLabel(BindingMap map) => "BindingMap";
-
+        protected override string ToLabel(BindingMap map) => $"Bindings : {map.Size}";
         protected override IEnumerable<SnoopableObject> Snooop(Document document, BindingMap map)
         {
             var iterator = map.ForwardIterator();
@@ -26,7 +24,7 @@ namespace RevitDBExplorer.Domain.DataModel.ValueTypes
                 var definition = iterator.Key;
                 var binding = iterator.Current;
 
-                yield return new SnoopableObject(definition, document, new SnoopableObject(binding, document));
+                yield return SnoopableObject.CreateKeyValuePair(document, definition, binding);
             }
         }
     }

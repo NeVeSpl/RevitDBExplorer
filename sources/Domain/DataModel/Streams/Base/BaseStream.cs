@@ -26,7 +26,7 @@ namespace RevitDBExplorer.Domain.DataModel.Streams.Base
         {
             foreach (var keyValue in templates)
             {
-                if (snoopableObject.Object.GetType() == keyValue.Key)
+                if (keyValue.Key.IsAssignableFrom(snoopableObject.Object.GetType()))
                 {
                     foreach (var template in keyValue.Value)
                     {

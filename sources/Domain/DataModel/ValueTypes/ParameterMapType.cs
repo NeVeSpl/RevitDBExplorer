@@ -2,6 +2,8 @@
 using Autodesk.Revit.DB;
 using RevitDBExplorer.Domain.DataModel.ValueTypes.Base;
 
+// (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
+
 namespace RevitDBExplorer.Domain.DataModel.ValueTypes
 {
     internal class ParameterMapType : Base.ValueType<ParameterMap>, IHaveFactoryMethod

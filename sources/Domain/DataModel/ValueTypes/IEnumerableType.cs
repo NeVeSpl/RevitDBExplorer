@@ -19,8 +19,8 @@ namespace RevitDBExplorer.Domain.DataModel.ValueTypes
 
         protected override bool CanBeSnoooped(IEnumerable enumerable)
         {
-            if (enumerable == null) return false;
-            foreach(var item in enumerable)
+            if (enumerable == null) return false;          
+            foreach (var item in enumerable)
             {
                 return true;
             }
@@ -50,8 +50,6 @@ namespace RevitDBExplorer.Domain.DataModel.ValueTypes
 
             return $"{typeName}[]";
         }
-
-
         protected override IEnumerable<SnoopableObject> Snooop(Document document, IEnumerable enumerable)
         {
             int index = -1;

@@ -15,9 +15,11 @@ namespace RevitDBExplorer.Domain.DataModel.ValueTypes.Base
             new DoubleType(),
             new GuidType(),
             new EnumType(),
+
+            // 
             new DoubleNullableType(),
 
-            // APIObjects primitives
+            // APIObject primitives
             new BoundingBoxXYZType(),
             new CategoryType(),
             new XYZType(),
