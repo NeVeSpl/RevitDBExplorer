@@ -18,8 +18,7 @@ Yet another [RevitLookup](https://github.com/jeremytammik/RevitLookup) clone. Re
 
 ## Installation
 
-- You will find the latest available MSI instalator in [Releases section](https://github.com/NeVeSpl/RevitDBExplorer/releases/latest) atached as an asset.
-
+- Download and install [RevitDBExplorer.msi](https://github.com/NeVeSpl/RevitDBExplorer/releases/latest/download/RevitDBExplorer.msi). Setup will instal RDBE for Revit 2022 and 2023.
 
 ## Features
 
@@ -112,4 +111,4 @@ You get access to Extensible Storage data exactly like through Api, by invoking:
 
 ## Supported Revit versions
 
-Only Revit 2023 is supported.
+Only Revit 2023 and 2022 are supported.
