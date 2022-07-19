@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
+using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using RevitDBExplorer.Domain;
 using RevitDBExplorer.Domain.DataModel;
@@ -122,7 +123,8 @@ namespace RevitDBExplorer
             InitializeComponent();
             this.DataContext = this;
             var ver = GetType().Assembly.GetName().Version;
-            Title += $" - v{ver.Major}.{ver.Minor}.{ver.Build}";
+            var revit_ver = typeof(Element).Assembly.GetName().Version;
+            Title += $" 20{revit_ver.Major} - v{ver.Major}.{ver.Minor}.{ver.Build}";            
         }
         public MainWindow(IList<SnoopableObject> objects) : this()
         {
@@ -192,6 +194,25 @@ namespace RevitDBExplorer
             catch (Exception ex)
             {
                 ShowErrorMsg("SnoopableMember.Snooop", ex);
+            }
+        }
+        private async void ReloadButton_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                await ExternalExecutor.ExecuteInRevitContextAsync(uiApp =>
+                {
+                    foreach (var item in listItems)
+                    {
+                        item.ReadValue();
+                    }
+                    return true;
+                });
+               
+            }
+            catch (Exception ex)
+            {
+                ShowErrorMsg("SnoopableMember.ReadValue", ex);
             }
         }
         private async void TryQueryDatabase(string query)
@@ -376,6 +397,7 @@ namespace RevitDBExplorer
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+
 
         #endregion
 

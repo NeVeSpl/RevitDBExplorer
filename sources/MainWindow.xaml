@@ -152,7 +152,13 @@
             </TextBox.Style>
         </TextBox>
 
-        <TextBox Grid.Row="2" Grid.Column="2" Margin="0 0 0 3"   Text="{Binding ListItemsFilterPhrase, Mode=TwoWay, Delay=200, UpdateSourceTrigger=PropertyChanged}"    >
+        <Grid Grid.Row="2" Grid.Column="2" Margin="0 0 0 3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="auto"/>
+            </Grid.ColumnDefinitions>
+            
+            <TextBox    Text="{Binding ListItemsFilterPhrase, Mode=TwoWay, Delay=200, UpdateSourceTrigger=PropertyChanged}"    >
                 <TextBox.Style>
                     <!--source: https://stackoverflow.com/a/33539781/1147478-->
                     <Style TargetType="TextBox" xmlns:sys="clr-namespace:System;assembly=mscorlib">
@@ -177,6 +183,13 @@
                     </Style>
                 </TextBox.Style>
             </TextBox>
+
+            <Button Grid.Column="1" Margin="2 0 0 0" ToolTip="Reload data drom Revit in the list" Background="Transparent" Padding="1" Click="ReloadButton_Click">
+                <Path Style="{StaticResource IconReload}" />
+            </Button>
+            
+        </Grid>
+        
         
 
         <TreeView Grid.Row="3" Grid.Column="0" ItemsSource="{Binding TreeItems}" Margin="0 2 2 0" SelectedItemChanged="TreeView_SelectedItemChanged" VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling">
