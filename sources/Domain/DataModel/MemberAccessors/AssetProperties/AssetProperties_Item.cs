@@ -14,7 +14,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 
 
         protected override bool CanBeSnoooped(Document document, AssetProperties assetProperties) => assetProperties.Size > 0;
-        protected override string GetLabel(Document document, AssetProperties assetProperties) => $"[{nameof(AssetProperty)}]";
+        protected override string GetLabel(Document document, AssetProperties assetProperties) => $"[{nameof(AssetProperty)} : {assetProperties.Size}]";
         protected override IEnumerable<SnoopableObject> Snooop(Document document, AssetProperties assetProperties)
         {            
             for (int i = 0; i < assetProperties.Size; i++)

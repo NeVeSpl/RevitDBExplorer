@@ -32,7 +32,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
             {
                 optionsForActiveView.Add(new Options() { View = document.ActiveView, IncludeNonVisibleObjects = false });
                 optionsForActiveView.Add(new Options() { View = document.ActiveView, IncludeNonVisibleObjects = true });
-                yield return new SnoopableObject(null, document, GetGeometry(document, element, optionsForActiveView)) { Name = "Active view: " + document.ActiveView.Name };
+                yield return new SnoopableObject(null, document, GetGeometry(document, element, optionsForActiveView)) { Name = "Active view: " + document.ActiveView.Name, NamePrefix="view:" };
             }
 
             var options = new List<Options>();
@@ -41,7 +41,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
                 options.Add(new Options() { DetailLevel = level, IncludeNonVisibleObjects = false });
                 options.Add(new Options() { DetailLevel = level, IncludeNonVisibleObjects = true });
             }
-            yield return new SnoopableObject(null, document, GetGeometry(document, element, options)) { Name = "Undefined view" };
+            yield return new SnoopableObject(null, document, GetGeometry(document, element, options)) { Name = "null", NamePrefix = "view:" };
         }
 
         private IEnumerable<SnoopableObject> GetGeometry(Document document, Element element, IEnumerable<Options> options)
@@ -49,7 +49,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
             foreach (var option in options)
             {
                 var result = element.get_Geometry(option);
-                var snoopableObject = new SnoopableObject(result, document) { Name = $"{option.DetailLevel}" + (option.IncludeNonVisibleObjects ? ", include non-visible objects" : "")  };
+                var snoopableObject = new SnoopableObject(result, document) { Name = $"{option.DetailLevel}" + (option.IncludeNonVisibleObjects ? ", include non-visible objects" : ""), NamePrefix= "detail level:"  };
                 yield return snoopableObject;
             }
         }

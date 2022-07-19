@@ -20,14 +20,14 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
             foreach (PlanViewPlane type in Enum.GetValues(typeof(PlanViewPlane)))
             {
                 var levelId = viewRange.GetLevelId(type);
-                if (levelId is not null && levelId != ElementId.InvalidElementId)
+                if (levelId is not null && levelId > ElementId.InvalidElementId)
                 {
-                    var level = document.GetElement(levelId) as Level;
-                    yield return new SnoopableObject(type, document, new SnoopableObject(level, document));                  
+                    var level = document.GetElement(levelId);
+                    yield return SnoopableObject.CreateInOutPair(document, type, level);                  
                 }
                 else
                 {
-                    yield return new SnoopableObject(type, document, new SnoopableObject(levelId, document));                   
+                    yield return SnoopableObject.CreateInOutPair(document, type, levelId);                   
                 }
             }
         }

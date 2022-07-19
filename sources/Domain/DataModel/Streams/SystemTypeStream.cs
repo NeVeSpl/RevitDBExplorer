@@ -17,6 +17,7 @@ namespace RevitDBExplorer.Domain.DataModel.Streams
         public override IEnumerable<SnoopableMember> Stream(SnoopableObject snoopableObject)
         {
             var type = snoopableObject.Object.GetType();
+            shouldEndAllStreaming = false;
 
             if ((type.IsEnum) || (type.IsPrimitive) || (type == typeof(string)))
             {

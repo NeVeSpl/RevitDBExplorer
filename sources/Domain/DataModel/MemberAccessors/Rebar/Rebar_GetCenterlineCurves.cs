@@ -15,13 +15,13 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 
 
         protected override bool CanBeSnoooped(Document document, Rebar rebar) => true;
-        protected override string GetLabel(Document document, Rebar rebar) => "[Curve]";
+        protected override string GetLabel(Document document, Rebar rebar) => $"[{nameof(Curve)}]";
         protected override IEnumerable<SnoopableObject> Snooop(Document document, Rebar rebar)
         {
             for (int i = 0; i < rebar.NumberOfBarPositions; ++i)
             {
                 var curves = rebar.GetCenterlineCurves(false, true, false, MultiplanarOption.IncludeOnlyPlanarCurves, i);
-                yield return new SnoopableObject(null, document, curves.Select(x => new SnoopableObject(x, document))) { Name = $"barPositionIndex: {i}" };
+                yield return new SnoopableObject(i, document, curves.Select(x => new SnoopableObject(x, document))) { NamePrefix = $"barPositionIndex:" };
             }           
         }
     }

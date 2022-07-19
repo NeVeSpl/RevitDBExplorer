@@ -25,7 +25,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
             {
                 var sectionData = tableData.GetSectionData(type);
                 if (sectionData is null) continue;
-                yield return new SnoopableObject(type, document, new SnoopableObject(sectionData, document));
+                yield return SnoopableObject.CreateInOutPair(document, type, sectionData);
             }
         }
     }

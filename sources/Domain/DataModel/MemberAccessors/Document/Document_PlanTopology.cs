@@ -32,7 +32,6 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
             {
                 transaction?.RollBack();
             }
-
         }
     }
 }

@@ -23,7 +23,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
         {
             var filters = new FilteredElementCollector(document, view.GetFilters()).WhereElementIsNotElementType().ToElements();
 
-            return filters.Select(x => new SnoopableObject(x, document, new SnoopableObject(view.GetFilterOverrides(x.Id), document)));
+            return filters.Select(x => SnoopableObject.CreateInOutPair(document, x, view.GetFilterOverrides(x.Id)));
         }
     }
 }

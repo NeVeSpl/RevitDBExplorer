@@ -25,7 +25,7 @@ namespace RevitDBExplorer.Domain.DataModel
 
         public Kind MemberKind { get; }
         public string Name { get; }
-        public string DeclaringType => declaringType.Name;
+        public string DeclaringType => declaringType.GetCSharpName();
         public int DeclaringTypeLevel { get; }
         public bool HasException => valueAccessException is not null;
         public bool HasExceptionCouldNotResolveAllArguments => valueAccessException is CouldNotResolveAllArgumentsException;

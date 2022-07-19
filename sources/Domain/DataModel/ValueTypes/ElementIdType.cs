@@ -39,6 +39,10 @@ namespace RevitDBExplorer.Domain.DataModel.ValueTypes
                 var catName = Enum.GetName(typeof(BuiltInCategory), id.IntegerValue);
                 if (parName != null) return $"BuiltInParameter.{parName} ({id})";
                 if (catName != null) return $"BuiltInCategory.{catName} ({id})";
+                if(id == PlanViewRange.Unlimited) return $"PlanViewRange.Unlimited";
+                if (id == PlanViewRange.Current) return $"PlanViewRange.Current";
+                if (id == PlanViewRange.LevelBelow) return $"PlanViewRange.LevelBelow";
+                if (id == PlanViewRange.LevelAbove) return $"PlanViewRange.LevelAbove";
                 return $"{id}";
             }
             return new ElementType().SetValue(null, element).ValueAsString;

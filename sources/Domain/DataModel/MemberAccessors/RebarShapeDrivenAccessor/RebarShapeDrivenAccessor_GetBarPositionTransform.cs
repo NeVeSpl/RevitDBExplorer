@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.Structure;
@@ -14,14 +13,14 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
         IMemberAccessor IHaveFactoryMethod.Create() => new RebarShapeDrivenAccessor_GetBarPositionTransform();
 
 
-        protected override bool CanBeSnoooped(Document document, RebarShapeDrivenAccessor rebar) => true;
-        protected override string GetLabel(Document document, RebarShapeDrivenAccessor rebar) => "[Transform]";
+        protected override bool CanBeSnoooped(Document document, RebarShapeDrivenAccessor rebar) => false;
+        protected override string GetLabel(Document document, RebarShapeDrivenAccessor rebar) => $"[{nameof(Transform)}]";
         protected override IEnumerable<SnoopableObject> Snooop(Document document, RebarShapeDrivenAccessor rebar)
         {
-            for (int i = 0; i < rebar.ArrayLength; ++i)
+            for (int i = 0; i < 0; ++i)
             {
                 var transform = rebar.GetBarPositionTransform(i);
-                yield return new SnoopableObject(null, document, new[] { new SnoopableObject(transform, document) }) { Name = $"barPositionIndex: {i}" };
+                yield return SnoopableObject.CreateInOutPair(document, i, transform, "barPositionIndex:");
             }           
         }
     }

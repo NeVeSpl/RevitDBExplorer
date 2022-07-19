@@ -21,7 +21,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
         }
         protected override string GetLabel(Document document, Entity entity)
         {
-            return "[Extensible storage values]";
+            return "[Extensible storage field values]";
         }
         protected override IEnumerable<SnoopableObject> Snooop(Document document, Entity entity)
         {
@@ -49,7 +49,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
                     parameters = new object[] { field };
                 }
                 var value = closedGenericGet.Invoke(entity, parameters);
-                yield return new SnoopableObject(field, document, new SnoopableObject(value, document));
+                yield return new SnoopableObject(field, document, new SnoopableObject(value, document) { NamePrefix ="value:" });
             }
         }
 
@@ -60,7 +60,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
                 ContainerType.Simple => field.ValueType,
                 ContainerType.Array => typeof(IList<>).MakeGenericType(field.ValueType),
                 ContainerType.Map => typeof(IDictionary<,>).MakeGenericType(field.KeyType, field.ValueType),
-                _ => throw new NotSupportedException(),
+                _ => throw new NotImplementedException(),
             };
         }
     }

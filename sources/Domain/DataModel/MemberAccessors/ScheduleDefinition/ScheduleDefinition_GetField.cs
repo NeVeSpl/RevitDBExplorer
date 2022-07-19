@@ -17,7 +17,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
             bool canBesnooped = scheduleDefinition.GetFieldCount() > 0;
             return canBesnooped;
         }
-        protected override string GetLabel(Document document, ScheduleDefinition scheduleDefinition) => $"[{nameof(ScheduleField)}]";
+        protected override string GetLabel(Document document, ScheduleDefinition scheduleDefinition) => $"Fields : {scheduleDefinition.GetFieldCount()}";
         protected override IEnumerable<SnoopableObject> Snooop(Document document, ScheduleDefinition scheduleDefinition)
         {
             for (var i = 0; i < scheduleDefinition.GetFieldCount(); i++)

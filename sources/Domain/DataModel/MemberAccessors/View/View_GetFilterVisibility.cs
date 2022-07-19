@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using Autodesk.Revit.DB;
@@ -18,12 +19,12 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
             bool canBesnooped = !view.Document.IsFamilyDocument && view.AreGraphicsOverridesAllowed() && view.GetFilters().Count > 0;
             return canBesnooped;
         }
-        protected override string GetLabel(Document document, View value) => "[Boolean]";
+        protected override string GetLabel(Document document, View value) => $"[{nameof(Boolean)}]";
         protected override IEnumerable<SnoopableObject> Snooop(Document document, View view)
         {
             var filters = new FilteredElementCollector(document, view.GetFilters()).WhereElementIsNotElementType().ToElements();
 
-            return filters.Select(x => new SnoopableObject(x, document, new SnoopableObject(view.GetFilterVisibility(x.Id), document)));
+            return filters.Select(x => SnoopableObject.CreateInOutPair(document, x, view.GetFilterVisibility(x.Id)));
         }
     }
 }

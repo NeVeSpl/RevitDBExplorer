@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq.Expressions;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.Structure;
@@ -15,13 +15,13 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 
 
         protected override bool CanBeSnoooped(Document document, Rebar rebar) => true;
-        protected override string GetLabel(Document document, Rebar rebar) => "[bool]";
+        protected override string GetLabel(Document document, Rebar rebar) => $"[{nameof(Boolean)}]";
         protected override IEnumerable<SnoopableObject> Snooop(Document document, Rebar rebar)
         {
             for (int i = 0; i < rebar.NumberOfBarPositions; ++i)
             {
                 var result = rebar.IsBarHidden(document.ActiveView, i);
-                yield return new SnoopableObject(null, document, new[] { new SnoopableObject(result, document) }) { Name = $"{i}" };
+                yield return SnoopableObject.CreateInOutPair(document, i, result, "barPosition:");
             }
         }
     }

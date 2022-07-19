@@ -12,7 +12,6 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
     {
         protected override IEnumerable<LambdaExpression> HandledMembers => Enumerable.Empty<LambdaExpression>();
 
-
      
         protected override bool CanBeSnoooped(Document document, Schema schema)
         {
@@ -22,7 +21,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
         protected override string GetLabel(Document document, Schema schema)
         {
             int count = new FilteredElementCollector(document).WherePasses(new ExtensibleStorageFilter(schema.GUID)).GetElementCount();
-            return $"[Elements: {count}]";
+            return $"Elements : {count}";
         }
         protected override IEnumerable<SnoopableObject> Snooop(Document document, Schema schema)
         {

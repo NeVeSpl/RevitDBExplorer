@@ -36,7 +36,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
                 var entity = element.GetEntity(schema);
                 if (!entity.IsValid()) continue;
 
-                yield return new SnoopableObject(schema, document, new SnoopableObject(entity, document));
+                yield return SnoopableObject.CreateInOutPair(document, schema, entity);
             }         
         }       
     }

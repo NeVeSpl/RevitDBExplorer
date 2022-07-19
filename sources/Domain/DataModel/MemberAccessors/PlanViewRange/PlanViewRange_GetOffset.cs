@@ -14,13 +14,13 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 
 
         protected override bool CanBeSnoooped(Document document, PlanViewRange viewRange) => true;
-        protected override string GetLabel(Document document, PlanViewRange viewRange) => "[double]";
+        protected override string GetLabel(Document document, PlanViewRange viewRange) => $"[{nameof(Double)}]";
         protected override IEnumerable<SnoopableObject> Snooop(Document document, PlanViewRange viewRange)
         {
             foreach (PlanViewPlane type in Enum.GetValues(typeof(PlanViewPlane)))
             {
                 var offset = viewRange.GetOffset(type);               
-                yield return new SnoopableObject(type, document, new SnoopableObject(offset, document));               
+                yield return SnoopableObject.CreateInOutPair(document, type, offset);               
             }
         }
     }
