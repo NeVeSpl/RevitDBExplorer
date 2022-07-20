@@ -219,12 +219,15 @@ namespace RevitDBExplorer.Domain
 #pragma warning disable CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
             IList<ForgeTypeId> ids = selector switch
             {
+#if R2022 || R2023
                 Selector.ForgeParameterUtilsGetAllBuiltInGroups => ParameterUtils.GetAllBuiltInGroups(),
                 Selector.ForgeParameterUtilsGetAllBuiltInParameters => ParameterUtils.GetAllBuiltInParameters(),
                 Selector.ForgeUnitUtilsGetAllMeasurableSpecs => UnitUtils.GetAllMeasurableSpecs(),
-                Selector.ForgeUnitUtilsGetAllUnits => UnitUtils.GetAllUnits(),
                 Selector.ForgeUnitUtilsGetAllDisciplines => UnitUtils.GetAllDisciplines(),
                 Selector.ForgeSpecUtilsGetAllSpecs => SpecUtils.GetAllSpecs(),
+#endif
+                Selector.ForgeUnitUtilsGetAllUnits => UnitUtils.GetAllUnits(),
+                
             };
 #pragma warning restore CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
             return ids.Select(x => new SnoopableObject(x, app?.ActiveUIDocument?.Document));

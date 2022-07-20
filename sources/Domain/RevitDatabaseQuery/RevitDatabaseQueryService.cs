@@ -139,7 +139,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
                 {
                     foreach (var parameter in NameLikeParameters)
                     {
-#if R2022
+#if R2021 || R2022
                         rules.Add(ParameterFilterRuleFactory.CreateContainsRule(new ElementId(parameter), name, false));
 #endif
 #if R2023

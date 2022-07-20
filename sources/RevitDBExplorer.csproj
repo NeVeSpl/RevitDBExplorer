@@ -47,6 +47,15 @@
     <LangVersion>10.0</LangVersion>
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'R2021|AnyCPU'">
+    <OutputPath>bin\R2021\</OutputPath>
+    <DefineConstants>TRACE;R2021</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <LangVersion>10.0</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="DocXml, Version=3.4.5.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\LoxSmoke.DocXml.3.4.5\lib\netstandard2.0\DocXml.dll</HintPath>
@@ -63,6 +72,10 @@
       <HintPath>..\binaries\revit\2022\RevitAPI.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="RevitAPI" Condition="'$(Configuration)'=='R2021'">
+      <HintPath>..\binaries\revit\2021\RevitAPI.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="RevitAPIUI" Condition="'$(Configuration)'=='Debug'">
       <HintPath>..\binaries\revit\2023\RevitAPIUI.dll</HintPath>
       <Private>False</Private>
@@ -73,6 +86,10 @@
     </Reference>
     <Reference Include="RevitAPIUI" Condition="'$(Configuration)'=='R2022'">
       <HintPath>..\binaries\revit\2022\RevitAPIUI.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="RevitAPIUI" Condition="'$(Configuration)'=='R2021'">
+      <HintPath>..\binaries\revit\2021\RevitAPIUI.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="SimMetrics.Net, Version=1.0.5.0, Culture=neutral, PublicKeyToken=c58dc06d59f3391b, processorArchitecture=MSIL">
