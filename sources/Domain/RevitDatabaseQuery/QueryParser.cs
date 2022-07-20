@@ -28,7 +28,37 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
             var splitted = query.Split(new[] { ';', ',' }, System.StringSplitOptions.RemoveEmptyEntries);
             var commands = splitted.Select(f => new Command(f)).ToList();
 
+            if (!DoesContainQuickFilter(commands))
+            {
+                commands.Insert(0, new Command("type"));
+                commands.Insert(0, new Command("element"));
+            }
+
             return commands;
+        }
+
+        private static readonly HashSet<CmdType> quickFilters = new() { CmdType.ActiveView, CmdType.ElementId, CmdType.ElementType, CmdType.NotElementType, CmdType.Category, CmdType.Class };
+
+        private static bool DoesContainQuickFilter(List<Command> commands)
+        {
+            foreach (var command in commands)
+            {
+                if (quickFilters.Contains(command.Type))
+                {
+                    return true;
+                }
+                if (command.Type == CmdType.WhoKnows)
+                {
+                    foreach (var arg in command.Arguments)
+                    {
+                        if (arg.IsClass || arg.IsCategory || arg.IsElementId)
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
         }
     }
 

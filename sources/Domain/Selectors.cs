@@ -51,12 +51,12 @@ namespace RevitDBExplorer.Domain
                 Selector.Schemas => SnoopSchemas(uiApplication),
                 Selector.FilterableCategories => SnoopCategories(uiApplication),
                 Selector.FilterableParameters => SnoopParameters(uiApplication),
-                Selector.ForgeParameterUtilsGetAllBuiltInGroups => SnoopForge(selector),
-                Selector.ForgeParameterUtilsGetAllBuiltInParameters => SnoopForge(selector),
-                Selector.ForgeUnitUtilsGetAllMeasurableSpecs => SnoopForge(selector),
-                Selector.ForgeUnitUtilsGetAllUnits => SnoopForge(selector),
-                Selector.ForgeUnitUtilsGetAllDisciplines => SnoopForge(selector),
-                Selector.ForgeSpecUtilsGetAllSpecs => SnoopForge(selector),
+                Selector.ForgeParameterUtilsGetAllBuiltInGroups => SnoopForge(uiApplication, selector),
+                Selector.ForgeParameterUtilsGetAllBuiltInParameters => SnoopForge(uiApplication, selector),
+                Selector.ForgeUnitUtilsGetAllMeasurableSpecs => SnoopForge(uiApplication, selector),
+                Selector.ForgeUnitUtilsGetAllUnits => SnoopForge(uiApplication, selector),
+                Selector.ForgeUnitUtilsGetAllDisciplines => SnoopForge(uiApplication, selector),
+                Selector.ForgeSpecUtilsGetAllSpecs => SnoopForge(uiApplication, selector),
                 _ => throw new NotImplementedException()
             };
             return result ?? Enumerable.Empty<SnoopableObject>();
@@ -214,7 +214,7 @@ namespace RevitDBExplorer.Domain
 
             yield return new SnoopableObject(view, view.Document);
         }
-        private static IEnumerable<SnoopableObject> SnoopForge(Selector selector)
+        private static IEnumerable<SnoopableObject> SnoopForge(UIApplication app, Selector selector)
         {
 #pragma warning disable CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
             IList<ForgeTypeId> ids = selector switch
@@ -227,7 +227,7 @@ namespace RevitDBExplorer.Domain
                 Selector.ForgeSpecUtilsGetAllSpecs => SpecUtils.GetAllSpecs(),
             };
 #pragma warning restore CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
-            return ids.Select(x => new SnoopableObject(x, null));
+            return ids.Select(x => new SnoopableObject(x, app?.ActiveUIDocument?.Document));
         }
     }
 }

@@ -8,17 +8,17 @@ using Autodesk.Revit.DB;
 namespace RevitDBExplorer.Domain.RevitDatabaseQuery
 {
     internal static class RevitDatabaseQueryService
-    {  
+    {
         public static void Init()
         {
             FuzzySearchEngine.Init();
         }
-        
+
 
         public static Result Parse(Document document, string query)
         {
             var commands = QueryParser.Parse(query);
-            
+
             var t1 = CreateCollector(document, commands);
             var t2 = WhereElementIsElementTypeOrNot(t1, commands);
             var t3 = WherePassesElementIdSetFilter(t2, commands);
@@ -29,7 +29,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
             return t6;
         }
 
-        
+
         private static Result CreateCollector(Document document, List<Command> commands)
         {
             if (commands.Any(x => x.Type == CmdType.ActiveView))
@@ -46,36 +46,30 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
             }
         }
         private static Result WhereElementIsElementTypeOrNot(Result token, List<Command> commands)
-        {            
-            if (DoesContainQuickFilter(commands))
+        {
+            var isElementTypePresent = commands.Any(x => x.Type == CmdType.ElementType);
+            var isNotElementTypePresent = commands.Any(x => x.Type == CmdType.NotElementType);
+
+            if (isElementTypePresent == true && isNotElementTypePresent == false)
             {
-                var isElementTypePresent = commands.Any(x => x.Type == CmdType.ElementType);
-                var isNotElementTypePresent = commands.Any(x => x.Type == CmdType.NotElementType);
-
-                if (isElementTypePresent == true && isNotElementTypePresent == false)
-                {
-                    var c = token.Collector.WhereElementIsElementType();
-                    var s = token.CollectorSyntax + ".WhereElementIsElementType()";
-                    return new Result(c, s);
-                }
-                if (isElementTypePresent == false && isNotElementTypePresent == true)
-                {
-                    var c = token.Collector.WhereElementIsNotElementType();
-                    var s = token.CollectorSyntax + ".WhereElementIsNotElementType()";
-                    return new Result(c, s);
-                }
-                if (isElementTypePresent == false && isNotElementTypePresent == false)
-                {
-                    return token;
-                }
+                var c = token.Collector.WhereElementIsElementType();
+                var s = token.CollectorSyntax + ".WhereElementIsElementType()";
+                return new Result(c, s);
             }
-
+            if (isElementTypePresent == false && isNotElementTypePresent == true)
+            {
+                var c = token.Collector.WhereElementIsNotElementType();
+                var s = token.CollectorSyntax + ".WhereElementIsNotElementType()";
+                return new Result(c, s);
+            }
+            if (isElementTypePresent == true && isNotElementTypePresent == true)
             {
                 var c = token.Collector.WherePasses(new LogicalOrFilter(new ElementIsElementTypeFilter(true), new ElementIsElementTypeFilter(false)));
                 var s = token.CollectorSyntax + ".WherePasses(new LogicalOrFilter(new ElementIsElementTypeFilter(true), new ElementIsElementTypeFilter(false)))";
-
                 return new Result(c, s);
             }
+
+            return token;
         }
         private static Result WherePassesElementIdSetFilter(Result token, List<Command> commands)
         {
@@ -129,7 +123,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
         }
 
         private static readonly List<BuiltInParameter> NameLikeParameters = new List<BuiltInParameter>()
-        {            
+        {
             BuiltInParameter.ALL_MODEL_TYPE_NAME,
             BuiltInParameter.ALL_MODEL_MARK,
             BuiltInParameter.ELEM_FAMILY_AND_TYPE_PARAM,
@@ -141,9 +135,9 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
             if (names.Any())
             {
                 var rules = new List<FilterRule>();
-                foreach(var name in names)
+                foreach (var name in names)
                 {
-                    foreach(var parameter in NameLikeParameters)
+                    foreach (var parameter in NameLikeParameters)
                     {
 #if R2022
                         rules.Add(ParameterFilterRuleFactory.CreateContainsRule(new ElementId(parameter), name, false));
@@ -156,34 +150,10 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
 
                 var or = new LogicalOrFilter(rules.Select(x => new ElementParameterFilter(x, false)).ToList<ElementFilter>());
                 var c = token.Collector.WherePasses(or);
-                var s = token.CollectorSyntax  + $".WherePasses(Name = " + String.Join(", ", names.Select(x => $"{x}")) + ")";
+                var s = token.CollectorSyntax + $".WherePasses(Name = " + String.Join(", ", names.Select(x => $"{x}")) + ")";
                 return new Result(c, s);
             }
             return token;
-        }
-
-
-        private static readonly HashSet<CmdType> quickFilters = new() { CmdType.ActiveView, CmdType.ElementId, CmdType.ElementType, CmdType.NotElementType, CmdType.Category, CmdType.Class };
-        private static bool DoesContainQuickFilter(List<Command> commands)
-        {
-            foreach (var command in commands)
-            {
-                if (quickFilters.Contains(command.Type))
-                {
-                    return true;
-                }
-                if (command.Type == CmdType.WhoKnows)
-                {
-                    foreach (var arg in command.Arguments)
-                    {
-                        if (arg.IsClass || arg.IsCategory || arg.IsElementId)
-                        {
-                            return true;
-                        }
-                    }
-                }
-            }
-            return false;
         }
 
 
