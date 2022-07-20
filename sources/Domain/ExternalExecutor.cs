@@ -22,6 +22,10 @@ namespace RevitDBExplorer.Domain
             externalEvent.Raise();
             return request.Task;
         }
+        public static Task ExecuteInRevitContextAsync(Action<UIApplication> command)
+        {           
+            return ExecuteInRevitContextAsync<bool>(x => { command.Invoke(x); return true; });
+        }
 
 
         private class Request<T> : IRequest

@@ -30,16 +30,16 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
             var optionsForActiveView = new List<Options>();
             if (document.ActiveView != null)
             {
-                optionsForActiveView.Add(new Options() { View = document.ActiveView, IncludeNonVisibleObjects = false });
-                optionsForActiveView.Add(new Options() { View = document.ActiveView, IncludeNonVisibleObjects = true });
+                optionsForActiveView.Add(new Options() { View = document.ActiveView, IncludeNonVisibleObjects = false, ComputeReferences = true });
+                optionsForActiveView.Add(new Options() { View = document.ActiveView, IncludeNonVisibleObjects = true, ComputeReferences = true });
                 yield return new SnoopableObject(null, document, GetGeometry(document, element, optionsForActiveView)) { Name = "Active view: " + document.ActiveView.Name, NamePrefix="view:" };
             }
 
             var options = new List<Options>();
             foreach (ViewDetailLevel level in Enum.GetValues(typeof(ViewDetailLevel)))
             {
-                options.Add(new Options() { DetailLevel = level, IncludeNonVisibleObjects = false });
-                options.Add(new Options() { DetailLevel = level, IncludeNonVisibleObjects = true });
+                options.Add(new Options() { DetailLevel = level, IncludeNonVisibleObjects = false, ComputeReferences=true });
+                options.Add(new Options() { DetailLevel = level, IncludeNonVisibleObjects = true, ComputeReferences = true });
             }
             yield return new SnoopableObject(null, document, GetGeometry(document, element, options)) { Name = "null", NamePrefix = "view:" };
         }

@@ -23,7 +23,7 @@ namespace RevitDBExplorer
     {
         private ObservableCollection<SnoopableCategoryTreeVM> treeItems = new();
         private ObservableCollection<SnoopableMember> listItems = new();
-        private SnoopableMember listViewSelectedItem = null;
+        private SnoopableMember listSelectedItem = null;
         private string listItemsFilterPhrase = string.Empty;
         private string treeItemsFilterPhrase = string.Empty;
         private string databaseQuery = string.Empty;
@@ -57,11 +57,11 @@ namespace RevitDBExplorer
         {
             get
             {
-                return listViewSelectedItem;
+                return listSelectedItem;
             }
             set
             {
-                listViewSelectedItem = value;
+                listSelectedItem = value;
                 OnPropertyChanged();
             }
         }
@@ -335,7 +335,48 @@ namespace RevitDBExplorer
             DatabaseQueryToolTip = "";
         }
 
-
+        private void TreeViewMenuItemInRevit_Click(object sender, RoutedEventArgs e)
+        {
+            var menuItem = sender as MenuItem;
+            var snoopableObject = (menuItem?.DataContext as SnoopableObjectTreeVM)?.Object;
+            try
+            {
+                if (snoopableObject?.Object is not null)
+                {
+                    switch (menuItem.Tag)
+                    {
+                        case "Select":
+                            RevitObjectPresenter.Select(snoopableObject);
+                            break;
+                        case "Isolate":
+                            RevitObjectPresenter.Isolate(snoopableObject);
+                            break;
+                        case "Show":
+                            RevitObjectPresenter.Show(snoopableObject);
+                            break;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ShowErrorMsg($"RevitObjectPresenter.{menuItem.Tag}", ex);
+            }
+        }
+        private void TreeViewMenuItemSnoop_Click(object sender, RoutedEventArgs e)
+        {
+            var snoopableObject = ((sender as MenuItem)?.DataContext as SnoopableObjectTreeVM)?.Object;
+            if (snoopableObject is not null)
+            {
+                var window = new MainWindow(new[] { snoopableObject });
+                window.Owner = this;
+                window.Show();
+            }
+        }
+        private void TreeViewItem_MouseRightButtonDown(object sender, RoutedEventArgs e)
+        {
+            (sender as TreeViewItem).IsSelected = true;
+            //e.Handled = true;
+        }
         private void ListViewMenuItemCopy_Click(object sender, RoutedEventArgs e)
         {
             var menuItem = e.Source as MenuItem;
@@ -398,9 +439,7 @@ namespace RevitDBExplorer
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        #endregion      
 
-        #endregion
-
-        
     }
 }

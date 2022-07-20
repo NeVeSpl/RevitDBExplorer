@@ -201,8 +201,16 @@
                     </StackPanel>
                 </HierarchicalDataTemplate>
 
-                <HierarchicalDataTemplate DataType="{x:Type viewModels:SnoopableObjectTreeVM}" ItemsSource="{Binding Items}">
-                    <StackPanel Orientation="Horizontal">                       
+                <HierarchicalDataTemplate DataType="{x:Type viewModels:SnoopableObjectTreeVM}" ItemsSource="{Binding Items}">                    
+                    <StackPanel Orientation="Horizontal">
+                        <StackPanel.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Select in Revit" Click="TreeViewMenuItemInRevit_Click" Tag="Select" IsEnabled="{Binding IsSelectInRevitAvailable}"/>
+                                <!--<MenuItem Header="Isolate in Revit" Click="TreeViewMenuItemInRevit_Click" Tag="Isolate" />-->
+                                <MenuItem Header="Show in Revit" Click="TreeViewMenuItemInRevit_Click" Tag="Show" IsEnabled="{Binding IsShowInRevitAvailable}"/>
+                                <MenuItem Header="Snoop in a new window" Click="TreeViewMenuItemSnoop_Click" />
+                            </ContextMenu>
+                        </StackPanel.ContextMenu>
                         <TextBlock>             
                              <Run Text="{Binding Prefix, Mode=OneWay}">
                                  <Run.Style>
@@ -230,12 +238,13 @@
 
             <TreeView.ItemContainerStyle>
                 <Style TargetType="{x:Type TreeViewItem}">
+                    <EventSetter Event="PreviewMouseRightButtonDown" Handler="TreeViewItem_MouseRightButtonDown"/>
                     <Setter Property="BorderThickness" Value="1" />
                     <Setter Property="HorizontalAlignment" Value="Stretch" />
                     <Setter Property="IsSelected" Value="{Binding Path=IsSelected, Mode=TwoWay}" />
                     <Setter Property="IsEnabled" Value="{Binding Path=IsEnabled, Mode=TwoWay}"/>
                     <Setter Property="IsExpanded" Value="{Binding Path=IsExpanded, Mode=TwoWay}" />
-                    <Setter Property="Padding" Value="1 0 1 0"/>
+                    <Setter Property="Padding" Value="1 0 1 0"/>                    
                     <Style.Triggers>
                         <Trigger Property="IsSelected" Value="True">
                             <Setter Property="BorderBrush" Value="#A9274C5E" />
@@ -255,7 +264,7 @@
 
         <GridSplitter Grid.Row="3" Grid.Column="1" Background="LightGray"  Width="2" Margin="0 2 2 0" HorizontalAlignment="Left" VerticalAlignment="Stretch"/>
 
-        <ListView Grid.Row="3" Grid.Column="3" Margin="0 2 0 0" ItemsSource="{Binding ListItems}" d:ItemsSource="{d:SampleData ItemCount=5}" SelectionMode="Single" SelectedItem="{Binding ListViewSelectedItem}" MouseLeftButtonUp="ListView_MouseLeftButtonUp" AlternationCount="2" >
+        <ListView Grid.Row="3" Grid.Column="3" Margin="0 2 0 0" ItemsSource="{Binding ListItems}" d:ItemsSource="{d:SampleData ItemCount=5}" SelectionMode="Single" SelectedItem="{Binding ListViewSelectedItem}"  AlternationCount="2" >
             <ListView.Resources>
                 <ContextMenu x:Key="ItemContextMenu">
                     <MenuItem Header="Copy" Click="ListViewMenuItemCopy_Click" />
@@ -319,7 +328,7 @@
                     <GridViewColumn Header="Value" Width="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListView}}, Path=ActualWidth, Converter={StaticResource PercentageOfValueConverter}, ConverterParameter=62}"  >
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock x:Name="cTextBlock" Text="{Binding Value, Mode=OneWay}" TextWrapping="NoWrap" >
+                                <TextBlock x:Name="cTextBlock" Text="{Binding Value, Mode=OneWay}" TextWrapping="NoWrap" MouseLeftButtonUp="ListView_MouseLeftButtonUp"  >
                                     <TextBlock.ToolTip>
                                         <TextBlock Text="{Binding ., Converter={StaticResource FeetToMetersConverter}}" />
                                     </TextBlock.ToolTip>

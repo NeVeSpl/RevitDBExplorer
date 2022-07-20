@@ -11,7 +11,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
     internal abstract class MemberAccessorByType<T> : IMemberAccessor where T : class
     {
         protected abstract IEnumerable<LambdaExpression> HandledMembers { get; }
-        public virtual IEnumerable<string> GetHandledMembers() => HandledMembers.Select(x => (x.Body as MethodCallExpression).Method.GetUniqueId());
+        public virtual IEnumerable<string> GetHandledMembers() => HandledMembers.Select(x => x.GetUniqueId());
 
 
         public ReadResult Read(Document document, object @object)

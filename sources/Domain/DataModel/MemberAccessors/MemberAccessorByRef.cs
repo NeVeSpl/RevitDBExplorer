@@ -60,7 +60,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
                     {
                         if (@object is Element { ViewSpecific: true })
                         {
-                            argument = new Options() { View = doc.ActiveView };
+                            argument = new Options() { View = doc.ActiveView, ComputeReferences = true };
                         }
                         else
                         {

@@ -94,6 +94,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Domain\DataModel\MemberAccessors\Element\Element_Id.cs" />
     <Compile Include="Domain\DataModel\Streams\Base\SnoopableMemberTemplate.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\AssetProperties\AssetProperties_Item.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\Curve\Curve_GetEndPoint.cs" />
@@ -163,13 +164,16 @@
     <Compile Include="Domain\DataModel\ValueTypes\ParameterType.cs" />
     <Compile Include="Domain\DataModel\ValueTypes\ScheduleFieldType.cs" />
     <Compile Include="Domain\DataModel\ValueTypes\UVType.cs" />
+    <Compile Include="Domain\RevitObjectPresenter.cs" />
     <Compile Include="Domain\RevitDatabaseQuery\FuzzySearchEngine.cs" />
     <Compile Include="Domain\RevitDatabaseQuery\QueryParser.cs" />
     <Compile Include="Domain\RevitDatabaseQuery\RevitDatabaseQueryService.cs" />
     <Compile Include="Domain\RevitDocumentationReader.cs" />
     <Compile Include="Extensions\Autodesk.Revit.DB\DocumentExtensions.cs" />
+    <Compile Include="Extensions\Autodesk.Revit.DB\GeometryObjectExtensions.cs" />
     <Compile Include="Extensions\System\Collections.Generic\IEnumerableExtensions.cs" />
     <Compile Include="Extensions\System\IntPtrExtensions.cs" />
+    <Compile Include="Extensions\System\Linq.Expressions\LambdaExpressionExtensions.cs" />
     <Compile Include="Extensions\System\Reflection\MethodInfoExtensions.cs" />
     <Compile Include="Extensions\System\Reflection\PropertyInfoExtensions.cs" />
     <Compile Include="Extensions\System\Runtime.CompilerServices\IsExternalInit .cs" />

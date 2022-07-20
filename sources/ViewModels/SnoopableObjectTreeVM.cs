@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq;
+using Autodesk.Revit.DB;
 using RevitDBExplorer.Domain.DataModel;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
@@ -24,6 +25,8 @@ namespace RevitDBExplorer.ViewModels
                 return  "";
             }
         }
+        public bool IsSelectInRevitAvailable => (Object.Object is Element || Object.Object is Face || Object.Object is Edge || Object.Object is Point || Object.Object is Curve);
+        public bool IsShowInRevitAvailable => Object.Object is Element;
 
 
         public SnoopableObjectTreeVM(SnoopableObject @object)
