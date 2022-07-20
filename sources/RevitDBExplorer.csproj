@@ -22,7 +22,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;R2023</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -51,12 +51,20 @@
     <Reference Include="DocXml, Version=3.4.5.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\LoxSmoke.DocXml.3.4.5\lib\netstandard2.0\DocXml.dll</HintPath>
     </Reference>
+    <Reference Include="RevitAPI" Condition="'$(Configuration)'=='Debug'">
+      <HintPath>..\binaries\revit\2023\RevitAPI.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="RevitAPI" Condition="'$(Configuration)'=='R2023'">
       <HintPath>..\binaries\revit\2023\RevitAPI.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="RevitAPI" Condition="'$(Configuration)'=='R2022'">
       <HintPath>..\binaries\revit\2022\RevitAPI.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="RevitAPIUI" Condition="'$(Configuration)'=='Debug'">
+      <HintPath>..\binaries\revit\2023\RevitAPIUI.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="RevitAPIUI" Condition="'$(Configuration)'=='R2023'">
@@ -155,9 +163,12 @@
     <Compile Include="Domain\DataModel\ValueTypes\ParameterType.cs" />
     <Compile Include="Domain\DataModel\ValueTypes\ScheduleFieldType.cs" />
     <Compile Include="Domain\DataModel\ValueTypes\UVType.cs" />
-    <Compile Include="Domain\RevitDatabaseQueryParser.cs" />
+    <Compile Include="Domain\RevitDatabaseQuery\FuzzySearchEngine.cs" />
+    <Compile Include="Domain\RevitDatabaseQuery\QueryParser.cs" />
+    <Compile Include="Domain\RevitDatabaseQuery\RevitDatabaseQueryService.cs" />
     <Compile Include="Domain\RevitDocumentationReader.cs" />
     <Compile Include="Extensions\Autodesk.Revit.DB\DocumentExtensions.cs" />
+    <Compile Include="Extensions\System\Collections.Generic\IEnumerableExtensions.cs" />
     <Compile Include="Extensions\System\IntPtrExtensions.cs" />
     <Compile Include="Extensions\System\Reflection\MethodInfoExtensions.cs" />
     <Compile Include="Extensions\System\Reflection\PropertyInfoExtensions.cs" />

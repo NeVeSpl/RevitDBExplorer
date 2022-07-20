@@ -11,6 +11,7 @@ using System.Windows.Input;
 using Autodesk.Revit.UI;
 using RevitDBExplorer.Domain;
 using RevitDBExplorer.Domain.DataModel;
+using RevitDBExplorer.Domain.RevitDatabaseQuery;
 using RevitDBExplorer.Properties;
 using RevitDBExplorer.ViewModels;
 
@@ -227,8 +228,8 @@ namespace RevitDBExplorer
 
                     if (document == null) return Enumerable.Empty<SnoopableObject>().ToList();
 
-                    var result = RevitDatabaseQueryParser.Parse(document, query);
-                    DatabaseQueryToolTip = result.RevitAPIQuery + ".ToElements();";
+                    var result = RevitDatabaseQueryService.Parse(document, query);
+                    DatabaseQueryToolTip = result.CollectorSyntax + ".ToElements();";
                     return result.Collector.ToElements().Select(x => new SnoopableObject(x, document)).ToList();
                 });
                 PopulateTreeView(snoopableObjects);

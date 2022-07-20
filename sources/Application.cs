@@ -2,6 +2,7 @@
 using System.Windows.Media.Imaging;
 using Autodesk.Revit.UI;
 using RevitDBExplorer.Domain;
+using RevitDBExplorer.Domain.RevitDatabaseQuery;
 
 namespace RevitDBExplorer
 {
@@ -22,7 +23,7 @@ namespace RevitDBExplorer
 
             ExternalExecutor.CreateExternalEvent();
             RevitDocumentationReader.Init();
-            RevitDatabaseQueryParser.Init();
+            RevitDatabaseQueryService.Init();
 
             return Result.Succeeded;
         }
