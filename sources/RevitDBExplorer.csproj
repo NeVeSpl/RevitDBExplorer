@@ -60,6 +60,10 @@
     <Reference Include="DocXml, Version=3.4.5.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\LoxSmoke.DocXml.3.4.5\lib\netstandard2.0\DocXml.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Expression.Interactions">
+      <HintPath>..\binaries\revit\2023\Microsoft.Expression.Interactions.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="RevitAPI" Condition="'$(Configuration)'=='Debug'">
       <HintPath>..\binaries\revit\2023\RevitAPI.dll</HintPath>
       <Private>False</Private>
@@ -97,6 +101,11 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Windows.Interactivity">
+      <HintPath>..\binaries\revit\2023\System.Windows.Interactivity.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -200,6 +209,8 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>AppSettings.settings</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\CommandsVM.cs" />
+    <Compile Include="ViewModels\CommandVM.cs" />
     <Compile Include="ViewModels\SnoopableCategoryTreeVM.cs" />
     <Compile Include="ViewModels\SnoopableObjectTreeVM.cs" />
     <Compile Include="ViewModels\TreeViewItemVM.cs" />

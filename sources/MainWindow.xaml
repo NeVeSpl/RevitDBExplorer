@@ -7,6 +7,8 @@
         xmlns:viewModels="clr-namespace:RevitDBExplorer.ViewModels"
         xmlns:converters="clr-namespace:RevitDBExplorer.WPF.Converters"
         xmlns:ext="clr-namespace:RevitDBExplorer.WPF.MarkupExtensions"
+        xmlns:interactivity="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:interactions="http://schemas.microsoft.com/expression/2010/interactions"
         mc:Ignorable="d"
         WindowStartupLocation="CenterOwner"
         Title="Revit database explorer and editor"
@@ -97,36 +99,100 @@
                     </ContextMenu>
                 </Button.ContextMenu>
             </Button>
-        </UniformGrid>   
-        
-            
-        <TextBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3"  Text="{Binding DatabaseQuery, Mode=TwoWay, Delay=1000, UpdateSourceTrigger=PropertyChanged}" Margin="0 3 0 2" ToolTip="{Binding DatabaseQueryToolTip}" ToolTipService.ShowDuration="50000"   >
-            <TextBox.Style>
-                <!--source: https://stackoverflow.com/a/33539781/1147478-->
-                <Style TargetType="TextBox" xmlns:sys="clr-namespace:System;assembly=mscorlib">
-                    <Style.Resources>
-                        <VisualBrush x:Key="CueBannerBrush" AlignmentX="Left" AlignmentY="Center" Stretch="None">
-                            <VisualBrush.Visual>
-                                <Label Content="Query Revit database" Foreground="Gray" />
-                            </VisualBrush.Visual>
-                        </VisualBrush>
-                    </Style.Resources>
-                    <Style.Triggers>
-                        <Trigger Property="Text" Value="{x:Static sys:String.Empty}">
-                            <Setter Property="Background" Value="{StaticResource CueBannerBrush}" />
-                        </Trigger>
-                        <Trigger Property="Text" Value="{x:Null}">
-                            <Setter Property="Background" Value="{StaticResource CueBannerBrush}" />
-                        </Trigger>
-                        <Trigger Property="IsKeyboardFocused" Value="True">
-                            <Setter Property="Background" Value="White" />
-                        </Trigger>
-                    </Style.Triggers>
-                </Style>
-            </TextBox.Style>
-        </TextBox>
+        </UniformGrid>
 
-        <TextBox Grid.Row="2" Grid.Column="0" Margin="0 0 2 3" Text="{Binding TreeItemsFilterPhrase, Mode=TwoWay, Delay=500, UpdateSourceTrigger=PropertyChanged}">
+
+        <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Margin="0 3 0 3" >
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            
+            
+            <TextBox Text="{Binding DatabaseQuery, Mode=TwoWay, Delay=1000, UpdateSourceTrigger=PropertyChanged}" Padding="1 2"  ToolTip="{Binding DatabaseQueryToolTip}" ToolTipService.ShowDuration="50000"   >
+                <TextBox.Style>
+                    <!--source: https://stackoverflow.com/a/33539781/1147478-->
+                    <Style TargetType="TextBox" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+                        <Style.Resources>
+                            <VisualBrush x:Key="CueBannerBrush" AlignmentX="Left" AlignmentY="Center" Stretch="None">
+                                <VisualBrush.Visual>
+                                    <Label Content="Query Revit database" Foreground="Gray" />
+                                </VisualBrush.Visual>
+                            </VisualBrush>
+                        </Style.Resources>
+                        <Style.Triggers>
+                            <Trigger Property="Text" Value="{x:Static sys:String.Empty}">
+                                <Setter Property="Background" Value="{StaticResource CueBannerBrush}" />
+                            </Trigger>
+                            <Trigger Property="Text" Value="{x:Null}">
+                                <Setter Property="Background" Value="{StaticResource CueBannerBrush}" />
+                            </Trigger>
+                            <Trigger Property="IsKeyboardFocused" Value="True">
+                                <Setter Property="Background" Value="White" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBox.Style>
+            </TextBox>
+
+            <ItemsControl Grid.Row="1"  ItemsSource="{Binding CommandsVM.Commands}" Margin="0 1 0 0">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel >
+                            <interactivity:Interaction.Behaviors>
+                                <interactions:FluidMoveBehavior Duration="0:0:1" AppliesTo="Children">
+                                    <interactions:FluidMoveBehavior.EaseY>
+                                        <CubicEase EasingMode="EaseInOut"/>
+                                    </interactions:FluidMoveBehavior.EaseY>
+                                    <interactions:FluidMoveBehavior.EaseX>
+                                        <CubicEase EasingMode="EaseInOut"/>
+                                    </interactions:FluidMoveBehavior.EaseX>
+                                </interactions:FluidMoveBehavior>
+                            </interactivity:Interaction.Behaviors>
+                        </WrapPanel>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        
+                        <Grid x:Name="MyGrid" Opacity="1"  >
+                            <Border Margin="0 3 5 2" Padding="7 3" BorderThickness="1" BorderBrush="#ABADB3" Background="{Binding Fill}" CornerRadius="10">
+                                <TextBlock Text="{Binding Name}" Foreground="{Binding Foreground}" TextTrimming="CharacterEllipsis" ToolTip="{Binding Name}" />
+                            </Border>
+                            <Grid.RenderTransform>
+                                <TransformGroup>
+                                    <ScaleTransform/>
+                                </TransformGroup>
+                            </Grid.RenderTransform>
+                        </Grid>     
+                        
+                        <DataTemplate.Triggers>
+                            <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+                                <BeginStoryboard x:Name="fadeIn">
+                                    <Storyboard  >
+                                        <DoubleAnimation Storyboard.TargetName="MyGrid" Storyboard.TargetProperty="Opacity" Duration="00:00:01" From ="0" To="1" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                            
+                            <DataTrigger Binding="{Binding Path =ToRemove}" Value="true" >                               
+                                <DataTrigger.EnterActions>
+                                    <StopStoryboard BeginStoryboardName="fadeIn"/>
+                                    <BeginStoryboard >
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetName="MyGrid" Storyboard.TargetProperty="Opacity" Duration="00:00:01" From ="1" To="0" />
+                                           </Storyboard>
+                                    </BeginStoryboard>
+                                </DataTrigger.EnterActions>                                
+                            </DataTrigger>
+                        </DataTemplate.Triggers>
+
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>   
+        </Grid>
+
+        <TextBox Grid.Row="2" Grid.Column="0" Margin="0 0 2 3" Padding="1 2" Text="{Binding TreeItemsFilterPhrase, Mode=TwoWay, Delay=500, UpdateSourceTrigger=PropertyChanged}">
             <TextBox.Style>
                 <!--source: https://stackoverflow.com/a/33539781/1147478-->
                 <Style TargetType="TextBox" xmlns:sys="clr-namespace:System;assembly=mscorlib">
@@ -157,8 +223,8 @@
                 <ColumnDefinition/>
                 <ColumnDefinition Width="auto"/>
             </Grid.ColumnDefinitions>
-            
-            <TextBox    Text="{Binding ListItemsFilterPhrase, Mode=TwoWay, Delay=200, UpdateSourceTrigger=PropertyChanged}"    >
+
+            <TextBox Text="{Binding ListItemsFilterPhrase, Mode=TwoWay, Delay=200, UpdateSourceTrigger=PropertyChanged}"  Padding="1 2"   >
                 <TextBox.Style>
                     <!--source: https://stackoverflow.com/a/33539781/1147478-->
                     <Style TargetType="TextBox" xmlns:sys="clr-namespace:System;assembly=mscorlib">
@@ -243,7 +309,7 @@
                     <Setter Property="HorizontalAlignment" Value="Stretch" />
                     <Setter Property="IsSelected" Value="{Binding Path=IsSelected, Mode=TwoWay}" />
                     <Setter Property="IsEnabled" Value="{Binding Path=IsEnabled, Mode=TwoWay}"/>
-                    <Setter Property="IsExpanded" Value="{Binding Path=IsExpanded, Mode=TwoWay}" />
+                    <Setter Property="IsExpanded" Value="{Binding Path=IsExpanded, Mode=TwoWay}" />                   
                     <Setter Property="Padding" Value="1 0 1 0"/>                    
                     <Style.Triggers>
                         <Trigger Property="IsSelected" Value="True">
@@ -289,7 +355,7 @@
                                     <Run Text="Remarks:" /><LineBreak/>
                                     <Run Text=" " /><Run Text="{Binding Documentation.Remarks, Mode=OneWay}" Foreground="Black"/><LineBreak/>
                                 </TextBlock>
-                                <TextBlock TextWrapping="Wrap" Visibility="{Binding Documentation.ValueTypeName, Converter={StaticResource StringToVisibilityConverter}}">
+                                <TextBlock TextWrapping="Wrap" Visibility="{Binding ValueTypeName, Converter={StaticResource StringToVisibilityConverter}}">
                                     <Run Text="Accessor:" /><LineBreak/>
                                     <Run Text=" " /><Run Text="{Binding ValueTypeName, Mode=OneWay}"  />
                                 </TextBlock>

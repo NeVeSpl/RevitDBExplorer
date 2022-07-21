@@ -14,6 +14,7 @@ using RevitDBExplorer.Domain.DataModel;
 using RevitDBExplorer.Domain.RevitDatabaseQuery;
 using RevitDBExplorer.Properties;
 using RevitDBExplorer.ViewModels;
+using RDQCommand = RevitDBExplorer.Domain.RevitDatabaseQuery.Command;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
@@ -23,6 +24,7 @@ namespace RevitDBExplorer
     {
         private ObservableCollection<SnoopableCategoryTreeVM> treeItems = new();
         private ObservableCollection<SnoopableMember> listItems = new();
+        private readonly CommandsVM commandsVM = new();
         private SnoopableMember listSelectedItem = null;
         private string listItemsFilterPhrase = string.Empty;
         private string treeItemsFilterPhrase = string.Empty;
@@ -52,7 +54,19 @@ namespace RevitDBExplorer
                 listItems = value;
                 OnPropertyChanged();
             }
-        }     
+        }
+        public CommandsVM CommandsVM
+        {
+            get
+            {
+                return commandsVM;
+            }
+            set
+            {
+                //commandsVM = value;
+                OnPropertyChanged();
+            }
+        }
         public SnoopableMember ListViewSelectedItem
         {
             get
@@ -116,7 +130,7 @@ namespace RevitDBExplorer
                 OnPropertyChanged();
             }
         }
-
+        
 
         public MainWindow()
         {
@@ -230,6 +244,7 @@ namespace RevitDBExplorer
 
                     var result = RevitDatabaseQueryService.Parse(document, query);
                     DatabaseQueryToolTip = result.CollectorSyntax + ".ToElements();";
+                    CommandsVM.Update(result.Commands);
                     return result.Collector.ToElements().Select(x => new SnoopableObject(x, document)).ToList();
                 });
                 PopulateTreeView(snoopableObjects);
@@ -333,6 +348,7 @@ namespace RevitDBExplorer
             databaseQuery = "";
             OnPropertyChanged(nameof(DatabaseQuery));
             DatabaseQueryToolTip = "";
+            commandsVM.Update(Enumerable.Empty<RDQCommand>());
         }
 
         private void TreeViewMenuItemInRevit_Click(object sender, RoutedEventArgs e)

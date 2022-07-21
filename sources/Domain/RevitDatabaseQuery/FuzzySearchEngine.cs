@@ -11,12 +11,15 @@ using SimMetrics.Net;
 
 namespace RevitDBExplorer.Domain.RevitDatabaseQuery
 {
-    internal enum LookupFor { Category = 1, Class = 2, ElementId = 4, All = 255}
+    internal enum LookupFor { Category = 1, Class = 2, ElementId = 4, Parameter = 8,  All = 255}
+
+    internal record ParameterSpec(BuiltInParameter BuiltInParameter, StorageType StorageType);
 
     internal static class FuzzySearchEngine
     {
         static readonly List<(string, BuiltInCategory)> Categories;
         static readonly List<(string, Type)> Classes;
+        static readonly List<(string, ForgeTypeId)> Parameters;
         static readonly HashSet<string> ClassesBlackList = new()
         {
             //typeof(Material),
@@ -49,7 +52,8 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
         {
             Categories = LoadCategories();
             Classes = LoadClasses();
-        }
+            Parameters = LoadParameters();
+        }      
         public static void Init()
         {
 
@@ -97,12 +101,24 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
                 }
             }
 
+            if (lookupFor.HasFlag(LookupFor.Parameter))
+            {
+                foreach (var item in Parameters)
+                {
+                    var score = needle.ApproximatelyEquals(item.Item1, SimMetricType.Levenstein);
+                    if (score > 0.69)
+                    {
+                        found.Add(new LookupResult<ForgeTypeId>(item.Item2, score) { Name = $"BuiltInParameter.{ParameterUtils.GetBuiltInParameter(item.Item2).ToString()}" });
+                    }
+                }
+            }
+
             if (found.Any())
             {
                 var sorted = found.OrderByDescending(x => x.LevensteinScore);
 
                 double prevScore = sorted.First().LevensteinScore;
-                foreach (var item in sorted.Take(5))
+                foreach (var item in sorted.Take(7))
                 {
                     if (Math.Abs(item.LevensteinScore - prevScore) < 0.11)
                     {
@@ -121,6 +137,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
             {
                 var category = (BuiltInCategory)categoryId.IntegerValue;
                 var label = LabelUtils.GetLabelFor(category);
+
                 categories.Add((label.Clean(), category));
                 categories.Add((category.ToString().Clean(), category));
             }
@@ -132,6 +149,34 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
             var elementType = typeof(Element);
             var classes = elementType.Assembly.GetExportedTypes().Where(p => elementType.IsAssignableFrom(p) && !p.IsInterface).Where(x => !ClassesBlackList.Contains(x.FullName)).Select(x => (x.Name.Clean(), x)).ToList();
             return classes;
+        }
+        private static List<(string, ForgeTypeId)> LoadParameters()
+        {
+            var ids = ParameterUtils.GetAllBuiltInParameters();
+            var parameters = new List<(string, ForgeTypeId)>(ids.Count * 2);
+            foreach (var id in ids)
+            {
+                var label = LabelUtils.GetLabelForBuiltInParameter(id);
+                var param = ParameterUtils.GetBuiltInParameter(id);
+
+                if (param == BuiltInParameter.INVALID)
+                {
+                    continue;
+                }
+
+                var labelCleaned = label.Clean();
+                var paramCleaned = param.ToString().Clean();
+
+                if (!string.IsNullOrEmpty(labelCleaned))
+                {
+                    parameters.Add((labelCleaned, id));
+                }
+                if (!string.IsNullOrEmpty(paramCleaned))
+                {
+                    parameters.Add((paramCleaned.ToString().Clean(), id)); 
+                } 
+            }
+            return parameters;
         }
 
         private static string Clean(this string text)
@@ -147,6 +192,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
         bool IsCategory { get; }
         bool IsClass { get; }
         bool IsElementId { get; }
+        bool IsParameter { get; }
     }
 
     internal class LookupResult<T> : ILookupResult
@@ -157,6 +203,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
         public bool IsCategory { get; init; }
         public bool IsClass { get; init; }
         public bool IsElementId { get; init; }
+        public bool IsParameter { get; }
 
 
         public LookupResult(T value, double levensteinScore)
@@ -166,6 +213,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
             IsCategory = typeof(T) == typeof(BuiltInCategory);
             IsClass = typeof(T) == typeof(Type);
             IsElementId = typeof(T) == typeof(ElementId);
+            IsParameter = typeof(T) == typeof(ForgeTypeId);
         }
     }
 }
