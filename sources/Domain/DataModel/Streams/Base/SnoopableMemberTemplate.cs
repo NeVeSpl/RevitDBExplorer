@@ -12,6 +12,7 @@ namespace RevitDBExplorer.Domain.DataModel.Streams.Base
         Type DeclaringType { get; }
         string MemberName { get; }
         IMemberAccessor MemberAccessor { get; }
+        SnoopableMember.Kind Kind { get; }
         bool CanBeUsed(object @object);
     }
 
@@ -21,6 +22,7 @@ namespace RevitDBExplorer.Domain.DataModel.Streams.Base
         public Type DeclaringType { get; init; }
         public string MemberName { get; init; }
         public IMemberAccessor MemberAccessor { get; init; }
+        public SnoopableMember.Kind Kind { get; init; }
         public bool CanBeUsed(object @object)
         {
             if (CanBeUsedTyped != null)
@@ -39,7 +41,7 @@ namespace RevitDBExplorer.Domain.DataModel.Streams.Base
             var memberAccessor = new MemberAccessorByFunc<TSnoopedObjectType, TReturnType>(compiledGetter);  
             return Create(methodCallExpression.Method.DeclaringType, methodCallExpression.Method.Name, memberAccessor, canBeUsed);
         } 
-        public static ISnoopableMemberTemplate Create(Type declaringType, string memberName, IMemberAccessor memberAccessor, Func<TSnoopedObjectType, bool> canBeUsed = null) 
+        public static ISnoopableMemberTemplate Create(Type declaringType, string memberName, IMemberAccessor memberAccessor, Func<TSnoopedObjectType, bool> canBeUsed = null, SnoopableMember.Kind kind = SnoopableMember.Kind.StaticMethod ) 
         {
             return new SnoopableMemberTemplate<TSnoopedObjectType>()
             {
@@ -47,6 +49,7 @@ namespace RevitDBExplorer.Domain.DataModel.Streams.Base
                 MemberName = memberName,
                 MemberAccessor = memberAccessor,
                 CanBeUsedTyped = canBeUsed,
+                Kind = kind,
             };
         }
     }

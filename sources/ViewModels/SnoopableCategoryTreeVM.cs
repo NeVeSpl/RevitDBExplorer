@@ -48,12 +48,12 @@ namespace RevitDBExplorer.ViewModels
             Count = items.Count();
             if (items?.Any() == true)
             {
-                if ((Count > 67 && (name == nameof(FamilyInstance) || name == nameof(Element) || name == nameof(FamilySymbol))))
+                if (name == nameof(FamilyInstance) || name == nameof(Element) || name == nameof(FamilySymbol))
                 {
                     var groupedItems = items.GroupBy(x => (x.Object as Element).Category?.Id).Select(x => new SnoopableCategoryTreeVM(Labeler.GetLabelForCategory(x.Key), x, itemFilter)).ToList();
                     Items = new ObservableCollection<TreeViewItemVM>(groupedItems.OrderBy(x => x.Name));
                 }
-                if (Count > 61 && (name == nameof(Family)))
+                if (name == nameof(Family))
                 {
                     var groupedItems = items.GroupBy(x => (x.Object as Family).FamilyCategoryId).Select(x => new SnoopableCategoryTreeVM(Labeler.GetLabelForCategory(x.Key), x, itemFilter)).ToList();
                     Items = new ObservableCollection<TreeViewItemVM>(groupedItems.OrderBy(x => x.Name));
@@ -75,11 +75,13 @@ namespace RevitDBExplorer.ViewModels
             {
                 var collectionView = CollectionViewSource.GetDefaultView(Items);
                 collectionView.Refresh();
+                int count = 0;
                 foreach (SnoopableCategoryTreeVM item in Items.OfType<SnoopableCategoryTreeVM>())
                 {
                     item.Refresh();
+                    count += item.Count;
                 }
-                Count = collectionView.Cast<object>().Count(); 
+                Count = count + collectionView.OfType<SnoopableObjectTreeVM>().Count(); 
             }
         }            
     }

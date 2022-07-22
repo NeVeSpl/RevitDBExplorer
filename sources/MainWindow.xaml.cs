@@ -390,8 +390,11 @@ namespace RevitDBExplorer
         }
         private void TreeViewItem_MouseRightButtonDown(object sender, RoutedEventArgs e)
         {
-            (sender as TreeViewItem).IsSelected = true;
-            //e.Handled = true;
+            var treeViewItem =  sender as TreeViewItem;
+            if (treeViewItem?.IsSelected == false)
+            {
+                treeViewItem.IsSelected = true;
+            }
         }
         private void ListViewMenuItemCopy_Click(object sender, RoutedEventArgs e)
         {

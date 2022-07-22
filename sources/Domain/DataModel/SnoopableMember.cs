@@ -11,7 +11,7 @@ namespace RevitDBExplorer.Domain.DataModel
 {
     internal class SnoopableMember : BaseViewModel
     {
-        public enum Kind { Property, Method, StaticMethod }
+        public enum Kind { Property, Method, StaticMethod, Extra }
 
         private readonly SnoopableObject parent;
         private readonly Type declaringType;      

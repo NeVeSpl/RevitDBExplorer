@@ -385,6 +385,7 @@
                                     <Path Style="{StaticResource IconProperty}" Margin="0 1 4 0" Visibility="{Binding MemberKind, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter= Property}" ToolTip="Property"/>
                                     <Path Style="{StaticResource IconMethod}" Margin="0 1 4 0" Visibility="{Binding MemberKind, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter= Method}" ToolTip="Method"/>
                                     <Path Style="{StaticResource IconMethodStatic}" Margin="0 1 4 0" Visibility="{Binding MemberKind, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter= StaticMethod}" ToolTip="Static Method"/>
+                                    <Path Style="{StaticResource IconExtra}" Margin="0 1 4 0" Visibility="{Binding MemberKind, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter= Extra}" ToolTip="Extra"/>
                                     <TextBlock x:Name="cTextBlock" Text="{Binding Name, Mode=OneWay}"  />
                                 </StackPanel>
                             </DataTemplate>
