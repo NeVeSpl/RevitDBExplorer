@@ -8,13 +8,11 @@ Yet another [RevitLookup](https://github.com/jeremytammik/RevitLookup) clone. Re
 - [elements of Family, FamilySymbol, FamilyInstance are grouped by category in tree](#grouping)
 - [tooltips with Revit documentation](#tooltips-with-Revit-documentation)
 - [extensive support for ForgeTypeId](#extensive-support-for-ForgeTypeId)
-- [snooping all Forge types](#snooping-all-Forge-types)
 - [snooping all categories that may be used in a ParameterFilterElement](#snooping-all-categories-that-may-be-used-in-a-ParameterFilterElement)
-- [snooping Extensible Storage framework schemas](#snooping-Extensible-Storage-framework-schemas)
-- [more natural access to Extensible Storage entities](#more-natural-access-to-Extensible-Storage-entities)
-- [finding every element that has an entity of a given schema](#finding-every-element-that-has-an-entity-of-a-given-schema)
-- [easier access to Element.Geometry](#geometry)
-- [more data exposed from Rebar](#more-data-exposed-from-rebar)
+
+- [better support for Revit Extensible Storage](#better-support-for-revit-extensible-storage)
+- [easier work with Element.Geometry](#easier-work-with-geometry)
+- [more data exposed](#more-data-exposed)
 
 ## Installation
 
@@ -47,13 +45,16 @@ Queries are case-insensitive, you can query for many ids, but only for one categ
 
 ![filterable-list-of-properties-and-metohds](documentation/examples/filterable-list-of-properties-and-metohds.gif)
 
+
 ### filterable tree of elements
 
 ![filterable-tree-of-elements](documentation/examples/filterable-tree-of-elements.gif)
 
+
 ### <a name="grouping"></a>elements of Family, FamilySymbol, FamilyInstance are grouped by category in the tree
 
 ![grouping](documentation/examples/grouping.png)
+
 
 ### tooltips with Revit documentation
 
@@ -61,54 +62,95 @@ They are problems with loading some of tooltips, but most of them should work.
 
 ![tooltips-with-Revit-documentations](documentation/examples/tooltips-with-Revit-documentation.png)
 
+
 ### extensive support for ForgeTypeId
 
-We all love (or hate) ForgeTypeId, RDBE exposes all data related to a given id scattered through many utils.
+We all love (or hate) the ForgeTypeId, RDBE exposes all data related to a given ForgeTypeId scattered through many utils. You can also snoop all ForgeTypeIds returned from: 
+- ParameterUtils.GetAllBuiltInGroups
+- ParameterUtils.GetAllBuiltInParameters
+- UnitUtils.GetAllMeasurableSpecs
+- UnitUtils.GetAllDisciplines
+- SpecUtils.GetAllSpecs
+-  UnitUtils.GetAllUnits
 
 ![extensive-support-for-ForgeTypeId](documentation/examples/extensive-support-for-ForgeTypeId.gif)
 
-### snooping all Forge types
-
-![snooping-all-Forge-types](documentation/examples/snooping-all-Forge-types.png)
 
 ### snooping all categories that may be used in a ParameterFilterElement
 
 ![snooping-all-categories-that-may-be-used-in-a-ParameterFilterElement](documentation/examples/snooping-all-categories-that-may-be-used-in-a-ParameterFilterElement.png)
 
-### snooping Extensible Storage framework schemas
 
-![snooping-Extensible-Storage-framework-schemas](documentation/examples/snooping-Extensible-Storage-framework-schemas.png)
+### better support for Revit Extensible Storage
 
-### more natural access to Extensible Storage entities
+RDBE allows you to snoop all schemas that are loaded into Revit memory, and you can easily get all elements that have an entity of a given schema. You get access to an Extensible Storage data exactly like through RevitApi, by invoking: Element.GetEntity(). In contrast to Revit Lookup, you will only see entities that you can read and really exist in a given element. (Revit Lookup shows an exception when cannot access an entity even when an entity does not exist in a given element....)
 
-You get access to Extensible Storage data exactly like through Api, by invoking: Element.GetEntity(). In contrast to Revit Lookup, you will only see entities that you can read and really exist in a given element. (Revit Lookup shows an exception when cannot access entity even when an entity does not exist in a given element....)
-
-![more-natural-access-to-Extensible-Storage-entities](documentation/examples/more-natural-access-to-Extensible-Storage-entities.gif)
-
-### finding every element that has an entity of a given schema
-
-![you-can-get-every-element-that-has-an-entity-of-a-given-schema](documentation/examples/you-can-get-every-element-that-has-an-entity-of-a-given-schema.png)
-
-### <a name="geometry"></a>easier access to Element.Geometry
-
-![easier-access-to-Element.Geometry](documentation/examples/easier-access-to-Element.Geometry.gif)
+![better-support-for-revit-extensible-storage](documentation/examples/better-support-for-revit-extensible-storage.gif)
 
 
-### more data exposed from Rebar
+### <a name="easier-work-with-geometry"></a>easier work with Element.Geometry
 
-- DoesBarExistAtPosition, 
-- GetCenterlineCurves, 
-- GetCouplerId, 
-- GetEndTreatmentTypeId, 
-- GetFullGeometryForView,
-- GetHookOrientation,
-- GetHookRotationAngle, 
-- GetHookTypeId,
-- GetMovedBarTransform,
-- GetTransformedCenterlineCurves,
-- IsBarHidden.
+Not only you have faster access to a geometry of an element, but you can also select an instance of GeometryObject in Revit if it has a valid reference.  
+
+![easier-work-with-geometry](documentation/examples/easier-work-with-geometry.gif)
 
 
-## Supported Revit versions
+### <a name="more-data-exposed"></a>more data exposed from Revit database
 
-Only Revit 2023 and 2022 are supported.
+In comparison to RevitLookup, RDBE in addition gives access to:
+
+- Category
+    - IsBuiltInCategory
+    - GetBuiltInCategory
+    - GetBuiltInCategoryTypeId
+- Document
+    - GetTypeOfStorage
+- FormatOptions
+    - GetValidSymbols
+    - CanHaveSymbol
+- HostObject
+    - **FindInserts**
+- JoinGeometryUtils
+    - **GetJoinedElements**
+    - **IsCuttingElementInJoin** 
+- LabelUtils
+    - GetLabelForBuiltInParameter
+    - GetLabelForGroup
+    - GetLabelForUnit
+    - GetLabelForSpec
+    - GetLabelForSymbol
+    - GetLabelForDiscipline
+- ParameterUtils
+    - IsBuiltInParameter
+    - GetBuiltInParameter
+    - IsBuiltInGroup
+    - GetBuiltInParameterGroup
+- Rebar
+    - DoesBarExistAtPosition 
+    - **GetCenterlineCurves** 
+    - GetCouplerId 
+    - GetEndTreatmentTypeId 
+    - **GetFullGeometryForView**
+    - GetHookOrientation
+    - GetHookRotationAngle
+    - GetHookTypeId
+    - **GetMovedBarTransform**
+    - **GetTransformedCenterlineCurves**
+    - IsBarHidden
+- UnitFormatUtils
+    - Format
+- UnitUtils
+    - IsMeasurableSpec
+    - IsSymbol
+    - IsUnit
+    - GetDiscipline
+    - GetTypeCatalogStringForSpec
+    - GetTypeCatalogStringForUnit
+    - GetValidUnits
+- SpecUtils
+    - IsValidDataType
+    - IsSpec
+
+
+
+
