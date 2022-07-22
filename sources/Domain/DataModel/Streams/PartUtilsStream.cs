@@ -15,22 +15,22 @@ namespace RevitDBExplorer.Domain.DataModel.Streams
         static PartUtilsStream()
         {
             partUtilsForElement = new ISnoopableMemberTemplate[]
-                {
-                    new SnoopableMemberTemplate<Element, bool>((doc, target) => PartUtils.AreElementsValidForCreateParts(doc, new[] { target.Id })),
-                    new SnoopableMemberTemplate<Element, PartMaker>((doc, target) => PartUtils.GetAssociatedPartMaker(doc,  target.Id)),
-                    new SnoopableMemberTemplate<Element, bool>((doc, target) => PartUtils.HasAssociatedParts(doc, target.Id)),
-                    new SnoopableMemberTemplate<Element, bool>((doc, target) => PartUtils.IsValidForCreateParts(doc, new LinkElementId(target.Id))),
-                };
+            {
+                SnoopableMemberTemplate<Element>.Create((doc, target) => PartUtils.AreElementsValidForCreateParts(doc, new[] { target.Id })),
+                SnoopableMemberTemplate<Element>.Create((doc, target) => PartUtils.GetAssociatedPartMaker(doc,  target.Id)),
+                SnoopableMemberTemplate<Element>.Create((doc, target) => PartUtils.HasAssociatedParts(doc, target.Id)),
+                SnoopableMemberTemplate<Element>.Create((doc, target) => PartUtils.IsValidForCreateParts(doc, new LinkElementId(target.Id))),
+            };
             partUtilsForPart = new ISnoopableMemberTemplate[]
-                {
-                    new SnoopableMemberTemplate<Part, bool>((doc, target) => PartUtils.ArePartsValidForDivide(doc, new[] { target.Id })),
-                    new SnoopableMemberTemplate<Part, bool>((doc, target) => PartUtils.ArePartsValidForMerge(doc, new[] { target.Id })),
-                    new SnoopableMemberTemplate<Part, int>((doc, target) => PartUtils.GetChainLengthToOriginal(target)),
+            {
+                SnoopableMemberTemplate<Part>.Create((doc, target) => PartUtils.ArePartsValidForDivide(doc, new[] { target.Id })),
+                SnoopableMemberTemplate<Part>.Create((doc, target) => PartUtils.ArePartsValidForMerge(doc, new[] { target.Id })),
+                SnoopableMemberTemplate<Part>.Create((doc, target) => PartUtils.GetChainLengthToOriginal(target)),
 
-                    new SnoopableMemberTemplate<Part, IEnumerable<ElementId>>((doc, target) => PartUtils.GetMergedParts(target)),
-                    new SnoopableMemberTemplate<Part, bool>((doc, target) => PartUtils.IsMergedPart(target)),
-                    new SnoopableMemberTemplate<Part, bool>((doc, target) => PartUtils.IsPartDerivedFromLink(target)),
-                };            
+                SnoopableMemberTemplate<Part>.Create((doc, target) => PartUtils.GetMergedParts(target)),
+                SnoopableMemberTemplate<Part>.Create((doc, target) => PartUtils.IsMergedPart(target)),
+                SnoopableMemberTemplate<Part>.Create((doc, target) => PartUtils.IsPartDerivedFromLink(target)),
+            };            
         }
 
 

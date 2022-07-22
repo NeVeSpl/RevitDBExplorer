@@ -21,7 +21,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
             for (int i = 0; i < rebar.NumberOfBarPositions; ++i)
             {
                 var curves = rebar.GetTransformedCenterlineCurves(false, true, false, MultiplanarOption.IncludeOnlyPlanarCurves, i);
-                yield return new SnoopableObject(i, document, curves.Select(x => new SnoopableObject(x, document))) { NamePrefix = $"barPositionIndex:" };
+                yield return new SnoopableObject(document, i, curves.Select(x => new SnoopableObject(document, x))) { NamePrefix = $"barPositionIndex:" };
             }           
         }
     }

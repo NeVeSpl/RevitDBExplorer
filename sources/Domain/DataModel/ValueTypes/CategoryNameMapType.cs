@@ -23,7 +23,7 @@ namespace RevitDBExplorer.Domain.DataModel.ValueTypes
         {
             foreach (Category cat in categoryNameMap)
             {
-                yield return new SnoopableObject(cat, document);
+                yield return new SnoopableObject(document, cat);
             }
         }
     }

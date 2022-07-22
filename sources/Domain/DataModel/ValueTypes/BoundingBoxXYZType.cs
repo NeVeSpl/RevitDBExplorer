@@ -21,7 +21,7 @@ namespace RevitDBExplorer.Domain.DataModel.ValueTypes
         }
         protected override IEnumerable<SnoopableObject> Snooop(Document document, BoundingBoxXYZ box)
         {
-            yield return new SnoopableObject(box, document);
+            yield return new SnoopableObject(document, box);
         }
     }
 }

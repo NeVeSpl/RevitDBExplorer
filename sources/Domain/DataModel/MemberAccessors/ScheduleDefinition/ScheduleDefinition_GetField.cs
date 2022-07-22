@@ -23,7 +23,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
             for (var i = 0; i < scheduleDefinition.GetFieldCount(); i++)
             {
                 var field = scheduleDefinition.GetField(i);
-                yield return new SnoopableObject(field, document);
+                yield return new SnoopableObject(document, field);
             }
         }
     }

@@ -24,17 +24,13 @@ namespace RevitDBExplorer.Domain.DataModel
         public string TypeName { get; }       
         public IEnumerable<SnoopableObject> Items => items;
         public int Index { get; init; } = -1;
-
         
-        public SnoopableObject(object @object, Document document, SnoopableObject child) : this(@object, document, new[] {child})
-        {
 
-        }
-        public SnoopableObject(object @object, Document document, IEnumerable<SnoopableObject> subObjects = null)
+        public SnoopableObject(Document document, object @object, IEnumerable<SnoopableObject> subObjects = null)
         {
             this.Object = @object;
             this.Document = document;            
-            this.Name = @object is not null ? Labels.GetLabelForObject(@object, document) : "";
+            this.Name = @object is not null ? Labeler.GetLabelForObject(@object, document) : "";
             this.TypeName = @object?.GetType().GetCSharpName();
 
             if (subObjects != null)
@@ -48,7 +44,7 @@ namespace RevitDBExplorer.Domain.DataModel
                     items = new List<SnoopableObject>();
                     foreach (var item in enumerable)
                     {
-                        items.Add(new SnoopableObject(item, document));
+                        items.Add(new SnoopableObject(document, item));
                     }
                 }
             }
@@ -63,7 +59,7 @@ namespace RevitDBExplorer.Domain.DataModel
             }
             foreach (var member in GetMembersFromStreams(app))
             {
-                member.ReadValue(Document, Object);
+                member.ReadValue();
                 if (!member.HasExceptionCouldNotResolveAllArguments)
                 {
                     yield return member;
@@ -76,6 +72,7 @@ namespace RevitDBExplorer.Domain.DataModel
             new SystemTypeStream(),
             new ForgeTypeIdStream(),
             new PartUtilsStream(),
+            new JoinGeometryUtilsStream(),
             new SchemaTypeStream(),
         };
         private IEnumerable<SnoopableMember> GetMembersFromStreams(UIApplication app)
@@ -131,11 +128,11 @@ namespace RevitDBExplorer.Domain.DataModel
 
         public static SnoopableObject CreateKeyValuePair(Document document, object key, object value, string keyPrefix = "key:", string valuePrefix = "value:")
         {
-            return new SnoopableObject(key, document, new SnoopableObject(value, document) { NamePrefix = valuePrefix }) { NamePrefix = keyPrefix };
+            return new SnoopableObject(document, key, new[] { new SnoopableObject(document, value) { NamePrefix = valuePrefix } }) { NamePrefix = keyPrefix };
         }
         public static SnoopableObject CreateInOutPair(Document document, object key, object value, string keyPrefix = "in:", string valuePrefix = "out:")
         {
-            return new SnoopableObject(key, document, new SnoopableObject(value, document) { NamePrefix = valuePrefix }) { NamePrefix = keyPrefix };
+            return new SnoopableObject(document, key, new[] { new SnoopableObject(document, value) { NamePrefix = valuePrefix } }) { NamePrefix = keyPrefix };
         }
     }
 }

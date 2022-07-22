@@ -22,7 +22,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
         protected override string GetLabel(Document document, View value) => $"[{nameof(Boolean)}]";
         protected override IEnumerable<SnoopableObject> Snooop(Document document, View view)
         {
-            var filters = new FilteredElementCollector(document, view.GetFilters()).WhereElementIsNotElementType().ToElements();
+            var filters = new FilteredElementCollector(document).WherePasses(new ElementIdSetFilter(view.GetFilters())).ToElements();
 
             return filters.Select(x => SnoopableObject.CreateInOutPair(document, x, view.GetFilterVisibility(x.Id)));
         }

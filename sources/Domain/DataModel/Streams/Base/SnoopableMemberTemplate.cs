@@ -12,45 +12,42 @@ namespace RevitDBExplorer.Domain.DataModel.Streams.Base
         Type DeclaringType { get; }
         string MemberName { get; }
         IMemberAccessor MemberAccessor { get; }
-        Func<object, bool> ShouldBeCreated { get; }
+        bool CanBeUsed(object @object);
     }
 
-    internal sealed class SnoopableMemberTemplate<TInput, TReturn> : ISnoopableMemberTemplate where TInput : class
+    internal sealed class SnoopableMemberTemplate<TSnoopedObjectType> : ISnoopableMemberTemplate
     {
-        public Type DeclaringType { get; }
-        public string MemberName { get; }
-        public IMemberAccessor MemberAccessor { get; }
-        public Func<object, bool> ShouldBeCreated { get; }
-
-
-        public SnoopableMemberTemplate(Expression<Func<Document, TInput, TReturn>> getter, Func<TInput, bool> shouldBeCreated = null)
+        public Func<TSnoopedObjectType, bool> CanBeUsedTyped { get; init; }
+        public Type DeclaringType { get; init; }
+        public string MemberName { get; init; }
+        public IMemberAccessor MemberAccessor { get; init; }
+        public bool CanBeUsed(object @object)
         {
-            var compiledGetter = getter.Compile();
-            var methodCallExpression = (getter.Body as MethodCallExpression);
-            MemberName = methodCallExpression.Method.Name;
-            DeclaringType = methodCallExpression.Method.DeclaringType;
-            MemberAccessor = new MemberAccessorByFunc<TInput, TReturn>(compiledGetter);
-            ShouldBeCreated = Wrap(shouldBeCreated);
-        }       
-        public SnoopableMemberTemplate(Type declaringType, string memberName, IMemberAccessor memberAccessor, Func<TInput, bool> shouldBeCreated = null)
-        {
-            DeclaringType = declaringType;
-            MemberName = memberName;
-            MemberAccessor = memberAccessor;
-            ShouldBeCreated = Wrap(shouldBeCreated);
+            if (CanBeUsedTyped != null)
+            {
+                Guard.IsAssignableToType<TSnoopedObjectType>(@object);
+                return CanBeUsedTyped((TSnoopedObjectType)@object);
+            }
+            return true;
         }
 
 
-        private Func<object, bool> Wrap(Func<TInput, bool> shouldBeCreated)
+        public static ISnoopableMemberTemplate Create<TReturnType>(Expression<Func<Document, TSnoopedObjectType, TReturnType>> getter, Func<TSnoopedObjectType, bool> canBeUsed = null)
         {
-            if (shouldBeCreated != null)
+            var compiledGetter = getter.Compile();
+            var methodCallExpression = (getter.Body as MethodCallExpression);           
+            var memberAccessor = new MemberAccessorByFunc<TSnoopedObjectType, TReturnType>(compiledGetter);  
+            return Create(methodCallExpression.Method.DeclaringType, methodCallExpression.Method.Name, memberAccessor, canBeUsed);
+        } 
+        public static ISnoopableMemberTemplate Create(Type declaringType, string memberName, IMemberAccessor memberAccessor, Func<TSnoopedObjectType, bool> canBeUsed = null) 
+        {
+            return new SnoopableMemberTemplate<TSnoopedObjectType>()
             {
-                return (x) => shouldBeCreated(x as TInput);
-            }
-            else
-            {
-                return (x) => true;
-            }
+                DeclaringType = declaringType,
+                MemberName = memberName,
+                MemberAccessor = memberAccessor,
+                CanBeUsedTyped = canBeUsed,
+            };
         }
     }
 }

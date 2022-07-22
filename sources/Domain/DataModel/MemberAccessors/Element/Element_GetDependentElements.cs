@@ -20,8 +20,8 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
             var ids = element.GetDependentElements(null);
             if (ids.Any())
             {
-                var elements = new FilteredElementCollector(document, ids).WhereElementIsNotElementType().ToElements();
-                return elements.Select(x => new SnoopableObject(x, document));
+                var elements = new FilteredElementCollector(document).WherePasses(new ElementIdSetFilter(ids)).ToElements();
+                return elements.Select(x => new SnoopableObject(document, x));
             }
 
             return Enumerable.Empty<SnoopableObject>();

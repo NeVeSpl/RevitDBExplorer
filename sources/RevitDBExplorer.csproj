@@ -121,6 +121,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Domain\DataModel\MemberAccessors\Element\Element_Id.cs" />
+    <Compile Include="Domain\DataModel\MemberAccessors\HostObject\HostObject_FindInserts.cs" />
+    <Compile Include="Domain\DataModel\MemberAccessors\JoinGeometryUtils\IsCuttingElementInJoin.cs" />
+    <Compile Include="Domain\DataModel\Streams\JoinGeometryUtilsStream.cs" />
     <Compile Include="Domain\DataModel\Streams\Base\SnoopableMemberTemplate.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\AssetProperties\AssetProperties_Item.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\Curve\Curve_GetEndPoint.cs" />
@@ -190,6 +193,7 @@
     <Compile Include="Domain\DataModel\ValueTypes\ParameterType.cs" />
     <Compile Include="Domain\DataModel\ValueTypes\ScheduleFieldType.cs" />
     <Compile Include="Domain\DataModel\ValueTypes\UVType.cs" />
+    <Compile Include="Domain\Guard.cs" />
     <Compile Include="Domain\RevitObjectPresenter.cs" />
     <Compile Include="Domain\RevitDatabaseQuery\FuzzySearchEngine.cs" />
     <Compile Include="Domain\RevitDatabaseQuery\QueryParser.cs" />
@@ -222,7 +226,7 @@
     <Compile Include="Domain\DataModel\ValueTypes\StringType.cs" />
     <Compile Include="Domain\DataModel\ValueTypes\XYZType.cs" />
     <Compile Include="Domain\ExternalExecutor.cs" />
-    <Compile Include="Domain\Labels.cs" />
+    <Compile Include="Domain\Labeler.cs" />
     <Compile Include="Domain\Selectors.cs" />
     <Compile Include="Extensions\System\ObjectExtensions.cs" />
     <Compile Include="Extensions\System\TypeExtensions.cs" />
@@ -269,6 +273,9 @@
       <Link>RevitDBExplorer.addin</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Domain\RevitDatabaseQuery\Internals\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

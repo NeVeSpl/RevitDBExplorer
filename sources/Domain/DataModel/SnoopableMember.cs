@@ -35,7 +35,7 @@ namespace RevitDBExplorer.Domain.DataModel
             {
                 if (valueAccessException is not null)
                 {
-                    return Labels.GetLabelForException(valueAccessException);
+                    return Labeler.GetLabelForException(valueAccessException);
                 }
                 return value;
             }
@@ -64,7 +64,7 @@ namespace RevitDBExplorer.Domain.DataModel
         {
             ReadValue(parent.Document, parent.Object);
         }
-        public void ReadValue(Document document, object @object)
+        private void ReadValue(Document document, object @object)
         {
             try
             {

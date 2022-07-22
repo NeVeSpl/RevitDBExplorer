@@ -24,7 +24,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
             var templateParameterIds = view.GetTemplateParameterIds().ToLookup(x => x);
             var templateParameters = view.Parameters.OfType<Parameter>().Where(x => templateParameterIds.Contains(x.Id)).ToList();
 
-            return templateParameters.Select(x => new SnoopableObject(x, document));
+            return templateParameters.Select(x => new SnoopableObject(document, x));
         }
     }
 }

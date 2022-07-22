@@ -7,28 +7,29 @@ using RevitDBExplorer.Domain.DataModel.ValueTypes.Base;
 
 namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
-    internal class MemberAccessorByFunc<TInput, TReturn> : IMemberAccessor where TInput : class
+    internal class MemberAccessorByFunc<TSnoopedObjectType, TReturnType> : MemberAccessorTyped<TSnoopedObjectType>
     {
         private readonly IValueType value;
-        private readonly Func<Document, TInput, TReturn> get;
+        private readonly Func<Document, TSnoopedObjectType, TReturnType> get;
 
 
-        public MemberAccessorByFunc(Func<Document, TInput, TReturn> get)
+        public MemberAccessorByFunc(Func<Document, TSnoopedObjectType, TReturnType> get)
         {
             this.get = get;
-            this.value = ValueTypeFactory.Create(typeof(TReturn));
+            this.value = ValueTypeFactory.Create(typeof(TReturnType));
         }
 
 
-        public ReadResult Read(Document document, object @object)
+        public override ReadResult Read(Document document, TSnoopedObjectType @object)
         {
-            value.SetValue(document, null);            
-            var result = get(document, @object as TInput);
+            value.SetValue(document, null);
+            var result = get(document, @object);
             value.SetValue(document, result);
             return new ReadResult(value.ValueAsString, value.TypeName, value.CanBeSnooped, null);
         }
 
-        public IEnumerable<SnoopableObject> Snoop(Document document, object @object)
+
+        public override IEnumerable<SnoopableObject> Snoop(Document document, TSnoopedObjectType @object)
         {
             return value.Snoop(document);
         }

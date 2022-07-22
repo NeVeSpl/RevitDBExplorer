@@ -23,7 +23,7 @@ namespace RevitDBExplorer.Domain.DataModel.ValueTypes
         {          
             foreach (Parameter param in parameterSet)
             {
-                yield return new SnoopableObject(param, document);
+                yield return new SnoopableObject(document, param);
             }
         }
     }

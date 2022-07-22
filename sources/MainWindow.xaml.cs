@@ -245,7 +245,7 @@ namespace RevitDBExplorer
                     var result = RevitDatabaseQueryService.Parse(document, query);
                     DatabaseQueryToolTip = result.CollectorSyntax + ".ToElements();";
                     CommandsVM.Update(result.Commands);
-                    return result.Collector.ToElements().Select(x => new SnoopableObject(x, document)).ToList();
+                    return result.Collector.ToElements().Select(x => new SnoopableObject(document, x)).ToList();
                 });
                 PopulateTreeView(snoopableObjects);
             }
@@ -437,7 +437,7 @@ namespace RevitDBExplorer
         {
             var dialog = new TaskDialog(title)
             {
-                MainInstruction = Labels.GetLabelForException(ex),
+                MainInstruction = Labeler.GetLabelForException(ex),
                 MainContent = ex.StackTrace,
                 CommonButtons = TaskDialogCommonButtons.Ok,
                 DefaultButton = TaskDialogResult.Ok,

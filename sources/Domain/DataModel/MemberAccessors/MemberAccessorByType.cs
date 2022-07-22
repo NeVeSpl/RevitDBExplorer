@@ -8,27 +8,26 @@ using Autodesk.Revit.DB;
 
 namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
-    internal abstract class MemberAccessorByType<T> : IMemberAccessor where T : class
+    internal abstract class MemberAccessorByType<TSnoopedObjectType> : MemberAccessorTyped<TSnoopedObjectType> where TSnoopedObjectType : class
     {
         protected abstract IEnumerable<LambdaExpression> HandledMembers { get; }
         public virtual IEnumerable<string> GetHandledMembers() => HandledMembers.Select(x => x.GetUniqueId());
+            
 
-
-        public ReadResult Read(Document document, object @object)
-        {
-            T target =  @object as T;
-            string label = GetLabel(document, target);
-            bool canBeSnooped = CanBeSnoooped(document, target);
+        public override ReadResult Read(Document document, TSnoopedObjectType @object)
+        {           
+            string label = GetLabel(document, @object);
+            bool canBeSnooped = CanBeSnoooped(document, @object);
 
             return new ReadResult(label, GetHandledMembers().FirstOrDefault(), canBeSnooped);
         }
-        protected abstract bool CanBeSnoooped(Document document, T value);
-        protected abstract string GetLabel(Document document, T value);
+        protected abstract bool CanBeSnoooped(Document document, TSnoopedObjectType value);
+        protected abstract string GetLabel(Document document, TSnoopedObjectType value);
 
-        public IEnumerable<SnoopableObject> Snoop(Document document, object @object)
+        public override IEnumerable<SnoopableObject> Snoop(Document document, TSnoopedObjectType @object)
         {
-            return this.Snooop(document, @object as T);
+            return this.Snooop(document, @object);
         }
-        protected virtual IEnumerable<SnoopableObject> Snooop(Document document, T value) => Enumerable.Empty<SnoopableObject>();       
+        protected virtual IEnumerable<SnoopableObject> Snooop(Document document, TSnoopedObjectType value) => Enumerable.Empty<SnoopableObject>();       
     }
 }

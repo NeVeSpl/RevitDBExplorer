@@ -30,7 +30,7 @@ namespace RevitDBExplorer.Domain.DataModel.Streams.Base
                 {
                     foreach (var template in keyValue.Value)
                     {
-                        if (template.ShouldBeCreated(snoopableObject.Object))
+                        if (template.CanBeUsed(snoopableObject.Object))
                         {
                             var member = new SnoopableMember(snoopableObject, SnoopableMember.Kind.StaticMethod, template.MemberName, template.DeclaringType, template.MemberAccessor, null);
                             yield return member;

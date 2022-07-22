@@ -6,7 +6,7 @@ using RevitDBExplorer.Domain.DataModel.ValueTypes.Base;
 
 namespace RevitDBExplorer.Domain
 {
-    internal static class Labels
+    internal static class Labeler
     {
         public static string GetLabelForObject(object @object, Document document)
         {

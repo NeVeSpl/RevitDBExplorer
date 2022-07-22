@@ -19,7 +19,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
         {            
             for (int i = 0; i < assetProperties.Size; i++)
             {
-                yield return new SnoopableObject(assetProperties[i], document);
+                yield return new SnoopableObject(document, assetProperties[i]);
             }
         }
     }

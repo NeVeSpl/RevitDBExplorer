@@ -18,7 +18,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
         {            
             for (var i = 0; i < manager.NumberOfSplitRegions; i++)
             {
-                yield return new SnoopableObject(manager.GetSplitRegionOffset(i), document) { Index = i };
+                yield return new SnoopableObject(document, manager.GetSplitRegionOffset(i)) { Index = i };
             }    
         }
     }

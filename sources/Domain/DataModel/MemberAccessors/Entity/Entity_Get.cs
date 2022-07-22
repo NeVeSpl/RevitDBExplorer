@@ -49,7 +49,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
                     parameters = new object[] { field };
                 }
                 var value = closedGenericGet.Invoke(entity, parameters);
-                yield return new SnoopableObject(field, document, new SnoopableObject(value, document) { NamePrefix ="value:" });
+                yield return SnoopableObject.CreateKeyValuePair(document, field, value, keyPrefix :"");
             }
         }
 

@@ -50,12 +50,12 @@ namespace RevitDBExplorer.ViewModels
             {
                 if ((Count > 67 && (name == nameof(FamilyInstance) || name == nameof(Element) || name == nameof(FamilySymbol))))
                 {
-                    var groupedItems = items.GroupBy(x => (x.Object as Element).Category?.Id).Select(x => new SnoopableCategoryTreeVM(Labels.GetLabelForCategory(x.Key), x, itemFilter)).ToList();
+                    var groupedItems = items.GroupBy(x => (x.Object as Element).Category?.Id).Select(x => new SnoopableCategoryTreeVM(Labeler.GetLabelForCategory(x.Key), x, itemFilter)).ToList();
                     Items = new ObservableCollection<TreeViewItemVM>(groupedItems.OrderBy(x => x.Name));
                 }
                 if (Count > 61 && (name == nameof(Family)))
                 {
-                    var groupedItems = items.GroupBy(x => (x.Object as Family).FamilyCategoryId).Select(x => new SnoopableCategoryTreeVM(Labels.GetLabelForCategory(x.Key), x, itemFilter)).ToList();
+                    var groupedItems = items.GroupBy(x => (x.Object as Family).FamilyCategoryId).Select(x => new SnoopableCategoryTreeVM(Labeler.GetLabelForCategory(x.Key), x, itemFilter)).ToList();
                     Items = new ObservableCollection<TreeViewItemVM>(groupedItems.OrderBy(x => x.Name));
                 }
                 if (Items == null)                

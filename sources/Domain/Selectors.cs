@@ -73,7 +73,7 @@ namespace RevitDBExplorer.Domain
             var elementsCollector = elementTypes.UnionWith(elementInstances);
             var elements = elementsCollector.ToElements();
 
-            return elements.Select(x => new SnoopableObject(x, document));
+            return elements.Select(x => new SnoopableObject(document, x));
         }
         private static IEnumerable<SnoopableObject> SnoopCurrentSelection(UIApplication app)
         {
@@ -87,14 +87,14 @@ namespace RevitDBExplorer.Domain
 
             if (selectedIds.Any())
             {
-                collector = new FilteredElementCollector(document, selectedIds);
+                collector = new FilteredElementCollector(document).WherePasses(new ElementIdSetFilter(selectedIds));
             }
             else
             {
-                collector = new FilteredElementCollector(document, document.ActiveView.Id);
+                collector = new FilteredElementCollector(document, document.ActiveView.Id); //.WherePasses(new VisibleInViewFilter(document, document.ActiveView.Id));
             }
 
-            return collector.WhereElementIsNotElementType().ToElements().Select(x => new SnoopableObject(x, document));
+            return collector.ToElements().Select(x => new SnoopableObject(document, x));
         }
         private static IEnumerable<SnoopableObject> SnoopPick(UIApplication app, ObjectType objectType)
         {            
@@ -113,7 +113,7 @@ namespace RevitDBExplorer.Domain
                 yield break;
             }
             var geoObject = uiDocument.Document.GetElement(reference).GetGeometryObjectFromReference(reference);
-            yield return new SnoopableObject(geoObject, uiDocument.Document);
+            yield return new SnoopableObject(uiDocument.Document, geoObject);
         }
         private static IEnumerable<SnoopableObject> SnoopLinkedElement(UIApplication app)
         {
@@ -139,7 +139,7 @@ namespace RevitDBExplorer.Domain
             var linkedDocument = revitLinkInstance.GetLinkDocument();
             var linkedElement = linkedDocument.GetElement(reference.LinkedElementId);
 
-            yield return new SnoopableObject(linkedElement, linkedDocument);
+            yield return new SnoopableObject(linkedDocument, linkedElement);
         }
         private static IEnumerable<SnoopableObject> SnoopDependentElements(UIApplication app)
         {
@@ -153,18 +153,18 @@ namespace RevitDBExplorer.Domain
                 return null;
             }
 
-            var selectedElements = new FilteredElementCollector(document, selectedIds).WhereElementIsNotElementType().ToElements();
+            var selectedElements = new FilteredElementCollector(document).WherePasses(new ElementIdSetFilter(selectedIds)).ToElements();
             var dependentElementIds = selectedElements.SelectMany(x => x.GetDependentElements(null)).ToList();
-            var elements = new FilteredElementCollector(document, dependentElementIds).WhereElementIsNotElementType().ToElements();
-            return elements.Select(x => new SnoopableObject(x, document));
+            var elements = new FilteredElementCollector(document).WherePasses(new ElementIdSetFilter(dependentElementIds)).ToElements();
+            return elements.Select(x => new SnoopableObject(document, x));
         }
         private static IEnumerable<SnoopableObject> SnoopApplication(UIApplication app)
         {
-            yield return new SnoopableObject(app.Application, null);
+            yield return new SnoopableObject(null, app.Application);
         }
         private static IEnumerable<SnoopableObject> SnoopSchemas(UIApplication app)
         {
-            return Schema.ListSchemas().Select(x => new SnoopableObject(x, app?.ActiveUIDocument?.Document));
+            return Schema.ListSchemas().Select(x => new SnoopableObject(app?.ActiveUIDocument?.Document, x));
         }
         private static IEnumerable<SnoopableObject> SnoopCategories(UIApplication app)
         {
@@ -175,7 +175,7 @@ namespace RevitDBExplorer.Domain
             var ids = ParameterFilterUtilities.GetAllFilterableCategories();
             var categorries = ids.Select(x => Category.GetCategory(document, x)).Where(x => x is not null).ToList();
            
-            return categorries.Select(x => new SnoopableObject(x, document));
+            return categorries.Select(x => new SnoopableObject(document, x));
         }
         private static IEnumerable<SnoopableObject> SnoopParameters(UIApplication app)
         {
@@ -192,10 +192,10 @@ namespace RevitDBExplorer.Domain
                 if (paramIds.Any())
                 {
                     var parameters = new FilteredElementCollector(document).WherePasses(new ElementIdSetFilter(paramIds)).ToList();
-                    snoopableParameters = parameters.Select(x => new SnoopableObject(x, document));
+                    snoopableParameters = parameters.Select(x => new SnoopableObject(document, x));
                  }
 
-                yield return new SnoopableObject(category, document, snoopableParameters);
+                yield return new SnoopableObject(document, category, snoopableParameters);
             }
         }
         private static IEnumerable<SnoopableObject> SnoopActiveDocument(UIApplication app)
@@ -212,7 +212,7 @@ namespace RevitDBExplorer.Domain
 
             if (view == null) yield break;
 
-            yield return new SnoopableObject(view, view.Document);
+            yield return new SnoopableObject(view.Document, view);
         }
         private static IEnumerable<SnoopableObject> SnoopForge(UIApplication app, Selector selector)
         {
@@ -230,7 +230,7 @@ namespace RevitDBExplorer.Domain
                 
             };
 #pragma warning restore CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
-            return ids.Select(x => new SnoopableObject(x, app?.ActiveUIDocument?.Document));
+            return ids.Select(x => new SnoopableObject(app?.ActiveUIDocument?.Document, x));
         }
     }
 }

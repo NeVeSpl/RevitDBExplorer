@@ -52,7 +52,7 @@ namespace RevitDBExplorer.Domain.DataModel.ValueTypes
             var freshElement = document.GetElementOrCategory(id);
             if (freshElement != null)
             {
-                yield return new SnoopableObject(freshElement, document);
+                yield return new SnoopableObject(document, freshElement);
             }
         }
     }

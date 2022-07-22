@@ -16,10 +16,9 @@ namespace RevitDBExplorer.Domain.DataModel.Streams
         static SchemaTypeStream()
         {
             ForSchema = new ISnoopableMemberTemplate[]
-               {
-                    new SnoopableMemberTemplate<Parameter, string>(typeof(Schema), "Get all elements that have entity of this schema", new Schema_GetAllElements()),
-               };
-            
+            {
+                SnoopableMemberTemplate<Parameter>.Create(typeof(Schema), "Get all elements that have entity of this schema", new Schema_GetAllElements()),
+            };            
         }
 
 
