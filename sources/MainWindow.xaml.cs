@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -244,7 +245,7 @@ namespace RevitDBExplorer
 
                     var result = RevitDatabaseQueryService.Parse(document, query);
                     DatabaseQueryToolTip = result.CollectorSyntax + ".ToElements();";
-                    CommandsVM.Update(result.Commands);
+                    CommandsVM.Update(result.Commands).Forget();
                     return result.Collector.ToElements().Select(x => new SnoopableObject(document, x)).ToList();
                 });
                 PopulateTreeView(snoopableObjects);
@@ -348,7 +349,7 @@ namespace RevitDBExplorer
             databaseQuery = "";
             OnPropertyChanged(nameof(DatabaseQuery));
             DatabaseQueryToolTip = "";
-            commandsVM.Update(Enumerable.Empty<RDQCommand>());
+            commandsVM.Update(Enumerable.Empty<RDQCommand>()).Forget();
         }
 
         private void TreeViewMenuItemInRevit_Click(object sender, RoutedEventArgs e)
@@ -430,10 +431,11 @@ namespace RevitDBExplorer
             }
         }
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
+        {            
             AppSettings.Default.MainWindowHeight = Height;
             AppSettings.Default.MainWindowWidth = Width;
-            AppSettings.Default.Save();
+            AppSettings.Default.FirstColumnWidth = cFirstColumnColumnDefinition.Width.Value;
+            AppSettings.Default.Save();           
         }
 
         private static void ShowErrorMsg(string title, Exception ex)

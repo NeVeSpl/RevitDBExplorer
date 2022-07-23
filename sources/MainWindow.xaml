@@ -33,9 +33,9 @@
         </Grid.Resources>
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="313" />
+            <ColumnDefinition Width="{ext:SettingBinding FirstColumnWidth}" MinWidth="100" x:Name="cFirstColumnColumnDefinition"  />
             <ColumnDefinition Width="auto" />
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*" MinWidth="100"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
@@ -258,7 +258,7 @@
         
         
 
-        <TreeView Grid.Row="3" Grid.Column="0" ItemsSource="{Binding TreeItems}" Margin="0 2 2 0" SelectedItemChanged="TreeView_SelectedItemChanged" VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling">
+        <TreeView Grid.Row="3" Grid.Column="0" ItemsSource="{Binding TreeItems}" Margin="0 2 2 0" SelectedItemChanged="TreeView_SelectedItemChanged" VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling" SizeChanged="Window_SizeChanged">
             <TreeView.Resources>
                 <HierarchicalDataTemplate DataType="{x:Type viewModels:SnoopableCategoryTreeVM}" ItemsSource="{Binding Items}">
                     <StackPanel Orientation="Horizontal">
@@ -328,7 +328,7 @@
             </TreeView.ItemContainerStyle>
         </TreeView>        
 
-        <GridSplitter Grid.Row="3" Grid.Column="1" Background="LightGray"  Width="2" Margin="0 2 2 0" HorizontalAlignment="Left" VerticalAlignment="Stretch"/>
+        <GridSplitter Grid.Row="3" Grid.Column="1" Background="LightGray"  Width="2" Margin="0 2 2 0" HorizontalAlignment="Left" VerticalAlignment="Stretch" />
 
         <ListView Grid.Row="3" Grid.Column="3" Margin="0 2 0 0" ItemsSource="{Binding ListItems}" d:ItemsSource="{d:SampleData ItemCount=5}" SelectionMode="Single" SelectedItem="{Binding ListViewSelectedItem}"  AlternationCount="2" >
             <ListView.Resources>

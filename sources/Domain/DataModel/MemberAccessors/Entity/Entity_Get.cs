@@ -35,20 +35,20 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
             {
                 var fieldValueType = GetFieldValueType(field);
                 var fieldSpecType = field.GetSpecTypeId();
-                MethodInfo closedGenericGet = null;
+                MethodInfo constructedGenericGet = null;
                 object[] parameters = null;
                 if (UnitUtils.IsMeasurableSpec(fieldSpecType) || fieldSpecType == SpecTypeId.Custom)
                 {
                     var unit = UnitUtils.IsMeasurableSpec(fieldSpecType) ? UnitUtils.GetValidUnits(fieldSpecType)[0] : UnitTypeId.Custom;
-                    closedGenericGet = getWithFielAndUnit.MakeGenericMethod(fieldValueType);
+                    constructedGenericGet = getWithFielAndUnit.MakeGenericMethod(fieldValueType);
                     parameters = new object[] { field, unit };
                 }
                 else
                 {
-                    closedGenericGet = getWithField.MakeGenericMethod(fieldValueType);
+                    constructedGenericGet = getWithField.MakeGenericMethod(fieldValueType);
                     parameters = new object[] { field };
                 }
-                var value = closedGenericGet.Invoke(entity, parameters);
+                var value = constructedGenericGet.Invoke(entity, parameters);
                 yield return SnoopableObject.CreateKeyValuePair(document, field, value, keyPrefix :"");
             }
         }

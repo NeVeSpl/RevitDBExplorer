@@ -208,6 +208,7 @@
     <Compile Include="Extensions\System\Reflection\PropertyInfoExtensions.cs" />
     <Compile Include="Extensions\System\Runtime.CompilerServices\IsExternalInit .cs" />
     <Compile Include="Extensions\System\StringExtensions.cs" />
+    <Compile Include="Extensions\System\Threading.Tasks\TaskExtensions.cs" />
     <Compile Include="Properties\AppSettings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>

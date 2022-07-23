@@ -46,5 +46,17 @@ namespace RevitDBExplorer.Properties {
                 this["MainWindowHeight"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("313")]
+        public double FirstColumnWidth {
+            get {
+                return ((double)(this["FirstColumnWidth"]));
+            }
+            set {
+                this["FirstColumnWidth"] = value;
+            }
+        }
     }
 }

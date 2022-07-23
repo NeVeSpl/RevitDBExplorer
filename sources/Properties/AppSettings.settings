@@ -8,5 +8,8 @@
     <Setting Name="MainWindowHeight" Type="System.Double" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
+    <Setting Name="FirstColumnWidth" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">313</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

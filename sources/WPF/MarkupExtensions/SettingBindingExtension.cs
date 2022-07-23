@@ -21,7 +21,7 @@ namespace RevitDBExplorer.WPF.MarkupExtensions
         private void Initialize()
         {
             this.Source = Properties.AppSettings.Default;
-            this.Mode = BindingMode.OneWay;
+            this.Mode = BindingMode.OneTime;
         }
     }
 }
