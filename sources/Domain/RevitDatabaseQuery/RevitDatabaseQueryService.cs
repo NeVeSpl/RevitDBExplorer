@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Autodesk.Revit.DB;
+using RevitDBExplorer.Domain.RevitDatabaseQuery.Internals;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
@@ -17,7 +18,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
 
         public static Result Parse(Document document, string query)
         {
-            var commands = QueryParser.Parse(query);
+            var commands = QueryParser.Parse(document, query);
 
             var t1 = CreateCollector(document, commands);
             var t2 = WhereElementIsElementTypeOrNot(t1, commands);
@@ -74,7 +75,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
         }
         private static Token WherePassesElementIdSetFilter(Token token, List<Command> commands)
         {
-            var ids = commands.SelectMany(x => x.Arguments).Where(x => x.IsElementId).OfType<LookupResult<ElementId>>().ToList();
+            var ids = commands.SelectMany(x => x.MatchedArguments).Where(x => x.IsElementId).OfType<LookupResult<ElementId>>().ToList();
             if (ids.Any())
             {
                 var filter = new ElementIdSetFilter(ids.Select(x => x.Value).ToList());
@@ -86,7 +87,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
         }
         private static Token OfClass(Token token, List<Command> commands)
         {
-            var types = commands.SelectMany(x => x.Arguments).Where(x => x.IsClass).OfType<LookupResult<Type>>().ToList();
+            var types = commands.SelectMany(x => x.MatchedArguments).Where(x => x.IsClass).OfType<LookupResult<Type>>().ToList();
             if (types.Count == 1)
             {
                 var type = types.First();
@@ -105,7 +106,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
         }
         private static Token OfCategory(Token token, List<Command> commands)
         {
-            var categories = commands.SelectMany(x => x.Arguments).Where(x => x.IsCategory).OfType<LookupResult<BuiltInCategory>>().ToList();
+            var categories = commands.SelectMany(x => x.MatchedArguments).Where(x => x.IsCategory).OfType<LookupResult<BuiltInCategory>>().ToList();
             if (categories.Count == 1)
             {
                 var category = categories.First();
@@ -158,39 +159,41 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
         }
         private static Token OfParameter(Token token, List<Command> commands, Document document)
         {
-            var parameters = commands.Where(x => x.Type == CmdType.Parameter).ToList();
+            var parameterCmds = commands.Where(x => x.Type == CmdType.Parameter).ToList();
 
-            if (parameters.Any())
+            if (parameterCmds.Any())
             {
                 var filtersForCmds = new List<ElementFilter>();
-                foreach (var parameterCmd in parameters)
+                foreach (var parameterCmd in parameterCmds)
                 {
                     var rules = new List<FilterRule>();
-                    foreach (var argument in parameterCmd.Arguments.OfType<LookupResult<ForgeTypeId>>())
-                    {
-                        var forgeId =  argument.Value;
-                        var builtInParameter = ParameterUtils.GetBuiltInParameter(forgeId);
+                    foreach (var argument in parameterCmd.MatchedArguments.OfType<LookupResult<ParameterSpec>>())
+                    {                        
+                        var builtInParameter = argument.Value.BuiltInParameter;
                         var parameter = new ElementId(builtInParameter);
-                        var storageType = document.get_TypeOfStorage(builtInParameter);
+                        var storageType = argument.Value.StorageType;
+                        var argAsInt = parameterCmd.Operator.ArgumentAsInt;
+                        var argAsDouble = parameterCmd.Operator.ArgumentAsDouble;
+                        var argAsString = parameterCmd.Operator.ArgumentAsString;
+
                         FilterRule rule = null;
                         if (storageType == StorageType.Integer)
-                        {
-                            int.TryParse(parameterCmd.OperatorArgumentAsString, out int intArg);
-                            rule = parameterCmd.Operator switch
+                        {                            
+                            rule = parameterCmd.Operator.Type switch
                             {
-                                Operator.Equals => ParameterFilterRuleFactory.CreateEqualsRule(parameter, intArg),
-                                Operator.NotEquals => ParameterFilterRuleFactory.CreateNotEqualsRule(parameter, intArg),
-                                Operator.Greater => ParameterFilterRuleFactory.CreateGreaterRule(parameter, intArg),
-                                Operator.GreaterOrEqual => ParameterFilterRuleFactory.CreateGreaterOrEqualRule(parameter, intArg),
-                                Operator.Less => ParameterFilterRuleFactory.CreateLessRule(parameter, intArg),
-                                Operator.LessOrEqual => ParameterFilterRuleFactory.CreateLessOrEqualRule(parameter, intArg),
+                                OperatorType.Equals => ParameterFilterRuleFactory.CreateEqualsRule(parameter, argAsInt),
+                                OperatorType.NotEquals => ParameterFilterRuleFactory.CreateNotEqualsRule(parameter, argAsInt),
+                                OperatorType.Greater => ParameterFilterRuleFactory.CreateGreaterRule(parameter, argAsInt),
+                                OperatorType.GreaterOrEqual => ParameterFilterRuleFactory.CreateGreaterOrEqualRule(parameter, argAsInt),
+                                OperatorType.Less => ParameterFilterRuleFactory.CreateLessRule(parameter, argAsInt),
+                                OperatorType.LessOrEqual => ParameterFilterRuleFactory.CreateLessOrEqualRule(parameter, argAsInt),
                                 _ => null
                             };
 
                         }
                         if (storageType == StorageType.String)
                         {
-                            rule = parameterCmd.Operator switch
+                            rule = parameterCmd.Operator.Type switch
                             {
 #if R2022
                                 Operator.Greater => ParameterFilterRuleFactory.CreateGreaterRule(parameter, parameterCmd.OperatorArgumentAsString, false),
@@ -199,19 +202,19 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
                                 Operator.LessOrEqual => ParameterFilterRuleFactory.CreateLessOrEqualRule(parameter, parameterCmd.OperatorArgumentAsString, false),
 #endif
 #if R2023
-                                Operator.Greater => ParameterFilterRuleFactory.CreateGreaterRule(parameter, parameterCmd.OperatorArgumentAsString),
-                                Operator.GreaterOrEqual => ParameterFilterRuleFactory.CreateGreaterOrEqualRule(parameter, parameterCmd.OperatorArgumentAsString),
-                                Operator.Less => ParameterFilterRuleFactory.CreateLessRule(parameter, parameterCmd.OperatorArgumentAsString),
-                                Operator.LessOrEqual => ParameterFilterRuleFactory.CreateLessOrEqualRule(parameter, parameterCmd.OperatorArgumentAsString),
+                                OperatorType.Greater => ParameterFilterRuleFactory.CreateGreaterRule(parameter, argAsString),
+                                OperatorType.GreaterOrEqual => ParameterFilterRuleFactory.CreateGreaterOrEqualRule(parameter, argAsString),
+                                OperatorType.Less => ParameterFilterRuleFactory.CreateLessRule(parameter, argAsString),
+                                OperatorType.LessOrEqual => ParameterFilterRuleFactory.CreateLessOrEqualRule(parameter, argAsString),
 #endif
                                 _ => null
                             };
-                            var serchTerm = parameterCmd.OperatorArgumentAsString.Trim();
+                            var serchTerm = argAsString;
                             bool startsWithWildcard = serchTerm.StartsWith("*") || serchTerm.StartsWith("%");
                             bool endsWithWildcard = serchTerm.EndsWith("*") || serchTerm.EndsWith("%");
                             serchTerm = serchTerm.Trim('*', '%');
 
-                            if (parameterCmd.Operator == Operator.Equals)
+                            if (parameterCmd.Operator.Type == OperatorType.Equals)
                             {
 #if R2023
                                 if (startsWithWildcard == true && endsWithWildcard == true) rule = ParameterFilterRuleFactory.CreateContainsRule(parameter, serchTerm);
@@ -226,7 +229,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
                                 if (startsWithWildcard == false && endsWithWildcard == false) rule = ParameterFilterRuleFactory.CreateEqualsRule(parameter, serchTerm, false);
 #endif
                             }
-                            if (parameterCmd.Operator == Operator.NotEquals)
+                            if (parameterCmd.Operator.Type == OperatorType.NotEquals)
                             {
 #if R2023
                                 if (startsWithWildcard == true && endsWithWildcard == true) rule = ParameterFilterRuleFactory.CreateNotContainsRule(parameter, serchTerm);
@@ -245,31 +248,31 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
                         }
                         double epsilon = 1e-6;
                         if (storageType == (StorageType.Double))
-                        {
-                            double.TryParse(parameterCmd.OperatorArgumentAsString, out double doubleArg);
-                            rule = parameterCmd.Operator switch
+                        {                          
+                            rule = parameterCmd.Operator.Type switch
                             {
-                                Operator.Equals => ParameterFilterRuleFactory.CreateEqualsRule(parameter, doubleArg, epsilon),
-                                Operator.NotEquals => ParameterFilterRuleFactory.CreateNotEqualsRule(parameter, doubleArg, epsilon),
-                                Operator.Greater => ParameterFilterRuleFactory.CreateGreaterRule(parameter, doubleArg, epsilon),
-                                Operator.GreaterOrEqual => ParameterFilterRuleFactory.CreateGreaterOrEqualRule(parameter, doubleArg, epsilon),
-                                Operator.Less => ParameterFilterRuleFactory.CreateLessRule(parameter, doubleArg, epsilon),
-                                Operator.LessOrEqual => ParameterFilterRuleFactory.CreateLessOrEqualRule(parameter, doubleArg, epsilon),
+                                OperatorType.Equals => ParameterFilterRuleFactory.CreateEqualsRule(parameter, argAsDouble, epsilon),
+                                OperatorType.NotEquals => ParameterFilterRuleFactory.CreateNotEqualsRule(parameter, argAsDouble, epsilon),
+                                OperatorType.Greater => ParameterFilterRuleFactory.CreateGreaterRule(parameter, argAsDouble, epsilon),
+                                OperatorType.GreaterOrEqual => ParameterFilterRuleFactory.CreateGreaterOrEqualRule(parameter, argAsDouble, epsilon),
+                                OperatorType.Less => ParameterFilterRuleFactory.CreateLessRule(parameter, argAsDouble, epsilon),
+                                OperatorType.LessOrEqual => ParameterFilterRuleFactory.CreateLessOrEqualRule(parameter, argAsDouble, epsilon),
                                 _ => null
                             };
 
                         }
-                        rule = parameterCmd.Operator switch
+                        rule = parameterCmd.Operator.Type switch
                         {
-                            Operator.HasValue => ParameterFilterRuleFactory.CreateHasValueParameterRule(parameter),
-                            Operator.HasNoValue => ParameterFilterRuleFactory.CreateHasNoValueParameterRule(parameter),
+                            OperatorType.HasValue => ParameterFilterRuleFactory.CreateHasValueParameterRule(parameter),
+                            OperatorType.HasNoValue => ParameterFilterRuleFactory.CreateHasNoValueParameterRule(parameter),
                             _ => rule
                         };
                         if (rule != null)
                         {
                             rules.Add(rule);
                         }
-                     }
+                    }
+
                     var or = new LogicalOrFilter(rules.Select(x => new ElementParameterFilter(x, false)).ToList<ElementFilter>());
                     filtersForCmds.Add(or);
                 }

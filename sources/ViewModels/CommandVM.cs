@@ -71,7 +71,7 @@ namespace RevitDBExplorer.ViewModels
             this.command = command;          
             string hexColor = "#FFFFFF";
 
-            string args = String.Join(", ", command.Arguments.Select(x => x.Name));
+            string args = String.Join(", ", command.MatchedArguments.Select(x => x.Name));
 
             switch (command.Type)
             {
@@ -104,11 +104,11 @@ namespace RevitDBExplorer.ViewModels
                     hexColor = "#EDEDED";
                     break;
                 case Domain.RevitDatabaseQuery.CmdType.Parameter:
-                    Name = $"{args} {command.Operator} {command.OperatorArgumentAsString}";
+                    Name = $"{args} {command.Operator} {command.Operator.ArgumentAsString}";
                     hexColor = "#EDEDED";
                     break;
                 case Domain.RevitDatabaseQuery.CmdType.Incorrect:
-                    Name = command.Argument;
+                    Name = command.Text;
                     hexColor = "#FF0000";
                     Foreground = Brushes.White;
                     break;

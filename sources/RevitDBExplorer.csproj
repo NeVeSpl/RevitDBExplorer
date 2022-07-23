@@ -193,6 +193,7 @@
     <Compile Include="Domain\DataModel\ValueTypes\ScheduleFieldType.cs" />
     <Compile Include="Domain\DataModel\ValueTypes\UVType.cs" />
     <Compile Include="Domain\Guard.cs" />
+    <Compile Include="Domain\RevitDatabaseQuery\Internals\Operators.cs" />
     <Compile Include="Domain\RevitObjectPresenter.cs" />
     <Compile Include="Domain\RevitDatabaseQuery\FuzzySearchEngine.cs" />
     <Compile Include="Domain\RevitDatabaseQuery\QueryParser.cs" />
@@ -274,8 +275,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Domain\RevitDatabaseQuery\Internals\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
