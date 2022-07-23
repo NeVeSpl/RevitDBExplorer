@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Media;
+using RevitDBExplorer.Domain.RevitDatabaseQuery;
 using RevitDBExplorer.WPF;
 using RDQCommand = RevitDBExplorer.Domain.RevitDatabaseQuery.Command;
 
@@ -14,7 +16,9 @@ namespace RevitDBExplorer.ViewModels
         private Brush fill;
         private Brush foreground = Brushes.Black;
         private string name;
+        private string filterName;
         private bool toRemove;
+        private IEnumerable<ILookupResult> arguments;
 
         public Brush Fill
         {
@@ -64,6 +68,30 @@ namespace RevitDBExplorer.ViewModels
                 OnPropertyChanged();
             }
         }
+        public string FilterName
+        {
+            get
+            {
+                return filterName;
+            }
+            set
+            {
+                filterName = value;
+                OnPropertyChanged();
+            }
+        }
+        public IEnumerable<ILookupResult> Arguments
+        {
+            get
+            {
+                return arguments;
+            }
+            set
+            {
+                arguments = value;
+                OnPropertyChanged();
+            }
+        }
 
 
         public CommandVM(RDQCommand command)
@@ -72,47 +100,63 @@ namespace RevitDBExplorer.ViewModels
             string hexColor = "#FFFFFF";
 
             string args = String.Join(", ", command.MatchedArguments.Select(x => x.Name));
-
+            Arguments = command.MatchedArguments;
             switch (command.Type)
             {
-                case Domain.RevitDatabaseQuery.CmdType.ActiveView:
+                case CmdType.ActiveView:
                     Name = "active view";
+                    FilterName = "new FilteredElementCollector(document, document.ActiveView.Id)";                    
                     hexColor = "#FFF2CC";
                     break;               
-                case Domain.RevitDatabaseQuery.CmdType.ElementId:
+                case CmdType.ElementId:
                     Name = args;
+                    FilterName = ".WherePasses(new ElementIdSetFilter())";
                     hexColor = "#FBE5D5";
                     break;
-                case Domain.RevitDatabaseQuery.CmdType.ElementType:
+                case CmdType.ElementType:
                     Name = "element type";
+                    FilterName = ".WhereElementIsElementType()";
                     hexColor = "#FFF2CC";
                     break;
-                case Domain.RevitDatabaseQuery.CmdType.NotElementType:
+                case CmdType.NotElementType:
                     Name = "element";
+                    FilterName = ".WhereElementIsNotElementType()";
                     hexColor = "#FFF2CC";
                     break;
-                case Domain.RevitDatabaseQuery.CmdType.Category:
+                case CmdType.Category:
                     Name = args;
+                    FilterName = ".OfCategory()";
                     hexColor = "#DEEBF6";
                     break;
                 case Domain.RevitDatabaseQuery.CmdType.Class:
                     Name = args;
+                    FilterName = ".OfClass()";
                     hexColor = "#E2EFD9";
                     break;
                 case Domain.RevitDatabaseQuery.CmdType.NameParam:
                     Name = $"name: {command.Argument}";
+                    FilterName = ".WherePasses(new ElementParameterFilter())";
                     hexColor = "#EDEDED";
                     break;
-                case Domain.RevitDatabaseQuery.CmdType.Parameter:
-                    Name = $"{args} {command.Operator} {command.Operator.ArgumentAsString}";
+                case CmdType.Parameter:
+                    string argsForParam = String.Join(", ", command.MatchedArguments.Take(2).Select(x => x.Name));
+                    string count = "";
+                    if (command.MatchedArguments.Count() > 2)
+                    {
+                        count = $" [+{command.MatchedArguments.Count() - 2}] ";
+                    }
+                    
+                    Name = $"{argsForParam}{count} {command.Operator.Symbol} {command.Operator.ArgumentAsString}";
+                    FilterName = ".WherePasses(new ElementParameterFilter())";
                     hexColor = "#EDEDED";
                     break;
-                case Domain.RevitDatabaseQuery.CmdType.Incorrect:
+                case CmdType.Incorrect:
                     Name = command.Text;
+                    FilterName = "could not recognize that phrase";
                     hexColor = "#FF0000";
                     Foreground = Brushes.White;
                     break;
-                case Domain.RevitDatabaseQuery.CmdType.WhoKnows:
+                case CmdType.WhoKnows:
                     Name = args;
                     hexColor = "#E3D6EC";
                     break;

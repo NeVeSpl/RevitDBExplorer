@@ -94,9 +94,15 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
             {
                 if (Argument.StartsWith(nameof(BuiltInCategory), StringComparison.OrdinalIgnoreCase))
                 {
+                    Argument = Argument.Remove(0, nameof(BuiltInCategory).Length + 1);
                     Type = CmdType.Category;
                 }
-                if (Argument.StartsWith(nameof(BuiltInParameter), StringComparison.OrdinalIgnoreCase) || Operators.DoesContainAnyValidOperator(Argument))
+                if (Argument.StartsWith(nameof(BuiltInParameter), StringComparison.OrdinalIgnoreCase))
+                {
+                    Argument = Argument.Remove(0, nameof(BuiltInParameter).Length + 1);
+                    Type = CmdType.Parameter;
+                }
+                if (Operators.DoesContainAnyValidOperator(Argument))
                 {
                     Type = CmdType.Parameter;
                 }
@@ -150,8 +156,9 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
                 case "types":
                     return CmdType.ElementType;
                 case "element":
-                case "notelementtype":
                 case "elements":
+                case "notelementtype":
+                case "nottype":               
                     return CmdType.NotElementType;
             }
 

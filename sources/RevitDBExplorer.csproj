@@ -193,6 +193,9 @@
     <Compile Include="Domain\DataModel\ValueTypes\ScheduleFieldType.cs" />
     <Compile Include="Domain\DataModel\ValueTypes\UVType.cs" />
     <Compile Include="Domain\Guard.cs" />
+    <Compile Include="Domain\RevitDatabaseQuery\Internals\Element.cs" />
+    <Compile Include="Domain\RevitDatabaseQuery\Internals\Filter.cs" />
+    <Compile Include="Domain\RevitDatabaseQuery\Internals\Group.cs" />
     <Compile Include="Domain\RevitDatabaseQuery\Internals\Operators.cs" />
     <Compile Include="Domain\RevitObjectPresenter.cs" />
     <Compile Include="Domain\RevitDatabaseQuery\FuzzySearchEngine.cs" />

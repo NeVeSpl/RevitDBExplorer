@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
@@ -13,7 +9,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Internals
 
     internal static class Operators
     {
-        private static readonly Operator None = new Operator(OperatorType.None, null);
+        private static readonly Operator None = new(OperatorType.None, null);
         private static readonly Operator[] operators = new[]
         {
             new Operator(OperatorType.NotEquals, "!="),

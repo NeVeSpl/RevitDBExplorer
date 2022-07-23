@@ -60,7 +60,7 @@ namespace RevitDBExplorer.ViewModels
                 Commands.Add(commandVM);
             }
 
-            await Task.Delay(2000);
+            await Task.Delay(500);
 
             foreach (var commandVM in toRemove)
             {

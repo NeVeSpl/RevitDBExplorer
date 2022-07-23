@@ -84,7 +84,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
                     var score = needle.ApproximatelyEquals(item.Item1, SimMetricType.Levenstein);
                     if (score > 0.61)
                     {
-                        found.Add(new LookupResult<BuiltInCategory>(item.Item2, score){ Name = $"BuiltInCategory.{item.Item2}" });
+                        found.Add(new LookupResult<BuiltInCategory>(item.Item2, score){ Name = $"BuiltInCategory.{item.Item2}", Label = LabelUtils.GetLabelFor(item.Item2) });
                     }
                 }
             }
@@ -111,7 +111,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
                         var builtInParam = ParameterUtils.GetBuiltInParameter(item.Item2);
                         var storageType = document.get_TypeOfStorage(builtInParam);
                         var param = new ParameterSpec(builtInParam, storageType);
-                        found.Add(new LookupResult<ParameterSpec>(param, score) { Name = $"BuiltInParameter.{builtInParam}" });
+                        found.Add(new LookupResult<ParameterSpec>(param, score) { Name = $"BuiltInParameter.{builtInParam}", Label = LabelUtils.GetLabelFor(builtInParam) });
                     }
                 }
             }
@@ -121,7 +121,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
                 var sorted = found.OrderByDescending(x => x.LevensteinScore);
 
                 double prevScore = sorted.First().LevensteinScore;
-                foreach (var item in sorted.Take(7))
+                foreach (var item in sorted.Take(27))
                 {
                     if (Math.Abs(item.LevensteinScore - prevScore) < 0.11)
                     {
@@ -141,8 +141,13 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
                 var category = (BuiltInCategory)categoryId.IntegerValue;
                 var label = LabelUtils.GetLabelFor(category);
 
-                categories.Add((label.Clean(), category));
-                categories.Add((category.ToString().Clean(), category));
+                if (!Category.IsBuiltInCategoryValid(category))
+                {
+                    continue;
+                }
+
+                 categories.Add((label.Clean(), category));
+                 categories.Add((category.ToString().Clean(), category));                
             }
 
             return categories;
@@ -192,6 +197,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
     internal interface ILookupResult
     {
         string Name { get;  }
+        string Label { get; }
         double LevensteinScore { get;  }
         bool IsCategory { get; }
         bool IsClass { get; }
@@ -205,6 +211,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
         public T  Value { get; init; }
         public double LevensteinScore { get; init; }
         public string Name { get; init; }
+        public string Label { get; init; }
         public bool IsCategory { get; init; }
         public bool IsClass { get; init; }
         public bool IsElementId { get; init; }

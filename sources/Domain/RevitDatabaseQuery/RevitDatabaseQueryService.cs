@@ -173,6 +173,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
                         var parameter = new ElementId(builtInParameter);
                         var storageType = argument.Value.StorageType;
                         var argAsInt = parameterCmd.Operator.ArgumentAsInt;
+                       
                         var argAsDouble = parameterCmd.Operator.ArgumentAsDouble;
                         var argAsString = parameterCmd.Operator.ArgumentAsString;
 
@@ -196,10 +197,10 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
                             rule = parameterCmd.Operator.Type switch
                             {
 #if R2022
-                                Operator.Greater => ParameterFilterRuleFactory.CreateGreaterRule(parameter, parameterCmd.OperatorArgumentAsString, false),
-                                Operator.GreaterOrEqual => ParameterFilterRuleFactory.CreateGreaterOrEqualRule(parameter, parameterCmd.OperatorArgumentAsString, false),
-                                Operator.Less => ParameterFilterRuleFactory.CreateLessRule(parameter, parameterCmd.OperatorArgumentAsString, false),
-                                Operator.LessOrEqual => ParameterFilterRuleFactory.CreateLessOrEqualRule(parameter, parameterCmd.OperatorArgumentAsString, false),
+                                OperatorType.Greater => ParameterFilterRuleFactory.CreateGreaterRule(parameter, argAsString, false),
+                                OperatorType.GreaterOrEqual => ParameterFilterRuleFactory.CreateGreaterOrEqualRule(parameter, argAsString, false),
+                                OperatorType.Less => ParameterFilterRuleFactory.CreateLessRule(parameter, argAsString, false),
+                                OperatorType.LessOrEqual => ParameterFilterRuleFactory.CreateLessOrEqualRule(parameter, argAsString, false),
 #endif
 #if R2023
                                 OperatorType.Greater => ParameterFilterRuleFactory.CreateGreaterRule(parameter, argAsString),
@@ -261,6 +262,20 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
                             };
 
                         }
+                        if (storageType == (StorageType.ElementId))
+                        {
+                            var argAsId = new ElementId(parameterCmd.Operator.ArgumentAsInt);
+                            rule = parameterCmd.Operator.Type switch
+                            {
+                                OperatorType.Equals => ParameterFilterRuleFactory.CreateEqualsRule(parameter, argAsId),
+                                OperatorType.NotEquals => ParameterFilterRuleFactory.CreateNotEqualsRule(parameter, argAsId),
+                                OperatorType.Greater => ParameterFilterRuleFactory.CreateGreaterRule(parameter, argAsId),
+                                OperatorType.GreaterOrEqual => ParameterFilterRuleFactory.CreateGreaterOrEqualRule(parameter, argAsId),
+                                OperatorType.Less => ParameterFilterRuleFactory.CreateLessRule(parameter, argAsId),
+                                OperatorType.LessOrEqual => ParameterFilterRuleFactory.CreateLessOrEqualRule(parameter, argAsId),
+                                _ => null
+                            };
+                        }
                         rule = parameterCmd.Operator.Type switch
                         {
                             OperatorType.HasValue => ParameterFilterRuleFactory.CreateHasValueParameterRule(parameter),
@@ -272,19 +287,23 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
                             rules.Add(rule);
                         }
                     }
-
-                    var or = new LogicalOrFilter(rules.Select(x => new ElementParameterFilter(x, false)).ToList<ElementFilter>());
-                    filtersForCmds.Add(or);
+                    if (rules.Any())
+                    {
+                        var or = new LogicalOrFilter(rules.Select(x => new ElementParameterFilter(x, false)).ToList<ElementFilter>());
+                        filtersForCmds.Add(or);
+                    }
                 }
-                var finalFilter = new LogicalAndFilter(filtersForCmds);
-                var c = token.Collector.WherePasses(finalFilter);
-                var s = token.CollectorSyntax;
-                return new Token(c, s);
+                if (filtersForCmds.Any())
+                {
+                    var finalFilter = new LogicalAndFilter(filtersForCmds);
+                    var c = token.Collector.WherePasses(finalFilter);
+                    var s = token.CollectorSyntax;
+                    return new Token(c, s);
+                }
             }
 
             return token;
         }
-
 
 
         private record Token(FilteredElementCollector Collector, string CollectorSyntax);
