@@ -4,9 +4,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
-using RevitDBExplorer.Domain.DataModel.MemberAccessors;
 using RevitDBExplorer.Domain.DataModel.Streams;
-using RevitDBExplorer.Domain.DataModel.Streams.Base;
 using RevitDBExplorer.WPF;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
@@ -67,28 +65,23 @@ namespace RevitDBExplorer.Domain.DataModel
             }
         }
 
-        private static readonly BaseStream[] Streams = new BaseStream[]
-        {
-            new SystemTypeStream(),
-            new ForgeTypeIdStream(),
-            new PartUtilsStream(),
-            new JoinGeometryUtilsStream(),
-            new SchemaTypeStream(),
-        };
+        private static readonly SystemTypeStream SystemTypeHandler = new();
         private IEnumerable<SnoopableMember> GetMembersFromStreams(UIApplication app)
         {
-            var type = Object.GetType();
-
-            foreach (var stream in Streams)
+            var type = Object.GetType();            
+                
+            foreach (var member in SystemTypeHandler.Stream(this))
             {
-                foreach (var member in stream.Stream(this))
-                {
-                    yield return member;
-                }
-                if (stream.ShouldEndAllStreaming())
-                {
-                    yield break;
-                }
+                yield return member;
+            }
+            if (SystemTypeHandler.ShouldEndAllStreaming())
+            {
+                yield break;
+            }            
+
+            foreach (var member in FactoryOfFactories.CreateSnoopableMembersFor(this))
+            {
+                yield return member;
             }
 
             var properties = type.GetProperties(BindingFlags.Instance | BindingFlags.Public);
@@ -106,7 +99,7 @@ namespace RevitDBExplorer.Domain.DataModel
                 }
 
                 var comments = () => RevitDocumentationReader.GetPropertyComments(prop);
-                var memberAccessor = MemberAccessorFactory.Create(getMethod, null);
+                var memberAccessor = FactoryOfFactories.CreateMemberAccessor(getMethod, null);
                 var member = new SnoopableMember(this, SnoopableMember.Kind.Property, prop.Name, prop.DeclaringType, memberAccessor, comments);              
                 yield return member;
             }
@@ -119,9 +112,9 @@ namespace RevitDBExplorer.Domain.DataModel
                 if (method.DeclaringType == typeof(object)) continue;               
 
                 var comments = () => RevitDocumentationReader.GetMethodComments(method);
-                var memberAccessor = MemberAccessorFactory.Create(method, null);
+                var memberAccessor = FactoryOfFactories.CreateMemberAccessor(method, null);
                 var member = new SnoopableMember(this, SnoopableMember.Kind.Method, method.Name, method.DeclaringType, memberAccessor, comments);
-                 yield return member;
+                yield return member;
             }
         }
 

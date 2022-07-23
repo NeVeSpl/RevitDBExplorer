@@ -6,10 +6,10 @@ using Autodesk.Revit.DB;
 
 namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
-    internal class PrintManager_SubmitPrint : MemberAccessorByType<PrintManager>, IHaveFactoryMethod
+    internal class PrintManager_SubmitPrint : MemberAccessorByType<PrintManager>, ICanCreateMemberAccessor
     {       
         protected override IEnumerable<LambdaExpression> HandledMembers { get { yield return (PrintManager x) => x.SubmitPrint(); yield return (PrintManager x, View v) => x.SubmitPrint(v); } }
-        IMemberAccessor IHaveFactoryMethod.Create() => new PrintManager_SubmitPrint();
+        IMemberAccessor ICanCreateMemberAccessor.Create() => new PrintManager_SubmitPrint();
 
 
         protected override bool CanBeSnoooped(Document document, PrintManager value) => false;

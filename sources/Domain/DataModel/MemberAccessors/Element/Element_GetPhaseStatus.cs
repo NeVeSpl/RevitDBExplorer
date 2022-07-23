@@ -7,10 +7,10 @@ using Autodesk.Revit.DB;
 
 namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
-    internal class Element_GetPhaseStatus : MemberAccessorByType<Element>, IHaveFactoryMethod
+    internal class Element_GetPhaseStatus : MemberAccessorByType<Element>, ICanCreateMemberAccessor
     {
         protected override IEnumerable<LambdaExpression> HandledMembers { get { yield return (Element x, ElementId i) => x.GetPhaseStatus(i); } }      
-        IMemberAccessor IHaveFactoryMethod.Create() => new Element_GetPhaseStatus();
+        IMemberAccessor ICanCreateMemberAccessor.Create() => new Element_GetPhaseStatus();
 
 
         protected override bool CanBeSnoooped(Document document, Element element) => !document.Phases.IsEmpty;

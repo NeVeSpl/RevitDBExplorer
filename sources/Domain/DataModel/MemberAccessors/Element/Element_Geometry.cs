@@ -7,10 +7,10 @@ using Autodesk.Revit.DB;
 
 namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
-    internal sealed class Element_Geometry : MemberAccessorByType<Element>, IHaveFactoryMethod
+    internal sealed class Element_Geometry : MemberAccessorByType<Element>, ICanCreateMemberAccessor
     {          
         protected override IEnumerable<LambdaExpression> HandledMembers { get { yield return (Element x, Options o) => x.get_Geometry(o); } }
-        IMemberAccessor IHaveFactoryMethod.Create()
+        IMemberAccessor ICanCreateMemberAccessor.Create()
         {
             return new Element_Geometry();
         }

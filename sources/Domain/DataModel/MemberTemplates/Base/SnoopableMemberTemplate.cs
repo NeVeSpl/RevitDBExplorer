@@ -5,10 +5,11 @@ using RevitDBExplorer.Domain.DataModel.MemberAccessors;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
-namespace RevitDBExplorer.Domain.DataModel.Streams.Base
+namespace RevitDBExplorer.Domain.DataModel.MemberTemplates.Base
 {
     internal interface ISnoopableMemberTemplate
     {
+        Type ForType { get; }
         Type DeclaringType { get; }
         string MemberName { get; }
         IMemberAccessor MemberAccessor { get; }
@@ -18,6 +19,7 @@ namespace RevitDBExplorer.Domain.DataModel.Streams.Base
 
     internal sealed class SnoopableMemberTemplate<TSnoopedObjectType> : ISnoopableMemberTemplate
     {
+        public Type ForType => typeof(TSnoopedObjectType);
         public Func<TSnoopedObjectType, bool> CanBeUsedTyped { get; init; }
         public Type DeclaringType { get; init; }
         public string MemberName { get; init; }

@@ -7,10 +7,10 @@ using Autodesk.Revit.DB;
 
 namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
-    internal class Document_PlanTopology : MemberAccessorByType<Document>, IHaveFactoryMethod
+    internal class Document_PlanTopology : MemberAccessorByType<Document>, ICanCreateMemberAccessor
     {       
         protected override IEnumerable<LambdaExpression> HandledMembers { get { yield return (Document x, Phase phase) => x.get_PlanTopologies(phase); } }
-        IMemberAccessor IHaveFactoryMethod.Create() => new Document_PlanTopology();
+        IMemberAccessor ICanCreateMemberAccessor.Create() => new Document_PlanTopology();
 
 
         protected override bool CanBeSnoooped(Document document, Document value) => false;// document.Phases.Size > 0;

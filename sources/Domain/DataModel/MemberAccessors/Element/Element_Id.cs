@@ -6,7 +6,7 @@ using Autodesk.Revit.DB;
 
 namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
-    internal class Element_Id : MemberAccessorByType<Element>, IHaveFactoryMethod
+    internal class Element_Id : MemberAccessorByType<Element>, ICanCreateMemberAccessor
     {
         protected override IEnumerable<LambdaExpression> HandledMembers 
         { 
@@ -16,7 +16,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
             }
         }
 
-        IMemberAccessor IHaveFactoryMethod.Create() => new Element_Id();
+        IMemberAccessor ICanCreateMemberAccessor.Create() => new Element_Id();
         
 
         protected override bool CanBeSnoooped(Document document, Element value) => false;

@@ -6,10 +6,10 @@ using Autodesk.Revit.DB;
 
 namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
-    internal class ViewCropRegionShapeManager_GetSplitRegionOffset : MemberAccessorByType<ViewCropRegionShapeManager>, IHaveFactoryMethod
+    internal class ViewCropRegionShapeManager_GetSplitRegionOffset : MemberAccessorByType<ViewCropRegionShapeManager>, ICanCreateMemberAccessor
     {    
         protected override IEnumerable<LambdaExpression> HandledMembers { get { yield return (ViewCropRegionShapeManager x) => x.GetSplitRegionOffset(69); } }
-        IMemberAccessor IHaveFactoryMethod.Create() => new ViewCropRegionShapeManager_GetSplitRegionOffset();
+        IMemberAccessor ICanCreateMemberAccessor.Create() => new ViewCropRegionShapeManager_GetSplitRegionOffset();
 
 
         protected override bool CanBeSnoooped(Document document, ViewCropRegionShapeManager manager) => manager.NumberOfSplitRegions > 1;

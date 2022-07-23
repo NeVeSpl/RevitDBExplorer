@@ -7,10 +7,10 @@ using Autodesk.Revit.DB.Structure;
 
 namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
-    internal class Rebar_GetMovedBarTransform : MemberAccessorByType<Rebar>, IHaveFactoryMethod
+    internal class Rebar_GetMovedBarTransform : MemberAccessorByType<Rebar>, ICanCreateMemberAccessor
     {
         protected override IEnumerable<LambdaExpression> HandledMembers { get { yield return (Rebar x) => x.GetMovedBarTransform(0); } }
-        IMemberAccessor IHaveFactoryMethod.Create() => new Rebar_GetMovedBarTransform();
+        IMemberAccessor ICanCreateMemberAccessor.Create() => new Rebar_GetMovedBarTransform();
 
 
         protected override bool CanBeSnoooped(Document document, Rebar rebar) => true;

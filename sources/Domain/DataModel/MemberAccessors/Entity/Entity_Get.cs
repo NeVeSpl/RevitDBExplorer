@@ -9,10 +9,10 @@ using Autodesk.Revit.DB.ExtensibleStorage;
 
 namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
-    internal class Entity_Get : MemberAccessorByType<Entity>, IHaveFactoryMethod
+    internal class Entity_Get : MemberAccessorByType<Entity>, ICanCreateMemberAccessor
     {       
         protected override IEnumerable<LambdaExpression> HandledMembers { get { yield return (Entity x, Field f) => x.Get<object>(f); } }
-        IMemberAccessor IHaveFactoryMethod.Create() => new Entity_Get();
+        IMemberAccessor ICanCreateMemberAccessor.Create() => new Entity_Get();
 
 
         protected override bool CanBeSnoooped(Document document, Entity entity)

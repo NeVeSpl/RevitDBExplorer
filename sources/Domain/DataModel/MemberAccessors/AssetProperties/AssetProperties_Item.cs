@@ -7,10 +7,10 @@ using Autodesk.Revit.DB.Visual;
 
 namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
-    internal class AssetProperties_Item : MemberAccessorByType<AssetProperties>, IHaveFactoryMethod
+    internal class AssetProperties_Item : MemberAccessorByType<AssetProperties>, ICanCreateMemberAccessor
     { 
         protected override IEnumerable<LambdaExpression> HandledMembers { get { yield return (AssetProperties x) => x[0]; } }
-        IMemberAccessor IHaveFactoryMethod.Create() => new AssetProperties_Item();
+        IMemberAccessor ICanCreateMemberAccessor.Create() => new AssetProperties_Item();
 
 
         protected override bool CanBeSnoooped(Document document, AssetProperties assetProperties) => assetProperties.Size > 0;

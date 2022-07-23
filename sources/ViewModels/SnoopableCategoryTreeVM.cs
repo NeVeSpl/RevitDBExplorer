@@ -108,7 +108,7 @@ namespace RevitDBExplorer.ViewModels
 
     class ElementEqualityComparer : IEqualityComparer<Element>
     {
-        public static readonly ElementEqualityComparer Instance = new ElementEqualityComparer();
+        public static readonly ElementEqualityComparer Instance = new();
 
         public bool Equals(Element x, Element y)
         {
@@ -122,7 +122,7 @@ namespace RevitDBExplorer.ViewModels
     }
     class CategoryEqualityComparer : IEqualityComparer<Category>
     {
-        public static readonly CategoryEqualityComparer Instance = new CategoryEqualityComparer();
+        public static readonly CategoryEqualityComparer Instance = new();
 
         public bool Equals(Category x, Category y)
         {

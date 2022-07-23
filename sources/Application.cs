@@ -22,8 +22,9 @@ namespace RevitDBExplorer
             panel.AddItem(pushButtonData);
 
             ExternalExecutor.CreateExternalEvent();
+            FactoryOfFactories.Init();
             RevitDocumentationReader.Init();
-            RevitDatabaseQueryService.Init();
+            RevitDatabaseQueryService.Init();            
 
             return Result.Succeeded;
         }

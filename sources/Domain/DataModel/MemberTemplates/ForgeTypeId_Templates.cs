@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Autodesk.Revit.DB;
-using RevitDBExplorer.Domain.DataModel.Streams.Base;
+using RevitDBExplorer.Domain.DataModel.MemberTemplates.Base;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
-namespace RevitDBExplorer.Domain.DataModel.Streams
+namespace RevitDBExplorer.Domain.DataModel.MemberTemplates
 {
-    internal class ForgeTypeIdStream : BaseStream
+    internal class ForgeTypeId_Templates : IHaveMemberTemplates
     {
 #if R2022 || R2023
         private static readonly HashSet<ForgeTypeId> AllDisciplines = new(UnitUtils.GetAllDisciplines());
@@ -16,7 +16,8 @@ namespace RevitDBExplorer.Domain.DataModel.Streams
         private static readonly IEnumerable<ISnoopableMemberTemplate> ForCategory = Enumerable.Empty<ISnoopableMemberTemplate>();
         private static readonly IEnumerable<ISnoopableMemberTemplate> ForParameter = Enumerable.Empty<ISnoopableMemberTemplate>();
 
-        static ForgeTypeIdStream()
+
+        static ForgeTypeId_Templates()
         {
             ForForgeTypeId = new ISnoopableMemberTemplate[]
             {
@@ -75,11 +76,9 @@ namespace RevitDBExplorer.Domain.DataModel.Streams
         }
 
 
-        public ForgeTypeIdStream()
+        public IEnumerable<ISnoopableMemberTemplate> GetTemplates()
         {
-            RegisterTemplates(typeof(ForgeTypeId), ForForgeTypeId);
-            RegisterTemplates(typeof(Category), ForCategory);
-            RegisterTemplates(typeof(Parameter), ForParameter);
+            return ForForgeTypeId.Concat(ForCategory).Concat(ForParameter);
         }
     }
 }

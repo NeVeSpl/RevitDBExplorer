@@ -8,10 +8,10 @@ using Autodesk.Revit.DB.Structure;
 
 namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
-    internal class Rebar_IsBarHidden : MemberAccessorByType<Rebar>, IHaveFactoryMethod
+    internal class Rebar_IsBarHidden : MemberAccessorByType<Rebar>, ICanCreateMemberAccessor
     {
         protected override IEnumerable<LambdaExpression> HandledMembers { get { yield return (Rebar x, View v) => x.IsBarHidden(v, 7); } }
-        IMemberAccessor IHaveFactoryMethod.Create() => new Rebar_IsBarHidden();
+        IMemberAccessor ICanCreateMemberAccessor.Create() => new Rebar_IsBarHidden();
 
 
         protected override bool CanBeSnoooped(Document document, Rebar rebar) => true;

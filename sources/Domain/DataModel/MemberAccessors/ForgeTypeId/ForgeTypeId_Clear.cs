@@ -6,10 +6,10 @@ using Autodesk.Revit.DB;
 
 namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
-    internal class ForgeTypeId_Clear : MemberAccessorByType<ForgeTypeId>, IHaveFactoryMethod
+    internal class ForgeTypeId_Clear : MemberAccessorByType<ForgeTypeId>, ICanCreateMemberAccessor
     {
         protected override IEnumerable<LambdaExpression> HandledMembers { get { yield return (ForgeTypeId x) => x.Clear(); } }
-        IMemberAccessor IHaveFactoryMethod.Create() => new ForgeTypeId_Clear();
+        IMemberAccessor ICanCreateMemberAccessor.Create() => new ForgeTypeId_Clear();
 
 
         protected override bool CanBeSnoooped(Document document, ForgeTypeId value) => false;

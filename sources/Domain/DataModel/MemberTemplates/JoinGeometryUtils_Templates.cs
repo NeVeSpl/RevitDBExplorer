@@ -2,19 +2,20 @@
 using System.Linq;
 using Autodesk.Revit.DB;
 using RevitDBExplorer.Domain.DataModel.MemberAccessors;
+using RevitDBExplorer.Domain.DataModel.MemberTemplates.Base;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
-namespace RevitDBExplorer.Domain.DataModel.Streams.Base
+namespace RevitDBExplorer.Domain.DataModel.MemberTemplates
 {
-    internal class JoinGeometryUtilsStream : BaseStream
+    internal class JoinGeometryUtils_Templates : IHaveMemberTemplates
     { 
-        private static readonly IEnumerable<ISnoopableMemberTemplate> ForElement = Enumerable.Empty<ISnoopableMemberTemplate>();
+        private static readonly IEnumerable<ISnoopableMemberTemplate> templates = Enumerable.Empty<ISnoopableMemberTemplate>();
 
 
-        static JoinGeometryUtilsStream()
+        static JoinGeometryUtils_Templates()
         {
-            ForElement = new ISnoopableMemberTemplate[]
+            templates = new ISnoopableMemberTemplate[]
             {
                 SnoopableMemberTemplate<Element>.Create((doc, target) => JoinGeometryUtils.GetJoinedElements(doc, target)),
                 SnoopableMemberTemplate<Element>.Create(typeof(JoinGeometryUtils), nameof(JoinGeometryUtils.IsCuttingElementInJoin), new JoinGeometryUtils_IsCuttingElementInJoin())
@@ -22,9 +23,9 @@ namespace RevitDBExplorer.Domain.DataModel.Streams.Base
         }
 
 
-        public JoinGeometryUtilsStream()
+        public IEnumerable<ISnoopableMemberTemplate> GetTemplates()
         {
-            RegisterTemplates(typeof(Element), ForElement);           
+            return templates;         
         }
     }
 }

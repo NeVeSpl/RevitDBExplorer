@@ -1,28 +1,26 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Autodesk.Revit.DB;
-using RevitDBExplorer.Domain.DataModel.Streams.Base;
+using RevitDBExplorer.Domain.DataModel.MemberTemplates.Base;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
-namespace RevitDBExplorer.Domain.DataModel.Streams
+namespace RevitDBExplorer.Domain.DataModel.MemberTemplates
 {
-    internal sealed class PartUtilsStream : BaseStream
+    internal sealed class PartUtils_Templates : IHaveMemberTemplates
     {
-        private static readonly IEnumerable<ISnoopableMemberTemplate> partUtilsForElement = Enumerable.Empty<ISnoopableMemberTemplate>();
-        private static readonly IEnumerable<ISnoopableMemberTemplate> partUtilsForPart = Enumerable.Empty<ISnoopableMemberTemplate>();
+        private static readonly IEnumerable<ISnoopableMemberTemplate> templates = Enumerable.Empty<ISnoopableMemberTemplate>();
+        
 
-        static PartUtilsStream()
+        static PartUtils_Templates()
         {
-            partUtilsForElement = new ISnoopableMemberTemplate[]
+            templates = new ISnoopableMemberTemplate[]
             {
                 SnoopableMemberTemplate<Element>.Create((doc, target) => PartUtils.AreElementsValidForCreateParts(doc, new[] { target.Id })),
                 SnoopableMemberTemplate<Element>.Create((doc, target) => PartUtils.GetAssociatedPartMaker(doc,  target.Id)),
                 SnoopableMemberTemplate<Element>.Create((doc, target) => PartUtils.HasAssociatedParts(doc, target.Id)),
                 SnoopableMemberTemplate<Element>.Create((doc, target) => PartUtils.IsValidForCreateParts(doc, new LinkElementId(target.Id))),
-            };
-            partUtilsForPart = new ISnoopableMemberTemplate[]
-            {
+           
                 SnoopableMemberTemplate<Part>.Create((doc, target) => PartUtils.ArePartsValidForDivide(doc, new[] { target.Id })),
                 SnoopableMemberTemplate<Part>.Create((doc, target) => PartUtils.ArePartsValidForMerge(doc, new[] { target.Id })),
                 SnoopableMemberTemplate<Part>.Create((doc, target) => PartUtils.GetChainLengthToOriginal(target)),
@@ -34,10 +32,9 @@ namespace RevitDBExplorer.Domain.DataModel.Streams
         }
 
 
-        public PartUtilsStream()
+        public IEnumerable<ISnoopableMemberTemplate> GetTemplates()
         {
-            RegisterTemplates(typeof(Element), partUtilsForElement);
-            RegisterTemplates(typeof(Part), partUtilsForPart);
+            return templates;
         }
     }
 }

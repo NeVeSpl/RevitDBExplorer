@@ -7,7 +7,6 @@ namespace RevitDBExplorer.Domain
 {
     internal static class RevitObjectPresenter
     {
-
         public static void Show(SnoopableObject snoopableObject)
         {
             if (snoopableObject.Object is Element element)

@@ -8,10 +8,10 @@ using Autodesk.Revit.DB.Structure;
 
 namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
-    internal class Rebar_GetCenterlineCurves : MemberAccessorByType<Rebar>, IHaveFactoryMethod
+    internal class Rebar_GetCenterlineCurves : MemberAccessorByType<Rebar>, ICanCreateMemberAccessor
     {
         protected override IEnumerable<LambdaExpression> HandledMembers { get { yield return (Rebar x) => x.GetCenterlineCurves(false, true, false, MultiplanarOption.IncludeOnlyPlanarCurves, 0); } }
-        IMemberAccessor IHaveFactoryMethod.Create() => new Rebar_GetCenterlineCurves();
+        IMemberAccessor ICanCreateMemberAccessor.Create() => new Rebar_GetCenterlineCurves();
 
 
         protected override bool CanBeSnoooped(Document document, Rebar rebar) => true;

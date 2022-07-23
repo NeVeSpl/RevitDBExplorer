@@ -7,10 +7,10 @@ using Autodesk.Revit.DB;
 
 namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
-    internal class HostObject_FindInserts : MemberAccessorByType<HostObject>, IHaveFactoryMethod
+    internal class HostObject_FindInserts : MemberAccessorByType<HostObject>, ICanCreateMemberAccessor
     {
         protected override IEnumerable<LambdaExpression> HandledMembers { get { yield return (HostObject x) => x.FindInserts(true, true, true, true); } }
-        IMemberAccessor IHaveFactoryMethod.Create() => new HostObject_FindInserts();
+        IMemberAccessor ICanCreateMemberAccessor.Create() => new HostObject_FindInserts();
 
 
         protected override bool CanBeSnoooped(Document document, HostObject hostObject)

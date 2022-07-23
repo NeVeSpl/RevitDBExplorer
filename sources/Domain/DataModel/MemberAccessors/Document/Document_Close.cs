@@ -6,10 +6,10 @@ using Autodesk.Revit.DB;
 
 namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
-    internal class Document_Close : MemberAccessorByType<Document>, IHaveFactoryMethod
+    internal class Document_Close : MemberAccessorByType<Document>, ICanCreateMemberAccessor
     {        
         protected override IEnumerable<LambdaExpression> HandledMembers { get { yield return (Document x) => x.Close(); } }
-        IMemberAccessor IHaveFactoryMethod.Create() => new Document_Close();
+        IMemberAccessor ICanCreateMemberAccessor.Create() => new Document_Close();
 
       
         protected override bool CanBeSnoooped(Document document, Document value) => false;

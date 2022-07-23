@@ -4,7 +4,7 @@
 
 namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
-    internal interface IHaveFactoryMethod
+    internal interface ICanCreateMemberAccessor
     {
         IMemberAccessor Create();
         IEnumerable<string> GetHandledMembers(); 

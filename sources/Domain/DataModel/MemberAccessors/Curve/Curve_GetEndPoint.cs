@@ -6,10 +6,10 @@ using Autodesk.Revit.DB;
 
 namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
-    internal class Curve_GetEndPoint : MemberAccessorByType<Curve>, IHaveFactoryMethod
+    internal class Curve_GetEndPoint : MemberAccessorByType<Curve>, ICanCreateMemberAccessor
     {
         protected override IEnumerable<LambdaExpression> HandledMembers { get { yield return (Curve x) => x.GetEndPoint(0); } }
-        IMemberAccessor IHaveFactoryMethod.Create() => new Curve_GetEndPoint();
+        IMemberAccessor ICanCreateMemberAccessor.Create() => new Curve_GetEndPoint();
 
 
         protected override bool CanBeSnoooped(Document document, Curve curve) => curve.IsBound;

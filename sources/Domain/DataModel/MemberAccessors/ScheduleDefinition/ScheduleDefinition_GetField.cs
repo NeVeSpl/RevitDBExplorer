@@ -6,10 +6,10 @@ using Autodesk.Revit.DB;
 
 namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
-    internal class ScheduleDefinition_GetField : MemberAccessorByType<ScheduleDefinition>, IHaveFactoryMethod
+    internal class ScheduleDefinition_GetField : MemberAccessorByType<ScheduleDefinition>, ICanCreateMemberAccessor
     {       
         protected override IEnumerable<LambdaExpression> HandledMembers { get { yield return (ScheduleDefinition x) => x.GetField(7); } }
-        IMemberAccessor IHaveFactoryMethod.Create() => new ScheduleDefinition_GetField();
+        IMemberAccessor ICanCreateMemberAccessor.Create() => new ScheduleDefinition_GetField();
 
 
         protected override bool CanBeSnoooped(Document document, ScheduleDefinition scheduleDefinition)

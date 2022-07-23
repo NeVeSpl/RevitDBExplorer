@@ -2,19 +2,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using RevitDBExplorer.Domain.DataModel.MemberAccessors;
-using RevitDBExplorer.Domain.DataModel.Streams.Base;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
 namespace RevitDBExplorer.Domain.DataModel.Streams
 {
-    internal sealed class SystemTypeStream : BaseStream
+    internal sealed class SystemTypeStream
     {
         private bool shouldEndAllStreaming = false;
-        public override bool ShouldEndAllStreaming() => shouldEndAllStreaming;
+        public bool ShouldEndAllStreaming() => shouldEndAllStreaming;
 
 
-        public override IEnumerable<SnoopableMember> Stream(SnoopableObject snoopableObject)
+        public IEnumerable<SnoopableMember> Stream(SnoopableObject snoopableObject)
         {
             var type = snoopableObject.Object.GetType();
             shouldEndAllStreaming = false;

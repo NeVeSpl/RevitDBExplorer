@@ -16,11 +16,12 @@ namespace RevitDBExplorer.Domain.DataModel
         private readonly SnoopableObject parent;
         private readonly Type declaringType;      
         private readonly IMemberAccessor memberAccessor;
+        private readonly Lazy<DocXml> documentation;
         private Exception valueAccessException;
         private string value;
         private string valueTypeName;
         private bool canBeSnooped;
-        private Lazy<DocXml> documentation;
+        
 
 
         public Kind MemberKind { get; }

@@ -7,10 +7,10 @@ using Autodesk.Revit.DB;
 
 namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
-    internal class PlanViewRange_GetOffset : MemberAccessorByType<PlanViewRange>, IHaveFactoryMethod
+    internal class PlanViewRange_GetOffset : MemberAccessorByType<PlanViewRange>, ICanCreateMemberAccessor
     {        
         protected override IEnumerable<LambdaExpression> HandledMembers { get { yield return (PlanViewRange x, PlanViewPlane p) => x.GetOffset(p); } }
-        IMemberAccessor IHaveFactoryMethod.Create() => new PlanViewRange_GetOffset();
+        IMemberAccessor ICanCreateMemberAccessor.Create() => new PlanViewRange_GetOffset();
 
 
         protected override bool CanBeSnoooped(Document document, PlanViewRange viewRange) => true;

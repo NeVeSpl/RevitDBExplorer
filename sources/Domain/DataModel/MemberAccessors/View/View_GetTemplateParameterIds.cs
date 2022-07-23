@@ -7,10 +7,10 @@ using Autodesk.Revit.DB;
 
 namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
-    internal class View_GetTemplateParameterIds : MemberAccessorByType<View>, IHaveFactoryMethod
+    internal class View_GetTemplateParameterIds : MemberAccessorByType<View>, ICanCreateMemberAccessor
     {        
         protected override IEnumerable<LambdaExpression> HandledMembers { get { yield return (View x) => x.GetTemplateParameterIds(); } }
-        IMemberAccessor IHaveFactoryMethod.Create() => new View_GetTemplateParameterIds();
+        IMemberAccessor ICanCreateMemberAccessor.Create() => new View_GetTemplateParameterIds();
 
       
         protected override bool CanBeSnoooped(Document document, View view)

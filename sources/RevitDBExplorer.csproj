@@ -120,11 +120,12 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Domain\FactoryOfFactories.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\Element\Element_Id.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\HostObject\HostObject_FindInserts.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\JoinGeometryUtils\IsCuttingElementInJoin.cs" />
-    <Compile Include="Domain\DataModel\Streams\JoinGeometryUtilsStream.cs" />
-    <Compile Include="Domain\DataModel\Streams\Base\SnoopableMemberTemplate.cs" />
+    <Compile Include="Domain\DataModel\MemberTemplates\JoinGeometryUtils_Templates.cs" />
+    <Compile Include="Domain\DataModel\MemberTemplates\Base\SnoopableMemberTemplate.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\AssetProperties\AssetProperties_Item.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\Curve\Curve_GetEndPoint.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\Document\Document_Close.cs" />
@@ -134,7 +135,7 @@
     <Compile Include="Domain\DataModel\MemberAccessors\Element\Element_GetPhaseStatus.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\Entity\Entity_Get.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\ForgeTypeId\ForgeTypeId_Clear.cs" />
-    <Compile Include="Domain\DataModel\MemberAccessors\IHaveFactoryMethod.cs" />
+    <Compile Include="Domain\DataModel\MemberAccessors\ICanCreateMemberAccessor.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\IMemberAccessor.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\MemberAccessorByFunc.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\MemberAccessorByType.cs" />
@@ -162,11 +163,9 @@
     <Compile Include="Domain\DataModel\MemberAccessors\View\View_GetFilterVisibility.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\View\View_GetFilterOverrides.cs" />
     <Compile Include="Domain\DataModel\SnoopableMember.cs" />
-    <Compile Include="Domain\DataModel\MemberAccessors\MemberAccessorFactory.cs" />
-    <Compile Include="Domain\DataModel\Streams\ForgeTypeIdStream.cs" />
-    <Compile Include="Domain\DataModel\Streams\Base\BaseStream.cs" />
-    <Compile Include="Domain\DataModel\Streams\PartUtilsStream.cs" />
-    <Compile Include="Domain\DataModel\Streams\SchemaTypeStream.cs" />
+    <Compile Include="Domain\DataModel\MemberTemplates\ForgeTypeId_Templates.cs" />
+    <Compile Include="Domain\DataModel\MemberTemplates\PartUtils_Templates.cs" />
+    <Compile Include="Domain\DataModel\MemberTemplates\Schema_Templates.cs" />
     <Compile Include="Domain\DataModel\Streams\SystemTypeStream.cs" />
     <Compile Include="Domain\DataModel\ValueTypes\Base\IHaveFactoryMethod.cs" />
     <Compile Include="Domain\DataModel\ValueTypes\Base\IValueType.cs" />

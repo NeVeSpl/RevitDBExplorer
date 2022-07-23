@@ -7,10 +7,10 @@ using Autodesk.Revit.DB;
 
 namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
-    internal class View_GetFilterOverrides : MemberAccessorByType<View>, IHaveFactoryMethod
+    internal class View_GetFilterOverrides : MemberAccessorByType<View>, ICanCreateMemberAccessor
     {     
         protected override IEnumerable<LambdaExpression> HandledMembers { get { yield return (View x, ElementId i) => x.GetFilterOverrides(i); } }
-        IMemberAccessor IHaveFactoryMethod.Create() => new View_GetFilterOverrides();
+        IMemberAccessor ICanCreateMemberAccessor.Create() => new View_GetFilterOverrides();
 
 
         protected override bool CanBeSnoooped(Document document, View view)
