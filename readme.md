@@ -2,17 +2,14 @@
 
 Yet another [RevitLookup](https://github.com/jeremytammik/RevitLookup) clone. RevitLookup is a mature and indispensable tool to work with Revit. But its code had many authors and architectural changes(reflection, modeless) through time which led to quite significant technical debt and lack of consistency. For worse, its UI is still based on WinForms ... When I was adding support for [modeless windows #93](https://github.com/jeremytammik/RevitLookup/pull/93) to RevitLookup , I knew that at some point in time I will rewrite it whole. So here we are, let me introduce you to RDBE, a completely rewritten RevitLookup with WPF UI and a few small improvements:
 
-- [possibility to query Revit database from UI](#possibility-to-query-Revit-database-from-UI)
-- [filterable list of properties and metohds](#filterable-list-of-properties-and-metohds)
-- [filterable tree of elements](#filterable-tree-of-elements)
-- [elements of Family, FamilySymbol, FamilyInstance are grouped by category in tree](#grouping)
-- [tooltips with Revit documentation](#tooltips-with-Revit-documentation)
-- [extensive support for ForgeTypeId](#extensive-support-for-ForgeTypeId)
-- [snooping all categories that may be used in a ParameterFilterElement](#snooping-all-categories-that-may-be-used-in-a-ParameterFilterElement)
-
+- [possibility to query Revit database from UI](#possibility-to-query-Revit-database)
+- [filterable tree of elements and list of properties and metohds](#filterable-tree-of-elements-and-list-of-properties-and-metohds)
+- [tooltips with Revit documentation](#tooltips-with-revit-documentation)
+- [extensive support for ForgeTypeId](#extensive-support-for-forgetypeid)
 - [better support for Revit Extensible Storage](#better-support-for-revit-extensible-storage)
 - [easier work with Element.Geometry](#easier-work-with-geometry)
 - [more data exposed](#more-data-exposed)
+- [elements of Family, FamilySymbol, FamilyInstance are grouped by category in tree](#grouping)
 
 ## Installation
 
@@ -20,7 +17,7 @@ Yet another [RevitLookup](https://github.com/jeremytammik/RevitLookup) clone. Re
 
 ## Features
 
-### possibility to query Revit database from UI
+### <a name="possibility-to-query-Revit-database"></a>possibility to query Revit database from UI - (RDQ - Revit database query)
 
 It is a very early version of this feature, but it can interpret words separated by `,` as element ids, Revit classes, and categories. It builds from them FilteredElementCollector (which syntax is available in a tooltip) and use it to query Revit database. The table with all available options/grammar is below the example.
 
@@ -41,19 +38,9 @@ e.g. `OST_Windows` - revit category | select elements of given category | .OfCat
 Queries are case-insensitive, you can query for many ids, but only for one category/class at a time. Matching for categories/classes is done in a fuzzy way, you do not have to be very precise with names, but this may lead to some false positive results.
 
 
-### filterable list of properties and metohds 
+### filterable tree of elements and list of properties and metohds
 
-![filterable-list-of-properties-and-metohds](documentation/examples/filterable-list-of-properties-and-metohds.gif)
-
-
-### filterable tree of elements
-
-![filterable-tree-of-elements](documentation/examples/filterable-tree-of-elements.gif)
-
-
-### <a name="grouping"></a>elements of Family, FamilySymbol, FamilyInstance are grouped by category in the tree
-
-![grouping](documentation/examples/grouping.png)
+![filterable-list-of-properties-and-metohds](documentation/examples/filterable-tree-of-elements-and-list-of-properties-and-metohds.gif)
 
 
 ### tooltips with Revit documentation
@@ -74,11 +61,6 @@ We all love (or hate) the ForgeTypeId, RDBE exposes all data related to a given 
 -  UnitUtils.GetAllUnits
 
 ![extensive-support-for-ForgeTypeId](documentation/examples/extensive-support-for-ForgeTypeId.gif)
-
-
-### snooping all categories that may be used in a ParameterFilterElement
-
-![snooping-all-categories-that-may-be-used-in-a-ParameterFilterElement](documentation/examples/snooping-all-categories-that-may-be-used-in-a-ParameterFilterElement.png)
 
 
 ### better support for Revit Extensible Storage
@@ -150,6 +132,11 @@ In comparison to RevitLookup, RDBE in addition gives access to:
 - SpecUtils
     - IsValidDataType
     - IsSpec
+
+
+### <a name="grouping"></a>elements of Family, FamilySymbol, FamilyInstance are grouped by category in the tree
+
+![grouping](documentation/examples/grouping.png)
 
 
 
