@@ -15,6 +15,14 @@ namespace RevitDBExplorer.Domain
                 ExternalExecutor.ExecuteInRevitContextAsync(x => { x.ActiveUIDocument?.ShowElements(new[] { element.Id }); });
             }
         }
+        public static bool IsShowInRevitAvailable(SnoopableObject snoopableObject)
+        {
+            if (snoopableObject.Object is Element)
+            {
+                return true;
+            }
+            return false;
+        }
 
         public static void Isolate(SnoopableObject snoopableObject)
         {
@@ -53,6 +61,31 @@ namespace RevitDBExplorer.Domain
 #endif
                 }
             }
+        }
+        public static bool IsSelectInRevitAvailable(SnoopableObject snoopableObject)
+        {
+            if (snoopableObject.Object is Element)
+            {
+                return true;
+            }
+            if (snoopableObject.Object is Curve { Reference: not null })
+            {
+                return true;
+            }
+            if (snoopableObject.Object is Edge { Reference: not null })
+            {
+                return true;
+            }
+            if (snoopableObject.Object is Face { Reference : not null})
+            {
+                return true;
+            }
+            if (snoopableObject.Object is Point { Reference: not null })
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }

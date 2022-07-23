@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -48,14 +49,33 @@ namespace RevitDBExplorer.ViewModels
             Count = items.Count();
             if (items?.Any() == true)
             {
-                if (name == nameof(FamilyInstance) || name == nameof(Element) || name == nameof(FamilySymbol))
+                List<SnoopableCategoryTreeVM> groupedItems = null;
+                if (name == nameof(FamilyInstance) || name == nameof(Element) || name == nameof(FamilySymbol) || name == nameof(IndependentTag))
                 {
-                    var groupedItems = items.GroupBy(x => (x.Object as Element).Category?.Id).Select(x => new SnoopableCategoryTreeVM(Labeler.GetLabelForCategory(x.Key), x, itemFilter)).ToList();
-                    Items = new ObservableCollection<TreeViewItemVM>(groupedItems.OrderBy(x => x.Name));
+                    groupedItems = items.GroupBy(x => (x.Object as Element).Category?.Id).Select(x => new SnoopableCategoryTreeVM(Labeler.GetLabelForCategory(x.Key), x, itemFilter)).ToList();
                 }
                 if (name == nameof(Family))
                 {
-                    var groupedItems = items.GroupBy(x => (x.Object as Family).FamilyCategoryId).Select(x => new SnoopableCategoryTreeVM(Labeler.GetLabelForCategory(x.Key), x, itemFilter)).ToList();
+                    groupedItems = items.GroupBy(x => (x.Object as Family).FamilyCategoryId).Select(x => new SnoopableCategoryTreeVM(Labeler.GetLabelForCategory(x.Key), x, itemFilter)).ToList();
+                }
+                if (name == nameof(DetailLine))
+                {
+                    groupedItems = items.GroupBy<SnoopableObject, Element>(x => (x.Object as DetailLine).LineStyle, ElementEqualityComparer.Instance).Select(x => new SnoopableCategoryTreeVM(x.Key.Name, x, itemFilter)).ToList();
+                }
+                if (name == nameof(Dimension))
+                {
+                    groupedItems = items.GroupBy<SnoopableObject, Element>(x => (x.Object as Dimension).DimensionType, ElementEqualityComparer.Instance).Select(x => new SnoopableCategoryTreeVM(x.Key.Name, x, itemFilter)).ToList();
+                }
+                if (name == nameof(Wall))
+                {
+                    groupedItems = items.GroupBy<SnoopableObject, Element>(x => (x.Object as Wall).WallType, ElementEqualityComparer.Instance).Select(x => new SnoopableCategoryTreeVM(x.Key.Name, x, itemFilter)).ToList();
+                }
+                if (name == nameof(Floor))
+                {
+                    groupedItems = items.GroupBy<SnoopableObject, Element>(x => (x.Object as Floor).FloorType, ElementEqualityComparer.Instance).Select(x => new SnoopableCategoryTreeVM(x.Key.Name, x, itemFilter)).ToList();
+                }
+                if (groupedItems != null)
+                {                    
                     Items = new ObservableCollection<TreeViewItemVM>(groupedItems.OrderBy(x => x.Name));
                 }
                 if (Items == null)                
@@ -84,5 +104,34 @@ namespace RevitDBExplorer.ViewModels
                 Count = count + collectionView.OfType<SnoopableObjectTreeVM>().Count(); 
             }
         }            
+    }
+
+    class ElementEqualityComparer : IEqualityComparer<Element>
+    {
+        public static readonly ElementEqualityComparer Instance = new ElementEqualityComparer();
+
+        public bool Equals(Element x, Element y)
+        {
+            return x?.Id?.Equals(y?.Id) ?? true;
+        }
+
+        public int GetHashCode(Element obj)
+        {
+            return obj?.Id?.GetHashCode() ?? -1;
+        }
+    }
+    class CategoryEqualityComparer : IEqualityComparer<Category>
+    {
+        public static readonly CategoryEqualityComparer Instance = new CategoryEqualityComparer();
+
+        public bool Equals(Category x, Category y)
+        {
+            return x?.Id?.IntegerValue.Equals(y?.Id?.IntegerValue) ?? true;
+        }
+
+        public int GetHashCode(Category obj)
+        {
+            return obj?.Id?.IntegerValue.GetHashCode() ?? -1;
+        }
     }
 }
