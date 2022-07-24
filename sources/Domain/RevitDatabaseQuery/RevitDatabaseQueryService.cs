@@ -18,17 +18,17 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
 
         public static Result Parse(Document document, string query)
         {
-            var commands = QueryParser.Parse(document, query);
+            var commands = QueryParser.Parse(query);
+            commands.SelectMany(x => x.MatchedArguments).OfType<BuiltInParameterMatch>().ToList().ForEach(x => x.ResolveStorageType(document));
 
             var t1 = CreateCollector(document, commands);
             var t2 = WhereElementIsElementTypeOrNot(t1, commands);
             var t3 = WherePassesElementIdSetFilter(t2, commands);
             var t4 = OfClass(t3, commands);
-            var t5 = OfCategory(t4, commands);
-            var t6 = OfName(t5, commands);
-            var t7 = OfParameter(t6, commands, document);
+            var t5 = OfCategory(t4, commands);      
+            var t6 = OfParameter(t5, commands, document);
 
-            return new(t7.Collector, t7.CollectorSyntax, commands);
+            return new(t6.Collector, t6.CollectorSyntax, commands);
         }
 
 
@@ -75,7 +75,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
         }
         private static Token WherePassesElementIdSetFilter(Token token, List<Command> commands)
         {
-            var ids = commands.SelectMany(x => x.MatchedArguments).Where(x => x.IsElementId).OfType<LookupResult<ElementId>>().ToList();
+            var ids = commands.SelectMany(x => x.MatchedArguments).Where(x => x.IsElementId).OfType<ElementIdMatch>().ToList();
             if (ids.Any())
             {
                 var filter = new ElementIdSetFilter(ids.Select(x => x.Value).ToList());
@@ -87,7 +87,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
         }
         private static Token OfClass(Token token, List<Command> commands)
         {
-            var types = commands.SelectMany(x => x.MatchedArguments).Where(x => x.IsClass).OfType<LookupResult<Type>>().ToList();
+            var types = commands.SelectMany(x => x.MatchedArguments).Where(x => x.IsClass).OfType<TypeMatch>().ToList();
             if (types.Count == 1)
             {
                 var type = types.First();
@@ -124,39 +124,8 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
             return token;
         }
 
-        private static readonly List<BuiltInParameter> NameLikeParameters = new List<BuiltInParameter>()
-        {
-            BuiltInParameter.ALL_MODEL_TYPE_NAME,
-            BuiltInParameter.ALL_MODEL_MARK,
-            BuiltInParameter.ELEM_FAMILY_AND_TYPE_PARAM,
-            BuiltInParameter.DATUM_TEXT
-        };
-        private static Token OfName(Token token, List<Command> commands)
-        {
-            var names = commands.Where(x => x.Type == CmdType.NameParam).Select(x => x.Argument).Where(x => !String.IsNullOrEmpty(x)).ToList();
-            if (names.Any())
-            {
-                var rules = new List<FilterRule>();
-                foreach (var name in names)
-                {
-                    foreach (var parameter in NameLikeParameters)
-                    {
-#if R2021 || R2022
-                        rules.Add(ParameterFilterRuleFactory.CreateContainsRule(new ElementId(parameter), name, false));
-#endif
-#if R2023
-                        rules.Add(ParameterFilterRuleFactory.CreateContainsRule(new ElementId(parameter), name));
-#endif
-                    }
-                }
+        
 
-                var or = new LogicalOrFilter(rules.Select(x => new ElementParameterFilter(x, false)).ToList<ElementFilter>());
-                var c = token.Collector.WherePasses(or);
-                var s = token.CollectorSyntax + $".WherePasses(Name = " + String.Join(", ", names.Select(x => $"{x}")) + ")";
-                return new Token(c, s);
-            }
-            return token;
-        }
         private static Token OfParameter(Token token, List<Command> commands, Document document)
         {
             var parameterCmds = commands.Where(x => x.Type == CmdType.Parameter).ToList();
@@ -167,13 +136,12 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
                 foreach (var parameterCmd in parameterCmds)
                 {
                     var rules = new List<FilterRule>();
-                    foreach (var argument in parameterCmd.MatchedArguments.OfType<LookupResult<ParameterSpec>>())
+                    foreach (var argument in parameterCmd.MatchedArguments.OfType<BuiltInParameterMatch>())
                     {                        
-                        var builtInParameter = argument.Value.BuiltInParameter;
+                        var builtInParameter = argument.Value;
                         var parameter = new ElementId(builtInParameter);
-                        var storageType = argument.Value.StorageType;
-                        var argAsInt = parameterCmd.Operator.ArgumentAsInt;
-                       
+                        var storageType = argument.StorageType;
+                        var argAsInt = parameterCmd.Operator.ArgumentAsInt;                       
                         var argAsDouble = parameterCmd.Operator.ArgumentAsDouble;
                         var argAsString = parameterCmd.Operator.ArgumentAsString;
 
@@ -285,6 +253,11 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
                         if (rule != null)
                         {
                             rules.Add(rule);
+                        }
+                        if (parameterCmd.Operator.Type == OperatorType.Exists)
+                        {
+                            rules.Add(ParameterFilterRuleFactory.CreateHasValueParameterRule(parameter));
+                            rules.Add(ParameterFilterRuleFactory.CreateHasNoValueParameterRule(parameter));
                         }
                     }
                     if (rules.Any())

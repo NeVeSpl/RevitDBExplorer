@@ -10,8 +10,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
 {
     internal enum CmdType
     {
-        ActiveView,
-        View,
+        ActiveView,       
         ElementId,
         ElementType,
         NotElementType,
@@ -26,15 +25,15 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
 
     internal class QueryParser
     {
-        public static List<Command> Parse(Document document, string query)
+        public static List<Command> Parse(string query)
         {
             var splitted = query.Trim().Split(new[] { ';', ',' }, System.StringSplitOptions.RemoveEmptyEntries);
-            var commands = splitted.Select(c => new Command(document, c)).ToList();
+            var commands = splitted.Select(c => new Command(c)).ToList();
 
             if (!DoesContainQuickFilter(commands))
             {
-                commands.Insert(0, new Command(document, "type"));
-                commands.Insert(0, new Command(document, "element"));
+                commands.Insert(0, new Command("type"));
+                commands.Insert(0, new Command("element"));
             }
 
             return commands;
@@ -69,12 +68,12 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
     {      
         public CmdType Type { get; init; } = CmdType.WhoKnows;
         public string Text { get; init; } = "";
-        public string Argument { get; init; } = "";
+        private string Argument { get; init; } = "";
         public IEnumerable<ILookupResult> MatchedArguments { get; init; } = Enumerable.Empty<ILookupResult>();
         public OperatorWithArgument Operator { get; init; } = new OperatorWithArgument();        
 
 
-        public Command(Document document, string cmdText)
+        public Command(string cmdText)
         {
             Text = cmdText.Trim();
             var splittedByClassifier = Text.Split(new[] { ':' }, 2, System.StringSplitOptions.RemoveEmptyEntries);
@@ -115,9 +114,13 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
                 {
                     Argument = Argument.Substring(0, Argument.IndexOf(Operator.Symbol));
                 }
+                else
+                {
+                    Type = CmdType.Incorrect;
+                }
             }
 
-            MatchedArguments = ParseArgument(document, Type, Argument);
+            MatchedArguments = ParseArgument(Type, Argument);
 
             if (MatchedArguments.IsEmpty())
             {
@@ -138,9 +141,29 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
                     if (MatchedArguments.All(x => x.IsCategory)) Type = CmdType.Category;
                     if (MatchedArguments.All(x => x.IsElementId)) Type = CmdType.ElementId;
                 }
-            }                 
-        }        
-
+            }     
+            
+            if (Type == CmdType.NameParam)
+            {
+                if (string.IsNullOrEmpty(Argument))
+                {
+                    Type = CmdType.Incorrect;
+                }
+                else
+                {
+                    Type = CmdType.Parameter;
+                    MatchedArguments = NameLikeParameters.Select(x => new BuiltInParameterMatch(x, 1)).ToList();
+                    Operator = Operators.Parse($"=%{Argument}%");
+                }
+            }
+        }
+        private static readonly List<BuiltInParameter> NameLikeParameters = new List<BuiltInParameter>()
+        {
+            BuiltInParameter.ALL_MODEL_TYPE_NAME,
+            BuiltInParameter.ALL_MODEL_MARK,
+            BuiltInParameter.ELEM_FAMILY_AND_TYPE_PARAM,
+            BuiltInParameter.DATUM_TEXT
+        };
 
         private CmdType InterpretCommandType(string strType)
         {
@@ -168,9 +191,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
         {
             var needle = strType.ToLower().RemoveWhitespace();
             switch (needle)
-            {
-                //case "view":
-                //   return CmdType.View;
+            {                
                 case "id":
                 case "ids":
                     return CmdType.ElementId;
@@ -182,15 +203,11 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
                 case "typeof":
                     return CmdType.Class;
                 case "name":
-                    return CmdType.NameParam;
-                //case "par":
-                //case "param":
-                //case "parameter":
-                //    return CmdType.Parameter;
+                    return CmdType.NameParam;   
             }
             return CmdType.WhoKnows;
         }
-        private IEnumerable<ILookupResult> ParseArgument(Document document, CmdType cmdTpe, string argument)
+        private IEnumerable<ILookupResult> ParseArgument(CmdType cmdTpe, string argument)
         {
             IEnumerable<ILookupResult> result = null;
             switch (cmdTpe)
@@ -199,25 +216,23 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
                 case CmdType.ElementType:
                 case CmdType.NotElementType:
                     // do not have arguments
-                    break;
-                case CmdType.View:
-                    break;
+                    break;               
                 case CmdType.ElementId:
-                    result = FuzzySearchEngine.Lookup(document, argument, LookupFor.ElementId).ToList();
+                    result = FuzzySearchEngine.Lookup(argument, LookupFor.ElementId).ToList();
                     break; 
                 case CmdType.Category:
-                    result = FuzzySearchEngine.Lookup(document, argument, LookupFor.Category).ToList();
+                    result = FuzzySearchEngine.Lookup(argument, LookupFor.Category).ToList();
                     break;
                 case CmdType.Class:
-                    result = FuzzySearchEngine.Lookup(document, argument, LookupFor.Class).ToList();
+                    result = FuzzySearchEngine.Lookup(argument, LookupFor.Class).ToList();
                     break;
                 case CmdType.NameParam:
                     break;
                 case CmdType.Parameter:                    
-                    result = FuzzySearchEngine.Lookup(document, argument, LookupFor.Parameter).ToList();
+                    result = FuzzySearchEngine.Lookup(argument, LookupFor.Parameter).ToList();
                     break;
                 case CmdType.WhoKnows:
-                    result = FuzzySearchEngine.Lookup(document, argument, LookupFor.ElementId | LookupFor.Category | LookupFor.Class).ToList();
+                    result = FuzzySearchEngine.Lookup(argument, LookupFor.ElementId | LookupFor.Category | LookupFor.Class).ToList();
                     break;
                 default:
                     throw new NotImplementedException();

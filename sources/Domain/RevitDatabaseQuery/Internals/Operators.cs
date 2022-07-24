@@ -1,15 +1,17 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using Autodesk.Revit.DB;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
 namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Internals
 {
-    internal enum OperatorType { None, Equals, Greater, GreaterOrEqual, Less, LessOrEqual, HasNoValue, HasValue, NotEquals }
+    internal enum OperatorType { None, Equals, Greater, GreaterOrEqual, Less, LessOrEqual, HasNoValue, HasValue, NotEquals, Exists }
 
 
     internal static class Operators
     {
-        private static readonly Operator None = new(OperatorType.None, null);
+        public static readonly Operator None = new(OperatorType.None, "");
         private static readonly Operator[] operators = new[]
         {
             new Operator(OperatorType.NotEquals, "!="),
@@ -18,6 +20,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Internals
             new Operator(OperatorType.LessOrEqual, "<="),
             new Operator(OperatorType.HasNoValue, "??"),
             new Operator(OperatorType.HasValue, "!!"),
+            new Operator(OperatorType.Exists, "?!"),
             new Operator(OperatorType.Equals, "="),
             new Operator(OperatorType.Greater, ">"),            
             new Operator(OperatorType.Less, "<"), 
@@ -35,13 +38,13 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Internals
         {            
             return GetOperator(text) != None;
         }
-        public static Operator GetOperator(string text)
+        internal static Operator GetOperator(string text)
         {
             foreach (var op in operators)
             {
                 if (op.Type != OperatorType.None)
                 {
-                    if (text.IndexOf(op.Symbol) >= 0)
+                    if (text.IndexOf(op.Symbol, System.StringComparison.Ordinal) >= 0)
                     {
                         return op;
                     }
@@ -61,10 +64,8 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Internals
             int.TryParse(argument, out int intArg);
             double.TryParse(argument, out double doubleArg);
 
-            var op = new OperatorWithArgument()
-            {
-                Type = @operator.Type,
-                Symbol = @operator.Symbol,
+            var op = new OperatorWithArgument(@operator)
+            {             
                 ArgumentAsString = argument.Trim(),
                 ArgumentAsDouble = doubleArg,
                 ArgumentAsInt = intArg,  
@@ -89,10 +90,39 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Internals
     }
 
 
-    internal class OperatorWithArgument : Operator
+    internal class OperatorWithArgument 
     {        
+        private readonly Operator @operator;
+
+        public OperatorType Type => @operator.Type;
+        public string Symbol => @operator.Symbol;
         public string ArgumentAsString { get; init; } = "";
         public double ArgumentAsDouble { get; init; } = double.NaN;
         public int ArgumentAsInt { get; init; } = 0;
+
+
+        public OperatorWithArgument(Operator @operator = null)
+        {
+            this.@operator = @operator ?? Operators.None;
+        }
+
+
+        public string ToString(StorageType storageType)
+        {
+            if ((Type == OperatorType.HasValue) || (Type == OperatorType.HasNoValue) || (Type == OperatorType.Exists))
+            {
+                return Symbol;
+            }
+
+            string arg = storageType switch
+            {
+                StorageType.String => ArgumentAsString,
+                StorageType.Double => ArgumentAsDouble.ToString(),
+                StorageType.Integer => ArgumentAsInt.ToString(),
+                StorageType.ElementId => ArgumentAsInt.ToString(),
+                _ => throw new NotImplementedException()
+            };            
+            return $"{Symbol} {arg}";
+        }
     }
 }

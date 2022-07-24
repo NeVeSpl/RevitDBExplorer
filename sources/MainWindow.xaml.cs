@@ -9,6 +9,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
+using System.Windows.Interop;
 using System.Windows.Threading;
 using Autodesk.Revit.UI;
 using RevitDBExplorer.Domain;
@@ -398,7 +399,7 @@ namespace RevitDBExplorer
             if (snoopableObject is not null)
             {
                 var window = new MainWindow(new[] { snoopableObject });
-                window.Owner = this;
+                new WindowInteropHelper(window).Owner = Application.RevitWindowHandle;
                 window.Show();
             }
         }

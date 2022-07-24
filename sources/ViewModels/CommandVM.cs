@@ -128,31 +128,28 @@ namespace RevitDBExplorer.ViewModels
                     FilterName = ".OfCategory()";
                     hexColor = "#DEEBF6";
                     break;
-                case Domain.RevitDatabaseQuery.CmdType.Class:
+                case CmdType.Class:
                     Name = args;
                     FilterName = ".OfClass()";
                     hexColor = "#E2EFD9";
-                    break;
-                case Domain.RevitDatabaseQuery.CmdType.NameParam:
-                    Name = $"name: {command.Argument}";
-                    FilterName = ".WherePasses(new ElementParameterFilter())";
-                    hexColor = "#EDEDED";
-                    break;
+                    break;                
                 case CmdType.Parameter:
-                    string argsForParam = String.Join(", ", command.MatchedArguments.Take(2).Select(x => x.Name));
+                    var firstArg = command.MatchedArguments.OfType<BuiltInParameterMatch>().First();
+
+                    string argsForParam = String.Join(", ", command.MatchedArguments.Take(1).Select(x => x.Name));
                     string count = "";
-                    if (command.MatchedArguments.Count() > 2)
+                    if (command.MatchedArguments.Count() > 1)
                     {
-                        count = $" [+{command.MatchedArguments.Count() - 2}] ";
+                        count = $" [+{command.MatchedArguments.Count() - 1} more]";
                     }
                     
-                    Name = $"{argsForParam}{count} {command.Operator.Symbol} {command.Operator.ArgumentAsString}";
+                    Name = $"{argsForParam}{count} {command.Operator.ToString(firstArg.StorageType)}";
                     FilterName = ".WherePasses(new ElementParameterFilter())";
                     hexColor = "#EDEDED";
                     break;
                 case CmdType.Incorrect:
                     Name = command.Text;
-                    FilterName = "could not recognize that phrase";
+                    FilterName = "could not recognize phrase";
                     hexColor = "#FF0000";
                     Foreground = Brushes.White;
                     break;
