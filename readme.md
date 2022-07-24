@@ -17,25 +17,52 @@ Yet another [RevitLookup](https://github.com/jeremytammik/RevitLookup) clone. Re
 
 ## Features
 
-### <a name="possibility-to-query-Revit-database"></a>query Revit database (RDQ) from UI with RQL - Revit query language
+### <a name="possibility-to-query-Revit-database"></a>query Revit database from UI (RDQ) with RQL (Revit query language)
 
-It is a very early version of this feature, but it can interpret words separated by `,` as element ids, Revit classes, and categories. It builds from them FilteredElementCollector (which syntax is available in a tooltip) and use it to query Revit database. The table with all available options/grammar is below the example.
+It is a very early version of this feature, but it can interpret words separated by `,` as element ids, Revit classes, categories and build-in parameters. It builds from them FilteredElementCollector and uses it to query the Revit database. The table with a description of RQL is below the example.
 
 ![possibility-to-query-Revit-database-from-UI](documentation/examples/rdq-revit-database-query-with-rql-revit-query-language.gif)
+
+#### RQL - Revit query language
  
-keywords/text | Interpretation | translates to in Revit Api
+input/keywords | Interpretation | translates to in Revit Api
 ----------|------------| ----
 `,`, `;` | seperates phrases/commands
-`:` | reserved, not used right now
+`:` | [classifier](#classifiers)
 `active`, `active view` | select elements from active view | FilteredElementCollector(doc, doc.ActiveView.Id)
-`type`, `element type`  | select only types | .WhereElementIsElementType()
-`element`, `not element type` | select only elements | .WhereElementIsNotElementType()
-e.g. `123456` - number | select elements with given ids  | var ids = new [] {new ElementId(123456)} </br>FilteredElementCollector(document, ids)
-e.g. `Wall` - revit class | select elements of given class | .OfClass(typeof(Wall))
-e.g. `OST_Windows` - revit category | select elements of given category | .OfCategory(BuiltInCategory.OST_Windows)
+`type`, `element type`, `not element`  | select only types | .WhereElementIsElementType()
+`element`, `not element type`, `not type` | select only elements | .WhereElementIsNotElementType()
+e.g. `123456` - number | select elements with given ids  | new ElementIdSetFilter(new [] {new ElementId(123456)})
+e.g. `Wall` - revit class | select elements of given class | .OfClass(typeof(Wall)) or new ElementMulticlassFilter()
+e.g. `OST_Windows` - revit category | select elements of given category | .OfCategory(BuiltInCategory.OST_Windows) or new ElementMulticategoryFilter()
+`param = walue` | a phrase that uses [any of the operators](#operators) is recognised as a search for parameter| new ElementParameterFilter()
 `foo` - any not recognized text | serach for given text in parameters : Name, Mark |BuiltInParameter.ALL_MODEL_TYPE_NAME, BuiltInParameter.ALL_MODEL_MARK, BuiltInParameter.ELEM_FAMILY_AND_TYPE_PARAM
 
-Queries are case-insensitive, you can query for many ids, but only for one category/class at a time. Matching for categories/classes is done in a fuzzy way, you do not have to be very precise with names, but this may lead to some false positive results.
+Queries are case-insensitive. Matching for categories/classes/parameters is done in a fuzzy way, you do not have to be very precise with names, but this may lead to some false positive results. 
+
+Parameters searching is only available for BuiltInParameters (for now). A value you are searching for is not parsed/interpreted (yet), which means that it uses internal Revit storage units/form, not Revit UI units. For parameters that have StorageType.String, you can do wildcard search by using %, * at the beginning and/or end of searching text e.g. Mark = *foo%
+
+<a name="classifiers"></a>
+
+classifier | meaning
+-----------|-------
+`id:[text]`, `ids:[text]` | interpret `[text]` as ElementId
+`category:[text]`, `cat:[text]` | interpret `[text]` as BuiltInCategory
+`type:[text]`, `class:[text]`, `typeof:[text]` | interpret `[text]` as element type/class
+`namr:[text]` | 
+
+<a name="operators"></a>
+
+operator | meaning | example
+-|-|-
+`!=`, `<>` | NotEquals | `Length != 0`
+`>=` | GreaterOrEqual
+`<=` | LessOrEqual
+`??` | HasNoValue, parameter exists but has no value | `Length ??`
+`!!` | HasValue, paramater exists and has value | `Length !!`
+`=` | Equals
+`>` | Greater
+`<` | Less
 
 
 ### filterable tree of elements and list of properties and metohds
