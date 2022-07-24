@@ -9,6 +9,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
+using System.Windows.Threading;
 using Autodesk.Revit.UI;
 using RevitDBExplorer.Domain;
 using RevitDBExplorer.Domain.DataModel;
@@ -449,13 +450,20 @@ namespace RevitDBExplorer
                 e.Handled = true;
             }
         }
+
+        private DispatcherTimer window_SizeChanged_Debouncer;
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
-        {            
+        {
+            window_SizeChanged_Debouncer = window_SizeChanged_Debouncer.Debounce(TimeSpan.FromSeconds(1), SaveUserSettings);               
+        }
+        private void SaveUserSettings()
+        {
             AppSettings.Default.MainWindowHeight = Height;
             AppSettings.Default.MainWindowWidth = Width;
             AppSettings.Default.FirstColumnWidth = cFirstColumnColumnDefinition.Width.Value;
-            AppSettings.Default.Save();           
+            AppSettings.Default.Save();
         }
+
 
         private static void ShowErrorMsg(string title, Exception ex)
         {
@@ -479,8 +487,6 @@ namespace RevitDBExplorer
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        #endregion
-
-        
+        #endregion        
     }
 }

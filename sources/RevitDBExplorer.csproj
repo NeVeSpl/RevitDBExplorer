@@ -247,6 +247,7 @@
     <Compile Include="Extensions\System\StringExtensions.cs" />
     <Compile Include="Extensions\System\Threading.Tasks\TaskExtensions.cs" />
     <Compile Include="Extensions\System\VersionExtensions.cs" />
+    <Compile Include="Extensions\System\Windows.Threading\DispatcherTimerExtensions.cs" />
     <Compile Include="Properties\AppSettings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>

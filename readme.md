@@ -17,7 +17,7 @@ Yet another [RevitLookup](https://github.com/jeremytammik/RevitLookup) clone. Re
 
 ## Features
 
-### <a name="possibility-to-query-Revit-database"></a>query Revit database from UI (RDQ) with RQL (Revit query language)
+### <a name="possibility-to-query-Revit-database"></a>query Revit database (RDQ) from UI with RQL (Revit query language)
 
 It is a very early version of this feature, but it can interpret words separated by `,` as element ids, Revit classes, categories and build-in parameters. It builds from them FilteredElementCollector and uses it to query Revit database. The table with a description of RQL is below the example.
 
@@ -40,7 +40,7 @@ e.g. `OST_Windows` - revit category | select elements of given category | .OfCat
 
 Queries are case-insensitive. Matching for categories/classes/parameters is done in a fuzzy way, you do not have to be very precise with names, but this may lead to some false positive results. 
 
-Parameters searching is only available for BuiltInParameters (for now). A value you are searching for is not parsed/interpreted (yet), which means that it uses internal Revit storage units/form, not Revit UI units. For parameters that have StorageType.String, you can do wildcard search by using %, * at the beginning and/or end of searching text e.g. `Mark = *foo%`
+Parameters searching is only available for BuiltInParameters (for now). A value you are searching for is not parsed/interpreted (yet), which means that it uses internal Revit storage units/form, not Revit UI units. For parameters that have StorageType.String, you can do wildcard search by using `%` or  `*` at the beginning and/or end of searching text e.g. `Mark = *foo%`
 
 <a name="classifiers"></a>
 
@@ -116,9 +116,9 @@ In comparison to RevitLookup, RDBE in addition gives access to:
 - FormatOptions
     - GetValidSymbols
     - CanHaveSymbol
-- HostObject
+- **HostObject**
     - **FindInserts**
-- JoinGeometryUtils
+- **JoinGeometryUtils**
     - **GetJoinedElements**
     - **IsCuttingElementInJoin** 
 - LabelUtils
