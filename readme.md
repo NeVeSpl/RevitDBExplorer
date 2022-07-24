@@ -2,7 +2,7 @@
 
 Yet another [RevitLookup](https://github.com/jeremytammik/RevitLookup) clone. RevitLookup is a mature and indispensable tool to work with Revit. But its code had many authors and architectural changes(reflection, modeless) through time which led to quite significant technical debt and lack of consistency. For worse, its UI is still based on WinForms ... When I was adding support for [modeless windows #93](https://github.com/jeremytammik/RevitLookup/pull/93) to RevitLookup , I knew that at some point in time I will rewrite it whole. So here we are, let me introduce you to RDBE, a completely rewritten RevitLookup with WPF UI and a few small improvements:
 
-- [possibility to query Revit database from UI](#possibility-to-query-Revit-database)
+- [query Revit database from UI](#possibility-to-query-Revit-database)
 - [filterable tree of elements and list of properties and metohds](#filterable-tree-of-elements-and-list-of-properties-and-metohds)
 - [tooltips with Revit documentation](#tooltips-with-revit-documentation)
 - [extensive support for ForgeTypeId](#extensive-support-for-forgetypeid)
@@ -17,11 +17,11 @@ Yet another [RevitLookup](https://github.com/jeremytammik/RevitLookup) clone. Re
 
 ## Features
 
-### <a name="possibility-to-query-Revit-database"></a>possibility to query Revit database from UI - (RDQ - Revit database query)
+### <a name="possibility-to-query-Revit-database"></a>query Revit database (RDQ) from UI with RQL - Revit query language
 
 It is a very early version of this feature, but it can interpret words separated by `,` as element ids, Revit classes, and categories. It builds from them FilteredElementCollector (which syntax is available in a tooltip) and use it to query Revit database. The table with all available options/grammar is below the example.
 
-![possibility-to-query-Revit-database-from-UI](documentation/examples/possibility-to-query-Revit-database-from-UI.gif)
+![possibility-to-query-Revit-database-from-UI](documentation/examples/rdq-revit-database-query-with-rql-revit-query-language.gif)
  
 keywords/text | Interpretation | translates to in Revit Api
 ----------|------------| ----
