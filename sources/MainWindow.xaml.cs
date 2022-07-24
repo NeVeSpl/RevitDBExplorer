@@ -139,11 +139,23 @@ namespace RevitDBExplorer
             this.DataContext = this;
             var ver = GetType().Assembly.GetName().Version;
             var revit_ver = typeof(Autodesk.Revit.DB.Element).Assembly.GetName().Version;
-            Title += $" 20{revit_ver.Major} - v{ver.Major}.{ver.Minor}.{ver.Build}";            
+            Title += $" 20{revit_ver.Major} - {ver.ToGitHubTag()}";
+
+            CheckIfNewVersionIsAvailable(ver).Forget();
         }
         public MainWindow(IList<SnoopableObject> objects) : this()
         {
             PopulateTreeView(objects);
+        }
+
+
+        private async Task CheckIfNewVersionIsAvailable(Version ver)
+        {
+            var (isNew, link) = await VersionChecker.Check(ver);
+            if (isNew) 
+            {
+                Title += $" - (a new version is available: {link})";
+            }
         }
 
 
@@ -430,6 +442,13 @@ namespace RevitDBExplorer
                 Close();
             }
         }
+        private void TextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)
+            {
+                e.Handled = true;
+            }
+        }
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
         {            
             AppSettings.Default.MainWindowHeight = Height;
@@ -460,7 +479,8 @@ namespace RevitDBExplorer
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        #endregion      
+        #endregion
 
+        
     }
 }

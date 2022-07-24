@@ -108,7 +108,7 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>            
             
-            <TextBox Text="{Binding DatabaseQuery, Mode=TwoWay, Delay=1000, UpdateSourceTrigger=PropertyChanged}" Padding="1 2"  ToolTip="{Binding DatabaseQueryToolTip}" ToolTipService.ShowDuration="50000"   >
+            <TextBox Text="{Binding DatabaseQuery, Mode=TwoWay, Delay=1000, UpdateSourceTrigger=PropertyChanged}" Padding="1 2"  ToolTip="{Binding DatabaseQueryToolTip}" ToolTipService.ShowDuration="50000" KeyDown="TextBox_KeyDown"  >
                 <TextBox.Style>
                     <!--source: https://stackoverflow.com/a/33539781/1147478-->
                     <Style TargetType="TextBox" xmlns:sys="clr-namespace:System;assembly=mscorlib">
@@ -223,7 +223,7 @@
             </ItemsControl>   
         </Grid>
 
-        <TextBox Grid.Row="2" Grid.Column="0" Margin="0 0 2 3" Padding="1 2" Text="{Binding TreeItemsFilterPhrase, Mode=TwoWay, Delay=500, UpdateSourceTrigger=PropertyChanged}">
+        <TextBox Grid.Row="2" Grid.Column="0" Margin="0 0 2 3" Padding="1 2" Text="{Binding TreeItemsFilterPhrase, Mode=TwoWay, Delay=500, UpdateSourceTrigger=PropertyChanged}" KeyDown="TextBox_KeyDown">
             <TextBox.Style>
                 <!--source: https://stackoverflow.com/a/33539781/1147478-->
                 <Style TargetType="TextBox" xmlns:sys="clr-namespace:System;assembly=mscorlib">
@@ -255,7 +255,7 @@
                 <ColumnDefinition Width="auto"/>
             </Grid.ColumnDefinitions>
 
-            <TextBox Text="{Binding ListItemsFilterPhrase, Mode=TwoWay, Delay=200, UpdateSourceTrigger=PropertyChanged}"  Padding="1 2"   >
+            <TextBox Text="{Binding ListItemsFilterPhrase, Mode=TwoWay, Delay=200, UpdateSourceTrigger=PropertyChanged}"  Padding="1 2"  KeyDown="TextBox_KeyDown">
                 <TextBox.Style>
                     <!--source: https://stackoverflow.com/a/33539781/1147478-->
                     <Style TargetType="TextBox" xmlns:sys="clr-namespace:System;assembly=mscorlib">

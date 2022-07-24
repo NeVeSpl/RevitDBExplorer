@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -103,35 +102,36 @@ namespace RevitDBExplorer.ViewModels
                 }
                 Count = count + collectionView.OfType<SnoopableObjectTreeVM>().Count(); 
             }
-        }            
-    }
+        }   
+        
 
-    class ElementEqualityComparer : IEqualityComparer<Element>
-    {
-        public static readonly ElementEqualityComparer Instance = new();
-
-        public bool Equals(Element x, Element y)
+        class ElementEqualityComparer : IEqualityComparer<Element>
         {
-            return x?.Id?.Equals(y?.Id) ?? true;
-        }
+            public static readonly ElementEqualityComparer Instance = new();
 
-        public int GetHashCode(Element obj)
-        {
-            return obj?.Id?.GetHashCode() ?? -1;
-        }
-    }
-    class CategoryEqualityComparer : IEqualityComparer<Category>
-    {
-        public static readonly CategoryEqualityComparer Instance = new();
+            public bool Equals(Element x, Element y)
+            {
+                return x?.Id?.Equals(y?.Id) ?? true;
+            }
 
-        public bool Equals(Category x, Category y)
-        {
-            return x?.Id?.IntegerValue.Equals(y?.Id?.IntegerValue) ?? true;
+            public int GetHashCode(Element obj)
+            {
+                return obj?.Id?.GetHashCode() ?? -1;
+            }
         }
+        class CategoryEqualityComparer : IEqualityComparer<Category>
+        {
+            public static readonly CategoryEqualityComparer Instance = new();
 
-        public int GetHashCode(Category obj)
-        {
-            return obj?.Id?.IntegerValue.GetHashCode() ?? -1;
+            public bool Equals(Category x, Category y)
+            {
+                return x?.Id?.IntegerValue.Equals(y?.Id?.IntegerValue) ?? true;
+            }
+
+            public int GetHashCode(Category obj)
+            {
+                return obj?.Id?.IntegerValue.GetHashCode() ?? -1;
+            }
         }
-    }
+    }    
 }

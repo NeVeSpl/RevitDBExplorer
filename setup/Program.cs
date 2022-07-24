@@ -45,7 +45,23 @@ namespace SetupBuilder
             Compiler.BuildMsi(project);
         }
 
-        readonly static string[] files = new string[] { "DocXml.dll", "RevitDBExplorer.dll", "SimMetrics.Net.dll" };
+        readonly static string[] files = new string[]
+        { 
+            "DocXml.dll",
+            "RevitDBExplorer.dll",
+            "RevitDBExplorer.dll.config",
+            "SimMetrics.Net.dll",
+            "Microsoft.Bcl.AsyncInterfaces.dll",
+            "System.Buffers.dll",
+            "System.Memory.dll",
+            "System.Net.Http.Json.dll",
+            "System.Numerics.Vectors.dll",
+            "System.Runtime.CompilerServices.Unsafe.dll",
+            "System.Text.Encodings.Web.dll",
+            "System.Text.Json.dll",
+            "System.Threading.Tasks.Extensions.dll",
+            "System.ValueTuple.dll"
+        };
         static Dir CreateDirFor(string year)
         {
             return new Dir(year,

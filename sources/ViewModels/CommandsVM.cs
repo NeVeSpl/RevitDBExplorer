@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using RevitDBExplorer.WPF;
 using RDQCommand = RevitDBExplorer.Domain.RevitDatabaseQuery.Command;
@@ -11,6 +12,7 @@ namespace RevitDBExplorer.ViewModels
 {
     internal class CommandsVM : BaseViewModel
     {
+        private static SemaphoreSlim semaphore = new SemaphoreSlim(1, 1);
         private ObservableCollection<CommandVM> commands = new();
 
 
@@ -32,39 +34,61 @@ namespace RevitDBExplorer.ViewModels
         {
             var toAdd = new List<CommandVM>();
             var toKeep = new List<CommandVM>();
-
-            foreach (var commandVM in commands.Select(x => new CommandVM(x)))
-            {
-                if (Commands.Contains(commandVM))
-                {
-                    toKeep.Add(commandVM);
-                }else
-                {
-                    toKeep.Add(commandVM);
-                    toAdd.Add(commandVM);
-                }
-            }
-
             var toRemove = new List<CommandVM>();
-            foreach (var commandVM in Commands.ToList())
+
+            try
             {
-                if (toKeep.Contains(commandVM) == false)
+                await semaphore.WaitAsync();
+
+                foreach (var commandVM in commands.Select(x => new CommandVM(x)))
                 {
-                    toRemove.Add(commandVM);
-                    commandVM.ToRemove = true;
+                    if (Commands.Contains(commandVM))
+                    {
+                        toKeep.Add(commandVM);
+                    }
+                    else
+                    {
+                        //toKeep.Add(commandVM);
+                        toAdd.Add(commandVM);
+                    }
+                }
+                
+                foreach (var commandVM in Commands)
+                {
+                    if (toKeep.Contains(commandVM) == false)
+                    {
+                        if (commandVM.ToRemove == false)
+                        {
+                            toRemove.Add(commandVM);
+                            commandVM.ToRemove = true;
+                        }
+                    }
+                }
+
+                foreach (var commandVM in toAdd)
+                {
+                    Commands.Add(commandVM);
                 }
             }
-
-            foreach (var commandVM in toAdd)
+            finally
             {
-                Commands.Add(commandVM);
+                semaphore.Release();
             }
 
             await Task.Delay(500);
 
-            foreach (var commandVM in toRemove)
+            try
             {
-                Commands.Remove(commandVM);
+                await semaphore.WaitAsync();
+
+                foreach (var commandVM in toRemove)
+                {
+                    Commands.Remove(commandVM);
+                }
+            }
+            finally
+            {
+                semaphore.Release();
             }
         }
     }
