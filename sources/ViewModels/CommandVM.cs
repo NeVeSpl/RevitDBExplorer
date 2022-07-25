@@ -134,7 +134,7 @@ namespace RevitDBExplorer.ViewModels
                     hexColor = "#E2EFD9";
                     break;                
                 case CmdType.Parameter:
-                    var firstArg = command.MatchedArguments.OfType<BuiltInParameterMatch>().First();
+                    var firstArg = command.MatchedArguments.OfType<ParameterMatch>().First();
 
                     string argsForParam = String.Join(", ", command.MatchedArguments.Take(1).Select(x => x.Name));
                     string count = "";

@@ -59,7 +59,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
             }
             if (i == splitted.Count - 1)
             {
-                yield return splitted[i + 1];
+                yield return splitted[i];
             }
         }
 
@@ -176,7 +176,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
                 else
                 {
                     Type = CmdType.Parameter;
-                    MatchedArguments = NameLikeParameters.Select(x => new BuiltInParameterMatch(x, 1)).ToList();
+                    MatchedArguments = NameLikeParameters.Select(x => new ParameterMatch(x, 1)).ToList();
                     Operator = Operators.Parse($"=%{Argument}%");
                 }
             }

@@ -19,6 +19,8 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
         static readonly List<(string, BuiltInCategory)> Categories;
         static readonly List<(string, Type)> Classes;
         static readonly List<(string, ForgeTypeId)> Parameters;
+        static List<(string, ElementId)> UserParameters = Enumerable.Empty<(string, ElementId)>().ToList();
+
         static readonly HashSet<string> ClassesBlackList = new()
         {
             //typeof(Material),
@@ -81,7 +83,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
                 foreach (var item in Categories)
                 {
                     var score = needle.ApproximatelyEquals(item.Item1, SimMetricType.Levenstein);
-                    if (score > 0.61)
+                    if (score > 0.59)
                     {
                         found.Add(new CategoryMatch(item.Item2, score));
                     }
@@ -93,7 +95,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
                 foreach (var item in Classes)
                 {
                     var score = needle.ApproximatelyEquals(item.Item1, SimMetricType.Levenstein);
-                    if (score > 0.67)
+                    if (score > 0.61)
                     {
                         found.Add(new TypeMatch(item.Item2, score));
                     }
@@ -108,7 +110,15 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
                     if (score > 0.69)
                     {
                         var builtInParam = ParameterUtils.GetBuiltInParameter(item.Item2);  
-                        found.Add(new BuiltInParameterMatch(builtInParam, score));
+                        found.Add(new ParameterMatch(builtInParam, score));
+                    }
+                }
+                foreach (var item in UserParameters)
+                {
+                    var score = needle.ApproximatelyEquals(item.Item1, SimMetricType.Levenstein);
+                    if (score > 0.67)
+                    {                        
+                        found.Add(new ParameterMatch(item.Item2, score, item.Item1));
                     }
                 }
             }
@@ -183,6 +193,15 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
             }
             return parameters;
         }
+        public static void LoadUserParameters(Document document)
+        {
+            var newList = new List<(string, ElementId)>(UserParameters.Count);
+            foreach (var userParam in new FilteredElementCollector(document).OfClass(typeof(ParameterElement)))
+            {
+                newList.Add((userParam.Name.Clean(), userParam.Id));
+            }
+            UserParameters = newList;
+        }
 
         private static string Clean(this string text)
         {
@@ -246,22 +265,61 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
             Name = $"new ElementId({value.IntegerValue})";
         }
     }
-    internal class BuiltInParameterMatch : LookupResult<BuiltInParameter>
+    internal class ParameterMatch : LookupResult<ElementId>
     {
-        public StorageType StorageType { get; private set; }
+        private static readonly Dictionary<string, StorageType> storageTypeForUserParameters = new();
+        public BuiltInParameter BuiltInParameter { get; init; }
+        public StorageType StorageType { get; private set; } = StorageType.None;
+        
 
 
-        public BuiltInParameterMatch(BuiltInParameter value, double levensteinScore) : base(value, levensteinScore)
+        public ParameterMatch(BuiltInParameter value, double levensteinScore) : base(new ElementId(value), levensteinScore)
         {
             IsBuiltInParameter = true;
+            BuiltInParameter = value;
             Name = $"BuiltInParameter.{value}";
             Label = LabelUtils.GetLabelFor(value);
+        }
+
+        public ParameterMatch(ElementId value, double levensteinScore, string name) : base(value, levensteinScore)
+        {
+            IsBuiltInParameter = false;            
+            Name = name;
+            Label = name;
         }
 
 
         public void ResolveStorageType(Document document)
         {
-            StorageType = document.get_TypeOfStorage(Value);
+            if (IsBuiltInParameter)
+            {
+                StorageType = document.get_TypeOfStorage(BuiltInParameter);
+            }
+            else
+            {
+                if (!storageTypeForUserParameters.TryGetValue(Name, out StorageType storage))
+                {
+                    var collector = new FilteredElementCollector(document)
+                        .WherePasses(new LogicalOrFilter(new ElementIsElementTypeFilter(true), new ElementIsElementTypeFilter(false)))
+                        .WherePasses(new LogicalOrFilter(new ElementParameterFilter(ParameterFilterRuleFactory.CreateHasValueParameterRule(Value)), new ElementParameterFilter(ParameterFilterRuleFactory.CreateHasNoValueParameterRule(Value))));
+                    var first = collector.FirstElement();
+                    if (first != null)
+                    {
+                        var parameterElement = document.GetElement(Value) as ParameterElement;
+                        if (parameterElement != null)
+                        {
+                            var definition = parameterElement.GetDefinition();
+                            var parameter = first.get_Parameter(definition);
+                            if (parameter != null)
+                            {
+                                storage = parameter.StorageType;
+                                storageTypeForUserParameters[Name] = storage;
+                            }
+                        }
+                    }
+                }
+                StorageType = storage;
+            }
         }
     }
 }

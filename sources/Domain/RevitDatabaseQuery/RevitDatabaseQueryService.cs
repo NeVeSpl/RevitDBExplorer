@@ -18,8 +18,9 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
 
         public static Result Parse(Document document, string query)
         {
+            FuzzySearchEngine.LoadUserParameters(document);
             var commands = QueryParser.Parse(query);
-            commands.SelectMany(x => x.MatchedArguments).OfType<BuiltInParameterMatch>().ToList().ForEach(x => x.ResolveStorageType(document));
+            commands.SelectMany(x => x.MatchedArguments).OfType<ParameterMatch>().ToList().ForEach(x => x.ResolveStorageType(document));
 
             var t1 = CreateCollector(document, commands);
             var t2 = WhereElementIsElementTypeOrNot(t1, commands);
@@ -122,10 +123,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
                 return new Token(c, s);
             }
             return token;
-        }
-
-        
-
+        }     
         private static Token OfParameter(Token token, List<Command> commands, Document document)
         {
             var parameterCmds = commands.Where(x => x.Type == CmdType.Parameter).ToList();
@@ -133,17 +131,22 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
             if (parameterCmds.Any())
             {
                 var filtersForCmds = new List<ElementFilter>();
+                var filtersForCmdsSyntax = new List<string>();
                 foreach (var parameterCmd in parameterCmds)
                 {
                     var rules = new List<FilterRule>();
-                    foreach (var argument in parameterCmd.MatchedArguments.OfType<BuiltInParameterMatch>())
-                    {                        
-                        var builtInParameter = argument.Value;
-                        var parameter = new ElementId(builtInParameter);
+                    var rulesSyntax = new List<string>();
+                    foreach (var argument in parameterCmd.MatchedArguments.OfType<ParameterMatch>())
+                    { 
+                        var parameter = argument.Value;
                         var storageType = argument.StorageType;
                         var argAsInt = parameterCmd.Operator.ArgumentAsInt;                       
                         var argAsDouble = parameterCmd.Operator.ArgumentAsDouble;
                         var argAsString = parameterCmd.Operator.ArgumentAsString;
+                        bool startsWithWildcard = argAsString.StartsWith("*") || argAsString.StartsWith("%");
+                        bool endsWithWildcard = argAsString.EndsWith("*") || argAsString.EndsWith("%");
+                        var serchTerm = argAsString.Trim('*', '%');
+                        var argForSyntax = serchTerm;
 
                         FilterRule rule = null;
                         if (storageType == StorageType.Integer)
@@ -160,7 +163,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
                             };
 
                         }
-                        if (storageType == StorageType.String)
+                        if (storageType == StorageType.String || storageType == StorageType.None)
                         {
                             rule = parameterCmd.Operator.Type switch
                             {
@@ -178,10 +181,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
 #endif
                                 _ => null
                             };
-                            var serchTerm = argAsString;
-                            bool startsWithWildcard = serchTerm.StartsWith("*") || serchTerm.StartsWith("%");
-                            bool endsWithWildcard = serchTerm.EndsWith("*") || serchTerm.EndsWith("%");
-                            serchTerm = serchTerm.Trim('*', '%');
+                           
 
                             if (parameterCmd.Operator.Type == OperatorType.Equals)
                             {
@@ -259,18 +259,57 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
                             rules.Add(ParameterFilterRuleFactory.CreateHasValueParameterRule(parameter));
                             rules.Add(ParameterFilterRuleFactory.CreateHasNoValueParameterRule(parameter));
                         }
+
+
+                        if (storageType == StorageType.String || storageType == StorageType.None)
+                        {
+                            argForSyntax = $"\"{argForSyntax}\"";
+                        }
+                        
+                        switch (parameterCmd.Operator.Type)
+                        {                           
+                            case OperatorType.Equals:
+                                rulesSyntax.Add($"ParameterFilterRuleFactory.CreateEqualsRule(new ElementId({parameter.IntegerValue}), {argForSyntax})");
+                                break;
+                            case OperatorType.NotEquals:
+                                rulesSyntax.Add($"ParameterFilterRuleFactory.CreateNotEqualsRule(new ElementId({parameter.IntegerValue}), {argForSyntax})");
+                                break;
+                            case OperatorType.Greater:
+                                rulesSyntax.Add($"ParameterFilterRuleFactory.CreateGreaterRule(new ElementId({parameter.IntegerValue}), {argForSyntax})");
+                                break;
+                            case OperatorType.GreaterOrEqual:
+                                rulesSyntax.Add($"ParameterFilterRuleFactory.CreateGreaterOrEqualRule(new ElementId({parameter.IntegerValue}), {argForSyntax})");
+                                break;
+                            case OperatorType.Less:
+                                rulesSyntax.Add($"ParameterFilterRuleFactory.CreateLessRule(new ElementId({parameter.IntegerValue}), {argForSyntax})");
+                                break;
+                            case OperatorType.LessOrEqual:
+                                rulesSyntax.Add($"ParameterFilterRuleFactory.CreateLessOrEqualRule(new ElementId({parameter.IntegerValue}), {argForSyntax})");
+                                break;
+                            case OperatorType.HasNoValue:
+                                rulesSyntax.Add($"ParameterFilterRuleFactory.CreateHasNoValueParameterRule(new ElementId({parameter.IntegerValue})");
+                                break;
+                            case OperatorType.HasValue:
+                                rulesSyntax.Add($"ParameterFilterRuleFactory.CreateHasValueParameterRule(new ElementId({parameter.IntegerValue}))");
+                                break;                            
+                            case OperatorType.Exists:
+                                rulesSyntax.Add($"ParameterFilterRuleFactory.CreateHasNoValueParameterRule(new ElementId({parameter.IntegerValue})");
+                                rulesSyntax.Add($"ParameterFilterRuleFactory.CreateHasValueParameterRule(new ElementId({parameter.IntegerValue}))");
+                                break;                           
+                        }
                     }
                     if (rules.Any())
                     {
                         var or = new LogicalOrFilter(rules.Select(x => new ElementParameterFilter(x, false)).ToList<ElementFilter>());
                         filtersForCmds.Add(or);
+                        filtersForCmdsSyntax.Add($"new LogicalOrFilter({String.Join(", ", rulesSyntax.Select(x => $"new ElementParameterFilter({x}, false)"))})");
                     }
                 }
                 if (filtersForCmds.Any())
                 {
                     var finalFilter = new LogicalAndFilter(filtersForCmds);
                     var c = token.Collector.WherePasses(finalFilter);
-                    var s = token.CollectorSyntax;
+                    var s = token.CollectorSyntax + $".WherePasses(new LogicalAndFilter({String.Join(", ", filtersForCmdsSyntax)}))";
                     return new Token(c, s);
                 }
             }

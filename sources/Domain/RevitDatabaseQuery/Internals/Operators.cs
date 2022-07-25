@@ -120,6 +120,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Internals
                 StorageType.Double => ArgumentAsDouble.ToString(),
                 StorageType.Integer => ArgumentAsInt.ToString(),
                 StorageType.ElementId => ArgumentAsInt.ToString(),
+                StorageType.None => ArgumentAsString,
                 _ => throw new NotImplementedException()
             };            
             return $"{Symbol} {arg}";
