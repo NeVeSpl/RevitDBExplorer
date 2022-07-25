@@ -16,11 +16,7 @@ namespace RevitDBExplorer.Domain.DataModel.ValueTypes
 
         protected override bool CanBeSnoooped(ForgeTypeId id) => id is not null;
         protected override string ToLabel(ForgeTypeId id)
-        {
-            if (string.IsNullOrEmpty(id.TypeId))
-            {
-                return "<empty>";
-            }
+        {           
             return $"{id.TypeId}";
         }
         protected override IEnumerable<SnoopableObject> Snooop(Document document, ForgeTypeId id)

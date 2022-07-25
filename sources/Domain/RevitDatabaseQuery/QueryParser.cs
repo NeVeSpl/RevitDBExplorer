@@ -27,7 +27,8 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
     {
         public static List<Command> Parse(string query)
         {
-            var splitted = query.Trim().Split(new[] { ';', ',' }, System.StringSplitOptions.RemoveEmptyEntries);
+            IList<string> splitted = query.Trim().Split(new[] { ';', ',' }, System.StringSplitOptions.RemoveEmptyEntries);
+            splitted = ReconcilePotentialDoubleNumbers(splitted).ToList();
             var commands = splitted.Select(c => new Command(c)).ToList();
 
             if (!DoesContainQuickFilter(commands))
@@ -37,6 +38,29 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
             }
 
             return commands;
+        }
+
+        private static IEnumerable<string> ReconcilePotentialDoubleNumbers(IList<string> splitted)
+        {
+            int i;
+            for (i = 0; i < splitted.Count - 1; i++)
+            {
+                var isParam = Operators.DoesContainAnyValidOperator(splitted[i]);
+                var isNumber = char.IsNumber(splitted[i + 1][0]);
+                if (isParam && isNumber)
+                {
+                    yield return String.Concat(splitted[i], ",", splitted[i + 1]);
+                    ++i;
+                } 
+                else
+                {
+                    yield return splitted[i];                    
+                }
+            }
+            if (i == splitted.Count - 1)
+            {
+                yield return splitted[i + 1];
+            }
         }
 
         private static readonly HashSet<CmdType> quickFilters = new() { CmdType.ActiveView, CmdType.ElementId, CmdType.ElementType, CmdType.NotElementType, CmdType.Category, CmdType.Class };

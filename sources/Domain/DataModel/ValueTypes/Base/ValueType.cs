@@ -43,7 +43,9 @@ namespace RevitDBExplorer.Domain.DataModel.ValueTypes.Base
             get 
             {
                 if (value is null) return "<null>";
-                return ToLabel(value);
+                var label = ToLabel(value);
+                if (string.IsNullOrEmpty(label)) return "<empty>";
+                return label;
             }            
         }
         protected abstract string ToLabel(T value);
