@@ -267,7 +267,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
     }
     internal class ParameterMatch : LookupResult<ElementId>
     {
-        private static readonly Dictionary<string, StorageType> storageTypeForUserParameters = new();
+        private static readonly Dictionary<ElementId, StorageType> storageTypeForUserParameters = new();
         public BuiltInParameter BuiltInParameter { get; init; }
         public StorageType StorageType { get; private set; } = StorageType.None;
         
@@ -297,7 +297,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
             }
             else
             {
-                if (!storageTypeForUserParameters.TryGetValue(Name, out StorageType storage))
+                if (!storageTypeForUserParameters.TryGetValue(Value, out StorageType storage))
                 {
                     var collector = new FilteredElementCollector(document)
                         .WherePasses(new LogicalOrFilter(new ElementIsElementTypeFilter(true), new ElementIsElementTypeFilter(false)))
@@ -313,7 +313,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
                             if (parameter != null)
                             {
                                 storage = parameter.StorageType;
-                                storageTypeForUserParameters[Name] = storage;
+                                storageTypeForUserParameters[Value] = storage;
                             }
                         }
                     }

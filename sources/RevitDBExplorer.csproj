@@ -253,13 +253,22 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>AppSettings.settings</DependentUpon>
     </Compile>
-    <Compile Include="ViewModels\CommandsVM.cs" />
+    <Compile Include="ViewModels\QueryVisualizationVM.cs" />
     <Compile Include="ViewModels\CommandVM.cs" />
     <Compile Include="ViewModels\SnoopableCategoryTreeVM.cs" />
     <Compile Include="ViewModels\SnoopableObjectTreeVM.cs" />
     <Compile Include="ViewModels\TreeViewItemVM.cs" />
+    <Compile Include="Views\QueryVisualizationView.xaml.cs">
+      <DependentUpon>QueryVisualizationView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WPF\Controls\TextBoxWithPlaceholder.xaml.cs">
+      <DependentUpon>TextBoxWithPlaceholder.xaml</DependentUpon>
+    </Compile>
     <Compile Include="WPF\Converters\EnumToVisibilityConverter.cs" />
     <Compile Include="WPF\Converters\FeetToMetersConverter.cs" />
+    <Compile Include="WPF\Converters\StringIsNotNullOrEmptyConverter.cs" />
+    <Compile Include="WPF\Converters\StringIsNullOrEmptyConverter.cs" />
+    <Compile Include="WPF\Converters\MultiBindingOrConverter.cs" />
     <Compile Include="WPF\Converters\PercentageOfValueConverter.cs" />
     <Compile Include="Domain\DataModel\ValueTypes\ParameterMapType.cs" />
     <Compile Include="Domain\DataModel\ValueTypes\ParameterSetType.cs" />
@@ -273,6 +282,7 @@
     <Compile Include="WPF\BaseViewModel.cs" />
     <Compile Include="WPF\Converters\StringToVisibilityConverter.cs" />
     <Compile Include="WPF\MarkupExtensions\SettingBindingExtension.cs" />
+    <Compile Include="WPF\ThemeResourceDictionary.cs" />
     <None Include="app.config" />
     <None Include="packages.config" />
     <None Include="Properties\AppSettings.settings">
@@ -291,7 +301,39 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Resources\Templates\All.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\Templates\GridViewColumnHeader.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\Templates\TextBox.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\Templates\Button.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\Themes\Default.Colors.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\Themes\Dark.Colors.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Resources\VectorGraphic.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\QueryVisualizationView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="WPF\Controls\TextBoxWithPlaceholder.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

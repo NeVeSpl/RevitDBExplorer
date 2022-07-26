@@ -10,7 +10,7 @@ using RDQCommand = RevitDBExplorer.Domain.RevitDatabaseQuery.Command;
 
 namespace RevitDBExplorer.ViewModels
 {
-    internal class CommandsVM : BaseViewModel
+    internal class QueryVisualizationVM : BaseViewModel
     {
         private static SemaphoreSlim semaphore = new SemaphoreSlim(1, 1);
         private ObservableCollection<CommandVM> commands = new();

@@ -1,0 +1,100 @@
+﻿<UserControl x:Class="RevitDBExplorer.Views.QueryVisualizationView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:interactivity="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:interactions="http://schemas.microsoft.com/expression/2010/interactions"
+             xmlns:local="clr-namespace:RevitDBExplorer.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <ItemsControl Grid.Row="1"  ItemsSource="{Binding Commands}" Margin="0 1 0 0">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel >
+                        <interactivity:Interaction.Behaviors>
+                            <interactions:FluidMoveBehavior Duration="0:0:0.5" AppliesTo="Children">
+                                <interactions:FluidMoveBehavior.EaseY>
+                                    <CubicEase EasingMode="EaseInOut"/>
+                                </interactions:FluidMoveBehavior.EaseY>
+                                <interactions:FluidMoveBehavior.EaseX>
+                                    <CubicEase EasingMode="EaseInOut"/>
+                                </interactions:FluidMoveBehavior.EaseX>
+                            </interactions:FluidMoveBehavior>
+                        </interactivity:Interaction.Behaviors>
+                    </WrapPanel>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Grid x:Name="cQueryVisualizationGrid" Opacity="1">
+                        <Border Margin="0 3 5 2" Padding="7 3" BorderThickness="1" BorderBrush="#ABADB3" Background="{Binding Fill}" CornerRadius="10"  ToolTipService.ShowDuration="50000">
+                            <TextBlock Text="{Binding Name}" Foreground="{Binding Foreground}" TextTrimming="CharacterEllipsis"/>
+
+                            <Border.ToolTip>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                        <RowDefinition Height="auto"/>
+                                    </Grid.RowDefinitions>
+                                    <TextBlock Text="{Binding FilterName}" />
+
+                                    <ItemsControl Grid.Row="1" Margin="0 7 0 0" ItemsSource="{Binding Arguments}" Grid.IsSharedSizeScope="True" >
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <StackPanel Orientation="Vertical">
+
+                                                </StackPanel>
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate >
+                                                <Grid ShowGridLines="True">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition SharedSizeGroup="FirstColumn" />
+                                                        <ColumnDefinition SharedSizeGroup="SecondColumn"/>
+                                                        <ColumnDefinition/>
+                                                    </Grid.ColumnDefinitions>
+
+                                                    <TextBlock Grid.Column="0" Text="{Binding LevensteinScore, StringFormat=P0}" Margin="0 0 5 0"/>
+                                                    <TextBlock Grid.Column="1" Text="{Binding Name}" Margin="5 0 5 0"/>
+                                                    <TextBlock Grid.Column="2" Text="{Binding Label}" Margin="5 0 0 0"/>
+                                                </Grid>
+
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </Grid>
+                            </Border.ToolTip>
+                        </Border>
+                    </Grid>
+
+                    <DataTemplate.Triggers>
+                        <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+                            <BeginStoryboard x:Name="fadeIn">
+                                <Storyboard  >
+                                    <DoubleAnimation Storyboard.TargetName="cQueryVisualizationGrid" Storyboard.TargetProperty="Opacity" Duration="00:00:0.5" From="0" To="1" />
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+
+                        <DataTrigger Binding="{Binding ToRemove}" Value="true" >
+                            <DataTrigger.EnterActions>
+                                <StopStoryboard BeginStoryboardName="fadeIn"/>
+                                <BeginStoryboard >
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="cQueryVisualizationGrid" Storyboard.TargetProperty="Opacity" Duration="00:00:0.5" From="1" To="0" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </DataTrigger.EnterActions>
+                        </DataTrigger>
+                    </DataTemplate.Triggers>
+
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </Grid>
+</UserControl>

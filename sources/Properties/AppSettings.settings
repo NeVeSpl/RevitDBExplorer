@@ -11,5 +11,8 @@
     <Setting Name="FirstColumnWidth" Type="System.Double" Scope="User">
       <Value Profile="(Default)">313</Value>
     </Setting>
+    <Setting Name="Theme" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Default</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

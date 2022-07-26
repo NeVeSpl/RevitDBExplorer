@@ -24,36 +24,28 @@
     <StreamGeometry x:Key="vReload">M2 12C2 16.97 6.03 21 11 21C13.39 21 15.68 20.06 17.4 18.4L15.9 16.9C14.63 18.25 12.86 19 11 19C4.76 19 1.64 11.46 6.05 7.05C10.46 2.64 18 5.77 18 12H15L19 16H19.1L23 12H20C20 7.03 15.97 3 11 3C6.03 3 2 7.03 2 12Z</StreamGeometry>
     <StreamGeometry x:Key="vStar">M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z</StreamGeometry>
 
-    <Style x:Key="IconProperty" TargetType="Path">
-        <Setter Property="Data" Value="{StaticResource vWrench}"/>
-        <Setter Property="Fill" Value="black"/>
+    <Style x:Key="IconMemberKind" TargetType="Path" >
+        <Setter Property="Fill" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
         <Setter Property="Stretch" Value="Uniform"/>
         <Setter Property="Width" Value="10"/>
     </Style>
 
-     <Style x:Key="IconMethod" TargetType="Path">
-        <Setter Property="Data" Value="{StaticResource vCubeOutline}"/>
-        <Setter Property="Fill" Value="black"/>
-        <Setter Property="Stretch" Value="Uniform"/>
-        <Setter Property="Width" Value="10"/>
+    <Style x:Key="IconProperty" TargetType="Path" BasedOn="{StaticResource IconMemberKind}">
+        <Setter Property="Data" Value="{StaticResource vWrench}"/>       
+    </Style>
+    <Style x:Key="IconMethod" TargetType="Path" BasedOn="{StaticResource IconMemberKind}">
+        <Setter Property="Data" Value="{StaticResource vCubeOutline}"/>      
+    </Style>
+    <Style x:Key="IconMethodStatic" TargetType="Path" BasedOn="{StaticResource IconMemberKind}">
+        <Setter Property="Data" Value="{StaticResource vCube}"/>        
+    </Style>
+    <Style x:Key="IconExtra" TargetType="Path" BasedOn="{StaticResource IconMemberKind}">
+        <Setter Property="Data" Value="{StaticResource vStar}"/>       
     </Style>
     
-    <Style x:Key="IconMethodStatic" TargetType="Path">
-        <Setter Property="Data" Value="{StaticResource vCube}"/>
-        <Setter Property="Fill" Value="black"/>
-        <Setter Property="Stretch" Value="Uniform"/>
-        <Setter Property="Width" Value="10"/>
-    </Style>
-
-    <Style x:Key="IconExtra" TargetType="Path">
-        <Setter Property="Data" Value="{StaticResource vStar}"/>
-        <Setter Property="Fill" Value="black"/>
-        <Setter Property="Stretch" Value="Uniform"/>
-        <Setter Property="Width" Value="10"/>
-    </Style>
-
-    <Style x:Key="IconSelector" TargetType="Path" >        
-        <Setter Property="Fill" Value="black"/>
+    
+    <Style x:Key="IconSelector" TargetType="Path" >
+        <Setter Property="Fill" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
         <Setter Property="Stretch" Value="Uniform"/>
     </Style>
 

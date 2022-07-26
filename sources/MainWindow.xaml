@@ -4,11 +4,12 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        xmlns:views="clr-namespace:RevitDBExplorer.Views"
         xmlns:viewModels="clr-namespace:RevitDBExplorer.ViewModels"
-        xmlns:converters="clr-namespace:RevitDBExplorer.WPF.Converters"
-        xmlns:ext="clr-namespace:RevitDBExplorer.WPF.MarkupExtensions"
-        xmlns:interactivity="http://schemas.microsoft.com/expression/2010/interactivity"
-        xmlns:interactions="http://schemas.microsoft.com/expression/2010/interactions"
+        xmlns:wpf="clr-namespace:RevitDBExplorer.WPF"
+        xmlns:converters="clr-namespace:RevitDBExplorer.WPF.Converters"       
+        xmlns:controls="clr-namespace:RevitDBExplorer.WPF.Controls" 
+        xmlns:ext="clr-namespace:RevitDBExplorer.WPF.MarkupExtensions"       
         mc:Ignorable="d"
         WindowStartupLocation="CenterOwner"
         Title="Revit database explorer and editor"
@@ -17,23 +18,38 @@
         Icon="/RevitDBExplorer;component/Resources/RDBE.ico" 
         Closed="Window_Closed"
         KeyDown="Window_KeyDown" 
-        SizeChanged="Window_SizeChanged"        
+        SizeChanged="Window_SizeChanged"      
+        Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"
         >
-    <Grid Margin="2">
-        <Grid.Resources>
-            <ResourceDictionary>
-                <ResourceDictionary.MergedDictionaries>
-                    <ResourceDictionary Source="Resources/VectorGraphic.xaml"/>
-                </ResourceDictionary.MergedDictionaries>
-                <converters:PercentageOfValueConverter x:Key="PercentageOfValueConverter"/>
-                <converters:FeetToMetersConverter x:Key="FeetToMetersConverter"/>
-                <converters:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
-                <converters:EnumToVisibilityConverter x:Key="EnumToVisibilityConverter"/>
-            </ResourceDictionary>
-        </Grid.Resources>
-
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <wpf:ThemeResourceDictionary Name="Colors"/>
+                <ResourceDictionary Source="Resources/VectorGraphic.xaml"/>
+                <ResourceDictionary Source="Resources/Templates/All.xaml"/>          
+            </ResourceDictionary.MergedDictionaries>
+            <converters:PercentageOfValueConverter x:Key="PercentageOfValueConverter"/>
+            <converters:FeetToMetersConverter x:Key="FeetToMetersConverter"/>
+            <converters:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
+            <converters:EnumToVisibilityConverter x:Key="EnumToVisibilityConverter"/>
+            <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
+                <Setter Property="Padding" Value="1 2"/>
+            </Style>
+        </ResourceDictionary>
+    </Window.Resources>
+    
+    <Window.ContextMenu>
+        <ContextMenu>
+            <MenuItem Header="Theme" >
+                <MenuItem Header ="Default" Tag="Default" Click="Window_MenuItemSelectTheme_Click"/>
+                <MenuItem Header ="Dark" Tag="Dark" Click="Window_MenuItemSelectTheme_Click"/>
+            </MenuItem>
+        </ContextMenu>
+    </Window.ContextMenu>
+    
+    <Grid Margin="2" >  
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="{ext:SettingBinding FirstColumnWidth}" MinWidth="100" x:Name="cFirstColumnColumnDefinition"  />
+            <ColumnDefinition Width="{ext:SettingBinding FirstColumnWidth}" MinWidth="100" x:Name="cFirstColumnDefinition" />
             <ColumnDefinition Width="auto" />
             <ColumnDefinition Width="*" MinWidth="100"/>
         </Grid.ColumnDefinitions>
@@ -46,9 +62,9 @@
 
         <UniformGrid Grid.ColumnSpan="3" Columns="12" Margin="0 0 0 2">
             <UniformGrid.Resources>
-                <Style TargetType="Button">
+                <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
                     <Setter Property="Background" Value="Transparent"/>
-                    <Setter Property="Padding" Value="3"/>
+                    <Setter Property="Padding" Value="3 3"/>
                     <Setter Property="Margin" Value="2 0 2 0"/>
                 </Style>
             </UniformGrid.Resources>
@@ -77,16 +93,16 @@
             <Button Click="SelectorButton_Click" Tag="LinkedElement" ToolTip="Snoop by selecting linked element in Revit">
                 <Path Style="{StaticResource IconLinkedElement}" />
             </Button>
-            <Button Click="SelectorButton_Click" Tag="DependentElements" Margin="2 0 0 0" ToolTip="Snoop dependent elements of already selected elements in Revit">
+            <Button Click="SelectorButton_Click" Tag="DependentElements" ToolTip="Snoop dependent elements of already selected elements in Revit">
                 <Path Style="{StaticResource IconDependentElements}" />
             </Button>
-            <Button Click="SelectorButton_Click" Tag="Schemas" Margin="2 0 0 0" ToolTip="Snoop Extensible Storage framework schemas located in memory">
+            <Button Click="SelectorButton_Click" Tag="Schemas" ToolTip="Snoop Extensible Storage framework schemas located in memory">
                 <Path Style="{StaticResource IconSchemas}" />
             </Button>
-            <Button Click="SelectorButton_Click"  Tag="FilterableCategories" Margin="2 0 0 0" ToolTip="Snoop categories that may be used in a ParameterFilterElement">
+            <Button Click="SelectorButton_Click"  Tag="FilterableCategories" ToolTip="Snoop categories that may be used in a ParameterFilterElement">
                 <Path Style="{StaticResource IconCategories}" />                
             </Button>
-            <Button Click="ButtonWithSubMenu_Click"  Margin="2 0 0 0" ToolTip="Snoop Forge types">
+            <Button Click="ButtonWithSubMenu_Click" Margin="2 0 0 0" ToolTip="Snoop Forge types">
                 <Path Style="{StaticResource IconForge}" />
                 <Button.ContextMenu>
                     <ContextMenu>
@@ -101,153 +117,18 @@
             </Button>
         </UniformGrid>
 
-
         <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Margin="0 3 0 3" >
             <Grid.RowDefinitions>
                 <RowDefinition/>
                 <RowDefinition/>
-            </Grid.RowDefinitions>            
-            
-            <TextBox Text="{Binding DatabaseQuery, Mode=TwoWay, Delay=1000, UpdateSourceTrigger=PropertyChanged}" Padding="1 2"  ToolTip="{Binding DatabaseQueryToolTip}" ToolTipService.ShowDuration="50000" KeyDown="TextBox_KeyDown"  >
-                <TextBox.Style>
-                    <!--source: https://stackoverflow.com/a/33539781/1147478-->
-                    <Style TargetType="TextBox" xmlns:sys="clr-namespace:System;assembly=mscorlib">
-                        <Style.Resources>
-                            <VisualBrush x:Key="CueBannerBrush" AlignmentX="Left" AlignmentY="Center" Stretch="None">
-                                <VisualBrush.Visual>
-                                    <Label Content="Query Revit database" Foreground="Gray" />
-                                </VisualBrush.Visual>
-                            </VisualBrush>
-                        </Style.Resources>
-                        <Style.Triggers>
-                            <Trigger Property="Text" Value="{x:Static sys:String.Empty}">
-                                <Setter Property="Background" Value="{StaticResource CueBannerBrush}" />
-                            </Trigger>
-                            <Trigger Property="Text" Value="{x:Null}">
-                                <Setter Property="Background" Value="{StaticResource CueBannerBrush}" />
-                            </Trigger>
-                            <Trigger Property="IsKeyboardFocused" Value="True">
-                                <Setter Property="Background" Value="White" />
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-                </TextBox.Style>
-            </TextBox>
+            </Grid.RowDefinitions>
 
-            <ItemsControl Grid.Row="1"  ItemsSource="{Binding CommandsVM.Commands}" Margin="0 1 0 0">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <WrapPanel >
-                            <interactivity:Interaction.Behaviors>
-                                <interactions:FluidMoveBehavior Duration="0:0:0.5" AppliesTo="Children">
-                                    <interactions:FluidMoveBehavior.EaseY>
-                                        <CubicEase EasingMode="EaseInOut"/>
-                                    </interactions:FluidMoveBehavior.EaseY>
-                                    <interactions:FluidMoveBehavior.EaseX>
-                                        <CubicEase EasingMode="EaseInOut"/>
-                                    </interactions:FluidMoveBehavior.EaseX>
-                                </interactions:FluidMoveBehavior>
-                            </interactivity:Interaction.Behaviors>
-                        </WrapPanel>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        
-                        <Grid x:Name="MyGrid" Opacity="1"  >
-                            <Border Margin="0 3 5 2" Padding="7 3" BorderThickness="1" BorderBrush="#ABADB3" Background="{Binding Fill}" CornerRadius="10"  ToolTipService.ShowDuration="50000">
-                                <TextBlock Text="{Binding Name}" Foreground="{Binding Foreground}" TextTrimming="CharacterEllipsis"/>
+            <controls:TextBoxWithPlaceholder Text="{Binding DatabaseQuery, Mode=TwoWay, Delay=1000, UpdateSourceTrigger=PropertyChanged}" Placeholder="Query Revit database" ToolTip="{Binding DatabaseQueryToolTip}" ToolTipService.ShowDuration="50000"/>
 
-                                <Border.ToolTip>
-                                    <Grid>
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition/>
-                                            <RowDefinition Height="auto"/>
-                                        </Grid.RowDefinitions>
-                                        <TextBlock Text="{Binding FilterName}" />
-
-                                        <ItemsControl Grid.Row="1" Margin="0 7 0 0" ItemsSource="{Binding Arguments}" Grid.IsSharedSizeScope="True" >
-                                            <ItemsControl.ItemsPanel>
-                                                <ItemsPanelTemplate>
-                                                    <StackPanel Orientation="Vertical">
-                                                        
-                                                    </StackPanel>
-                                                </ItemsPanelTemplate>
-                                            </ItemsControl.ItemsPanel>
-                                            
-                                            <ItemsControl.ItemTemplate>
-                                                <DataTemplate >
-                                                    <Grid ShowGridLines="True">
-                                                        <Grid.ColumnDefinitions>
-                                                            <ColumnDefinition SharedSizeGroup="FirstColumn" />
-                                                            <ColumnDefinition SharedSizeGroup="SecondColumn"/>
-                                                            <ColumnDefinition/>
-                                                        </Grid.ColumnDefinitions>
-
-                                                        <TextBlock Grid.Column="0" Text="{Binding LevensteinScore, StringFormat=P0}" Margin="0 0 5 0"/>
-                                                        <TextBlock Grid.Column="1" Text="{Binding Name}" Margin="5 0 5 0"/>
-                                                        <TextBlock Grid.Column="2" Text="{Binding Label}" Margin="5 0 0 0"/>
-                                                    </Grid>
-                                                   
-                                                </DataTemplate>
-                                            </ItemsControl.ItemTemplate>   
-                                        </ItemsControl>
-                                    </Grid>
-                                </Border.ToolTip>
-                            </Border>                          
-                        </Grid>     
-                        
-                        <DataTemplate.Triggers>
-                            <EventTrigger RoutedEvent="FrameworkElement.Loaded">
-                                <BeginStoryboard x:Name="fadeIn">
-                                    <Storyboard  >
-                                        <DoubleAnimation Storyboard.TargetName="MyGrid" Storyboard.TargetProperty="Opacity" Duration="00:00:0.5" From ="0" To="1" />
-                                    </Storyboard>
-                                </BeginStoryboard>
-                            </EventTrigger>
-                            
-                            <DataTrigger Binding="{Binding Path =ToRemove}" Value="true" >                               
-                                <DataTrigger.EnterActions>
-                                    <StopStoryboard BeginStoryboardName="fadeIn"/>
-                                    <BeginStoryboard >
-                                        <Storyboard>
-                                            <DoubleAnimation Storyboard.TargetName="MyGrid" Storyboard.TargetProperty="Opacity" Duration="00:00:0.5" From ="1" To="0" />
-                                           </Storyboard>
-                                    </BeginStoryboard>
-                                </DataTrigger.EnterActions>                                
-                            </DataTrigger>
-                        </DataTemplate.Triggers>
-
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>   
+            <views:QueryVisualizationView  Grid.Row="1" Margin="0 1 0 0" DataContext="{Binding QueryVisualization}"/>            
         </Grid>
 
-        <TextBox Grid.Row="2" Grid.Column="0" Margin="0 0 2 3" Padding="1 2" Text="{Binding TreeItemsFilterPhrase, Mode=TwoWay, Delay=500, UpdateSourceTrigger=PropertyChanged}" KeyDown="TextBox_KeyDown">
-            <TextBox.Style>
-                <!--source: https://stackoverflow.com/a/33539781/1147478-->
-                <Style TargetType="TextBox" xmlns:sys="clr-namespace:System;assembly=mscorlib">
-                    <Style.Resources>
-                        <VisualBrush x:Key="CueBannerBrush" AlignmentX="Left" AlignmentY="Center" Stretch="None">
-                            <VisualBrush.Visual>
-                                <Label Content="Filter tree by item name" Foreground="Gray" />
-                            </VisualBrush.Visual>
-                        </VisualBrush>
-                    </Style.Resources>
-                    <Style.Triggers>
-                        <Trigger Property="Text" Value="{x:Static sys:String.Empty}">
-                            <Setter Property="Background" Value="{StaticResource CueBannerBrush}" />
-                        </Trigger>
-                        <Trigger Property="Text" Value="{x:Null}">
-                            <Setter Property="Background" Value="{StaticResource CueBannerBrush}" />
-                        </Trigger>
-                        <Trigger Property="IsKeyboardFocused" Value="True">
-                            <Setter Property="Background" Value="White" />
-                        </Trigger>
-                    </Style.Triggers>
-                </Style>
-            </TextBox.Style>
-        </TextBox>
+        <controls:TextBoxWithPlaceholder Grid.Row="2" Grid.Column="0" Margin="0 0 2 3" Text="{Binding TreeItemsFilterPhrase, Mode=TwoWay, Delay=500, UpdateSourceTrigger=PropertyChanged}" Placeholder="Filter tree by item name"/>       
 
         <Grid Grid.Row="2" Grid.Column="2" Margin="0 0 0 3">
             <Grid.ColumnDefinitions>
@@ -255,46 +136,20 @@
                 <ColumnDefinition Width="auto"/>
             </Grid.ColumnDefinitions>
 
-            <TextBox Text="{Binding ListItemsFilterPhrase, Mode=TwoWay, Delay=200, UpdateSourceTrigger=PropertyChanged}"  Padding="1 2"  KeyDown="TextBox_KeyDown">
-                <TextBox.Style>
-                    <!--source: https://stackoverflow.com/a/33539781/1147478-->
-                    <Style TargetType="TextBox" xmlns:sys="clr-namespace:System;assembly=mscorlib">
-                        <Style.Resources>
-                            <VisualBrush x:Key="CueBannerBrush" AlignmentX="Left" AlignmentY="Center" Stretch="None">
-                                <VisualBrush.Visual>
-                                    <Label Content="Filter list by property/method name" Foreground="Gray" />
-                                </VisualBrush.Visual>
-                            </VisualBrush>
-                        </Style.Resources>
-                        <Style.Triggers>
-                            <Trigger Property="Text" Value="{x:Static sys:String.Empty}">
-                                <Setter Property="Background" Value="{StaticResource CueBannerBrush}" />
-                            </Trigger>
-                            <Trigger Property="Text" Value="{x:Null}">
-                                <Setter Property="Background" Value="{StaticResource CueBannerBrush}" />
-                            </Trigger>
-                            <Trigger Property="IsKeyboardFocused" Value="True">
-                                <Setter Property="Background" Value="White" />
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-                </TextBox.Style>
-            </TextBox>
+            <controls:TextBoxWithPlaceholder Margin="0 0 2 0" Text="{Binding ListItemsFilterPhrase, Mode=TwoWay, Delay=200, UpdateSourceTrigger=PropertyChanged}" Placeholder="Filter list by property/method name"/>
 
-            <Button Grid.Column="1" Margin="2 0 0 0" ToolTip="Reload data drom Revit in the list" Background="Transparent" Padding="1" Click="ReloadButton_Click">
-                <Path Style="{StaticResource IconReload}" />
-            </Button>
-            
-        </Grid>
-        
+            <Button Grid.Column="1" Margin="2 0 0 0" MinWidth="22" MinHeight="22" Padding="2 1 1 1" ToolTip="Reload data from Revit in the list" Background="Transparent"  Click="ReloadButton_Click">
+                <Path Style="{StaticResource IconReload}" Width="18" />
+            </Button>            
+        </Grid>       
         
 
         <TreeView Grid.Row="3" Grid.Column="0" ItemsSource="{Binding TreeItems}" Margin="0 2 2 0" SelectedItemChanged="TreeView_SelectedItemChanged" VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling" SizeChanged="Window_SizeChanged">
             <TreeView.Resources>
                 <HierarchicalDataTemplate DataType="{x:Type viewModels:SnoopableCategoryTreeVM}" ItemsSource="{Binding Items}">
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{Binding Name, Mode=OneWay}" />                        
-                        <TextBlock Text="{Binding Count, StringFormat=[{0}], Mode=OneWay}" Foreground="Blue" />                      
+                        <TextBlock Text="{Binding Name, Mode=OneWay}" />
+                        <TextBlock Text="{Binding Count, StringFormat=[{0}], Mode=OneWay}" Foreground="{DynamicResource TreeView.Category.Postfix}" />                      
                     </StackPanel>
                 </HierarchicalDataTemplate>
 
@@ -302,10 +157,9 @@
                     <StackPanel Orientation="Horizontal">
                         <StackPanel.ContextMenu>
                             <ContextMenu>
-                                <MenuItem Header="Select in Revit" Click="TreeViewMenuItemInRevit_Click" Tag="Select" IsEnabled="{Binding IsSelectInRevitAvailable}"/>
-                                <!--<MenuItem Header="Isolate in Revit" Click="TreeViewMenuItemInRevit_Click" Tag="Isolate" />-->
-                                <MenuItem Header="Show in Revit" Click="TreeViewMenuItemInRevit_Click" Tag="Show" IsEnabled="{Binding IsShowInRevitAvailable}"/>
-                                <MenuItem Header="Snoop in a new window" Click="TreeViewMenuItemSnoop_Click" />
+                                <MenuItem Header="Select in Revit" Click="TreeViewItem_MenuItemInRevit_Click" Tag="Select" IsEnabled="{Binding IsSelectInRevitAvailable}"/>
+                                <MenuItem Header="Show in Revit" Click="TreeViewItem_MenuItemInRevit_Click" Tag="Show" IsEnabled="{Binding IsShowInRevitAvailable}"/>
+                                <MenuItem Header="Snoop in a new window" Click="TreeViewItem_MenuItemSnoop_Click" />
                             </ContextMenu>
                         </StackPanel.ContextMenu>
                         <TextBlock>             
@@ -317,11 +171,11 @@
                                                 <MultiDataTrigger.Conditions>
                                                     <Condition Binding="{Binding Path=IsSelected}" Value="True" />
                                                     <Condition Binding="{Binding Path=IsFocused}" Value="True" />
-                                                </MultiDataTrigger.Conditions>
-                                                <Setter Property="Foreground" Value="White"/>
+                                                </MultiDataTrigger.Conditions>                                               
+                                                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}"/>
                                             </MultiDataTrigger>
                                             <DataTrigger Binding="{Binding Path=IsSelected}"  Value="False">
-                                                <Setter Property="Foreground" Value="Gray"/>
+                                                <Setter Property="Foreground" Value="{DynamicResource TreeView.Object.Prefix}"/>
                                             </DataTrigger>
                                         </Style.Triggers>
                                      </Style>
@@ -341,30 +195,30 @@
                     <Setter Property="IsSelected" Value="{Binding Path=IsSelected, Mode=TwoWay}" />
                     <Setter Property="IsEnabled" Value="{Binding Path=IsEnabled, Mode=TwoWay}"/>
                     <Setter Property="IsExpanded" Value="{Binding Path=IsExpanded, Mode=TwoWay}" />                   
-                    <Setter Property="Padding" Value="1 0 1 0"/>                    
-                    <Style.Triggers>
-                        <Trigger Property="IsSelected" Value="True">
-                            <Setter Property="BorderBrush" Value="#A9274C5E" />
-                        </Trigger>
-                    </Style.Triggers>
+                    <Setter Property="Padding" Value="1 0 1 0"/>   
                     <Style.Resources>
                         <Style TargetType="Border">
                             <Setter Property="CornerRadius" Value="2" />
-                            <Setter Property="BorderBrush" Value="#99274C5E" />
+                            <Setter Property="BorderBrush" Value="{DynamicResource TreeViewItem.BorderBrush}" />
                             <Setter Property="BorderThickness" Value="1" />
                             <Setter Property="Padding" Value="2 0 2 0"/>
                         </Style>
                     </Style.Resources>
+                    <Style.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="BorderBrush" Value="{DynamicResource TreeViewItem.BorderBrush.IsSelected}" />
+                        </Trigger>
+                    </Style.Triggers>
                 </Style>
             </TreeView.ItemContainerStyle>
-        </TreeView>        
+        </TreeView>
 
-        <GridSplitter Grid.Row="3" Grid.Column="1" Background="LightGray"  Width="2" Margin="0 2 2 0" HorizontalAlignment="Left" VerticalAlignment="Stretch" />
+        <GridSplitter Grid.Row="3" Grid.Column="1" Background="{DynamicResource GridSplitter.Background}"  Width="2" Margin="0 2 2 0" HorizontalAlignment="Left" VerticalAlignment="Stretch" />
 
-        <ListView Grid.Row="3" Grid.Column="3" Margin="0 2 0 0" ItemsSource="{Binding ListItems}" d:ItemsSource="{d:SampleData ItemCount=5}" SelectionMode="Single" SelectedItem="{Binding ListViewSelectedItem}"  AlternationCount="2" >
+        <ListView Grid.Row="3" Grid.Column="3" Margin="0 2 0 0" ItemsSource="{Binding ListItems}" d:ItemsSource="{d:SampleData ItemCount=5}" SelectionMode="Single" SelectedItem="{Binding ListSelectedItem}"  AlternationCount="2" >
             <ListView.Resources>
                 <ContextMenu x:Key="ItemContextMenu">
-                    <MenuItem Header="Copy" Click="ListViewMenuItemCopy_Click" />
+                    <MenuItem Header="Copy" Click="ListViewItem_MenuItemCopy_Click" />
                 </ContextMenu>
 
                 <Style TargetType="{x:Type ListViewItem}">
@@ -372,23 +226,23 @@
                         <Setter.Value>
                             <StackPanel Orientation="Vertical"  MaxWidth="727">
                                 <TextBlock Visibility="{Binding Documentation.Name, Converter={StaticResource StringToVisibilityConverter}}">
-                                    <Run Foreground="#0000FF" Text="{Binding Documentation.ReturnType, Mode=OneWay}" /> <Run Foreground="#745320" Text="{Binding Documentation.Name, Mode=OneWay}" /><Run Foreground="#21377F" Text="{Binding Documentation.Invocation, Mode=OneWay}" />
+                                    <Run Foreground="{DynamicResource ToolTip.ReturnType}" Text="{Binding Documentation.ReturnType, Mode=OneWay}" /> <Run Foreground="{DynamicResource ToolTip.Name}" Text="{Binding Documentation.Name, Mode=OneWay}" /><Run Foreground="{DynamicResource ToolTip.Invocation}" Text="{Binding Documentation.Invocation, Mode=OneWay}" />
                                     <LineBreak/>
                                 </TextBlock>
-                                <TextBlock TextWrapping="Wrap" Visibility="{Binding Documentation.Summary, Converter={StaticResource StringToVisibilityConverter}}">  
-                                    <Run Text="{Binding Documentation.Summary, Mode=OneWay}" Foreground="Black"/><LineBreak/>
+                                <TextBlock TextWrapping="Wrap" Visibility="{Binding Documentation.Summary, Converter={StaticResource StringToVisibilityConverter}}" >  
+                                    <Run Text="{Binding Documentation.Summary, Mode=OneWay}" Foreground="{DynamicResource ToolTip.Value}" /><LineBreak/>
                                 </TextBlock>
-                                <TextBlock TextWrapping="Wrap" Visibility="{Binding Documentation.Returns, Converter={StaticResource StringToVisibilityConverter}}">
-                                    <Run Text="Returns:" /><LineBreak/>
-                                    <Run Text=" " /><Run Text="{Binding Documentation.Returns, Mode=OneWay}" Foreground="Black" /><LineBreak/>
+                                <TextBlock TextWrapping="Wrap" Visibility="{Binding Documentation.Returns, Converter={StaticResource StringToVisibilityConverter}}" >
+                                    <Run Text="Returns:" Foreground="{DynamicResource ToolTip.Key}"/><LineBreak/>
+                                    <Run Text="{Binding Documentation.Returns, Mode=OneWay}" Foreground="{DynamicResource ToolTip.Value}" /><LineBreak/>
                                 </TextBlock>
                                 <TextBlock TextWrapping="Wrap" Visibility="{Binding Documentation.Remarks, Converter={StaticResource StringToVisibilityConverter}}">
-                                    <Run Text="Remarks:" /><LineBreak/>
-                                    <Run Text=" " /><Run Text="{Binding Documentation.Remarks, Mode=OneWay}" Foreground="Black"/><LineBreak/>
+                                    <Run Text="Remarks:" Foreground="{DynamicResource ToolTip.Key}"/><LineBreak/>
+                                    <Run Text="{Binding Documentation.Remarks, Mode=OneWay}"  Foreground="{DynamicResource ToolTip.Value}"/><LineBreak/>
                                 </TextBlock>
                                 <TextBlock TextWrapping="Wrap" Visibility="{Binding ValueTypeName, Converter={StaticResource StringToVisibilityConverter}}">
-                                    <Run Text="Accessor:" /><LineBreak/>
-                                    <Run Text=" " /><Run Text="{Binding ValueTypeName, Mode=OneWay}"  />
+                                    <Run Text="Accessor:" Foreground="{DynamicResource ToolTip.Key}"/><LineBreak/>
+                                    <Run Text="{Binding ValueTypeName, Mode=OneWay}" Foreground="{DynamicResource ToolTip.Value}" />
                                 </TextBlock>
 
                             </StackPanel>
@@ -398,10 +252,10 @@
                     <Setter Property="ContextMenu" Value="{StaticResource ItemContextMenu}" />
                     <Style.Triggers>
                         <Trigger Property="ItemsControl.AlternationIndex" Value="0">
-                            <Setter Property="Background" Value="white"></Setter>
+                            <Setter Property="Background" Value="{DynamicResource ListView.Alternation.Background_0}"/>
                         </Trigger>
                         <Trigger Property="ItemsControl.AlternationIndex" Value="1">
-                            <Setter Property="Background" Value="#FAFAFA"></Setter>
+                            <Setter Property="Background" Value="{DynamicResource ListView.Alternation.Background_1}"/>
                         </Trigger>
                     </Style.Triggers>
                 </Style>
@@ -416,8 +270,8 @@
                                     <Path Style="{StaticResource IconProperty}" Margin="0 1 4 0" Visibility="{Binding MemberKind, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter= Property}" ToolTip="Property"/>
                                     <Path Style="{StaticResource IconMethod}" Margin="0 1 4 0" Visibility="{Binding MemberKind, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter= Method}" ToolTip="Method"/>
                                     <Path Style="{StaticResource IconMethodStatic}" Margin="0 1 4 0" Visibility="{Binding MemberKind, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter= StaticMethod}" ToolTip="Static Method"/>
-                                    <Path Style="{StaticResource IconExtra}" Margin="0 1 4 0" Visibility="{Binding MemberKind, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter= Extra}" ToolTip="Extra"/>
-                                    <TextBlock x:Name="cTextBlock" Text="{Binding Name, Mode=OneWay}"  />
+                                    <Path Style="{StaticResource IconExtra}" Margin="0 1 4 0" Visibility="{Binding MemberKind, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter= Extra}" ToolTip="Extra - not available directly in API"/>
+                                    <TextBlock Text="{Binding Name, Mode=OneWay}" Foreground="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"  />
                                 </StackPanel>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
@@ -426,27 +280,29 @@
                     <GridViewColumn Header="Value" Width="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListView}}, Path=ActualWidth, Converter={StaticResource PercentageOfValueConverter}, ConverterParameter=62}"  >
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock x:Name="cTextBlock" Text="{Binding Value, Mode=OneWay}" TextWrapping="NoWrap" MouseLeftButtonUp="ListView_MouseLeftButtonUp"  >
+                                <TextBlock x:Name="cTextBlock" Text="{Binding Value, Mode=OneWay}" TextWrapping="NoWrap" MouseLeftButtonUp="ListViewItem_MouseLeftButtonUp"   >
                                     <TextBlock.ToolTip>
                                         <TextBlock Text="{Binding ., Converter={StaticResource FeetToMetersConverter}}" />
                                     </TextBlock.ToolTip>
                                 </TextBlock>
 
                                 <DataTemplate.Triggers>
+                                    <DataTrigger Binding="{Binding CanBeSnooped}" Value="False">
+                                        <Setter TargetName="cTextBlock" Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>                                     
+                                     </DataTrigger>
                                     <DataTrigger Binding="{Binding CanBeSnooped}" Value="True">
-                                        <Setter TargetName="cTextBlock" Property="Foreground" Value="#1a0dab"/>
+                                        <Setter TargetName="cTextBlock" Property="Foreground" Value="{DynamicResource Member.Link}"/>
                                         <Setter TargetName="cTextBlock" Property="Cursor" Value="Hand"/>
                                         <Setter TargetName="cTextBlock" Property="FontWeight" Value="Bold"/>
                                     </DataTrigger>
                                     <DataTrigger Binding="{Binding HasException}" Value="True">
-                                        <Setter TargetName="cTextBlock" Property="Foreground" Value="Red"/>
+                                        <Setter TargetName="cTextBlock" Property="Foreground" Value="{DynamicResource Member.Error}"/>
                                     </DataTrigger>
                                 </DataTemplate.Triggers>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-
-                    <!--<GridViewColumn Header="Type" Width="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListView}}, Path=ActualWidth, Converter={StaticResource PercentageOfValueConverter}, ConverterParameter=17}" DisplayMemberBinding="{Binding ValueTypeName}" />-->
+                    </GridViewColumn>         
+                    
                 </GridView>
             </ListView.View>
 
@@ -454,7 +310,7 @@
                 <GroupStyle>
                     <GroupStyle.HeaderTemplate>
                         <DataTemplate>
-                            <TextBlock FontWeight="Bold" FontSize="14" Text="{Binding Name, Mode=OneWay}"/>
+                            <TextBlock FontWeight="Bold" FontSize="14" Text="{Binding Name, Mode=OneWay}" Foreground="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
                         </DataTemplate>
                     </GroupStyle.HeaderTemplate>
                     <GroupStyle.ContainerStyle>

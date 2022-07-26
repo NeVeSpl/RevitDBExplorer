@@ -1,0 +1,37 @@
+﻿<UserControl x:Class="RevitDBExplorer.WPF.Controls.TextBoxWithPlaceholder"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:converters="clr-namespace:RevitDBExplorer.WPF.Converters"  
+             xmlns:local="clr-namespace:RevitDBExplorer.WPF.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid x:Name="cMainGrid">
+        <Grid.Resources>
+            <converters:StringIsNotNullOrEmptyConverter x:Key="StringIsNotNullOrEmptyConverter"/>
+        </Grid.Resources>
+        <TextBox Text="{Binding Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Padding="1 2" KeyDown="TextBox_KeyDown">
+            <TextBox.Background>
+                <VisualBrush AlignmentX="Left" AlignmentY="Center" Stretch="None">
+                    <VisualBrush.Visual>
+                        <Label Content="{Binding Placeholder}" Foreground="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" >
+                            <Label.Style>
+                                <Style TargetType="Label">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Text, Converter={StaticResource StringIsNotNullOrEmptyConverter}}" Value="True">
+                                            <Setter Property="Visibility" Value="Hidden" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding IsKeyboardFocused, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}" Value="True">
+                                            <Setter Property="Visibility" Value="Hidden" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Label.Style>
+                        </Label>
+                    </VisualBrush.Visual>                    
+                </VisualBrush>
+            </TextBox.Background>  
+        </TextBox>
+    </Grid>
+</UserControl>

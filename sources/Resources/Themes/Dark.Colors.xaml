@@ -1,0 +1,36 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+
+
+
+    <SolidColorBrush x:Key="Button.MouseOver.Background" Color="#FFBEE6FD"/>
+    <SolidColorBrush x:Key="Button.MouseOver.Border" Color="#FF3C7FB1"/>
+
+    <SolidColorBrush x:Key="TreeView.Category.Postfix" Color="Blue"/>
+    <SolidColorBrush x:Key="TreeView.Object.Prefix" Color="Gray"/>
+
+    <SolidColorBrush x:Key="TreeViewItem.BorderBrush" Color="#99274C5E"/>
+    <SolidColorBrush x:Key="TreeViewItem.BorderBrush.IsSelected" Color="#A9274C5E"/>
+
+    <SolidColorBrush x:Key="GridSplitter.Background" Color="LightGray"/>
+
+    <SolidColorBrush x:Key="Member.Link" Color="#1a0dab"/>
+    <SolidColorBrush x:Key="Member.Error" Color="#FF0000"/>
+
+    <SolidColorBrush x:Key="ListView.Alternation.Background_0" Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="ListView.Alternation.Background_1" Color="#FAFAFA"/>
+
+
+    <LinearGradientBrush x:Key="GridViewColumnHeaderBackground" EndPoint="0,1" StartPoint="0,0">
+        <GradientStop Color="#FFFFFFFF" Offset="0"/>
+        <GradientStop Color="#FFFFFFFF" Offset="0.4091"/>
+        <GradientStop Color="#FFF7F8F9" Offset="1"/>
+    </LinearGradientBrush>
+
+    <SolidColorBrush x:Key="ToolTip.Key" Color="Gray"/>
+    <SolidColorBrush x:Key="ToolTip.Value" Color="#000000"/>
+    <SolidColorBrush x:Key="ToolTip.ReturnType" Color="#0000FF"/>
+    <SolidColorBrush x:Key="ToolTip.Name" Color="#745320"/>
+    <SolidColorBrush x:Key="ToolTip.Invocation" Color="#21377F"/>
+</ResourceDictionary>                    
