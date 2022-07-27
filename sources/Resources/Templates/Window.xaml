@@ -1,0 +1,39 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework"
+                    xmlns:system="clr-namespace:System.Windows;assembly=PresentationFramework"
+                    >
+    
+    <Style x:Key="StandardStyle" TargetType="{x:Type Window}">
+        <Setter Property="shell:WindowChrome.WindowChrome">
+            <Setter.Value>
+                <shell:WindowChrome GlassFrameThickness="0" NonClientFrameEdges="Top"  />
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Window}">
+                    <Grid   >
+
+                        <Border Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}" Margin="{Binding Source={x:Static system:SystemParameters.WindowNonClientFrameThickness}}" >
+                            <ContentPresenter Content="{TemplateBinding Content}" />
+                        </Border>
+
+                        <Border Background="blue" Height="{Binding Source={x:Static system:SystemParameters.CaptionHeight}}" Width="10" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+
+                        <Border Margin="10 0 0 0" Background="navy"  Width="10" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+
+                        <TextBlock 
+                            Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Title}"   
+                            VerticalAlignment="Top"
+                            HorizontalAlignment="Left" 
+                            Margin="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(shell:WindowChrome.WindowChrome).ResizeBorderThickness}"                                    
+                         />
+                       
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+</ResourceDictionary>

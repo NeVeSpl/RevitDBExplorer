@@ -5,7 +5,7 @@ using RevitDBExplorer.Domain.DataModel;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
-namespace RevitDBExplorer.ViewModels
+namespace RevitDBExplorer.UIComponents.Tree
 {
     internal class SnoopableObjectTreeVM : TreeViewItemVM
     {

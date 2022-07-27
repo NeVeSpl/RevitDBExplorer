@@ -1,11 +1,11 @@
-﻿<UserControl x:Class="RevitDBExplorer.Views.QueryVisualizationView"
+﻿<UserControl x:Class="RevitDBExplorer.UIComponents.QueryVisualization.QueryVisualizationView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:interactivity="http://schemas.microsoft.com/expression/2010/interactivity"
-             xmlns:interactions="http://schemas.microsoft.com/expression/2010/interactions"
-             xmlns:local="clr-namespace:RevitDBExplorer.Views"
+             xmlns:interactions="http://schemas.microsoft.com/expression/2010/interactions"           
+             xmlns:local="clr-namespace:RevitDBExplorer.UIComponents.QueryVisualization"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
@@ -30,8 +30,8 @@
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <Grid x:Name="cQueryVisualizationGrid" Opacity="1">
-                        <Border Margin="0 3 5 2" Padding="7 3" BorderThickness="1" BorderBrush="#ABADB3" Background="{Binding Fill}" CornerRadius="10"  ToolTipService.ShowDuration="50000">
-                            <TextBlock Text="{Binding Name}" Foreground="{Binding Foreground}" TextTrimming="CharacterEllipsis"/>
+                        <Border Margin="0 3 5 2" Padding="7 3" BorderThickness="1" BorderBrush="{DynamicResource Query.BorderBrush}"  CornerRadius="10"  ToolTipService.ShowDuration="50000">
+                            <TextBlock Text="{Binding Name}"  TextTrimming="CharacterEllipsis"/>
 
                             <Border.ToolTip>
                                 <Grid>
@@ -69,6 +69,42 @@
                                     </ItemsControl>
                                 </Grid>
                             </Border.ToolTip>
+
+                            <Border.Style>      
+                                <Style TargetType="Border">
+                                    <Setter Property="TextBlock.Foreground" Value="{DynamicResource Query.Foreground}"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Type}" Value="ActiveView">
+                                            <Setter Property="Background" Value="{DynamicResource Query.ActiveView.Background}"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Type}" Value="ElementId">
+                                            <Setter Property="Background" Value="{DynamicResource Query.ElementId.Background}"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Type}" Value="ElementType">
+                                            <Setter Property="Background" Value="{DynamicResource Query.ElementType.Background}"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Type}" Value="NotElementType">
+                                            <Setter Property="Background" Value="{DynamicResource Query.NotElementType.Background}"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Type}" Value="Category">
+                                            <Setter Property="Background" Value="{DynamicResource Query.Category.Background}"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Type}" Value="Class">
+                                            <Setter Property="Background" Value="{DynamicResource Query.Class.Background}"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Type}" Value="Parameter">
+                                            <Setter Property="Background" Value="{DynamicResource Query.Parameter.Background}"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Type}" Value="Incorrect">
+                                            <Setter Property="Background" Value="{DynamicResource Query.Incorrect.Background}"/>
+                                            <Setter Property="TextBlock.Foreground" Value="{DynamicResource Query.Incorrect.Foreground}"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Type}" Value="WhoKnows">
+                                            <Setter Property="Background" Value="{DynamicResource Query.WhoKnows.Background}"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
                         </Border>
                     </Grid>
 

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Windows;
 
+// (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
+
 namespace RevitDBExplorer.WPF
 {
     internal class ThemeResourceDictionary : ResourceDictionary
@@ -22,9 +24,9 @@ namespace RevitDBExplorer.WPF
 
         private void UpdateSource()
         {
-            var category = String.IsNullOrEmpty(name) ? "Default" : name;
-            var style = String.IsNullOrEmpty(Properties.AppSettings.Default.Theme) ? "Default" : Properties.AppSettings.Default.Theme;
-            var path = new Uri($"pack://application:,,,/RevitDBExplorer;component/Resources/Themes/{style}.{category}.xaml", UriKind.RelativeOrAbsolute);
+            var dictionaryName = String.IsNullOrEmpty(name) ? "Default" : name;
+            var themeName = String.IsNullOrEmpty(Properties.AppSettings.Default.Theme) ? "Default" : Properties.AppSettings.Default.Theme;
+            var path = new Uri($"pack://application:,,,/RevitDBExplorer;component/Resources/Themes/{themeName}.{dictionaryName}.xaml", UriKind.RelativeOrAbsolute);
             base.Source = path;
         }
     }

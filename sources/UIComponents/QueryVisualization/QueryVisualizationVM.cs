@@ -8,7 +8,7 @@ using RDQCommand = RevitDBExplorer.Domain.RevitDatabaseQuery.Command;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
-namespace RevitDBExplorer.ViewModels
+namespace RevitDBExplorer.UIComponents.QueryVisualization
 {
     internal class QueryVisualizationVM : BaseViewModel
     {

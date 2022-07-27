@@ -47,6 +47,8 @@
     <Style x:Key="IconSelector" TargetType="Path" >
         <Setter Property="Fill" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
         <Setter Property="Stretch" Value="Uniform"/>
+        <Setter Property="SnapsToDevicePixels" Value="true"/>
+        
     </Style>
 
     <Style x:Key="IconSelection" TargetType="Path" BasedOn="{StaticResource IconSelector}">

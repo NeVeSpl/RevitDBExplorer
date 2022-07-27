@@ -253,12 +253,12 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>AppSettings.settings</DependentUpon>
     </Compile>
-    <Compile Include="ViewModels\QueryVisualizationVM.cs" />
-    <Compile Include="ViewModels\CommandVM.cs" />
-    <Compile Include="ViewModels\SnoopableCategoryTreeVM.cs" />
-    <Compile Include="ViewModels\SnoopableObjectTreeVM.cs" />
-    <Compile Include="ViewModels\TreeViewItemVM.cs" />
-    <Compile Include="Views\QueryVisualizationView.xaml.cs">
+    <Compile Include="UIComponents\QueryVisualization\QueryVisualizationVM.cs" />
+    <Compile Include="UIComponents\QueryVisualization\CommandVM.cs" />
+    <Compile Include="UIComponents\Tree\SnoopableCategoryTreeVM.cs" />
+    <Compile Include="UIComponents\Tree\SnoopableObjectTreeVM.cs" />
+    <Compile Include="UIComponents\Tree\TreeViewItemVM.cs" />
+    <Compile Include="UIComponents\QueryVisualization\QueryVisualizationView.xaml.cs">
       <DependentUpon>QueryVisualizationView.xaml</DependentUpon>
     </Compile>
     <Compile Include="WPF\Controls\TextBoxWithPlaceholder.xaml.cs">
@@ -309,6 +309,18 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Resources\Templates\ListViewItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\Templates\ScrollBar.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\Templates\ScrollViewer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Resources\Templates\TextBox.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -316,6 +328,10 @@
     <Page Include="Resources\Templates\Button.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\Templates\Window.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Resources\Themes\Default.Colors.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -329,7 +345,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\QueryVisualizationView.xaml">
+    <Page Include="UIComponents\QueryVisualization\QueryVisualizationView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -357,7 +373,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="UIComponents\List\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\System.Text.Json.6.0.0\build\System.Text.Json.targets" Condition="Exists('..\packages\System.Text.Json.6.0.0\build\System.Text.Json.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

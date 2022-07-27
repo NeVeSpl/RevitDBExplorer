@@ -16,7 +16,8 @@ using RevitDBExplorer.Domain;
 using RevitDBExplorer.Domain.DataModel;
 using RevitDBExplorer.Domain.RevitDatabaseQuery;
 using RevitDBExplorer.Properties;
-using RevitDBExplorer.ViewModels;
+using RevitDBExplorer.UIComponents.QueryVisualization;
+using RevitDBExplorer.UIComponents.Tree;
 using RDQCommand = RevitDBExplorer.Domain.RevitDatabaseQuery.Command;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md

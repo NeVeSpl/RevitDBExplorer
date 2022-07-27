@@ -2,10 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
 
-    <LinearGradientBrush x:Key="GridViewColumnHeaderBorderBackground" EndPoint="0,1" StartPoint="0,0">
-        <GradientStop Color="#FFF2F2F2" Offset="0"/>
-        <GradientStop Color="#FFD5D5D5" Offset="1"/>
-    </LinearGradientBrush>
+ 
    
     <LinearGradientBrush x:Key="GridViewColumnHeaderHoverBackground" EndPoint="0,1" StartPoint="0,0">
         <GradientStop Color="#FFBDEDFF" Offset="0"/>
@@ -20,7 +17,7 @@
         <Setter Property="Width" Value="18"/>
         <Setter Property="Height" Value="{Binding ActualHeight, RelativeSource={RelativeSource TemplatedParent}}"/>
         <Setter Property="Padding" Value="0"/>
-        <Setter Property="Background" Value="{StaticResource GridViewColumnHeaderBorderBackground}"/>
+        <Setter Property="Background" Value="{DynamicResource GridViewColumnHeaderBorderBackground}"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Thumb}">
@@ -35,7 +32,7 @@
         <Setter Property="HorizontalContentAlignment" Value="Center"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="Background" Value="{DynamicResource GridViewColumnHeaderBackground}"/>
-        <Setter Property="BorderBrush" Value="{StaticResource GridViewColumnHeaderBorderBackground}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource GridViewColumnHeaderBorderBackground}"/>
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="Padding" Value="2,0,2,0"/>
         <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
@@ -43,7 +40,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type GridViewColumnHeader}">
                     <Grid SnapsToDevicePixels="true">
-                        <Border x:Name="HeaderBorder" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="0,1,0,1">
+                        <Border x:Name="HeaderBorder" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="0,0,0,1">
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition MaxHeight="7"/>
@@ -55,20 +52,20 @@
                                 </Border>
                             </Grid>
                         </Border>
-                        <Border x:Name="HeaderHoverBorder" BorderThickness="1,0,1,1" Margin="1,1,0,0"/>
-                        <Border x:Name="HeaderPressBorder" BorderThickness="1,1,1,0" Margin="1,0,0,1"/>
+                        <!--<Border x:Name="HeaderHoverBorder" BorderThickness="1,0,1,1" Margin="1,1,0,0"/>
+                        <Border x:Name="HeaderPressBorder" BorderThickness="1,1,1,0" Margin="1,0,0,1"/>-->
                         <Canvas>
                             <Thumb x:Name="PART_HeaderGripper" Style="{StaticResource GridViewColumnHeaderGripper}"/>
                         </Canvas>
                     </Grid>
                     <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="true">
+                        <!--<Trigger Property="IsMouseOver" Value="true">
                             <Setter Property="Background" TargetName="HeaderBorder" Value="{StaticResource GridViewColumnHeaderHoverBackground}"/>
                             <Setter Property="BorderBrush" TargetName="HeaderHoverBorder" Value="#FF88CBEB"/>
                             <Setter Property="Visibility" TargetName="UpperHighlight" Value="Visible"/>
                             <Setter Property="Background" TargetName="PART_HeaderGripper" Value="Transparent"/>
-                        </Trigger>
-                        <Trigger Property="IsPressed" Value="true">
+                        </Trigger>-->
+                        <!--<Trigger Property="IsPressed" Value="true">
                             <Setter Property="Background" TargetName="HeaderBorder" Value="{StaticResource GridViewColumnHeaderPressBackground}"/>
                             <Setter Property="BorderBrush" TargetName="HeaderHoverBorder" Value="#FF95DAF9"/>
                             <Setter Property="BorderBrush" TargetName="HeaderPressBorder" Value="#FF7A9EB1"/>
@@ -76,7 +73,7 @@
                             <Setter Property="Fill" TargetName="UpperHighlight" Value="#FFBCE4F9"/>
                             <Setter Property="Visibility" TargetName="PART_HeaderGripper" Value="Hidden"/>
                             <Setter Property="Margin" TargetName="HeaderContent" Value="1,1,0,0"/>
-                        </Trigger>
+                        </Trigger>-->
                         <Trigger Property="Height" Value="Auto">
                             <Setter Property="MinHeight" Value="20"/>
                         </Trigger>
@@ -104,7 +101,7 @@
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type GridViewColumnHeader}">
-                            <Border x:Name="HeaderBorder" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="0,1,0,1"/>
+                            <Border x:Name="HeaderBorder" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="0,0,0,1"/>
                             <ControlTemplate.Triggers>
                                 <Trigger Property="Height" Value="Auto">
                                     <Setter Property="MinHeight" Value="20"/>

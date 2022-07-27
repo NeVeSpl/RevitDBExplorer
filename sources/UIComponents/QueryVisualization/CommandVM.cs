@@ -1,37 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Media;
 using RevitDBExplorer.Domain.RevitDatabaseQuery;
 using RevitDBExplorer.WPF;
 using RDQCommand = RevitDBExplorer.Domain.RevitDatabaseQuery.Command;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
-namespace RevitDBExplorer.ViewModels
+namespace RevitDBExplorer.UIComponents.QueryVisualization
 {
     internal class CommandVM : BaseViewModel, IEquatable<CommandVM>
     {
         private readonly RDQCommand command;
-        private Brush fill;
-        private Brush foreground = Brushes.Black;
+        private readonly string args;
         private string name;
         private string filterName;
-        private bool toRemove;
-        private IEnumerable<ILookupResult> arguments;
+        private bool toRemove;      
 
-        public Brush Fill
-        {
-            get
-            {
-                return fill;
-            }
-            set
-            {
-                fill = value;
-                OnPropertyChanged();
-            }
-        }
+
         public string Name
         {
             get
@@ -43,19 +29,7 @@ namespace RevitDBExplorer.ViewModels
                 name = value;
                 OnPropertyChanged();
             }
-        }
-        public Brush Foreground
-        {
-            get
-            {
-                return foreground;
-            }
-            set
-            {
-                foreground = value;
-                OnPropertyChanged();
-            }
-        }
+        }   
         public bool ToRemove
         {
             get
@@ -80,58 +54,39 @@ namespace RevitDBExplorer.ViewModels
                 OnPropertyChanged();
             }
         }
-        public IEnumerable<ILookupResult> Arguments
-        {
-            get
-            {
-                return arguments;
-            }
-            set
-            {
-                arguments = value;
-                OnPropertyChanged();
-            }
-        }
+        public IEnumerable<ILookupResult> Arguments => command.MatchedArguments;
+        public CmdType Type => command.Type;
 
 
         public CommandVM(RDQCommand command)
         {
-            this.command = command;          
-            string hexColor = "#FFFFFF";
-
-            string args = String.Join(", ", command.MatchedArguments.Select(x => x.Name));
-            Arguments = command.MatchedArguments;
+            this.command = command; 
+            args = String.Join(", ", command.MatchedArguments.Select(x => x.Name));          
             switch (command.Type)
             {
                 case CmdType.ActiveView:
                     Name = "active view";
-                    FilterName = "new FilteredElementCollector(document, document.ActiveView.Id)";                    
-                    hexColor = "#FFF2CC";
+                    FilterName = "new FilteredElementCollector(document, document.ActiveView.Id)"; 
                     break;               
                 case CmdType.ElementId:
                     Name = args;
-                    FilterName = ".WherePasses(new ElementIdSetFilter())";
-                    hexColor = "#FBE5D5";
+                    FilterName = ".WherePasses(new ElementIdSetFilter())";                   
                     break;
                 case CmdType.ElementType:
                     Name = "element type";
-                    FilterName = ".WhereElementIsElementType()";
-                    hexColor = "#FFF2CC";
+                    FilterName = ".WhereElementIsElementType()";                  
                     break;
                 case CmdType.NotElementType:
                     Name = "element";
-                    FilterName = ".WhereElementIsNotElementType()";
-                    hexColor = "#FFF2CC";
+                    FilterName = ".WhereElementIsNotElementType()";                 
                     break;
                 case CmdType.Category:
                     Name = args;
-                    FilterName = ".OfCategory()";
-                    hexColor = "#DEEBF6";
+                    FilterName = ".OfCategory()";                 
                     break;
                 case CmdType.Class:
                     Name = args;
-                    FilterName = ".OfClass()";
-                    hexColor = "#E2EFD9";
+                    FilterName = ".OfClass()";                   
                     break;                
                 case CmdType.Parameter:
                     var firstArg = command.MatchedArguments.OfType<ParameterMatch>().First();
@@ -144,33 +99,23 @@ namespace RevitDBExplorer.ViewModels
                     }
                     
                     Name = $"{argsForParam}{count} {command.Operator.ToString(firstArg.StorageType)}";
-                    FilterName = ".WherePasses(new ElementParameterFilter())";
-                    hexColor = "#EDEDED";
+                    FilterName = ".WherePasses(new ElementParameterFilter())";                   
                     break;
                 case CmdType.Incorrect:
                     Name = command.Text;
-                    FilterName = "could not recognize phrase";
-                    hexColor = "#FF0000";
-                    Foreground = Brushes.White;
+                    FilterName = "could not recognize phrase";  
                     break;
                 case CmdType.WhoKnows:
-                    Name = args;
-                    hexColor = "#E3D6EC";
+                    Name = args;                 
                     break;
                 default:
                     throw new NotImplementedException();
             };
-
-
-
-            fill = new SolidColorBrush((Color)ColorConverter.ConvertFromString(hexColor));
-
-
         }
 
         public bool Equals(CommandVM other)
         {
-            return string.Equals(Name, other.Name) && string.Equals(Fill.ToString(), other.Fill.ToString()); 
+            return string.Equals(Name, other.Name) && string.Equals(args.ToString(), other.args.ToString()); 
         }
     }
 }

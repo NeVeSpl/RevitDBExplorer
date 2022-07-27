@@ -7,19 +7,20 @@
              xmlns:local="clr-namespace:RevitDBExplorer.WPF.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid x:Name="cMainGrid">
+    <Grid x:Name="cMainGrid" Background="{DynamicResource TextBox.Background}">
         <Grid.Resources>
             <converters:StringIsNotNullOrEmptyConverter x:Key="StringIsNotNullOrEmptyConverter"/>
         </Grid.Resources>
         <TextBox Text="{Binding Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Padding="1 2" KeyDown="TextBox_KeyDown">
             <TextBox.Background>
-                <VisualBrush AlignmentX="Left" AlignmentY="Center" Stretch="None">
+                <VisualBrush AlignmentX="Left" AlignmentY="Center" Stretch="None" >
+                 
                     <VisualBrush.Visual>
-                        <Label Content="{Binding Placeholder}" Foreground="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" >
+                        <Label Content="{Binding Placeholder}" Foreground="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}">
                             <Label.Style>
                                 <Style TargetType="Label">
                                     <Style.Triggers>
-                                        <DataTrigger Binding="{Binding Text, Converter={StaticResource StringIsNotNullOrEmptyConverter}}" Value="True">
+                                        <DataTrigger Binding="{Binding Text, Converter={StaticResource StringIsNotNullOrEmptyConverter}, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}" Value="True">
                                             <Setter Property="Visibility" Value="Hidden" />
                                         </DataTrigger>
                                         <DataTrigger Binding="{Binding IsKeyboardFocused, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}" Value="True">
