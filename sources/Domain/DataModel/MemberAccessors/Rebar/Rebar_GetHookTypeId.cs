@@ -9,8 +9,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
     internal class Rebar_GetHookTypeId : MemberAccessorByType<Rebar>, ICanCreateMemberAccessor
     {
-        protected override IEnumerable<LambdaExpression> HandledMembers { get { yield return (Rebar x) => x.GetHookTypeId(7); } }
-        IMemberAccessor ICanCreateMemberAccessor.Create() => new Rebar_GetHookTypeId();
+        IEnumerable<LambdaExpression> ICanCreateMemberAccessor.GetHandledMembers() { yield return (Rebar x) => x.GetHookTypeId(7); }      
 
 
         protected override bool CanBeSnoooped(Document document, Rebar rebar) => true;

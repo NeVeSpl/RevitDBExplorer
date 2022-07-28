@@ -9,8 +9,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
     internal class AssetProperties_Item : MemberAccessorByType<AssetProperties>, ICanCreateMemberAccessor
     { 
-        protected override IEnumerable<LambdaExpression> HandledMembers { get { yield return (AssetProperties x) => x[0]; } }
-        IMemberAccessor ICanCreateMemberAccessor.Create() => new AssetProperties_Item();
+        IEnumerable<LambdaExpression> ICanCreateMemberAccessor.GetHandledMembers() { yield return (AssetProperties x) => x[0]; }     
 
 
         protected override bool CanBeSnoooped(Document document, AssetProperties assetProperties) => assetProperties.Size > 0;

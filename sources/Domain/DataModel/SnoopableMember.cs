@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using RevitDBExplorer.Domain.DataModel.MemberAccessors;
+using RevitDBExplorer.Domain.DataModel.ValueObjects;
 using RevitDBExplorer.WPF;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
@@ -14,7 +15,7 @@ namespace RevitDBExplorer.Domain.DataModel
         public enum Kind { Property, Method, StaticMethod, Extra }
 
         private readonly SnoopableObject parent;
-        private readonly Type declaringType;      
+        private readonly DeclaringType declaringType;      
         private readonly IMemberAccessor memberAccessor;
         private readonly Lazy<DocXml> documentation;
         private Exception valueAccessException;
@@ -26,8 +27,11 @@ namespace RevitDBExplorer.Domain.DataModel
 
         public Kind MemberKind { get; }
         public string Name { get; }
-        public string DeclaringType => declaringType.GetCSharpName();
-        public int DeclaringTypeLevel { get; }
+        public string DeclaringTypeName => declaringType.Name;
+        public int DeclaringTypeLevel => declaringType.InheritanceLevel;
+        public DocXml Documentation => documentation?.Value ?? DocXml.Empty;
+
+
         public bool HasException => valueAccessException is not null;
         public bool HasExceptionCouldNotResolveAllArguments => valueAccessException is CouldNotResolveAllArgumentsException;
         public string Value
@@ -43,7 +47,7 @@ namespace RevitDBExplorer.Domain.DataModel
         }
         public string ValueTypeName => valueTypeName;
         public bool CanBeSnooped => canBeSnooped;
-        public DocXml Documentation => documentation?.Value ?? DocXml.Empty;
+       
         
 
         public SnoopableMember(SnoopableObject parent, Kind memberKind, string name, Type declaringType, IMemberAccessor memberAccessor, Func<DocXml> documentationFactoryMethod)
@@ -51,8 +55,7 @@ namespace RevitDBExplorer.Domain.DataModel
             this.parent = parent;
             this.MemberKind = memberKind;
             this.Name = name;
-            this.declaringType = declaringType;
-            this.DeclaringTypeLevel = declaringType.NumberOfBaseTypes();
+            this.declaringType = DeclaringType.Create(declaringType);      
             this.memberAccessor = memberAccessor;
             if (documentationFactoryMethod != null)
             {
@@ -63,10 +66,11 @@ namespace RevitDBExplorer.Domain.DataModel
 
         public void ReadValue()
         {
-            ReadValue(parent.Document, parent.Object);
+            ReadValue(parent.Context, parent.Object);
         }
-        private void ReadValue(Document document, object @object)
+        private void ReadValue(SnoopableContext document, object @object)
         {
+            
             try
             {
                 var result = memberAccessor.Read(document, @object);
@@ -91,7 +95,7 @@ namespace RevitDBExplorer.Domain.DataModel
         }
         public IEnumerable<SnoopableObject> Snooop(UIApplication app)
         {
-            return memberAccessor.Snoop(parent.Document, parent.Object);
+            return memberAccessor.Snoop(parent.Context, parent.Object);
         }
     }
 }

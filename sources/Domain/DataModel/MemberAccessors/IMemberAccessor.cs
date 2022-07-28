@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Autodesk.Revit.DB;
+using System.Linq;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
@@ -8,28 +8,28 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
     internal interface IMemberAccessor
     {
-        ReadResult Read(Document document, object @object);      
-        IEnumerable<SnoopableObject> Snoop(Document document, object @object);
+        ReadResult Read(SnoopableContext context, object @object);      
+        IEnumerable<SnoopableObject> Snoop(SnoopableContext context, object @object);
     }
 
 
     internal abstract class MemberAccessorTyped<TSnoopedObjectType> : IMemberAccessor
     {
-        ReadResult IMemberAccessor.Read(Document document, object @object)
+        ReadResult IMemberAccessor.Read(SnoopableContext context, object @object)
         {
             Guard.IsAssignableToType<TSnoopedObjectType>(@object);      
             var typedObject = (TSnoopedObjectType) @object;          
-            return Read(document, typedObject);
+            return Read(context, typedObject);
         }
-        public abstract ReadResult Read(Document document, TSnoopedObjectType @object);
+        public abstract ReadResult Read(SnoopableContext context, TSnoopedObjectType @object);
 
-        IEnumerable<SnoopableObject> IMemberAccessor.Snoop(Document document, object @object)
+        IEnumerable<SnoopableObject> IMemberAccessor.Snoop(SnoopableContext context, object @object)
         {
             Guard.IsAssignableToType<TSnoopedObjectType>(@object);
             var typedObject = (TSnoopedObjectType) @object;            
-            return Snoop(document, typedObject);
+            return Snoop(context, typedObject) ?? Enumerable.Empty<SnoopableObject>();
         }
-        public abstract IEnumerable<SnoopableObject> Snoop(Document document, TSnoopedObjectType @object);
+        public abstract IEnumerable<SnoopableObject> Snoop(SnoopableContext context, TSnoopedObjectType @object);
     }
 
 

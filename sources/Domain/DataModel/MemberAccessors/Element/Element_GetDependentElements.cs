@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
 using Autodesk.Revit.DB;
 
@@ -7,24 +6,14 @@ using Autodesk.Revit.DB;
 
 namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
-    internal class Element_GetDependentElements : MemberAccessorByType<Element>, ICanCreateMemberAccessor
-    {       
-        protected override IEnumerable<LambdaExpression> HandledMembers { get { yield return (Element x, ElementFilter ef) => x.GetDependentElements(ef); } }
-        IMemberAccessor ICanCreateMemberAccessor.Create() => new Element_GetDependentElements();
+    internal class Element_GetDependentElements : MemberAccessorByFunc<Element, IList<ElementId>>, ICanCreateMemberAccessor
+    {
+        IEnumerable<LambdaExpression> ICanCreateMemberAccessor.GetHandledMembers() { yield return (Element x, ElementFilter ef) => x.GetDependentElements(ef); }
 
 
-        protected override bool CanBeSnoooped(Document document, Element element) => true;
-        protected override string GetLabel(Document document, Element element) => $"[{nameof(Element)}]";
-        protected override IEnumerable<SnoopableObject> Snooop(Document document, Element element)
+        public Element_GetDependentElements() : base( (document, element) => element.GetDependentElements(null) )
         {
-            var ids = element.GetDependentElements(null);
-            if (ids.Any())
-            {
-                var elements = new FilteredElementCollector(document).WherePasses(new ElementIdSetFilter(ids)).ToElements();
-                return elements.Select(x => new SnoopableObject(document, x));
-            }
 
-            return Enumerable.Empty<SnoopableObject>();
         }
     }
 }

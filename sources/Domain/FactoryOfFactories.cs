@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 using RevitDBExplorer.Domain.DataModel;
 using RevitDBExplorer.Domain.DataModel.MemberAccessors;
@@ -13,7 +14,7 @@ namespace RevitDBExplorer.Domain
     internal static class FactoryOfFactories
     {
         private static readonly Dictionary<Type, List<ISnoopableMemberTemplate>> forTypes = new();
-        private static readonly Dictionary<string, ICanCreateMemberAccessor> forTypeMembers = new();
+        private static readonly Dictionary<string, Func<IMemberAccessor>> forTypeMembers = new();
 
 
         public static void Init()
@@ -24,7 +25,7 @@ namespace RevitDBExplorer.Domain
 
         static FactoryOfFactories()
         {
-            var memberTemplateFactories = GetFactoriesOfType<IHaveMemberTemplates>();
+            var memberTemplateFactories = GetAllInstancesThatImplement<IHaveMemberTemplates>();
 
             foreach (var factory in memberTemplateFactories)
             {
@@ -34,17 +35,24 @@ namespace RevitDBExplorer.Domain
                 }    
             }
 
-            var accessorsFactories = GetFactoriesOfType<ICanCreateMemberAccessor>();
-            forTypeMembers = accessorsFactories.SelectMany(x => x.GetHandledMembers(), (factory, key) => (factory, key)).ToDictionary(x => x.key, x => x.factory);
+            var accessors = GetAllInstancesThatImplement<ICanCreateMemberAccessor>();
+            foreach (var accessor in accessors)
+            {
+                foreach (var handledMember in accessor.GetHandledMembers())
+                {
+                    var memberId = handledMember.GetUniqueId();
+                    forTypeMembers[memberId] = accessor.GetType().CompileFactoryMethod<IMemberAccessor>();
+                }
+            }
         }
 
 
-        private static IEnumerable<T> GetFactoriesOfType<T>() where T : class
+        private static IEnumerable<T> GetAllInstancesThatImplement<T>() where T : class
         {
             var type = typeof(T);
-            var factoryTypes = type.Assembly.GetTypes().Where(p => type.IsAssignableFrom(p) && !p.IsInterface).ToList();
-            var factoryinstances = factoryTypes.Select(x => Activator.CreateInstance(x) as T);
-            return factoryinstances;
+            var types = type.Assembly.GetTypes().Where(p => type.IsAssignableFrom(p) && !p.IsInterface).ToList();
+            var instances = types.Select(x => Activator.CreateInstance(x) as T);
+            return instances;
         }
         private static void RegisterTemplate(ISnoopableMemberTemplate template)
         {
@@ -76,9 +84,18 @@ namespace RevitDBExplorer.Domain
         }
         public static IMemberAccessor CreateMemberAccessor(MethodInfo getMethod, MethodInfo setMethod)
         {
-            if (forTypeMembers.TryGetValue(getMethod.GetUniqueId(), out ICanCreateMemberAccessor factory))
+            if (forTypeMembers.TryGetValue(getMethod.GetUniqueId(), out Func<IMemberAccessor> factory))
             {
-                return factory.Create();
+                return factory();
+            }
+
+            var @params = getMethod.GetParameters();
+            if (@params.Length == 1)
+            {
+                if (@params[0].ParameterType.IsEnum)
+                {
+                    return new MemberAccessorByEnum(getMethod);
+                }
             }
 
             return new MemberAccessorByRef(getMethod, setMethod);

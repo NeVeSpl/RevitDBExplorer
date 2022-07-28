@@ -10,12 +10,11 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
     internal class Rebar_GetCenterlineCurves : MemberAccessorByType<Rebar>, ICanCreateMemberAccessor
     {
-        protected override IEnumerable<LambdaExpression> HandledMembers { get { yield return (Rebar x) => x.GetCenterlineCurves(false, true, false, MultiplanarOption.IncludeOnlyPlanarCurves, 0); } }
-        IMemberAccessor ICanCreateMemberAccessor.Create() => new Rebar_GetCenterlineCurves();
+        IEnumerable<LambdaExpression> ICanCreateMemberAccessor.GetHandledMembers() { yield return (Rebar x) => x.GetCenterlineCurves(false, true, false, MultiplanarOption.IncludeOnlyPlanarCurves, 0); }      
 
 
         protected override bool CanBeSnoooped(Document document, Rebar rebar) => true;
-        protected override string GetLabel(Document document, Rebar rebar) => $"[{nameof(Curve)}]";
+        protected override string GetLabel(Document document, Rebar rebar) => $"[{nameof(Curve)} : {rebar.NumberOfBarPositions}]";
         protected override IEnumerable<SnoopableObject> Snooop(Document document, Rebar rebar)
         {
             for (int i = 0; i < rebar.NumberOfBarPositions; ++i)

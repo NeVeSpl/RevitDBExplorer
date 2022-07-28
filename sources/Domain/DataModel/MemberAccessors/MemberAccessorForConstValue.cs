@@ -19,13 +19,13 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
         }
 
 
-        public ReadResult Read(Document document, object @object)
+        public ReadResult Read(SnoopableContext context, object @object)
         {          
             return new ReadResult(value.ValueAsString, value.TypeName, value.CanBeSnooped, null);
         }
-        public IEnumerable<SnoopableObject> Snoop(Document document, object @object)
+        public IEnumerable<SnoopableObject> Snoop(SnoopableContext context, object @object)
         {
-            return value.Snoop(document);
+            return value.Snoop(context.Document);
         }
     }
 }

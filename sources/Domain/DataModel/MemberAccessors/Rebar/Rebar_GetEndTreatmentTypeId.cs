@@ -9,8 +9,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
     internal class Rebar_GetEndTreatmentTypeId : MemberAccessorByType<Rebar>, ICanCreateMemberAccessor
     {
-        protected override IEnumerable<LambdaExpression> HandledMembers { get { yield return (Rebar x) => x.GetEndTreatmentTypeId(7); } }
-        IMemberAccessor ICanCreateMemberAccessor.Create() => new Rebar_GetEndTreatmentTypeId();
+        IEnumerable<LambdaExpression> ICanCreateMemberAccessor.GetHandledMembers() { yield return (Rebar x) => x.GetEndTreatmentTypeId(7); }       
 
 
         protected override bool CanBeSnoooped(Document document, Rebar rebar) => true;

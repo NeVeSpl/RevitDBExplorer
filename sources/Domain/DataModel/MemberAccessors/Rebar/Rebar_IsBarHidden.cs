@@ -10,12 +10,11 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
     internal class Rebar_IsBarHidden : MemberAccessorByType<Rebar>, ICanCreateMemberAccessor
     {
-        protected override IEnumerable<LambdaExpression> HandledMembers { get { yield return (Rebar x, View v) => x.IsBarHidden(v, 7); } }
-        IMemberAccessor ICanCreateMemberAccessor.Create() => new Rebar_IsBarHidden();
+        IEnumerable<LambdaExpression> ICanCreateMemberAccessor.GetHandledMembers() { yield return (Rebar x, View v) => x.IsBarHidden(v, 7); }    
 
 
         protected override bool CanBeSnoooped(Document document, Rebar rebar) => true;
-        protected override string GetLabel(Document document, Rebar rebar) => $"[{nameof(Boolean)}]";
+        protected override string GetLabel(Document document, Rebar rebar) => $"[{nameof(Boolean)} : {rebar.NumberOfBarPositions}]";
         protected override IEnumerable<SnoopableObject> Snooop(Document document, Rebar rebar)
         {
             for (int i = 0; i < rebar.NumberOfBarPositions; ++i)

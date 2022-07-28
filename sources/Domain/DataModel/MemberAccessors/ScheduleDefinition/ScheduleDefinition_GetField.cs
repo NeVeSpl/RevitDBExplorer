@@ -7,9 +7,8 @@ using Autodesk.Revit.DB;
 namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
     internal class ScheduleDefinition_GetField : MemberAccessorByType<ScheduleDefinition>, ICanCreateMemberAccessor
-    {       
-        protected override IEnumerable<LambdaExpression> HandledMembers { get { yield return (ScheduleDefinition x) => x.GetField(7); } }
-        IMemberAccessor ICanCreateMemberAccessor.Create() => new ScheduleDefinition_GetField();
+    {
+        IEnumerable<LambdaExpression> ICanCreateMemberAccessor.GetHandledMembers() { yield return (ScheduleDefinition x) => x.GetField(7); }  
 
 
         protected override bool CanBeSnoooped(Document document, ScheduleDefinition scheduleDefinition)

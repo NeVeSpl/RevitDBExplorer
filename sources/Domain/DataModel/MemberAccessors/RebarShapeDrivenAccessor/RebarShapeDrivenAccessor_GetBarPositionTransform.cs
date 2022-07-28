@@ -9,8 +9,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
     internal class RebarShapeDrivenAccessor_GetBarPositionTransform : MemberAccessorByType<RebarShapeDrivenAccessor>, ICanCreateMemberAccessor
     {
-        protected override IEnumerable<LambdaExpression> HandledMembers { get { yield return (RebarShapeDrivenAccessor x) => x.GetBarPositionTransform(13); } }
-        IMemberAccessor ICanCreateMemberAccessor.Create() => new RebarShapeDrivenAccessor_GetBarPositionTransform();
+        IEnumerable<LambdaExpression> ICanCreateMemberAccessor.GetHandledMembers() { yield return (RebarShapeDrivenAccessor x) => x.GetBarPositionTransform(13); }       
 
 
         protected override bool CanBeSnoooped(Document document, RebarShapeDrivenAccessor rebar) => false;

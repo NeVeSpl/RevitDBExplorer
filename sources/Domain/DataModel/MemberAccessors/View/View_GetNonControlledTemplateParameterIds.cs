@@ -8,9 +8,8 @@ using Autodesk.Revit.DB;
 namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
     internal class View_GetNonControlledTemplateParameterIds : MemberAccessorByType<View>, ICanCreateMemberAccessor
-    {       
-        protected override IEnumerable<LambdaExpression> HandledMembers { get { yield return (View x) => x.GetNonControlledTemplateParameterIds(); } }
-        IMemberAccessor ICanCreateMemberAccessor.Create() => new View_GetNonControlledTemplateParameterIds();
+    {
+        IEnumerable<LambdaExpression> ICanCreateMemberAccessor.GetHandledMembers() { yield return (View x) => x.GetNonControlledTemplateParameterIds(); }  
 
 
         protected override bool CanBeSnoooped(Document document, View view)

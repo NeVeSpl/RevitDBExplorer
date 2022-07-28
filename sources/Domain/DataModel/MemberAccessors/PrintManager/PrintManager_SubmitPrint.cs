@@ -7,10 +7,9 @@ using Autodesk.Revit.DB;
 namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
     internal class PrintManager_SubmitPrint : MemberAccessorByType<PrintManager>, ICanCreateMemberAccessor
-    {       
-        protected override IEnumerable<LambdaExpression> HandledMembers { get { yield return (PrintManager x) => x.SubmitPrint(); yield return (PrintManager x, View v) => x.SubmitPrint(v); } }
-        IMemberAccessor ICanCreateMemberAccessor.Create() => new PrintManager_SubmitPrint();
-
+    {
+        IEnumerable<LambdaExpression> ICanCreateMemberAccessor.GetHandledMembers() { yield return (PrintManager x) => x.SubmitPrint(); yield return (PrintManager x, View v) => x.SubmitPrint(v); } 
+      
 
         protected override bool CanBeSnoooped(Document document, PrintManager value) => false;
         protected override string GetLabel(Document document, PrintManager value) => "'I wouldn't do that if I were you' - Anthony";

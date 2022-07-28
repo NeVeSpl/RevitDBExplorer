@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using Autodesk.Revit.DB;
@@ -10,9 +11,8 @@ using Autodesk.Revit.DB.ExtensibleStorage;
 namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
     internal class Entity_Get : MemberAccessorByType<Entity>, ICanCreateMemberAccessor
-    {       
-        protected override IEnumerable<LambdaExpression> HandledMembers { get { yield return (Entity x, Field f) => x.Get<object>(f); } }
-        IMemberAccessor ICanCreateMemberAccessor.Create() => new Entity_Get();
+    {
+        IEnumerable<LambdaExpression> ICanCreateMemberAccessor.GetHandledMembers() { yield return (Entity x, Field f) => x.Get<object>(f); }         
 
 
         protected override bool CanBeSnoooped(Document document, Entity entity)
@@ -39,7 +39,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
                 object[] parameters = null;
                 if (UnitUtils.IsMeasurableSpec(fieldSpecType) || fieldSpecType == SpecTypeId.Custom)
                 {
-                    var unit = UnitUtils.IsMeasurableSpec(fieldSpecType) ? UnitUtils.GetValidUnits(fieldSpecType)[0] : UnitTypeId.Custom;
+                    var unit = UnitUtils.IsMeasurableSpec(fieldSpecType) ? UnitUtils.GetValidUnits(fieldSpecType).FirstOrDefault() : UnitTypeId.Custom;
                     constructedGenericGet = getWithFielAndUnit.MakeGenericMethod(fieldValueType);
                     parameters = new object[] { field, unit };
                 }

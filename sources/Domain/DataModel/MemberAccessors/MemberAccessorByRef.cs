@@ -23,22 +23,22 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
         }
 
 
-        public ReadResult Read(Document document, object @object)
+        public ReadResult Read(SnoopableContext context, object @object)
         {
-            value.SetValue(document, null);
+            value.SetValue(context.Document, null);
             var paramsDef = getMethod.GetParameters();
-            var resolvedArgs = ResolveArguments(paramsDef, document, @object);
+            var resolvedArgs = ResolveArguments(paramsDef, context.Document, @object);
             if (resolvedArgs.ex is not null)
             {
                 return new ReadResult(String.Empty, value.TypeName, false, resolvedArgs.ex);
             }
             var result = getMethod.Invoke(@object, resolvedArgs.args);
-            value.SetValue(document, result);
+            value.SetValue(context.Document, result);
             return new ReadResult(value.ValueAsString, value.TypeName, value.CanBeSnooped, null);
         }
-        public IEnumerable<SnoopableObject> Snoop(Document document, object @object)
+        public IEnumerable<SnoopableObject> Snoop(SnoopableContext context, object @object)
         {
-            return value.Snoop(document);
+            return value.Snoop(context.Document);
         }
 
 

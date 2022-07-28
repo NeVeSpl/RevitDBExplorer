@@ -8,10 +8,9 @@ using Autodesk.Revit.DB;
 namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
     internal class PlanViewRange_GetLevelId : MemberAccessorByType<PlanViewRange>, ICanCreateMemberAccessor
-    {       
-        protected override IEnumerable<LambdaExpression> HandledMembers { get { yield return (PlanViewRange x, PlanViewPlane p) => x.GetLevelId(p); } }
-        IMemberAccessor ICanCreateMemberAccessor.Create() => new PlanViewRange_GetLevelId();
-
+    {
+        IEnumerable<LambdaExpression> ICanCreateMemberAccessor.GetHandledMembers() { yield return (PlanViewRange x, PlanViewPlane p) => x.GetLevelId(p); }
+       
 
         protected override bool CanBeSnoooped(Document document, PlanViewRange viewRange) => true;
         protected override string GetLabel(Document document, PlanViewRange viewRange) => $"[{nameof(Level)}]";

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq.Expressions;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
@@ -44,6 +43,7 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers.Base
             new ElementContainer(),
             
             //
+            new IListElementIdContainer(),
             new IEnumerableContainer()
         };
 
@@ -51,11 +51,8 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers.Base
         static ValueContainerFactory()
         {
             foreach (var valueType in ValueContainers)
-            {
-                var newExpression = Expression.New(valueType.GetType());
-                var factoryLambda = Expression.Lambda<Func<IValueContainer>>(newExpression);
-                var FactoryMethod = factoryLambda.Compile();
-                FactoryMethodsForValueContainers.Add((valueType.Type, FactoryMethod));
+            {              
+                FactoryMethodsForValueContainers.Add((valueType.Type, valueType.GetType().CompileFactoryMethod<IValueContainer>()));
             }
         }
 

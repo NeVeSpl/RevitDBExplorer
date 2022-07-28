@@ -13,8 +13,9 @@ namespace RevitDBExplorer.Domain.DataModel
 {
     internal class SnoopableObject : BaseViewModel
     {        
-        private readonly List<SnoopableObject> items;         
+        private readonly List<SnoopableObject> items;   
 
+        public SnoopableContext Context { get; }
         public object Object { get; }
         public Document Document { get; }
         public string Name { get; init; }
@@ -26,9 +27,10 @@ namespace RevitDBExplorer.Domain.DataModel
 
         public SnoopableObject(Document document, object @object, IEnumerable<SnoopableObject> subObjects = null)
         {
+            this.Context = new SnoopableContext() { Document = document };
             this.Object = @object;
             this.Document = document;            
-            this.Name = @object is not null ? Labeler.GetLabelForObject(@object, document) : "";
+            this.Name = @object is not null ? Labeler.GetLabelForObject(@object, document) : "<null>";
             this.TypeName = @object?.GetType().GetCSharpName();
 
             if (subObjects != null)
@@ -117,7 +119,7 @@ namespace RevitDBExplorer.Domain.DataModel
                 yield return member;
             }
         }
-
+        
 
         public static SnoopableObject CreateKeyValuePair(Document document, object key, object value, string keyPrefix = "key:", string valuePrefix = "value:")
         {

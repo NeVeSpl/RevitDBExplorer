@@ -244,6 +244,13 @@
                     <Setter Property="ToolTip">
                         <Setter.Value>
                             <StackPanel Orientation="Vertical"  MaxWidth="727">
+                                <StackPanel.Resources>
+                                    <SolidColorBrush x:Key="ToolTip.Key" Color="Gray"/>
+                                    <SolidColorBrush x:Key="ToolTip.Value" Color="#000000"/>
+                                    <SolidColorBrush x:Key="ToolTip.ReturnType" Color="#0000FF"/>
+                                    <SolidColorBrush x:Key="ToolTip.Name" Color="#745320"/>
+                                    <SolidColorBrush x:Key="ToolTip.Invocation" Color="#21377F"/>
+                                </StackPanel.Resources>
                                 <TextBlock Visibility="{Binding Documentation.Name, Converter={StaticResource StringToVisibilityConverter}}">
                                     <Run Foreground="{DynamicResource ToolTip.ReturnType}" Text="{Binding Documentation.ReturnType, Mode=OneWay}" /> <Run Foreground="{DynamicResource ToolTip.Name}" Text="{Binding Documentation.Name, Mode=OneWay}" /><Run Foreground="{DynamicResource ToolTip.Invocation}" Text="{Binding Documentation.Invocation, Mode=OneWay}" />
                                     <LineBreak/>

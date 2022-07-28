@@ -9,8 +9,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
     internal class Element_GetPhaseStatus : MemberAccessorByType<Element>, ICanCreateMemberAccessor
     {
-        protected override IEnumerable<LambdaExpression> HandledMembers { get { yield return (Element x, ElementId i) => x.GetPhaseStatus(i); } }      
-        IMemberAccessor ICanCreateMemberAccessor.Create() => new Element_GetPhaseStatus();
+        IEnumerable<LambdaExpression> ICanCreateMemberAccessor.GetHandledMembers() { yield return (Element x, ElementId i) => x.GetPhaseStatus(i); }           
 
 
         protected override bool CanBeSnoooped(Document document, Element element) => !document.Phases.IsEmpty;

@@ -10,8 +10,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
     internal class Rebar_GetHookRotationAngle : MemberAccessorByType<Rebar>, ICanCreateMemberAccessor
     {
-        protected override IEnumerable<LambdaExpression> HandledMembers { get { yield return (Rebar x) => x.GetHookRotationAngle(7); } }
-        IMemberAccessor ICanCreateMemberAccessor.Create() => new Rebar_GetHookRotationAngle();
+        IEnumerable<LambdaExpression> ICanCreateMemberAccessor.GetHandledMembers() { yield return (Rebar x) => x.GetHookRotationAngle(7); }     
 
 
         protected override bool CanBeSnoooped(Document document, Rebar rebar) => true;

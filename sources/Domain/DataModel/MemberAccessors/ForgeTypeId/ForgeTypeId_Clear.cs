@@ -8,8 +8,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
     internal class ForgeTypeId_Clear : MemberAccessorByType<ForgeTypeId>, ICanCreateMemberAccessor
     {
-        protected override IEnumerable<LambdaExpression> HandledMembers { get { yield return (ForgeTypeId x) => x.Clear(); } }
-        IMemberAccessor ICanCreateMemberAccessor.Create() => new ForgeTypeId_Clear();
+        IEnumerable<LambdaExpression> ICanCreateMemberAccessor.GetHandledMembers() { yield return (ForgeTypeId x) => x.Clear(); }        
 
 
         protected override bool CanBeSnoooped(Document document, ForgeTypeId value) => false;

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
@@ -77,6 +78,15 @@ namespace System
 
             result = result.Substring(0, result.IndexOf("`"));
             return result + "<" + string.Join(", ", type.GetGenericArguments().Select(GetCSharpName)) + ">";
+        }
+
+
+        public static Func<T> CompileFactoryMethod<T>(this Type type)
+        {
+            var newExpression = Expression.New(type);
+            var factoryLambda = Expression.Lambda<Func<T>>(newExpression);
+            var factoryMethod = factoryLambda.Compile();
+            return factoryMethod;
         }
     }
 }
