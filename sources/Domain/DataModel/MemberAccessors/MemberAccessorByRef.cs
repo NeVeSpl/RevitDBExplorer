@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using Autodesk.Revit.DB;
-using RevitDBExplorer.Domain.DataModel.ValueTypes.Base;
+using RevitDBExplorer.Domain.DataModel.ValueContainers.Base;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
@@ -12,14 +12,14 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
     {
         private readonly MethodInfo getMethod;
         private readonly MethodInfo setMethod; 
-        private readonly IValueType value;
+        private readonly IValueContainer value;
 
 
         public MemberAccessorByRef(MethodInfo getMethod, MethodInfo setMethod)
         {                
             this.getMethod = getMethod;
             this.setMethod = setMethod;
-            this.value = ValueTypeFactory.Create(getMethod.ReturnType);
+            this.value = ValueContainerFactory.Create(getMethod.ReturnType);
         }
 
 

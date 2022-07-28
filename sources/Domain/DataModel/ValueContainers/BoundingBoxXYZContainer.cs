@@ -3,9 +3,9 @@ using Autodesk.Revit.DB;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
-namespace RevitDBExplorer.Domain.DataModel.ValueTypes
+namespace RevitDBExplorer.Domain.DataModel.ValueContainers
 {
-    internal sealed class BoundingBoxXYZType : Base.ValueType<BoundingBoxXYZ>
+    internal sealed class BoundingBoxXYZContainer : Base.ValueContainer<BoundingBoxXYZ>
     {
         protected override bool CanBeSnoooped(BoundingBoxXYZ box) => box is not null;
         protected override string ToLabel(BoundingBoxXYZ box)

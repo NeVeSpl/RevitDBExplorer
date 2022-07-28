@@ -3,9 +3,9 @@ using Autodesk.Revit.DB;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
-namespace RevitDBExplorer.Domain.DataModel.ValueTypes
+namespace RevitDBExplorer.Domain.DataModel.ValueContainers
 {
-    internal class ParameterMapType : Base.ValueType<ParameterMap>
+    internal class ParameterMapContainer : Base.ValueContainer<ParameterMap>
     {
         protected override bool CanBeSnoooped(ParameterMap parameterMap) => parameterMap?.IsEmpty == false;
         protected override string ToLabel(ParameterMap parameterMap)

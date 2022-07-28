@@ -5,9 +5,9 @@ using Autodesk.Revit.DB;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
-namespace RevitDBExplorer.Domain.DataModel.ValueTypes.Base
+namespace RevitDBExplorer.Domain.DataModel.ValueContainers.Base
 {
-    internal abstract class ValueType<T> : IValueType
+    internal abstract class ValueContainer<T> : IValueContainer
     {
         private static readonly Type type = typeof(T);
         private T value;
@@ -19,13 +19,13 @@ namespace RevitDBExplorer.Domain.DataModel.ValueTypes.Base
             get
             {
                 var containerTypeName = Type.GetCSharpName();
-                var valueType = value?.GetType()?.GetCSharpName() ?? containerTypeName;
+                var valueTypeName = value?.GetType()?.GetCSharpName() ?? containerTypeName;
 
-                return $"{containerTypeName}"+ (valueType != containerTypeName ? $"({valueType})" : "");
+                return valueTypeName == containerTypeName ? containerTypeName : $"{containerTypeName} : {valueTypeName}";
             }
         }
 
-        public virtual IValueType SetValue(Document document, object value)
+        public virtual IValueContainer SetValue(Document document, object value)
         {
             if (value == null)
             {
@@ -53,7 +53,7 @@ namespace RevitDBExplorer.Domain.DataModel.ValueTypes.Base
         public bool CanBeSnooped => CanBeSnoooped(value);
         protected abstract bool CanBeSnoooped(T value);
 
-        public IEnumerable<SnoopableObject> Snoop(Document document) => Snooop(document, value);
-        protected virtual IEnumerable<SnoopableObject> Snooop(Document document, T value) => Enumerable.Empty<SnoopableObject>();
+        public IEnumerable<SnoopableObject> Snoop(Document document) => Snooop(document, value) ?? Enumerable.Empty<SnoopableObject>();
+        protected virtual IEnumerable<SnoopableObject> Snooop(Document document, T value) => null;
     }
 }

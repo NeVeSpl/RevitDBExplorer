@@ -3,9 +3,9 @@ using Autodesk.Revit.DB;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
-namespace RevitDBExplorer.Domain.DataModel.ValueTypes
+namespace RevitDBExplorer.Domain.DataModel.ValueContainers
 {
-    internal class CategoryNameMapType : Base.ValueType<CategoryNameMap>
+    internal class CategoryNameMapContainer : Base.ValueContainer<CategoryNameMap>
     {    
         protected override bool CanBeSnoooped(CategoryNameMap categoryNameMap) => categoryNameMap?.IsEmpty == false;
         protected override string ToLabel(CategoryNameMap categoryNameMap)

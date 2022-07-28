@@ -1,6 +1,6 @@
 ﻿using System;
 using Autodesk.Revit.DB;
-using RevitDBExplorer.Domain.DataModel.ValueTypes.Base;
+using RevitDBExplorer.Domain.DataModel.ValueContainers.Base;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
@@ -14,7 +14,7 @@ namespace RevitDBExplorer.Domain
         }
         public static string GetLabelForObject(Type type, object @object, Document document)
         {
-            var valueType = ValueTypeFactory.Create(type);
+            var valueType = ValueContainerFactory.Create(type);
             valueType.SetValue(document, @object);           
             return valueType.ValueAsString;
         }

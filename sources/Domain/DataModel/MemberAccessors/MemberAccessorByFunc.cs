@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Autodesk.Revit.DB;
-using RevitDBExplorer.Domain.DataModel.ValueTypes.Base;
+using RevitDBExplorer.Domain.DataModel.ValueContainers.Base;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
@@ -9,14 +9,14 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
     internal class MemberAccessorByFunc<TSnoopedObjectType, TReturnType> : MemberAccessorTyped<TSnoopedObjectType>
     {
-        private readonly IValueType value;
+        private readonly IValueContainer value;
         private readonly Func<Document, TSnoopedObjectType, TReturnType> get;
 
 
         public MemberAccessorByFunc(Func<Document, TSnoopedObjectType, TReturnType> get)
         {
             this.get = get;
-            this.value = ValueTypeFactory.Create(typeof(TReturnType));
+            this.value = ValueContainerFactory.Create(typeof(TReturnType));
         }
 
 

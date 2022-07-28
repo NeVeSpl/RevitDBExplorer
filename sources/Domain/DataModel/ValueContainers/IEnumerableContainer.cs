@@ -6,9 +6,9 @@ using Autodesk.Revit.DB;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
-namespace RevitDBExplorer.Domain.DataModel.ValueTypes
+namespace RevitDBExplorer.Domain.DataModel.ValueContainers
 {
-    internal class IEnumerableType : Base.ValueType<IEnumerable>
+    internal class IEnumerableContainer : Base.ValueContainer<IEnumerable>
     {
         protected override bool CanBeSnoooped(IEnumerable enumerable)
         {

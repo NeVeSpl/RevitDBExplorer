@@ -4,9 +4,9 @@ using Autodesk.Revit.DB;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
-namespace RevitDBExplorer.Domain.DataModel.ValueTypes
+namespace RevitDBExplorer.Domain.DataModel.ValueContainers
 {
-    internal sealed class ElementType : Base.ValueType<Element>
+    internal sealed class ElementContainer : Base.ValueContainer<Element>
     {
         protected override bool CanBeSnoooped(Element element) => element is not null;
         protected override string ToLabel(Element element)

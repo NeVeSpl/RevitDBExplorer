@@ -3,9 +3,9 @@ using Autodesk.Revit.DB;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
-namespace RevitDBExplorer.Domain.DataModel.ValueTypes
+namespace RevitDBExplorer.Domain.DataModel.ValueContainers
 {
-    internal class BindingMapType : Base.ValueType<BindingMap>
+    internal class BindingMapContainer : Base.ValueContainer<BindingMap>
     {   
         protected override bool CanBeSnoooped(BindingMap map) => map is not null && !map.IsEmpty;
         protected override string ToLabel(BindingMap map) => $"Bindings : {map.Size}";
