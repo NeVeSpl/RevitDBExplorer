@@ -1,20 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using Autodesk.Revit.DB;
-using RevitDBExplorer.Domain.DataModel.ValueTypes.Base;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
 namespace RevitDBExplorer.Domain.DataModel.ValueTypes
 {
-    internal sealed class ElementType : Base.ValueType<Element>, IHaveFactoryMethod
+    internal sealed class ElementType : Base.ValueType<Element>
     {
-        IValueType IHaveFactoryMethod.Create()
-        {
-            return new ElementType();
-        }
-
-
         protected override bool CanBeSnoooped(Element element) => element is not null;
         protected override string ToLabel(Element element)
         {  

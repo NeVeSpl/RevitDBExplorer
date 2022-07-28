@@ -3,20 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Autodesk.Revit.DB;
-using RevitDBExplorer.Domain.DataModel.ValueTypes.Base;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
 namespace RevitDBExplorer.Domain.DataModel.ValueTypes
 {
-    internal class IEnumerableType : Base.ValueType<IEnumerable>, IHaveFactoryMethod
+    internal class IEnumerableType : Base.ValueType<IEnumerable>
     {
-        IValueType IHaveFactoryMethod.Create()
-        {
-            return new IEnumerableType();
-        }
-
-
         protected override bool CanBeSnoooped(IEnumerable enumerable)
         {
             if (enumerable == null) return false;          

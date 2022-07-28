@@ -7,14 +7,8 @@ using RevitDBExplorer.Domain.DataModel.ValueTypes.Base;
 
 namespace RevitDBExplorer.Domain.DataModel.ValueTypes
 {
-    internal sealed class ElementIdType : Base.ValueType<ElementId>, IHaveFactoryMethod
+    internal sealed class ElementIdType : Base.ValueType<ElementId>
     {
-        IValueType IHaveFactoryMethod.Create()
-        {
-            return new ElementIdType();
-        }
-
-
         private bool canBeSnoooped;
         private Element element;
 

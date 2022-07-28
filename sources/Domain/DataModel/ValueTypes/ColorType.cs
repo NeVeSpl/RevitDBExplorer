@@ -1,17 +1,9 @@
-﻿using RevitDBExplorer.Domain.DataModel.ValueTypes.Base;
-
-// (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
+﻿// (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
 namespace RevitDBExplorer.Domain.DataModel.ValueTypes
 {
-    internal sealed class ColorType : Base.ValueType<Autodesk.Revit.DB.Color>, IHaveFactoryMethod
+    internal sealed class ColorType : Base.ValueType<Autodesk.Revit.DB.Color>
     {
-        IValueType IHaveFactoryMethod.Create()
-        {
-            return new ColorType();
-        }
-
-
         protected override bool CanBeSnoooped(Autodesk.Revit.DB.Color color) => false;
         protected override string ToLabel(Autodesk.Revit.DB.Color color)
         {

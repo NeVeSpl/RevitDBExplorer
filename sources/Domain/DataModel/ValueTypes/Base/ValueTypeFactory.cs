@@ -1,12 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
 namespace RevitDBExplorer.Domain.DataModel.ValueTypes.Base
 {
     internal static class ValueTypeFactory
-    {
-        private static readonly IHaveFactoryMethod[] ValueTypeFactories = new IHaveFactoryMethod[]
+    {        
+        //private static readonly bool RunStaticConstructorASAP = true;
+
+        private static readonly List<(Type type, Func<IValueType> factory)> FactoryMethodsForValueTypes = new List<(Type, Func<IValueType>)>(); 
+        private static readonly IValueType[] ValueTypes = new IValueType[]
         {
             // System primitives
             new BoolType(),
@@ -43,13 +48,25 @@ namespace RevitDBExplorer.Domain.DataModel.ValueTypes.Base
         };
 
 
+        static ValueTypeFactory()
+        {
+            foreach (var valueType in ValueTypes)
+            {
+                var newExpression = Expression.New(valueType.GetType());
+                var factoryLambda = Expression.Lambda<Func<IValueType>>(newExpression);
+                var FactoryMethod = factoryLambda.Compile();
+                FactoryMethodsForValueTypes.Add((valueType.Type, FactoryMethod));
+            }
+        }
+
+
         public static IValueType Create(Type type)
         {
-            foreach (var factory in ValueTypeFactories)
+            foreach (var pair in FactoryMethodsForValueTypes)
             {
-                if (factory.Type.IsAssignableFrom(type))
+                if (pair.type.IsAssignableFrom(type))
                 {
-                    var result = factory.Create();                   
+                    var result = pair.factory();                   
                     return result;
                 }
             }

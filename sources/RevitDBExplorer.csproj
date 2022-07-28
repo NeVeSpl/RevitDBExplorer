@@ -200,7 +200,6 @@
     <Compile Include="Domain\DataModel\MemberTemplates\PartUtils_Templates.cs" />
     <Compile Include="Domain\DataModel\MemberTemplates\Schema_Templates.cs" />
     <Compile Include="Domain\DataModel\Streams\SystemTypeStream.cs" />
-    <Compile Include="Domain\DataModel\ValueTypes\Base\IHaveFactoryMethod.cs" />
     <Compile Include="Domain\DataModel\ValueTypes\Base\IValueType.cs" />
     <Compile Include="Domain\DataModel\ValueTypes\Base\ValueType.cs" />
     <Compile Include="Domain\DataModel\ValueTypes\Base\ValueTypeFactory.cs" />

@@ -12,8 +12,8 @@ namespace RevitDBExplorer.Domain
 {
     internal static class FactoryOfFactories
     {
-        private static readonly Dictionary<Type, List<ISnoopableMemberTemplate>> templates = new();
-        private static readonly Dictionary<string, ICanCreateMemberAccessor> accessors = new();
+        private static readonly Dictionary<Type, List<ISnoopableMemberTemplate>> forTypes = new();
+        private static readonly Dictionary<string, ICanCreateMemberAccessor> forTypeMembers = new();
 
 
         public static void Init()
@@ -35,7 +35,7 @@ namespace RevitDBExplorer.Domain
             }
 
             var accessorsFactories = GetFactoriesOfType<ICanCreateMemberAccessor>();
-            accessors = accessorsFactories.SelectMany(x => x.GetHandledMembers(), (factory, key) => (factory, key)).ToDictionary(x => x.key, x => x.factory);
+            forTypeMembers = accessorsFactories.SelectMany(x => x.GetHandledMembers(), (factory, key) => (factory, key)).ToDictionary(x => x.key, x => x.factory);
         }
 
 
@@ -48,10 +48,10 @@ namespace RevitDBExplorer.Domain
         }
         private static void RegisterTemplate(ISnoopableMemberTemplate template)
         {
-            if (!templates.TryGetValue(template.ForType, out List<ISnoopableMemberTemplate> list))
+            if (!forTypes.TryGetValue(template.ForType, out List<ISnoopableMemberTemplate> list))
             {
                 list = new List<ISnoopableMemberTemplate>();
-                templates[template.ForType] = list;
+                forTypes[template.ForType] = list;
             }
             list.Add(template);
         }
@@ -59,7 +59,7 @@ namespace RevitDBExplorer.Domain
         public static IEnumerable<SnoopableMember> CreateSnoopableMembersFor(SnoopableObject snoopableObject)
         {
             var objectType = snoopableObject.Object.GetType();
-            foreach (var keyValue in templates)
+            foreach (var keyValue in forTypes)
             {
                 if (keyValue.Key.IsAssignableFrom(objectType))
                 {
@@ -76,7 +76,7 @@ namespace RevitDBExplorer.Domain
         }
         public static IMemberAccessor CreateMemberAccessor(MethodInfo getMethod, MethodInfo setMethod)
         {
-            if (accessors.TryGetValue(getMethod.GetUniqueId(), out ICanCreateMemberAccessor factory))
+            if (forTypeMembers.TryGetValue(getMethod.GetUniqueId(), out ICanCreateMemberAccessor factory))
             {
                 return factory.Create();
             }
