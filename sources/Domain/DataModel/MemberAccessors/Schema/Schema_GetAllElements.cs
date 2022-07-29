@@ -15,7 +15,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
             return new ReadResult() 
             { 
                 CanBeSnooped = count > 0, 
-                Value = $"Elements : {count}",
+                Label = $"Elements : {count}",
                 ValueTypeName = nameof(Schema_GetAllElements) 
             };            
         }

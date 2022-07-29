@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -92,13 +93,18 @@ namespace RevitDBExplorer.Domain
             var @params = getMethod.GetParameters();
             if (@params.Length == 1)
             {
-                if (@params[0].ParameterType.IsEnum)
+                if (MemberAccessorByIteration.HandledParameterTypes.Contains(@params[0].ParameterType) || @params[0].ParameterType.IsEnum)
                 {
-                    return new MemberAccessorByEnum(getMethod);
+                    return new MemberAccessorByIteration(getMethod);
                 }
             }
+            if (@params.All(x => MemberAccessorByRef.HandledParameterTypes.Contains(x.ParameterType)))
+            {
+                return new MemberAccessorByRef(getMethod, setMethod);
+            }
 
-            return new MemberAccessorByRef(getMethod, setMethod);
+            Debug.WriteLine(getMethod.GetUniqueId());
+            return null;
         }
     }
 

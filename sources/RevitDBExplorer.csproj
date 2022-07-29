@@ -153,7 +153,8 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Domain\DataModel\MemberAccessors\MemberAccessorByEnum.cs" />
+    <Compile Include="Domain\DataModel\MemberAccessors\MemberAccessorByIteration.cs" />
+    <Compile Include="Domain\DataModel\MemberAccessors\View\View_Duplicate.cs" />
     <Compile Include="Domain\DataModel\SnoopableContext.cs" />
     <Compile Include="Domain\DataModel\ValueContainers\IListElementIdContainer.cs" />
     <Compile Include="Domain\DataModel\ValueObjects\DeclaringType.cs" />
@@ -179,20 +180,10 @@
     <Compile Include="Domain\DataModel\MemberAccessors\MemberAccessorForConstValue.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\PlanViewRange\PlanViewRange_GetLevelId.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\PrintManager\PrintManager_SubmitPrint.cs" />
-    <Compile Include="Domain\DataModel\MemberAccessors\RebarShapeDrivenAccessor\RebarShapeDrivenAccessor_GetBarPositionTransform.cs" />
-    <Compile Include="Domain\DataModel\MemberAccessors\Rebar\Rebar_GetMovedBarTransform.cs" />
-    <Compile Include="Domain\DataModel\MemberAccessors\Rebar\Rebar_GetEndTreatmentTypeId.cs" />
-    <Compile Include="Domain\DataModel\MemberAccessors\Rebar\Rebar_DoesBarExistAtPosition.cs" />
-    <Compile Include="Domain\DataModel\MemberAccessors\Rebar\Rebar_GetCouplerId.cs" />
-    <Compile Include="Domain\DataModel\MemberAccessors\Rebar\Rebar_GetHookRotationAngle.cs" />
-    <Compile Include="Domain\DataModel\MemberAccessors\Rebar\Rebar_GetHookOrientation.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\Rebar\Rebar_IsBarHidden.cs" />
-    <Compile Include="Domain\DataModel\MemberAccessors\Rebar\Rebar_GetHookTypeId.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\Rebar\Rebar_GetTransformedCenterlineCurves.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\Rebar\Rebar_GetCenterlineCurves.cs" />
-    <Compile Include="Domain\DataModel\MemberAccessors\ScheduleDefinition\ScheduleDefinition_GetField.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\Schema\Schema_GetAllElements.cs" />
-    <Compile Include="Domain\DataModel\MemberAccessors\ViewCropRegionShapeManager\ViewCropRegionShapeManager_GetSplitRegionOffset.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\View\View_GetTemplateParameterIds.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\View\View_GetNonControlledTemplateParameterIds.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\View\View_GetFilterVisibility.cs" />

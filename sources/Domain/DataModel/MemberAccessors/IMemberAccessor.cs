@@ -35,17 +35,16 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 
     readonly ref struct ReadResult
     {
-        public string Value { get; init; }
+        public string Label { get; init; }
         public string ValueTypeName { get; init; }
         public bool CanBeSnooped { get; init; }
-        public Exception Exception { get; init; }
+     
 
-        public ReadResult(string value, string valueTypeName, bool canBeSnooped, Exception exception = null)
+        public ReadResult(string value, string valueTypeName, bool canBeSnooped)
         {
-            Value = value;
+            Label = value;
             ValueTypeName = valueTypeName;
-            CanBeSnooped = canBeSnooped;
-            Exception = exception;
+            CanBeSnooped = canBeSnooped;          
         }
     }
 }

@@ -59,9 +59,9 @@ namespace RevitDBExplorer.Domain.DataModel
             }
             foreach (var member in GetMembersFromStreams(app))
             {
-                member.ReadValue();
-                if (!member.HasExceptionCouldNotResolveAllArguments)
+                if (!member.HasAccessor)
                 {
+                    member.ReadValue();                
                     yield return member;
                 }
             }

@@ -27,22 +27,19 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
         {
             value.SetValue(context.Document, null);
             var paramsDef = getMethod.GetParameters();
-            var resolvedArgs = ResolveArguments(paramsDef, context.Document, @object);
-            if (resolvedArgs.ex is not null)
-            {
-                return new ReadResult(String.Empty, value.TypeName, false, resolvedArgs.ex);
-            }
-            var result = getMethod.Invoke(@object, resolvedArgs.args);
+            var resolvedArgs = ResolveArguments(paramsDef, context.Document, @object);            
+            var result = getMethod.Invoke(@object, resolvedArgs);
             value.SetValue(context.Document, result);
-            return new ReadResult(value.ValueAsString, value.TypeName, value.CanBeSnooped, null);
+            return new ReadResult(value.ValueAsString, value.TypeName, value.CanBeSnooped);
         }
         public IEnumerable<SnoopableObject> Snoop(SnoopableContext context, object @object)
         {
             return value.Snoop(context.Document);
         }
 
+        public static Type[] HandledParameterTypes = new[] { typeof(Document), typeof(Options), typeof(View), typeof(SpatialElementBoundaryOptions) };
 
-        private (object[] args, Exception ex) ResolveArguments(ParameterInfo[] paramsDef, Document doc, object @object)
+        private object[] ResolveArguments(ParameterInfo[] paramsDef, Document doc, object @object)
         {
             object[] args = null;
             if (paramsDef.Length > 0)
@@ -78,25 +75,12 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
                             StoreFreeBoundaryFaces = true,
                             SpatialElementBoundaryLocation = SpatialElementBoundaryLocation.Center
                         };
-                    }
-
-                    if (argument is null)
-                    {
-                        return (null, new CouldNotResolveAllArgumentsException(paramsDef[i].Name));
-                    }
+                    }                 
 
                     args[i] = argument;
                 }
             }
-            return (args, null);
+            return args;
         }        
-    }
-
-    class CouldNotResolveAllArgumentsException : ArgumentException
-    {
-        public CouldNotResolveAllArgumentsException(string argName) : base($"Could not resolve argument: {argName}")
-        {
-
-        }
     }
 }

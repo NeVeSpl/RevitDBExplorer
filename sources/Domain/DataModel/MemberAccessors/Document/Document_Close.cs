@@ -8,7 +8,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
     internal class Document_Close : MemberAccessorByType<Document>, ICanCreateMemberAccessor
     {
-        IEnumerable<LambdaExpression> ICanCreateMemberAccessor.GetHandledMembers() { yield return (Document x) => x.Close(); }         
+        IEnumerable<LambdaExpression> ICanCreateMemberAccessor.GetHandledMembers() { yield return (Document x) => x.Close(); yield return (Document x) => x.Close(true); }         
 
       
         protected override bool CanBeSnoooped(Document document, Document value) => false;

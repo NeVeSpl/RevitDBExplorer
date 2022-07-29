@@ -8,9 +8,7 @@ namespace RevitDBExplorer.Domain.DataModel.ValueObjects
     {
         public string Name { get; init; }
 
-        public int InheritanceLevel { get; init; }
-
-       
+        public int InheritanceLevel { get; init; }       
 
 
 

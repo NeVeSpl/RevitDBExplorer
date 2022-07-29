@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using RevitDBExplorer.Domain.DataModel.MemberAccessors;
 using RevitDBExplorer.Domain.DataModel.ValueObjects;
@@ -33,7 +32,7 @@ namespace RevitDBExplorer.Domain.DataModel
 
 
         public bool HasException => valueAccessException is not null;
-        public bool HasExceptionCouldNotResolveAllArguments => valueAccessException is CouldNotResolveAllArgumentsException;
+        public bool HasAccessor => memberAccessor is null;
         public string Value
         {
             get
@@ -46,8 +45,7 @@ namespace RevitDBExplorer.Domain.DataModel
             }
         }
         public string ValueTypeName => valueTypeName;
-        public bool CanBeSnooped => canBeSnooped;
-       
+        public bool CanBeSnooped => canBeSnooped;       
         
 
         public SnoopableMember(SnoopableObject parent, Kind memberKind, string name, Type declaringType, IMemberAccessor memberAccessor, Func<DocXml> documentationFactoryMethod)
@@ -73,15 +71,8 @@ namespace RevitDBExplorer.Domain.DataModel
             
             try
             {
-                var result = memberAccessor.Read(document, @object);
-                if (result.Exception is not null)
-                {
-                    valueAccessException = result.Exception;
-                }
-                else
-                {
-                    value = result.Value; 
-                }
+                var result = memberAccessor.Read(document, @object);    
+                value = result.Label;                 
                 valueTypeName = result.ValueTypeName;
                 canBeSnooped = result.CanBeSnooped;
             }

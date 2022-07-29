@@ -14,7 +14,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
             return new ReadResult()
             {
                 CanBeSnooped = elementIds.Count > 0,
-                Value = $"Elements : {elementIds.Count}",
+                Label = $"Elements : {elementIds.Count}",
                 ValueTypeName = nameof(JoinGeometryUtils_IsCuttingElementInJoin)
             };
 
