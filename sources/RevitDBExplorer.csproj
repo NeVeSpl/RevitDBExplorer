@@ -275,6 +275,7 @@
     <Compile Include="Extensions\System\TypeExtensions.cs" />
     <Compile Include="WPF\BaseViewModel.cs" />
     <Compile Include="WPF\Converters\StringToVisibilityConverter.cs" />
+    <Compile Include="WPF\Converters\BoolVisibilityConverter.cs" />
     <Compile Include="WPF\MarkupExtensions\SettingBindingExtension.cs" />
     <Compile Include="WPF\ThemeResourceDictionary.cs" />
     <None Include="app.config" />

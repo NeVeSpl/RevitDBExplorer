@@ -35,6 +35,9 @@ namespace RevitDBExplorer
         private string treeItemsFilterPhrase = string.Empty;
         private string databaseQuery = string.Empty;
         private string databaseQueryToolTip = string.Empty;
+        private bool isRevitBusy;
+        private DispatcherTimer isRevitBusyDispatcher;
+
 
         public ObservableCollection<SnoopableCategoryTreeVM> TreeItems
         {
@@ -135,7 +138,22 @@ namespace RevitDBExplorer
                 OnPropertyChanged();
             }
         }
-        
+        public bool IsRevitBusy
+        {
+            get
+            {
+                return isRevitBusy;
+            }
+            set
+            {
+                if (isRevitBusy != value)
+                {
+                    isRevitBusy = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
 
         public MainWindow()
         {
@@ -144,6 +162,8 @@ namespace RevitDBExplorer
             var ver = GetType().Assembly.GetName().Version;
             var revit_ver = typeof(Autodesk.Revit.DB.Element).Assembly.GetName().Version;
             Title += $" 20{revit_ver.Major} - {ver.ToGitHubTag()}";
+
+            isRevitBusyDispatcher = new DispatcherTimer(TimeSpan.FromMilliseconds(500), DispatcherPriority.Background, (x, y) => IsRevitBusy = (DateTime.Now - Application.LastTimeWhen).TotalSeconds > 0.5, Dispatcher.CurrentDispatcher);
 
             CheckIfNewVersionIsAvailable(ver).Forget();
         }

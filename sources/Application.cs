@@ -26,6 +26,8 @@ namespace RevitDBExplorer
             RevitDocumentationReader.Init();
             RevitDatabaseQueryService.Init();            
 
+            application.Idling += Application_Idling;
+
             return Result.Succeeded;
         }
 
@@ -33,5 +35,11 @@ namespace RevitDBExplorer
         {
             return Result.Succeeded;
         }
+
+        public static DateTime LastTimeWhen;        
+        private void Application_Idling(object sender, Autodesk.Revit.UI.Events.IdlingEventArgs e)
+        {
+            LastTimeWhen = DateTime.Now;            
+        }        
     }
 }
