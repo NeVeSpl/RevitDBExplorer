@@ -25,7 +25,12 @@ jobs:
       uses: NuGet/setup-nuget@v1.0.6
 
     - name: Restore Packages
-      run: nuget restore RevitDBExplorer.sln       
+      run: nuget restore RevitDBExplorer.sln
+      
+    - name: Build Project for R2021     
+      working-directory: sources/
+      run: |
+          msbuild /p:Configuration=R2021 
       
     - name: Build Project for R2022     
       working-directory: sources/
