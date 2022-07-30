@@ -14,7 +14,7 @@ Yet another [RevitLookup](https://github.com/jeremytammik/RevitLookup) clone. Re
 
 ## Installation
 
-- Download and install [RevitDBExplorer.msi](https://github.com/NeVeSpl/RevitDBExplorer/releases/latest/download/RevitDBExplorer.msi). Setup will instal RDBE for Revit 2022 and 2023.
+- Download and install [RevitDBExplorer.msi](https://github.com/NeVeSpl/RevitDBExplorer/releases/latest/download/RevitDBExplorer.msi). Setup will instal RDBE for Revit 2021, 2022, 2023.
 
 ## Features
 
@@ -107,7 +107,7 @@ Not only you have faster access to a geometry of an element, but you can also se
 
 ### <a name="themes"></a>UI themes: dark and light
 
-It is getting dark out there. **Be ready**, with a new dark theme.
+It is getting dark out there. **Be ready** for what is coming, with a new dark theme.
 
 ![themes](documentation/examples/themes.gif)
 
