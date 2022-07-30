@@ -234,7 +234,7 @@
 
         <GridSplitter Grid.Row="3" Grid.Column="1" Background="{DynamicResource GridSplitter.Background}"  Width="2" Margin="0 2 2 0" HorizontalAlignment="Left" VerticalAlignment="Stretch" />
 
-        <ListView Grid.Row="3" Grid.Column="3" Margin="-2 2 0 0" BorderThickness="0" ItemsSource="{Binding ListItems}" d:ItemsSource="{d:SampleData ItemCount=5}" SelectionMode="Single" SelectedItem="{Binding ListSelectedItem}"  AlternationCount="2" >
+        <ListView Grid.Row="3" Grid.Column="3" Margin="-2 2 0 0" BorderThickness="0" ItemsSource="{Binding ListItems}" d:ItemsSource="{d:SampleData ItemCount=5}" SelectionMode="Single" SelectedItem="{Binding ListSelectedItem}"  AlternationCount="2" VirtualizingStackPanel.IsVirtualizing="True"  KeyDown="ListView_KeyDown" >
             <ListView.Resources>
                 <ContextMenu x:Key="ItemContextMenu">
                     <MenuItem Header="Copy" Click="ListViewItem_MenuItemCopy_Click" />
@@ -266,9 +266,9 @@
                                     <Run Text="Remarks:" Foreground="{DynamicResource ToolTip.Key}"/><LineBreak/>
                                     <Run Text="{Binding Documentation.Remarks, Mode=OneWay}"  Foreground="{DynamicResource ToolTip.Value}"/><LineBreak/>
                                 </TextBlock>
-                                <TextBlock TextWrapping="Wrap" Visibility="{Binding ValueTypeName, Converter={StaticResource StringToVisibilityConverter}}">
+                                <TextBlock TextWrapping="Wrap" Visibility="{Binding AccessorName, Converter={StaticResource StringToVisibilityConverter}}">
                                     <Run Text="Accessor:" Foreground="{DynamicResource ToolTip.Key}"/><LineBreak/>
-                                    <Run Text="{Binding ValueTypeName, Mode=OneWay}" Foreground="{DynamicResource ToolTip.Value}" />
+                                    <Run Text="{Binding AccessorName, Mode=OneWay}" Foreground="{DynamicResource ToolTip.Value}" />
                                 </TextBlock>
 
                             </StackPanel>
@@ -287,6 +287,7 @@
                             <Setter Property="Background" Value="Transparent" />
                             <Setter Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />                           
                         </Trigger>
+                        
 
                         <Trigger Property="ItemsControl.AlternationIndex" Value="0">
                             <Setter Property="Background" Value="{DynamicResource ListView.Alternation.Background_0}"/>
@@ -317,7 +318,7 @@
                     <GridViewColumn Header="Value" Width="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListView}}, Path=ActualWidth, Converter={StaticResource PercentageOfValueConverter}, ConverterParameter=62}"  >
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock x:Name="cTextBlock" Text="{Binding Value, Mode=OneWay}" TextWrapping="NoWrap" MouseLeftButtonUp="ListViewItem_MouseLeftButtonUp"   >
+                                <TextBlock x:Name="cTextBlock" Text="{Binding Label.Text, Mode=OneWay}" TextWrapping="NoWrap" MouseLeftButtonUp="ListViewItem_MouseLeftButtonUp"   >
                                     <TextBlock.ToolTip>
                                         <TextBlock Text="{Binding ., Converter={StaticResource FeetToMetersConverter}}" />
                                     </TextBlock.ToolTip>
@@ -332,7 +333,7 @@
                                         <Setter TargetName="cTextBlock" Property="Cursor" Value="Hand"/>
                                         <Setter TargetName="cTextBlock" Property="FontWeight" Value="Bold"/>
                                     </DataTrigger>
-                                    <DataTrigger Binding="{Binding HasException}" Value="True">
+                                    <DataTrigger Binding="{Binding Label.IsException}" Value="True">
                                         <Setter TargetName="cTextBlock" Property="Foreground" Value="{DynamicResource Member.Error}"/>
                                     </DataTrigger>
                                 </DataTemplate.Triggers>

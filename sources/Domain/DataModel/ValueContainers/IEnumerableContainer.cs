@@ -23,6 +23,12 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers
         {
             var type = enumerable.GetType();
             var typeName = type.GetCSharpName();
+            var size = enumerable.TryGetPropertyValue(propertyThatContainsSize);
+
+            if (!string.IsNullOrEmpty(size))
+            {
+                size = $": {size}";
+            }
 
             if (type.FullName.StartsWith("System"))
             {
@@ -32,17 +38,21 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers
             if (type.IsGenericType)
             {
                 var args = type.GetGenericArguments();
-                return $"{typeName}[{String.Join(", ", args.Select(x => x.GetCSharpName()))}]";
+                return $"{typeName}[{String.Join(", ", args.Select(x => x.GetCSharpName()))}{size}]";
             }
 
             foreach (var item in enumerable)
             {
                 var firstItemType = item.GetType();
-                return $"{typeName}[{firstItemType.GetCSharpName()}]";               
+                return $"{typeName}[{firstItemType.GetCSharpName()}{size}]";               
             }
 
-            return $"{typeName}[]";
+            return $"{typeName}[{size}]";
         }
+
+        private static readonly string[] propertyThatContainsSize = new[] { "Count", "Size", "Length" };
+
+
         protected override IEnumerable<SnoopableObject> Snooop(Document document, IEnumerable enumerable)
         {
             int index = -1;
@@ -50,12 +60,8 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers
             {
                 index++;
                 if (item is ElementId id)
-                {
-                    var element = document.GetElementOrCategory(id);
-                    if (element != null)
-                    {
-                        yield return new SnoopableObject(document, element);
-                    }
+                {                   
+                    yield return new SnoopableObject(document, id);                    
                 }
                 else
                 {

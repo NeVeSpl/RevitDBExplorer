@@ -12,6 +12,7 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers.Base
         private static readonly Type type = typeof(T);
         private T value;
 
+        public T Value => value;
         
         public Type Type => type;
         public virtual string TypeName

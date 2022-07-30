@@ -12,6 +12,6 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 
 
         protected override bool CanBeSnoooped(Document document, ForgeTypeId value) => false;
-        protected override string GetLabel(Document document, ForgeTypeId value) => "'not this time' - Benedict";
+        protected override string GetLabel(Document document, ForgeTypeId value) => QuoteGenerator.Deny();
     }
 }

@@ -8,11 +8,12 @@ using RevitDBExplorer.Domain.DataModel.ValueContainers.Base;
 
 namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
-    internal class MemberAccessorByRef : IMemberAccessor
+    internal class MemberAccessorByRef : IMemberAccessor, IMemberAccessorWithValue
     {
         private readonly MethodInfo getMethod;
         private readonly MethodInfo setMethod; 
         private readonly IValueContainer value;
+        IValueContainer IMemberAccessorWithValue.Value => value;
 
 
         public MemberAccessorByRef(MethodInfo getMethod, MethodInfo setMethod)

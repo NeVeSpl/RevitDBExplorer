@@ -219,7 +219,7 @@ namespace RevitDBExplorer.Domain
 #pragma warning disable CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
             IList<ForgeTypeId> ids = selector switch
             {
-#if R2022 || R2023
+#if R2022b
                 Selector.ForgeParameterUtilsGetAllBuiltInGroups => ParameterUtils.GetAllBuiltInGroups(),
                 Selector.ForgeParameterUtilsGetAllBuiltInParameters => ParameterUtils.GetAllBuiltInParameters(),
                 Selector.ForgeUnitUtilsGetAllMeasurableSpecs => UnitUtils.GetAllMeasurableSpecs(),

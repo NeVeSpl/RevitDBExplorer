@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Windows.Data;
 using RevitDBExplorer.Domain.DataModel;
+using RevitDBExplorer.Domain.DataModel.ValueContainers;
 
 namespace RevitDBExplorer.WPF.Converters
 {
@@ -13,12 +14,12 @@ namespace RevitDBExplorer.WPF.Converters
 
             if (snoopableMember == null) return null;
 
-            if ((snoopableMember.ValueTypeName == "Double") && (double.TryParse(snoopableMember.Value, out double parsed)))
+            if (snoopableMember.ValueContainer is DoubleContainer container)
             {
-                double result = parsed * 0.3048;
+                double result = container.Value * 0.3048;
                 return $"{result} [m]";
             }
-            return snoopableMember.Value;
+            return snoopableMember.ValueContainer;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

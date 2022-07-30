@@ -7,9 +7,10 @@ using RevitDBExplorer.Domain.DataModel.ValueContainers.Base;
 
 namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
-    internal sealed class MemberAccessorForConstValue : IMemberAccessor
+    internal sealed class MemberAccessorForConstValue : IMemberAccessor, IMemberAccessorWithValue
     {
         private readonly IValueContainer value;
+        IValueContainer IMemberAccessorWithValue.Value => value;
 
 
         public MemberAccessorForConstValue(Type type, Document document, object value)

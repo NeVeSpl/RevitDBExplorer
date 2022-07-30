@@ -30,30 +30,30 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
             var parameter = getMethod.GetParameters().First();
 
             var arg = new object[1];
-            foreach (var input in StreamValues(parameter.ParameterType))
-            {                
+            foreach (var input in StreamValues(context, parameter.ParameterType))
+            {    
+                arg[0] = input;     
+                object resultOfInvocation = null;
                 try
                 {
-                    arg[0] = input;
-                    var temp = getMethod.Invoke(@object, arg);
 
-                    if (temp is ElementId { IntegerValue: > -1 } id)
-                    {
-                        temp = context.Document.GetElementOrCategory(id);
-                    }
-
-                    result.Add(SnoopableObject.CreateInOutPair(context.Document, input, temp, keyPrefix: parameter.Name + ":"));
+                    resultOfInvocation = getMethod.Invoke(@object, arg);                    
                 }
-                catch
+                catch (Exception ex)
                 {
-                    break;
-                }      
+                    if (parameter.ParameterType == typeof(int))
+                    {
+                        break;
+                    }
+                    resultOfInvocation = Labeler.GetLabelForException(ex);
+                }
+                result.Add(SnoopableObject.CreateInOutPair(context.Document, input, resultOfInvocation, keyPrefix: parameter.Name + ":"));
             }
 
             return result;
         }
 
-        private IEnumerable<object> StreamValues(Type type)
+        private IEnumerable<object> StreamValues(SnoopableContext context, Type type)
         {
             if (type == typeof(int))
             {
@@ -74,9 +74,24 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
                 yield return true;
                 yield return false;
             }
+            if (type == typeof(Phase))
+            {
+                foreach (Phase phase in context.Document.Phases)
+                {
+                    yield return phase;
+                }
+            }
+            if (type == typeof(Level))
+            {
+                foreach (Level level in new FilteredElementCollector(context.Document).OfClass(typeof(Level)).ToElements())
+                {
+                    yield return level;
+                }
+            }
+
         }
 
 
-        public static Type[] HandledParameterTypes = new[] { typeof(int), typeof(bool), typeof(Enum) };
+        public static Type[] HandledParameterTypes = new[] { typeof(int), typeof(bool), typeof(Enum), typeof(Phase), typeof(Level) };
     }
 }

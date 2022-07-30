@@ -1,6 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using RevitDBExplorer.Domain.DataModel.ValueContainers.Base;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
@@ -10,6 +10,12 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
     {
         ReadResult Read(SnoopableContext context, object @object);      
         IEnumerable<SnoopableObject> Snoop(SnoopableContext context, object @object);
+    }
+
+
+    internal interface IMemberAccessorWithValue
+    {
+        IValueContainer Value { get; }
     }
 
 
@@ -36,14 +42,14 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
     readonly ref struct ReadResult
     {
         public string Label { get; init; }
-        public string ValueTypeName { get; init; }
+        public string AccessorName { get; init; }
         public bool CanBeSnooped { get; init; }
      
 
-        public ReadResult(string value, string valueTypeName, bool canBeSnooped)
+        public ReadResult(string value, string sccessorName, bool canBeSnooped)
         {
             Label = value;
-            ValueTypeName = valueTypeName;
+            AccessorName = sccessorName;
             CanBeSnooped = canBeSnooped;          
         }
     }

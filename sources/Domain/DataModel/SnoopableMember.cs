@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Autodesk.Revit.UI;
 using RevitDBExplorer.Domain.DataModel.MemberAccessors;
+using RevitDBExplorer.Domain.DataModel.ValueContainers.Base;
 using RevitDBExplorer.Domain.DataModel.ValueObjects;
 using RevitDBExplorer.WPF;
 
@@ -17,48 +18,46 @@ namespace RevitDBExplorer.Domain.DataModel
         private readonly DeclaringType declaringType;      
         private readonly IMemberAccessor memberAccessor;
         private readonly Lazy<DocXml> documentation;
-        private Exception valueAccessException;
-        private string value;
-        private string valueTypeName;
-        private bool canBeSnooped;
-        
 
 
         public Kind MemberKind { get; }
         public string Name { get; }
         public string DeclaringTypeName => declaringType.Name;
         public int DeclaringTypeLevel => declaringType.InheritanceLevel;
+        public bool HasAccessor => memberAccessor is not null;
         public DocXml Documentation => documentation?.Value ?? DocXml.Empty;
 
-
-        public bool HasException => valueAccessException is not null;
-        public bool HasAccessor => memberAccessor is null;
-        public string Value
-        {
+        public Label Label { get; private set; }        
+        public IValueContainer ValueContainer 
+        { 
             get
             {
-                if (valueAccessException is not null)
-                {
-                    return Labeler.GetLabelForException(valueAccessException);
-                }
-                return value;
-            }
+                return memberAccessor is IMemberAccessorWithValue accesor ? accesor.Value : null;
+            } 
         }
-        public string ValueTypeName => valueTypeName;
-        public bool CanBeSnooped => canBeSnooped;       
-        
+        public string AccessorName { get; private set; }
+        public bool CanBeSnooped { get; private set; }
+
 
         public SnoopableMember(SnoopableObject parent, Kind memberKind, string name, Type declaringType, IMemberAccessor memberAccessor, Func<DocXml> documentationFactoryMethod)
         {
             this.parent = parent;
             this.MemberKind = memberKind;
             this.Name = name;
-            this.declaringType = DeclaringType.Create(declaringType);      
+            if (declaringType != null)
+            {
+                this.declaringType = DeclaringType.Create(declaringType);
+            }
             this.memberAccessor = memberAccessor;
             if (documentationFactoryMethod != null)
             {
                 this.documentation = new Lazy<DocXml>(documentationFactoryMethod);
             }
+        }
+        public SnoopableMember(SnoopableObject snoopableObject, SnoopableMember source) : this(snoopableObject, source.MemberKind, source.Name, null, source.memberAccessor, null)
+        {
+            this.declaringType = source.declaringType;
+            this.documentation = source.documentation;
         }
 
 
@@ -67,21 +66,21 @@ namespace RevitDBExplorer.Domain.DataModel
             ReadValue(parent.Context, parent.Object);
         }
         private void ReadValue(SnoopableContext document, object @object)
-        {
-            
+        {            
             try
             {
-                var result = memberAccessor.Read(document, @object);    
-                value = result.Label;                 
-                valueTypeName = result.ValueTypeName;
-                canBeSnooped = result.CanBeSnooped;
+                var result = memberAccessor.Read(document, @object);                  
+                AccessorName = result.AccessorName;
+                CanBeSnooped = result.CanBeSnooped;
+                Label = new Label(result.Label, false);
             }
-            catch (Exception ex)
+            catch (Exception valueAccessException)
             {
-                valueAccessException = ex;
+                Label = new Label(Labeler.GetLabelForException(valueAccessException), true);
             }
-            OnPropertyChanged(nameof(Value));
-            OnPropertyChanged(nameof(ValueTypeName));
+            OnPropertyChanged(nameof(Label));
+            OnPropertyChanged(nameof(ValueContainer));
+            OnPropertyChanged(nameof(AccessorName));
             OnPropertyChanged(nameof(CanBeSnooped));
         }
         public IEnumerable<SnoopableObject> Snooop(UIApplication app)

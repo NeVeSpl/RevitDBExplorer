@@ -24,7 +24,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;R2023</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;R2021b, R2022b, R2023b, R2023e</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -33,7 +33,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'R2023|AnyCPU'">
     <OutputPath>bin\R2023\</OutputPath>
-    <DefineConstants>TRACE;R2023</DefineConstants>
+    <DefineConstants>TRACE;R2021b, R2022b, R2023b, R2023e</DefineConstants>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -42,7 +42,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'R2022|AnyCPU'">
     <OutputPath>bin\R2022\</OutputPath>
-    <DefineConstants>TRACE;R2022</DefineConstants>
+    <DefineConstants>TRACE;R2021b, R2022b, R2022e, R2023e</DefineConstants>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -51,7 +51,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'R2021|AnyCPU'">
     <OutputPath>bin\R2021\</OutputPath>
-    <DefineConstants>TRACE;R2021</DefineConstants>
+    <DefineConstants>TRACE;R2021b, R2021e, R2022e, R2023e</DefineConstants>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -154,10 +154,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Domain\DataModel\MemberAccessors\MemberAccessorByIteration.cs" />
+    <Compile Include="Domain\DataModel\MemberAccessors\Rebar\Rebar_GetOverridableHookParameters.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\View\View_Duplicate.cs" />
+    <Compile Include="Domain\QuoteGenerator.cs" />
     <Compile Include="Domain\DataModel\SnoopableContext.cs" />
     <Compile Include="Domain\DataModel\ValueContainers\IListElementIdContainer.cs" />
     <Compile Include="Domain\DataModel\ValueObjects\DeclaringType.cs" />
+    <Compile Include="Domain\DataModel\ValueObjects\Label.cs" />
     <Compile Include="Domain\FactoryOfFactories.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\Element\Element_Id.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\HostObject\HostObject_FindInserts.cs" />
@@ -178,7 +181,6 @@
     <Compile Include="Domain\DataModel\MemberAccessors\MemberAccessorByFunc.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\MemberAccessorByType.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\MemberAccessorForConstValue.cs" />
-    <Compile Include="Domain\DataModel\MemberAccessors\PlanViewRange\PlanViewRange_GetLevelId.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\PrintManager\PrintManager_SubmitPrint.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\Rebar\Rebar_IsBarHidden.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\Rebar\Rebar_GetTransformedCenterlineCurves.cs" />

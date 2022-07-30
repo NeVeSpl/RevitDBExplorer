@@ -22,7 +22,7 @@ namespace RevitDBExplorer.WPF
         }
 
 
-        private void UpdateSource()
+        public void UpdateSource()
         {
             var dictionaryName = String.IsNullOrEmpty(name) ? "Default" : name;
             var themeName = String.IsNullOrEmpty(Properties.AppSettings.Default.Theme) ? "Default" : Properties.AppSettings.Default.Theme;

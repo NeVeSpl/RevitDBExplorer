@@ -112,8 +112,13 @@ In comparison to RevitLookup, RDBE in addition gives access to:
     - IsBuiltInCategory
     - GetBuiltInCategory
     - GetBuiltInCategoryTypeId
+- Curve
+    - GetEndParameter
 - Document
     - GetTypeOfStorage
+    - GetDefaultElementTypeId
+- Element
+    - **GetMaterialIds** 
 - FormatOptions
     - GetValidSymbols
     - CanHaveSymbol
@@ -144,8 +149,17 @@ In comparison to RevitLookup, RDBE in addition gives access to:
     - GetHookRotationAngle
     - GetHookTypeId
     - **GetMovedBarTransform**
+    - **GetOverridableHookParameters**
     - **GetTransformedCenterlineCurves**
     - IsBarHidden
+- RebarShapeDrivenAccessor
+    - **GetBarPositionTransform**
+- ScheduleDefinition
+    - GetFilter
+    - GetSortGroupField
+- SpecUtils
+    - IsValidDataType
+    - IsSpec
 - UnitFormatUtils
     - Format
 - UnitUtils
@@ -156,9 +170,16 @@ In comparison to RevitLookup, RDBE in addition gives access to:
     - GetTypeCatalogStringForSpec
     - GetTypeCatalogStringForUnit
     - GetValidUnits
-- SpecUtils
-    - IsValidDataType
-    - IsSpec
+- Wall
+    - IsWallCrossSectionValid
+- View
+    - CanViewBeDuplicated
+    - IsInTemporaryViewMode
+    - SupportsWorksharingDisplayMode
+- ViewCropRegionShapeManage
+    - GetSplitRegionMaximum
+    - GetSplitRegionMinimum
+
 
 
 ### <a name="grouping"></a>elements of Family, FamilySymbol, FamilyInstance are grouped by category in the tree

@@ -9,23 +9,18 @@ namespace RevitDBExplorer.Domain.DataModel.MemberTemplates.Base
 {
     internal interface ISnoopableMemberTemplate
     {
-        Type ForType { get; }
-        Type DeclaringType { get; }
-        string MemberName { get; }
-        IMemberAccessor MemberAccessor { get; }
-        SnoopableMember.Kind Kind { get; }
-        bool CanBeUsed(object @object);
+        Type ForType { get; }     
+        bool CanBeUsedWith(object @object);
+        SnoopableMember SnoopableMember { get; init; }
     }
+
 
     internal sealed class SnoopableMemberTemplate<TSnoopedObjectType> : ISnoopableMemberTemplate
     {
+        private Func<TSnoopedObjectType, bool> CanBeUsedTyped { get; init; }
+        public SnoopableMember SnoopableMember { get; init; }
         public Type ForType => typeof(TSnoopedObjectType);
-        public Func<TSnoopedObjectType, bool> CanBeUsedTyped { get; init; }
-        public Type DeclaringType { get; init; }
-        public string MemberName { get; init; }
-        public IMemberAccessor MemberAccessor { get; init; }
-        public SnoopableMember.Kind Kind { get; init; }
-        public bool CanBeUsed(object @object)
+        public bool CanBeUsedWith(object @object)
         {
             if (CanBeUsedTyped != null)
             {
@@ -47,11 +42,8 @@ namespace RevitDBExplorer.Domain.DataModel.MemberTemplates.Base
         {
             return new SnoopableMemberTemplate<TSnoopedObjectType>()
             {
-                DeclaringType = declaringType,
-                MemberName = memberName,
-                MemberAccessor = memberAccessor,
-                CanBeUsedTyped = canBeUsed,
-                Kind = kind,
+                SnoopableMember = new SnoopableMember(null, kind, memberName, declaringType, memberAccessor, null),             
+                CanBeUsedTyped = canBeUsed,              
             };
         }
     }

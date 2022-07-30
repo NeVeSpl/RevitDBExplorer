@@ -34,7 +34,7 @@ namespace RevitDBExplorer.Domain.DataModel.Streams
                     itemType = genericArgs[0];
                 }
 
-                for (int i = 0; i < list.Count; i++)
+                for (int i = 0; i < Math.Min(list.Count, 9999); i++)
                 {                   
                     var member = new SnoopableMember(snoopableObject, SnoopableMember.Kind.Property, i.ToString(), type, new MemberAccessorForConstValue(itemType, snoopableObject.Document, list[i]), null);
                     yield return member;

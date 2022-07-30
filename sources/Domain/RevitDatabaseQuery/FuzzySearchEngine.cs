@@ -18,7 +18,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
     {
         static readonly List<(string, BuiltInCategory)> Categories;
         static readonly List<(string, Type)> Classes;
-        static readonly List<(string, ForgeTypeId)> Parameters;
+        static readonly List<(string, BuiltInParameter)> Parameters;
         static List<(string, ElementId)> UserParameters = Enumerable.Empty<(string, ElementId)>().ToList();
 
         static readonly HashSet<string> ClassesBlackList = new()
@@ -108,9 +108,8 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
                 {
                     var score = needle.ApproximatelyEquals(item.Item1, SimMetricType.Levenstein);
                     if (score > 0.69)
-                    {
-                        var builtInParam = ParameterUtils.GetBuiltInParameter(item.Item2);  
-                        found.Add(new ParameterMatch(builtInParam, score));
+                    {                       
+                        found.Add(new ParameterMatch(item.Item2, score));
                     }
                 }
                 foreach (var item in UserParameters)
@@ -165,15 +164,32 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
             var classes = elementType.Assembly.GetExportedTypes().Where(p => elementType.IsAssignableFrom(p) && !p.IsInterface).Where(x => !ClassesBlackList.Contains(x.FullName)).Select(x => (x.Name.Clean(), x)).ToList();
             return classes;
         }
-        private static List<(string, ForgeTypeId)> LoadParameters()
+        private static List<(string, BuiltInParameter)> LoadParameters()
         {
-            var ids = ParameterUtils.GetAllBuiltInParameters();
-            var parameters = new List<(string, ForgeTypeId)>(ids.Count * 2);
-            foreach (var id in ids)
+#if R2022b
+            var ids = ParameterUtils.GetAllBuiltInParameters().Select(x => ParameterUtils.GetBuiltInParameter(x)).ToList();
+#endif
+#if R2021e
+            var bips = System.Enum.GetValues(typeof(BuiltInParameter));
+            var ids = new List<BuiltInParameter>(bips.Length);
+            foreach (BuiltInParameter i in bips)
             {
-                var label = LabelUtils.GetLabelForBuiltInParameter(id);
-                var param = ParameterUtils.GetBuiltInParameter(id);
+                try
+                {
+                    var label = LabelUtils.GetLabelFor(i);
+                    ids.Add(i);
+                }
+                catch
+                {
 
+                }
+            }
+#endif            
+            var parameters = new List<(string, BuiltInParameter)>(ids.Count * 2);
+            foreach (var param in ids)
+            {
+                var label = LabelUtils.GetLabelFor(param);               
+                
                 if (param == BuiltInParameter.INVALID)
                 {
                     continue;
@@ -184,11 +200,11 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
 
                 if (!string.IsNullOrEmpty(labelCleaned))
                 {
-                    parameters.Add((labelCleaned, id));
+                    parameters.Add((labelCleaned, param));
                 }
                 if (!string.IsNullOrEmpty(paramCleaned))
                 {
-                    parameters.Add((paramCleaned.ToString().Clean(), id)); 
+                    parameters.Add((paramCleaned.ToString().Clean(), param)); 
                 } 
             }
             return parameters;

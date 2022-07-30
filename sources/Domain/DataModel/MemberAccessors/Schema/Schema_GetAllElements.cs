@@ -16,7 +16,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
             { 
                 CanBeSnooped = count > 0, 
                 Label = $"Elements : {count}",
-                ValueTypeName = nameof(Schema_GetAllElements) 
+                AccessorName = nameof(Schema_GetAllElements) 
             };            
         }
 

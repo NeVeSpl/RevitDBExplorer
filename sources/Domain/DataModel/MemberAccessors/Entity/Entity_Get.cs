@@ -36,10 +36,12 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
                 var fieldValueType = GetFieldValueType(field);
                 var fieldSpecType = field.GetSpecTypeId();
                 MethodInfo constructedGenericGet = null;
-                object[] parameters = null;
-                if (UnitUtils.IsMeasurableSpec(fieldSpecType) || fieldSpecType == SpecTypeId.Custom)
+                object[] parameters = null;              
+                bool isMeasurableSpec = IsMeasurableSpec(fieldSpecType);
+
+                if (isMeasurableSpec || fieldSpecType == SpecTypeId.Custom)
                 {
-                    var unit = UnitUtils.IsMeasurableSpec(fieldSpecType) ? UnitUtils.GetValidUnits(fieldSpecType).FirstOrDefault() : UnitTypeId.Custom;
+                    var unit = isMeasurableSpec ? UnitUtils.GetValidUnits(fieldSpecType).FirstOrDefault() : UnitTypeId.Custom;
                     constructedGenericGet = getWithFielAndUnit.MakeGenericMethod(fieldValueType);
                     parameters = new object[] { field, unit };
                 }
@@ -51,6 +53,28 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
                 var value = constructedGenericGet.Invoke(entity, parameters);
                 yield return SnoopableObject.CreateKeyValuePair(document, field, value, keyPrefix :"");
             }
+        }
+
+        private bool IsMeasurableSpec(ForgeTypeId id)
+        {
+#if R2022b
+            return UnitUtils.IsMeasurableSpec(id);
+#endif
+#if R2021e
+            try
+            {
+                if (UnitUtils.IsSpec(id))
+                {
+                    UnitUtils.GetValidUnits(id);
+                    return true;
+                }
+            }
+            catch
+            {
+
+            }
+            return false;
+#endif
         }
 
         private Type GetFieldValueType(Field field)

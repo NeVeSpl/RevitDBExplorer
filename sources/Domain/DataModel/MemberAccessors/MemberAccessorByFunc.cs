@@ -7,10 +7,11 @@ using RevitDBExplorer.Domain.DataModel.ValueContainers.Base;
 
 namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
-    internal class MemberAccessorByFunc<TSnoopedObjectType, TReturnType> : MemberAccessorTyped<TSnoopedObjectType>
+    internal class MemberAccessorByFunc<TSnoopedObjectType, TReturnType> : MemberAccessorTyped<TSnoopedObjectType>, IMemberAccessorWithValue
     {
         private readonly IValueContainer value;
         private readonly Func<Document, TSnoopedObjectType, TReturnType> get;
+        IValueContainer IMemberAccessorWithValue.Value => value;
 
 
         public MemberAccessorByFunc(Func<Document, TSnoopedObjectType, TReturnType> get)
@@ -18,7 +19,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
             this.get = get;
             this.value = ValueContainerFactory.Create(typeof(TReturnType));
         }
-
+        
 
         public override ReadResult Read(SnoopableContext context, TSnoopedObjectType @object)
         {

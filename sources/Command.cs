@@ -1,7 +1,9 @@
-﻿using System.Windows.Interop;
+﻿using System.Linq;
+using System.Windows.Interop;
 using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
+using RevitDBExplorer.Domain;
 
 namespace RevitDBExplorer
 {
@@ -10,7 +12,7 @@ namespace RevitDBExplorer
     {
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
-            var window = new MainWindow();
+            var window = new MainWindow(Selectors.Snoop(commandData.Application, Selector.CurrentSelection).ToList());
             new WindowInteropHelper(window).Owner = commandData.Application.MainWindowHandle;
             window.Show();
 

@@ -43,11 +43,7 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers
         }
         protected override IEnumerable<SnoopableObject> Snooop(Document document, ElementId id)
         {
-            var freshElement = document.GetElementOrCategory(id);
-            if (freshElement != null)
-            {
-                yield return new SnoopableObject(document, freshElement);
-            }
+            yield return new SnoopableObject(document, id);            
         }
     }
 }

@@ -27,6 +27,11 @@ namespace RevitDBExplorer.Domain.DataModel
 
         public SnoopableObject(Document document, object @object, IEnumerable<SnoopableObject> subObjects = null)
         {
+            if (@object is ElementId id)
+            {
+                var element = document.GetElementOrCategory(id);
+                @object = element ?? @object;
+            }            
             this.Context = new SnoopableContext() { Document = document };
             this.Object = @object;
             this.Document = document;            
@@ -39,7 +44,7 @@ namespace RevitDBExplorer.Domain.DataModel
             }
             else
             {
-                if (@object is IEnumerable enumerable && @object is not string && @object is not IDictionary)
+                if (@object is IEnumerable enumerable && @object?.GetType()?.FullName.StartsWith("System") == false)
                 {
                     items = new List<SnoopableObject>();
                     foreach (var item in enumerable)
@@ -59,7 +64,7 @@ namespace RevitDBExplorer.Domain.DataModel
             }
             foreach (var member in GetMembersFromStreams(app))
             {
-                if (!member.HasAccessor)
+                if (member.HasAccessor)
                 {
                     member.ReadValue();                
                     yield return member;
@@ -109,7 +114,7 @@ namespace RevitDBExplorer.Domain.DataModel
             var methods = type.GetMethods(BindingFlags.Instance | BindingFlags.Public);
             foreach (var method in methods)
             {
-                if (method.ReturnType == typeof(void)) continue;
+                if (method.ReturnType == typeof(void) && method.Name != "GetOverridableHookParameters") continue;
                 if (method.IsSpecialName) continue;
                 if (method.DeclaringType == typeof(object)) continue;               
 

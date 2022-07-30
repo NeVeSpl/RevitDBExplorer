@@ -55,7 +55,7 @@ namespace RevitDBExplorer.Domain
                 var reference = geometryObject.GetReference();
                 if (reference != null)
                 {
-#if R2023
+#if R2023b
                     ExternalExecutor.ExecuteInRevitContextAsync(x => { x.ActiveUIDocument?.Selection.SetReferences(new[] { reference }); });
 #endif
                 }

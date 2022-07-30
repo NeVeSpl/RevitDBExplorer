@@ -18,6 +18,7 @@ using RevitDBExplorer.Domain.RevitDatabaseQuery;
 using RevitDBExplorer.Properties;
 using RevitDBExplorer.UIComponents.QueryVisualization;
 using RevitDBExplorer.UIComponents.Tree;
+using RevitDBExplorer.WPF;
 using RDQCommand = RevitDBExplorer.Domain.RevitDatabaseQuery.Command;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
@@ -299,7 +300,7 @@ namespace RevitDBExplorer
                     firstObject.IsExpanded = true;
                     firstObject.Items.First().IsSelected = true;
                 }
-                firstObject.IsSelected = true;                
+                firstObject.IsSelected = true; 
             }           
         }
         private void PopulateListView(IList<SnoopableMember> members)
@@ -399,7 +400,7 @@ namespace RevitDBExplorer
             var snoopableObject = ((sender as MenuItem)?.DataContext as SnoopableObjectTreeVM)?.Object;
             if (snoopableObject is not null)
             {
-                var window = new MainWindow(new[] { snoopableObject });
+                var window = new MainWindow(new[] { new SnoopableObject(snoopableObject.Document, snoopableObject.Object) });
                 new WindowInteropHelper(window).Owner = Application.RevitWindowHandle;
                 window.Show();
             }
@@ -420,7 +421,14 @@ namespace RevitDBExplorer
 
             if (item.DataContext is SnoopableMember snoopableMember)
             {
-                Clipboard.SetDataObject($"{snoopableMember.Name}= {snoopableMember.Value}");
+                Clipboard.SetDataObject($"{snoopableMember.Name}= {snoopableMember.Label.Text}");
+            }
+        }
+        private void ListView_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                ListViewItem_MouseLeftButtonUp(sender, null);
             }
         }
         private void ButtonWithSubMenu_Click(object sender, RoutedEventArgs e)
@@ -465,6 +473,13 @@ namespace RevitDBExplorer
             if (sender is MenuItem menuItem)
             {
                 AppSettings.Default.Theme = menuItem.Tag.ToString();
+                foreach (ResourceDictionary dict in Resources.MergedDictionaries)
+                {
+                    if (dict is ThemeResourceDictionary skinDict)
+                        skinDict.UpdateSource();
+                    //else
+                     //   dict.Source = dict.Source;
+                }
             }
         }
 
@@ -491,6 +506,6 @@ namespace RevitDBExplorer
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        #endregion       
+        #endregion        
     }
 }

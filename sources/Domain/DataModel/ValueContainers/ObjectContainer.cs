@@ -22,7 +22,7 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers
         protected override bool CanBeSnoooped(object @object) => @object is not null;
         protected override string ToLabel(object @object)
         {
-            string name = GetNameForObjectFromProperty(@object);
+            string name = @object.TryGetPropertyValue(propertyThatContainsName);
             string typeName = @object.GetType()?.GetCSharpName();     
             return $"{typeName}: {name}";
         }
@@ -32,19 +32,6 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers
         }
 
 
-        private static readonly string[] propertyThatContainsName = new[]  { "Name", "Title", "SchemaName", "FieldName" };
-        private static string GetNameForObjectFromProperty(object obj)
-        {
-            foreach (var propName in propertyThatContainsName)
-            {
-                var property = obj.GetType()?.GetProperty(propName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-                var propertyValue = property?.GetGetGetMethod()?.Invoke(obj, default) as string;
-                if (!string.IsNullOrEmpty(propertyValue))
-                {
-                    return propertyValue;
-                }
-            }
-            return null;
-        }
+        private static readonly string[] propertyThatContainsName = new[]  { "Name", "Title", "SchemaName", "FieldName" };       
     }
 }

@@ -74,9 +74,9 @@ namespace RevitDBExplorer.Domain
                 {
                     foreach (var template in keyValue.Value)
                     {
-                        if (template.CanBeUsed(snoopableObject.Object))
+                        if (template.CanBeUsedWith(snoopableObject.Object))
                         {
-                            var member = new SnoopableMember(snoopableObject, template.Kind, template.MemberName, template.DeclaringType, template.MemberAccessor, null);
+                            var member = new SnoopableMember(snoopableObject, template.SnoopableMember);
                             yield return member;
                         }
                     }
