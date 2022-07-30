@@ -38,7 +38,7 @@ namespace SetupBuilder
 
             project.Dirs = new Dir[]
             {
-                new Dir(@"%AppDataFolder%\Autodesk\Revit\Addins", CreateDirFor("2022"), CreateDirFor("2023"))
+                new Dir(@"%AppDataFolder%\Autodesk\Revit\Addins", CreateDirFor("2021"), CreateDirFor("2022"), CreateDirFor("2023"))
             };
 
             project.RemoveDialogsBetween(NativeDialogs.WelcomeDlg, NativeDialogs.InstallDirDlg);
