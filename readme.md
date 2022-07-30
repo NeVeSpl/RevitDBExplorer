@@ -8,6 +8,7 @@ Yet another [RevitLookup](https://github.com/jeremytammik/RevitLookup) clone. Re
 - [extensive support for ForgeTypeId](#extensive-support-for-forgetypeid)
 - [better support for Revit Extensible Storage](#better-support-for-revit-extensible-storage)
 - [easier work with Element.Geometry](#easier-work-with-geometry)
+- [UI themes: dark and light](#themes)
 - [more data exposed](#more-data-exposed)
 - [elements of Family, FamilySymbol, FamilyInstance are grouped by category in tree](#grouping)
 
@@ -102,6 +103,13 @@ RDBE allows you to snoop all schemas that are loaded into Revit memory, and you 
 Not only you have faster access to a geometry of an element, but you can also select an instance of GeometryObject in Revit if it has a valid reference.  
 
 ![easier-work-with-geometry](documentation/examples/easier-work-with-geometry.gif)
+
+
+### <a name="themes"></a>UI themes: dark and light
+
+It is getting dark out there. **Be ready**, with a new dark theme.
+
+![themes](documentation/examples/themes.gif)
 
 
 ### <a name="more-data-exposed"></a>more data exposed from Revit database
