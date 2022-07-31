@@ -20,6 +20,8 @@ namespace RevitDBExplorer.Domain.DataModel.MemberTemplates
 #if R2023b
                 SnoopableMemberTemplate<Document>.Create((doc, target) => target.GetChangedElements(Guid.Empty), kind: SnoopableMember.Kind.Method),
 #endif
+
+                SnoopableMemberTemplate<Document>.Create((doc, target) => BasicFileInfo.Extract(target.PathName), kind: SnoopableMember.Kind.StaticMethod),
             };
         }
 
