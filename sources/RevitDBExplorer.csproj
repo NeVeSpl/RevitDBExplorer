@@ -153,6 +153,8 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Domain\DataModel\MemberAccessors\Element\Element_GetMaterialVolume.cs" />
+    <Compile Include="Domain\DataModel\MemberAccessors\Element\Element_GetMaterialArea.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\MemberAccessorByIteration.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\Rebar\Rebar_GetOverridableHookParameters.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\View\View_Duplicate.cs" />

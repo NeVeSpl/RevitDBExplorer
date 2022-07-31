@@ -19,7 +19,7 @@ namespace RevitDBExplorer.WPF.Converters
                 double result = container.Value * 0.3048;
                 return $"{result} [m]";
             }
-            return snoopableMember.ValueContainer;
+            return snoopableMember.Label.Text;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
