@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Autodesk.Revit.DB;
 using RevitDBExplorer.Domain.DataModel.MemberTemplates.Base;
@@ -16,7 +17,9 @@ namespace RevitDBExplorer.Domain.DataModel.MemberTemplates
             templates = new ISnoopableMemberTemplate[]
             {
                 SnoopableMemberTemplate<Document>.Create((doc, target) => Document.GetDocumentVersion(target), kind: SnoopableMember.Kind.StaticMethod),
-              
+#if R2023b
+                SnoopableMemberTemplate<Document>.Create((doc, target) => target.GetChangedElements(Guid.Empty), kind: SnoopableMember.Kind.Method),
+#endif
             };
         }
 
