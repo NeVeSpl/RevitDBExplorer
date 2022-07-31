@@ -30,11 +30,11 @@
                 <wpf:ThemeResourceDictionary Name="Colors"/>
                 <ResourceDictionary Source="Resources/VectorGraphic.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-            <converters:PercentageOfValueConverter x:Key="PercentageOfValueConverter"/>
-            <converters:FeetToMetersConverter x:Key="FeetToMetersConverter"/>
+            <converters:PercentageOfValueConverter x:Key="PercentageOfValueConverter"/>            
             <converters:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
-            <converters:EnumToVisibilityConverter x:Key="EnumToVisibilityConverter"/>
+            <converters:EnumMatchToVisibilityConverter x:Key="EnumMatchToVisibilityConverter"/>
             <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+            <wpf:DataTemplateSelectorForPropertyType x:Key="DataTemplateSelectorForPropertyType"/>
         </ResourceDictionary>
     </Window.Resources>
 
@@ -237,93 +237,97 @@
 
         <ListView Grid.Row="3" Grid.Column="3" Margin="-2 2 0 0" BorderThickness="0" ItemsSource="{Binding ListItems}" d:ItemsSource="{d:SampleData ItemCount=5}" SelectionMode="Single" SelectedItem="{Binding ListSelectedItem}"  AlternationCount="2" VirtualizingStackPanel.IsVirtualizing="True"  KeyDown="ListView_KeyDown" >
             <ListView.Resources>
-                <ContextMenu x:Key="ItemContextMenu">
+                <ResourceDictionary>
+                    <ResourceDictionary.MergedDictionaries>
+                        <ResourceDictionary Source="UIComponents/List/CellDataTemplates.xaml"/>                     
+                    </ResourceDictionary.MergedDictionaries>
+
+                    <ContextMenu x:Key="ItemContextMenu">
                     <MenuItem Header="Copy" Click="ListViewItem_MenuItemCopy_Click" />
                 </ContextMenu>
 
-                <Style TargetType="{x:Type ListViewItem}" BasedOn="{StaticResource {x:Type ListViewItem}}" >
-                    <Setter Property="ToolTip">
-                        <Setter.Value>
-                            <StackPanel Orientation="Vertical"  MaxWidth="727">
-                                <StackPanel.Resources>
-                                    <SolidColorBrush x:Key="ToolTip.Key" Color="Gray"/>
-                                    <SolidColorBrush x:Key="ToolTip.Value" Color="#000000"/>
-                                    <SolidColorBrush x:Key="ToolTip.ReturnType" Color="#0000FF"/>
-                                    <SolidColorBrush x:Key="ToolTip.Name" Color="#745320"/>
-                                    <SolidColorBrush x:Key="ToolTip.Invocation" Color="#21377F"/>
-                                </StackPanel.Resources>
-                                <TextBlock Visibility="{Binding Documentation.Name, Converter={StaticResource StringToVisibilityConverter}}">
-                                    <Run Foreground="{DynamicResource ToolTip.ReturnType}" Text="{Binding Documentation.ReturnType, Mode=OneWay}" /> <Run Foreground="{DynamicResource ToolTip.Name}" Text="{Binding Documentation.Name, Mode=OneWay}" /><Run Foreground="{DynamicResource ToolTip.Invocation}" Text="{Binding Documentation.Invocation, Mode=OneWay}" />
-                                    <LineBreak/>
-                                </TextBlock>
-                                <TextBlock TextWrapping="Wrap" Visibility="{Binding Documentation.Summary, Converter={StaticResource StringToVisibilityConverter}}" >  
-                                    <Run Text="{Binding Documentation.Summary, Mode=OneWay}" Foreground="{DynamicResource ToolTip.Value}" /><LineBreak/>
-                                </TextBlock>
-                                <TextBlock TextWrapping="Wrap" Visibility="{Binding Documentation.Returns, Converter={StaticResource StringToVisibilityConverter}}" >
-                                    <Run Text="Returns:" Foreground="{DynamicResource ToolTip.Key}"/><LineBreak/>
-                                    <Run Text="{Binding Documentation.Returns, Mode=OneWay}" Foreground="{DynamicResource ToolTip.Value}" /><LineBreak/>
-                                </TextBlock>
-                                <TextBlock TextWrapping="Wrap" Visibility="{Binding Documentation.Remarks, Converter={StaticResource StringToVisibilityConverter}}">
-                                    <Run Text="Remarks:" Foreground="{DynamicResource ToolTip.Key}"/><LineBreak/>
-                                    <Run Text="{Binding Documentation.Remarks, Mode=OneWay}"  Foreground="{DynamicResource ToolTip.Value}"/><LineBreak/>
-                                </TextBlock>
-                                <TextBlock TextWrapping="Wrap" Visibility="{Binding AccessorName, Converter={StaticResource StringToVisibilityConverter}}">
-                                    <Run Text="Accessor:" Foreground="{DynamicResource ToolTip.Key}"/><LineBreak/>
-                                    <Run Text="{Binding AccessorName, Mode=OneWay}" Foreground="{DynamicResource ToolTip.Value}" />
-                                </TextBlock>
+                    <Style TargetType="{x:Type ListViewItem}" BasedOn="{StaticResource {x:Type ListViewItem}}" >
+                        <Setter Property="ToolTip">
+                            <Setter.Value>
+                                <StackPanel Orientation="Vertical"  MaxWidth="727">
+                                    <StackPanel.Resources>
+                                        <SolidColorBrush x:Key="ToolTip.Key" Color="Gray"/>
+                                        <SolidColorBrush x:Key="ToolTip.Value" Color="#000000"/>
+                                        <SolidColorBrush x:Key="ToolTip.ReturnType" Color="#0000FF"/>
+                                        <SolidColorBrush x:Key="ToolTip.Name" Color="#745320"/>
+                                        <SolidColorBrush x:Key="ToolTip.Invocation" Color="#21377F"/>
+                                    </StackPanel.Resources>
+                                    <TextBlock Visibility="{Binding Documentation.Name, Converter={StaticResource StringToVisibilityConverter}}">
+                                        <Run Foreground="{DynamicResource ToolTip.ReturnType}" Text="{Binding Documentation.ReturnType, Mode=OneWay}" /> <Run Foreground="{DynamicResource ToolTip.Name}" Text="{Binding Documentation.Name, Mode=OneWay}" /><Run Foreground="{DynamicResource ToolTip.Invocation}" Text="{Binding Documentation.Invocation, Mode=OneWay}" />
+                                        <LineBreak/>
+                                    </TextBlock>
+                                    <TextBlock TextWrapping="Wrap" Visibility="{Binding Documentation.Summary, Converter={StaticResource StringToVisibilityConverter}}" >  
+                                        <Run Text="{Binding Documentation.Summary, Mode=OneWay}" Foreground="{DynamicResource ToolTip.Value}" /><LineBreak/>
+                                    </TextBlock>
+                                    <TextBlock TextWrapping="Wrap" Visibility="{Binding Documentation.Returns, Converter={StaticResource StringToVisibilityConverter}}" >
+                                        <Run Text="Returns:" Foreground="{DynamicResource ToolTip.Key}"/><LineBreak/>
+                                        <Run Text="{Binding Documentation.Returns, Mode=OneWay}" Foreground="{DynamicResource ToolTip.Value}" /><LineBreak/>
+                                    </TextBlock>
+                                    <TextBlock TextWrapping="Wrap" Visibility="{Binding Documentation.Remarks, Converter={StaticResource StringToVisibilityConverter}}">
+                                        <Run Text="Remarks:" Foreground="{DynamicResource ToolTip.Key}"/><LineBreak/>
+                                        <Run Text="{Binding Documentation.Remarks, Mode=OneWay}"  Foreground="{DynamicResource ToolTip.Value}"/><LineBreak/>
+                                    </TextBlock>
+                                    <TextBlock TextWrapping="Wrap" Visibility="{Binding AccessorName, Converter={StaticResource StringToVisibilityConverter}}">
+                                        <Run Text="Accessor:" Foreground="{DynamicResource ToolTip.Key}"/><LineBreak/>
+                                        <Run Text="{Binding AccessorName, Mode=OneWay}" Foreground="{DynamicResource ToolTip.Value}" />
+                                    </TextBlock>
 
-                            </StackPanel>
-                        </Setter.Value>
-                    </Setter>
-                    <Setter Property="ToolTipService.ShowDuration" Value="50000"></Setter>
-                    <Setter Property="ContextMenu" Value="{StaticResource ItemContextMenu}" />
-                    <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                                </StackPanel>
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Property="ToolTipService.ShowDuration" Value="50000"></Setter>
+                        <Setter Property="ContextMenu" Value="{StaticResource ItemContextMenu}" />
+                        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
 
-                    <Style.Triggers>
-                        <Trigger Property="IsMouseOver" Value="true" >
-                            <Setter Property="Background" Value="Transparent" />
-                            <Setter Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
-                        </Trigger>
-                        <Trigger Property="IsSelected" Value="true" >
-                            <Setter Property="Background" Value="Transparent" />
-                            <Setter Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />                           
-                        </Trigger>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="true" >
+                                <Setter Property="Background" Value="Transparent" />
+                                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="true" >
+                                <Setter Property="Background" Value="Transparent" />
+                                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />                           
+                            </Trigger>
                         
 
-                        <Trigger Property="ItemsControl.AlternationIndex" Value="0">
-                            <Setter Property="Background" Value="{DynamicResource ListView.Alternation.Background_0}"/>
-                        </Trigger>
-                        <Trigger Property="ItemsControl.AlternationIndex" Value="1">
-                            <Setter Property="Background" Value="{DynamicResource ListView.Alternation.Background_1}"/>
-                        </Trigger>
-                    </Style.Triggers>                    
-                </Style>
+                            <Trigger Property="ItemsControl.AlternationIndex" Value="0">
+                                <Setter Property="Background" Value="{DynamicResource ListView.Alternation.Background_0}"/>
+                            </Trigger>
+                            <Trigger Property="ItemsControl.AlternationIndex" Value="1">
+                                <Setter Property="Background" Value="{DynamicResource ListView.Alternation.Background_1}"/>
+                            </Trigger>
+                        </Style.Triggers>                    
+                    </Style>
+                </ResourceDictionary>
             </ListView.Resources>
 
             <ListView.View>
                 <GridView AllowsColumnReorder="False">
+                    
                     <GridViewColumn Header="Name" Width="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListView}}, Path=ActualWidth, Converter={StaticResource PercentageOfValueConverter}, ConverterParameter=38}">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
-                                    <Path Style="{StaticResource IconProperty}" Margin="0 1 4 0" Visibility="{Binding MemberKind, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter= Property}" ToolTip="Property"/>
-                                    <Path Style="{StaticResource IconMethod}" Margin="0 1 4 0" Visibility="{Binding MemberKind, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter= Method}" ToolTip="Method"/>
-                                    <Path Style="{StaticResource IconMethodStatic}" Margin="0 1 4 0" Visibility="{Binding MemberKind, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter= StaticMethod}" ToolTip="Static Method"/>
-                                    <Path Style="{StaticResource IconExtra}" Margin="0 1 4 0" Visibility="{Binding MemberKind, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter= Extra}" ToolTip="Extra - not available directly in API"/>
+                                    <Path Style="{StaticResource IconProperty}" Margin="0 1 4 0" Visibility="{Binding MemberKind, Converter={StaticResource EnumMatchToVisibilityConverter}, ConverterParameter= Property}" ToolTip="Property"/>
+                                    <Path Style="{StaticResource IconMethod}" Margin="0 1 4 0" Visibility="{Binding MemberKind, Converter={StaticResource EnumMatchToVisibilityConverter}, ConverterParameter= Method}" ToolTip="Method"/>
+                                    <Path Style="{StaticResource IconMethodStatic}" Margin="0 1 4 0" Visibility="{Binding MemberKind, Converter={StaticResource EnumMatchToVisibilityConverter}, ConverterParameter= StaticMethod}" ToolTip="Static Method"/>
+                                    <Path Style="{StaticResource IconAsArgument}" Margin="0 1 4 0" Visibility="{Binding MemberKind, Converter={StaticResource EnumMatchToVisibilityConverter}, ConverterParameter= AsArgument}" ToolTip="Parameter of method from different type"/>
+                                    <Path Style="{StaticResource IconExtra}" Margin="0 1 4 0" Visibility="{Binding MemberKind, Converter={StaticResource EnumMatchToVisibilityConverter}, ConverterParameter= Extra}" ToolTip="Extra - not available directly in API"/>
                                     <TextBlock Text="{Binding Name, Mode=OneWay}" Foreground="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"  />
                                 </StackPanel>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
 
-                    <GridViewColumn Header="Value" Width="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListView}}, Path=ActualWidth, Converter={StaticResource PercentageOfValueConverter}, ConverterParameter=62}"  >
+                    <GridViewColumn Header="Value"    Width="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListView}}, Path=ActualWidth, Converter={StaticResource PercentageOfValueConverter}, ConverterParameter=62}"  >
                         <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock x:Name="cTextBlock" Text="{Binding Label.Text, Mode=OneWay}" TextWrapping="NoWrap" MouseLeftButtonUp="ListViewItem_MouseLeftButtonUp"   >
-                                    <TextBlock.ToolTip>
-                                        <TextBlock Text="{Binding ., Converter={StaticResource FeetToMetersConverter}}" />
-                                    </TextBlock.ToolTip>
-                                </TextBlock>
+                            <DataTemplate>                              
+                                <ContentControl Content="{Binding}" ContentTemplateSelector="{StaticResource DataTemplateSelectorForPropertyType}"  x:Name="cTextBlock" MouseLeftButtonUp="ListViewItem_MouseLeftButtonUp" />
 
                                 <DataTemplate.Triggers>
                                     <DataTrigger Binding="{Binding CanBeSnooped}" Value="False">
@@ -366,8 +370,8 @@
                 <ColumnDefinition Width="10"/>
                 <ColumnDefinition Width="auto"/>
                 <ColumnDefinition/>
-
             </Grid.ColumnDefinitions>
+            
             <Path Grid.Column="1" Style="{StaticResource BusyIndicator}" RenderTransformOrigin="0.5,0.5" >
                 <Path.RenderTransform>
                     <RotateTransform x:Name="MyAnimatedTransform" Angle="0" />                    
@@ -382,29 +386,8 @@
                     </EventTrigger>
                 </Path.Triggers>
             </Path>
-            <TextBlock Grid.Column="2" Text="Revit is busy!" FontSize="18" Margin="8 4 0 0" RenderTransformOrigin="0.5,0.5" Foreground="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}">
-                <TextBlock.RenderTransform>
-                    <TransformGroup>
-                        <ScaleTransform x:Name="ScaleTransformX" />                       
-                    </TransformGroup>
-                </TextBlock.RenderTransform>
-                <!--<TextBlock.Triggers>                 
-                    <EventTrigger RoutedEvent="Loaded">
-                        <BeginStoryboard>
-                            <Storyboard  RepeatBehavior="Forever">
-                                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)" >
-                                    <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="1.02"/>
-                                    <EasingDoubleKeyFrame KeyTime="0:0:2" Value="1"/>
-                                </DoubleAnimationUsingKeyFrames>
-                                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)" >
-                                    <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="1.02"/>
-                                    <EasingDoubleKeyFrame KeyTime="0:0:2" Value="1"/>
-                                </DoubleAnimationUsingKeyFrames>
-                            </Storyboard>
-                        </BeginStoryboard>
-                    </EventTrigger>                 
-                </TextBlock.Triggers>-->
-            </TextBlock>
+            <TextBlock Grid.Column="2" Text="Revit is busy!" FontSize="18" Margin="8 4 0 0" RenderTransformOrigin="0.5,0.5" Foreground="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>       
+            
         </Grid>
     </Grid>
 </Window>

@@ -4,7 +4,7 @@ using System.Windows.Data;
 
 namespace RevitDBExplorer.WPF.Converters
 {
-    internal class StringIsNullOrEmptyConverter : IValueConverter
+    internal class StringIsNullOrEmptyToBoolConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {         

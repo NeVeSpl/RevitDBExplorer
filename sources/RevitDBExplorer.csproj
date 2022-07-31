@@ -156,6 +156,7 @@
     <Compile Include="Domain\DataModel\MemberAccessors\MemberAccessorByIteration.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\Rebar\Rebar_GetOverridableHookParameters.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\View\View_Duplicate.cs" />
+    <Compile Include="Domain\DataModel\MemberTemplates\Element_Templates.cs" />
     <Compile Include="Domain\QuoteGenerator.cs" />
     <Compile Include="Domain\DataModel\SnoopableContext.cs" />
     <Compile Include="Domain\DataModel\ValueContainers\IListElementIdContainer.cs" />
@@ -258,10 +259,11 @@
     <Compile Include="WPF\Controls\TextBoxWithPlaceholder.xaml.cs">
       <DependentUpon>TextBoxWithPlaceholder.xaml</DependentUpon>
     </Compile>
+    <Compile Include="WPF\Converters\ColorToBrushConverter.cs" />
     <Compile Include="WPF\Converters\EnumToVisibilityConverter.cs" />
     <Compile Include="WPF\Converters\FeetToMetersConverter.cs" />
-    <Compile Include="WPF\Converters\StringIsNotNullOrEmptyConverter.cs" />
-    <Compile Include="WPF\Converters\StringIsNullOrEmptyConverter.cs" />
+    <Compile Include="WPF\Converters\StringIsNotNullOrEmptyToBoolConverter.cs" />
+    <Compile Include="WPF\Converters\StringIsNullOrEmptyToBoolConverter.cs" />
     <Compile Include="WPF\Converters\MultiBindingOrConverter.cs" />
     <Compile Include="WPF\Converters\PercentageOfValueConverter.cs" />
     <Compile Include="Domain\DataModel\ValueContainers\ParameterMapContainer.cs" />
@@ -275,7 +277,8 @@
     <Compile Include="Extensions\System\TypeExtensions.cs" />
     <Compile Include="WPF\BaseViewModel.cs" />
     <Compile Include="WPF\Converters\StringToVisibilityConverter.cs" />
-    <Compile Include="WPF\Converters\BoolVisibilityConverter.cs" />
+    <Compile Include="WPF\Converters\BoolToVisibilityConverter.cs" />
+    <Compile Include="WPF\DataTemplateSelectorForPropertyType.cs" />
     <Compile Include="WPF\MarkupExtensions\SettingBindingExtension.cs" />
     <Compile Include="WPF\ThemeResourceDictionary.cs" />
     <None Include="app.config" />
@@ -340,6 +343,18 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="UIComponents\List\CellDataTemplates.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UIComponents\List\CellDataTemplates\ColorContainer.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UIComponents\List\CellDataTemplates\_Default.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="UIComponents\QueryVisualization\QueryVisualizationView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -368,9 +383,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="UIComponents\List\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\System.Text.Json.6.0.0\build\System.Text.Json.targets" Condition="Exists('..\packages\System.Text.Json.6.0.0\build\System.Text.Json.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

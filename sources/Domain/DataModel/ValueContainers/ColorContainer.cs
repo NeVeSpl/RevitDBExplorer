@@ -9,7 +9,7 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers
         {
             return color.IsValid
             ? $"R: {color.Red}; G: {color.Green}; B: {color.Blue}"
-            : "invalid color value";
+            : "<invalid color value>";
         }
     }
 }

@@ -9,7 +9,7 @@ using System.Windows.Data;
 
 namespace RevitDBExplorer.WPF.Converters
 {
-    internal class EnumToVisibilityConverter : IValueConverter
+    internal class EnumMatchToVisibilityConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
