@@ -27,7 +27,7 @@ namespace RevitDBExplorer
 {
     internal partial class MainWindow : Window, INotifyPropertyChanged
     {
-        private ObservableCollection<SnoopableCategoryTreeVM> treeItems = new();
+        private ObservableCollection<TreeViewItemVM> treeItems = new();
         private ObservableCollection<SnoopableMember> listItems = new();
         private readonly QueryVisualizationVM queryVisualizationVM = new();
         private SnoopableMember listSelectedItem = null;
@@ -39,7 +39,7 @@ namespace RevitDBExplorer
         private DispatcherTimer isRevitBusyDispatcher;
 
 
-        public ObservableCollection<SnoopableCategoryTreeVM> TreeItems
+        public ObservableCollection<TreeViewItemVM> TreeItems
         {
             get
             {
@@ -210,6 +210,22 @@ namespace RevitDBExplorer
                 ShowErrorMsg("Selectors.Snoop", ex);
             }
         }
+        private void SnoopEvents_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                ResetTreeItems();
+                ResetListItems();
+                ResetDatabaseQuery();
+
+                var snoopableObjects = EventMonitor.GetEvents().Select(x => new SnoopableObjectTreeVM(x) { IsExpanded = true }).ToList();
+                TreeItems = new(snoopableObjects);
+            }
+            catch (Exception ex)
+            {
+                ShowErrorMsg("Selectors.SnoopEvents", ex);
+            }
+        }
         private async void TreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
             try
@@ -363,7 +379,7 @@ namespace RevitDBExplorer
         {
             if (TreeItems != null)
             {
-                foreach (var item in TreeItems)
+                foreach (var item in TreeItems.OfType<SnoopableCategoryTreeVM>())
                 {
                     item.Refresh();
                 }
@@ -502,6 +518,13 @@ namespace RevitDBExplorer
                 }
             }
         }
+        private void Window_MenuItemSnoopEvents_Checked(object sender, RoutedEventArgs e)
+        {
+            if (sender is MenuItem menuItem)
+            {
+                AppSettings.Default.IsEventMonitorEnabled = menuItem.IsChecked;
+            }
+        }
 
 
         private static void ShowErrorMsg(string title, Exception ex)
@@ -526,6 +549,6 @@ namespace RevitDBExplorer
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        #endregion        
+        #endregion              
     }
 }

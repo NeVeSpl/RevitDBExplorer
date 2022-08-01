@@ -30,6 +30,9 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers.Base
             new UVContainer(),
             new ColorContainer(),
             new ForgeTypeIdContainer(),
+            new FailuresProcessingEventArgsContainer(),
+            new DocumentChangedEventArgsContainer(),
+            new RevitApiEventArgsContainer(),            
 
             //            
             new BindingMapContainer(),

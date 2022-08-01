@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Autodesk.Revit.UI;
 using RevitDBExplorer.Domain.DataModel.MemberAccessors;
 using RevitDBExplorer.Domain.DataModel.ValueContainers.Base;
@@ -46,7 +47,7 @@ namespace RevitDBExplorer.Domain.DataModel
             this.Name = name;
             if (declaringType != null)
             {
-                this.declaringType = DeclaringType.Create(declaringType);
+                this.declaringType = DeclaringType.Create(declaringType, parent?.Object?.GetType());
             }
             this.memberAccessor = memberAccessor;
             if (documentationFactoryMethod != null)
@@ -60,10 +61,11 @@ namespace RevitDBExplorer.Domain.DataModel
             this.documentation = source.documentation;
         }
 
-
+        
         public void ReadValue()
         {
-            ReadValue(parent.Context, parent.Object);
+            if (isFrozen) return;
+            ReadValue(parent.Context, parent.Object);            
         }
         private void ReadValue(SnoopableContext document, object @object)
         {            
@@ -85,7 +87,21 @@ namespace RevitDBExplorer.Domain.DataModel
         }
         public IEnumerable<SnoopableObject> Snooop(UIApplication app)
         {
+            if (isFrozen) return frozenSnooopResult;
             return memberAccessor.Snoop(parent.Context, parent.Object);
+        }
+
+
+        private bool isFrozen = false;
+        private IList<SnoopableObject> frozenSnooopResult;
+        public void Freeze()
+        {            
+            if (CanBeSnooped)
+            {
+                frozenSnooopResult = Snooop(null).ToList();
+                frozenSnooopResult.ForEach(x => x.Freeze());
+            }
+            isFrozen = true;
         }
     }
 }

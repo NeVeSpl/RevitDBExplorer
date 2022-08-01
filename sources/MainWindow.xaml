@@ -44,6 +44,7 @@
                 <MenuItem Header ="Light - default" Tag="Default" Click="Window_MenuItemSelectTheme_Click"/>
                 <MenuItem Header ="Dark - be ready" Tag="Dark" Click="Window_MenuItemSelectTheme_Click"/>
             </MenuItem>
+            <MenuItem Header="Is event monitor enabled" IsCheckable="True" Checked="Window_MenuItemSnoopEvents_Checked"  Unchecked="Window_MenuItemSnoopEvents_Checked"/>
         </ContextMenu>
     </Window.ContextMenu>
 
@@ -60,7 +61,7 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
 
-        <UniformGrid Grid.ColumnSpan="3" Columns="12" Margin="0 0 0 2">
+        <UniformGrid Grid.ColumnSpan="3" Columns="13" Margin="0 0 0 2">
             <UniformGrid.Resources>
                 <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
                     <Setter Property="Background" Value="Transparent"/>
@@ -102,7 +103,7 @@
             <Button Click="SelectorButton_Click"  Tag="FilterableCategories" ToolTip="Snoop categories that may be used in a ParameterFilterElement">
                 <Path Style="{StaticResource IconCategories}" SnapsToDevicePixels="True" />
             </Button>
-            <Button Click="ButtonWithSubMenu_Click" Margin="2 0 0 0" ToolTip="Snoop Forge types">
+            <Button Click="ButtonWithSubMenu_Click"  ToolTip="Snoop Forge types">
                 <Path Style="{StaticResource IconForge}" />
                 <Button.ContextMenu>
                     <ContextMenu>
@@ -114,6 +115,9 @@
                         <MenuItem Header="SpecUtils.GetAllSpecs()" Click="SelectorButton_Click" Tag="ForgeSpecUtilsGetAllSpecs"/>
                     </ContextMenu>
                 </Button.ContextMenu>
+            </Button>
+            <Button Click="SnoopEvents_Click" Margin="2 0 0 0" ToolTip="Snoop events">
+                <Path Style="{StaticResource IconEvent}" SnapsToDevicePixels="True" />
             </Button>
         </UniformGrid>
 

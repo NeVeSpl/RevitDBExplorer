@@ -42,5 +42,21 @@ namespace System
         {
             return string.Join("", str.Split(default(string[]), StringSplitOptions.RemoveEmptyEntries));
         }
+
+
+        /// <summary>
+        /// source: https://stackoverflow.com/questions/5284591/how-to-remove-a-suffix-from-end-of-string
+        /// </summary>
+        public static string RemoveFromEnd(this string s, string suffix)
+        {
+            if (s.EndsWith(suffix))
+            {
+                return s.Substring(0, s.Length - suffix.Length);
+            }
+            else
+            {
+                return s;
+            }
+        }
     }
 }

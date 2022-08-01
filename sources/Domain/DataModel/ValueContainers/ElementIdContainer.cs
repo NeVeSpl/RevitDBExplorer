@@ -17,7 +17,7 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers
             base.SetValue(document, value);
             if (value is ElementId id)
             {
-                var elementOrCat = document.GetElementOrCategory(id);
+                var elementOrCat = document?.GetElementOrCategory(id);
                 canBeSnoooped = elementOrCat != null;
                 element = elementOrCat as Element;
             }
@@ -39,7 +39,11 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers
                 if (id == PlanViewRange.LevelAbove) return $"PlanViewRange.LevelAbove";
                 return $"{id}";
             }
-            return new ElementContainer().SetValue(null, element).ValueAsString;
+            if (element != null)
+            {
+                return new ElementContainer().SetValue(null, element).ValueAsString;
+            }
+            return $"{id}";
         }
         protected override IEnumerable<SnoopableObject> Snooop(Document document, ElementId id)
         {

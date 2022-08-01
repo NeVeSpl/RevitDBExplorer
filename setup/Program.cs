@@ -46,7 +46,8 @@ namespace SetupBuilder
         }
 
         readonly static string[] files = new string[]
-        { 
+        {
+            "CircularBuffer.dll",
             "DocXml.dll",
             "RevitDBExplorer.dll",
             "RevitDBExplorer.dll.config",

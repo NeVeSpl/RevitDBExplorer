@@ -12,12 +12,14 @@ namespace RevitDBExplorer.Domain.DataModel.ValueObjects
 
 
 
-        public static DeclaringType Create(Type type)
+        public static DeclaringType Create(Type declaringType, Type snoopableObjectTyppe)
         {
+            int penalty = declaringType.IsAssignableFrom(snoopableObjectTyppe) == false ? 7 : 0;
+
             return new DeclaringType()
             {
-                Name = type.GetCSharpName(),
-                InheritanceLevel = type.NumberOfBaseTypes(),
+                Name = declaringType.GetCSharpName(),
+                InheritanceLevel = declaringType.NumberOfBaseTypes() + penalty,
             };
         }
     }

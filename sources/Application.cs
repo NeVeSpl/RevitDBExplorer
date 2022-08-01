@@ -15,7 +15,7 @@ namespace RevitDBExplorer
         {
             RevitWindowHandle = application.MainWindowHandle;
 
-            var panel = application.CreateRibbonPanel("RevitDBExplorer");
+            var panel = application.CreateRibbonPanel("Revit Explorer");
             var cmdType = typeof(Command);
             var pushButtonData = new PushButtonData(cmdType.FullName, "Revit DB\r\nExplorer", cmdType.Assembly.Location, cmdType.FullName);
             pushButtonData.LargeImage = new BitmapImage(new Uri("pack://application:,,,/RevitDBExplorer;component/Resources/RDBE.Icon.32.png", UriKind.RelativeOrAbsolute));
@@ -24,7 +24,8 @@ namespace RevitDBExplorer
             ExternalExecutor.CreateExternalEvent();
             FactoryOfFactories.Init();
             RevitDocumentationReader.Init();
-            RevitDatabaseQueryService.Init();            
+            RevitDatabaseQueryService.Init();
+            EventMonitor.Register(application);
 
             application.Idling += Application_Idling;
 

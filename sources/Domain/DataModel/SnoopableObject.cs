@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
@@ -29,8 +30,11 @@ namespace RevitDBExplorer.Domain.DataModel
         {
             if (@object is ElementId id)
             {
-                var element = document.GetElementOrCategory(id);
-                @object = element ?? @object;
+                var element = document?.GetElementOrCategory(id);
+                if (element != null)
+                {
+                    @object = element;
+                }
             }            
             this.Context = new SnoopableContext() { Document = document };
             this.Object = @object;
@@ -56,8 +60,16 @@ namespace RevitDBExplorer.Domain.DataModel
         }
 
                 
-        public IEnumerable<SnoopableMember> GetMembers(UIApplication app)
+        public virtual IEnumerable<SnoopableMember> GetMembers(UIApplication app)
         {
+            if (isFrozen)
+            {
+                foreach (var frozenMember in frozenMembers)
+                {
+                    yield return frozenMember;
+                }
+                yield break;
+            }
             if (Object == null)
             {
                 yield break;
@@ -124,7 +136,38 @@ namespace RevitDBExplorer.Domain.DataModel
                 yield return member;
             }
         }
-        
+
+
+        private bool isFrozen = false;
+        IList<SnoopableMember> frozenMembers;
+        private static readonly Type[] doNotFreeze = new Type[] { typeof(Document) , typeof(View), typeof(Element) };
+        public void Freeze()
+        {
+            var objectType = Object.GetType();
+            foreach (var forbiden in doNotFreeze)
+            {
+                if (forbiden.IsAssignableFrom(objectType))
+                {
+                    return;
+                }
+            }
+            try
+            {
+                frozenMembers = GetMembers(null).ToList();
+                foreach (SnoopableMember member in frozenMembers)
+                {
+                    member.Freeze();
+                }
+                isFrozen = true;
+            }
+            catch (Exception ex)
+            {
+#if DEBUG
+                //throw new Exception("" , ex);
+#endif
+            }
+        }
+
 
         public static SnoopableObject CreateKeyValuePair(Document document, object key, object value, string keyPrefix = "key:", string valuePrefix = "value:")
         {
