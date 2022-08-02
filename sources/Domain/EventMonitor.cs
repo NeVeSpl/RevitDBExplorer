@@ -24,7 +24,10 @@ namespace RevitDBExplorer.Domain
             application.DockableFrameVisibilityChanged += GenericEventHandler;
             application.FabricationPartBrowserChanged += GenericEventHandler;
             application.FormulaEditing += GenericEventHandler;
-            application.SelectionChanged += GenericEventHandler;
+#if R2023b
+application.SelectionChanged += GenericEventHandler;
+#endif
+
             application.TransferredProjectStandards += GenericEventHandler;
             application.TransferringProjectStandards += GenericEventHandler;
             application.ViewActivated += GenericEventHandler;
@@ -78,10 +81,13 @@ namespace RevitDBExplorer.Domain
             {
                 document = formulaEditingEventArgs.CurrentDocument;
             }
-            if (e is SelectionChangedEventArgs selectionChangedEventArgs)
+#if R2023b
+if (e is SelectionChangedEventArgs selectionChangedEventArgs)
             {
                 document = selectionChangedEventArgs.GetDocument();
             }
+#endif
+
             if (e is RevitAPIPostDocEventArgs revitAPIPostDocEventArgs)
             {
                 document = revitAPIPostDocEventArgs.Document;
