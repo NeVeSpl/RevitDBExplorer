@@ -24,7 +24,7 @@ namespace RevitDBExplorer.Domain
             application.DockableFrameVisibilityChanged += GenericEventHandler;
             application.FabricationPartBrowserChanged += GenericEventHandler;
             application.FormulaEditing += GenericEventHandler;
-#if R2023
+#if R2023b
 application.SelectionChanged += GenericEventHandler;
 #endif
 
@@ -81,7 +81,7 @@ application.SelectionChanged += GenericEventHandler;
             {
                 document = formulaEditingEventArgs.CurrentDocument;
             }
-#if R2023
+#if R2023b
 if (e is SelectionChangedEventArgs selectionChangedEventArgs)
             {
                 document = selectionChangedEventArgs.GetDocument();
