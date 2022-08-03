@@ -4,6 +4,6 @@
         
         <ResourceDictionary Source="CellDataTemplates/_Default.xaml"/>
         <ResourceDictionary Source="CellDataTemplates/ColorContainer.xaml"/>
-        
+        <ResourceDictionary Source="CellDataTemplates/IMemberAccessorWithWrite.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>

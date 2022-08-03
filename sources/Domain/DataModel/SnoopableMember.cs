@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Autodesk.Revit.UI;
 using RevitDBExplorer.Domain.DataModel.MemberAccessors;
 using RevitDBExplorer.Domain.DataModel.ValueContainers.Base;
@@ -26,6 +27,8 @@ namespace RevitDBExplorer.Domain.DataModel
         public string DeclaringTypeName => declaringType.Name;
         public int DeclaringTypeLevel => declaringType.InheritanceLevel;
         public bool HasAccessor => memberAccessor is not null;
+        public bool HasValue => memberAccessor is IMemberAccessorWithValue reader;
+        public bool IsWritable => memberAccessor is IMemberAccessorWithWrite writer;
         public DocXml Documentation => documentation?.Value ?? DocXml.Empty;
 
         public Label Label { get; private set; }        
@@ -33,11 +36,13 @@ namespace RevitDBExplorer.Domain.DataModel
         { 
             get
             {
-                return memberAccessor is IMemberAccessorWithValue accesor ? accesor.Value : null;
+                return memberAccessor is IMemberAccessorWithValue reader ? reader.Value : null;
             } 
         }
         public string AccessorName { get; private set; }
         public bool CanBeSnooped { get; private set; }
+        public RelayCommand WriteCommand { get; }
+        public bool CanBeWritten { get; private set; } = false;
 
 
         public SnoopableMember(SnoopableObject parent, Kind memberKind, string name, Type declaringType, IMemberAccessor memberAccessor, Func<DocXml> documentationFactoryMethod)
@@ -54,6 +59,7 @@ namespace RevitDBExplorer.Domain.DataModel
             {
                 this.documentation = new Lazy<DocXml>(documentationFactoryMethod);
             }
+            WriteCommand = new RelayCommand(x => Write(), x => CanBeWritten); 
         }
         public SnoopableMember(SnoopableObject snoopableObject, SnoopableMember source) : this(snoopableObject, source.MemberKind, source.Name, null, source.memberAccessor, null)
         {
@@ -62,12 +68,16 @@ namespace RevitDBExplorer.Domain.DataModel
         }
 
         
-        public void ReadValue()
+        public void Read()
         {
             if (isFrozen) return;
-            ReadValue(parent.Context, parent.Object);            
+            Read(parent.Context, parent.Object);
+            if (memberAccessor is IMemberAccessorWithWrite writer)
+            {
+                CanBeWritten = writer.CanBeWritten(parent.Context, parent.Object);
+            }
         }
-        private void ReadValue(SnoopableContext document, object @object)
+        private void Read(SnoopableContext document, object @object)
         {            
             try
             {
@@ -89,6 +99,14 @@ namespace RevitDBExplorer.Domain.DataModel
         {
             if (isFrozen) return frozenSnooopResult;
             return memberAccessor.Snoop(parent.Context, parent.Object);
+        }
+
+        public void Write()
+        {
+            if (memberAccessor is IMemberAccessorWithWrite writer)
+            {
+                writer.Write(parent.Context, parent.Object).Forget();
+            }            
         }
 
 

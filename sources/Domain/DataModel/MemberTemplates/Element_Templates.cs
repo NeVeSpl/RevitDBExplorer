@@ -8,16 +8,16 @@ using RevitDBExplorer.Domain.DataModel.MemberTemplates.Base;
 
 namespace RevitDBExplorer.Domain.DataModel.MemberTemplates
 {
-    internal class View_Templates : IHaveMemberTemplates
+    internal class Element_Templates : IHaveMemberTemplates
     {
         private static readonly IEnumerable<ISnoopableMemberTemplate> templates = Enumerable.Empty<ISnoopableMemberTemplate>();
 
-        static View_Templates()
+        static Element_Templates()
         {
             templates = new ISnoopableMemberTemplate[]
             {
                 SnoopableMemberTemplate<Element>.Create((doc, target) => doc.ActiveView.GetElementOverrides(target.Id), kind: SnoopableMember.Kind.AsArgument),
-              
+                SnoopableMemberTemplate<Element>.Create((doc, target) => doc.GetWorksetId(target.Id), kind: SnoopableMember.Kind.AsArgument),
             };
         }
 

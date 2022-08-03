@@ -22,7 +22,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberTemplates
 #endif
 
                 SnoopableMemberTemplate<Document>.Create((doc, target) => BasicFileInfo.Extract(target.PathName), kind: SnoopableMember.Kind.StaticMethod),
-                SnoopableMemberTemplate<Element>.Create((doc, target) => doc.GetWorksetId(target.Id), kind: SnoopableMember.Kind.AsArgument),
+               
             };
         }
 

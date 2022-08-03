@@ -9,7 +9,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
     internal abstract class MemberAccessorByType<TSnoopedObjectType> : MemberAccessorTyped<TSnoopedObjectType> where TSnoopedObjectType : class
     {
-        public override ReadResult Read(SnoopableContext context, TSnoopedObjectType @object)
+        public sealed override ReadResult Read(SnoopableContext context, TSnoopedObjectType @object)
         {           
             string label = GetLabel(context.Document, @object);
             bool canBeSnooped = CanBeSnoooped(context.Document, @object);
@@ -19,7 +19,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
         protected abstract bool CanBeSnoooped(Document document, TSnoopedObjectType value);
         protected abstract string GetLabel(Document document, TSnoopedObjectType value);
 
-        public override IEnumerable<SnoopableObject> Snoop(SnoopableContext context, TSnoopedObjectType @object)
+        public sealed override IEnumerable<SnoopableObject> Snoop(SnoopableContext context, TSnoopedObjectType @object)
         {
             return this.Snooop(context.Document, @object);
         }

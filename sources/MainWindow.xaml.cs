@@ -207,7 +207,7 @@ namespace RevitDBExplorer
             }
             catch (Exception ex)
             {
-                ShowErrorMsg("Selectors.Snoop", ex);
+                ex.ShowErrorMsg("Selectors.Snoop");
             }
         }
         private void SnoopEvents_Click(object sender, RoutedEventArgs e)
@@ -223,7 +223,7 @@ namespace RevitDBExplorer
             }
             catch (Exception ex)
             {
-                ShowErrorMsg("Selectors.SnoopEvents", ex);
+                ex.ShowErrorMsg("Selectors.SnoopEvents");
             }
         }
         private async void TreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
@@ -243,7 +243,7 @@ namespace RevitDBExplorer
             catch (Exception ex)
             {
                 ResetListItems();
-                ShowErrorMsg( "SnoopableObject.GetMembers", ex);
+                ex.ShowErrorMsg( "SnoopableObject.GetMembers");
             }
         }
         private async void ListViewItem_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
@@ -260,7 +260,7 @@ namespace RevitDBExplorer
             }
             catch (Exception ex)
             {
-                ShowErrorMsg("SnoopableMember.Snooop", ex);
+                ex.ShowErrorMsg("SnoopableMember.Snooop");
             }
         }
         private async void ReloadButton_Click(object sender, RoutedEventArgs e)
@@ -271,7 +271,7 @@ namespace RevitDBExplorer
                 {
                     foreach (var item in listItems)
                     {
-                        item.ReadValue();
+                        item.Read();
                     }
                     return true;
                 });
@@ -279,7 +279,7 @@ namespace RevitDBExplorer
             }
             catch (Exception ex)
             {
-                ShowErrorMsg("SnoopableMember.ReadValue", ex);
+                ex.ShowErrorMsg("SnoopableMember.ReadValue");
             }
         }
         private async void TryQueryDatabase(string query)
@@ -304,7 +304,7 @@ namespace RevitDBExplorer
             }
             catch (Exception ex)
             {
-                ShowErrorMsg("RevitDatabaseQueryParser.Parse", ex);
+                ex.ShowErrorMsg("RevitDatabaseQueryParser.Parse");
             }
         }        
 
@@ -428,7 +428,7 @@ namespace RevitDBExplorer
             }
             catch (Exception ex)
             {
-                ShowErrorMsg($"RevitObjectPresenter.{menuItem.Tag}", ex);
+                ex.ShowErrorMsg($"RevitObjectPresenter.{menuItem.Tag}");
             }
         }
         private void TreeViewItem_MenuItemSnoop_Click(object sender, RoutedEventArgs e)
@@ -524,21 +524,7 @@ namespace RevitDBExplorer
             {
                 AppSettings.Default.IsEventMonitorEnabled = menuItem.IsChecked;
             }
-        }
-
-
-        private static void ShowErrorMsg(string title, Exception ex)
-        {
-            var dialog = new TaskDialog(title)
-            {
-                MainInstruction = Labeler.GetLabelForException(ex),
-                MainContent = ex.StackTrace,
-                CommonButtons = TaskDialogCommonButtons.Ok,
-                DefaultButton = TaskDialogResult.Ok,
-                MainIcon = TaskDialogIcon.TaskDialogIconError
-            };
-            dialog.Show();
-        }
+        }       
 
         #region INotifyPropertyChanged
 

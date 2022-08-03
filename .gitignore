@@ -5,3 +5,4 @@ sources/obj/
 setup/obj/
 setup/bin/
 .idea
+sources/RevitDBExplorer.csproj.user

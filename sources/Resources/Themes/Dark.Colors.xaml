@@ -23,7 +23,8 @@
     <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="{StaticResource TextOnSecondary}"/>
     <SolidColorBrush x:Key="{x:Static SystemColors.WindowBrushKey}" Color="{StaticResource Background}"/>
 
-    <SolidColorBrush x:Key="Button.Static.Border" Color="{StaticResource Primary}"/>
+    <SolidColorBrush x:Key="Button.Static.Background" Color="{StaticResource PrimaryDark}"/>
+    <SolidColorBrush x:Key="Button.Static.Border" Color="{StaticResource Primary}"/>    
     <SolidColorBrush x:Key="Button.MouseOver.Background" Color="{StaticResource PrimaryLight}"/>
     <SolidColorBrush x:Key="Button.MouseOver.Border" Color="{StaticResource Primary}"/>
     <SolidColorBrush x:Key="Button.Pressed.Background" Color="{StaticResource PrimaryLight}"/>

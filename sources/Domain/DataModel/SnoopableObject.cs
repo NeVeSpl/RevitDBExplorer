@@ -78,7 +78,7 @@ namespace RevitDBExplorer.Domain.DataModel
             {
                 if (member.HasAccessor)
                 {
-                    member.ReadValue();                
+                    member.Read();                
                     yield return member;
                 }
             }

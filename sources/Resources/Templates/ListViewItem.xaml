@@ -29,7 +29,27 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ListViewItem}">
                     <Border x:Name="Bd" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="true">
-                        <GridViewRowPresenter  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        <GridViewRowPresenter  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                            <GridViewRowPresenter.Resources>
+                                <Style TargetType="ContentPresenter">
+                                    <Style.Triggers>
+                                        <EventTrigger RoutedEvent="Loaded">
+                                            <BeginStoryboard>
+                                                <Storyboard >
+                                                    <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="VerticalAlignment">
+                                                        <DiscreteObjectKeyFrame KeyTime="0:0:0">
+                                                            <DiscreteObjectKeyFrame.Value>
+                                                                <VerticalAlignment>Center</VerticalAlignment>
+                                                            </DiscreteObjectKeyFrame.Value>
+                                                        </DiscreteObjectKeyFrame>
+                                                    </ObjectAnimationUsingKeyFrames>
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </EventTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </GridViewRowPresenter.Resources>
+                        </GridViewRowPresenter>
                     </Border>
                     <ControlTemplate.Triggers>
                         <MultiTrigger>
