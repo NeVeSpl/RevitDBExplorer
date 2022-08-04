@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using RevitDBExplorer.Domain.DataModel.MemberAccessors;
 using RevitDBExplorer.Domain.DataModel.ValueContainers.Base;
@@ -77,11 +78,11 @@ namespace RevitDBExplorer.Domain.DataModel
                 CanBeWritten = writer.CanBeWritten(parent.Context, parent.Object);
             }
         }
-        private void Read(SnoopableContext document, object @object)
+        private void Read(SnoopableContext context, object @object)
         {            
             try
             {
-                var result = memberAccessor.Read(document, @object);                  
+                var result = memberAccessor.Read(context, @object);                  
                 AccessorName = result.AccessorName;
                 CanBeSnooped = result.CanBeSnooped;
                 Label = new Label(result.Label, false);
@@ -101,11 +102,40 @@ namespace RevitDBExplorer.Domain.DataModel
             return memberAccessor.Snoop(parent.Context, parent.Object);
         }
 
+
         public void Write()
+        {
+            Write(parent.Context, parent.Object);
+        }
+        private void Write(SnoopableContext context, object @object)
         {
             if (memberAccessor is IMemberAccessorWithWrite writer)
             {
-                writer.Write(parent.Context, parent.Object).Forget();
+                ExternalExecutor.ExecuteInRevitContextAsync((x) =>
+                {
+                    string transactionName = $"RDBE::{memberAccessor.GetType().Name}.Write()";
+                    Transaction transaction = null;
+                    try
+                    {
+                        transaction = context.Document.IsModifiable == false ? new Transaction(context.Document, transactionName) : null;
+                        transaction?.Start();
+                        writer.Write(context, @object);
+                        transaction?.Commit();
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction?.RollBack();
+                        ex.ShowErrorMsg($"SnoopableContext.Execute : {transactionName}");
+                    }
+                    finally
+                    {
+                        transaction?.Dispose();
+                    }
+                }).Forget();
+
+
+
+                
             }            
         }
 

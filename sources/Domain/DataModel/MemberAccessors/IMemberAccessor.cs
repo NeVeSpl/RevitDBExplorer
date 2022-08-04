@@ -21,7 +21,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 
     internal interface IMemberAccessorWithWrite
     {
-        Task Write(SnoopableContext context, object @object);
+        void Write(SnoopableContext context, object @object);
         bool CanBeWritten(SnoopableContext context, object @object);
     }
 
@@ -48,13 +48,13 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 
     internal abstract class MemberAccessorTypedWithWrite<TSnoopedObjectType> : MemberAccessorTyped<TSnoopedObjectType>, IMemberAccessorWithWrite
     {
-        Task IMemberAccessorWithWrite.Write(SnoopableContext context, object @object)
+        void IMemberAccessorWithWrite.Write(SnoopableContext context, object @object)
         {
             Guard.IsAssignableToType<TSnoopedObjectType>(@object);
             var typedObject = (TSnoopedObjectType)@object;
-            return Write(context, typedObject);
+            Write(context, typedObject);
         }
-        public abstract Task Write(SnoopableContext context, TSnoopedObjectType typedObject);
+        public abstract void Write(SnoopableContext context, TSnoopedObjectType typedObject);
 
         bool IMemberAccessorWithWrite.CanBeWritten(SnoopableContext context, object @object)
         {

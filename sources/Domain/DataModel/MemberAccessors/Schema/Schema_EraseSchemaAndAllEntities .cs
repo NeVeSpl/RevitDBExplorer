@@ -24,17 +24,14 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
             return result;
         }
 
-        public override Task Write(SnoopableContext context, Schema schema)
-        {            
-            return context.Execute(x =>
-            {   
-                var elements = new FilteredElementCollector(context.Document).WherePasses(new ExtensibleStorageFilter(schema.GUID)).ToElements();
-                foreach (var element in elements)
-                {
-                    element.DeleteEntity(schema);
-                }
-                x.EraseSchemaAndAllEntities(schema); // does not work usually
-            }, nameof(Schema_EraseSchemaAndAllEntities));
+        public override void Write(SnoopableContext context, Schema schema)
+        {  
+            var elements = new FilteredElementCollector(context.Document).WherePasses(new ExtensibleStorageFilter(schema.GUID)).ToElements();
+            foreach (var element in elements)
+            {
+                element.DeleteEntity(schema);
+            }
+            context.Document.EraseSchemaAndAllEntities(schema); // does not work usually            
         }
     }
 }
