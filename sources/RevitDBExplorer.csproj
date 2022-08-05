@@ -72,6 +72,10 @@
       <HintPath>..\binaries\revit\2023\Microsoft.Expression.Interactions.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="RevitAddInUtility">
+      <HintPath>..\binaries\revit\2023\RevitAddInUtility.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="RevitAPI" Condition="'$(Configuration)'=='Debug'">
       <HintPath>..\binaries\revit\2023\RevitAPI.dll</HintPath>
       <Private>False</Private>
@@ -156,6 +160,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Domain\AddInManifestWizard.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\DialogBoxShowingEventArgs\DialogBoxShowingEventArgs_OverrideResult.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\Element\Element_GetMaterialVolume.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\Element\Element_GetMaterialArea.cs" />
@@ -171,9 +176,13 @@
     <Compile Include="Domain\DataModel\MemberAccessors\View\View_Duplicate.cs" />
     <Compile Include="Domain\DataModel\MemberTemplates\Document_Templates.cs" />
     <Compile Include="Domain\DataModel\MemberTemplates\Element_Templates.cs" />
+    <Compile Include="Domain\DataModel\MemberTemplates\IExternalApplication_Templates.cs" />
+    <Compile Include="Domain\DataModel\MemberTemplates\UpdaterInfo_Templates.cs" />
     <Compile Include="Domain\DataModel\ValueContainers\DocumentChangedEventArgsContainer.cs" />
     <Compile Include="Domain\DataModel\ValueContainers\FailuresProcessingEventArgsContainer.cs" />
+    <Compile Include="Domain\DataModel\ValueContainers\IExternalApplicationContainer.cs" />
     <Compile Include="Domain\DataModel\ValueContainers\RevitApiEventArgsContainer.cs" />
+    <Compile Include="Domain\DataModel\ValueContainers\UpdaterInfoContainer.cs" />
     <Compile Include="Domain\EventMonitor.cs" />
     <Compile Include="Domain\QuoteGenerator.cs" />
     <Compile Include="Domain\DataModel\SnoopableContext.cs" />
@@ -248,6 +257,7 @@
     <Compile Include="Domain\RevitDatabaseQuery\QueryParser.cs" />
     <Compile Include="Domain\RevitDatabaseQuery\RevitDatabaseQueryService.cs" />
     <Compile Include="Domain\RevitDocumentationReader.cs" />
+    <Compile Include="Domain\UpdaterInfoWizard.cs" />
     <Compile Include="Domain\VersionChecker.cs" />
     <Compile Include="Extensions\Autodesk.Revit.DB\DocumentExtensions.cs" />
     <Compile Include="Extensions\Autodesk.Revit.DB\GeometryObjectExtensions.cs" />

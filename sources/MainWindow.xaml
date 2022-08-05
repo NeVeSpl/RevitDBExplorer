@@ -94,9 +94,9 @@
             <Button Click="SelectorButton_Click" Tag="LinkedElement" ToolTip="Snoop by selecting linked element in Revit">
                 <Path Style="{StaticResource IconLinkedElement}" />
             </Button>
-            <Button Click="SelectorButton_Click" Tag="DependentElements" ToolTip="Snoop dependent elements of already selected elements in Revit">
+            <!--<Button Click="SelectorButton_Click" Tag="DependentElements" ToolTip="Snoop dependent elements of already selected elements in Revit">
                 <Path Style="{StaticResource IconDependentElements}" />
-            </Button>
+            </Button>-->
             <Button Click="SelectorButton_Click" Tag="Schemas" ToolTip="Snoop Extensible Storage framework schemas located in memory">
                 <Path Style="{StaticResource IconSchemas}" />
             </Button>
@@ -118,6 +118,18 @@
             </Button>
             <Button Click="SnoopEvents_Click" Margin="2 0 0 0" ToolTip="Snoop events">
                 <Path Style="{StaticResource IconEvent}" SnapsToDevicePixels="True" />
+            </Button>
+            <!--<Button Click="SelectorButton_Click" Tag="Updaters" >
+                <Path Style="{StaticResource IconUpdater}" />
+            </Button>-->
+            <Button Click="ButtonWithSubMenu_Click"  ToolTip="Snoop addins">
+            <Path Style="{StaticResource IconAddin}" />
+            <Button.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Snoop loaded external applications" Click="SelectorButton_Click" Tag="LoadedApplications" ToolTip="UIApplication.LoadedApplications"/>
+                    <MenuItem Header="Snoop updaters applicable to the given document" Icon="" Click="SelectorButton_Click" Tag="Updaters" ToolTip="UpdaterRegistry.GetRegisteredUpdaterInfos()"/>                              
+                </ContextMenu>
+            </Button.ContextMenu>
             </Button>
         </UniformGrid>
 

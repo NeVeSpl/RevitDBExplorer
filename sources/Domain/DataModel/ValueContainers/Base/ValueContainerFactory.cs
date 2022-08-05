@@ -9,7 +9,7 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers.Base
     {        
         //private static readonly bool RunStaticConstructorASAP = true;
 
-        private static readonly List<(Type type, Func<IValueContainer> factory)> FactoryMethodsForValueContainers = new List<(Type, Func<IValueContainer>)>(); 
+        private static readonly List<(Type type, Func<IValueContainer> factory)> FactoryMethodsForValueContainers = new List<(Type, Func<IValueContainer>)>();
         private static readonly IValueContainer[] ValueContainers = new IValueContainer[]
         {
             // System primitives
@@ -34,7 +34,9 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers.Base
             new DocumentChangedEventArgsContainer(),
             new RevitApiEventArgsContainer(),            
 
-            //            
+            //
+            new IExternalApplicationContainer(),
+            new UpdaterInfoContainer(),
             new BindingMapContainer(),
             new CategoryNameMapContainer(),
             new ScheduleFieldContainer(),

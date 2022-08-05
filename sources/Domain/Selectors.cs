@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.ExtensibleStorage;
 using Autodesk.Revit.UI;
@@ -31,6 +32,8 @@ namespace RevitDBExplorer.Domain
         ForgeUnitUtilsGetAllUnits,
         ForgeUnitUtilsGetAllDisciplines,
         ForgeSpecUtilsGetAllSpecs,
+        Updaters,
+        LoadedApplications
     }
 
     internal static class Selectors
@@ -44,7 +47,7 @@ namespace RevitDBExplorer.Domain
                 Selector.PickFace => SnoopPick(uiApplication, ObjectType.Face),
                 Selector.PickEdge => SnoopPick(uiApplication, ObjectType.Edge),
                 Selector.LinkedElement => SnoopLinkedElement(uiApplication),
-                Selector.DependentElements => SnoopDependentElements(uiApplication),                
+                Selector.DependentElements => SnoopDependentElements(uiApplication),
                 Selector.Application => SnoopApplication(uiApplication),
                 Selector.ActiveDocument => SnoopActiveDocument(uiApplication),
                 Selector.ActiveView => SnoopActiveView(uiApplication),
@@ -57,6 +60,8 @@ namespace RevitDBExplorer.Domain
                 Selector.ForgeUnitUtilsGetAllUnits => SnoopForge(uiApplication, selector),
                 Selector.ForgeUnitUtilsGetAllDisciplines => SnoopForge(uiApplication, selector),
                 Selector.ForgeSpecUtilsGetAllSpecs => SnoopForge(uiApplication, selector),
+                Selector.Updaters => SnoopUpdaters(uiApplication),
+                Selector.LoadedApplications => SnoopLoadedApplications(uiApplication),
                 _ => throw new NotImplementedException()
             };
             return result ?? Enumerable.Empty<SnoopableObject>();
@@ -97,7 +102,7 @@ namespace RevitDBExplorer.Domain
             return collector.ToElements().Select(x => new SnoopableObject(document, x));
         }
         private static IEnumerable<SnoopableObject> SnoopPick(UIApplication app, ObjectType objectType)
-        {            
+        {
             var uiDocument = app?.ActiveUIDocument;
 
             if (uiDocument == null || uiDocument.Document == null) yield break;
@@ -105,7 +110,7 @@ namespace RevitDBExplorer.Domain
             Reference reference;
             try
             {
-                reference = uiDocument.Selection.PickObject(objectType);               
+                reference = uiDocument.Selection.PickObject(objectType);
             }
             catch
             {
@@ -131,7 +136,7 @@ namespace RevitDBExplorer.Domain
                 // User can cancel picking
                 yield break;
             }
-        
+
 
             var representation = reference.ConvertToStableRepresentation(document).Split(':')[0];
             var parsedReference = Reference.ParseFromStableRepresentation(document, representation);
@@ -174,7 +179,7 @@ namespace RevitDBExplorer.Domain
 
             var ids = ParameterFilterUtilities.GetAllFilterableCategories();
             var categorries = ids.Select(x => Category.GetCategory(document, x)).Where(x => x is not null).ToList();
-           
+
             return categorries.Select(x => new SnoopableObject(document, x));
         }
         private static IEnumerable<SnoopableObject> SnoopParameters(UIApplication app)
@@ -185,15 +190,15 @@ namespace RevitDBExplorer.Domain
 
             var categoryIds = ParameterFilterUtilities.GetAllFilterableCategories();
             var categorries = categoryIds.Select(x => Category.GetCategory(document, x)).Where(x => x is not null).ToList();
-            foreach(var category in categorries)
+            foreach (var category in categorries)
             {
-                var paramIds = ParameterFilterUtilities.GetFilterableParametersInCommon(document, new[] {category.Id });
+                var paramIds = ParameterFilterUtilities.GetFilterableParametersInCommon(document, new[] { category.Id });
                 IEnumerable<SnoopableObject> snoopableParameters = Enumerable.Empty<SnoopableObject>();
                 if (paramIds.Any())
                 {
                     var parameters = new FilteredElementCollector(document).WherePasses(new ElementIdSetFilter(paramIds)).ToList();
                     snoopableParameters = parameters.Select(x => new SnoopableObject(document, x));
-                 }
+                }
 
                 yield return new SnoopableObject(document, category, snoopableParameters);
             }
@@ -207,7 +212,7 @@ namespace RevitDBExplorer.Domain
             yield return new SnoopableObject(document, document);
         }
         private static IEnumerable<SnoopableObject> SnoopActiveView(UIApplication app)
-        {            
+        {
             var view = app?.ActiveUIDocument?.Document?.ActiveView;
 
             if (view == null) yield break;
@@ -227,10 +232,28 @@ namespace RevitDBExplorer.Domain
                 Selector.ForgeSpecUtilsGetAllSpecs => SpecUtils.GetAllSpecs(),
 #endif
                 Selector.ForgeUnitUtilsGetAllUnits => UnitUtils.GetAllUnits(),
-                
+
             };
 #pragma warning restore CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
             return ids.Select(x => new SnoopableObject(app?.ActiveUIDocument?.Document, x));
+        }
+        private static IEnumerable<SnoopableObject> SnoopUpdaters(UIApplication app)
+        {
+            var document = app?.ActiveUIDocument?.Document;
+
+            if (document == null) return null;
+
+            UpdaterInfoWizard.AvadaKedavra();
+
+            return UpdaterRegistry.GetRegisteredUpdaterInfos(document).Select(x => new SnoopableObject(document, x));
+        }
+        private static IEnumerable<SnoopableObject> SnoopLoadedApplications(UIApplication app)
+        {
+            AddInManifestWizard.WingardiumLeviosa(app);
+            foreach (var externalApp in app.LoadedApplications)
+            {
+                yield return new SnoopableObject(app?.ActiveUIDocument?.Document, externalApp);
+            }
         }
     }
 }
