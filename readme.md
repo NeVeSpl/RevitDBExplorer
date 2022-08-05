@@ -111,7 +111,7 @@ Not only you have faster access to a geometry of an element, but you can also se
 
 ### <a name="themes"></a>UI themes: dark and light
 
-It is getting dark out there. **Be ready** for what is coming, with a new dark theme.
+It is getting dark out there. **Be ready** for [Revit 2024 Dark Theme](https://trello.com/c/BybVTpZK), with a new dark theme for RDBE.
 
 ![themes](documentation/examples/themes.gif)
 
