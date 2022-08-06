@@ -93,7 +93,7 @@ We all love (or hate) the ForgeTypeId, RDBE exposes all data related to a given 
 - UnitUtils.GetAllMeasurableSpecs
 - UnitUtils.GetAllDisciplines
 - SpecUtils.GetAllSpecs
--  UnitUtils.GetAllUnits
+- UnitUtils.GetAllUnits
 
 ![extensive-support-for-ForgeTypeId](documentation/examples/extensive-support-for-ForgeTypeId.gif)
 
@@ -121,15 +121,19 @@ It is getting dark out there. **Be ready** for [Revit 2024 Dark Theme](https://t
 ### snoop Revit events
 
 A new take on [EventsMonitor from  RevitSdkSamples
-](https://github.com/jeremytammik/RevitSdkSamples/tree/master/SDK/Samples/Events/EventsMonitor/CS). RDBE stores the last 30 events that occurred during Revit session and allows to snoop them. Idling event and ProgressChanged event are not stored because they are too noisy - they happen too often. In order to use this feature, you need to enable event monitor, which by default is disabled.
+](https://github.com/jeremytammik/RevitSdkSamples/tree/master/SDK/Samples/Events/EventsMonitor/CS). RDBE stores the last 30 events that occurred during Revit session and allows to snoop them. UIControlledApplication.Idling event and ControlledApplication.ProgressChanged event are not stored because they are too noisy - they happen too often. In order to use this feature, you need to enable event monitor, which by default is disabled.
 
 ![themes](documentation/examples/snooping-events.gif)
 
-### snoop external applications
+### <a name="snoop-external-applications"></a>snoop external applications (aka add-ons) loaded into Revit
+
+RDBE allows to look deeper into UIApplication.LoadedApplications
 
 ![themes](documentation/examples/snooping-loaded-external-applications.gif)
 
 ### snoop updaters
+
+
 
 ![themes](documentation/examples/snooping-updaters.gif)
 
