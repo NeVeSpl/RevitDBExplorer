@@ -15,9 +15,9 @@ Yet another [RevitLookup](https://github.com/jeremytammik/RevitLookup) clone. Re
 - [better support for Revit Extensible Storage](#better-support-for-revit-extensible-storage)
 - [easier work with Element.Geometry](#easier-work-with-geometry)
 - [UI themes: dark and light](#themes)
-- [snoop Revit events](snoop-Revit-events)
-- [snoop external applications](snoop-external-applications)
-- [snoop updaters](snoop-updaters)
+- [snoop Revit events](#snoop-Revit-events)
+- [snoop external applications](#snoop-external-applications)
+- [snoop updaters](#snoop-updaters)
 - [more data exposed](#more-data-exposed)
 - [elements of Family, FamilySymbol, FamilyInstance are grouped by category in tree](#grouping)
 
@@ -82,8 +82,6 @@ operator | meaning | example
 
 ### tooltips with Revit documentation
 
-They are problems with loading some of tooltips, but most of them should work.
-
 ![tooltips-with-Revit-documentations](documentation/examples/tooltips-with-Revit-documentation.png)
 
 
@@ -121,6 +119,9 @@ It is getting dark out there. **Be ready** for [Revit 2024 Dark Theme](https://t
 ![themes](documentation/examples/themes.gif)
 
 ### snoop Revit events
+
+A new take on [EventsMonitor from  RevitSdkSamples
+](https://github.com/jeremytammik/RevitSdkSamples/tree/master/SDK/Samples/Events/EventsMonitor/CS). RDBE stores the last 30 events that occurred during Revit session and allows to snoop them. Idling event and ProgressChanged event are not stored because they are too noisy - they happen too often. In order to use this feature, you need to enable event monitor, which by default is disabled.
 
 ![themes](documentation/examples/snooping-events.gif)
 
