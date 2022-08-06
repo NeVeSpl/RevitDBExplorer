@@ -121,7 +121,7 @@ It is getting dark out there. **Be ready** for [Revit 2024 Dark Theme](https://t
 ### snoop Revit events
 
 A new take on [EventsMonitor from  RevitSdkSamples
-](https://github.com/jeremytammik/RevitSdkSamples/tree/master/SDK/Samples/Events/EventsMonitor/CS). RDBE stores the last 30 events that occurred during Revit session and allows to snoop them. UIControlledApplication.Idling event and ControlledApplication.ProgressChanged event are not stored because they are too noisy - they happen too often. In order to use this feature, you need to enable event monitor, which by default is disabled.
+](https://github.com/jeremytammik/RevitSdkSamples/tree/master/SDK/Samples/Events/EventsMonitor/CS). RDBE stores the latest 30 events that occurred during Revit session and allows to snoop them. UIControlledApplication.Idling event and ControlledApplication.ProgressChanged event are not stored because they are too noisy - they happen too often. In order to use this feature, you need to enable event monitor, which by default is disabled.
 
 ![themes](documentation/examples/snooping-events.gif)
 
@@ -133,7 +133,7 @@ RDBE allows to look deeper into UIApplication.LoadedApplications
 
 ### snoop updaters
 
-
+RDBE allows to look deeper into UpdaterRegistry.GetRegisteredUpdaterInfos(). What is special about this feature is that, with a bit of luck, it is able to get UpdaterId, as a first publicly available tool.
 
 ![themes](documentation/examples/snooping-updaters.gif)
 
