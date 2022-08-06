@@ -2,6 +2,8 @@
 
 The fastest, modern, asynchronous Revit database exploration tool for Revit 2021+ 
 
+
+
 ## Origin
 
 Yet another [RevitLookup](https://github.com/jeremytammik/RevitLookup) clone. RevitLookup is a mature and indispensable tool to work with Revit. But its code had many authors and architectural changes(reflection, modeless) through time which led to quite significant technical debt and lack of consistency. For worse, its UI is still based on WinForms ... When I was adding support for [modeless windows #93](https://github.com/jeremytammik/RevitLookup/pull/93) to RevitLookup , I knew that at some point in time I will rewrite it whole. So here we are, let me introduce you to RDBE, a completely rewritten RevitLookup with WPF UI and a few small improvements:
@@ -13,12 +15,15 @@ Yet another [RevitLookup](https://github.com/jeremytammik/RevitLookup) clone. Re
 - [better support for Revit Extensible Storage](#better-support-for-revit-extensible-storage)
 - [easier work with Element.Geometry](#easier-work-with-geometry)
 - [UI themes: dark and light](#themes)
+- [snoop Revit events](snoop-Revit-events)
+- [snoop external applications](snoop-external-applications)
+- [snoop updaters](snoop-updaters)
 - [more data exposed](#more-data-exposed)
 - [elements of Family, FamilySymbol, FamilyInstance are grouped by category in tree](#grouping)
 
 ## Installation
 
-- Download and install [RevitDBExplorer.msi](https://github.com/NeVeSpl/RevitDBExplorer/releases/latest/download/RevitDBExplorer.msi). Setup will instal RDBE for Revit 2021, 2022, 2023.
+- Download and install [RevitDBExplorer.msi](https://github.com/NeVeSpl/RevitDBExplorer/releases/latest/download/RevitDBExplorer.msi). Setup will install RDBE for Revit 2021, 2022, 2023.
 
 ## Features
 
@@ -115,11 +120,26 @@ It is getting dark out there. **Be ready** for [Revit 2024 Dark Theme](https://t
 
 ![themes](documentation/examples/themes.gif)
 
+### snoop Revit events
+
+![themes](documentation/examples/snooping-events.gif)
+
+### snoop external applications
+
+![themes](documentation/examples/snooping-loaded-external-applications.gif)
+
+### snoop updaters
+
+![themes](documentation/examples/snooping-updaters.gif)
+
+
 
 ### <a name="more-data-exposed"></a>more data exposed from Revit database
 
 In comparison to RevitLookup, RDBE in addition gives access to:
 
+- BasicFileInfo
+    - Extract
 - Category
     - IsBuiltInCategory
     - GetBuiltInCategory
@@ -128,9 +148,14 @@ In comparison to RevitLookup, RDBE in addition gives access to:
     - GetEndParameter
 - Document
     - GetTypeOfStorage
+    - GetChangedElements
     - GetDefaultElementTypeId
+    - GetDocumentVersion
+    - GetWorksetId
 - Element
-    - **GetMaterialIds** 
+    - **GetMaterialIds**
+    - GetMaterialArea
+    - GetMaterialVolume    
 - FormatOptions
     - GetValidSymbols
     - CanHaveSymbol
@@ -164,6 +189,12 @@ In comparison to RevitLookup, RDBE in addition gives access to:
     - **GetOverridableHookParameters**
     - **GetTransformedCenterlineCurves**
     - IsBarHidden
+- RebarBarType
+    - GetAutoCalcHookLengths,
+    - GetHookLength, 
+    - GetHookOffsetLength, 
+    - GetHookPermission
+    - GetHookTangentLength
 - RebarShapeDrivenAccessor
     - **GetBarPositionTransform**
 - ScheduleDefinition
@@ -186,8 +217,9 @@ In comparison to RevitLookup, RDBE in addition gives access to:
     - IsWallCrossSectionValid
 - View
     - CanViewBeDuplicated
+    - **GetElementOverrides**
     - IsInTemporaryViewMode
-    - SupportsWorksharingDisplayMode
+    - SupportsWorksharingDisplayMode    
 - ViewCropRegionShapeManage
     - GetSplitRegionMaximum
     - GetSplitRegionMinimum
