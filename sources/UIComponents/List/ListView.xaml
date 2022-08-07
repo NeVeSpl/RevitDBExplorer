@@ -38,41 +38,39 @@
                         <MenuItem Header="Copy" Click="ListViewItem_MenuItemCopy_Click" />
                     </ContextMenu>
 
-                    <Style TargetType="{x:Type ListViewItem}" BasedOn="{StaticResource {x:Type ListViewItem}}" >
-                        <Setter Property="ToolTip">
-                            <Setter.Value>
-                                <StackPanel Orientation="Vertical"  MaxWidth="727">
-                                    <StackPanel.Resources>
-                                        <SolidColorBrush x:Key="ToolTip.Key" Color="Gray"/>
-                                        <SolidColorBrush x:Key="ToolTip.Value" Color="#000000"/>
-                                        <SolidColorBrush x:Key="ToolTip.ReturnType" Color="#0000FF"/>
-                                        <SolidColorBrush x:Key="ToolTip.Name" Color="#745320"/>
-                                        <SolidColorBrush x:Key="ToolTip.Invocation" Color="#21377F"/>
-                                    </StackPanel.Resources>
-                                    <TextBlock Visibility="{Binding Documentation.Name, Converter={StaticResource StringToVisibilityConverter}}">
+                    <ToolTip x:Key="ToolTipWithRevitHelp">
+                        <StackPanel Orientation="Vertical"  MaxWidth="727">
+                            <StackPanel.Resources>
+                                <SolidColorBrush x:Key="ToolTip.Key" Color="Gray"/>
+                                <SolidColorBrush x:Key="ToolTip.Value" Color="#000000"/>
+                                <SolidColorBrush x:Key="ToolTip.ReturnType" Color="#0000FF"/>
+                                <SolidColorBrush x:Key="ToolTip.Name" Color="#745320"/>
+                                <SolidColorBrush x:Key="ToolTip.Invocation" Color="#21377F"/>
+                            </StackPanel.Resources>
+                            <TextBlock Visibility="{Binding Documentation.Name, Converter={StaticResource StringToVisibilityConverter}}">
                                         <Run Foreground="{DynamicResource ToolTip.ReturnType}" Text="{Binding Documentation.ReturnType, Mode=OneWay}" /> <Run Foreground="{DynamicResource ToolTip.Name}" Text="{Binding Documentation.Name, Mode=OneWay}" /><Run Foreground="{DynamicResource ToolTip.Invocation}" Text="{Binding Documentation.Invocation, Mode=OneWay}" />
                                         <LineBreak/>
-                                    </TextBlock>
-                                    <TextBlock TextWrapping="Wrap" Visibility="{Binding Documentation.Summary, Converter={StaticResource StringToVisibilityConverter}}" >  
+                            </TextBlock>
+                            <TextBlock TextWrapping="Wrap" Visibility="{Binding Documentation.Summary, Converter={StaticResource StringToVisibilityConverter}}" >  
                                         <Run Text="{Binding Documentation.Summary, Mode=OneWay}" Foreground="{DynamicResource ToolTip.Value}" /><LineBreak/>
-                                    </TextBlock>
-                                    <TextBlock TextWrapping="Wrap" Visibility="{Binding Documentation.Returns, Converter={StaticResource StringToVisibilityConverter}}" >
+                            </TextBlock>
+                            <TextBlock TextWrapping="Wrap" Visibility="{Binding Documentation.Returns, Converter={StaticResource StringToVisibilityConverter}}" >
                                         <Run Text="Returns:" Foreground="{DynamicResource ToolTip.Key}"/><LineBreak/>
                                         <Run Text="{Binding Documentation.Returns, Mode=OneWay}" Foreground="{DynamicResource ToolTip.Value}" /><LineBreak/>
-                                    </TextBlock>
-                                    <TextBlock TextWrapping="Wrap" Visibility="{Binding Documentation.Remarks, Converter={StaticResource StringToVisibilityConverter}}">
+                            </TextBlock>
+                            <TextBlock TextWrapping="Wrap" Visibility="{Binding Documentation.Remarks, Converter={StaticResource StringToVisibilityConverter}}">
                                         <Run Text="Remarks:" Foreground="{DynamicResource ToolTip.Key}"/><LineBreak/>
                                         <Run Text="{Binding Documentation.Remarks, Mode=OneWay}"  Foreground="{DynamicResource ToolTip.Value}"/><LineBreak/>
-                                    </TextBlock>
-                                    <TextBlock TextWrapping="Wrap" Visibility="{Binding AccessorName, Converter={StaticResource StringToVisibilityConverter}}">
+                            </TextBlock>
+                            <TextBlock TextWrapping="Wrap" Visibility="{Binding AccessorName, Converter={StaticResource StringToVisibilityConverter}}">
                                         <Run Text="Accessor:" Foreground="{DynamicResource ToolTip.Key}"/><LineBreak/>
                                         <Run Text="{Binding AccessorName, Mode=OneWay}" Foreground="{DynamicResource ToolTip.Value}" />
-                                    </TextBlock>
+                            </TextBlock>
 
-                                </StackPanel>
-                            </Setter.Value>
-                        </Setter>
-                        <Setter Property="ToolTipService.ShowDuration" Value="50000"></Setter>
+                        </StackPanel>
+                    </ToolTip>
+
+                    <Style TargetType="{x:Type ListViewItem}" BasedOn="{StaticResource {x:Type ListViewItem}}" >  
                         <Setter Property="ContextMenu" Value="{StaticResource ItemContextMenu}" />
                         <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
                         <Setter Property="HorizontalAlignment" Value="Stretch"/>
@@ -104,8 +102,15 @@
                 <GridView AllowsColumnReorder="False">
 
                     <GridViewColumn Header="Name" Width="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListView}}, Path=ActualWidth, Converter={StaticResource PercentageOfValueConverter}, ConverterParameter=38}">
+                        
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
+                                <DataTemplate.Resources>
+                                    <Style TargetType="{x:Type StackPanel}">
+                                        <Setter Property="ToolTip" Value="{StaticResource ToolTipWithRevitHelp}"/>
+                                        <Setter Property="ToolTipService.ShowDuration" Value="50000"></Setter>
+                                    </Style>
+                                </DataTemplate.Resources>
                                 <StackPanel Orientation="Horizontal">
                                     <Path Style="{StaticResource IconProperty}" Margin="0 1 4 0" Visibility="{Binding MemberKind, Converter={StaticResource EnumMatchToVisibilityConverter}, ConverterParameter= Property}" ToolTip="Property"/>
                                     <Path Style="{StaticResource IconMethod}" Margin="0 1 4 0" Visibility="{Binding MemberKind, Converter={StaticResource EnumMatchToVisibilityConverter}, ConverterParameter= Method}" ToolTip="Method"/>

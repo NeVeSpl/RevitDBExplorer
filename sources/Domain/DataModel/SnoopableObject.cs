@@ -128,7 +128,24 @@ namespace RevitDBExplorer.Domain.DataModel
             {
                 if (method.ReturnType == typeof(void) && method.Name != "GetOverridableHookParameters") continue;
                 if (method.IsSpecialName) continue;
-                if (method.DeclaringType == typeof(object)) continue;               
+                if (method.DeclaringType == typeof(object)) continue;     
+                
+                if (method.Name == "Set" && Object is Parameter parameter)
+                {
+                    Type expectedParameterType = parameter.StorageType switch
+                    {
+                        StorageType.None => null,
+                        StorageType.Integer => typeof(int),
+                        StorageType.Double => typeof(double),
+                        StorageType.String => typeof(string),
+                        StorageType.ElementId => typeof(ElementId)
+                    };
+                    var parameterType =  method.GetParameters().FirstOrDefault()?.ParameterType;
+                    if (parameterType != expectedParameterType)
+                    {
+                        continue;
+                    }
+                }
 
                 var comments = () => RevitDocumentationReader.GetMethodComments(method);
                 var memberAccessor = FactoryOfFactories.CreateMemberAccessor(method, null);

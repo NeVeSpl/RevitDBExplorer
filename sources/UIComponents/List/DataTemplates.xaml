@@ -7,5 +7,7 @@
         <ResourceDictionary Source="ValuePresenters/ErrorPresenterVM.xaml"/>
         <ResourceDictionary Source="ValueEditors/ExecuteEditorVM.xaml"/>
         <ResourceDictionary Source="ValueEditors/StringEditorVM.xaml"/>
+        <ResourceDictionary Source="ValueEditors/DoubleEditorVM.xaml"/>
+        <ResourceDictionary Source="ValueEditors/IntegerEditorVM.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>

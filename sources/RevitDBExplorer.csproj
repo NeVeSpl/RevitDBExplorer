@@ -167,6 +167,7 @@
     <Compile Include="Domain\DataModel\MemberAccessors\Element\Element_GetMaterialArea.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\FailureHandlingOptions\FailureHandlingOptions.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\MemberAccessorByIteration.cs" />
+    <Compile Include="Domain\DataModel\MemberAccessors\Parameter\Parameter_Set.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\Parameter\Parameter_SetValueString.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\RebarBarType\RebarBarType_GetHookOffsetLength.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\RebarBarType\RebarBarType_GetHookTangentLength.cs" />
@@ -285,6 +286,8 @@
     </Compile>
     <Compile Include="UIComponents\List\ListVM.cs" />
     <Compile Include="UIComponents\List\ValueEditors\ExecuteEditorVM.cs" />
+    <Compile Include="UIComponents\List\ValueEditors\DoubleEditorVM.cs" />
+    <Compile Include="UIComponents\List\ValueEditors\IntegerEditorVM.cs" />
     <Compile Include="UIComponents\List\ValueEditors\StringEditorVM.cs" />
     <Compile Include="UIComponents\List\ValuePresenters\ErrorPresenterVM.cs" />
     <Compile Include="UIComponents\List\ValuePresenters\DefaultPresenterVM.cs" />
@@ -392,6 +395,14 @@
     <Page Include="UIComponents\List\ListView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UIComponents\List\ValueEditors\IntegerEditorVM.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UIComponents\List\ValueEditors\DoubleEditorVM.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="UIComponents\List\ValuePresenters\ErrorPresenterVM.xaml">
       <Generator>MSBuild:Compile</Generator>
