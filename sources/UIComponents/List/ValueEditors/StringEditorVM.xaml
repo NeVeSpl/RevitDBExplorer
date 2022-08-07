@@ -10,7 +10,11 @@
                 <ColumnDefinition />
                 <ColumnDefinition Width="0.33*"/>                
             </Grid.ColumnDefinitions>
-            <TextBox Text="{Binding ValueViewModel.Value}" Padding="1 2"/>
+            <TextBox Text="{Binding ValueViewModel.Value,  UpdateSourceTrigger=PropertyChanged}" Padding="1 2">
+                <TextBox.InputBindings>
+                    <KeyBinding Key="Enter" Command="{Binding WriteCommand}"/>
+                </TextBox.InputBindings>
+            </TextBox>
             <Button Grid.Column="1" Content="Save" Command="{Binding WriteCommand}"  Margin="5 0 0 0" Padding="7 2"/>
         </Grid>
     </DataTemplate>
