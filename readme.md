@@ -11,6 +11,7 @@ Yet another [RevitLookup](https://github.com/jeremytammik/RevitLookup) clone. Re
 - [query Revit database from UI](#possibility-to-query-Revit-database)
 - [filterable tree of elements and list of properties and methods](#filterable-tree-of-elements-and-list-of-properties-and-methods)
 - [tooltips with Revit documentation](#tooltips-with-revit-documentation)
+- [edit parameter value](#edit-parameter-value)
 - [extensive support for ForgeTypeId](#extensive-support-for-forgetypeid)
 - [better support for Revit Extensible Storage](#better-support-for-revit-extensible-storage)
 - [easier work with Element.Geometry](#easier-work-with-geometry)
@@ -84,6 +85,9 @@ operator | meaning | example
 
 ![tooltips-with-Revit-documentations](documentation/examples/tooltips-with-Revit-documentation.png)
 
+### edit parameter value
+
+![edit-parameter-value](documentation/examples/set.parameter.value.gif)
 
 ### extensive support for ForgeTypeId
 
