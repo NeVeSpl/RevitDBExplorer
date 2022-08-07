@@ -32,6 +32,7 @@
                         <GridViewRowPresenter  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
                             <GridViewRowPresenter.Resources>
                                 <Style TargetType="ContentPresenter">
+                                    <Setter Property="VerticalAlignment" Value="Stretch"/>
                                     <Style.Triggers>
                                         <EventTrigger RoutedEvent="Loaded">
                                             <BeginStoryboard>

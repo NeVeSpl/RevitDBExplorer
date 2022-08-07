@@ -7,7 +7,7 @@ using RevitDBExplorer.Domain.DataModel.ValueContainers.Base;
 
 namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
-    internal sealed class MemberAccessorForConstValue : IMemberAccessor, IMemberAccessorWithValue
+    internal sealed class MemberAccessorForConstValue : MemberAccessorTyped<object>, IMemberAccessorWithValue
     {
         private readonly IValueContainer value;
         IValueContainer IMemberAccessorWithValue.Value => value;
@@ -20,11 +20,11 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
         }
 
 
-        public ReadResult Read(SnoopableContext context, object @object)
+        public override ReadResult Read(SnoopableContext context, object @object)
         {          
             return new ReadResult(value.ValueAsString, value.TypeName, value.CanBeSnooped);
         }
-        public IEnumerable<SnoopableObject> Snoop(SnoopableContext context, object @object)
+        public override IEnumerable<SnoopableObject> Snoop(SnoopableContext context, object @object)
         {
             return value.Snoop(context.Document);
         }

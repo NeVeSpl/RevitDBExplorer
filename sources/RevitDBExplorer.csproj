@@ -167,6 +167,7 @@
     <Compile Include="Domain\DataModel\MemberAccessors\Element\Element_GetMaterialArea.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\FailureHandlingOptions\FailureHandlingOptions.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\MemberAccessorByIteration.cs" />
+    <Compile Include="Domain\DataModel\MemberAccessors\Parameter\Parameter_SetValueString.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\RebarBarType\RebarBarType_GetHookOffsetLength.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\RebarBarType\RebarBarType_GetHookTangentLength.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\RebarBarType\RebarBarType_GetHookLength.cs" />
@@ -279,6 +280,10 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>AppSettings.settings</DependentUpon>
     </Compile>
+    <Compile Include="UIComponents\List\ValueEditors\ExecuteEditorVM.cs" />
+    <Compile Include="UIComponents\List\ValueEditors\StringEditorVM.cs" />
+    <Compile Include="UIComponents\List\ValuePresenters\ErrorPresenterVM.cs" />
+    <Compile Include="UIComponents\List\ValuePresenters\DefaultPresenterVM.cs" />
     <Compile Include="UIComponents\QueryVisualization\QueryVisualizationVM.cs" />
     <Compile Include="UIComponents\QueryVisualization\CommandVM.cs" />
     <Compile Include="UIComponents\Tree\SnoopableCategoryTreeVM.cs" />
@@ -375,19 +380,27 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UIComponents\List\CellDataTemplates.xaml">
+    <Page Include="UIComponents\List\DataTemplates.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UIComponents\List\CellDataTemplates\ColorContainer.xaml">
+    <Page Include="UIComponents\List\ValuePresenters\ErrorPresenterVM.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="UIComponents\List\CellDataTemplates\IMemberAccessorWithWrite.xaml">
+    <Page Include="UIComponents\List\ValuePresenters\ValueContainers\ColorContainer.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="UIComponents\List\CellDataTemplates\_Default.xaml">
+    <Page Include="UIComponents\List\ValueEditors\StringEditorVM.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UIComponents\List\ValueEditors\ExecuteEditorVM.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UIComponents\List\ValuePresenters\DefaultPresenterVM.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

@@ -252,7 +252,7 @@ namespace RevitDBExplorer
             {
                 if (ListSelectedItem?.CanBeSnooped == true)
                 {
-                    var snoopableObjects = await ExternalExecutor.ExecuteInRevitContextAsync(x => ListSelectedItem.Snooop(x).ToList());
+                    var snoopableObjects = await ExternalExecutor.ExecuteInRevitContextAsync(x => ListSelectedItem.Snooop().ToList());
                     var window = new MainWindow(snoopableObjects);
                     window.Owner = this;
                     window.Show();

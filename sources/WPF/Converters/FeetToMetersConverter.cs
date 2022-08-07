@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Windows.Data;
 using RevitDBExplorer.Domain.DataModel;
 using RevitDBExplorer.Domain.DataModel.ValueContainers;
+using RevitDBExplorer.UIComponents.List.ValuePresenters;
 
 namespace RevitDBExplorer.WPF.Converters
 {
@@ -14,10 +15,13 @@ namespace RevitDBExplorer.WPF.Converters
 
             if (snoopableMember == null) return null;
 
-            if (snoopableMember.ValueContainer is DoubleContainer container)
+            if (snoopableMember.ValueViewModel is DefaultPresenterVM presenter)
             {
-                double result = container.Value * 0.3048;
-                return $"{result} [m]";
+                if (presenter.ValueContainer is DoubleContainer container)
+                {
+                    double result = container.Value * 0.3048;
+                    return $"{result} [m]";
+                }
             }
             return snoopableMember.Label.Text;
         }

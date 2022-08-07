@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using RevitDBExplorer.Domain.DataModel;
-using RevitDBExplorer.Domain.DataModel.MemberAccessors;
+using RevitDBExplorer.UIComponents.List.ValuePresenters;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
@@ -15,18 +15,22 @@ namespace RevitDBExplorer.WPF
             {
                 FrameworkElement element = container as FrameworkElement;
 
-                if (snoopableMember.HasValue)
-                { 
-                    var key = new System.Windows.DataTemplateKey(snoopableMember.ValueContainer.GetType());
-                    var dataTemplate = (DataTemplate)element.TryFindResource(key);
-                    return dataTemplate;
-                }
-
-                if (snoopableMember.IsWritable)
+                if (snoopableMember.ValueViewModel != null)
                 {
-                    var key = new System.Windows.DataTemplateKey(typeof(IMemberAccessorWithWrite));
-                    var dataTemplate = (DataTemplate)element.TryFindResource(key);
-                    return dataTemplate;
+                    if (snoopableMember.ValueViewModel is DefaultPresenterVM { ValueContainer: not null } presenter)
+                    {
+                        var key = new DataTemplateKey(presenter.ValueContainer?.GetType());
+                        var dataTemplate = (DataTemplate)element.TryFindResource(key);
+                        if (dataTemplate != null)
+                        {
+                            return dataTemplate;
+                        }
+                    }
+                    {
+                        var key = new DataTemplateKey(snoopableMember.ValueViewModel.GetType());
+                        var dataTemplate = (DataTemplate)element.TryFindResource(key);
+                        return dataTemplate;
+                    }
                 }
             }
 

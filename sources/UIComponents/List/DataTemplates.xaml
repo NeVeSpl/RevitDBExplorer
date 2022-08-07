@@ -1,0 +1,11 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ResourceDictionary.MergedDictionaries>
+
+        <ResourceDictionary Source="ValuePresenters/ValueContainers/ColorContainer.xaml"/>
+        <ResourceDictionary Source="ValuePresenters/DefaultPresenterVM.xaml"/>
+        <ResourceDictionary Source="ValuePresenters/ErrorPresenterVM.xaml"/>
+        <ResourceDictionary Source="ValueEditors/ExecuteEditorVM.xaml"/>
+        <ResourceDictionary Source="ValueEditors/StringEditorVM.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
+</ResourceDictionary>

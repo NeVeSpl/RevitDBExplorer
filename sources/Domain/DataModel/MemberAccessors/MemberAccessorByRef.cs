@@ -8,7 +8,7 @@ using RevitDBExplorer.Domain.DataModel.ValueContainers.Base;
 
 namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
-    internal class MemberAccessorByRef : IMemberAccessor, IMemberAccessorWithValue
+    internal class MemberAccessorByRef : MemberAccessorTyped<object>, IMemberAccessorWithValue
     {
         private readonly MethodInfo getMethod;
         private readonly MethodInfo setMethod; 
@@ -24,7 +24,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
         }
 
 
-        public ReadResult Read(SnoopableContext context, object @object)
+        public override ReadResult Read(SnoopableContext context, object @object)
         {
             value.SetValue(context.Document, null);
             var paramsDef = getMethod.GetParameters();
@@ -33,7 +33,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
             value.SetValue(context.Document, result);
             return new ReadResult(value.ValueAsString, value.TypeName, value.CanBeSnooped);
         }
-        public IEnumerable<SnoopableObject> Snoop(SnoopableContext context, object @object)
+        public override IEnumerable<SnoopableObject> Snoop(SnoopableContext context, object @object)
         {
             return value.Snoop(context.Document);
         }

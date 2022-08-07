@@ -8,7 +8,7 @@ using Autodesk.Revit.DB;
 
 namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
-    internal class MemberAccessorByIteration : IMemberAccessor
+    internal class MemberAccessorByIteration : MemberAccessorTyped<object>
     {
         private readonly MethodInfo getMethod;
 
@@ -19,12 +19,12 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
         }
 
 
-        public ReadResult Read(SnoopableContext context, object @object)
+        public override ReadResult Read(SnoopableContext context, object @object)
         {
             var typeName = getMethod.ReturnType.GetCSharpName();
             return new ReadResult($"[{typeName}]", nameof(MemberAccessorByIteration), true);
         }
-        public IEnumerable<SnoopableObject> Snoop(SnoopableContext context, object @object)
+        public override IEnumerable<SnoopableObject> Snoop(SnoopableContext context, object @object)
         {            
             var result = new List<SnoopableObject>();
             var parameter = getMethod.GetParameters().First();

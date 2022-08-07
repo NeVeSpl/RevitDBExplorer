@@ -1,0 +1,11 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:converters="clr-namespace:RevitDBExplorer.WPF.Converters" 
+                    xmlns:presenters="clr-namespace:RevitDBExplorer.UIComponents.List.ValuePresenters" 
+                    >
+
+    <DataTemplate DataType="{x:Type presenters:ErrorPresenterVM}">
+        <TextBlock Text="{Binding Label.Text, Mode=OneWay}" TextWrapping="NoWrap"  />
+    </DataTemplate>
+    
+</ResourceDictionary>
