@@ -280,6 +280,10 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>AppSettings.settings</DependentUpon>
     </Compile>
+    <Compile Include="UIComponents\List\ListView.xaml.cs">
+      <DependentUpon>ListView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UIComponents\List\ListVM.cs" />
     <Compile Include="UIComponents\List\ValueEditors\ExecuteEditorVM.cs" />
     <Compile Include="UIComponents\List\ValueEditors\StringEditorVM.cs" />
     <Compile Include="UIComponents\List\ValuePresenters\ErrorPresenterVM.cs" />
@@ -292,6 +296,7 @@
     <Compile Include="UIComponents\QueryVisualization\QueryVisualizationView.xaml.cs">
       <DependentUpon>QueryVisualizationView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="WPF\BindingProxy.cs" />
     <Compile Include="WPF\Controls\TextBoxWithPlaceholder.xaml.cs">
       <DependentUpon>TextBoxWithPlaceholder.xaml</DependentUpon>
     </Compile>
@@ -381,6 +386,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UIComponents\List\DataTemplates.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UIComponents\List\ListView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

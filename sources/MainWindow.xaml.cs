@@ -7,15 +7,14 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Threading;
-using Autodesk.Revit.UI;
 using RevitDBExplorer.Domain;
 using RevitDBExplorer.Domain.DataModel;
 using RevitDBExplorer.Domain.RevitDatabaseQuery;
 using RevitDBExplorer.Properties;
+using RevitDBExplorer.UIComponents.List;
 using RevitDBExplorer.UIComponents.QueryVisualization;
 using RevitDBExplorer.UIComponents.Tree;
 using RevitDBExplorer.WPF;
@@ -27,16 +26,15 @@ namespace RevitDBExplorer
 {
     internal partial class MainWindow : Window, INotifyPropertyChanged
     {
-        private ObservableCollection<TreeViewItemVM> treeItems = new();
-        private ObservableCollection<SnoopableMember> listItems = new();
-        private readonly QueryVisualizationVM queryVisualizationVM = new();
-        private SnoopableMember listSelectedItem = null;
+        private ObservableCollection<TreeViewItemVM> treeItems = new();        
+        private readonly ListVM listVM = new();
+        private readonly QueryVisualizationVM queryVisualizationVM = new();        
         private string listItemsFilterPhrase = string.Empty;
         private string treeItemsFilterPhrase = string.Empty;
         private string databaseQuery = string.Empty;
         private string databaseQueryToolTip = string.Empty;
         private bool isRevitBusy;
-        private DispatcherTimer isRevitBusyDispatcher;
+        private readonly DispatcherTimer isRevitBusyDispatcher;
 
 
         public ObservableCollection<TreeViewItemVM> TreeItems
@@ -50,17 +48,12 @@ namespace RevitDBExplorer
                 treeItems = value;
                 OnPropertyChanged();
             }
-        }
-        public ObservableCollection<SnoopableMember> ListItems
+        }      
+        public ListVM List
         {
             get
             {
-                return listItems;
-            }
-            set
-            {
-                listItems = value;
-                OnPropertyChanged();
+                return listVM;
             }
         }
         public QueryVisualizationVM QueryVisualization
@@ -69,24 +62,7 @@ namespace RevitDBExplorer
             {
                 return queryVisualizationVM;
             }
-            set
-            {
-                //commandsVM = value;
-                OnPropertyChanged();
-            }
-        }
-        public SnoopableMember ListSelectedItem
-        {
-            get
-            {
-                return listSelectedItem;
-            }
-            set
-            {
-                listSelectedItem = value;
-                OnPropertyChanged();
-            }
-        }
+        }        
         public string ListItemsFilterPhrase
         {
             get
@@ -96,7 +72,7 @@ namespace RevitDBExplorer
             set
             {
                 listItemsFilterPhrase = value;
-                FilterListView();                
+                List.FilterListView();                
                 OnPropertyChanged();
             }
         }
@@ -153,7 +129,7 @@ namespace RevitDBExplorer
                 }
             }
         }
-
+        
 
         public MainWindow()
         {
@@ -166,6 +142,8 @@ namespace RevitDBExplorer
             isRevitBusyDispatcher = new DispatcherTimer(TimeSpan.FromMilliseconds(500), DispatcherPriority.Background, (x, y) => IsRevitBusy = (DateTime.Now - Application.LastTimeWhen).TotalSeconds > 0.5, Dispatcher.CurrentDispatcher);
 
             CheckIfNewVersionIsAvailable(ver).Forget();
+
+            List.MemberSnooped += () => ListViewItem_MouseLeftButtonUp(null, null);
         }
         public MainWindow(IList<SnoopableObject> objects) : this()
         {
@@ -233,7 +211,8 @@ namespace RevitDBExplorer
                 if (e.NewValue is SnoopableObjectTreeVM snoopableObjectVM)
                 {
                     var snoopableMembers = await ExternalExecutor.ExecuteInRevitContextAsync(x => snoopableObjectVM.Object.GetMembers(x).ToList());
-                    PopulateListView(snoopableMembers);
+                    snoopableMembers.ForEach(x => x.SnoopableObjectChanged += () => ReloadButton_Click(null, null));
+                    List.PopulateListView(snoopableMembers, ListViewFilter);
                 }
                 else
                 {
@@ -250,9 +229,9 @@ namespace RevitDBExplorer
         {
             try
             {
-                if (ListSelectedItem?.CanBeSnooped == true)
+                if (List.ListSelectedItem?.CanBeSnooped == true)
                 {
-                    var snoopableObjects = await ExternalExecutor.ExecuteInRevitContextAsync(x => ListSelectedItem.Snooop().ToList());
+                    var snoopableObjects = await ExternalExecutor.ExecuteInRevitContextAsync(x => List.ListSelectedItem.Snooop().ToList());
                     var window = new MainWindow(snoopableObjects);
                     window.Owner = this;
                     window.Show();
@@ -267,15 +246,7 @@ namespace RevitDBExplorer
         {
             try
             {
-                await ExternalExecutor.ExecuteInRevitContextAsync(uiApp =>
-                {
-                    foreach (var item in listItems)
-                    {
-                        item.Read();
-                    }
-                    return true;
-                });
-               
+                await ExternalExecutor.ExecuteInRevitContextAsync(uiApp => List.ReloadItems());                
             }
             catch (Exception ex)
             {
@@ -339,19 +310,7 @@ namespace RevitDBExplorer
                 firstObject.IsSelected = true; 
             }           
         }
-        private void PopulateListView(IList<SnoopableMember> members)
-        {
-            members.ForEach(x => x.SnoopableObjectChanged += () => ReloadButton_Click(null, null));
-            ListItems = new(members);
-
-            var lcv = (ListCollectionView)CollectionViewSource.GetDefaultView(ListItems);
-            
-            lcv.GroupDescriptions.Add(new PropertyGroupDescription(nameof(SnoopableMember.DeclaringTypeName)));          
-            lcv.SortDescriptions.Add(new SortDescription(nameof(SnoopableMember.DeclaringTypeLevel), ListSortDirection.Ascending));
-            lcv.SortDescriptions.Add(new SortDescription(nameof(SnoopableMember.MemberKind), ListSortDirection.Ascending));
-            lcv.SortDescriptions.Add(new SortDescription(nameof(SnoopableMember.Name), ListSortDirection.Ascending));
-            lcv.Filter = ListViewFilter;
-        }
+        
         private bool ListViewFilter(object item)
         {
             if (item is SnoopableMember snoopableMember)
@@ -367,15 +326,8 @@ namespace RevitDBExplorer
                 return snoopableObjectVM.Object.Name.IndexOf(treeItemsFilterPhrase, StringComparison.OrdinalIgnoreCase) >= 0;
             }
             return true;
-        }
+        }        
         
-        private void FilterListView()
-        {
-            if (ListItems != null)
-            {
-                CollectionViewSource.GetDefaultView(ListItems).Refresh();
-            }
-        }
         private void FilterTreeView()
         {
             if (TreeItems != null)
@@ -389,7 +341,7 @@ namespace RevitDBExplorer
         
         private void ResetListItems()
         {
-            PopulateListView(System.Array.Empty<SnoopableMember>());
+            List.PopulateListView(System.Array.Empty<SnoopableMember>(), ListViewFilter);
         }
         private void ResetTreeItems()
         {
@@ -449,25 +401,7 @@ namespace RevitDBExplorer
             {
                 treeViewItem.IsSelected = true;
             }
-        }
-        private void ListViewItem_MenuItemCopy_Click(object sender, RoutedEventArgs e)
-        {
-            var menuItem = e.Source as MenuItem;
-            var menu = menuItem.Parent as ContextMenu;
-            var item = menu.PlacementTarget as ListViewItem;
-
-            if (item.DataContext is SnoopableMember snoopableMember)
-            {
-                Clipboard.SetDataObject($"{snoopableMember.Name}= {snoopableMember.Label.Text}");
-            }
-        }
-        private void ListView_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter)
-            {
-                ListViewItem_MouseLeftButtonUp(sender, null);
-            }
-        }
+        }        
         private void ButtonWithSubMenu_Click(object sender, RoutedEventArgs e)
         {
             var contextMenu = ContextMenuService.GetContextMenu(sender as DependencyObject);
