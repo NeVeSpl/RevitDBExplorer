@@ -35,6 +35,7 @@ namespace RevitDBExplorer.Domain.DataModel
         public bool CanBeSnooped { get; private set; }        
         public bool CanBeWritten { get; private set; } = false;
         public RelayCommand WriteCommand { get; }        
+        public event Action SnoopableObjectChanged;
 
 
         public SnoopableMember(SnoopableObject parent, Kind memberKind, string name, Type declaringType, IMemberAccessor memberAccessor, Func<DocXml> documentationFactoryMethod)
@@ -118,6 +119,7 @@ namespace RevitDBExplorer.Domain.DataModel
                         transaction?.Start();
                         writer.Write(context, @object);
                         transaction?.Commit();
+                        SnoopableObjectChanged?.Invoke();
                     }
                     catch (Exception ex)
                     {

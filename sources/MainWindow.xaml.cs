@@ -341,6 +341,7 @@ namespace RevitDBExplorer
         }
         private void PopulateListView(IList<SnoopableMember> members)
         {
+            members.ForEach(x => x.SnoopableObjectChanged += () => ReloadButton_Click(null, null));
             ListItems = new(members);
 
             var lcv = (ListCollectionView)CollectionViewSource.GetDefaultView(ListItems);
