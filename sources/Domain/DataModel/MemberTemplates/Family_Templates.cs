@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Autodesk.Revit.DB;
-using Autodesk.Revit.DB.Structure.StructuralSections;
+using Autodesk.Revit.DB.ExtensibleStorage;
+using Autodesk.Revit.UI;
 using RevitDBExplorer.Domain.DataModel.MemberAccessors;
 using RevitDBExplorer.Domain.DataModel.MemberTemplates.Base;
 
@@ -9,18 +10,19 @@ using RevitDBExplorer.Domain.DataModel.MemberTemplates.Base;
 
 namespace RevitDBExplorer.Domain.DataModel.MemberTemplates
 {
-    internal class Element_Templates : IHaveMemberTemplates
+    internal class Family_Templates : IHaveMemberTemplates
     {
         private static readonly IEnumerable<ISnoopableMemberTemplate> templates = Enumerable.Empty<ISnoopableMemberTemplate>();
 
-        static Element_Templates()
+
+        static Family_Templates()
         {
             templates = new ISnoopableMemberTemplate[]
             {
-                SnoopableMemberTemplate<Element>.Create((doc, target) => doc.ActiveView.GetElementOverrides(target.Id), kind: SnoopableMember.Kind.AsArgument),
-                SnoopableMemberTemplate<Element>.Create((doc, target) => doc.GetWorksetId(target.Id), kind: SnoopableMember.Kind.AsArgument),
-                SnoopableMemberTemplate<FamilyInstance>.Create((doc, target) => StructuralSectionUtils.GetStructuralSection(doc, target.Id), kind: SnoopableMember.Kind.StaticMethod),
-            };
+               SnoopableMemberTemplate<Family>.Create((doc, target) => doc.EditFamily(target), kind: SnoopableMember.Kind.AsArgument),
+               SnoopableMemberTemplate<Family>.Create((doc, target) => FamilySizeTableManager.GetFamilySizeTableManager(doc, target.Id), kind: SnoopableMember.Kind.StaticMethod),
+               
+            }; 
         }
 
 

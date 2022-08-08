@@ -166,6 +166,7 @@
     <Compile Include="Domain\DataModel\MemberAccessors\Element\Element_GetMaterialVolume.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\Element\Element_GetMaterialArea.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\FailureHandlingOptions\FailureHandlingOptions.cs" />
+    <Compile Include="Domain\DataModel\MemberAccessors\HostObjectUtils\HostObjectUtils_GetSideFaces.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\MemberAccessorByIteration.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\Parameter\Parameter_Set.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\Parameter\Parameter_SetValueString.cs" />
@@ -179,12 +180,16 @@
     <Compile Include="Domain\DataModel\MemberAccessors\View\View_Duplicate.cs" />
     <Compile Include="Domain\DataModel\MemberTemplates\Document_Templates.cs" />
     <Compile Include="Domain\DataModel\MemberTemplates\Element_Templates.cs" />
+    <Compile Include="Domain\DataModel\MemberTemplates\HostObject_Templates.cs" />
     <Compile Include="Domain\DataModel\MemberTemplates\IExternalApplication_Templates.cs" />
+    <Compile Include="Domain\DataModel\MemberTemplates\Family_Templates.cs" />
     <Compile Include="Domain\DataModel\MemberTemplates\UpdaterInfo_Templates.cs" />
+    <Compile Include="Domain\DataModel\MemberTemplates\WorksharingUtils_Templates.cs" />
     <Compile Include="Domain\DataModel\ValueContainers\DocumentChangedEventArgsContainer.cs" />
     <Compile Include="Domain\DataModel\ValueContainers\FailuresProcessingEventArgsContainer.cs" />
     <Compile Include="Domain\DataModel\ValueContainers\IExternalApplicationContainer.cs" />
     <Compile Include="Domain\DataModel\ValueContainers\RevitApiEventArgsContainer.cs" />
+    <Compile Include="Domain\DataModel\ValueContainers\StructuralSectionContainer.cs" />
     <Compile Include="Domain\DataModel\ValueContainers\UpdaterInfoContainer.cs" />
     <Compile Include="Domain\EventMonitor.cs" />
     <Compile Include="Domain\QuoteGenerator.cs" />

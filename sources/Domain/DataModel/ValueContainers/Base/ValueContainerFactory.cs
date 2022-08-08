@@ -35,6 +35,7 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers.Base
             new RevitApiEventArgsContainer(),            
 
             //
+            new StructuralSectionContainer(),
             new IExternalApplicationContainer(),
             new UpdaterInfoContainer(),
             new BindingMapContainer(),

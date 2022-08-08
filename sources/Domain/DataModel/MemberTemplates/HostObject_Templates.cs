@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Autodesk.Revit.DB;
-using Autodesk.Revit.DB.Structure.StructuralSections;
 using RevitDBExplorer.Domain.DataModel.MemberAccessors;
 using RevitDBExplorer.Domain.DataModel.MemberTemplates.Base;
 
@@ -9,18 +8,19 @@ using RevitDBExplorer.Domain.DataModel.MemberTemplates.Base;
 
 namespace RevitDBExplorer.Domain.DataModel.MemberTemplates
 {
-    internal class Element_Templates : IHaveMemberTemplates
+    internal class HostObject_Templates : IHaveMemberTemplates
     {
         private static readonly IEnumerable<ISnoopableMemberTemplate> templates = Enumerable.Empty<ISnoopableMemberTemplate>();
 
-        static Element_Templates()
+
+        static HostObject_Templates()
         {
             templates = new ISnoopableMemberTemplate[]
             {
-                SnoopableMemberTemplate<Element>.Create((doc, target) => doc.ActiveView.GetElementOverrides(target.Id), kind: SnoopableMember.Kind.AsArgument),
-                SnoopableMemberTemplate<Element>.Create((doc, target) => doc.GetWorksetId(target.Id), kind: SnoopableMember.Kind.AsArgument),
-                SnoopableMemberTemplate<FamilyInstance>.Create((doc, target) => StructuralSectionUtils.GetStructuralSection(doc, target.Id), kind: SnoopableMember.Kind.StaticMethod),
-            };
+               SnoopableMemberTemplate<HostObject>.Create((doc, target) => HostObjectUtils.GetTopFaces(target), kind: SnoopableMember.Kind.StaticMethod),
+               SnoopableMemberTemplate<HostObject>.Create((doc, target) => HostObjectUtils.GetBottomFaces(target), kind: SnoopableMember.Kind.StaticMethod),
+               SnoopableMemberTemplate<HostObject>.Create(typeof(HostObjectUtils), "GetSideFaces", new HostObjectUtils_GetSideFaces(), kind: SnoopableMember.Kind.StaticMethod ),           
+            }; 
         }
 
 

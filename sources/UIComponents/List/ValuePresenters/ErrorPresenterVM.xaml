@@ -5,7 +5,11 @@
                     >
 
     <DataTemplate DataType="{x:Type presenters:ErrorPresenterVM}">
-        <TextBlock Text="{Binding Label.Text, Mode=OneWay}" TextWrapping="NoWrap"  />
+        <TextBlock Text="{Binding Label.Text, Mode=OneWay}" TextWrapping="NoWrap"  >
+            <TextBlock.ToolTip>
+                <TextBlock Text="{Binding Label.Text, Mode=OneWay}" />
+            </TextBlock.ToolTip>
+        </TextBlock>
     </DataTemplate>
     
 </ResourceDictionary>
