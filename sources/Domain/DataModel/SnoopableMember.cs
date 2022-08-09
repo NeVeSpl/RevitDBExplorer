@@ -29,9 +29,9 @@ namespace RevitDBExplorer.Domain.DataModel
         public bool HasAccessor => memberAccessor is not null;
         public DocXml Documentation => documentation?.Value ?? DocXml.Empty;
 
-        public Label Label { get; private set; }          
+        public Label Label { get; private set; } = new Label("", false);
         public string AccessorName { get; private set; }
-        public IValuePresenter ValueViewModel { get; private set; }
+        public IValuePresenter ValueViewModel { get; private set; } = new DefaultPresenterVM();
         public bool CanBeSnooped { get; private set; }        
         public bool CanBeWritten { get; private set; } = false;
         public RelayCommand WriteCommand { get; }        
@@ -48,6 +48,10 @@ namespace RevitDBExplorer.Domain.DataModel
                 this.declaringType = DeclaringType.Create(declaringType, parent?.Object?.GetType());
             }
             this.memberAccessor = memberAccessor;
+            if (memberAccessor == null)
+            {
+                this.declaringType = DeclaringType.NotExposed;
+            }
             if (documentationFactoryMethod != null)
             {
                 this.documentation = new Lazy<DocXml>(documentationFactoryMethod);
@@ -64,6 +68,7 @@ namespace RevitDBExplorer.Domain.DataModel
         public void Read()
         {
             if (isFrozen) return;
+            if (!HasAccessor) return;
             Read(parent.Context, parent.Object);            
         }
         private void Read(SnoopableContext context, object @object)
@@ -93,7 +98,7 @@ namespace RevitDBExplorer.Domain.DataModel
 
         public IEnumerable<SnoopableObject> Snooop()
         {
-            if (isFrozen) return frozenSnooopResult;
+            if (isFrozen) return frozenSnooopResult;           
             if (memberAccessor is IMemberAccessorWithSnoop snooper)
             {
                 return snooper.Snoop(parent.Context, parent.Object);

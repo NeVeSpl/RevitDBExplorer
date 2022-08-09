@@ -102,8 +102,7 @@ namespace RevitDBExplorer.Domain
             {
                 return new MemberAccessorByRef(getMethod, setMethod);
             }
-
-            Debug.WriteLine(getMethod.GetUniqueId());
+            
             return null;
         }
     }

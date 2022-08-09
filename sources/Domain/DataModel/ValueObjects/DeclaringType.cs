@@ -6,6 +6,7 @@ namespace RevitDBExplorer.Domain.DataModel.ValueObjects
 {
     internal class DeclaringType: IEquatable<DeclaringType>, IComparable<DeclaringType>
     {
+        public static readonly DeclaringType NotExposed = new DeclaringType("Not exposed", 256);
         private readonly Lazy<DocXml> documentation = null;
 
         public string Name { get; init; }
