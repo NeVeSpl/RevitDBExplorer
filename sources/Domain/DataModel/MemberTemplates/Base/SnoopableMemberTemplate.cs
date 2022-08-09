@@ -36,13 +36,13 @@ namespace RevitDBExplorer.Domain.DataModel.MemberTemplates.Base
             var compiledGetter = getter.Compile();
             var methodCallExpression = (getter.Body as MethodCallExpression);           
             var memberAccessor = new MemberAccessorByFunc<TSnoopedObjectType, TReturnType>(compiledGetter);  
-            return Create(methodCallExpression.Method.DeclaringType, methodCallExpression.Method.Name, memberAccessor, canBeUsed, kind);
+            return Create(methodCallExpression.Method.DeclaringType, methodCallExpression.Method.Name, memberAccessor, canBeUsed, kind, () => RevitDocumentationReader.GetMethodComments(methodCallExpression.Method));
         } 
-        public static ISnoopableMemberTemplate Create(Type declaringType, string memberName, IMemberAccessor memberAccessor, Func<TSnoopedObjectType, bool> canBeUsed = null, SnoopableMember.Kind kind = SnoopableMember.Kind.StaticMethod ) 
+        public static ISnoopableMemberTemplate Create(Type declaringType, string memberName, IMemberAccessor memberAccessor, Func<TSnoopedObjectType, bool> canBeUsed = null, SnoopableMember.Kind kind = SnoopableMember.Kind.StaticMethod, Func<DocXml> documentationFactoryMethod = null) 
         {
             return new SnoopableMemberTemplate<TSnoopedObjectType>()
             {
-                SnoopableMember = new SnoopableMember(null, kind, memberName, declaringType, memberAccessor, null),             
+                SnoopableMember = new SnoopableMember(null, kind, memberName, declaringType, memberAccessor, documentationFactoryMethod),             
                 CanBeUsedTyped = canBeUsed,              
             };
         }

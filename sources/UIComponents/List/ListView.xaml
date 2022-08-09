@@ -156,7 +156,26 @@
                 <GroupStyle>
                     <GroupStyle.HeaderTemplate>
                         <DataTemplate>
-                            <TextBlock FontWeight="Bold" FontSize="14" Margin="5 0 0 0" Text="{Binding Name, Mode=OneWay}" Foreground="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+                            <TextBlock FontWeight="Bold" FontSize="14" Margin="5 0 0 0" Text="{Binding Name, Mode=OneWay}" Foreground="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" ToolTipService.ShowDuration="50000">
+                                <TextBlock.ToolTip>
+                                    <ToolTip>
+                                        <StackPanel Orientation="Vertical"  MaxWidth="727">
+                                            <TextBlock Visibility="{Binding Items[0].DeclaringType.Documentation.Name, Converter={StaticResource StringToVisibilityConverter}}">
+                                                <Run Foreground="{DynamicResource ToolTip.Name}" Text="{Binding Items[0].DeclaringType.Documentation.Name, Mode=OneWay}" />
+                                                <LineBreak/>
+                                            </TextBlock>
+                                            <TextBlock TextWrapping="Wrap" Visibility="{Binding Items[0].DeclaringType.Documentation.Summary, Converter={StaticResource StringToVisibilityConverter}}" >  
+                                                <Run Text="{Binding Items[0].DeclaringType.Documentation.Summary, Mode=OneWay}" Foreground="{DynamicResource ToolTip.Value}" /><LineBreak/>
+                                            </TextBlock>
+
+                                            <TextBlock TextWrapping="Wrap" Visibility="{Binding Items[0].DeclaringType.Documentation.Remarks, Converter={StaticResource StringToVisibilityConverter}}">
+                                                <Run Text="Remarks:" Foreground="{DynamicResource ToolTip.Key}"/><LineBreak/>
+                                                <Run Text="{Binding Items[0].DeclaringType.Documentation.Remarks, Mode=OneWay}"  Foreground="{DynamicResource ToolTip.Value}"/><LineBreak/>
+                                            </TextBlock>
+                                        </StackPanel>
+                                    </ToolTip>                                    
+                                </TextBlock.ToolTip>
+                            </TextBlock>
                         </DataTemplate>
                     </GroupStyle.HeaderTemplate>
                     <GroupStyle.ContainerStyle>

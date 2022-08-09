@@ -21,7 +21,7 @@ namespace RevitDBExplorer.Domain.DataModel
         private readonly IMemberAccessor memberAccessor;
         private readonly Lazy<DocXml> documentation;
 
-
+        public DeclaringType DeclaringType => declaringType;
         public Kind MemberKind { get; }
         public string Name { get; }
         public string DeclaringTypeName => declaringType.Name;

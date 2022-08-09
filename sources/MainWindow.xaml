@@ -114,13 +114,13 @@
                     </ContextMenu>
                 </Button.ContextMenu>
             </Button>
-            <Button Click="SnoopEvents_Click" Margin="2 0 0 0" ToolTip="Snoop events">
+            <Button Click="SnoopEvents_Click"  ToolTip="Snoop events">
                 <Path Style="{StaticResource IconEvent}" SnapsToDevicePixels="True" />
             </Button>
             <!--<Button Click="SelectorButton_Click" Tag="Updaters" >
                 <Path Style="{StaticResource IconUpdater}" />
             </Button>-->
-            <Button Click="ButtonWithSubMenu_Click"  ToolTip="Snoop addins">
+            <Button Click="ButtonWithSubMenu_Click" Margin="2 0 0 0" ToolTip="Snoop addins">
             <Path Style="{StaticResource IconAddin}" />
             <Button.ContextMenu>
                 <ContextMenu>

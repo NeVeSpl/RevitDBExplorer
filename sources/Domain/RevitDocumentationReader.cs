@@ -24,22 +24,46 @@ namespace RevitDBExplorer.Domain
             }
         }
 
-        //public static DocXml GetTypeComments(Type type)
-        //{
-        //    var typeComments = docXml.GetTypeComments(type);
-        //    return new DocXml(typeComments.Summary?.Trim(), typeComments.Remarks?.Trim());
-        //}
+        public static DocXml GetTypeComments(Type type)
+        {
+            var typeComments = docXml.GetTypeComments(type);
+
+            var doc = new DocXml()
+            {
+                Summary = CleanString(typeComments?.Summary),
+                Remarks = CleanString(typeComments?.Remarks),              
+                Name = type.GetCSharpName(),              
+            };
+
+            return doc;
+        }
         public static DocXml GetPropertyComments(PropertyInfo info)
         {
             var memberComments = docXml?.GetMemberComments(info);
+
+            var invocation = " { get; }";
+            var name = info.Name;
+            if (info.CanWrite)
+            {
+                invocation = " { get; set; }";
+            }
+            var parameters = info?.GetGetGetMethod().GetParameters();
+            if (parameters.Any())
+            {
+                name = info.GetGetGetMethod().Name;
+                invocation = "(" + String.Join(",", parameters.Select(p => $"{p.ParameterType.GetCSharpName()} {p.Name}").ToArray()) + ")";
+            }
+
             var doc = new DocXml()
             {
-                Summary = CleanString(memberComments?.Summary),              
+                Summary = CleanString(memberComments?.Summary),
                 Remarks = CleanString(memberComments?.Remarks),
                 ReturnType = info.PropertyType.GetCSharpName(),
-                Name = info.Name,
-                Invocation = " { get; }"
+                Name = name,
+                Invocation = invocation
             };
+
+
             return doc;
         }
         public static DocXml GetMethodComments(MethodInfo info)
@@ -53,7 +77,7 @@ namespace RevitDBExplorer.Domain
                 ReturnType = info.ReturnType.GetCSharpName(),
                 Name = info.Name,
                 Invocation = "(" + String.Join(",", info.GetParameters().Select(p => $"{p.ParameterType.GetCSharpName()} {p.Name}").ToArray()) + ")"
-        };
+            };
             return doc;
         }
 
@@ -69,11 +93,11 @@ namespace RevitDBExplorer.Domain
         public static readonly DocXml Empty = new DocXml();
 
 
-        public string Summary    { get; init; }
-        public string Returns    { get; init; }
-        public string Remarks    { get; init; }
+        public string Summary { get; init; }
+        public string Returns { get; init; }
+        public string Remarks { get; init; }
         public string ReturnType { get; init; }
-        public string Name       { get; init; }
+        public string Name { get; init; }
         public string Invocation { get; init; }
 
     }
