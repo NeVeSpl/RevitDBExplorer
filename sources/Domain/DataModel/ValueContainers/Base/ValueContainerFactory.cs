@@ -24,31 +24,34 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers.Base
             new DoubleNullableContainer(),
 
             // APIObject primitives
-            new BoundingBoxXYZContainer(),
-            new CategoryContainer(),
+            new ForgeTypeIdContainer(),
+            new ElementIdContainer(),
             new XYZContainer(),
             new UVContainer(),
+            new CategoryContainer(),
             new ColorContainer(),
-            new ForgeTypeIdContainer(),
-            new FailuresProcessingEventArgsContainer(),
-            new DocumentChangedEventArgsContainer(),
-            new RevitApiEventArgsContainer(),            
+            new BoundingBoxXYZContainer(),      
 
             //
+            new TransformContainer(),
+            new ParameterContainer(),
+            new FamilyParameterContainer(),
+            new ParameterSetContainer(),
+            new ParameterMapContainer(),
             new StructuralSectionContainer(),
             new IExternalApplicationContainer(),
             new UpdaterInfoContainer(),
             new BindingMapContainer(),
             new CategoryNameMapContainer(),
-            new ScheduleFieldContainer(),
-            new ParameterContainer(),
-            new FamilyParameterContainer(),
-            new ParameterSetContainer(),
-            new ParameterMapContainer(),
-            new ElementIdContainer(),
-            new ElementContainer(),
+            new ScheduleFieldContainer(),  
+            new FailuresProcessingEventArgsContainer(),
+            new DocumentChangedEventArgsContainer(),
+            new RevitApiEventArgsContainer(),            
             
-            //
+            // generic
+            new ElementContainer(),
+
+            // collections
             new IListElementIdContainer(),
             new IEnumerableContainer()
         };

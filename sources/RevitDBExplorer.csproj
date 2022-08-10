@@ -191,6 +191,7 @@
     <Compile Include="Domain\DataModel\ValueContainers\RevitApiEventArgsContainer.cs" />
     <Compile Include="Domain\DataModel\ValueContainers\StructuralSectionContainer.cs" />
     <Compile Include="Domain\DataModel\ValueContainers\UpdaterInfoContainer.cs" />
+    <Compile Include="Domain\DataModel\ValueContainers\TransformContainer.cs" />
     <Compile Include="Domain\EventMonitor.cs" />
     <Compile Include="Domain\QuoteGenerator.cs" />
     <Compile Include="Domain\DataModel\SnoopableContext.cs" />
@@ -298,7 +299,7 @@
     <Compile Include="UIComponents\List\ValuePresenters\DefaultPresenterVM.cs" />
     <Compile Include="UIComponents\QueryVisualization\QueryVisualizationVM.cs" />
     <Compile Include="UIComponents\QueryVisualization\CommandVM.cs" />
-    <Compile Include="UIComponents\Tree\SnoopableCategoryTreeVM.cs" />
+    <Compile Include="UIComponents\Tree\GroupTreeVM.cs" />
     <Compile Include="UIComponents\Tree\SnoopableObjectTreeVM.cs" />
     <Compile Include="UIComponents\Tree\TreeViewItemVM.cs" />
     <Compile Include="UIComponents\QueryVisualization\QueryVisualizationView.xaml.cs">

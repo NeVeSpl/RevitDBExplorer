@@ -282,7 +282,7 @@ namespace RevitDBExplorer
         
         private void PopulateTreeView(IList<SnoopableObject> objects)
         {
-            var items = objects.GroupBy(x => x.TypeName).Select(x => new SnoopableCategoryTreeVM(x.Key, x, TreeViewFilter)).OrderBy(x => x.Name);
+            var items = objects.GroupBy(x => x.TypeName).Select(x => new GroupTreeVM(x.Key, x, TreeViewFilter)).OrderBy(x => x.Name);
 
             TreeItems = new(items);
             if ((objects.Count > 0 && objects.Count < 29) || (TreeItems.Count() == 1))
@@ -332,7 +332,7 @@ namespace RevitDBExplorer
         {
             if (TreeItems != null)
             {
-                foreach (var item in TreeItems.OfType<SnoopableCategoryTreeVM>())
+                foreach (var item in TreeItems.OfType<GroupTreeVM>())
                 {
                     item.Refresh();
                 }
@@ -360,21 +360,31 @@ namespace RevitDBExplorer
         private void TreeViewItem_MenuItemInRevit_Click(object sender, RoutedEventArgs e)
         {
             var menuItem = sender as MenuItem;
-            var snoopableObject = (menuItem?.DataContext as SnoopableObjectTreeVM)?.Object;
+
+            IEnumerable<SnoopableObject> toSelect = Enumerable.Empty<SnoopableObject>();
+            if (menuItem?.DataContext is SnoopableObjectTreeVM snoopableObject)
+            {
+                toSelect = new SnoopableObject[] { snoopableObject.Object };
+            }
+            if (menuItem?.DataContext is GroupTreeVM group)
+            {
+                toSelect = group.GetAllSnoopableObjects();
+            }
+
             try
             {
-                if (snoopableObject?.Object is not null)
+                if (toSelect.Any())
                 {
                     switch (menuItem.Tag)
                     {
                         case "Select":
-                            RevitObjectPresenter.Select(snoopableObject);
+                            RevitObjectPresenter.Select(toSelect);
                             break;
                         case "Isolate":
-                            RevitObjectPresenter.Isolate(snoopableObject);
+                            RevitObjectPresenter.Isolate(toSelect);
                             break;
                         case "Show":
-                            RevitObjectPresenter.Show(snoopableObject);
+                            RevitObjectPresenter.Show(toSelect);
                             break;
                     }
                 }

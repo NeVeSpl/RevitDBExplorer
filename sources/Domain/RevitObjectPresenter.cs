@@ -1,4 +1,6 @@
-﻿using Autodesk.Revit.DB;
+﻿using System.Linq;
+using System.Collections.Generic;
+using Autodesk.Revit.DB;
 using RevitDBExplorer.Domain.DataModel;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
@@ -7,11 +9,12 @@ namespace RevitDBExplorer.Domain
 {
     internal static class RevitObjectPresenter
     {
-        public static void Show(SnoopableObject snoopableObject)
+        public static void Show(IEnumerable<SnoopableObject> snoopableObjects)
         {
-            if (snoopableObject.Object is Element element)
+            var elementIds = snoopableObjects.Select(x => x.Object).OfType<Element>().Select(x => x.Id).ToList();
+            if (elementIds.Any())
             {
-                ExternalExecutor.ExecuteInRevitContextAsync(x => { x.ActiveUIDocument?.ShowElements(new[] { element.Id }); });
+                ExternalExecutor.ExecuteInRevitContextAsync(x => { x.ActiveUIDocument?.ShowElements(elementIds); });
             }
         }
         public static bool IsShowInRevitAvailable(SnoopableObject snoopableObject)
@@ -23,9 +26,10 @@ namespace RevitDBExplorer.Domain
             return false;
         }
 
-        public static void Isolate(SnoopableObject snoopableObject)
+        public static void Isolate(IEnumerable<SnoopableObject> snoopableObjects)
         {
-            if (snoopableObject.Object is Element element)
+            var elementIds = snoopableObjects.Select(x => x.Object).OfType<Element>().Select(x => x.Id).ToList();
+            if (elementIds.Any())
             {
                 ExternalExecutor.ExecuteInRevitContextAsync(x =>
                 {
@@ -39,24 +43,26 @@ namespace RevitDBExplorer.Domain
                         view.DisableTemporaryViewMode(Autodesk.Revit.DB.TemporaryViewMode.TemporaryHideIsolate);
                     }
 
-                    view.IsolateElementsTemporary(new[] { element.Id });
+                    view.IsolateElementsTemporary(elementIds);
                 });
             }
         }
 
-        public static void Select(SnoopableObject snoopableObject)
+        public static void Select(IEnumerable<SnoopableObject> snoopableObjects)
         {
-            if (snoopableObject.Object is Element element)
+            var elementIds = snoopableObjects.Select(x => x.Object).OfType<Element>().Select(x => x.Id).ToList();
+            if (elementIds.Any())
             {
-                ExternalExecutor.ExecuteInRevitContextAsync(x => { x.ActiveUIDocument?.Selection.SetElementIds(new[] { element.Id }); }) ;
+                ExternalExecutor.ExecuteInRevitContextAsync(x => { x.ActiveUIDocument?.Selection.SetElementIds(elementIds); }) ;
             }
-            if (snoopableObject.Object is GeometryObject geometryObject)
+            var geometryObjects = snoopableObjects.Select(x => x.Object).OfType<GeometryObject>().ToList();
+            if (geometryObjects.Any())
             {
-                var reference = geometryObject.GetReference();
-                if (reference != null)
+                var references = geometryObjects.Select(x => x.GetReference()).ToList();
+                if (references.Any())
                 {
 #if R2023b
-                    ExternalExecutor.ExecuteInRevitContextAsync(x => { x.ActiveUIDocument?.Selection.SetReferences(new[] { reference }); });
+                    ExternalExecutor.ExecuteInRevitContextAsync(x => { x.ActiveUIDocument?.Selection.SetReferences(references); });
 #endif
                 }
             }

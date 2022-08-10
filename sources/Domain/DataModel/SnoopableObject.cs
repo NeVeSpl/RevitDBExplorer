@@ -57,6 +57,18 @@ namespace RevitDBExplorer.Domain.DataModel
                     }
                 }
             }
+            if (@object is Parameter parameter)
+            {                
+                NamePrefix = "     ";
+                if (parameter.Id.IntegerValue > -1)
+                {
+                    NamePrefix = "[P]";
+                }
+                if (parameter.IsShared)
+                {
+                    NamePrefix = "[S]";
+                }
+            }
         }
 
                 

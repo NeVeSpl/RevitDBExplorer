@@ -160,8 +160,13 @@
 
         <TreeView Grid.Row="3" Grid.Column="0" ItemsSource="{Binding TreeItems}" Margin="0 2 2 0" BorderThickness="0"  SelectedItemChanged="TreeView_SelectedItemChanged" VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling" SizeChanged="Window_SizeChanged">
             <TreeView.Resources>
-                <HierarchicalDataTemplate DataType="{x:Type componentTree:SnoopableCategoryTreeVM}" ItemsSource="{Binding Items}">
+                <HierarchicalDataTemplate DataType="{x:Type componentTree:GroupTreeVM}" ItemsSource="{Binding Items}">
                     <StackPanel Orientation="Horizontal">
+                        <StackPanel.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Select in Revit" Click="TreeViewItem_MenuItemInRevit_Click" Tag="Select" />
+                            </ContextMenu>
+                        </StackPanel.ContextMenu>
                         <StackPanel.Resources>
                             <Style TargetType="{x:Type TextBlock}" x:Key="postfix">
                                 <Style.Triggers>

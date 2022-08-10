@@ -13,7 +13,7 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers.Base
         private T value;
 
         public T Value => value;
-        
+
         public Type Type => type;
         public virtual string TypeName
         {
@@ -37,21 +37,28 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers.Base
                 this.value = (T)value;
             }
             return this;
-        }        
+        }
 
-        public string ValueAsString 
+        public string ValueAsString
         {
-            get 
+            get
             {
                 if (value is null) return "<null>";
                 var label = ToLabel(value);
                 if (string.IsNullOrEmpty(label)) return "<empty>";
                 return label;
-            }            
+            }
         }
         protected abstract string ToLabel(T value);
 
-        public bool CanBeSnooped => CanBeSnoooped(value);
+        public bool CanBeSnooped
+        {
+            get 
+            {
+                if (value is null) return false;
+                return CanBeSnoooped(value);
+            }
+        }
         protected abstract bool CanBeSnoooped(T value);
 
         public IEnumerable<SnoopableObject> Snoop(Document document) => Snooop(document, value) ?? Enumerable.Empty<SnoopableObject>();

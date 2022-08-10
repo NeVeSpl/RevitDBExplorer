@@ -11,7 +11,7 @@ using RevitDBExplorer.Domain.DataModel;
 
 namespace RevitDBExplorer.UIComponents.Tree
 {
-    internal class SnoopableCategoryTreeVM : TreeViewItemVM
+    internal class GroupTreeVM : TreeViewItemVM
     {
         private string name;
         private int count;
@@ -42,36 +42,36 @@ namespace RevitDBExplorer.UIComponents.Tree
         }
 
 
-        public SnoopableCategoryTreeVM(string name, IEnumerable<SnoopableObject> items, Predicate<object> itemFilter)
+        public GroupTreeVM(string name, IEnumerable<SnoopableObject> items, Predicate<object> itemFilter)
         {
             Name = name;
             Count = items.Count();
             if (items?.Any() == true)
             {
-                List<SnoopableCategoryTreeVM> groupedItems = null;
+                List<GroupTreeVM> groupedItems = null;
                 if (name == nameof(FamilyInstance) || name == nameof(Element) || name == nameof(FamilySymbol) || name == nameof(IndependentTag))
                 {
-                    groupedItems = items.GroupBy(x => (x.Object as Element).Category?.Id).Select(x => new SnoopableCategoryTreeVM(Labeler.GetLabelForCategory(x.Key), x, itemFilter)).ToList();
+                    groupedItems = items.GroupBy(x => (x.Object as Element).Category?.Id).Select(x => new GroupTreeVM(Labeler.GetLabelForCategory(x.Key), x, itemFilter)).ToList();
                 }
                 if (name == nameof(Family))
                 {
-                    groupedItems = items.GroupBy(x => (x.Object as Family).FamilyCategoryId).Select(x => new SnoopableCategoryTreeVM(Labeler.GetLabelForCategory(x.Key), x, itemFilter)).ToList();
+                    groupedItems = items.GroupBy(x => (x.Object as Family).FamilyCategoryId).Select(x => new GroupTreeVM(Labeler.GetLabelForCategory(x.Key), x, itemFilter)).ToList();
                 }
                 if (name == nameof(DetailLine))
                 {
-                    groupedItems = items.GroupBy<SnoopableObject, Element>(x => (x.Object as DetailLine).LineStyle, ElementEqualityComparer.Instance).Select(x => new SnoopableCategoryTreeVM(x.Key.Name, x, itemFilter)).ToList();
+                    groupedItems = items.GroupBy<SnoopableObject, Element>(x => (x.Object as DetailLine).LineStyle, ElementEqualityComparer.Instance).Select(x => new GroupTreeVM(x.Key.Name, x, itemFilter)).ToList();
                 }
                 if (name == nameof(Dimension))
                 {
-                    groupedItems = items.GroupBy<SnoopableObject, Element>(x => (x.Object as Dimension).DimensionType, ElementEqualityComparer.Instance).Select(x => new SnoopableCategoryTreeVM(x.Key.Name, x, itemFilter)).ToList();
+                    groupedItems = items.GroupBy<SnoopableObject, Element>(x => (x.Object as Dimension).DimensionType, ElementEqualityComparer.Instance).Select(x => new GroupTreeVM(x.Key.Name, x, itemFilter)).ToList();
                 }
                 if (name == nameof(Wall))
                 {
-                    groupedItems = items.GroupBy<SnoopableObject, Element>(x => (x.Object as Wall).WallType, ElementEqualityComparer.Instance).Select(x => new SnoopableCategoryTreeVM(x.Key.Name, x, itemFilter)).ToList();
+                    groupedItems = items.GroupBy<SnoopableObject, Element>(x => (x.Object as Wall).WallType, ElementEqualityComparer.Instance).Select(x => new GroupTreeVM(x.Key.Name, x, itemFilter)).ToList();
                 }
                 if (name == nameof(Floor))
                 {
-                    groupedItems = items.GroupBy<SnoopableObject, Element>(x => (x.Object as Floor).FloorType, ElementEqualityComparer.Instance).Select(x => new SnoopableCategoryTreeVM(x.Key.Name, x, itemFilter)).ToList();
+                    groupedItems = items.GroupBy<SnoopableObject, Element>(x => (x.Object as Floor).FloorType, ElementEqualityComparer.Instance).Select(x => new GroupTreeVM(x.Key.Name, x, itemFilter)).ToList();
                 }
                 if (groupedItems != null)
                 {                    
@@ -95,15 +95,34 @@ namespace RevitDBExplorer.UIComponents.Tree
                 var collectionView = CollectionViewSource.GetDefaultView(Items);
                 collectionView.Refresh();
                 int count = 0;
-                foreach (SnoopableCategoryTreeVM item in Items.OfType<SnoopableCategoryTreeVM>())
+                foreach (var group in Items.OfType<GroupTreeVM>())
                 {
-                    item.Refresh();
-                    count += item.Count;
+                    group.Refresh();
+                    count += group.Count;
                 }
                 Count = count + collectionView.OfType<SnoopableObjectTreeVM>().Count(); 
             }
-        }   
-        
+        }
+
+        public IEnumerable<SnoopableObject> GetAllSnoopableObjects()
+        {
+            if (Items != null)
+            {
+                var collectionView = CollectionViewSource.GetDefaultView(Items);
+                foreach (var item in collectionView.OfType<SnoopableObjectTreeVM>())
+                {
+                    yield return item.Object;
+                }
+                foreach (var group in Items.OfType<GroupTreeVM>())
+                {
+                    foreach (var item in group.GetAllSnoopableObjects())
+                    {
+                        yield return item;
+                    }
+                }
+            }
+        }
+
 
         class ElementEqualityComparer : IEqualityComparer<Element>
         {
