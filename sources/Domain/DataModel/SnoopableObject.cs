@@ -12,6 +12,7 @@ using RevitDBExplorer.WPF;
 
 namespace RevitDBExplorer.Domain.DataModel
 {
+    internal enum Icon { None, Empty, ProjectParameter, SharedParameter }
     internal class SnoopableObject : BaseViewModel
     {        
         private readonly List<SnoopableObject> items;   
@@ -21,6 +22,7 @@ namespace RevitDBExplorer.Domain.DataModel
         public Document Document { get; }
         public string Name { get; init; }
         public string NamePrefix { get; init; }
+        public Icon NamePrefixIcon { get; init; }
         public string TypeName { get; }       
         public IEnumerable<SnoopableObject> Items => items;
         public int Index { get; init; } = -1;
@@ -58,15 +60,15 @@ namespace RevitDBExplorer.Domain.DataModel
                 }
             }
             if (@object is Parameter parameter)
-            {                
-                NamePrefix = "     ";
+            {
+                NamePrefixIcon = Icon.Empty;
                 if (parameter.Id.IntegerValue > -1)
                 {
-                    NamePrefix = "[P]";
+                    NamePrefixIcon = Icon.ProjectParameter;
                 }
                 if (parameter.IsShared)
                 {
-                    NamePrefix = "[S]";
+                    NamePrefixIcon = Icon.SharedParameter;
                 }
             }
         }

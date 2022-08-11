@@ -158,8 +158,10 @@
         </Grid>
 
 
-        <TreeView Grid.Row="3" Grid.Column="0" ItemsSource="{Binding TreeItems}" Margin="0 2 2 0" BorderThickness="0"  SelectedItemChanged="TreeView_SelectedItemChanged" VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling" SizeChanged="Window_SizeChanged">
+        <TreeView Grid.Row="3" Grid.Column="0" ItemsSource="{Binding TreeItems}" Margin="0 2 2 0" BorderThickness="0"  SelectedItemChanged="TreeView_SelectedItemChanged" VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling" SizeChanged="Window_SizeChanged" x:Name="cTreeSecretName">
             <TreeView.Resources>
+                <converters:ToResourceWithKeyConverter x:Key="ToResourceWithKeyConverter" FrameworkElement="{Binding ElementName=cTreeSecretName}" />
+                
                 <HierarchicalDataTemplate DataType="{x:Type componentTree:GroupTreeVM}" ItemsSource="{Binding Items}">
                     <StackPanel Orientation="Horizontal">
                         <StackPanel.ContextMenu>
@@ -195,7 +197,9 @@
                                 <MenuItem Header="Snoop in a new window" Click="TreeViewItem_MenuItemSnoop_Click" />
                             </ContextMenu>
                         </StackPanel.ContextMenu>
-                        <TextBlock>             
+
+                        <Path Style="{Binding Object.NamePrefixIcon, Converter={StaticResource ToResourceWithKeyConverter}, ConverterParameter=Icon}" Margin="0 1 4 0" Fill="{Binding ElementName=cTextBlock, Path=Foreground}"  />
+                        <TextBlock x:Name="cTextBlock">             
                              <Run Text="{Binding Prefix, Mode=OneWay}">
                                  <Run.Style>
                                      <Style TargetType="{x:Type Run}">

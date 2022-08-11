@@ -28,7 +28,11 @@
     <StreamGeometry x:Key="vFlash">M7,2V13H10V22L17,10H13L17,2H7Z</StreamGeometry>
     <StreamGeometry x:Key="vSourceBranchRefresh">M13 14C9.64 14 8.54 15.35 8.18 16.24C9.25 16.7 10 17.76 10 19C10 20.66 8.66 22 7 22S4 20.66 4 19C4 17.69 4.83 16.58 6 16.17V7.83C4.83 7.42 4 6.31 4 5C4 3.34 5.34 2 7 2S10 3.34 10 5C10 6.31 9.17 7.42 8 7.83V13.12C8.88 12.47 10.16 12 12 12C14.67 12 15.56 10.66 15.85 9.77C14.77 9.32 14 8.25 14 7C14 5.34 15.34 4 17 4S20 5.34 20 7C20 8.34 19.12 9.5 17.91 9.86C17.65 11.29 16.68 14 13 14M7 18C6.45 18 6 18.45 6 19S6.45 20 7 20 8 19.55 8 19 7.55 18 7 18M7 4C6.45 4 6 4.45 6 5S6.45 6 7 6 8 5.55 8 5 7.55 4 7 4M17 6C16.45 6 16 6.45 16 7S16.45 8 17 8 18 7.55 18 7 17.55 6 17 6M18 14C19.1 14 20.1 14.4 20.8 15.2L22 14V18H18L19.8 16.2C19.3 15.8 18.7 15.5 18 15.5C16.6 15.5 15.5 16.6 15.5 18S16.6 20.5 18 20.5C18.8 20.5 19.5 20.1 20 19.5H21.7C21.1 21 19.7 22 18 22C15.8 22 14 20.2 14 18S15.8 14 18 14Z</StreamGeometry>
     <StreamGeometry x:Key="vPlusBox">M17,13H13V17H11V13H7V11H11V7H13V11H17M19,3H5C3.89,3 3,3.89 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5C21,3.89 20.1,3 19,3Z</StreamGeometry>
-    
+
+    <StreamGeometry x:Key="vAccount">M12,4A4,4 0 0,1 16,8A4,4 0 0,1 12,12A4,4 0 0,1 8,8A4,4 0 0,1 12,4M12,14C16.42,14 20,15.79 20,18V20H4V18C4,15.79 7.58,14 12,14Z</StreamGeometry>
+    <StreamGeometry x:Key="vAccountOutline">M12,4A4,4 0 0,1 16,8A4,4 0 0,1 12,12A4,4 0 0,1 8,8A4,4 0 0,1 12,4M12,6A2,2 0 0,0 10,8A2,2 0 0,0 12,10A2,2 0 0,0 14,8A2,2 0 0,0 12,6M12,13C14.67,13 20,14.33 20,17V20H4V17C4,14.33 9.33,13 12,13M12,14.9C9.03,14.9 5.9,16.36 5.9,17V18.1H18.1V17C18.1,16.36 14.97,14.9 12,14.9Z</StreamGeometry>
+    <StreamGeometry x:Key="vAccountMultiple">M16 17V19H2V17S2 13 9 13 16 17 16 17M12.5 7.5A3.5 3.5 0 1 0 9 11A3.5 3.5 0 0 0 12.5 7.5M15.94 13A5.32 5.32 0 0 1 18 17V19H22V17S22 13.37 15.94 13M15 4A3.39 3.39 0 0 0 13.07 4.59A5 5 0 0 1 13.07 10.41A3.39 3.39 0 0 0 15 11A3.5 3.5 0 0 0 15 4Z</StreamGeometry>
+
     <Style x:Key="IconMemberKind" TargetType="Path" >
         <Setter Property="Fill" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
         <Setter Property="Stretch" Value="Uniform"/>
@@ -36,21 +40,49 @@
     </Style>
 
     <Style x:Key="IconProperty" TargetType="Path" BasedOn="{StaticResource IconMemberKind}">
-        <Setter Property="Data" Value="{StaticResource vWrench}"/>       
+        <Setter Property="Data" Value="{StaticResource vWrench}"/>
+        <Setter Property="ToolTip" Value="Property" />
     </Style>
     <Style x:Key="IconMethod" TargetType="Path" BasedOn="{StaticResource IconMemberKind}">
-        <Setter Property="Data" Value="{StaticResource vCubeOutline}"/>      
+        <Setter Property="Data" Value="{StaticResource vCubeOutline}"/>
+        <Setter Property="ToolTip" Value="Method" />
     </Style>
-    <Style x:Key="IconMethodStatic" TargetType="Path" BasedOn="{StaticResource IconMemberKind}">
-        <Setter Property="Data" Value="{StaticResource vCube}"/>        
+    <Style x:Key="IconStaticMethod" TargetType="Path" BasedOn="{StaticResource IconMemberKind}">
+        <Setter Property="Data" Value="{StaticResource vCube}"/>
+        <Setter Property="ToolTip" Value="Static Method" />
     </Style>
     <Style x:Key="IconExtra" TargetType="Path" BasedOn="{StaticResource IconMemberKind}">
-        <Setter Property="Data" Value="{StaticResource vStar}"/>       
+        <Setter Property="Data" Value="{StaticResource vStar}"/>
+        <Setter Property="ToolTip" Value="Extra - not available directly in API" />
     </Style>
     <Style x:Key="IconAsArgument" TargetType="Path" BasedOn="{StaticResource IconMemberKind}">
         <Setter Property="Data" Value="{StaticResource vCubeScan}"/>
+        <Setter Property="ToolTip" Value="Parameter of method from different type" />
         <Setter Property="Width" Value="10"/>
     </Style>
+
+
+
+    <Style x:Key="IconTree" TargetType="Path" >        
+        <Setter Property="Stretch" Value="Uniform"/>
+        <Setter Property="Width" Value="10"/>
+    </Style>
+
+    <Style x:Key="IconNone" TargetType="Path" BasedOn="{StaticResource IconTree}">
+        <Setter Property="Visibility" Value="Collapsed"/>        
+    </Style>
+    <Style x:Key="IconEmpty" TargetType="Path" BasedOn="{StaticResource IconTree}">
+        <Setter Property="Visibility" Value="Hidden"/>
+    </Style>
+    <Style x:Key="IconProjectParameter" TargetType="Path" BasedOn="{StaticResource IconTree}">
+        <Setter Property="Data" Value="{StaticResource vAccountOutline}"/>
+        <Setter Property="ToolTip" Value="Project or family parameter" />
+    </Style>
+    <Style x:Key="IconSharedParameter" TargetType="Path" BasedOn="{StaticResource IconTree}">
+        <Setter Property="Data" Value="{StaticResource vAccount}"/>
+        <Setter Property="ToolTip" Value="Shared parameter" />
+    </Style>
+
 
     <Style x:Key="BusyIndicator" TargetType="Path" >
         <Setter Property="Fill" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
@@ -63,8 +95,7 @@
     <Style x:Key="IconSelector" TargetType="Path" >
         <Setter Property="Fill" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
         <Setter Property="Stretch" Value="Uniform"/>
-        <Setter Property="SnapsToDevicePixels" Value="true"/>
-        
+        <Setter Property="SnapsToDevicePixels" Value="true"/>        
     </Style>
 
     <Style x:Key="IconSelection" TargetType="Path" BasedOn="{StaticResource IconSelector}">

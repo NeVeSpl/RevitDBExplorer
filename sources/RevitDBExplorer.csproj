@@ -320,6 +320,7 @@
     <Compile Include="WPF\Converters\ColorToBrushConverter.cs" />
     <Compile Include="WPF\Converters\EnumToVisibilityConverter.cs" />
     <Compile Include="WPF\Converters\FeetToMetersConverter.cs" />
+    <Compile Include="WPF\Converters\ToResourceWithKeyConverter.cs" />
     <Compile Include="WPF\Converters\StringIsNotNullOrEmptyToBoolConverter.cs" />
     <Compile Include="WPF\Converters\StringIsNullOrEmptyToBoolConverter.cs" />
     <Compile Include="WPF\Converters\MultiBindingOrConverter.cs" />

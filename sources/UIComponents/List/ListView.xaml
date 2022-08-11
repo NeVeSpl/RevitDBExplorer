@@ -19,19 +19,20 @@
             </ResourceDictionary>
         </Grid.Resources>
 
-        <ListView BorderThickness="0" ItemsSource="{Binding ListItems}" SelectionMode="Single" SelectedItem="{Binding ListSelectedItem}" AlternationCount="2" VirtualizingStackPanel.IsVirtualizing="True" >
+        <ListView BorderThickness="0" ItemsSource="{Binding ListItems}" SelectionMode="Single" SelectedItem="{Binding ListSelectedItem}" AlternationCount="2" VirtualizingStackPanel.IsVirtualizing="True" x:Name="cSecretName">
 
             <ListView.InputBindings>
                 <KeyBinding Key="Enter" Command="{Binding KeyDown_Enter_Command}"/>
             </ListView.InputBindings>
 
             <ListView.Resources>
-                <ResourceDictionary>   
+                <ResourceDictionary>
                     <wpf:BindingProxy x:Key="Proxy" Data="{Binding}" />
 
                     <converters:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
                     <converters:PercentageOfValueConverter x:Key="PercentageOfValueConverter"/>
                     <converters:EnumMatchToVisibilityConverter x:Key="EnumMatchToVisibilityConverter"/>
+                    <converters:ToResourceWithKeyConverter x:Key="ToResourceWithKeyConverter" FrameworkElement="{Binding ElementName=cSecretName}" />
                     <wpf:DataTemplateSelectorForPropertyType x:Key="DataTemplateSelectorForPropertyType"/>
 
                     <ContextMenu x:Key="ItemContextMenu">
@@ -70,7 +71,7 @@
                         </StackPanel>
                     </ToolTip>
 
-                    <Style TargetType="{x:Type ListViewItem}" BasedOn="{StaticResource {x:Type ListViewItem}}" >  
+                    <Style TargetType="{x:Type ListViewItem}" BasedOn="{StaticResource {x:Type ListViewItem}}" >
                         <Setter Property="ContextMenu" Value="{StaticResource ItemContextMenu}" />
                         <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
                         <Setter Property="HorizontalAlignment" Value="Stretch"/>
@@ -102,7 +103,7 @@
                 <GridView AllowsColumnReorder="False">
 
                     <GridViewColumn Header="Name" Width="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListView}}, Path=ActualWidth, Converter={StaticResource PercentageOfValueConverter}, ConverterParameter=38}">
-                        
+
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <DataTemplate.Resources>
@@ -112,11 +113,7 @@
                                     </Style>
                                 </DataTemplate.Resources>
                                 <StackPanel Orientation="Horizontal">
-                                    <Path Style="{StaticResource IconProperty}" Margin="0 1 4 0" Visibility="{Binding MemberKind, Converter={StaticResource EnumMatchToVisibilityConverter}, ConverterParameter= Property}" ToolTip="Property"/>
-                                    <Path Style="{StaticResource IconMethod}" Margin="0 1 4 0" Visibility="{Binding MemberKind, Converter={StaticResource EnumMatchToVisibilityConverter}, ConverterParameter= Method}" ToolTip="Method"/>
-                                    <Path Style="{StaticResource IconMethodStatic}" Margin="0 1 4 0" Visibility="{Binding MemberKind, Converter={StaticResource EnumMatchToVisibilityConverter}, ConverterParameter= StaticMethod}" ToolTip="Static Method"/>
-                                    <Path Style="{StaticResource IconAsArgument}" Margin="0 1 4 0" Visibility="{Binding MemberKind, Converter={StaticResource EnumMatchToVisibilityConverter}, ConverterParameter= AsArgument}" ToolTip="Parameter of method from different type"/>
-                                    <Path Style="{StaticResource IconExtra}" Margin="0 1 4 0" Visibility="{Binding MemberKind, Converter={StaticResource EnumMatchToVisibilityConverter}, ConverterParameter= Extra}" ToolTip="Extra - not available directly in API"/>
+                                    <Path Style="{Binding MemberKind, Converter={StaticResource ToResourceWithKeyConverter}, ConverterParameter=Icon}" Margin="0 1 4 0"  />
                                     <TextBlock Text="{Binding Name, Mode=OneWay}" Foreground="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"  />
                                 </StackPanel>
                             </DataTemplate>
@@ -173,7 +170,7 @@
                                                 <Run Text="{Binding Items[0].DeclaringType.Documentation.Remarks, Mode=OneWay}"  Foreground="{DynamicResource ToolTip.Value}"/><LineBreak/>
                                             </TextBlock>
                                         </StackPanel>
-                                    </ToolTip>                                    
+                                    </ToolTip>
                                 </TextBlock.ToolTip>
                             </TextBlock>
                         </DataTemplate>
