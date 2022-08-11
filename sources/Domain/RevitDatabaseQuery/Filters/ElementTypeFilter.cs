@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Internals
+namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Filters
 {
-    internal class Element
+    internal class ElementTypeFilter : Filter
     {
     }
 }

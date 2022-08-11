@@ -11,11 +11,10 @@ using SimMetrics.Net;
 
 namespace RevitDBExplorer.Domain.RevitDatabaseQuery
 {
-    internal enum LookupFor { Category = 1, Class = 2, ElementId = 4, Parameter = 8,  All = 255}    
-        
-
     internal static class FuzzySearchEngine
     {
+        internal enum LookFor { Category = 1, Class = 2, ElementId = 4, Parameter = 8, All = 255 }
+
         static readonly List<(string, BuiltInCategory)> Categories;
         static readonly List<(string, Type)> Classes;
         static readonly List<(string, BuiltInParameter)> Parameters;
@@ -59,14 +58,18 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
         {
 
         }
+        public static void LoadDocumentSpecificData(Document document)
+        {
+            LoadUserParameters(document);
+        }
 
 
-        public static IEnumerable<ILookupResult> Lookup(string text, LookupFor lookupFor = LookupFor.All)
+        public static IEnumerable<ILookupResult> Lookup(string text, LookFor lookupFor = LookFor.All)
         {
             var needle = text.Clean();
             var found = new List<ILookupResult>();
 
-            if (lookupFor.HasFlag(LookupFor.ElementId))
+            if (lookupFor.HasFlag(LookFor.ElementId))
             {
                 var words = text.Split(' ');
                 foreach (var word in words)
@@ -78,7 +81,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
                 }
             }
 
-            if (lookupFor.HasFlag(LookupFor.Category))
+            if (lookupFor.HasFlag(LookFor.Category))
             {
                 foreach (var item in Categories)
                 {
@@ -90,7 +93,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
                 }
             }
 
-            if (lookupFor.HasFlag(LookupFor.Class))
+            if (lookupFor.HasFlag(LookFor.Class))
             { 
                 foreach (var item in Classes)
                 {
@@ -102,7 +105,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
                 }
             }
 
-            if (lookupFor.HasFlag(LookupFor.Parameter))
+            if (lookupFor.HasFlag(LookFor.Parameter))
             {
                 foreach (var item in Parameters)
                 {
@@ -129,9 +132,13 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
                 double prevScore = sorted.First().LevensteinScore;
                 foreach (var item in sorted.Take(27))
                 {
-                    if (Math.Abs(item.LevensteinScore - prevScore) < 0.11)
+                    if (Math.Abs(item.LevensteinScore - prevScore) < 0.13)
                     {
                         yield return item;
+                    }
+                    else
+                    {
+                        yield break;
                     }
                 }
             }
@@ -209,7 +216,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
             }
             return parameters;
         }
-        public static void LoadUserParameters(Document document)
+        private static void LoadUserParameters(Document document)
         {
             var newList = new List<(string, ElementId)>(UserParameters.Count);
             foreach (var userParam in new FilteredElementCollector(document).OfClass(typeof(ParameterElement)))
@@ -223,119 +230,5 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
         {
             return text.RemoveWhitespace().ToLower();
         }
-    }
-
-
-    internal interface ILookupResult
-    {
-        string Name { get;  }
-        string Label { get; }
-        double LevensteinScore { get;  }
-        bool IsCategory { get; }
-        bool IsClass { get; }
-        bool IsElementId { get; }
-        bool IsBuiltInParameter { get; }
-    }
-
-    internal class LookupResult<T> : ILookupResult
-    {
-        public T  Value { get; init; }
-        public double LevensteinScore { get; init; }
-        public string Name { get; init; }
-        public string Label { get; init; }
-        public bool IsCategory { get; init; }
-        public bool IsClass { get; init; }
-        public bool IsElementId { get; init; }
-        public bool IsBuiltInParameter { get; init; }
-
-
-        public LookupResult(T value, double levensteinScore)
-        {
-            Value = value;
-            LevensteinScore = levensteinScore;           
-        }
-    }
-
-    internal class CategoryMatch : LookupResult<BuiltInCategory>
-    {
-        public CategoryMatch(BuiltInCategory value, double levensteinScore) : base(value, levensteinScore)
-        {
-            IsCategory = true;
-            Name = $"BuiltInCategory.{value}";
-            Label = LabelUtils.GetLabelFor(value);
-        }
-    }
-    internal class TypeMatch : LookupResult<Type>
-    {
-        public TypeMatch(Type value, double levensteinScore) : base(value, levensteinScore)
-        {
-            IsClass = true;
-            Name = $"typeof({value.Name})";
-        }
-    }
-    internal class ElementIdMatch : LookupResult<ElementId>
-    {
-        public ElementIdMatch(ElementId value, double levensteinScore) : base(value, levensteinScore)
-        {
-            IsElementId = true;
-            Name = $"new ElementId({value.IntegerValue})";
-        }
-    }
-    internal class ParameterMatch : LookupResult<ElementId>
-    {
-        private static readonly Dictionary<ElementId, StorageType> storageTypeForUserParameters = new();
-        public BuiltInParameter BuiltInParameter { get; init; }
-        public StorageType StorageType { get; private set; } = StorageType.None;
-        
-
-
-        public ParameterMatch(BuiltInParameter value, double levensteinScore) : base(new ElementId(value), levensteinScore)
-        {
-            IsBuiltInParameter = true;
-            BuiltInParameter = value;
-            Name = $"BuiltInParameter.{value}";
-            Label = LabelUtils.GetLabelFor(value);
-        }
-
-        public ParameterMatch(ElementId value, double levensteinScore, string name) : base(value, levensteinScore)
-        {
-            IsBuiltInParameter = false;            
-            Name = name;
-            Label = name;
-        }
-
-
-        public void ResolveStorageType(Document document)
-        {
-            if (IsBuiltInParameter)
-            {
-                StorageType = document.get_TypeOfStorage(BuiltInParameter);
-            }
-            else
-            {
-                if (!storageTypeForUserParameters.TryGetValue(Value, out StorageType storage))
-                {
-                    var collector = new FilteredElementCollector(document)
-                        .WherePasses(new LogicalOrFilter(new ElementIsElementTypeFilter(true), new ElementIsElementTypeFilter(false)))
-                        .WherePasses(new LogicalOrFilter(new ElementParameterFilter(ParameterFilterRuleFactory.CreateHasValueParameterRule(Value)), new ElementParameterFilter(ParameterFilterRuleFactory.CreateHasNoValueParameterRule(Value))));
-                    var first = collector.FirstElement();
-                    if (first != null)
-                    {
-                        var parameterElement = document.GetElement(Value) as ParameterElement;
-                        if (parameterElement != null)
-                        {
-                            var definition = parameterElement.GetDefinition();
-                            var parameter = first.get_Parameter(definition);
-                            if (parameter != null)
-                            {
-                                storage = parameter.StorageType;
-                                storageTypeForUserParameters[Value] = storage;
-                            }
-                        }
-                    }
-                }
-                StorageType = storage;
-            }
-        }
-    }
+    }   
 }

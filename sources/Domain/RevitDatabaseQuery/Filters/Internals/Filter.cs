@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
-namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Internals
+namespace RevitDBExplorer.Domain.RevitDatabaseQuery
 {
-    internal class Filter : Element
+    internal class Filter : QueryItem
     {
     }
 }

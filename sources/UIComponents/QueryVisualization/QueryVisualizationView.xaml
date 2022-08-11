@@ -99,9 +99,7 @@
                                             <Setter Property="Background" Value="{DynamicResource Query.Incorrect.Background}"/>
                                             <Setter Property="TextBlock.Foreground" Value="{DynamicResource Query.Incorrect.Foreground}"/>
                                         </DataTrigger>
-                                        <DataTrigger Binding="{Binding Type}" Value="WhoKnows">
-                                            <Setter Property="Background" Value="{DynamicResource Query.WhoKnows.Background}"/>
-                                        </DataTrigger>
+                                        
                                     </Style.Triggers>
                                 </Style>
                             </Border.Style>

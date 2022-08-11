@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
-namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Internals
+namespace RevitDBExplorer.Domain.RevitDatabaseQuery
 {
-    internal class Group : Element
+    internal class Group : QueryItem
     {
-        public List<Element> Elements { get; init; } = new List<Element> ();
+        public List<QueryItem> Elements { get; init; } = new List<QueryItem> ();
 
 
     }

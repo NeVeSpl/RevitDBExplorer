@@ -18,7 +18,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
 
         public static Result Parse(Document document, string query)
         {
-            FuzzySearchEngine.LoadUserParameters(document);
+            FuzzySearchEngine.LoadDocumentSpecificData(document);
             var commands = QueryParser.Parse(query);
             commands.SelectMany(x => x.MatchedArguments).OfType<ParameterMatch>().ToList().ForEach(x => x.ResolveStorageType(document));
 
@@ -76,7 +76,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
         }
         private static Token WherePassesElementIdSetFilter(Token token, List<Command> commands)
         {
-            var ids = commands.SelectMany(x => x.MatchedArguments).Where(x => x.IsElementId).OfType<ElementIdMatch>().ToList();
+            var ids = commands.Where(x => x.Type == CmdType.ElementId).SelectMany(x => x.MatchedArguments).OfType<ElementIdMatch>().ToList();
             if (ids.Any())
             {
                 var filter = new ElementIdSetFilter(ids.Select(x => x.Value).ToList());
@@ -88,7 +88,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
         }
         private static Token OfClass(Token token, List<Command> commands)
         {
-            var types = commands.SelectMany(x => x.MatchedArguments).Where(x => x.IsClass).OfType<TypeMatch>().ToList();
+            var types = commands.Where(x => x.Type == CmdType.Class).SelectMany(x => x.MatchedArguments).OfType<TypeMatch>().ToList();
             if (types.Count == 1)
             {
                 var type = types.First();
@@ -107,7 +107,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
         }
         private static Token OfCategory(Token token, List<Command> commands)
         {
-            var categories = commands.SelectMany(x => x.MatchedArguments).Where(x => x.IsCategory).OfType<LookupResult<BuiltInCategory>>().ToList();
+            var categories = commands.Where(x => x.Type == CmdType.Category).SelectMany(x => x.MatchedArguments).OfType<CategoryMatch>().ToList();
             if (categories.Count == 1)
             {
                 var category = categories.First();
