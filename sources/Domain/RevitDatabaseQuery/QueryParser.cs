@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Autodesk.Revit.DB;
+using Autodesk.Revit.DB.Structure;
 using RevitDBExplorer.Domain.RevitDatabaseQuery.Internals;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
@@ -18,6 +19,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
         Class,
         NameParam, // only inside CommandFactory
         Parameter,
+        StructuralType,
         Incorrect = 383,
         WhoKnows = 666 // only inside CommandFactory
     }
@@ -63,7 +65,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
             }
         }
 
-        private static readonly HashSet<CmdType> quickFilters = new() { CmdType.ActiveView, CmdType.ElementId, CmdType.ElementType, CmdType.NotElementType, CmdType.Category, CmdType.Class };
+        private static readonly HashSet<CmdType> quickFilters = new() { CmdType.ActiveView, CmdType.ElementId, CmdType.ElementType, CmdType.NotElementType, CmdType.Category, CmdType.Class, CmdType.StructuralType };
         private static bool DoesContainQuickFilter(List<Command> commands)
         {
             foreach (var command in commands)
@@ -126,6 +128,11 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
                 {
                     argument = argument.Remove(0, nameof(BuiltInParameter).Length + 1);
                     type = CmdType.Parameter;
+                }
+                if (argument.StartsWith(nameof(StructuralType), StringComparison.OrdinalIgnoreCase))
+                {
+                    argument = argument.Remove(0, nameof(StructuralType).Length + 1);
+                    type = CmdType.StructuralType;
                 }
                 if (Operators.DoesContainAnyValidOperator(argument))
                 {
@@ -235,7 +242,10 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
                 case "typeof":
                     return CmdType.Class;
                 case "name":
-                    return CmdType.NameParam;   
+                    return CmdType.NameParam;
+                case "stru":
+                case "structual":
+                    return CmdType.StructuralType;
             }
             return CmdType.WhoKnows;
         }
@@ -252,7 +262,10 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
                     break;
                 case CmdType.Class:
                     result = FuzzySearchEngine.Lookup(argument, FuzzySearchEngine.LookFor.Class).ToList();
-                    break;                
+                    break;
+                case CmdType.StructuralType:
+                    result = FuzzySearchEngine.Lookup(argument, FuzzySearchEngine.LookFor.StructuralType).ToList();
+                    break;
                 case CmdType.Parameter:                    
                     result = FuzzySearchEngine.Lookup(argument, FuzzySearchEngine.LookFor.Parameter).ToList();
                     break;

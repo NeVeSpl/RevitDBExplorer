@@ -104,8 +104,10 @@ namespace RevitDBExplorer.UIComponents.QueryVisualization
                 case CmdType.Incorrect:
                     Name = command.Text;
                     FilterName = "could not recognize phrase";  
-                    break;              
-                
+                    break;
+                default:
+                    Name = args;
+                    break;
             };
         }
 

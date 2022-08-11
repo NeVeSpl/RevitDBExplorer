@@ -28,8 +28,9 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
             var t4 = OfClass(t3, commands);
             var t5 = OfCategory(t4, commands);      
             var t6 = OfParameter(t5, commands, document);
+            var t7 = OfStructual(t6, commands);
 
-            return new(t6.Collector, t6.CollectorSyntax, commands);
+            return new(t7.Collector, t7.CollectorSyntax, commands);
         }
 
 
@@ -314,6 +315,18 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
                 }
             }
 
+            return token;
+        }
+        private static Token OfStructual(Token token, List<Command> commands)
+        {
+            var structuralTypes = commands.Where(x => x.Type == CmdType.StructuralType).SelectMany(x => x.MatchedArguments).OfType<StructuralTypeMatch>().ToList();
+            if (structuralTypes.Count > 0)
+            {
+                var structuralType = structuralTypes.Select(x => new ElementStructuralTypeFilter(x.Value)).ToList<ElementFilter>();
+                var c = token.Collector.WherePasses(new LogicalOrFilter(structuralType));
+                var s = token.CollectorSyntax;// + $".OfCategory({structuralType.Name})";
+                return new Token(c, s);
+            }
             return token;
         }
 

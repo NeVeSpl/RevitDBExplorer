@@ -13,12 +13,13 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
 {
     internal static class FuzzySearchEngine
     {
-        internal enum LookFor { Category = 1, Class = 2, ElementId = 4, Parameter = 8, All = 255 }
+        internal enum LookFor { Category = 1, Class = 2, ElementId = 4, Parameter = 8, StructuralType = 16, All = 255 }
 
         static readonly List<(string, BuiltInCategory)> Categories;
         static readonly List<(string, Type)> Classes;
         static readonly List<(string, BuiltInParameter)> Parameters;
         static List<(string, ElementId)> UserParameters = Enumerable.Empty<(string, ElementId)>().ToList();
+        static readonly List<(string, StructuralType)> StructuralTypes;
 
         static readonly HashSet<string> ClassesBlackList = new()
         {
@@ -53,6 +54,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
             Categories = LoadCategories();
             Classes = LoadClasses();
             Parameters = LoadParameters();
+            StructuralTypes = LoadStructuralTypes();
         }      
         public static void Init()
         {
@@ -121,6 +123,18 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
                     if (score > 0.67)
                     {                        
                         found.Add(new ParameterMatch(item.Item2, score, item.Item1));
+                    }
+                }
+            }
+
+            if (lookupFor.HasFlag(LookFor.StructuralType))
+            {
+                foreach (var item in StructuralTypes)
+                {
+                    var score = needle.ApproximatelyEquals(item.Item1, SimMetricType.Levenstein);
+                    if (score > 0.61)
+                    {
+                        found.Add(new StructuralTypeMatch(item.Item2, score - 0.1));
                     }
                 }
             }
@@ -224,6 +238,18 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
                 newList.Add((userParam.Name.Clean(), userParam.Id));
             }
             UserParameters = newList;
+        }
+        private static List<(string, StructuralType)> LoadStructuralTypes()
+        {
+            return new List<(string, StructuralType)>()
+            {
+                ("Beam".Clean(), StructuralType.Beam),
+                ("Brace".Clean(), StructuralType.Brace),
+                ("Column".Clean(), StructuralType.Column),
+                ("Footing".Clean(), StructuralType.Footing),
+                ("NonStructural".Clean(), StructuralType.NonStructural),
+                ("UnknownFraming".Clean(), StructuralType.UnknownFraming),               
+            };
         }
 
         private static string Clean(this string text)
