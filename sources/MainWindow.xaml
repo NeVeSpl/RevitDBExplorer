@@ -137,7 +137,17 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
 
-            <controls:TextBoxWithPlaceholder Text="{Binding DatabaseQuery, Mode=TwoWay, Delay=1000, UpdateSourceTrigger=PropertyChanged}" Placeholder="Query Revit database" ToolTip="{Binding DatabaseQueryToolTip}" ToolTipService.ShowDuration="50000"/>
+            <controls:TextBoxWithPlaceholder Text="{Binding DatabaseQuery, Mode=TwoWay, Delay=1000, UpdateSourceTrigger=PropertyChanged}" Placeholder="Query Revit database" ToolTip="{Binding DatabaseQueryToolTip}" ToolTipService.ShowDuration="50000">
+                <controls:TextBoxWithPlaceholder.ContextMenu>
+                    <ContextMenu>                       
+                        <MenuItem Command="ApplicationCommands.Copy" />
+                        <MenuItem Command="ApplicationCommands.Cut" />
+                        <MenuItem Command="ApplicationCommands.Paste" />
+                        <Separator/>
+                        <MenuItem Header ="Copy generated FilteredElementCollector syntax" Tag="Default" Click="TextBox_MenuItem_CopyFilteredElementCollector"/>
+                    </ContextMenu>
+                </controls:TextBoxWithPlaceholder.ContextMenu>
+            </controls:TextBoxWithPlaceholder>
 
             <componentQueryVisualization:QueryVisualizationView  Grid.Row="1" Margin="0 1 0 0" DataContext="{Binding QueryVisualization}"/>
         </Grid>

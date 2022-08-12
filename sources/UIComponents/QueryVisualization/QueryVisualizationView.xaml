@@ -95,6 +95,9 @@
                                         <DataTrigger Binding="{Binding Type}" Value="Parameter">
                                             <Setter Property="Background" Value="{DynamicResource Query.Parameter.Background}"/>
                                         </DataTrigger>
+                                        <DataTrigger Binding="{Binding Type}" Value="StructuralType">
+                                            <Setter Property="Background" Value="{DynamicResource Query.WhoKnows.Background}"/>
+                                        </DataTrigger>
                                         <DataTrigger Binding="{Binding Type}" Value="Incorrect">
                                             <Setter Property="Background" Value="{DynamicResource Query.Incorrect.Background}"/>
                                             <Setter Property="TextBlock.Foreground" Value="{DynamicResource Query.Incorrect.Foreground}"/>

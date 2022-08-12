@@ -11,7 +11,7 @@
         <Grid.Resources>
             <converters:StringIsNotNullOrEmptyToBoolConverter x:Key="StringIsNotNullOrEmptyToBoolConverter"/>
         </Grid.Resources>
-        <TextBox Text="{Binding Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Padding="1 2" KeyDown="TextBox_KeyDown">
+        <TextBox Text="{Binding Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Padding="1 2" KeyDown="TextBox_KeyDown" ContextMenu="{Binding ContextMenu, RelativeSource={RelativeSource Mode=FindAncestor,  AncestorType={x:Type UserControl}}}">
             <TextBox.Background>
                 <VisualBrush AlignmentX="Left" AlignmentY="Center" Stretch="None" >
                  

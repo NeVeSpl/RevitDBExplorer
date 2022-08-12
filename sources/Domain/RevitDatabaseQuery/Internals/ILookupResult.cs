@@ -76,7 +76,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
         {
             CmdType = CmdType.Parameter;
             IsBuiltInParameter = false;
-            Name = name;
+            Name = $"new ElementId({value.IntegerValue})";
             Label = name;
         }
 

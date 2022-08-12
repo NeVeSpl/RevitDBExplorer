@@ -1,12 +1,32 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Autodesk.Revit.DB;
+
+// (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
 namespace RevitDBExplorer.Domain.RevitDatabaseQuery
 {
-    internal class QueryItem
+    internal abstract class QueryItem
     {
+        public ElementFilter Filter 
+        { 
+            get; 
+            init; 
+        }
+        public string FilterSyntax
+        {
+            get; 
+            init;
+        } = String.Empty;
+        public string CollectorSyntax
+        {
+            get 
+            {
+                if (!string.IsNullOrEmpty(FilterSyntax) && !FilterSyntax.StartsWith("."))
+                {
+                    return $".WherePasses({FilterSyntax})";
+                }
+                return FilterSyntax;
+            }
+        } 
     }
 }

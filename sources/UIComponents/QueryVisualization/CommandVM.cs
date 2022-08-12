@@ -66,11 +66,11 @@ namespace RevitDBExplorer.UIComponents.QueryVisualization
             {
                 case CmdType.ActiveView:
                     Name = "active view";
-                    FilterName = "new FilteredElementCollector(document, document.ActiveView.Id)"; 
+                    FilterName = "new VisibleInViewFilter(document, document.ActiveView.Id)"; 
                     break;               
                 case CmdType.ElementId:
                     Name = args;
-                    FilterName = ".WherePasses(new ElementIdSetFilter())";                   
+                    FilterName = "new ElementIdSetFilter()";                   
                     break;
                 case CmdType.ElementType:
                     Name = "element type";
@@ -89,17 +89,22 @@ namespace RevitDBExplorer.UIComponents.QueryVisualization
                     FilterName = ".OfClass()";                   
                     break;                
                 case CmdType.Parameter:
-                    var firstArg = command.MatchedArguments.OfType<ParameterMatch>().First();
-
-                    string argsForParam = String.Join(", ", command.MatchedArguments.Take(1).Select(x => x.Name));
+                    var arguments = command.MatchedArguments.OfType<ParameterMatch>();
+                    var firstArg = arguments.First();
+                    
                     string count = "";
-                    if (command.MatchedArguments.Count() > 1)
+                    if (arguments.Count() > 1)
                     {
-                        count = $" [+{command.MatchedArguments.Count() - 1} more]";
+                        count = $" [+{arguments.Count() - 1} more]";
+                    }
+                    string name = firstArg.Name;
+                    if(!firstArg.IsBuiltInParameter)
+                    {
+                        name = firstArg.Label;
                     }
                     
-                    Name = $"{argsForParam}{count} {command.Operator.ToString(firstArg.StorageType)}";
-                    FilterName = ".WherePasses(new ElementParameterFilter())";                   
+                    Name = $"{name}{count} {command.Operator.ToString(firstArg.StorageType)}";
+                    FilterName = "new ElementParameterFilter()";                   
                     break;
                 case CmdType.Incorrect:
                     Name = command.Text;

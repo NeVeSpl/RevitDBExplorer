@@ -1,14 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Autodesk.Revit.DB;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
 namespace RevitDBExplorer.Domain.RevitDatabaseQuery
 {
-    internal class Filter : QueryItem
-    {
+    internal abstract class Filter : QueryItem
+    {     
+
+
+
     }
 }

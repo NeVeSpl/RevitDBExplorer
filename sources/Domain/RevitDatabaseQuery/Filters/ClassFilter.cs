@@ -1,12 +1,39 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Autodesk.Revit.DB;
+
+// (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
 namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Filters
 {
     internal class ClassFilter : Filter
     {
+        private readonly List<TypeMatch> types;
+        
+
+        public ClassFilter(List<TypeMatch> types)
+        {
+            this.types = types;
+            if (types.Count == 1)
+            {               
+                FilterSyntax = $".OfClass({types.First().Name})";
+            }
+            else
+            {                
+                FilterSyntax = "new ElementMulticlassFilter(new [] {" + String.Join(", ", types.Select(x => x.Name)) + "})";
+            }
+            Filter = new ElementMulticlassFilter(types.Select(x => x.Value).ToList());
+        }
+
+
+        public static IEnumerable<Filter> Create(List<Command> commands)
+        {
+            var types = commands.Where(x => x.Type == CmdType.Class).SelectMany(x => x.MatchedArguments).OfType<TypeMatch>().ToList();
+            if (types.Any())
+            {
+                yield return new ClassFilter(types);
+            }
+        }
     }
 }

@@ -230,19 +230,24 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
         {
             var needle = strType.ToLower().RemoveWhitespace();
             switch (needle)
-            {                
+            {
+                case "i":
                 case "id":
                 case "ids":
                     return CmdType.ElementId;
-                case "category":
+                case "c":
                 case "cat":
+                case "category":                
                     return CmdType.Category;
+                case "t":
                 case "type":
                 case "class":
                 case "typeof":
                     return CmdType.Class;
+                case "n":
                 case "name":
                     return CmdType.NameParam;
+                case "s":
                 case "stru":
                 case "structual":
                     return CmdType.StructuralType;

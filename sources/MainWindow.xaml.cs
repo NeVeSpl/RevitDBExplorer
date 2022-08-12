@@ -267,7 +267,7 @@ namespace RevitDBExplorer
                     if (document == null) return Enumerable.Empty<SnoopableObject>().ToList();
 
                     var result = RevitDatabaseQueryService.Parse(document, query);
-                    DatabaseQueryToolTip = result.CollectorSyntax + ".ToElements();";
+                    DatabaseQueryToolTip = result.CollectorSyntax;
                     QueryVisualization.Update(result.Commands).Forget();
                     return result.Collector.ToElements().Select(x => new SnoopableObject(document, x)).ToList();
                 });
@@ -469,7 +469,11 @@ namespace RevitDBExplorer
             {
                 AppSettings.Default.IsEventMonitorEnabled = menuItem.IsChecked;
             }
-        }       
+        }
+        private void TextBox_MenuItem_CopyFilteredElementCollector(object sender, RoutedEventArgs e)
+        {
+            Clipboard.SetText(DatabaseQueryToolTip);
+        }
 
         #region INotifyPropertyChanged
 

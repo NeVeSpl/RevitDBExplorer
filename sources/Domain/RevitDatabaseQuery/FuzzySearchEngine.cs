@@ -73,10 +73,10 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
 
             if (lookupFor.HasFlag(LookFor.ElementId))
             {
-                var words = text.Split(' ');
-                foreach (var word in words)
+                //var words = text.Split(' ');
+                //foreach (var word in words)
                 {
-                    if (int.TryParse(word, out int intValue))
+                    if (int.TryParse(text, out int intValue))
                     {
                         found.Add(new ElementIdMatch(new ElementId(intValue), 1.0));
                     }

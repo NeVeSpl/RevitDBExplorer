@@ -61,7 +61,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Internals
                 argument = argument.Substring(argument.IndexOf(@operator.Symbol) + @operator.Symbol.Length);
             }
 
-            int.TryParse(argument, out int intArg);
+            bool isInt = int.TryParse(argument, out int intArg);
             double.TryParse(argument, out double doubleArg);
 
             var op = new OperatorWithArgument(@operator)
@@ -69,6 +69,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Internals
                 ArgumentAsString = argument.Trim(),
                 ArgumentAsDouble = doubleArg,
                 ArgumentAsInt = intArg,  
+                IsArgumentInt = isInt,
             };
 
             return op;
@@ -99,6 +100,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Internals
         public string ArgumentAsString { get; init; } = "";
         public double ArgumentAsDouble { get; init; } = double.NaN;
         public int ArgumentAsInt { get; init; } = 0;
+        public bool IsArgumentInt { get; init; }
 
 
         public OperatorWithArgument(Operator @operator = null)
@@ -114,15 +116,21 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Internals
                 return Symbol;
             }
 
-            string arg = storageType switch
+            string arg = $"\"{ArgumentAsString}\"";
+
+            if (storageType == StorageType.Integer)
             {
-                StorageType.String => ArgumentAsString,
-                StorageType.Double => ArgumentAsDouble.ToString(),
-                StorageType.Integer => ArgumentAsInt.ToString(),
-                StorageType.ElementId => ArgumentAsInt.ToString(),
-                StorageType.None => ArgumentAsString,
-                _ => throw new NotImplementedException()
-            };            
+                arg = ArgumentAsInt.ToString();
+            }
+            if (storageType == StorageType.ElementId && IsArgumentInt)
+            {
+                arg = $"new ElementId({ArgumentAsInt})";
+            }
+            if (storageType == StorageType.Double)
+            {
+                arg = ArgumentAsDouble.ToString();
+            }
+                  
             return $"{Symbol} {arg}";
         }
     }
