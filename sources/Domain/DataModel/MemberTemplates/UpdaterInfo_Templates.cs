@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Autodesk.Revit.DB;
-using Autodesk.Revit.DB.ExtensibleStorage;
-using Autodesk.Revit.UI;
 using RevitDBExplorer.Domain.DataModel.MemberAccessors;
 using RevitDBExplorer.Domain.DataModel.MemberTemplates.Base;
 

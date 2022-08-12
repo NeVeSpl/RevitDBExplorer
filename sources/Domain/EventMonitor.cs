@@ -25,7 +25,7 @@ namespace RevitDBExplorer.Domain
             application.FabricationPartBrowserChanged += GenericEventHandler;
             application.FormulaEditing += GenericEventHandler;
 #if R2023b
-application.SelectionChanged += GenericEventHandler;
+            application.SelectionChanged += GenericEventHandler;
 #endif
 
             application.TransferredProjectStandards += GenericEventHandler;

@@ -123,7 +123,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Filters
                 };
             }
 
-            if (storageType == StorageType.String || storageType == StorageType.None|| (storageType == (StorageType.ElementId) && !@operator.IsArgumentInt))
+            if (storageType == StorageType.String || storageType == StorageType.None|| (storageType == (StorageType.ElementId) && !@operator.IsArgumentInt) || (storageType == (StorageType.Double) && !@operator.IsArgumentDouble))
             {
                 rule = @operator.Type switch
                 {
@@ -176,7 +176,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Filters
             }
 
             double epsilon = 1e-6;
-            if (storageType == (StorageType.Double))
+            if (storageType == (StorageType.Double) && @operator.IsArgumentDouble)
             {
                 rule = @operator.Type switch
                 {

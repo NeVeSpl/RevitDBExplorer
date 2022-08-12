@@ -264,11 +264,17 @@
     <Compile Include="Domain\RevitDatabaseQuery\Filters\ElementIdFilter.cs" />
     <Compile Include="Domain\RevitDatabaseQuery\Filters\ElementTypeFilter.cs" />
     <Compile Include="Domain\RevitDatabaseQuery\Filters\ParameterFilter.cs" />
+    <Compile Include="Domain\RevitDatabaseQuery\Filters\CategoryMatch.cs" />
+    <Compile Include="Domain\RevitDatabaseQuery\Filters\ClassMatch.cs" />
+    <Compile Include="Domain\RevitDatabaseQuery\Filters\ElementIdMatch.cs" />
+    <Compile Include="Domain\RevitDatabaseQuery\Filters\VisibleInViewMatch.cs" />
     <Compile Include="Domain\RevitDatabaseQuery\Internals\ILookupResult.cs" />
     <Compile Include="Domain\RevitDatabaseQuery\Filters\Internals\QueryItem.cs" />
     <Compile Include="Domain\RevitDatabaseQuery\Filters\Internals\Filter.cs" />
     <Compile Include="Domain\RevitDatabaseQuery\Filters\Internals\Group.cs" />
     <Compile Include="Domain\RevitDatabaseQuery\Internals\Operators.cs" />
+    <Compile Include="Domain\RevitDatabaseQuery\Filters\StructuralTypeMatch.cs" />
+    <Compile Include="Domain\RevitDatabaseQuery\Filters\ParameterMatch.cs" />
     <Compile Include="Domain\RevitObjectPresenter.cs" />
     <Compile Include="Domain\RevitDatabaseQuery\FuzzySearchEngine.cs" />
     <Compile Include="Domain\RevitDatabaseQuery\QueryParser.cs" />

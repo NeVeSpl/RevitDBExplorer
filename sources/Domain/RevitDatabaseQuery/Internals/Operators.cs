@@ -62,7 +62,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Internals
             }
 
             bool isInt = int.TryParse(argument, out int intArg);
-            double.TryParse(argument, out double doubleArg);
+            bool isDouble = double.TryParse(argument, out double doubleArg);
 
             var op = new OperatorWithArgument(@operator)
             {             
@@ -70,6 +70,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Internals
                 ArgumentAsDouble = doubleArg,
                 ArgumentAsInt = intArg,  
                 IsArgumentInt = isInt,
+                IsArgumentDouble = isDouble,
             };
 
             return op;
@@ -101,6 +102,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Internals
         public double ArgumentAsDouble { get; init; } = double.NaN;
         public int ArgumentAsInt { get; init; } = 0;
         public bool IsArgumentInt { get; init; }
+        public bool IsArgumentDouble { get; init; }
 
 
         public OperatorWithArgument(Operator @operator = null)

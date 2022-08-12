@@ -12,14 +12,14 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
 
     internal class Group : QueryItem
     {      
-        public LogicalOperator Operator { get; set; } = LogicalOperator.Or;
+        public LogicalOperator Operator { get; init; } = LogicalOperator.Or;
         public IEnumerable<QueryItem> Items { get; init; } = Enumerable.Empty<QueryItem>();
 
 
-        public Group(IEnumerable<QueryItem> list, LogicalOperator logicalOperator = LogicalOperator.Or)
+        public Group(IEnumerable<QueryItem> items, LogicalOperator logicalOperator = LogicalOperator.Or)
         {
             Operator = logicalOperator;
-            Items = list;
+            Items = items;
 
             if (logicalOperator == LogicalOperator.Or)
             {

@@ -5,6 +5,7 @@ using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.Architecture;
 using Autodesk.Revit.DB.Mechanical;
 using Autodesk.Revit.DB.Structure;
+using RevitDBExplorer.Domain.RevitDatabaseQuery.Filters;
 using SimMetrics.Net;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
@@ -102,7 +103,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
                     var score = needle.ApproximatelyEquals(item.Item1, SimMetricType.Levenstein);
                     if (score > 0.61)
                     {
-                        found.Add(new TypeMatch(item.Item2, score));
+                        found.Add(new ClassMatch(item.Item2, score));
                     }
                 }
             }
