@@ -40,7 +40,7 @@ input/keywords | interpretation | translates to in Revit Api
 ----------|------------| ----
 `,`, `;` | seperates phrases/commands
 `:` | [classifier](#classifiers)
-`active`, <br/>`active view` | select elements from active view | FilteredElementCollector(doc, doc.ActiveView.Id)
+`active`, <br/>`active view` | select elements from active view | new VisibleInViewFilter()
 `type`, <br/>`element type`, <br/>`not element`  | select only types | .WhereElementIsElementType()
 `element`, <br/>`not element type`, <br/>`not type` | select only elements | .WhereElementIsNotElementType()
 e.g. `123456` - number | select elements with given id  | new ElementIdSetFilter(new [] {new ElementId(123456)})
@@ -48,6 +48,7 @@ e.g. `Wall` - revit class | select elements of given class | .OfClass(typeof(Wal
 e.g. `OST_Windows` - revit category | select elements of given category | .OfCategory(BuiltInCategory.OST_Windows) or <br/>new ElementMulticategoryFilter()
 `param = value` | a phrase that uses [any of the operators](#operators) is recognised as a search for a parameter (value)| new ElementParameterFilter()
 `foo` - any not recognized text | wildcard search for a given text in parameters:<br/> Name,<br/> Mark,<br/> Type Name,<br/> Family and Type | ParameterFilterRuleFactory.CreateContainsRule(),  <br/>BuiltInParameter.ALL_MODEL_TYPE_NAME, <br/>BuiltInParameter.ALL_MODEL_MARK, <br/>BuiltInParameter.ELEM_FAMILY_AND_TYPE_PARAM, <br/>BuiltInParameter.DATUM_TEXT
+`s:column`|selectd elements matching a structural type|new ElementStructuralTypeFilter()
 
 Queries are case-insensitive. Matching for categories/classes/parameters is done in a fuzzy way, you do not have to be very precise with names, but this may lead to some false positive results. 
 
@@ -57,10 +58,11 @@ A value you are searching for is not parsed/interpreted (yet), which means that 
 
 classifier | meaning
 -----------|-------
-`id:[text]`, `ids:[text]` | interpret `[text]` as ElementId
-`category:[text]`, `cat:[text]` | interpret `[text]` as BuiltInCategory
-`type:[text]`, `class:[text]`, `typeof:[text]` | interpret `[text]` as element type/class
-`name:[text]` | 
+`i:[text]`,`id:[text]`, `ids:[text]` | interpret `[text]` as an ElementId
+`c:[text]`, `cat:[text]`, `category:[text]` | interpret `[text]` as a BuiltInCategory
+`t:[text]`, `type:[text]`, `class:[text]`, `typeof:[text]` | interpret `[text]` as an element type/class
+`n:[text]`, `name:[text]` | 
+`s:[text]`, `stru:[text]`,  `structual:[text]`| interpret `[text]` as a structural type
 
 <a name="operators"></a>
 
@@ -161,6 +163,7 @@ In comparison to RevitLookup, RDBE in addition gives access to:
     - GetDefaultElementTypeId
     - GetDocumentVersion
     - GetWorksetId
+    - EditFamily
 - Element
     - **GetMaterialIds**
     - GetMaterialArea
@@ -170,6 +173,10 @@ In comparison to RevitLookup, RDBE in addition gives access to:
     - CanHaveSymbol
 - **HostObject**
     - **FindInserts**
+- **HostObjectUtils**
+    - **GetTopFaces**
+    - **GetBottomFaces**
+    - **GetSideFaces**
 - **JoinGeometryUtils**
     - **GetJoinedElements**
     - **IsCuttingElementInJoin** 
@@ -212,6 +219,8 @@ In comparison to RevitLookup, RDBE in addition gives access to:
 - SpecUtils
     - IsValidDataType
     - IsSpec
+- StructuralSectionUtils
+-   - GetStructuralSection
 - UnitFormatUtils
     - Format
 - UnitUtils
@@ -224,6 +233,10 @@ In comparison to RevitLookup, RDBE in addition gives access to:
     - GetValidUnits
 - Wall
     - IsWallCrossSectionValid
+- WorksharingUtils
+    - GetCheckoutStatus
+    - GetModelUpdatesStatus
+    - GetWorksharingTooltipInfo
 - View
     - CanViewBeDuplicated
     - **GetElementOverrides**
