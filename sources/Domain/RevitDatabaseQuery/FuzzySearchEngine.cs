@@ -14,13 +14,14 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
 {
     internal static class FuzzySearchEngine
     {
-        internal enum LookFor { Category = 1, Class = 2, ElementId = 4, Parameter = 8, StructuralType = 16, All = 255 }
+        internal enum LookFor { Category = 1, Class = 2, ElementId = 4, Parameter = 8, StructuralType = 16, Level = 32, All = 255 }
 
         static readonly List<(string, BuiltInCategory)> Categories;
         static readonly List<(string, Type)> Classes;
         static readonly List<(string, BuiltInParameter)> Parameters;
         static List<(string, ElementId)> UserParameters = Enumerable.Empty<(string, ElementId)>().ToList();
         static readonly List<(string, StructuralType)> StructuralTypes;
+        static List<(string, ElementId)> Levels;
 
         static readonly HashSet<string> ClassesBlackList = new()
         {
@@ -56,6 +57,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
             Classes = LoadClasses();
             Parameters = LoadParameters();
             StructuralTypes = LoadStructuralTypes();
+            
         }      
         public static void Init()
         {
@@ -64,6 +66,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
         public static void LoadDocumentSpecificData(Document document)
         {
             LoadUserParameters(document);
+            LoadLevels(document);
         }
 
 
@@ -136,6 +139,17 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
                     if (score > 0.61)
                     {
                         found.Add(new StructuralTypeMatch(item.Item2, score - 0.1));
+                    }
+                }
+            }
+            if (lookupFor.HasFlag(LookFor.Level))
+            {
+                foreach (var item in Levels)
+                {
+                    var score = needle.ApproximatelyEquals(item.Item1, SimMetricType.Levenstein);
+                    if (score > 0.61)
+                    {
+                        found.Add(new LevelMatch(item.Item2, score, item.Item1));
                     }
                 }
             }
@@ -251,6 +265,15 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
                 ("NonStructural".Clean(), StructuralType.NonStructural),
                 ("UnknownFraming".Clean(), StructuralType.UnknownFraming),               
             };
+        }
+        private static void LoadLevels(Document document)
+        {
+            var newList = new List<(string, ElementId)>(UserParameters.Count);
+            foreach (var level in new FilteredElementCollector(document).OfClass(typeof(Level)))
+            {
+                newList.Add((level.Name.Clean(), level.Id));
+            }
+            Levels = newList;
         }
 
         private static string Clean(this string text)

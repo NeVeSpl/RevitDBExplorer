@@ -21,6 +21,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
         NameParam, // only inside CommandFactory
         Parameter,
         StructuralType,
+        Level,
         Incorrect = 383,
         WhoKnows = 666 // only inside CommandFactory
     }
@@ -111,7 +112,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
                 type = InterpretCommandType(splittedByClassifier[0]);
                 argument = splittedByClassifier[0].Trim();
             }
-            else
+            if (splittedByClassifier.Length == 2)
             {
                 type = ParseCommandClassifier(splittedByClassifier[0]);
                 argument = splittedByClassifier[1].Trim();                
@@ -252,6 +253,10 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
                 case "stru":
                 case "structual":
                     return CmdType.StructuralType;
+                case "l":
+                case "lvl":
+                case "level":
+                    return CmdType.Level;
             }
             return CmdType.WhoKnows;
         }
@@ -274,6 +279,9 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
                     break;
                 case CmdType.Parameter:                    
                     result = FuzzySearchEngine.Lookup(argument, FuzzySearchEngine.LookFor.Parameter).ToList();
+                    break;
+                case CmdType.Level:
+                    result = FuzzySearchEngine.Lookup(argument, FuzzySearchEngine.LookFor.Level).ToList();
                     break;
                 case CmdType.WhoKnows:
                     result = FuzzySearchEngine.Lookup(argument, FuzzySearchEngine.LookFor.ElementId | FuzzySearchEngine.LookFor.Category | FuzzySearchEngine.LookFor.Class).ToList();

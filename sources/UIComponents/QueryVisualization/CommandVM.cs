@@ -111,6 +111,14 @@ namespace RevitDBExplorer.UIComponents.QueryVisualization
                     Name = command.Text;
                     FilterName = "could not recognize phrase";  
                     break;
+                case CmdType.Level:
+                    Name = String.Join(", ", command.MatchedArguments.Select(x => x.Label));
+                    FilterName = "new ElementLevelFilter() ";
+                    break;
+                case CmdType.StructuralType:
+                    Name = args;
+                    FilterName = "new ElementStructuralTypeFilter() ";
+                    break;
                 default:
                     Name = args;
                     break;

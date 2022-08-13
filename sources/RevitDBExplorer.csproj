@@ -257,7 +257,9 @@
     <Compile Include="Domain\DataModel\ValueContainers\ScheduleFieldContainer.cs" />
     <Compile Include="Domain\DataModel\ValueContainers\UVContainer.cs" />
     <Compile Include="Domain\Guard.cs" />
+    <Compile Include="Domain\RevitDatabaseQuery\Filters\LevelFilter.cs" />
     <Compile Include="Domain\RevitDatabaseQuery\Filters\StructuralTypeFilter.cs" />
+    <Compile Include="Domain\RevitDatabaseQuery\Filters\LevelMatch.cs" />
     <Compile Include="Domain\RevitDatabaseQuery\Filters\VisibleInViewFilter.cs" />
     <Compile Include="Domain\RevitDatabaseQuery\Filters\CategoryFilter.cs" />
     <Compile Include="Domain\RevitDatabaseQuery\Filters\ClassFilter.cs" />
