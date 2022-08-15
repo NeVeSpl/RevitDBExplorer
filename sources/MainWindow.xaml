@@ -239,6 +239,7 @@
                     <Setter Property="IsEnabled" Value="{Binding Path=IsEnabled, Mode=TwoWay}"/>
                     <Setter Property="IsExpanded" Value="{Binding Path=IsExpanded, Mode=TwoWay}" />
                     <Setter Property="Padding" Value="2 1 2 1"/>
+                    <Setter Property="Margin" Value="-3 0 0 0"/>
 
                     <Style.Resources>
                         <Style TargetType="Border">

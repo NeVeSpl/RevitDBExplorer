@@ -282,33 +282,10 @@ namespace RevitDBExplorer
         
         private void PopulateTreeView(IList<SnoopableObject> objects)
         {
-            var items = objects.GroupBy(x => x.TypeName).Select(x => new GroupTreeVM(x.Key, x, TreeViewFilter)).OrderBy(x => x.Name);
-
-            TreeItems = new(items);
-            if ((objects.Count > 0 && objects.Count < 29) || (TreeItems.Count() == 1))
-            {
-                // Expand
-                foreach (var cat in TreeItems)
-                {
-                    cat.IsExpanded = true;
-                    foreach (var sub in (cat.Items ?? Enumerable.Empty<TreeViewItemVM>()))
-                    {
-                        sub.IsExpanded = true;
-                        foreach (var subsub in (sub.Items ?? Enumerable.Empty<TreeViewItemVM>()))
-                        {
-                            //subsub.IsExpanded = true;
-                        }
-                    }                   
-                }       
-                // Select
-                var firstObject = TreeItems.First().Items.First();
-                if (firstObject.Items?.Any() == true)
-                {
-                    firstObject.IsExpanded = true;
-                    firstObject.Items.First().IsSelected = true;
-                }
-                firstObject.IsSelected = true; 
-            }           
+            GroupTreeVM groupTreeVM = new GroupTreeVM("", objects, TreeViewFilter, GroupBy.TypeName);
+            groupTreeVM.Expand(true);
+            groupTreeVM.SelectFirstDeepestVisibleItem();
+            TreeItems = new(new[] { groupTreeVM });
         }
         
         private bool ListViewFilter(object item)

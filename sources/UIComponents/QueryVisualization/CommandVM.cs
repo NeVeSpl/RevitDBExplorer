@@ -113,11 +113,11 @@ namespace RevitDBExplorer.UIComponents.QueryVisualization
                     break;
                 case CmdType.Level:
                     Name = String.Join(", ", command.MatchedArguments.Select(x => x.Label));
-                    FilterName = "new ElementLevelFilter() ";
+                    FilterName = "new ElementLevelFilter()";
                     break;
                 case CmdType.StructuralType:
                     Name = args;
-                    FilterName = "new ElementStructuralTypeFilter() ";
+                    FilterName = "new ElementStructuralTypeFilter()";
                     break;
                 default:
                     Name = args;
