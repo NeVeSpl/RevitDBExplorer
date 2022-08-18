@@ -133,6 +133,7 @@ namespace RevitDBExplorer
 
         public MainWindow()
         {
+            Dispatcher.UnhandledException += Dispatcher_UnhandledException;
             InitializeComponent();
             this.DataContext = this;
             var ver = GetType().Assembly.GetName().Version;
@@ -144,13 +145,18 @@ namespace RevitDBExplorer
             CheckIfNewVersionIsAvailable(ver).Forget();
 
             List.MemberSnooped += () => ListViewItem_MouseLeftButtonUp(null, null);
-        }
+        }  
         public MainWindow(IList<SnoopableObject> objects) : this()
         {
             PopulateTreeView(objects);
         }
 
 
+        private void Dispatcher_UnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
+        {
+            e.Exception.ShowErrorMsg("MainWindow::UnhandledException");
+            e.Handled = true;
+        }
         private async Task CheckIfNewVersionIsAvailable(Version ver)
         {
             var (isNew, link) = await VersionChecker.Check(ver);
@@ -159,124 +165,77 @@ namespace RevitDBExplorer
                 Title += $" - (a new version is available: {link})";
             }
         }
-
-
         private async void SelectorButton_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {                
-                ResetTreeItems();
-                ResetListItems();
-                ResetDatabaseQuery();
+        {                           
+            ResetTreeItems();
+            ResetListItems();
+            ResetDatabaseQuery();
 
-                var tag = ((Control)sender).Tag as string;
-                var selector = (Selector)Enum.Parse(typeof(Selector), tag);
-                if (selector == Selector.PickEdge || selector ==  Selector.PickFace)
-                {
-                    //this.WindowState = WindowState.Minimized;
-                }
-                var snoopableObjects = await ExternalExecutor.ExecuteInRevitContextAsync(x => Selectors.Snoop(x, selector).ToList());
-                if (selector == Selector.PickEdge || selector == Selector.PickFace)
-                {
-                    //this.WindowState = WindowState.Normal;
-                }       
-                
-                PopulateTreeView(snoopableObjects);
-            }
-            catch (Exception ex)
+            var tag = ((Control)sender).Tag as string;
+            var selector = (Selector)Enum.Parse(typeof(Selector), tag);
+            if (selector == Selector.PickEdge || selector ==  Selector.PickFace)
             {
-                ex.ShowErrorMsg("Selectors.Snoop");
+                //this.WindowState = WindowState.Minimized;
             }
+            var snoopableObjects = await ExternalExecutor.ExecuteInRevitContextAsync(x => Selectors.Snoop(x, selector).ToList());
+            if (selector == Selector.PickEdge || selector == Selector.PickFace)
+            {
+                //this.WindowState = WindowState.Normal;
+            }       
+                
+            PopulateTreeView(snoopableObjects);            
         }
         private void SnoopEvents_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                ResetTreeItems();
-                ResetListItems();
-                ResetDatabaseQuery();
+        {           
+            ResetTreeItems();
+            ResetListItems();
+            ResetDatabaseQuery();
 
-                var snoopableObjects = EventMonitor.GetEvents().Select(x => new SnoopableObjectTreeVM(x) { IsExpanded = true }).ToList();
-                TreeItems = new(snoopableObjects);
-            }
-            catch (Exception ex)
-            {
-                ex.ShowErrorMsg("Selectors.SnoopEvents");
-            }
+            var snoopableObjects = EventMonitor.GetEvents().Select(x => new SnoopableObjectTreeVM(x) { IsExpanded = true }).ToList();
+            TreeItems = new(snoopableObjects);            
         }
         private async void TreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            try
+            ResetListItems();
+            
+            if (e.NewValue is SnoopableObjectTreeVM snoopableObjectVM)
             {
-                if (e.NewValue is SnoopableObjectTreeVM snoopableObjectVM)
-                {
-                    var snoopableMembers = await ExternalExecutor.ExecuteInRevitContextAsync(x => snoopableObjectVM.Object.GetMembers(x).ToList());
-                    snoopableMembers.ForEach(x => x.SnoopableObjectChanged += () => ReloadButton_Click(null, null));
-                    List.PopulateListView(snoopableMembers, ListViewFilter);
-                }
-                else
-                {
-                    ResetListItems();
-                }
-            }
-            catch (Exception ex)
-            {
-                ResetListItems();
-                ex.ShowErrorMsg( "SnoopableObject.GetMembers");
+                var snoopableMembers = await ExternalExecutor.ExecuteInRevitContextAsync(x => snoopableObjectVM.Object.GetMembers(x).ToList());
+                snoopableMembers.ForEach(x => x.SnoopableObjectChanged += () => ReloadButton_Click(null, null));
+                List.PopulateListView(snoopableMembers, ListViewFilter);
             }
         }
         private async void ListViewItem_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            try
+        {           
+            if (List.ListSelectedItem?.CanBeSnooped == true)
             {
-                if (List.ListSelectedItem?.CanBeSnooped == true)
-                {
-                    var snoopableObjects = await ExternalExecutor.ExecuteInRevitContextAsync(x => List.ListSelectedItem.Snooop().ToList());
-                    var window = new MainWindow(snoopableObjects);
-                    window.Owner = this;
-                    window.Show();
-                }
-            }
-            catch (Exception ex)
-            {
-                ex.ShowErrorMsg("SnoopableMember.Snooop");
-            }
+                var snoopableObjects = await ExternalExecutor.ExecuteInRevitContextAsync(x => List.ListSelectedItem.Snooop().ToList());
+                var window = new MainWindow(snoopableObjects);
+                window.Owner = this;
+                window.Show();
+            }            
         }
         private async void ReloadButton_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                await ExternalExecutor.ExecuteInRevitContextAsync(uiApp => List.ReloadItems());                
-            }
-            catch (Exception ex)
-            {
-                ex.ShowErrorMsg("SnoopableMember.ReadValue");
-            }
+        {            
+            await ExternalExecutor.ExecuteInRevitContextAsync(uiApp => List.ReloadItems());    
         }
         private async void TryQueryDatabase(string query)
-        {
-            try
+        {            
+            ResetTreeItems();
+            ResetListItems();
+
+            var snoopableObjects = await ExternalExecutor.ExecuteInRevitContextAsync(uiApp =>
             {
-                ResetTreeItems();
-                ResetListItems();
+                var document = uiApp?.ActiveUIDocument?.Document;
 
-                var snoopableObjects = await ExternalExecutor.ExecuteInRevitContextAsync(uiApp =>
-                {
-                    var document = uiApp?.ActiveUIDocument?.Document;
+                if (document == null) return Enumerable.Empty<SnoopableObject>().ToList();
 
-                    if (document == null) return Enumerable.Empty<SnoopableObject>().ToList();
-
-                    var result = RevitDatabaseQueryService.Parse(document, query);
-                    DatabaseQueryToolTip = result.CollectorSyntax;
-                    QueryVisualization.Update(result.Commands).Forget();
-                    return result.Collector.ToElements().Select(x => new SnoopableObject(document, x)).ToList();
-                });
-                PopulateTreeView(snoopableObjects);
-            }
-            catch (Exception ex)
-            {
-                ex.ShowErrorMsg("RevitDatabaseQueryParser.Parse");
-            }
+                var result = RevitDatabaseQueryService.Parse(document, query);
+                DatabaseQueryToolTip = result.CollectorSyntax;
+                QueryVisualization.Update(result.Commands).Forget();
+                return result.Collector.ToElements().Select(x => new SnoopableObject(document, x)).ToList();
+            });
+            PopulateTreeView(snoopableObjects);            
         }        
 
         
@@ -335,7 +294,7 @@ namespace RevitDBExplorer
         }
 
         private void TreeViewItem_MenuItemInRevit_Click(object sender, RoutedEventArgs e)
-        {
+        {           
             var menuItem = sender as MenuItem;
 
             IEnumerable<SnoopableObject> toSelect = Enumerable.Empty<SnoopableObject>();
@@ -347,29 +306,22 @@ namespace RevitDBExplorer
             {
                 toSelect = group.GetAllSnoopableObjects();
             }
-
-            try
+           
+            if (toSelect.Any())
             {
-                if (toSelect.Any())
+                switch (menuItem.Tag)
                 {
-                    switch (menuItem.Tag)
-                    {
-                        case "Select":
-                            RevitObjectPresenter.Select(toSelect);
-                            break;
-                        case "Isolate":
-                            RevitObjectPresenter.Isolate(toSelect);
-                            break;
-                        case "Show":
-                            RevitObjectPresenter.Show(toSelect);
-                            break;
-                    }
+                    case "Select":
+                        RevitObjectPresenter.Select(toSelect);
+                        break;
+                    case "Isolate":
+                        RevitObjectPresenter.Isolate(toSelect);
+                        break;
+                    case "Show":
+                        RevitObjectPresenter.Show(toSelect);
+                        break;
                 }
-            }
-            catch (Exception ex)
-            {
-                ex.ShowErrorMsg($"RevitObjectPresenter.{menuItem.Tag}");
-            }
+            }           
         }
         private void TreeViewItem_MenuItemSnoop_Click(object sender, RoutedEventArgs e)
         {
@@ -451,6 +403,7 @@ namespace RevitDBExplorer
         {
             Clipboard.SetText(DatabaseQueryToolTip);
         }
+        
 
         #region INotifyPropertyChanged
 
