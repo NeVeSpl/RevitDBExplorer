@@ -244,7 +244,15 @@ namespace RevitDBExplorer
             GroupTreeVM groupTreeVM = new GroupTreeVM("", objects, TreeViewFilter, GroupBy.TypeName);
             groupTreeVM.Expand(true);
             groupTreeVM.SelectFirstDeepestVisibleItem();
-            TreeItems = new(new[] { groupTreeVM });
+
+            if (groupTreeVM.Items.Count == 1)
+            {
+                TreeItems = new(new[] { groupTreeVM.Items.First() });
+            }
+            else
+            {
+                TreeItems = new(new[] { groupTreeVM });
+            }
         }
         
         private bool ListViewFilter(object item)
@@ -292,55 +300,8 @@ namespace RevitDBExplorer
             DatabaseQueryToolTip = "";
             queryVisualizationVM.Update(Enumerable.Empty<RDQCommand>()).Forget();
         }
-
-        private void TreeViewItem_MenuItemInRevit_Click(object sender, RoutedEventArgs e)
-        {           
-            var menuItem = sender as MenuItem;
-
-            IEnumerable<SnoopableObject> toSelect = Enumerable.Empty<SnoopableObject>();
-            if (menuItem?.DataContext is SnoopableObjectTreeVM snoopableObject)
-            {
-                toSelect = new SnoopableObject[] { snoopableObject.Object };
-            }
-            if (menuItem?.DataContext is GroupTreeVM group)
-            {
-                toSelect = group.GetAllSnoopableObjects();
-            }
-           
-            if (toSelect.Any())
-            {
-                switch (menuItem.Tag)
-                {
-                    case "Select":
-                        RevitObjectPresenter.Select(toSelect);
-                        break;
-                    case "Isolate":
-                        RevitObjectPresenter.Isolate(toSelect);
-                        break;
-                    case "Show":
-                        RevitObjectPresenter.Show(toSelect);
-                        break;
-                }
-            }           
-        }
-        private void TreeViewItem_MenuItemSnoop_Click(object sender, RoutedEventArgs e)
-        {
-            var snoopableObject = ((sender as MenuItem)?.DataContext as SnoopableObjectTreeVM)?.Object;
-            if (snoopableObject is not null)
-            {
-                var window = new MainWindow(new[] { new SnoopableObject(snoopableObject.Document, snoopableObject.Object) });
-                new WindowInteropHelper(window).Owner = Application.RevitWindowHandle;
-                window.Show();
-            }
-        }
-        private void TreeViewItem_MouseRightButtonDown(object sender, RoutedEventArgs e)
-        {
-            var treeViewItem =  sender as TreeViewItem;
-            if (treeViewItem?.IsSelected == false)
-            {
-                treeViewItem.IsSelected = true;
-            }
-        }        
+              
+     
         private void ButtonWithSubMenu_Click(object sender, RoutedEventArgs e)
         {
             var contextMenu = ContextMenuService.GetContextMenu(sender as DependencyObject);

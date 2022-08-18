@@ -193,6 +193,9 @@
     <Compile Include="Domain\DataModel\ValueContainers\UpdaterInfoContainer.cs" />
     <Compile Include="Domain\DataModel\ValueContainers\TransformContainer.cs" />
     <Compile Include="Domain\EventMonitor.cs" />
+    <Compile Include="Domain\Presentation\SelectInRevitCommand.cs" />
+    <Compile Include="Domain\Presentation\ShowInRevitCommand.cs" />
+    <Compile Include="Domain\Presentation\SnoopInNewWindow.cs" />
     <Compile Include="Domain\QuoteGenerator.cs" />
     <Compile Include="Domain\DataModel\SnoopableContext.cs" />
     <Compile Include="Domain\DataModel\ValueContainers\IListElementIdContainer.cs" />
@@ -321,6 +324,7 @@
     <Compile Include="UIComponents\QueryVisualization\QueryVisualizationView.xaml.cs">
       <DependentUpon>QueryVisualizationView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="WPF\BaseCommand.cs" />
     <Compile Include="WPF\BindingProxy.cs" />
     <Compile Include="WPF\Controls\TextBoxWithPlaceholder.xaml.cs">
       <DependentUpon>TextBoxWithPlaceholder.xaml</DependentUpon>

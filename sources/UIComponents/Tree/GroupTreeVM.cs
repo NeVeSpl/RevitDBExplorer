@@ -138,27 +138,7 @@ namespace RevitDBExplorer.UIComponents.Tree
                 Count = count + collectionView.OfType<SnoopableObjectTreeVM>().Count(); 
             }
         }
-        public IEnumerable<SnoopableObject> GetAllSnoopableObjects()
-        {
-            if (Items != null)
-            {
-                var collectionView = CollectionViewSource.GetDefaultView(Items);
-                foreach (var item in collectionView.OfType<SnoopableObjectTreeVM>())
-                {
-                    if (item.Object != null)
-                    {
-                        yield return item.Object;
-                    }
-                }
-                foreach (var group in Items.OfType<GroupTreeVM>())
-                {
-                    foreach (var item in group.GetAllSnoopableObjects())
-                    {
-                        yield return item;
-                    }
-                }
-            }
-        }
+        
 
 
         class ElementEqualityComparer : IEqualityComparer<Element>

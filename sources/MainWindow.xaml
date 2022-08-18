@@ -176,7 +176,7 @@
                     <StackPanel Orientation="Horizontal">
                         <StackPanel.ContextMenu>
                             <ContextMenu>
-                                <MenuItem Header="Select in Revit" Click="TreeViewItem_MenuItemInRevit_Click" Tag="Select" />
+                                <MenuItem Header="Select in Revit" Command="{Binding SelectInRevit}" CommandParameter="{Binding}"/>
                             </ContextMenu>
                         </StackPanel.ContextMenu>
                         <StackPanel.Resources>
@@ -202,9 +202,10 @@
                     <StackPanel Orientation="Horizontal">
                         <StackPanel.ContextMenu>
                             <ContextMenu>
-                                <MenuItem Header="Select in Revit" Click="TreeViewItem_MenuItemInRevit_Click" Tag="Select" IsEnabled="{Binding IsSelectInRevitAvailable}"/>
-                                <MenuItem Header="Show in Revit" Click="TreeViewItem_MenuItemInRevit_Click" Tag="Show" IsEnabled="{Binding IsShowInRevitAvailable}"/>
-                                <MenuItem Header="Snoop in a new window" Click="TreeViewItem_MenuItemSnoop_Click" />
+                                <MenuItem Header="Select in Revit" Command="{Binding SelectInRevit}" CommandParameter="{Binding}"/>
+                                <MenuItem Header="Show in Revit" Command="{Binding ShowInRevit}" CommandParameter="{Binding}"/>
+                                <!--<MenuItem Header="Draw in Revit (using model lines)" />-->
+                                <MenuItem Header="Snoop in a new window" Command="{Binding SnoopInNewWindow}" CommandParameter="{Binding}" />                               
                             </ContextMenu>
                         </StackPanel.ContextMenu>
 
@@ -231,8 +232,7 @@
             </TreeView.Resources>
 
             <TreeView.ItemContainerStyle>
-                <Style TargetType="{x:Type TreeViewItem}">
-                    <EventSetter Event="PreviewMouseRightButtonDown" Handler="TreeViewItem_MouseRightButtonDown"/>
+                <Style TargetType="{x:Type TreeViewItem}">                    
                     <Setter Property="BorderThickness" Value="1" />
                     <Setter Property="HorizontalAlignment" Value="Stretch" />
                     <Setter Property="IsSelected" Value="{Binding Path=IsSelected, Mode=TwoWay}" />

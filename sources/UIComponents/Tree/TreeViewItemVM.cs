@@ -1,12 +1,16 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows.Data;
+using RevitDBExplorer.Domain.DataModel;
+using RevitDBExplorer.Domain.Presentation;
 using RevitDBExplorer.WPF;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
 namespace RevitDBExplorer.UIComponents.Tree
 {
-    internal class TreeViewItemVM : BaseViewModel
+    internal abstract class TreeViewItemVM : BaseViewModel
     {
         private bool isSelected = false;
         private bool isExpanded = false;
@@ -49,8 +53,9 @@ namespace RevitDBExplorer.UIComponents.Tree
                 OnPropertyChanged();
             }
         }
-
-        
+        public SelectInRevitCommand SelectInRevit { get; } = SelectInRevitCommand.Instance;
+        public ShowInRevitCommand ShowInRevit { get; } = ShowInRevitCommand.Instance;
+        public SnoopInNewWindow SnoopInNewWindow { get; } = SnoopInNewWindow.Instance;
         public ObservableCollection<TreeViewItemVM> Items
         {
             get
@@ -97,6 +102,31 @@ namespace RevitDBExplorer.UIComponents.Tree
             else
             {
                 IsSelected = true;
+            }
+        }
+        public IEnumerable<SnoopableObject> GetAllSnoopableObjects()
+        {
+            if (this is SnoopableObjectTreeVM snoopableObjectTreeVM)
+            {
+                yield return snoopableObjectTreeVM.Object;
+            }
+            if (Items != null)
+            {
+                var collectionView = CollectionViewSource.GetDefaultView(Items);
+                foreach (var item in collectionView.OfType<SnoopableObjectTreeVM>())
+                {
+                    if (item.Object != null)
+                    {
+                        yield return item.Object;
+                    }
+                }
+                foreach (var group in Items.OfType<GroupTreeVM>())
+                {
+                    foreach (var item in group.GetAllSnoopableObjects())
+                    {
+                        yield return item;
+                    }
+                }
             }
         }
     }

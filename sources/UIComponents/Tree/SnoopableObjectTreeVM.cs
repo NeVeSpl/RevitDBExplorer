@@ -1,7 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq;
-using RevitDBExplorer.Domain;
 using RevitDBExplorer.Domain.DataModel;
+using RevitDBExplorer.Domain.Presentation;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
@@ -24,9 +24,8 @@ namespace RevitDBExplorer.UIComponents.Tree
                 }
                 return  "";
             }
-        }
-        public bool IsSelectInRevitAvailable => RevitObjectPresenter.IsSelectInRevitAvailable(Object);
-        public bool IsShowInRevitAvailable => RevitObjectPresenter.IsShowInRevitAvailable(Object);
+        }            
+        
 
 
         public SnoopableObjectTreeVM(SnoopableObject @object)
