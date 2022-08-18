@@ -9,7 +9,6 @@ namespace RevitDBExplorer.Domain
 {
     internal static class VersionChecker
     {
-
         public async static Task<(bool, string)> Check(Version ver)
         {
             try

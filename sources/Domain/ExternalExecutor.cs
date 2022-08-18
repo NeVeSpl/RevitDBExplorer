@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Threading.Tasks;
+using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
@@ -76,6 +77,36 @@ namespace RevitDBExplorer.Domain
             {
                 return "RevitDBExplorer::ExternalExecutor::ExternalEventHandler";
             }
+        }
+    }
+
+    internal static class ExternalExecutorExt
+    {
+        public static Task ExecuteInRevitContextInsideTransactionAsync(Action<UIApplication> command, Document document, string transactionName)
+        {
+            return ExternalExecutor.ExecuteInRevitContextAsync((x) =>
+            {
+                string fullTransactionName = $"RDBE::{transactionName}";
+                Transaction transaction = null;
+                try
+                {
+                    var revitDocument = document ?? x.ActiveUIDocument.Document;
+                    transaction = revitDocument.IsModifiable == false ? new Transaction(revitDocument, fullTransactionName) : null;
+                    transaction?.Start();
+                    command?.Invoke(x);
+                    transaction?.Commit();
+                    
+                }
+                catch (Exception ex)
+                {
+                    transaction?.RollBack();
+                    ex.ShowErrorMsg($"ExternalExecutorExt : {fullTransactionName}");
+                }
+                finally
+                {
+                    transaction?.Dispose();
+                }
+            });
         }
     }
 }

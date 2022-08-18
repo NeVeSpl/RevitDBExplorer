@@ -114,28 +114,11 @@ namespace RevitDBExplorer.Domain.DataModel
         {
             if (memberAccessor is IMemberAccessorWithWrite writer)
             {
-                ExternalExecutor.ExecuteInRevitContextAsync((x) =>
-                {
-                    string transactionName = $"RDBE::{memberAccessor.GetType().Name}.Write()";
-                    Transaction transaction = null;
-                    try
-                    {
-                        transaction = context.Document.IsModifiable == false ? new Transaction(context.Document, transactionName) : null;
-                        transaction?.Start();
-                        writer.Write(context, @object);
-                        transaction?.Commit();
-                        SnoopableObjectChanged?.Invoke();
-                    }
-                    catch (Exception ex)
-                    {
-                        transaction?.RollBack();
-                        ex.ShowErrorMsg($"SnoopableContext.Execute : {transactionName}");
-                    }
-                    finally
-                    {
-                        transaction?.Dispose();
-                    }
-                }).Forget();
+                ExternalExecutorExt.ExecuteInRevitContextInsideTransactionAsync((x) =>
+                {                    
+                    writer.Write(context, @object);
+                }, context.Document, $"{memberAccessor.GetType().Name}").Forget();
+                SnoopableObjectChanged?.Invoke();
             }            
         }
 

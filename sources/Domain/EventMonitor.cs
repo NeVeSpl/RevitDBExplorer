@@ -8,6 +8,8 @@ using CircularBuffer;
 using RevitDBExplorer.Domain.DataModel;
 using RevitDBExplorer.Properties;
 
+// (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
+
 namespace RevitDBExplorer.Domain
 {
     internal class EventMonitor
@@ -15,7 +17,7 @@ namespace RevitDBExplorer.Domain
         static CircularBuffer<SnoopableObject> events = new CircularBuffer<SnoopableObject>(27);
 
 
-        internal static void Register(UIControlledApplication application)
+        public static void Register(UIControlledApplication application)
         {
             application.ApplicationClosing += GenericEventHandler;
             application.DialogBoxShowing += GenericEventHandler;

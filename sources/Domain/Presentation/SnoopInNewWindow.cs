@@ -7,9 +7,9 @@ using RevitDBExplorer.WPF;
 
 namespace RevitDBExplorer.Domain.Presentation
 {
-    internal class SnoopInNewWindow : BaseCommand
+    internal class SnoopInNewWindowCommand : BaseCommand
     {
-        public static readonly SnoopInNewWindow Instance = new SnoopInNewWindow();
+        public static readonly SnoopInNewWindowCommand Instance = new SnoopInNewWindowCommand();
 
         public override bool CanExecute(object parameter)
         {

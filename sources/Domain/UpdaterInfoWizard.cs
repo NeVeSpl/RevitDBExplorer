@@ -13,6 +13,9 @@ namespace RevitDBExplorer.Domain
         private static Dictionary<string, UpdaterId> nameToGuidMap = new();
 
 
+        /// <summary>
+        /// The real name is `Update`, but it does not sound that cool as : 
+        /// </summary>
         public static void AvadaKedavra()
         {
             var iupdater = typeof(IUpdater);           
@@ -53,7 +56,7 @@ namespace RevitDBExplorer.Domain
             }
         }
 
-        internal static UpdaterId Get(string applicationName, string updaterName)
+        public static UpdaterId Get(string applicationName, string updaterName)
         {
             nameToGuidMap.TryGetValue($"{applicationName}.{updaterName}", out UpdaterId result);
             return result;            

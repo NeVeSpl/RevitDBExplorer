@@ -193,6 +193,8 @@
     <Compile Include="Domain\DataModel\ValueContainers\UpdaterInfoContainer.cs" />
     <Compile Include="Domain\DataModel\ValueContainers\TransformContainer.cs" />
     <Compile Include="Domain\EventMonitor.cs" />
+    <Compile Include="Domain\Presentation\DrawInRevitCommand.cs" />
+    <Compile Include="Domain\Presentation\IsolateInRevitCommand.cs" />
     <Compile Include="Domain\Presentation\SelectInRevitCommand.cs" />
     <Compile Include="Domain\Presentation\ShowInRevitCommand.cs" />
     <Compile Include="Domain\Presentation\SnoopInNewWindow.cs" />
@@ -280,7 +282,6 @@
     <Compile Include="Domain\RevitDatabaseQuery\Internals\Operators.cs" />
     <Compile Include="Domain\RevitDatabaseQuery\Filters\StructuralTypeMatch.cs" />
     <Compile Include="Domain\RevitDatabaseQuery\Filters\ParameterMatch.cs" />
-    <Compile Include="Domain\RevitObjectPresenter.cs" />
     <Compile Include="Domain\RevitDatabaseQuery\FuzzySearchEngine.cs" />
     <Compile Include="Domain\RevitDatabaseQuery\QueryParser.cs" />
     <Compile Include="Domain\RevitDatabaseQuery\RevitDatabaseQueryService.cs" />
