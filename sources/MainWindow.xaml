@@ -190,6 +190,13 @@
                                     </MultiDataTrigger>
                                 </Style.Triggers>
                             </Style>
+                            <Style TargetType="{x:Type StackPanel}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Count}" Value="0">
+                                        <Setter Property="Opacity" Value="0.4"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
                         </StackPanel.Resources>
                         <TextBlock Text="{Binding Name, Mode=OneWay}" />
                         <TextBlock Text="[" Margin="0 -1 0 0" Style="{StaticResource postfix}"/>
