@@ -11,7 +11,16 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers
 
         protected override string ToLabel(Transform transform)
         {
-            string id = transform.IsIdentity ? "Identity" : "";
+            string id = "";
+            if (transform.IsIdentity)
+            {
+                id = "Identity";
+            }
+            if (transform.IsTranslation)
+            {
+                id = "Translation";
+            }
+
             return $"Transform: {id}";
         }
 
