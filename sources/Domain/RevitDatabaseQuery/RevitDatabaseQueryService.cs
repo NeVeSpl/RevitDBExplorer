@@ -31,6 +31,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
             pipe.AddRange(CategoryFilter.Create(commands));
             pipe.AddRange(StructuralTypeFilter.Create(commands));
             pipe.AddRange(LevelFilter.Create(commands));
+            pipe.AddRange(RoomFilter.Create(commands, document));
             pipe.AddRange(ParameterFilter.Create(commands));
 
             var collector = new FilteredElementCollector(document);
