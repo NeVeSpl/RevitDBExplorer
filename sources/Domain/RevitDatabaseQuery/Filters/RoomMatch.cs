@@ -9,7 +9,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Filters
         public RoomMatch(ElementId roomId, double levensteinScore, string name) : base(roomId, levensteinScore)
         {
             CmdType = CmdType.Room;
-            Name = $"new ElementId({roomId.IntegerValue})";
+            Name = $"{name}.ClosedShell";
             Label = name;
         }
     }

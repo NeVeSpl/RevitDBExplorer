@@ -23,7 +23,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Filters
                 var tranScale = Transform.Identity.ScaleBasis(1.05);
                 var solidWithDelta = SolidUtils.CreateTransformed(solid, tranTranslation.Inverse * tranScale * tranTranslation);              
                 Filter = new ElementIntersectsSolidFilter(solidWithDelta);
-                FilterSyntax = $"new ElementLevelFilter({roomMatch.Name})";
+                FilterSyntax = $"new ElementIntersectsSolidFilter({roomMatch.Name})";
             }
         }
 
@@ -37,7 +37,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Filters
             }
             if (rooms.Count > 1)
             {
-                yield return new Group(rooms.Select(x => new RoomFilter(x, document.GetElement(x.Value) as Room)).ToList());
+                yield return new Group(rooms.Select(x => new RoomFilter(x, document.GetElement(x.Value) as Room)).Where(x => x.Filter != null).ToList());
             }
         }
     }

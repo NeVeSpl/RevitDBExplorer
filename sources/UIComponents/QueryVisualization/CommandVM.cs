@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Autodesk.Revit.DB;
 using RevitDBExplorer.Domain.RevitDatabaseQuery;
 using RevitDBExplorer.Domain.RevitDatabaseQuery.Filters;
 using RevitDBExplorer.WPF;
@@ -118,6 +119,11 @@ namespace RevitDBExplorer.UIComponents.QueryVisualization
                 case CmdType.StructuralType:
                     Name = args;
                     FilterName = "new ElementStructuralTypeFilter()";
+                    break;
+                case CmdType.Room:
+                    var labels = String.Join(", ", command.MatchedArguments.Select(x => x.Label));
+                    Name = args;
+                    FilterName = "new ElementIntersectsSolidFilter()";
                     break;
                 default:
                     Name = args;

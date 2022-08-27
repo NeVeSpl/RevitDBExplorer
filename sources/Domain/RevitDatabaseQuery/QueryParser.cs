@@ -292,7 +292,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
                     result = FuzzySearchEngine.Lookup(argument, FuzzySearchEngine.LookFor.Level).ToList();
                     break;
                 case CmdType.Room:
-                    result = FuzzySearchEngine.Lookup(argument, FuzzySearchEngine.LookFor.Level).ToList();
+                    result = FuzzySearchEngine.Lookup(argument, FuzzySearchEngine.LookFor.Room).ToList();
                     break;
                 case CmdType.Filter:
                     result = FuzzySearchEngine.Lookup(argument, FuzzySearchEngine.LookFor.Level).ToList();
