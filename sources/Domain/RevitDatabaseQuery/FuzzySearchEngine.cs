@@ -14,7 +14,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
 {
     internal static class FuzzySearchEngine
     {
-        internal enum LookFor { Category = 1, Class = 2, ElementId = 4, Parameter = 8, StructuralType = 16, Level = 32, Filter = 64, Room = 128, All = 255 }
+        internal enum LookFor { Category = 1, Class = 2, ElementId = 4, Parameter = 8, StructuralType = 16, Level = 32, RuleBasedFilter = 64, Room = 128, All = 255 }
 
         static readonly List<(string, BuiltInCategory)> Categories;
         static readonly List<(string, Type)> Classes;
@@ -69,7 +69,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
             LoadUserParameters(document);
             Buckets.Clear();
             Buckets.Add(new Bucket(LookFor.Level, Load<Level>(document), (kv, score) => new LevelMatch(kv.Value, score, kv.Key)));
-            Buckets.Add(new Bucket(LookFor.Filter, Load<ParameterFilterElement>(document), (kv, score) => new LevelMatch(kv.Value, score, kv.Key)));
+            Buckets.Add(new Bucket(LookFor.RuleBasedFilter, Load<ParameterFilterElement>(document), (kv, score) => new RuleMatch(kv.Value, score, kv.Key)));
             Buckets.Add(new Bucket(LookFor.Room, LoadRooms(document), (kv, score) => new RoomMatch(kv.Value, score, kv.Key)));
         }
 

@@ -104,6 +104,9 @@
                                         <DataTrigger Binding="{Binding Type}" Value="Room">
                                             <Setter Property="Background" Value="{DynamicResource Query.WhoKnows.Background}"/>
                                         </DataTrigger>
+                                        <DataTrigger Binding="{Binding Type}" Value="RuleFilter">
+                                            <Setter Property="Background" Value="{DynamicResource Query.WhoKnows.Background}"/>
+                                        </DataTrigger>
                                         <DataTrigger Binding="{Binding Type}" Value="Incorrect">
                                             <Setter Property="Background" Value="{DynamicResource Query.Incorrect.Background}"/>
                                             <Setter Property="TextBlock.Foreground" Value="{DynamicResource Query.Incorrect.Foreground}"/>

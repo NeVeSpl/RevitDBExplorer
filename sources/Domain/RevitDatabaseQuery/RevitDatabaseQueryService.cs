@@ -32,6 +32,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
             pipe.AddRange(StructuralTypeFilter.Create(commands));
             pipe.AddRange(LevelFilter.Create(commands));
             pipe.AddRange(RoomFilter.Create(commands, document));
+            pipe.AddRange(RuleFilter.Create(commands, document));
             pipe.AddRange(ParameterFilter.Create(commands));
 
             var collector = new FilteredElementCollector(document);
@@ -39,8 +40,11 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
 
             foreach (var filter in pipe)
             {
-                collector.WherePasses(filter.Filter);               
-                collectorSyntax += Environment.NewLine + "    " + filter.CollectorSyntax;                
+                if (filter.Filter != null)
+                {
+                    collector.WherePasses(filter.Filter);
+                    collectorSyntax += Environment.NewLine + "    " + filter.CollectorSyntax;
+                }
             }
             collectorSyntax += Environment.NewLine + "    .ToElements();";
 

@@ -23,7 +23,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
         StructuralType,
         Level,
         Room,
-        Filter,
+        RuleBasedFilter,
         Incorrect = 383,
         WhoKnows = 666 // only inside CommandFactory
     }
@@ -264,7 +264,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
                     return CmdType.Room;
                 case "f":
                 case "filter":
-                    return CmdType.Filter;
+                    return CmdType.RuleBasedFilter;
             }
             return CmdType.WhoKnows;
         }
@@ -294,8 +294,8 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
                 case CmdType.Room:
                     result = FuzzySearchEngine.Lookup(argument, FuzzySearchEngine.LookFor.Room).ToList();
                     break;
-                case CmdType.Filter:
-                    result = FuzzySearchEngine.Lookup(argument, FuzzySearchEngine.LookFor.Level).ToList();
+                case CmdType.RuleBasedFilter:
+                    result = FuzzySearchEngine.Lookup(argument, FuzzySearchEngine.LookFor.RuleBasedFilter).ToList();
                     break;
                 case CmdType.WhoKnows:
                     result = FuzzySearchEngine.Lookup(argument, FuzzySearchEngine.LookFor.ElementId | 
@@ -303,7 +303,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
                                                                 FuzzySearchEngine.LookFor.Class | 
                                                                 FuzzySearchEngine.LookFor.Level |
                                                                 FuzzySearchEngine.LookFor.Room |
-                                                                FuzzySearchEngine.LookFor.Filter 
+                                                                FuzzySearchEngine.LookFor.RuleBasedFilter 
                                                                 ).ToList();
                     break;               
             }
