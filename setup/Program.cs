@@ -21,7 +21,7 @@ namespace SetupBuilder
                 UpgradeCode = new Guid("E92B4658-0D37-4FF6-AD09-379881769A8D"),
                 Platform = Platform.x64,
                 UI = WUI.WixUI_InstallDir,
-                InstallScope = InstallScope.perMachine,
+                InstallScope = InstallScope.perUser,
                 MajorUpgrade = MajorUpgrade.Default,
                 Version = new Version(productVersion),
                 OutFileName = $"RevitDBExplorer",
