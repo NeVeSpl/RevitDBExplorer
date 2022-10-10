@@ -14,14 +14,15 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
 {
     internal static class FuzzySearchEngine
     {
-        internal enum LookFor { Category = 1, Class = 2, ElementId = 4, Parameter = 8, StructuralType = 16, Level = 32, All = 255 }
+        internal enum LookFor { Category = 1, Class = 2, ElementId = 4, Parameter = 8, StructuralType = 16, Level = 32, RuleBasedFilter = 64, Room = 128, All = 255 }
 
         static readonly List<(string, BuiltInCategory)> Categories;
         static readonly List<(string, Type)> Classes;
         static readonly List<(string, BuiltInParameter)> Parameters;
         static List<(string, ElementId)> UserParameters = Enumerable.Empty<(string, ElementId)>().ToList();
         static readonly List<(string, StructuralType)> StructuralTypes;
-        static List<(string, ElementId)> Levels;
+        static readonly List<Bucket> Buckets = new List<Bucket>();
+
 
         static readonly HashSet<string> ClassesBlackList = new()
         {
@@ -64,9 +65,12 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
 
         }
         public static void LoadDocumentSpecificData(Document document)
-        {
+        {            
             LoadUserParameters(document);
-            LoadLevels(document);
+            Buckets.Clear();
+            Buckets.Add(new Bucket(LookFor.Level, Load<Level>(document), (kv, score) => new LevelMatch(kv.Value, score, kv.Key)));
+            Buckets.Add(new Bucket(LookFor.RuleBasedFilter, Load<ParameterFilterElement>(document), (kv, score) => new RuleMatch(kv.Value, score, kv.Key)));
+            Buckets.Add(new Bucket(LookFor.Room, LoadRooms(document), (kv, score) => new RoomMatch(kv.Value, score, kv.Key)));
         }
 
 
@@ -142,14 +146,18 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
                     }
                 }
             }
-            if (lookupFor.HasFlag(LookFor.Level))
+
+            foreach (var bucket in Buckets)
             {
-                foreach (var item in Levels)
+                if (lookupFor.HasFlag(bucket.Type))
                 {
-                    var score = needle.ApproximatelyEquals(item.Item1, SimMetricType.Levenstein);
-                    if (score > 0.61)
+                    foreach (var item in bucket.Elements)
                     {
-                        found.Add(new LevelMatch(item.Item2, score, item.Item1));
+                        var score = needle.ApproximatelyEquals(item.Key, SimMetricType.Levenstein);
+                        if (score > 0.61)
+                        {
+                            found.Add(bucket.CreateMatch(item, score));
+                        }
                     }
                 }
             }
@@ -266,19 +274,45 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
                 ("UnknownFraming".Clean(), StructuralType.UnknownFraming),               
             };
         }
-        private static void LoadLevels(Document document)
+        private static List<KeyValue> Load<T>(Document document) where T : Element
         {
-            var newList = new List<(string, ElementId)>(UserParameters.Count);
-            foreach (var level in new FilteredElementCollector(document).OfClass(typeof(Level)))
+            var newList = new List<KeyValue>(UserParameters.Count);
+            foreach (var level in new FilteredElementCollector(document).OfClass(typeof(T)))
             {
-                newList.Add((level.Name.Clean(), level.Id));
+                newList.Add(new (level.Name.Clean(), level.Id));
             }
-            Levels = newList;
+            return newList;
+        }
+        private static List<KeyValue> LoadRooms(Document document)
+        {
+            var newList = new List<KeyValue>(UserParameters.Count);
+            foreach (var room in new FilteredElementCollector(document).WherePasses(new Autodesk.Revit.DB.Architecture.RoomFilter()))
+            {
+                newList.Add(new(room.Name.Clean(), room.Id));
+            }
+            return newList;
         }
 
         private static string Clean(this string text)
         {
             return text.RemoveWhitespace().ToLower();
         }
+
+        private class Bucket
+        {
+            public LookFor Type { get; init; }
+            public List<KeyValue> Elements { get; init; }
+            public Func<KeyValue, double, ILookupResult> CreateMatch { get; init; }
+
+
+            public Bucket(LookFor type, List<KeyValue> elements, Func<KeyValue, double, ILookupResult> createMatch)
+            {
+                Type = type;
+                Elements = elements;
+                CreateMatch = createMatch;
+            }
+        }
+
+        private record struct KeyValue(string Key, ElementId Value);       
     }   
 }
