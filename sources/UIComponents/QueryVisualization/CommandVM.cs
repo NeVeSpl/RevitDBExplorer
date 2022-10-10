@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Autodesk.Revit.DB;
 using RevitDBExplorer.Domain.RevitDatabaseQuery;
 using RevitDBExplorer.Domain.RevitDatabaseQuery.Filters;
 using RevitDBExplorer.WPF;
@@ -62,7 +63,8 @@ namespace RevitDBExplorer.UIComponents.QueryVisualization
         public CommandVM(RDQCommand command)
         {
             this.command = command; 
-            args = String.Join(", ", command.MatchedArguments.Select(x => x.Name));          
+            args = String.Join(", ", command.MatchedArguments.Select(x => x.Name));
+            var labels = String.Join(", ", command.MatchedArguments.Select(x => x.Label));
             switch (command.Type)
             {
                 case CmdType.ActiveView:
@@ -112,12 +114,20 @@ namespace RevitDBExplorer.UIComponents.QueryVisualization
                     FilterName = "could not recognize phrase";  
                     break;
                 case CmdType.Level:
-                    Name = String.Join(", ", command.MatchedArguments.Select(x => x.Label));
+                    Name = labels;
                     FilterName = "new ElementLevelFilter()";
                     break;
                 case CmdType.StructuralType:
                     Name = args;
                     FilterName = "new ElementStructuralTypeFilter()";
+                    break;
+                case CmdType.Room:                   
+                    Name = args;
+                    FilterName = "new ElementIntersectsSolidFilter()";
+                    break;
+                case CmdType.RuleBasedFilter:                    
+                    Name = "Rule-based filter: " + labels;
+                    FilterName = "ParameterFilterElement.GetElementFilter()";
                     break;
                 default:
                     Name = args;

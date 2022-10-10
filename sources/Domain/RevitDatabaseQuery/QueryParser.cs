@@ -22,6 +22,8 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
         Parameter,
         StructuralType,
         Level,
+        Room,
+        RuleBasedFilter,
         Incorrect = 383,
         WhoKnows = 666 // only inside CommandFactory
     }
@@ -257,6 +259,12 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
                 case "lvl":
                 case "level":
                     return CmdType.Level;
+                case "r":
+                case "room":             
+                    return CmdType.Room;
+                case "f":
+                case "filter":
+                    return CmdType.RuleBasedFilter;
             }
             return CmdType.WhoKnows;
         }
@@ -283,8 +291,20 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
                 case CmdType.Level:
                     result = FuzzySearchEngine.Lookup(argument, FuzzySearchEngine.LookFor.Level).ToList();
                     break;
+                case CmdType.Room:
+                    result = FuzzySearchEngine.Lookup(argument, FuzzySearchEngine.LookFor.Room).ToList();
+                    break;
+                case CmdType.RuleBasedFilter:
+                    result = FuzzySearchEngine.Lookup(argument, FuzzySearchEngine.LookFor.RuleBasedFilter).ToList();
+                    break;
                 case CmdType.WhoKnows:
-                    result = FuzzySearchEngine.Lookup(argument, FuzzySearchEngine.LookFor.ElementId | FuzzySearchEngine.LookFor.Category | FuzzySearchEngine.LookFor.Class).ToList();
+                    result = FuzzySearchEngine.Lookup(argument, FuzzySearchEngine.LookFor.ElementId | 
+                                                                FuzzySearchEngine.LookFor.Category | 
+                                                                FuzzySearchEngine.LookFor.Class | 
+                                                                FuzzySearchEngine.LookFor.Level |
+                                                                FuzzySearchEngine.LookFor.Room |
+                                                                FuzzySearchEngine.LookFor.RuleBasedFilter 
+                                                                ).ToList();
                     break;               
             }
             return result;
