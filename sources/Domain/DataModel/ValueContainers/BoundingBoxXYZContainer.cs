@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
 using Autodesk.Revit.DB;
+using RevitDBExplorer.Domain.DataModel.ValueContainers.Base;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
 namespace RevitDBExplorer.Domain.DataModel.ValueContainers
 {
-    internal sealed class BoundingBoxXYZContainer : Base.ValueContainer<BoundingBoxXYZ>
+    internal sealed class BoundingBoxXYZContainer : Base.ValueContainer<BoundingBoxXYZ>, IHaveDetailInformation
     {
         protected override bool CanBeSnoooped(BoundingBoxXYZ box) => box is not null;
         protected override string ToLabel(BoundingBoxXYZ box)
@@ -15,6 +16,17 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers
         protected override IEnumerable<SnoopableObject> Snooop(Document document, BoundingBoxXYZ box)
         {
             yield return new SnoopableObject(document, box);
+        }
+
+        /// <summary>
+        /// Retrieve BoundingBoxXYZ in mm
+        /// </summary>
+        public string DetailInformationText
+        {
+            get => 
+@$"{ToLabel(Value)}
+Min({Value.Min.X.ToLengthDisplayString(Units)}, {Value.Min.Y.ToLengthDisplayString(Units)}, {Value.Min.Z.ToLengthDisplayString(Units)}), Max({Value.Max.X.ToLengthDisplayString(Units)}, {Value.Max.Y.ToLengthDisplayString(Units)}, {Value.Max.Z.ToLengthDisplayString(Units)})
+WDH({(Value.Max.X - Value.Min.X).ToLengthDisplayString(Units)}, {(Value.Max.Y - Value.Min.Y).ToLengthDisplayString(Units)}, {(Value.Max.Z - Value.Min.Z).ToLengthDisplayString(Units)})";
         }
     }
 }

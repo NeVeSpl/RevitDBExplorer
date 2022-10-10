@@ -185,6 +185,8 @@
     <Compile Include="Domain\DataModel\MemberTemplates\Family_Templates.cs" />
     <Compile Include="Domain\DataModel\MemberTemplates\UpdaterInfo_Templates.cs" />
     <Compile Include="Domain\DataModel\MemberTemplates\WorksharingUtils_Templates.cs" />
+    <Compile Include="Domain\DataModel\ValueContainers\Base\ToDisplayUnitHelper.cs" />
+    <Compile Include="Domain\DataModel\ValueContainers\Base\IHaveDetailInformation.cs" />
     <Compile Include="Domain\DataModel\ValueContainers\DocumentChangedEventArgsContainer.cs" />
     <Compile Include="Domain\DataModel\ValueContainers\FailuresProcessingEventArgsContainer.cs" />
     <Compile Include="Domain\DataModel\ValueContainers\IExternalApplicationContainer.cs" />
