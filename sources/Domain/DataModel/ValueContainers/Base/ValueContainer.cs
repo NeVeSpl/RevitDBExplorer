@@ -30,7 +30,7 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers.Base
 
         public virtual IValueContainer SetValue(Document document, object value)
         {
-            Units = document.GetUnits();
+            Units = document?.GetUnits();
             if (value == null)
             {
                 this.value = (T)type.GetDefaultValue();

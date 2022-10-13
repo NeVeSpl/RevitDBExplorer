@@ -9,7 +9,13 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers.Base
 {
     internal static class ToDisplayUnitExtensions
     {
-        public static string ToLengthDisplayString(this double value, Units units) =>
-            UnitFormatUtils.Format(units, SpecTypeId.Length, value, false, new FormatValueOptions { AppendUnitSymbol = true});
+        public static string ToLengthDisplayString(this double value, Units units)
+        {
+            if (units != null)
+                return UnitFormatUtils.Format(units, SpecTypeId.Length, value, false,
+                                       new FormatValueOptions { AppendUnitSymbol = true });
+            else
+                return string.Empty;
+        }
     }
 }
