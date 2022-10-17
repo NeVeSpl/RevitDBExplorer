@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Autodesk.Revit.DB;
+﻿using Autodesk.Revit.DB;
 
-namespace RevitDBExplorer.Domain.DataModel.ValueContainers.Base
+// (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
+
+namespace RevitDBExplorer.Extensions.System
 {
-    internal static class ToDisplayUnitExtensions
+    internal static class DoubleExtensions
     {
         public static string ToLengthDisplayString(this double value, Units units)
         {

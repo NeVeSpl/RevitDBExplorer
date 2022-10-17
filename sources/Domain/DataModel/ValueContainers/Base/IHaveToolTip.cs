@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace RevitDBExplorer.Domain.DataModel.ValueContainers.Base
 {
-    internal interface IHaveDetailInformation
+    internal interface IHaveToolTip
     {
-        string DetailInformationText { get; }
+        string ToolTip { get; }
     }
 }

@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
 using Autodesk.Revit.DB;
 using RevitDBExplorer.Domain.DataModel.ValueContainers.Base;
+using RevitDBExplorer.Extensions.System;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
 namespace RevitDBExplorer.Domain.DataModel.ValueContainers
 {
-    internal sealed class BoundingBoxXYZContainer : Base.ValueContainer<BoundingBoxXYZ>, IHaveDetailInformation
+    internal sealed class BoundingBoxXYZContainer : Base.ValueContainer<BoundingBoxXYZ>, IHaveToolTip
     {
         protected override bool CanBeSnoooped(BoundingBoxXYZ box) => box is not null;
         protected override string ToLabel(BoundingBoxXYZ box)
@@ -18,10 +19,7 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers
             yield return new SnoopableObject(document, box);
         }
 
-        /// <summary>
-        /// Retrieve BoundingBoxXYZ in mm
-        /// </summary>
-        public string DetailInformationText
+        public string ToolTip
         {
             get => 
 @$"{ToLabel(Value)}

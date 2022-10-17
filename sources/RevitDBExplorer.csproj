@@ -184,8 +184,7 @@
     <Compile Include="Domain\DataModel\MemberTemplates\Family_Templates.cs" />
     <Compile Include="Domain\DataModel\MemberTemplates\UpdaterInfo_Templates.cs" />
     <Compile Include="Domain\DataModel\MemberTemplates\WorksharingUtils_Templates.cs" />
-    <Compile Include="Domain\DataModel\ValueContainers\Base\ToDisplayUnitHelper.cs" />
-    <Compile Include="Domain\DataModel\ValueContainers\Base\IHaveDetailInformation.cs" />
+    <Compile Include="Domain\DataModel\ValueContainers\Base\IHaveToolTip.cs" />
     <Compile Include="Domain\DataModel\ValueContainers\DocumentChangedEventArgsContainer.cs" />
     <Compile Include="Domain\DataModel\ValueContainers\FailuresProcessingEventArgsContainer.cs" />
     <Compile Include="Domain\DataModel\ValueContainers\IExternalApplicationContainer.cs" />
@@ -305,6 +304,7 @@
     <Compile Include="Extensions\System\Runtime.CompilerServices\IsExternalInit .cs" />
     <Compile Include="Extensions\System\StringExtensions.cs" />
     <Compile Include="Extensions\System\Threading.Tasks\TaskExtensions.cs" />
+    <Compile Include="Extensions\System\DoubleExtensions.cs" />
     <Compile Include="Extensions\System\VersionExtensions.cs" />
     <Compile Include="Extensions\System\Windows.Threading\DispatcherTimerExtensions.cs" />
     <Compile Include="Properties\AppSettings.Designer.cs">

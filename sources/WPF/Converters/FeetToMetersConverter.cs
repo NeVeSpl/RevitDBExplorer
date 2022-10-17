@@ -18,9 +18,9 @@ namespace RevitDBExplorer.WPF.Converters
 
             if (snoopableMember.ValueViewModel is DefaultPresenterVM presenter)
             {
-                if (presenter.ValueContainer is IHaveDetailInformation detailInformation)
+                if (presenter.ValueContainer is IHaveToolTip toolTip)
                 {
-                    return detailInformation.DetailInformationText;
+                    return toolTip.ToolTip;
                 }
             }
             return snoopableMember.Label.Text;
