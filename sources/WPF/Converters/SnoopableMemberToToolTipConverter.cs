@@ -8,7 +8,7 @@ using RevitDBExplorer.UIComponents.List.ValuePresenters;
 
 namespace RevitDBExplorer.WPF.Converters
 {
-    internal class FeetToMetersConverter : IValueConverter
+    internal class SnoopableMemberToToolTipConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
