@@ -3,11 +3,12 @@ using System.Globalization;
 using System.Windows.Data;
 using RevitDBExplorer.Domain.DataModel;
 using RevitDBExplorer.Domain.DataModel.ValueContainers;
+using RevitDBExplorer.Domain.DataModel.ValueContainers.Base;
 using RevitDBExplorer.UIComponents.List.ValuePresenters;
 
 namespace RevitDBExplorer.WPF.Converters
 {
-    internal class FeetToMetersConverter : IValueConverter
+    internal class SnoopableMemberToToolTipConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
@@ -17,10 +18,9 @@ namespace RevitDBExplorer.WPF.Converters
 
             if (snoopableMember.ValueViewModel is DefaultPresenterVM presenter)
             {
-                if (presenter.ValueContainer is DoubleContainer container)
+                if (presenter.ValueContainer is IHaveToolTip toolTip)
                 {
-                    double result = container.Value * 0.3048;
-                    return $"{result} [m]";
+                    return toolTip.ToolTip;
                 }
             }
             return snoopableMember.Label.Text;

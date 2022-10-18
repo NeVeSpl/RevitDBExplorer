@@ -7,7 +7,7 @@
     <DataTemplate DataType="{x:Type presenters:DefaultPresenterVM}">
         <TextBlock Text="{Binding Label.Text, Mode=OneWay}" TextWrapping="NoWrap"  >
             <TextBlock.Resources>
-                <converters:FeetToMetersConverter x:Key="FeetToMetersConverter"/>
+                <converters:SnoopableMemberToToolTipConverter x:Key="FeetToMetersConverter"/>
             </TextBlock.Resources>
             <TextBlock.ToolTip>
                 <TextBlock Text="{Binding ., Converter={StaticResource FeetToMetersConverter}}" />
