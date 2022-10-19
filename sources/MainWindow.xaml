@@ -175,7 +175,7 @@
                 <ColumnDefinition Width="auto"/>
             </Grid.ColumnDefinitions>
             <controls:TextBoxWithPlaceholder Grid.Column="0" Margin="0 0 2 1" Text="{Binding TreeItemsFilterPhrase, Mode=TwoWay, Delay=500, UpdateSourceTrigger=PropertyChanged}" Placeholder="Filter tree by item name"/>
-            <Button Grid.Column="1" Style="{DynamicResource ResetButton}"  ToolTip="Reset filter of item name" Background="Transparent"  Click="ResetItemFilter_Click">
+            <Button Grid.Column="1" Style="{DynamicResource ResetButton}"  ToolTip="Reset filter of item name" Background="Transparent"  Click="ResetTreeItemsFilter_Click">
                 <Path Style="{StaticResource IconClose}" Width="18" />
             </Button>
         </Grid>
@@ -189,7 +189,7 @@
 
             <controls:TextBoxWithPlaceholder Margin="0 0 2 0" Text="{Binding ListItemsFilterPhrase, Mode=TwoWay, Delay=200, UpdateSourceTrigger=PropertyChanged}" Placeholder="Filter list by property/method name"/>
 
-            <Button Grid.Column="1" Style="{DynamicResource ResetButton}"  ToolTip="Reset filter of property/method name" Background="Transparent"  Click="ResetPropertyFilter_Click">
+            <Button Grid.Column="1" Style="{DynamicResource ResetButton}"  ToolTip="Reset filter of property/method name" Background="Transparent"  Click="ResetListItemsFilter_Click">
                 <Path Style="{StaticResource IconClose}" Width="18" />
             </Button>
             <Button Grid.Column="2" Margin="2 0 0 0" MinWidth="22" MinHeight="22" Padding="1 1 1 1" ToolTip="Reload data from Revit in the list" Background="Transparent"  Click="ReloadButton_Click">

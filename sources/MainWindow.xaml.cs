@@ -224,19 +224,16 @@ namespace RevitDBExplorer
         {
             await ExternalExecutor.ExecuteInRevitContextAsync(uiApp => ResetDatabaseQuery());    
         }
-        private async void ResetItemFilter_Click(object sender, RoutedEventArgs e)
+        private async void ResetTreeItemsFilter_Click(object sender, RoutedEventArgs e)
         {
-            await ExternalExecutor.ExecuteInRevitContextAsync(uiApp => ResetTreeViewFilter());    
+            await ExternalExecutor.ExecuteInRevitContextAsync(uiApp => ResetTreeItemsFilter());    
         }
 
-        private async void ResetPropertyFilter_Click(object sender, RoutedEventArgs e)
+        private async void ResetListItemsFilter_Click(object sender, RoutedEventArgs e)
         {
-            await ExternalExecutor.ExecuteInRevitContextAsync(uiApp => ResetListFilter());    
+            await ExternalExecutor.ExecuteInRevitContextAsync(uiApp => ResetListItemsFilter());    
         }
-
-
-
-
+        
         private async void TryQueryDatabase(string query)
         {            
             ResetTreeItems();
@@ -318,11 +315,11 @@ namespace RevitDBExplorer
             DatabaseQueryToolTip = "";
             queryVisualizationVM.Update(Enumerable.Empty<RDQCommand>()).Forget();
         }
-        private void ResetTreeViewFilter()
+        private void ResetTreeItemsFilter()
         {
             TreeItemsFilterPhrase = "";
         }
-        private void ResetListFilter()
+        private void ResetListItemsFilter()
         {
             ListItemsFilterPhrase = "";
         }
