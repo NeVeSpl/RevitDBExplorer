@@ -41,6 +41,7 @@
             <MenuItem Header="Theme" >
                 <MenuItem Header ="Light - default" Tag="Default" Click="Window_MenuItemSelectTheme_Click"/>
                 <MenuItem Header ="Dark - be ready" Tag="Dark" Click="Window_MenuItemSelectTheme_Click"/>
+                <MenuItem Header ="Dark - R2024" Tag="DarkR2024" Click="Window_MenuItemSelectTheme_Click"/>
             </MenuItem>
             <MenuItem Header="Is event monitor enabled" IsCheckable="True" IsChecked="{ext:SettingBinding IsEventMonitorEnabled}" Checked="Window_MenuItemSnoopEvents_Checked"  Unchecked="Window_MenuItemSnoopEvents_Checked"/>
         </ContextMenu>
