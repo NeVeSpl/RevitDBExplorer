@@ -62,7 +62,7 @@ namespace RevitDBExplorer.Domain.DataModel
             if (@object is Parameter parameter)
             {
                 NamePrefixIcon = Icon.Empty;
-                if (parameter.Id.IntegerValue > -1)
+                if (parameter.Id.Value() > -1)
                 {
                     NamePrefixIcon = Icon.ProjectParameter;
                 }

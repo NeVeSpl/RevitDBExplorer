@@ -27,10 +27,10 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers
         protected override string ToLabel(ElementId id)
         {
             if (id == ElementId.InvalidElementId) return ElementId.InvalidElementId.ToString();
-            if (id.IntegerValue < -1)
+            if (id.Value() < -1)
             {                
-                var parName = Enum.GetName(typeof(BuiltInParameter), id.IntegerValue);
-                var catName = Enum.GetName(typeof(BuiltInCategory), id.IntegerValue);
+                var parName = Enum.GetName(typeof(BuiltInParameter), id.Value());
+                var catName = Enum.GetName(typeof(BuiltInCategory), id.Value());
                 if (parName != null) return $"BuiltInParameter.{parName} ({id})";
                 if (catName != null) return $"BuiltInCategory.{catName} ({id})";
                 if(id == PlanViewRange.Unlimited) return $"PlanViewRange.Unlimited";

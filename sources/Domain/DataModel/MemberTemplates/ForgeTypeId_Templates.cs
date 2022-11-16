@@ -64,7 +64,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberTemplates
             ForCategory = new ISnoopableMemberTemplate[]
             {
 #if R2022b
-                SnoopableMemberTemplate<Category>.Create((doc, category) => Category.GetBuiltInCategoryTypeId((BuiltInCategory)category.Id.IntegerValue)),
+                SnoopableMemberTemplate<Category>.Create((doc, category) => Category.GetBuiltInCategoryTypeId((BuiltInCategory)category.Id.Value())),
 #endif
             };
             ForParameter = new ISnoopableMemberTemplate[]

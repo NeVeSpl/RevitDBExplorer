@@ -84,9 +84,9 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
                 //var words = text.Split(' ');
                 //foreach (var word in words)
                 {
-                    if (int.TryParse(text, out int intValue))
+                    if (long.TryParse(text, out long longValue))
                     {
-                        found.Add(new ElementIdMatch(new ElementId(intValue), 1.0));
+                        found.Add(new ElementIdMatch(ElementIdFactory.Create(longValue), 1.0));
                     }
                 }
             }
@@ -188,7 +188,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
 
             foreach (ElementId categoryId in allFilterableCategories)
             {
-                var category = (BuiltInCategory)categoryId.IntegerValue;
+                var category = (BuiltInCategory)categoryId.Value();
                 var label = LabelUtils.GetLabelFor(category);
 
                 if (!Category.IsBuiltInCategoryValid(category))

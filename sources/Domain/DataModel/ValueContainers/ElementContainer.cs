@@ -24,7 +24,7 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers
             {
                 elementName = $"{symbol.FamilyName}: {symbol.Name}";
             }
-            return $"{elementName} ({element.Id.IntegerValue})";
+            return $"{elementName} ({element.Id})";
         }
         protected override IEnumerable<SnoopableObject> Snooop(Document document, Element element)
         {

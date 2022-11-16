@@ -33,9 +33,9 @@ namespace RevitDBExplorer.Domain
         }
         public static string GetLabelForCategory(ElementId categoryId)
         {
-            if ((categoryId != null) && (Category.IsBuiltInCategoryValid((BuiltInCategory)categoryId.IntegerValue)))
+            if ((categoryId != null) && (Category.IsBuiltInCategoryValid((BuiltInCategory)categoryId.Value())))
             {
-                return LabelUtils.GetLabelFor((BuiltInCategory)categoryId.IntegerValue);
+                return LabelUtils.GetLabelFor((BuiltInCategory)categoryId.Value());
             }
             return "[invalid category]";
         }

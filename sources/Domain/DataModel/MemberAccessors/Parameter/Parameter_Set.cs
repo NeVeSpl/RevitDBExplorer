@@ -14,7 +14,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
             yield return (Parameter x) => x.Set("foo");
             yield return (Parameter x) => x.Set(7); 
             yield return (Parameter x) => x.Set(7.77);
-            yield return (Parameter x) => x.Set(new ElementId(7)); 
+            yield return (Parameter x) => x.Set(ElementIdFactory.Create(7)); 
         }
 
 
@@ -56,7 +56,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
                     parameter.Set(intEditor.Value);
                     break;
                 case StorageType.ElementId:
-                    parameter.Set(new ElementId(intEditor.Value));
+                    parameter.Set(ElementIdFactory.Create(intEditor.Value));
                     break;
                 case StorageType.String:
                     parameter.Set(stringEditor.Value);

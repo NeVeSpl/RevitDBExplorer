@@ -25,7 +25,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Filters
         {
             CmdType = CmdType.Parameter;
             IsBuiltInParameter = false;
-            Name = $"new ElementId({value.IntegerValue})";
+            Name = $"new ElementId({value})";
             Label = name;
         }
 

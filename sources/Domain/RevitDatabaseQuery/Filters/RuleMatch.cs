@@ -9,7 +9,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Filters
         public RuleMatch(ElementId filterId, double levensteinScore, string name) : base(filterId, levensteinScore)
         {
             CmdType = CmdType.RuleBasedFilter;
-            Name = $"new ElementId({filterId.IntegerValue})";
+            Name = $"new ElementId({filterId})";
             Label = name;
         }
     }

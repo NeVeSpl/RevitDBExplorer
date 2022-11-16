@@ -161,12 +161,12 @@ namespace RevitDBExplorer.UIComponents.Tree
 
             public bool Equals(Category x, Category y)
             {
-                return x?.Id?.IntegerValue.Equals(y?.Id?.IntegerValue) ?? true;
+                return x?.Id?.Value().Equals(y?.Id?.Value()) ?? true;
             }
 
             public int GetHashCode(Category obj)
             {
-                return obj?.Id?.IntegerValue.GetHashCode() ?? -1;
+                return obj?.Id?.Value().GetHashCode() ?? -1;
             }
         }
     }    

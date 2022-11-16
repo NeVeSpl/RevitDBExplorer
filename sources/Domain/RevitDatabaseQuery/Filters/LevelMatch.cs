@@ -9,7 +9,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Filters
         public LevelMatch(ElementId levelId, double levensteinScore, string name) : base(levelId, levensteinScore)
         {
             CmdType = CmdType.Level;
-            Name = $"new ElementId({levelId.IntegerValue})";
+            Name = $"new ElementId({levelId})";
             Label = name;
         }
     }

@@ -193,7 +193,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Filters
 
             if (storageType == (StorageType.ElementId) && @operator.IsArgumentInt)
             {
-                var argAsId = new ElementId(@operator.ArgumentAsInt);
+                var argAsId = ElementIdFactory.Create(@operator.ArgumentAsInt);
                 rule = @operator.Type switch
                 {
                     OperatorType.Equals => ParameterFilterRuleFactory.CreateEqualsRule(parameter, argAsId),

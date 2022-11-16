@@ -9,8 +9,8 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Filters
         public ElementIdMatch(ElementId value, double levensteinScore) : base(value, levensteinScore)
         {
             CmdType = CmdType.ElementId;
-            Name = $"new ElementId({value.IntegerValue})";
-            Label = value.IntegerValue.ToString();
+            Name = $"new ElementId({value})";
+            Label = value.Value().ToString();
         }
     }
 }
