@@ -48,6 +48,11 @@ jobs:
       working-directory: sources/
       run: |
           msbuild /p:Configuration=R2023
+
+    - name: Build Project for R2024     
+      working-directory: sources/
+      run: |
+          msbuild /p:Configuration=R2024
           
     - name: Create Code Signing Certificate
       run: |

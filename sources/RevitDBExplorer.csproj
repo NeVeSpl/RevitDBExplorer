@@ -67,6 +67,15 @@
     <LangVersion>10.0</LangVersion>
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'R2024|AnyCPU'">
+    <OutputPath>bin\R2024\</OutputPath>
+    <DefineConstants>TRACE;R2021b, R2022b, R2023b, R2024b, R2024e</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <LangVersion>10.0</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="CircularBuffer, Version=1.3.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\CircularBuffer.1.3.0\lib\net461\CircularBuffer.dll</HintPath>
@@ -89,7 +98,11 @@
       <HintPath>..\binaries\revit\2023\RevitAPI.dll</HintPath>
       <Private>False</Private>
     </Reference>
-	<Reference Include="RevitAPI" Condition="'$(Configuration)'=='Debug2024'">
+    <Reference Include="RevitAPI" Condition="'$(Configuration)'=='Debug2024'">
+      <HintPath>..\binaries\revit\2024\RevitAPI.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+	<Reference Include="RevitAPI" Condition="'$(Configuration)'=='R2024'">
       <HintPath>..\binaries\revit\2024\RevitAPI.dll</HintPath>
       <Private>False</Private>
     </Reference>
@@ -109,7 +122,11 @@
       <HintPath>..\binaries\revit\2023\RevitAPIUI.dll</HintPath>
       <Private>False</Private>
     </Reference>
-	 <Reference Include="RevitAPIUI" Condition="'$(Configuration)'=='Debug2024'">
+    <Reference Include="RevitAPIUI" Condition="'$(Configuration)'=='Debug2024'">	
+      <HintPath>..\binaries\revit\2024\RevitAPIUI.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+	<Reference Include="RevitAPIUI" Condition="'$(Configuration)'=='R2024'">
       <HintPath>..\binaries\revit\2024\RevitAPIUI.dll</HintPath>
       <Private>False</Private>
     </Reference>
