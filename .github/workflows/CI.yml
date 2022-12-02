@@ -17,6 +17,12 @@ jobs:
       uses: actions/checkout@v3
       with:
         fetch-depth: 0 
+        
+    - name: Checkout Secret Repo
+      uses: actions/checkout@master
+      with:
+        repository: NeVeSpl/SecretRepository
+        token: ${{ secrets.SR_PAT }}
 
     - name: Setup MSBuild.exe
       uses: microsoft/setup-msbuild@v1.1
