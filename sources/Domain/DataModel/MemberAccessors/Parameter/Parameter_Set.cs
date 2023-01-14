@@ -16,50 +16,55 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
             yield return (Parameter x) => x.Set(7.77);
             yield return (Parameter x) => x.Set(ElementIdFactory.Create(7)); 
         }
+              
 
 
-        private readonly StringEditorVM stringEditor = new();
-        private readonly IntegerEditorVM intEditor = new();
-        private readonly DoubleEditorVM doubleEditor = new();
-
-
-        public override IValueEditor GetEditor(SnoopableContext context, Parameter parameter)
+        public override IValueEditor CreateEditor(SnoopableContext context, Parameter parameter)
         {
             switch (parameter.StorageType)
             {
                 case StorageType.Double:
-                    return doubleEditor;   
+                    return new DoubleEditorVM();   
                 case StorageType.Integer:
                 case StorageType.ElementId:
-                    return intEditor;              
+                    return new IntegerEditorVM();              
             }
-            return stringEditor;
+            return new StringEditorVM();
         }
-        public override void Read(SnoopableContext context, Parameter parameter)
+        public override void Read(SnoopableContext context, Parameter parameter, IValueEditor valueEditor)
         {
-            stringEditor.Value = parameter.AsString();
-            intEditor.Value = parameter.AsInteger();
-            doubleEditor.Value = parameter.AsDouble();
+            switch (valueEditor)
+            {
+                case DoubleEditorVM doubleEditor:
+                    doubleEditor.Value = parameter.AsDouble();
+                    break;
+                case IntegerEditorVM integerEditor:
+                    integerEditor.Value = parameter.AsInteger();
+                    break;
+                case StringEditorVM stringEditor:
+                    stringEditor.Value = parameter.AsString();
+                    break;
+            }
         }
         public override bool CanBeWritten(SnoopableContext context, Parameter parameter)
         {
             return !parameter.IsReadOnly;
         }   
-        public override void Write(SnoopableContext context, Parameter parameter)
+        public override void Write(SnoopableContext context, Parameter parameter, IValueEditor valueEditor)
         {
             switch (parameter.StorageType)
             {
                 case StorageType.Double:
-                    parameter.Set(doubleEditor.Value);
+                    parameter.Set((valueEditor as DoubleEditorVM).Value);
                     break;
                 case StorageType.Integer:
-                    parameter.Set(intEditor.Value);
+                    parameter.Set((valueEditor as IntegerEditorVM).Value);
                     break;
                 case StorageType.ElementId:
-                    parameter.Set(ElementIdFactory.Create(intEditor.Value));
+                    parameter.Set(ElementIdFactory.Create((valueEditor as IntegerEditorVM).Value));
                     break;
                 case StorageType.String:
-                    parameter.Set(stringEditor.Value);
+                    parameter.Set((valueEditor as StringEditorVM).Value);
                     break;
             }
         }       

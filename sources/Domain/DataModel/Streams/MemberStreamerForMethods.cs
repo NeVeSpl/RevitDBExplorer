@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace RevitDBExplorer.Domain.DataModel.Streams
 {
-    internal static class MembersFromMethods
+    internal static class MemberStreamerForMethods
     {
     }
 }

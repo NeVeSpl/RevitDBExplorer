@@ -1,13 +1,14 @@
 ﻿using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.ExtensibleStorage;
+using RevitDBExplorer.Domain.DataModel.MemberAccessors;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
-namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
+namespace RevitDBExplorer.Domain.DataModel.MemberTemplates.Accessors
 {
     internal class Schema_EraseSchemaAndAllEntities : MemberAccessorTypedWithWrite<Schema>
     {
-        public override void Read(SnoopableContext context, Schema @object)
+        public override void Read(SnoopableContext context, Schema @object, IValueEditor valueEditor)
         {
             //Label = $"Erase",           
         }
@@ -18,7 +19,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
             return result;
         }
 
-        public override void Write(SnoopableContext context, Schema schema)
+        public override void Write(SnoopableContext context, Schema schema, IValueEditor valueEditor)
         {  
             var elements = new FilteredElementCollector(context.Document).WherePasses(new ExtensibleStorageFilter(schema.GUID)).ToElements();
             foreach (var element in elements)

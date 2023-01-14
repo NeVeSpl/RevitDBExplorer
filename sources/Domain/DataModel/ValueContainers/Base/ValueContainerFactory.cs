@@ -62,6 +62,10 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers.Base
         };
 
 
+        public static void Init()
+        {
+
+        }
         static ValueContainerFactory()
         {
             foreach (var typeHandler in TypeHandlers)
@@ -73,7 +77,6 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers.Base
                 FactoryMethodsForValueContainers.Add((typeHandler.Type, closedType.CompileFactoryMethod<IValueContainer>()));
             }
         }
-
 
 
         private static readonly Dictionary<Type, Func<IValueContainer>> Cache_Factories = new();

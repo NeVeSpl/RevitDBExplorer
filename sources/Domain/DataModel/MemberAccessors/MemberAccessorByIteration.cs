@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Autodesk.Revit.DB;
+using RevitDBExplorer.Domain.DataModel.ValueContainers.Base;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
@@ -24,7 +25,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
             var typeName = getMethod.ReturnType.GetCSharpName();
             return new ReadResult($"[{typeName}]", nameof(MemberAccessorByIteration), true);
         }
-        public override IEnumerable<SnoopableObject> Snoop(SnoopableContext context, object @object)
+        public override IEnumerable<SnoopableObject> Snoop(SnoopableContext context, object @object, IValueContainer state)
         {            
             var result = new List<SnoopableObject>();
             var parameter = getMethod.GetParameters().First();

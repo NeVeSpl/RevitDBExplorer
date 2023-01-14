@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Autodesk.Revit.DB;
+using RevitDBExplorer.Domain.DataModel.MemberAccessors;
+using RevitDBExplorer.Domain.DataModel.ValueContainers.Base;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
-namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
+namespace RevitDBExplorer.Domain.DataModel.MemberTemplates.Accessors
 {
     internal class JoinGeometryUtils_IsCuttingElementInJoin : MemberAccessorTyped<Element>
     {
@@ -20,7 +22,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 
         }
 
-        public override IEnumerable<SnoopableObject> Snoop(SnoopableContext context, Element element)
+        public override IEnumerable<SnoopableObject> Snoop(SnoopableContext context, Element element, IValueContainer state)
         {
             var elementIds = JoinGeometryUtils.GetJoinedElements(context.Document, element);
             if (elementIds.Any())

@@ -7,7 +7,7 @@ using RevitDBExplorer.Domain.DataModel.MemberAccessors;
 
 namespace RevitDBExplorer.Domain.DataModel.Streams
 {
-    internal static class MembersFromSystemType
+    internal static class MemberStreamerForSystemType
     {
         public static IEnumerable<SnoopableMember> Stream(SnoopableObject snoopableObject)
         {
@@ -16,7 +16,7 @@ namespace RevitDBExplorer.Domain.DataModel.Streams
 
             if ((type.IsEnum) || (type.IsPrimitive) || (type == typeof(string)))
             {
-                var member = new SnoopableMember(snoopableObject, SnoopableMember.Kind.Property, "Value", type, new MemberAccessorForConstValue(type, snoopableObject.Document, snoopableObject.Object), null);                
+                var member = new SnoopableMember(snoopableObject, SnoopableMember.Kind.Property, "Value", type, new MemberAccessorForConstValue(type, snoopableObject.Context, snoopableObject.Object), null);                
                 yield return member;                            
             }
 
@@ -31,12 +31,12 @@ namespace RevitDBExplorer.Domain.DataModel.Streams
 
                 for (int i = 0; i < Math.Min(list.Count, 9999); i++)
                 {                   
-                    var member = new SnoopableMember(snoopableObject, SnoopableMember.Kind.Property, i.ToString(), type, new MemberAccessorForConstValue(itemType, snoopableObject.Document, list[i]), null);
+                    var member = new SnoopableMember(snoopableObject, SnoopableMember.Kind.Property, i.ToString(), type, new MemberAccessorForConstValue(itemType, snoopableObject.Context, list[i]), null);
                     yield return member;
                 }
                 if (list.Count == 0)
                 {
-                    yield return new SnoopableMember(snoopableObject, SnoopableMember.Kind.Property, "<list is empty>", type, new MemberAccessorForConstValue(itemType, snoopableObject.Document, null), null);
+                    yield return new SnoopableMember(snoopableObject, SnoopableMember.Kind.Property, "<list is empty>", type, new MemberAccessorForConstValue(itemType, snoopableObject.Context, null), null);
                 }
             }
 
@@ -51,12 +51,12 @@ namespace RevitDBExplorer.Domain.DataModel.Streams
 
                 foreach (DictionaryEntry item in dict)
                 {
-                    var member = new SnoopableMember(snoopableObject, SnoopableMember.Kind.Property, item.Key.ToString(), type, new MemberAccessorForConstValue(itemType, snoopableObject.Document, item.Value), null);                   
+                    var member = new SnoopableMember(snoopableObject, SnoopableMember.Kind.Property, item.Key.ToString(), type, new MemberAccessorForConstValue(itemType, snoopableObject.Context, item.Value), null);                   
                     yield return member;
                 }
                 if (dict.Count == 0)
                 {
-                    yield return new SnoopableMember(snoopableObject, SnoopableMember.Kind.Property, "<dictionary is empty>", type, new MemberAccessorForConstValue(itemType, snoopableObject.Document, null), null);
+                    yield return new SnoopableMember(snoopableObject, SnoopableMember.Kind.Property, "<dictionary is empty>", type, new MemberAccessorForConstValue(itemType, snoopableObject.Context, null), null);
                 }
             }
         }

@@ -12,24 +12,24 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
         IEnumerable<LambdaExpression> ICanCreateMemberAccessor.GetHandledMembers() { yield return (Parameter x) => x.SetValueString("foo"); }
 
 
-        private readonly StringEditorVM editor = new();
+       
 
 
-        public override IValueEditor GetEditor(SnoopableContext context, Parameter typedObject)
+        public override IValueEditor CreateEditor(SnoopableContext context, Parameter typedObject)
         {
-            return editor;
+            return new StringEditorVM();
         }
-        public override void Read(SnoopableContext context, Parameter parameter)
+        public override void Read(SnoopableContext context, Parameter parameter, IValueEditor valueEditor)
         {
-            editor.Value = parameter.AsValueString();           
+            (valueEditor as StringEditorVM).Value = parameter.AsValueString();           
         }
         public override bool CanBeWritten(SnoopableContext context, Parameter parameter)
         {
             return !parameter.IsReadOnly;
         }   
-        public override void Write(SnoopableContext context, Parameter typedObject)
+        public override void Write(SnoopableContext context, Parameter typedObject, IValueEditor valueEditor)
         {            
-            typedObject.SetValueString(editor.Value);
+            typedObject.SetValueString((valueEditor as StringEditorVM).Value);
         }       
     }
 }

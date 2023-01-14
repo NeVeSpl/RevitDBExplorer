@@ -4,6 +4,7 @@ using Autodesk.Revit.UI;
 using RevitDBExplorer.Domain;
 using RevitDBExplorer.Domain.DataModel.MemberAccessors;
 using RevitDBExplorer.Domain.DataModel.Streams;
+using RevitDBExplorer.Domain.DataModel.ValueContainers.Base;
 using RevitDBExplorer.Domain.RevitDatabaseQuery;
 
 namespace RevitDBExplorer
@@ -26,7 +27,8 @@ namespace RevitDBExplorer
 
             ExternalExecutor.CreateExternalEvent();
             MemberAccessorFactory.Init();
-            MembersFromTemplates.Init();
+            ValueContainerFactory.Init();
+            MemberStreamerForTemplates.Init();
             RevitDocumentationReader.Init();
             RevitDatabaseQueryService.Init();
             EventMonitor.Register(application);

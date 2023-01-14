@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using RevitDBExplorer.Domain.DataModel.MemberAccessors;
+using RevitDBExplorer.Domain.DataModel.ValueContainers.Base;
 using RevitDBExplorer.Domain.DataModel.ValueObjects;
 using RevitDBExplorer.UIComponents.List.ValuePresenters;
 using RevitDBExplorer.WPF;
@@ -36,6 +37,8 @@ namespace RevitDBExplorer.Domain.DataModel
         public RelayCommand WriteCommand { get; }        
         public event Action SnoopableObjectChanged;
 
+        private IValueContainer state;
+        private IValuePresenter valuePresenter;
 
         public SnoopableMember(SnoopableObject parent, Kind memberKind, string name, Type declaringType, IMemberAccessor memberAccessor, Func<DocXml> documentationFactoryMethod)
         {
@@ -69,8 +72,16 @@ namespace RevitDBExplorer.Domain.DataModel
         {
             try
             {
-                ValueViewModel = memberAccessor.GetPresenter(context, @object);
-                var result = memberAccessor.Read(context, @object);                  
+                valuePresenter ??= memberAccessor.CreatePresenter(context, @object);
+                ValueViewModel = valuePresenter;
+
+                var result = memberAccessor.Read(context, @object, valuePresenter);
+                if (ValueViewModel is DefaultPresenterVM pres)
+                {
+                    pres.ValueContainer = result.State;
+                }
+                state = result.State;
+              
                 AccessorName = result.AccessorName;
                 CanBeSnooped = result.CanBeSnooped;
                 Label = new Label(result.Label, false);
@@ -95,7 +106,7 @@ namespace RevitDBExplorer.Domain.DataModel
             if (isFrozen) return frozenSnooopResult;           
             if (memberAccessor is IMemberAccessorWithSnoop snooper)
             {
-                return snooper.Snoop(parent.Context, parent.Object);
+                return snooper.Snoop(parent.Context, parent.Object, state);
             }
             return Enumerable.Empty<SnoopableObject>();
         }
@@ -110,7 +121,7 @@ namespace RevitDBExplorer.Domain.DataModel
             {
                 ExternalExecutorExt.ExecuteInRevitContextInsideTransactionAsync((x) =>
                 {                    
-                    writer.Write(context, @object);
+                    writer.Write(context, @object, valuePresenter);
                 }, context.Document, $"{memberAccessor.GetType().Name}").Forget();
                 SnoopableObjectChanged?.Invoke();
             }            
@@ -129,4 +140,9 @@ namespace RevitDBExplorer.Domain.DataModel
             isFrozen = true;
         }
     }
+
+    //internal class SnoopableMember<T> : SnoopableMember
+    //{
+
+    //}
 }

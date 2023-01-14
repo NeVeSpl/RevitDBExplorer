@@ -4,7 +4,7 @@ using static RevitDBExplorer.Domain.DataModel.SnoopableMember;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
-namespace RevitDBExplorer.Domain.DataModel.MemberTemplates.Base
+namespace RevitDBExplorer.Domain.DataModel.Streams.Base
 {
     internal class MemberDescriptor
     {

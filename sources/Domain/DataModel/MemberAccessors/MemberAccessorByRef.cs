@@ -8,34 +8,31 @@ using RevitDBExplorer.Domain.DataModel.ValueContainers.Base;
 
 namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
-    internal class MemberAccessorByRef : MemberAccessorTyped<object>, IMemberAccessorWithValue
+    internal class MemberAccessorByRef : MemberAccessorTyped<object>
     {
         private readonly MethodInfo getMethod;
-        private readonly MethodInfo setMethod; 
-        private readonly IValueContainer value;
-        IValueContainer IMemberAccessorWithValue.Value => value;
+        private readonly MethodInfo setMethod;      
 
 
         public MemberAccessorByRef(MethodInfo getMethod, MethodInfo setMethod)
-        {                
+        { 
             this.getMethod = getMethod;
-            this.setMethod = setMethod;
-            this.value = ValueContainerFactory.Create(getMethod.ReturnType);
+            this.setMethod = setMethod;            
         }
 
 
         public override ReadResult Read(SnoopableContext context, object @object)
         {
-            value.SetValue(context, null);
+            var value = ValueContainerFactory.Create(getMethod.ReturnType);
             var paramsDef = getMethod.GetParameters();
             var resolvedArgs = ResolveArguments(paramsDef, context.Document, @object);            
             var result = getMethod.Invoke(@object, resolvedArgs);
             value.SetValue(context, result);
-            return new ReadResult(value.ValueAsString, value.TypeName, value.CanBeSnooped);
+            return new ReadResult(value.ValueAsString, value.TypeName, value.CanBeSnooped, value);
         }
-        public override IEnumerable<SnoopableObject> Snoop(SnoopableContext context, object @object)
-        {
-            return value.Snoop();
+        public override IEnumerable<SnoopableObject> Snoop(SnoopableContext context, object @object, IValueContainer state)
+        {            
+            return state.Snoop();
         }
 
         public static Type[] HandledParameterTypes = new[] { typeof(Document), typeof(Options), typeof(View), typeof(SpatialElementBoundaryOptions) };

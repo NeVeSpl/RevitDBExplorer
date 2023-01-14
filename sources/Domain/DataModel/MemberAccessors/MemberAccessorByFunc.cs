@@ -7,30 +7,28 @@ using RevitDBExplorer.Domain.DataModel.ValueContainers.Base;
 
 namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
-    internal class MemberAccessorByFunc<TSnoopedObjectType, TReturnType> : MemberAccessorTyped<TSnoopedObjectType>, IMemberAccessorWithValue
-    {
-        private readonly IValueContainer value;
-        private readonly Func<Document, TSnoopedObjectType, TReturnType> get;
-        IValueContainer IMemberAccessorWithValue.Value => value;
+    internal class MemberAccessorByFunc<TSnoopedObjectType, TReturnType> : MemberAccessorTyped<TSnoopedObjectType>
+    {     
+        private readonly Func<Document, TSnoopedObjectType, TReturnType> get;      
 
 
         public MemberAccessorByFunc(Func<Document, TSnoopedObjectType, TReturnType> get)
         {
             this.get = get;
-            this.value = ValueContainerFactory.Create(typeof(TReturnType));
+            
         }
         
 
         public override ReadResult Read(SnoopableContext context, TSnoopedObjectType @object)
         {
-            value.SetValue(context, null);
+            var value = ValueContainerFactory.Create(typeof(TReturnType));            
             var result = get(context.Document, @object);
             value.SetValue(context, result);
-            return new ReadResult(value.ValueAsString, value.TypeName, value.CanBeSnooped);
+            return new ReadResult(value.ValueAsString, value.TypeName, value.CanBeSnooped, value);
         }
-        public override IEnumerable<SnoopableObject> Snoop(SnoopableContext context, TSnoopedObjectType @object)
+        public override IEnumerable<SnoopableObject> Snoop(SnoopableContext context, TSnoopedObjectType @object, IValueContainer state)
         {
-            return value.Snoop();
+            return state.Snoop();
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Linq.Expressions;
 using Autodesk.Revit.DB;
 using RevitDBExplorer.Domain.DataModel.MemberAccessors;
+using RevitDBExplorer.Domain.DataModel.Streams.Base;
 using static RevitDBExplorer.Domain.DataModel.SnoopableMember;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md

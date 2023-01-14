@@ -10,38 +10,30 @@ using RevitDBExplorer.UIComponents.List.ValuePresenters;
 namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
     internal interface IMemberAccessor
-    {
-        IValuePresenter GetPresenter(SnoopableContext context, object @object);
-        ReadResult Read(SnoopableContext context, object @object);   
+    { 
+        IValuePresenter CreatePresenter(SnoopableContext context, object @object);          
+        ReadResult Read(SnoopableContext context, object @object, IValuePresenter presenter);   
     }
-
     internal interface IMemberAccessorWithSnoop
     {
-        IEnumerable<SnoopableObject> Snoop(SnoopableContext context, object @object);
+        IEnumerable<SnoopableObject> Snoop(SnoopableContext context, object @object, IValueContainer state);
     }
-    internal interface IMemberAccessorWithValue
-    {
-        IValueContainer Value { get; }
-    }
+    
     internal interface IMemberAccessorWithWrite
     {
         bool CanBeWritten(SnoopableContext context, object @object);
-        void Write(SnoopableContext context, object @object);    
+        void Write(SnoopableContext context, object @object, IValuePresenter presenter);    
     }
 
 
     internal abstract class MemberAccessorTyped<TSnoopedObjectType> : IMemberAccessor, IMemberAccessorWithSnoop
     {
-        IValuePresenter IMemberAccessor.GetPresenter(SnoopableContext context, object @object)
-        { 
-            if (this is IMemberAccessorWithValue reader)
-            {
-                return new DefaultPresenterVM() { ValueContainer = reader.Value };
-            }
+        IValuePresenter IMemberAccessor.CreatePresenter(SnoopableContext context, object @object)
+        {            
             return new DefaultPresenterVM();
         }
 
-        ReadResult IMemberAccessor.Read(SnoopableContext context, object @object)
+        ReadResult IMemberAccessor.Read(SnoopableContext context, object @object, IValuePresenter presenter)
         {
             Guard.IsAssignableToType<TSnoopedObjectType>(@object);      
             var typedObject = (TSnoopedObjectType) @object;          
@@ -49,33 +41,33 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
         }
         public abstract ReadResult Read(SnoopableContext context, TSnoopedObjectType typedObject);
 
-        IEnumerable<SnoopableObject> IMemberAccessorWithSnoop.Snoop(SnoopableContext context, object @object)
+        IEnumerable<SnoopableObject> IMemberAccessorWithSnoop.Snoop(SnoopableContext context, object @object, IValueContainer state)
         {
             Guard.IsAssignableToType<TSnoopedObjectType>(@object);
             var typedObject = (TSnoopedObjectType) @object;            
-            return Snoop(context, typedObject) ?? Enumerable.Empty<SnoopableObject>();
+            return Snoop(context, typedObject, state) ?? Enumerable.Empty<SnoopableObject>();
         }
-        public virtual IEnumerable<SnoopableObject> Snoop(SnoopableContext context, TSnoopedObjectType typedObject) => null;
+        public virtual IEnumerable<SnoopableObject> Snoop(SnoopableContext context, TSnoopedObjectType typedObject, IValueContainer state) => null;
     }
 
     internal abstract class MemberAccessorTypedWithWrite<TSnoopedObjectType> : IMemberAccessor,  IMemberAccessorWithWrite
     {
-        IValuePresenter IMemberAccessor.GetPresenter(SnoopableContext context, object @object)
+        IValuePresenter IMemberAccessor.CreatePresenter(SnoopableContext context, object @object)
         {
             Guard.IsAssignableToType<TSnoopedObjectType>(@object);
             var typedObject = (TSnoopedObjectType)@object;
-            return GetEditor(context, typedObject);
+            return CreateEditor(context, typedObject);
         }
-        public virtual IValueEditor GetEditor(SnoopableContext context, TSnoopedObjectType typedObject) => new ExecuteEditorVM();
+        public virtual IValueEditor CreateEditor(SnoopableContext context, TSnoopedObjectType typedObject) => new ExecuteEditorVM();
 
-        ReadResult IMemberAccessor.Read(SnoopableContext context, object @object)
+        ReadResult IMemberAccessor.Read(SnoopableContext context, object @object, IValuePresenter presenter)
         {
             Guard.IsAssignableToType<TSnoopedObjectType>(@object);
             var typedObject = (TSnoopedObjectType)@object;
-            Read(context, typedObject);
+            Read(context, typedObject, presenter as IValueEditor);
             return new ReadResult("", this.GetType().GetCSharpName(), false);
         }
-        public abstract void Read(SnoopableContext context, TSnoopedObjectType typedObject);
+        public abstract void Read(SnoopableContext context, TSnoopedObjectType typedObject, IValueEditor valueEditor);
 
         bool IMemberAccessorWithWrite.CanBeWritten(SnoopableContext context, object @object)
         {
@@ -85,13 +77,13 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
         }
         public abstract bool CanBeWritten(SnoopableContext context, TSnoopedObjectType typedObject);
 
-        void IMemberAccessorWithWrite.Write(SnoopableContext context, object @object)
+        void IMemberAccessorWithWrite.Write(SnoopableContext context, object @object, IValuePresenter presenter)
         {
             Guard.IsAssignableToType<TSnoopedObjectType>(@object);
             var typedObject = (TSnoopedObjectType)@object;
-            Write(context, typedObject);
+            Write(context, typedObject, presenter as IValueEditor);
         }
-        public abstract void Write(SnoopableContext context, TSnoopedObjectType typedObject); 
+        public abstract void Write(SnoopableContext context, TSnoopedObjectType typedObject, IValueEditor valueEditor); 
     }
 
 
@@ -100,13 +92,15 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
         public string Label { get; init; }
         public string AccessorName { get; init; }
         public bool CanBeSnooped { get; init; }
-     
+        public IValueContainer State { get; init; }
 
-        public ReadResult(string value, string accessorName, bool canBeSnooped)
+
+        public ReadResult(string value, string accessorName, bool canBeSnooped, IValueContainer state = null)
         {
             Label = value;
             AccessorName = accessorName;
-            CanBeSnooped = canBeSnooped;          
+            CanBeSnooped = canBeSnooped; 
+            State = state;
         }
     }
 

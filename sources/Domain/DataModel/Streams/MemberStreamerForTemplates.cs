@@ -7,7 +7,7 @@ using RevitDBExplorer.Domain.DataModel.MemberTemplates.Base;
 
 namespace RevitDBExplorer.Domain.DataModel.Streams
 {
-    internal static class MembersFromTemplates
+    internal static class MemberStreamerForTemplates
     {
         private static readonly Dictionary<Type, List<ISnoopableMemberTemplate>> forTypes = new();
 
@@ -17,7 +17,7 @@ namespace RevitDBExplorer.Domain.DataModel.Streams
         }
 
 
-        static MembersFromTemplates()
+        static MemberStreamerForTemplates()
         {
             var memberTemplateFactories = GetAllInstancesThatImplement<IHaveMemberTemplates>();
 

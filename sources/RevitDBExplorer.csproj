@@ -200,7 +200,7 @@
     <Compile Include="Domain\DataModel\MemberAccessors\Element\Element_GetMaterialVolume.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\Element\Element_GetMaterialArea.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\FailureHandlingOptions\FailureHandlingOptions.cs" />
-    <Compile Include="Domain\DataModel\MemberAccessors\HostObjectUtils\HostObjectUtils_GetSideFaces.cs" />
+    <Compile Include="Domain\DataModel\MemberTemplates\Accessors\HostObjectUtils_GetSideFaces.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\MemberAccessorByIteration.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\Parameter\Parameter_Set.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\Parameter\Parameter_SetValueString.cs" />
@@ -210,9 +210,9 @@
     <Compile Include="Domain\DataModel\MemberAccessors\RebarBarType\RebarBarType_GetAutoCalcHookLengths.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\RebarBarType\RebarBarType_GetHookPermission.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\Rebar\Rebar_GetOverridableHookParameters.cs" />
-    <Compile Include="Domain\DataModel\MemberAccessors\Schema\Schema_EraseSchemaAndAllEntities .cs" />
+    <Compile Include="Domain\DataModel\MemberTemplates\Accessors\Schema_EraseSchemaAndAllEntities .cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\View\View_Duplicate.cs" />
-    <Compile Include="Domain\DataModel\MemberTemplates\Base\MemberDescriptor.cs" />
+    <Compile Include="Domain\DataModel\Streams\Base\MemberDescriptor.cs" />
     <Compile Include="Domain\DataModel\MemberTemplates\Document_Templates.cs" />
     <Compile Include="Domain\DataModel\MemberTemplates\Element_Templates.cs" />
     <Compile Include="Domain\DataModel\MemberTemplates\HostObject_Templates.cs" />
@@ -220,9 +220,10 @@
     <Compile Include="Domain\DataModel\MemberTemplates\Family_Templates.cs" />
     <Compile Include="Domain\DataModel\MemberTemplates\UpdaterInfo_Templates.cs" />
     <Compile Include="Domain\DataModel\MemberTemplates\WorksharingUtils_Templates.cs" />
-    <Compile Include="Domain\DataModel\Streams\MembersFromProperties.cs" />
-    <Compile Include="Domain\DataModel\Streams\MembersFromMethods.cs" />
-    <Compile Include="Domain\DataModel\Streams\MembersFromTemplates.cs" />
+    <Compile Include="Domain\DataModel\Streams\MemberStreamerForProperties.cs" />
+    <Compile Include="Domain\DataModel\Streams\MemberStreamerForMethods.cs" />
+    <Compile Include="Domain\DataModel\Streams\MemberStreamerForTemplates.cs" />
+    <Compile Include="Domain\DataModel\Streams\MemberStreamer.cs" />
     <Compile Include="Domain\DataModel\ValueContainers\Base\ITypeHandler.cs" />
     <Compile Include="Domain\DataModel\ValueContainers\Base\TypeHandler.cs" />
     <Compile Include="Domain\DataModel\ValueContainers\DocumentChangedEventArgsHandler.cs" />
@@ -246,7 +247,7 @@
     <Compile Include="Domain\DataModel\MemberAccessors\MemberAccessorFactory.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\Element\Element_Id.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\HostObject\HostObject_FindInserts.cs" />
-    <Compile Include="Domain\DataModel\MemberAccessors\JoinGeometryUtils\IsCuttingElementInJoin.cs" />
+    <Compile Include="Domain\DataModel\MemberTemplates\Accessors\IsCuttingElementInJoin.cs" />
     <Compile Include="Domain\DataModel\MemberTemplates\JoinGeometryUtils_Templates.cs" />
     <Compile Include="Domain\DataModel\MemberTemplates\Base\SnoopableMemberTemplate.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\AssetProperties\AssetProperties_Item.cs" />
@@ -266,7 +267,7 @@
     <Compile Include="Domain\DataModel\MemberAccessors\Rebar\Rebar_IsBarHidden.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\Rebar\Rebar_GetTransformedCenterlineCurves.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\Rebar\Rebar_GetCenterlineCurves.cs" />
-    <Compile Include="Domain\DataModel\MemberAccessors\Schema\Schema_GetAllElements.cs" />
+    <Compile Include="Domain\DataModel\MemberTemplates\Accessors\Schema_GetAllElements.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\View\View_GetTemplateParameterIds.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\View\View_GetNonControlledTemplateParameterIds.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\View\View_GetFilterVisibility.cs" />
@@ -275,7 +276,7 @@
     <Compile Include="Domain\DataModel\MemberTemplates\ForgeTypeId_Templates.cs" />
     <Compile Include="Domain\DataModel\MemberTemplates\PartUtils_Templates.cs" />
     <Compile Include="Domain\DataModel\MemberTemplates\Schema_Templates.cs" />
-    <Compile Include="Domain\DataModel\Streams\MembersFromSystemType.cs" />
+    <Compile Include="Domain\DataModel\Streams\MemberStreamerForSystemType.cs" />
     <Compile Include="Domain\DataModel\ValueContainers\Base\IValueContainer.cs" />
     <Compile Include="Domain\DataModel\ValueContainers\Base\ValueContainer.cs" />
     <Compile Include="Domain\DataModel\ValueContainers\Base\ValueContainerFactory.cs" />
