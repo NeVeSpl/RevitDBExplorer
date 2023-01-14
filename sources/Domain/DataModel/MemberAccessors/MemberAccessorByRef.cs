@@ -26,16 +26,16 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 
         public override ReadResult Read(SnoopableContext context, object @object)
         {
-            value.SetValue(context.Document, null);
+            value.SetValue(context, null);
             var paramsDef = getMethod.GetParameters();
             var resolvedArgs = ResolveArguments(paramsDef, context.Document, @object);            
             var result = getMethod.Invoke(@object, resolvedArgs);
-            value.SetValue(context.Document, result);
+            value.SetValue(context, result);
             return new ReadResult(value.ValueAsString, value.TypeName, value.CanBeSnooped);
         }
         public override IEnumerable<SnoopableObject> Snoop(SnoopableContext context, object @object)
         {
-            return value.Snoop(context.Document);
+            return value.Snoop();
         }
 
         public static Type[] HandledParameterTypes = new[] { typeof(Document), typeof(Options), typeof(View), typeof(SpatialElementBoundaryOptions) };

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
+using RevitDBExplorer.Domain.DataModel.MemberAccessors;
 using RevitDBExplorer.Domain.DataModel.Streams;
 using RevitDBExplorer.WPF;
 
@@ -41,7 +42,7 @@ namespace RevitDBExplorer.Domain.DataModel
             this.Context = new SnoopableContext() { Document = document };
             this.Object = @object;
             this.Document = document;            
-            this.Name = @object is not null ? Labeler.GetLabelForObject(@object, document) : "<null>";
+            this.Name = @object is not null ? Labeler.GetLabelForObject(@object, this.Context) : "<null>";
             this.TypeName = @object?.GetType().GetCSharpName();
 
             if (subObjects != null)
@@ -98,21 +99,21 @@ namespace RevitDBExplorer.Domain.DataModel
             }
         }
 
-        private static readonly SystemTypeStream SystemTypeHandler = new();
+        
         private IEnumerable<SnoopableMember> GetMembersFromStreams(UIApplication app)
         {
-            var type = Object.GetType();            
-                
-            foreach (var member in SystemTypeHandler.Stream(this))
+            var type = Object.GetType();
+
+            bool shouldEndAllStreaming = false;
+            foreach (var member in MembersFromSystemType.Stream(this))
             {
+                shouldEndAllStreaming = true;
                 yield return member;
             }
-            if (SystemTypeHandler.ShouldEndAllStreaming())
-            {
-                yield break;
-            }            
+            if (shouldEndAllStreaming) yield break;
+                      
 
-            foreach (var member in FactoryOfFactories.CreateSnoopableMembersFor(this))
+            foreach (var member in MembersFromTemplates.Stream(this))
             {
                 yield return member;
             }
@@ -132,7 +133,7 @@ namespace RevitDBExplorer.Domain.DataModel
                 }
 
                 var comments = () => RevitDocumentationReader.GetPropertyComments(prop);
-                var memberAccessor = FactoryOfFactories.CreateMemberAccessor(getMethod, null);
+                var memberAccessor = MemberAccessorFactory.CreateMemberAccessor(getMethod, null);
                 var member = new SnoopableMember(this, SnoopableMember.Kind.Property, prop.Name, prop.DeclaringType, memberAccessor, comments);              
                 yield return member;
             }
@@ -162,7 +163,7 @@ namespace RevitDBExplorer.Domain.DataModel
                 }
 
                 var comments = () => RevitDocumentationReader.GetMethodComments(method);
-                var memberAccessor = FactoryOfFactories.CreateMemberAccessor(method, null);
+                var memberAccessor = MemberAccessorFactory.CreateMemberAccessor(method, null);
                 var member = new SnoopableMember(this, SnoopableMember.Kind.Method, method.Name, method.DeclaringType, memberAccessor, comments);
                 yield return member;
             }

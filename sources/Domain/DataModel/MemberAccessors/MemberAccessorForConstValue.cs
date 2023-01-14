@@ -16,7 +16,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
         public MemberAccessorForConstValue(Type type, Document document, object value)
         {
             this.value = ValueContainerFactory.Create(type);
-            this.value.SetValue(document, value);
+            this.value.SetValue(new SnoopableContext() { Document = document }, value);
         }
 
 
@@ -26,7 +26,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
         }
         public override IEnumerable<SnoopableObject> Snoop(SnoopableContext context, object @object)
         {
-            return value.Snoop(context.Document);
+            return value.Snoop();
         }
     }
 }

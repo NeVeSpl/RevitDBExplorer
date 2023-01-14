@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
@@ -10,73 +12,107 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers.Base
         //private static readonly bool RunStaticConstructorASAP = true;
 
         private static readonly List<(Type type, Func<IValueContainer> factory)> FactoryMethodsForValueContainers = new List<(Type, Func<IValueContainer>)>();
-        private static readonly IValueContainer[] ValueContainers = new IValueContainer[]
+        private static readonly ITypeHandler[] TypeHandlers = new ITypeHandler[]
         {
             // System primitives
-            new BoolContainer(),
-            new IntContainer(),
-            new StringContainer(),
-            new DoubleContainer(),
-            new GuidContainer(),
-            new EnumContainer(),
+            new BoolHandler(),
+            new IntHandler(),
+            new StringHandler(),
+            new DoubleHandler(),
+            new GuidHandler(),
+            new EnumHandler(),
 
             // 
-            new DoubleNullableContainer(),
+            new DoubleNullableHandler(),
 
             // APIObject primitives
-            new ForgeTypeIdContainer(),
-            new ElementIdContainer(),
-            new XYZContainer(),
-            new UVContainer(),
-            new CategoryContainer(),
-            new ColorContainer(),
-            new BoundingBoxXYZContainer(),      
+            new ForgeTypeIdHandler(),
+            new ElementIdHandler(),
+            new XYZHandler(),
+            new UVHandler(),
+            new CategoryHandler(),
+            new ColorHandler(),
+            new BoundingBoxXYZHandler(),      
 
             //
-            new TransformContainer(),
-            new ParameterContainer(),
-            new FamilyParameterContainer(),
-            new ParameterSetContainer(),
-            new ParameterMapContainer(),
-            new StructuralSectionContainer(),
-            new IExternalApplicationContainer(),
-            new UpdaterInfoContainer(),
-            new BindingMapContainer(),
-            new CategoryNameMapContainer(),
-            new ScheduleFieldContainer(),  
-            new FailuresProcessingEventArgsContainer(),
-            new DocumentChangedEventArgsContainer(),
-            new RevitApiEventArgsContainer(),            
+            new TransformHandler(),
+            new ParameterHandler(),
+            new FamilyParameterHandler(),
+            new ParameterSetHandler(),
+            new ParameterMapHandler(),
+            new StructuralSectionHandler(),
+            new IExternalApplicationHandler(),
+            new UpdaterInfoHandler(),
+            new BindingMapHandler(),
+            new CategoryNameMapHandler(),
+            new ScheduleFieldHandler(),
+            new FailuresProcessingEventArgsHandler(),
+            new DocumentChangedEventArgsHandler(),
+            new RevitApiEventArgsHandler(),            
             
             // generic
-            new ElementContainer(),
+            new ElementHandler(),
 
             // collections
-            new IListElementIdContainer(),
-            new IEnumerableContainer()
+            new IListElementIdHandler(),
+            new IEnumerableHandler(),
+
+            // one to rule them all
+            new ObjectHandler(),
         };
 
 
         static ValueContainerFactory()
         {
-            foreach (var valueType in ValueContainers)
-            {              
-                FactoryMethodsForValueContainers.Add((valueType.Type, valueType.GetType().CompileFactoryMethod<IValueContainer>()));
+            foreach (var typeHandler in TypeHandlers)
+            {
+                var closedType = typeof(ValueContainer<>).MakeGenericType(new Type[] { typeHandler.Type });
+                var field = closedType.GetField("typeHandler", BindingFlags.NonPublic | BindingFlags.Static);
+                field.SetValue(null, typeHandler);
+
+                FactoryMethodsForValueContainers.Add((typeHandler.Type, closedType.CompileFactoryMethod<IValueContainer>()));
             }
         }
 
 
+
+        private static readonly Dictionary<Type, Func<IValueContainer>> Cache_Factories = new();
         public static IValueContainer Create(Type type)
+        {           
+            var factory = Cache_Factories.GetOrCreate(type, SelectValueContainerFactory);           
+            return factory();
+        }
+        private static Func<IValueContainer> SelectValueContainerFactory(Type type)
         {
             foreach (var pair in FactoryMethodsForValueContainers)
             {
                 if (pair.type.IsAssignableFrom(type))
                 {
-                    var result = pair.factory();                   
+                    var result = pair.factory;
                     return result;
                 }
             }
-            return new ObjectContainer(type);
+            return FactoryMethodsForValueContainers.Last().factory;
+        }
+
+
+
+        private static readonly Dictionary<Type, ITypeHandler> Cache_TypeHandlers = new();
+        public static ITypeHandler SelectTypeHandler(Type type)
+        {
+            var typeHandler = Cache_TypeHandlers.GetOrCreate(type, SelectTypeHandlerInternal);         
+            return typeHandler;
+        }
+        private static ITypeHandler SelectTypeHandlerInternal(Type type)
+        {
+            foreach (var typeHandler in TypeHandlers)
+            {
+                if (typeHandler.Type.IsAssignableFrom(type))
+                {
+                    return typeHandler;
+                }
+            }
+            return TypeHandlers.Last();
         }
     }
 }

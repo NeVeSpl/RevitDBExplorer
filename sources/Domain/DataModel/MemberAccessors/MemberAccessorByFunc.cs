@@ -23,14 +23,14 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 
         public override ReadResult Read(SnoopableContext context, TSnoopedObjectType @object)
         {
-            value.SetValue(context.Document, null);
+            value.SetValue(context, null);
             var result = get(context.Document, @object);
-            value.SetValue(context.Document, result);
+            value.SetValue(context, result);
             return new ReadResult(value.ValueAsString, value.TypeName, value.CanBeSnooped);
         }
         public override IEnumerable<SnoopableObject> Snoop(SnoopableContext context, TSnoopedObjectType @object)
         {
-            return value.Snoop(context.Document);
+            return value.Snoop();
         }
     }
 }

@@ -1,70 +1,62 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using Autodesk.Revit.DB;
+using RevitDBExplorer.Domain.DataModel.Base;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
 namespace RevitDBExplorer.Domain.DataModel.ValueContainers.Base
 {
-    internal abstract class ValueContainer<T> : IValueContainer
-    {
-        private static readonly Type type = typeof(T);
+    internal sealed class ValueContainer<T> : IValueContainer
+    {       
+        private static readonly ITypeHandler<T> typeHandler;
+        private Type nativeType;
+        private SnoopableContext context;
         private T value;
 
-        public T Value => value;
-
-        public Type Type => type;
-        public virtual string TypeName
+        public Type TypeHandlerType => typeHandler.GetType();
+        public Type Type => typeHandler.Type;
+        public T Value => value;       
+        public string TypeName
         {
             get
             {
-                var containerTypeName = Type.GetCSharpName();
-                var valueTypeName = value?.GetType()?.GetCSharpName() ?? containerTypeName;
-
-                return valueTypeName == containerTypeName ? containerTypeName : $"{containerTypeName} : {valueTypeName}";
-            }
+                var typeHandlerName = typeHandler.GetTypeHandlerName(value);
+                string TypeName = typeHandlerName != "Object" ? typeHandlerName : $"Object : {nativeType?.GetCSharpName()}";
+                return TypeName;                
+             }
         }
 
-        protected Units Units { get; private set; }
 
-        public virtual IValueContainer SetValue(Document document, object value)
+        public ValueContainer()
+        {           
+            
+        }
+
+
+        public IValueContainer SetValue(SnoopableContext context, object value)
         {
-            Units = document?.GetUnits();
-            if (value == null)
-            {
-                this.value = (T)type.GetDefaultValue();
-            }
-            else
-            {
-                this.value = (T)value;
-            }
+            this.context = context;           
+            this.value = value.CastValue<T>(Type);
+         
             return this;
         }
 
-        public string ValueAsString
+        public string ValueAsString => typeHandler.ToLabel(context, value);
+        public bool CanBeSnooped => typeHandler.CanBeSnooped(context, value);
+
+        public string ToolTip
         {
             get
             {
-                if (value is null) return "<null>";
-                var label = ToLabel(value);
-                if (string.IsNullOrEmpty(label)) return "<empty>";
-                return label;
+                if (typeHandler is IHaveToolTip<T> typeHandlerWithToolTip)
+                {
+                    return typeHandlerWithToolTip.GetToolTip(context, value);
+                }
+                return null;
             }
         }
-        protected abstract string ToLabel(T value);
 
-        public bool CanBeSnooped
-        {
-            get 
-            {
-                if (value is null) return false;
-                return CanBeSnoooped(value);
-            }
-        }
-        protected abstract bool CanBeSnoooped(T value);
-
-        public IEnumerable<SnoopableObject> Snoop(Document document) => Snooop(document, value) ?? Enumerable.Empty<SnoopableObject>();
-        protected virtual IEnumerable<SnoopableObject> Snooop(Document document, T value) => null;
+        public IEnumerable<SnoopableObject> Snoop() => typeHandler.Snoop(context, value);
+       
     }
 }

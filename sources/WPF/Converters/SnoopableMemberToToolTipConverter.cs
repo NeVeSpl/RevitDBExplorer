@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Windows.Data;
 using RevitDBExplorer.Domain.DataModel;
+using RevitDBExplorer.Domain.DataModel.Base;
 using RevitDBExplorer.Domain.DataModel.ValueContainers;
 using RevitDBExplorer.Domain.DataModel.ValueContainers.Base;
 using RevitDBExplorer.UIComponents.List.ValuePresenters;
@@ -18,9 +19,9 @@ namespace RevitDBExplorer.WPF.Converters
 
             if (snoopableMember.ValueViewModel is DefaultPresenterVM presenter)
             {
-                if (presenter.ValueContainer is IHaveToolTip toolTip)
+                if (!string.IsNullOrEmpty(presenter.ValueContainer?.ToolTip))
                 {
-                    return toolTip.ToolTip;
+                    return presenter.ValueContainer.ToolTip;
                 }
             }
             return snoopableMember.Label.Text;

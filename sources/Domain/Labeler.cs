@@ -1,5 +1,6 @@
 ﻿using System;
 using Autodesk.Revit.DB;
+using RevitDBExplorer.Domain.DataModel;
 using RevitDBExplorer.Domain.DataModel.ValueContainers.Base;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
@@ -8,15 +9,14 @@ namespace RevitDBExplorer.Domain
 {
     internal static class Labeler
     {
-        public static string GetLabelForObject(object @object, Document document)
+        public static string GetLabelForObject(object @object, SnoopableContext context)
         {
-            return GetLabelForObject(@object.GetType(), @object, document);
+            return GetLabelForObject(@object.GetType(), @object, context);
         }
-        public static string GetLabelForObject(Type type, object @object, Document document)
+        public static string GetLabelForObject(Type type, object @object, SnoopableContext context)
         {
-            var valueType = ValueContainerFactory.Create(type);
-            valueType.SetValue(document, @object);           
-            return valueType.ValueAsString;
+            var valueType = ValueContainerFactory.SelectTypeHandler(type);          
+            return valueType.ToLabel(context, @object);
         }
 
         public static string GetLabelForException(Exception ex)

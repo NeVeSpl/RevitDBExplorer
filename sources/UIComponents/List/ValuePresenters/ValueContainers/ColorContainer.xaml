@@ -4,7 +4,7 @@
                     xmlns:ValueContainers="clr-namespace:RevitDBExplorer.Domain.DataModel.ValueContainers" 
                     >
 
-    <DataTemplate DataType="{x:Type ValueContainers:ColorContainer}">
+    <DataTemplate DataType="{x:Type ValueContainers:ColorHandler}">
         
         <StackPanel Orientation="Horizontal">
             <StackPanel.Resources>

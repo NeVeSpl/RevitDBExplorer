@@ -2,7 +2,7 @@
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
-namespace RevitDBExplorer.Extensions.System
+namespace System
 {
     internal static class DoubleExtensions
     {

@@ -19,5 +19,17 @@ namespace System
             }
             return null;
         }
+
+        public static T CastValue<T>(this object value, Type type)
+        {
+            if (value == null)
+            {
+                return (T)type.GetDefaultValue();
+            }
+            else
+            {
+                return (T)value;
+            }
+        }
     }
 }

@@ -102,7 +102,7 @@
       <HintPath>..\binaries\revit\2024\RevitAPI.dll</HintPath>
       <Private>False</Private>
     </Reference>
-	<Reference Include="RevitAPI" Condition="'$(Configuration)'=='R2024'">
+    <Reference Include="RevitAPI" Condition="'$(Configuration)'=='R2024'">
       <HintPath>..\binaries\revit\2024\RevitAPI.dll</HintPath>
       <Private>False</Private>
     </Reference>
@@ -122,11 +122,11 @@
       <HintPath>..\binaries\revit\2023\RevitAPIUI.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="RevitAPIUI" Condition="'$(Configuration)'=='Debug2024'">	
+    <Reference Include="RevitAPIUI" Condition="'$(Configuration)'=='Debug2024'">
       <HintPath>..\binaries\revit\2024\RevitAPIUI.dll</HintPath>
       <Private>False</Private>
     </Reference>
-	<Reference Include="RevitAPIUI" Condition="'$(Configuration)'=='R2024'">
+    <Reference Include="RevitAPIUI" Condition="'$(Configuration)'=='R2024'">
       <HintPath>..\binaries\revit\2024\RevitAPIUI.dll</HintPath>
       <Private>False</Private>
     </Reference>
@@ -195,6 +195,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Domain\AddInManifestWizard.cs" />
+    <Compile Include="Domain\DataModel\Base\Traits.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\DialogBoxShowingEventArgs\DialogBoxShowingEventArgs_OverrideResult.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\Element\Element_GetMaterialVolume.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\Element\Element_GetMaterialArea.cs" />
@@ -211,6 +212,7 @@
     <Compile Include="Domain\DataModel\MemberAccessors\Rebar\Rebar_GetOverridableHookParameters.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\Schema\Schema_EraseSchemaAndAllEntities .cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\View\View_Duplicate.cs" />
+    <Compile Include="Domain\DataModel\MemberTemplates\Base\MemberDescriptor.cs" />
     <Compile Include="Domain\DataModel\MemberTemplates\Document_Templates.cs" />
     <Compile Include="Domain\DataModel\MemberTemplates\Element_Templates.cs" />
     <Compile Include="Domain\DataModel\MemberTemplates\HostObject_Templates.cs" />
@@ -218,14 +220,18 @@
     <Compile Include="Domain\DataModel\MemberTemplates\Family_Templates.cs" />
     <Compile Include="Domain\DataModel\MemberTemplates\UpdaterInfo_Templates.cs" />
     <Compile Include="Domain\DataModel\MemberTemplates\WorksharingUtils_Templates.cs" />
-    <Compile Include="Domain\DataModel\ValueContainers\Base\IHaveToolTip.cs" />
-    <Compile Include="Domain\DataModel\ValueContainers\DocumentChangedEventArgsContainer.cs" />
-    <Compile Include="Domain\DataModel\ValueContainers\FailuresProcessingEventArgsContainer.cs" />
-    <Compile Include="Domain\DataModel\ValueContainers\IExternalApplicationContainer.cs" />
-    <Compile Include="Domain\DataModel\ValueContainers\RevitApiEventArgsContainer.cs" />
-    <Compile Include="Domain\DataModel\ValueContainers\StructuralSectionContainer.cs" />
-    <Compile Include="Domain\DataModel\ValueContainers\UpdaterInfoContainer.cs" />
-    <Compile Include="Domain\DataModel\ValueContainers\TransformContainer.cs" />
+    <Compile Include="Domain\DataModel\Streams\MembersFromProperties.cs" />
+    <Compile Include="Domain\DataModel\Streams\MembersFromMethods.cs" />
+    <Compile Include="Domain\DataModel\Streams\MembersFromTemplates.cs" />
+    <Compile Include="Domain\DataModel\ValueContainers\Base\ITypeHandler.cs" />
+    <Compile Include="Domain\DataModel\ValueContainers\Base\TypeHandler.cs" />
+    <Compile Include="Domain\DataModel\ValueContainers\DocumentChangedEventArgsHandler.cs" />
+    <Compile Include="Domain\DataModel\ValueContainers\FailuresProcessingEventArgsHandler.cs" />
+    <Compile Include="Domain\DataModel\ValueContainers\IExternalApplicationHandler.cs" />
+    <Compile Include="Domain\DataModel\ValueContainers\RevitApiEventArgsHandler.cs" />
+    <Compile Include="Domain\DataModel\ValueContainers\StructuralSectionHandler.cs" />
+    <Compile Include="Domain\DataModel\ValueContainers\UpdaterInfoHandler.cs" />
+    <Compile Include="Domain\DataModel\ValueContainers\TransformHandler.cs" />
     <Compile Include="Domain\EventMonitor.cs" />
     <Compile Include="Domain\Presentation\DrawInRevitCommand.cs" />
     <Compile Include="Domain\Presentation\IsolateInRevitCommand.cs" />
@@ -234,10 +240,10 @@
     <Compile Include="Domain\Presentation\SnoopInNewWindow.cs" />
     <Compile Include="Domain\QuoteGenerator.cs" />
     <Compile Include="Domain\DataModel\SnoopableContext.cs" />
-    <Compile Include="Domain\DataModel\ValueContainers\IListElementIdContainer.cs" />
+    <Compile Include="Domain\DataModel\ValueContainers\IListElementIdHandler.cs" />
     <Compile Include="Domain\DataModel\ValueObjects\DeclaringType.cs" />
     <Compile Include="Domain\DataModel\ValueObjects\Label.cs" />
-    <Compile Include="Domain\FactoryOfFactories.cs" />
+    <Compile Include="Domain\DataModel\MemberAccessors\MemberAccessorFactory.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\Element\Element_Id.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\HostObject\HostObject_FindInserts.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\JoinGeometryUtils\IsCuttingElementInJoin.cs" />
@@ -252,7 +258,6 @@
     <Compile Include="Domain\DataModel\MemberAccessors\Element\Element_GetPhaseStatus.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\Entity\Entity_Get.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\ForgeTypeId\ForgeTypeId_Clear.cs" />
-    <Compile Include="Domain\DataModel\MemberAccessors\ICanCreateMemberAccessor.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\IMemberAccessor.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\MemberAccessorByFunc.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\MemberAccessorByType.cs" />
@@ -270,31 +275,31 @@
     <Compile Include="Domain\DataModel\MemberTemplates\ForgeTypeId_Templates.cs" />
     <Compile Include="Domain\DataModel\MemberTemplates\PartUtils_Templates.cs" />
     <Compile Include="Domain\DataModel\MemberTemplates\Schema_Templates.cs" />
-    <Compile Include="Domain\DataModel\Streams\SystemTypeStream.cs" />
+    <Compile Include="Domain\DataModel\Streams\MembersFromSystemType.cs" />
     <Compile Include="Domain\DataModel\ValueContainers\Base\IValueContainer.cs" />
     <Compile Include="Domain\DataModel\ValueContainers\Base\ValueContainer.cs" />
     <Compile Include="Domain\DataModel\ValueContainers\Base\ValueContainerFactory.cs" />
-    <Compile Include="Domain\DataModel\ValueContainers\BindingMapContainer.cs" />
-    <Compile Include="Domain\DataModel\ValueContainers\BoolContainer.cs" />
-    <Compile Include="Domain\DataModel\ValueContainers\BoundingBoxXYZContainer.cs" />
-    <Compile Include="Domain\DataModel\ValueContainers\CategoryNameMapContainer.cs" />
-    <Compile Include="Domain\DataModel\ValueContainers\CategoryContainer.cs" />
-    <Compile Include="Domain\DataModel\ValueContainers\ColorContainer.cs" />
-    <Compile Include="Domain\DataModel\ValueContainers\DoubleNullableContainer.cs" />
-    <Compile Include="Domain\DataModel\ValueContainers\DoubleContainer.cs" />
-    <Compile Include="Domain\DataModel\ValueContainers\ElementIdContainer.cs" />
-    <Compile Include="Domain\DataModel\ValueContainers\ElementContainer.cs" />
-    <Compile Include="Domain\DataModel\ValueContainers\ForgeTypeIdContainer.cs" />
-    <Compile Include="Domain\DataModel\ValueContainers\IEnumerableContainer.cs" />
-    <Compile Include="Domain\DataModel\ValueContainers\EnumContainer.cs" />
-    <Compile Include="Domain\DataModel\ValueContainers\FamilyParameterContainer.cs" />
+    <Compile Include="Domain\DataModel\ValueContainers\BindingMapHandler.cs" />
+    <Compile Include="Domain\DataModel\ValueContainers\BoolHandler.cs" />
+    <Compile Include="Domain\DataModel\ValueContainers\BoundingBoxXYZHandler.cs" />
+    <Compile Include="Domain\DataModel\ValueContainers\CategoryNameMapHandler.cs" />
+    <Compile Include="Domain\DataModel\ValueContainers\CategoryHandler.cs" />
+    <Compile Include="Domain\DataModel\ValueContainers\ColorHandler.cs" />
+    <Compile Include="Domain\DataModel\ValueContainers\DoubleNullableHandler.cs" />
+    <Compile Include="Domain\DataModel\ValueContainers\DoubleHandler.cs" />
+    <Compile Include="Domain\DataModel\ValueContainers\ElementIdHandler.cs" />
+    <Compile Include="Domain\DataModel\ValueContainers\ElementHandler.cs" />
+    <Compile Include="Domain\DataModel\ValueContainers\ForgeTypeIdHandler.cs" />
+    <Compile Include="Domain\DataModel\ValueContainers\IEnumerableHandler.cs" />
+    <Compile Include="Domain\DataModel\ValueContainers\EnumHandler.cs" />
+    <Compile Include="Domain\DataModel\ValueContainers\FamilyParameterHandler.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\Element\Element_Geometry.cs" />
-    <Compile Include="Domain\DataModel\ValueContainers\GuidContainer.cs" />
-    <Compile Include="Domain\DataModel\ValueContainers\IntContainer.cs" />
-    <Compile Include="Domain\DataModel\ValueContainers\ObjectContainer.cs" />
-    <Compile Include="Domain\DataModel\ValueContainers\ParameterContainer.cs" />
-    <Compile Include="Domain\DataModel\ValueContainers\ScheduleFieldContainer.cs" />
-    <Compile Include="Domain\DataModel\ValueContainers\UVContainer.cs" />
+    <Compile Include="Domain\DataModel\ValueContainers\GuidHandler.cs" />
+    <Compile Include="Domain\DataModel\ValueContainers\IntHandler.cs" />
+    <Compile Include="Domain\DataModel\ValueContainers\ObjectHandler.cs" />
+    <Compile Include="Domain\DataModel\ValueContainers\ParameterHandler.cs" />
+    <Compile Include="Domain\DataModel\ValueContainers\ScheduleFieldHandler.cs" />
+    <Compile Include="Domain\DataModel\ValueContainers\UVHandler.cs" />
     <Compile Include="Domain\Guard.cs" />
     <Compile Include="Domain\RevitDatabaseQuery\Filters\RuleFilter.cs" />
     <Compile Include="Domain\RevitDatabaseQuery\Filters\RuleMatch.cs" />
@@ -329,6 +334,7 @@
     <Compile Include="Extensions\Autodesk.Revit.DB\DocumentExtensions.cs" />
     <Compile Include="Extensions\Autodesk.Revit.DB\ElementIdExtensions.cs" />
     <Compile Include="Extensions\Autodesk.Revit.DB\GeometryObjectExtensions.cs" />
+    <Compile Include="Extensions\System\Collections.Generic\IDictionaryExtensions.cs" />
     <Compile Include="Extensions\System\Collections.Generic\IEnumerableExtensions.cs" />
     <Compile Include="Extensions\System\Collections.Generic\IListExtensions.cs" />
     <Compile Include="Extensions\System\ExceptionExtensions.cs" />
@@ -378,10 +384,10 @@
     <Compile Include="WPF\Converters\StringIsNullOrEmptyToBoolConverter.cs" />
     <Compile Include="WPF\Converters\MultiBindingOrConverter.cs" />
     <Compile Include="WPF\Converters\PercentageOfValueConverter.cs" />
-    <Compile Include="Domain\DataModel\ValueContainers\ParameterMapContainer.cs" />
-    <Compile Include="Domain\DataModel\ValueContainers\ParameterSetContainer.cs" />
-    <Compile Include="Domain\DataModel\ValueContainers\StringContainer.cs" />
-    <Compile Include="Domain\DataModel\ValueContainers\XYZContainer.cs" />
+    <Compile Include="Domain\DataModel\ValueContainers\ParameterMapHandler.cs" />
+    <Compile Include="Domain\DataModel\ValueContainers\ParameterSetHandler.cs" />
+    <Compile Include="Domain\DataModel\ValueContainers\StringHandler.cs" />
+    <Compile Include="Domain\DataModel\ValueContainers\XYZHandler.cs" />
     <Compile Include="Domain\ExternalExecutor.cs" />
     <Compile Include="Domain\Labeler.cs" />
     <Compile Include="Domain\Selectors.cs" />

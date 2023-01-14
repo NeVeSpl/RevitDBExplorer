@@ -23,6 +23,18 @@ namespace System
         {
             if ((type.IsValueType) && (type != typeof(void)))
             {
+                if (type == typeof(int))
+                {
+                    return default(int);
+                }
+                if (type == typeof(double))
+                {
+                    return default(double);
+                }
+                if (type == typeof(bool))
+                {
+                    return default(bool);
+                }
                 return Activator.CreateInstance(type);
             }
             return null;
@@ -88,5 +100,7 @@ namespace System
             var factoryMethod = factoryLambda.Compile();
             return factoryMethod;
         }
+
+       
     }
 }

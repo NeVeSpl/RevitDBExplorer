@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Autodesk.Revit.DB;
 using RevitDBExplorer.Domain.DataModel.MemberAccessors;
 using RevitDBExplorer.Domain.DataModel.ValueObjects;
 using RevitDBExplorer.UIComponents.List.ValuePresenters;
@@ -57,12 +56,7 @@ namespace RevitDBExplorer.Domain.DataModel
                 this.documentation = new Lazy<DocXml>(documentationFactoryMethod);
             }
             WriteCommand = new RelayCommand(x => Write(), x => CanBeWritten); 
-        }
-        public SnoopableMember(SnoopableObject parent, SnoopableMember source) : this(parent, source.MemberKind, source.Name, null, source.memberAccessor, null)
-        {
-            this.declaringType = source.declaringType;
-            this.documentation = source.documentation;
-        }
+        }   
 
         
         public void Read()
