@@ -12,21 +12,8 @@ namespace RevitDBExplorer.Domain.DataModel.Streams
 {
     internal static class MemberStreamer
     {
-        public static IEnumerable<SnoopableMember> Stream(SnoopableObject snoopableObject)
-        {        
-            foreach (var descriptor in StreamDescriptors(snoopableObject.Context, snoopableObject.Object))
-            {
-                var member = new SnoopableMember(snoopableObject, descriptor);
-                yield return member;
-            }           
-        }
-
-
-        private static IEnumerable<MemberDescriptor> StreamDescriptors(SnoopableContext context, object snoopableObject)
+        public static IEnumerable<MemberDescriptor> StreamDescriptors(SnoopableContext context, object snoopableObject)
         {
-            var type = snoopableObject.GetType();
-
-
             bool shouldEndAllStreaming = false;
             foreach (var member in MemberStreamerForSystemType.Stream(context, snoopableObject))
             {
@@ -40,6 +27,20 @@ namespace RevitDBExplorer.Domain.DataModel.Streams
             {
                 yield return member;
             }
+
+            var type = snoopableObject.GetType();
+            var cachableDescriptors = Cache_Descriptors.GetOrCreate(type, _ => StreamDescriptorsForPropsAndMethods(snoopableObject).ToArray());
+
+            foreach (var member in cachableDescriptors)
+            {
+                yield return member;
+            }
+        }
+        private static readonly Dictionary<Type, IReadOnlyList<MemberDescriptor>> Cache_Descriptors = new();
+
+        public static IEnumerable<MemberDescriptor> StreamDescriptorsForPropsAndMethods(object snoopableObject)
+        {
+            var type = snoopableObject.GetType();
 
             var properties = type.GetProperties(BindingFlags.Instance | BindingFlags.Public);
             foreach (var prop in properties)
@@ -57,7 +58,7 @@ namespace RevitDBExplorer.Domain.DataModel.Streams
 
                 var comments = () => RevitDocumentationReader.GetPropertyComments(prop);
                 var memberAccessor = MemberAccessorFactory.CreateMemberAccessor(getMethod, null);
-                var member = new MemberDescriptor(type, MemberKind.Property, prop.Name, prop.DeclaringType, memberAccessor, comments);               
+                var member = new MemberDescriptor(type, MemberKind.Property, prop.Name, prop.DeclaringType, memberAccessor, comments);
                 yield return member;
             }
 

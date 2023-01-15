@@ -16,8 +16,6 @@ namespace RevitDBExplorer.Domain.DataModel.Streams
         {
 
         }
-
-
         static MemberStreamerForTemplates()
         {
             var memberTemplateFactories = GetAllInstancesThatImplement<IHaveMemberTemplates>();
@@ -39,29 +37,37 @@ namespace RevitDBExplorer.Domain.DataModel.Streams
         }
         private static void RegisterTemplate(ISnoopableMemberTemplate template)
         {
-            if (!forTypes.TryGetValue(template.ForType, out List<ISnoopableMemberTemplate> list))
+            if (!forTypes.TryGetValue(template.Descriptor.ForType, out List<ISnoopableMemberTemplate> list))
             {
                 list = new List<ISnoopableMemberTemplate>();
-                forTypes[template.ForType] = list;
+                forTypes[template.Descriptor.ForType] = list;
             }
             list.Add(template);
         }
 
 
+        private static readonly Dictionary<Type, IReadOnlyList<ISnoopableMemberTemplate>> Cache_Templates = new();
         public static IEnumerable<MemberDescriptor> Stream(object snoopableObject)
-        {            
+        {
             var objectType = snoopableObject.GetType();
+            var templates = Cache_Templates.GetOrCreate(objectType, x => StreamTemplates(x).ToArray());
+            foreach (var template in templates)
+            {
+                if (template.CanBeUsedWith(snoopableObject))
+                {                            
+                    yield return template.Descriptor;
+                }
+            }
+        }
+        private static IEnumerable<ISnoopableMemberTemplate> StreamTemplates(Type objectType)
+        {         
             foreach (var keyValue in forTypes)
             {
                 if (keyValue.Key.IsAssignableFrom(objectType))
                 {
                     foreach (var template in keyValue.Value)
                     {
-                        if (template.CanBeUsedWith(snoopableObject))
-                        {
-                            
-                            yield return template.Data;
-                        }
+                        yield return template;
                     }
                 }
             }

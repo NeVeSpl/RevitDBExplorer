@@ -10,18 +10,16 @@ namespace RevitDBExplorer.Domain.DataModel.MemberTemplates.Base
 {
     internal interface ISnoopableMemberTemplate
     {
-        Type ForType { get; }     
         bool CanBeUsedWith(object @object);
-        MemberDescriptor Data { get; init; }
+        MemberDescriptor Descriptor { get;  }
     }
-
 
 
     internal sealed class SnoopableMemberTemplate<TSnoopedObjectType> : ISnoopableMemberTemplate
     {
         private Func<TSnoopedObjectType, bool> CanBeUsedTyped { get; init; }
-        public MemberDescriptor Data { get; init; }
-        public Type ForType => typeof(TSnoopedObjectType);
+        public MemberDescriptor Descriptor { get; init; }
+       
         public bool CanBeUsedWith(object @object)
         {
             if (CanBeUsedTyped != null)
@@ -44,12 +42,9 @@ namespace RevitDBExplorer.Domain.DataModel.MemberTemplates.Base
         {
             return new SnoopableMemberTemplate<TSnoopedObjectType>()
             {
-                Data = new MemberDescriptor(typeof(TSnoopedObjectType), kind, memberName, declaringType, memberAccessor, documentationFactoryMethod),             
+                Descriptor = new MemberDescriptor(typeof(TSnoopedObjectType), kind, memberName, declaringType, memberAccessor, documentationFactoryMethod),             
                 CanBeUsedTyped = canBeUsed,              
             };
         }
-
-
-
     }
 }

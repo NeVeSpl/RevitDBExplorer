@@ -87,10 +87,19 @@ namespace RevitDBExplorer.Domain.DataModel
             {
                 yield break;
             }
-            foreach (var member in MemberStreamer.Stream(this))
+            foreach (var member in CreateMembers(this))
             {                
                 member.Read();                
                 yield return member;                
+            }
+        }
+
+        private static IEnumerable<SnoopableMember> CreateMembers(SnoopableObject snoopableObject)
+        {
+            foreach (var descriptor in MemberStreamer.StreamDescriptors(snoopableObject.Context, snoopableObject.Object))
+            {
+                var member = new SnoopableMember(snoopableObject, descriptor);
+                yield return member;
             }
         }
 
