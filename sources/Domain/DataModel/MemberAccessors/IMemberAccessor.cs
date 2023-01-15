@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using RevitDBExplorer.Domain.DataModel.ValueContainers.Base;
-using RevitDBExplorer.UIComponents.List.ValueEditors;
-using RevitDBExplorer.UIComponents.List.ValuePresenters;
+using RevitDBExplorer.Domain.DataModel.ViewModels;
+using RevitDBExplorer.Domain.DataModel.ViewModels.Base;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
@@ -11,8 +11,8 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
     internal interface IMemberAccessor
     { 
-        IValuePresenter CreatePresenter(SnoopableContext context, object @object);          
-        ReadResult Read(SnoopableContext context, object @object, IValuePresenter presenter);   
+        IValueViewModel CreatePresenter(SnoopableContext context, object @object);          
+        ReadResult Read(SnoopableContext context, object @object, IValueViewModel presenter);   
     }
     internal interface IMemberAccessorWithSnoop
     {
@@ -22,18 +22,18 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
     internal interface IMemberAccessorWithWrite
     {
         bool CanBeWritten(SnoopableContext context, object @object);
-        void Write(SnoopableContext context, object @object, IValuePresenter presenter);    
+        void Write(SnoopableContext context, object @object, IValueViewModel presenter);    
     }
 
 
     internal abstract class MemberAccessorTyped<TSnoopedObjectType> : IMemberAccessor, IMemberAccessorWithSnoop
     {
-        IValuePresenter IMemberAccessor.CreatePresenter(SnoopableContext context, object @object)
+        IValueViewModel IMemberAccessor.CreatePresenter(SnoopableContext context, object @object)
         {            
             return new DefaultPresenterVM();
         }
 
-        ReadResult IMemberAccessor.Read(SnoopableContext context, object @object, IValuePresenter presenter)
+        ReadResult IMemberAccessor.Read(SnoopableContext context, object @object, IValueViewModel presenter)
         {
             Guard.IsAssignableToType<TSnoopedObjectType>(@object);      
             var typedObject = (TSnoopedObjectType) @object;          
@@ -52,7 +52,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 
     internal abstract class MemberAccessorTypedWithWrite<TSnoopedObjectType> : IMemberAccessor,  IMemberAccessorWithWrite
     {
-        IValuePresenter IMemberAccessor.CreatePresenter(SnoopableContext context, object @object)
+        IValueViewModel IMemberAccessor.CreatePresenter(SnoopableContext context, object @object)
         {
             Guard.IsAssignableToType<TSnoopedObjectType>(@object);
             var typedObject = (TSnoopedObjectType)@object;
@@ -60,7 +60,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
         }
         public virtual IValueEditor CreateEditor(SnoopableContext context, TSnoopedObjectType typedObject) => new ExecuteEditorVM();
 
-        ReadResult IMemberAccessor.Read(SnoopableContext context, object @object, IValuePresenter presenter)
+        ReadResult IMemberAccessor.Read(SnoopableContext context, object @object, IValueViewModel presenter)
         {
             Guard.IsAssignableToType<TSnoopedObjectType>(@object);
             var typedObject = (TSnoopedObjectType)@object;
@@ -77,7 +77,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
         }
         public abstract bool CanBeWritten(SnoopableContext context, TSnoopedObjectType typedObject);
 
-        void IMemberAccessorWithWrite.Write(SnoopableContext context, object @object, IValuePresenter presenter)
+        void IMemberAccessorWithWrite.Write(SnoopableContext context, object @object, IValueViewModel presenter)
         {
             Guard.IsAssignableToType<TSnoopedObjectType>(@object);
             var typedObject = (TSnoopedObjectType)@object;
@@ -103,11 +103,4 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
             State = state;
         }
     }
-
-    internal interface IValuePresenter
-    {
-    }
-    internal interface IValueEditor : IValuePresenter
-    {
-    }    
 }

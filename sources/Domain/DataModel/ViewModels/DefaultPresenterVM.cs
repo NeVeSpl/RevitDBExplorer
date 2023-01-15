@@ -1,14 +1,14 @@
-﻿using RevitDBExplorer.Domain.DataModel.MemberAccessors;
-using RevitDBExplorer.Domain.DataModel.ValueContainers.Base;
-using RevitDBExplorer.WPF;
+﻿using RevitDBExplorer.Domain.DataModel.ValueContainers.Base;
+using RevitDBExplorer.Domain.DataModel.ViewModels.Base;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
-namespace RevitDBExplorer.UIComponents.List.ValuePresenters
+namespace RevitDBExplorer.Domain.DataModel.ViewModels
 {
-    internal class DefaultPresenterVM : BaseViewModel, IValuePresenter
+    internal class DefaultPresenterVM : ValuePresenterVM
     {
-        public IValueContainer valueContainer;
+        private IValueContainer valueContainer;
+       
 
 
         public IValueContainer ValueContainer

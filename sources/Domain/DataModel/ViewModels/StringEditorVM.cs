@@ -1,16 +1,15 @@
-﻿using RevitDBExplorer.Domain.DataModel.MemberAccessors;
-using RevitDBExplorer.WPF;
+﻿using RevitDBExplorer.Domain.DataModel.ViewModels.Base;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
-namespace RevitDBExplorer.UIComponents.List.ValueEditors
+namespace RevitDBExplorer.Domain.DataModel.ViewModels
 {
-    internal class DoubleEditorVM : BaseViewModel, IValueEditor
+    internal class StringEditorVM : ValueEditorVM
     {
-        private double value;
+        private string value;
 
 
-        public double Value
+        public string Value
         {
             get
             {

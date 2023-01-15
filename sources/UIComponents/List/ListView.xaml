@@ -138,9 +138,7 @@
                                         <Setter TargetName="cTextBlock" Property="Cursor" Value="Hand"/>
                                         <Setter TargetName="cTextBlock" Property="FontWeight" Value="Bold"/>
                                     </DataTrigger>
-                                    <DataTrigger Binding="{Binding Label.IsException}" Value="True">
-                                        <Setter TargetName="cTextBlock" Property="Foreground" Value="{DynamicResource Member.Error}"/>
-                                    </DataTrigger>
+                                 
                                 </DataTemplate.Triggers>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>

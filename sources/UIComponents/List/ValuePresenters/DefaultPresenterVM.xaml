@@ -1,16 +1,16 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:converters="clr-namespace:RevitDBExplorer.WPF.Converters" 
-                    xmlns:presenters="clr-namespace:RevitDBExplorer.UIComponents.List.ValuePresenters" 
+                    xmlns:presenters="clr-namespace:RevitDBExplorer.Domain.DataModel.ViewModels" 
                     >
 
     <DataTemplate DataType="{x:Type presenters:DefaultPresenterVM}">
-        <TextBlock Text="{Binding Label.Text, Mode=OneWay}" TextWrapping="NoWrap"  >
+        <TextBlock Text="{Binding ValueViewModel.Label, Mode=OneWay}" TextWrapping="NoWrap"  >
             <TextBlock.Resources>
-                <converters:SnoopableMemberToToolTipConverter x:Key="FeetToMetersConverter"/>
+                <converters:SnoopableMemberToToolTipConverter x:Key="SnoopableMemberToToolTipConverter"/>
             </TextBlock.Resources>
             <TextBlock.ToolTip>
-                <TextBlock Text="{Binding ., Converter={StaticResource FeetToMetersConverter}}" />
+                <TextBlock Text="{Binding ., Converter={StaticResource SnoopableMemberToToolTipConverter}}" />
             </TextBlock.ToolTip>
         </TextBlock>
     </DataTemplate>

@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Autodesk.Revit.DB;
-using Autodesk.Revit.DB.ExtensibleStorage;
-using Autodesk.Revit.UI;
-using RevitDBExplorer.Domain.DataModel.Streams;
 using RevitDBExplorer.Domain.DataModel.MemberTemplates.Base;
+using RevitDBExplorer.Domain.DataModel.Streams;
+using RevitDBExplorer.Domain.DataModel.Streams.Base;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
@@ -19,8 +18,8 @@ namespace RevitDBExplorer.Domain.DataModel.MemberTemplates
         {
             templates = new ISnoopableMemberTemplate[]
             {
-               SnoopableMemberTemplate<Family>.Create((doc, target) => doc.EditFamily(target), kind: SnoopableMember.Kind.AsArgument),
-               SnoopableMemberTemplate<Family>.Create((doc, target) => FamilySizeTableManager.GetFamilySizeTableManager(doc, target.Id), kind: SnoopableMember.Kind.StaticMethod),
+               SnoopableMemberTemplate<Family>.Create((doc, target) => doc.EditFamily(target), kind: MemberKind.AsArgument),
+               SnoopableMemberTemplate<Family>.Create((doc, target) => FamilySizeTableManager.GetFamilySizeTableManager(doc, target.Id), kind: MemberKind.StaticMethod),
                
             }; 
         }

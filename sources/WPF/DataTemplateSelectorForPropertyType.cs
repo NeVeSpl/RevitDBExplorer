@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using RevitDBExplorer.Domain.DataModel;
-using RevitDBExplorer.UIComponents.List.ValuePresenters;
+using RevitDBExplorer.Domain.DataModel.ViewModels;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 

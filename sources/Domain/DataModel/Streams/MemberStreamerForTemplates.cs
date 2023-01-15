@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using RevitDBExplorer.Domain.DataModel.MemberTemplates.Base;
+using RevitDBExplorer.Domain.DataModel.Streams.Base;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
@@ -47,27 +48,19 @@ namespace RevitDBExplorer.Domain.DataModel.Streams
         }
 
 
-        public static IEnumerable<SnoopableMember> Stream(SnoopableObject snoopableObject)
-        {
-            foreach (var member in CreateSnoopableMembersFor(snoopableObject))
-            {
-                yield return member;
-            }
-        }
-
-        private static IEnumerable<SnoopableMember> CreateSnoopableMembersFor(SnoopableObject snoopableObject)
-        {
-            var objectType = snoopableObject.Object.GetType();
+        public static IEnumerable<MemberDescriptor> Stream(object snoopableObject)
+        {            
+            var objectType = snoopableObject.GetType();
             foreach (var keyValue in forTypes)
             {
                 if (keyValue.Key.IsAssignableFrom(objectType))
                 {
                     foreach (var template in keyValue.Value)
                     {
-                        if (template.CanBeUsedWith(snoopableObject.Object))
+                        if (template.CanBeUsedWith(snoopableObject))
                         {
-                            var member = new SnoopableMember(snoopableObject, template.Data.MemberKind, template.Data.Name, template.Data.DeclaringType, template.Data.MemberAccessor, template.Data.DocumentationFactoryMethod);
-                            yield return member;
+                            
+                            yield return template.Data;
                         }
                     }
                 }

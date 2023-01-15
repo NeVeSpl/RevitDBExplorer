@@ -1,7 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:converters="clr-namespace:RevitDBExplorer.WPF.Converters" 
-                    xmlns:editors="clr-namespace:RevitDBExplorer.UIComponents.List.ValueEditors" 
+                    xmlns:editors="clr-namespace:RevitDBExplorer.Domain.DataModel.ViewModels"  
                     >
 
     <DataTemplate DataType="{x:Type editors:IntegerEditorVM}" >
@@ -12,10 +12,10 @@
             </Grid.ColumnDefinitions>
             <TextBox Text="{Binding ValueViewModel.Value,  UpdateSourceTrigger=PropertyChanged}" Padding="1 2">
                 <TextBox.InputBindings>
-                    <KeyBinding Key="Enter" Command="{Binding WriteCommand}"/>
+                    <KeyBinding Key="Enter" Command="{Binding ValueViewModel.WriteCommand}"/>
                 </TextBox.InputBindings>
             </TextBox>
-            <Button Grid.Column="1" Content="Save" Command="{Binding WriteCommand}"  Margin="5 0 0 0" Padding="7 2"/>
+            <Button Grid.Column="1" Content="Save" Command="{Binding ValueViewModel.WriteCommand}"  Margin="5 0 0 0" Padding="7 2"/>
         </Grid>
     </DataTemplate>
     

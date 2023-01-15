@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using RevitDBExplorer.Domain.DataModel;
+using RevitDBExplorer.Domain.DataModel.ViewModels.Base;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
@@ -21,7 +22,10 @@ namespace RevitDBExplorer.UIComponents.List
 
             if (item.DataContext is SnoopableMember snoopableMember)
             {
-                Clipboard.SetDataObject($"{snoopableMember.Name}= {snoopableMember.Label.Text}");
+                if (snoopableMember.ValueViewModel is IValuePresenter presenter)
+                {
+                    Clipboard.SetDataObject($"{snoopableMember.Name}= {presenter.Label}");
+                }
             }
         }
     }

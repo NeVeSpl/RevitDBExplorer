@@ -4,6 +4,7 @@ using System.Linq;
 using Autodesk.Revit.DB;
 using RevitDBExplorer.Domain.DataModel.MemberTemplates.Base;
 using RevitDBExplorer.Domain.DataModel.Streams;
+using RevitDBExplorer.Domain.DataModel.Streams.Base;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
@@ -17,12 +18,12 @@ namespace RevitDBExplorer.Domain.DataModel.MemberTemplates
         {
             templates = new ISnoopableMemberTemplate[]
             {
-                SnoopableMemberTemplate<Document>.Create((doc, target) => Document.GetDocumentVersion(target), kind: SnoopableMember.Kind.StaticMethod),
+                SnoopableMemberTemplate<Document>.Create((doc, target) => Document.GetDocumentVersion(target), kind: MemberKind.StaticMethod),
 #if R2023b
-                SnoopableMemberTemplate<Document>.Create((doc, target) => target.GetChangedElements(Guid.Empty), kind: SnoopableMember.Kind.Method),
+                SnoopableMemberTemplate<Document>.Create((doc, target) => target.GetChangedElements(Guid.Empty), kind: MemberKind.Method),
 #endif
 
-                SnoopableMemberTemplate<Document>.Create((doc, target) => BasicFileInfo.Extract(target.PathName), kind: SnoopableMember.Kind.StaticMethod),
+                SnoopableMemberTemplate<Document>.Create((doc, target) => BasicFileInfo.Extract(target.PathName), kind: MemberKind.StaticMethod),
                
             };
         }

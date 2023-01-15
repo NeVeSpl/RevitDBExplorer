@@ -2,7 +2,7 @@
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
-namespace RevitDBExplorer.Domain.DataModel.Base
+namespace RevitDBExplorer.Domain.DataModel.ValueContainers.Base
 {
     internal interface ICanBeSnooped
     {

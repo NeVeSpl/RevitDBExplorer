@@ -6,16 +6,29 @@ using Autodesk.Revit.DB;
 using RevitDBExplorer.Domain.DataModel.MemberAccessors;
 using RevitDBExplorer.Domain.DataModel.Streams.Base;
 
+// (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
+
 namespace RevitDBExplorer.Domain.DataModel.Streams
 {
     internal static class MemberStreamer
     {
-        public static IEnumerable<SnoopableMember> Stream(SnoopableObject target)
+        public static IEnumerable<SnoopableMember> Stream(SnoopableObject snoopableObject)
+        {        
+            foreach (var descriptor in StreamDescriptors(snoopableObject.Context, snoopableObject.Object))
+            {
+                var member = new SnoopableMember(snoopableObject, descriptor);
+                yield return member;
+            }           
+        }
+
+
+        private static IEnumerable<MemberDescriptor> StreamDescriptors(SnoopableContext context, object snoopableObject)
         {
-            var type = target.Object.GetType();
+            var type = snoopableObject.GetType();
+
 
             bool shouldEndAllStreaming = false;
-            foreach (var member in MemberStreamerForSystemType.Stream(target))
+            foreach (var member in MemberStreamerForSystemType.Stream(context, snoopableObject))
             {
                 shouldEndAllStreaming = true;
                 yield return member;
@@ -23,7 +36,7 @@ namespace RevitDBExplorer.Domain.DataModel.Streams
             if (shouldEndAllStreaming) yield break;
 
 
-            foreach (var member in MemberStreamerForTemplates.Stream(target))
+            foreach (var member in MemberStreamerForTemplates.Stream(snoopableObject))
             {
                 yield return member;
             }
@@ -44,8 +57,7 @@ namespace RevitDBExplorer.Domain.DataModel.Streams
 
                 var comments = () => RevitDocumentationReader.GetPropertyComments(prop);
                 var memberAccessor = MemberAccessorFactory.CreateMemberAccessor(getMethod, null);
-                var member = new SnoopableMember(target, SnoopableMember.Kind.Property, prop.Name, prop.DeclaringType, memberAccessor, comments);
-                var desc = new MemberDescriptor(SnoopableMember.Kind.Property, prop.Name, prop.DeclaringType, null, comments);
+                var member = new MemberDescriptor(type, MemberKind.Property, prop.Name, prop.DeclaringType, memberAccessor, comments);               
                 yield return member;
             }
 
@@ -56,7 +68,7 @@ namespace RevitDBExplorer.Domain.DataModel.Streams
                 if (method.IsSpecialName) continue;
                 if (method.DeclaringType == typeof(object)) continue;
 
-                if (method.Name == "Set" && target.Object is Parameter parameter)
+                if (method.Name == "Set" && snoopableObject is Parameter parameter)
                 {
                     Type expectedParameterType = parameter.StorageType switch
                     {
@@ -64,7 +76,8 @@ namespace RevitDBExplorer.Domain.DataModel.Streams
                         StorageType.Integer => typeof(int),
                         StorageType.Double => typeof(double),
                         StorageType.String => typeof(string),
-                        StorageType.ElementId => typeof(ElementId)
+                        StorageType.ElementId => typeof(ElementId),
+                        _ => throw new NotImplementedException()
                     };
                     var parameterType = method.GetParameters().FirstOrDefault()?.ParameterType;
                     if (parameterType != expectedParameterType)
@@ -75,7 +88,7 @@ namespace RevitDBExplorer.Domain.DataModel.Streams
 
                 var comments = () => RevitDocumentationReader.GetMethodComments(method);
                 var memberAccessor = MemberAccessorFactory.CreateMemberAccessor(method, null);
-                var member = new SnoopableMember(target, SnoopableMember.Kind.Method, method.Name, method.DeclaringType, memberAccessor, comments);
+                var member = new MemberDescriptor(type, MemberKind.Method, method.Name, method.DeclaringType, memberAccessor, comments);
                 yield return member;
             }
         }

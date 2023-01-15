@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using RevitDBExplorer.Domain.DataModel.MemberAccessors;
+using RevitDBExplorer.Domain.DataModel.Streams.Base;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
@@ -9,18 +10,18 @@ namespace RevitDBExplorer.Domain.DataModel.Streams
 {
     internal static class MemberStreamerForSystemType
     {
-        public static IEnumerable<SnoopableMember> Stream(SnoopableObject snoopableObject)
+        public static IEnumerable<MemberDescriptor> Stream(SnoopableContext context, object target)
         {
-            var type = snoopableObject.Object.GetType();
+            var type = target.GetType();
          
 
             if ((type.IsEnum) || (type.IsPrimitive) || (type == typeof(string)))
             {
-                var member = new SnoopableMember(snoopableObject, SnoopableMember.Kind.Property, "Value", type, new MemberAccessorForConstValue(type, snoopableObject.Context, snoopableObject.Object), null);                
+                var member = new MemberDescriptor(type, MemberKind.Property, "Value", type, new MemberAccessorForConstValue(type, context, target), null);                
                 yield return member;                            
             }
 
-            if (snoopableObject.Object is IList list)
+            if (target is IList list)
             {
                 Type itemType = typeof(object);
                 var genericArgs = type.GetGenericArguments();
@@ -31,16 +32,16 @@ namespace RevitDBExplorer.Domain.DataModel.Streams
 
                 for (int i = 0; i < Math.Min(list.Count, 9999); i++)
                 {                   
-                    var member = new SnoopableMember(snoopableObject, SnoopableMember.Kind.Property, i.ToString(), type, new MemberAccessorForConstValue(itemType, snoopableObject.Context, list[i]), null);
+                    var member = new MemberDescriptor(type, MemberKind.Property, i.ToString(), type, new MemberAccessorForConstValue(itemType, context, list[i]), null);
                     yield return member;
                 }
                 if (list.Count == 0)
                 {
-                    yield return new SnoopableMember(snoopableObject, SnoopableMember.Kind.Property, "<list is empty>", type, new MemberAccessorForConstValue(itemType, snoopableObject.Context, null), null);
+                    yield return new MemberDescriptor(type, MemberKind.Property, "<list is empty>", type, new MemberAccessorForConstValue(itemType, context, null), null);
                 }
             }
 
-            if (snoopableObject.Object is IDictionary dict)
+            if (target is IDictionary dict)
             {
                 Type itemType = typeof(object);
                 var genericArgs = type.GetGenericArguments();
@@ -51,12 +52,12 @@ namespace RevitDBExplorer.Domain.DataModel.Streams
 
                 foreach (DictionaryEntry item in dict)
                 {
-                    var member = new SnoopableMember(snoopableObject, SnoopableMember.Kind.Property, item.Key.ToString(), type, new MemberAccessorForConstValue(itemType, snoopableObject.Context, item.Value), null);                   
+                    var member = new MemberDescriptor(type, MemberKind.Property, item.Key.ToString(), type, new MemberAccessorForConstValue(itemType, context, item.Value), null);                   
                     yield return member;
                 }
                 if (dict.Count == 0)
                 {
-                    yield return new SnoopableMember(snoopableObject, SnoopableMember.Kind.Property, "<dictionary is empty>", type, new MemberAccessorForConstValue(itemType, snoopableObject.Context, null), null);
+                    yield return new MemberDescriptor(type, MemberKind.Property, "<dictionary is empty>", type, new MemberAccessorForConstValue(itemType, context, null), null);
                 }
             }
         }

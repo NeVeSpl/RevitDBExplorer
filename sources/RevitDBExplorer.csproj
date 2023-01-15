@@ -195,11 +195,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Domain\AddInManifestWizard.cs" />
-    <Compile Include="Domain\DataModel\Base\Traits.cs" />
+    <Compile Include="Domain\DataModel\ValueContainers\Base\Traits.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\DialogBoxShowingEventArgs\DialogBoxShowingEventArgs_OverrideResult.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\Element\Element_GetMaterialVolume.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\Element\Element_GetMaterialArea.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\FailureHandlingOptions\FailureHandlingOptions.cs" />
+    <Compile Include="Domain\DataModel\ViewModels\Base\ValueEditorVM.cs" />
+    <Compile Include="Domain\DataModel\ViewModels\Base\IValueEditor.cs" />
+    <Compile Include="Domain\DataModel\ViewModels\Base\IValueViewModel.cs" />
     <Compile Include="Domain\DataModel\MemberTemplates\Accessors\HostObjectUtils_GetSideFaces.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\MemberAccessorByIteration.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\Parameter\Parameter_Set.cs" />
@@ -220,8 +223,7 @@
     <Compile Include="Domain\DataModel\MemberTemplates\Family_Templates.cs" />
     <Compile Include="Domain\DataModel\MemberTemplates\UpdaterInfo_Templates.cs" />
     <Compile Include="Domain\DataModel\MemberTemplates\WorksharingUtils_Templates.cs" />
-    <Compile Include="Domain\DataModel\Streams\MemberStreamerForProperties.cs" />
-    <Compile Include="Domain\DataModel\Streams\MemberStreamerForMethods.cs" />
+    <Compile Include="Domain\DataModel\Streams\Base\MemberKind.cs" />
     <Compile Include="Domain\DataModel\Streams\MemberStreamerForTemplates.cs" />
     <Compile Include="Domain\DataModel\Streams\MemberStreamer.cs" />
     <Compile Include="Domain\DataModel\ValueContainers\Base\ITypeHandler.cs" />
@@ -233,6 +235,8 @@
     <Compile Include="Domain\DataModel\ValueContainers\StructuralSectionHandler.cs" />
     <Compile Include="Domain\DataModel\ValueContainers\UpdaterInfoHandler.cs" />
     <Compile Include="Domain\DataModel\ValueContainers\TransformHandler.cs" />
+    <Compile Include="Domain\DataModel\ViewModels\Base\IValuePresenter.cs" />
+    <Compile Include="Domain\DataModel\ViewModels\Base\ValuePresenterVM.cs" />
     <Compile Include="Domain\EventMonitor.cs" />
     <Compile Include="Domain\Presentation\DrawInRevitCommand.cs" />
     <Compile Include="Domain\Presentation\IsolateInRevitCommand.cs" />
@@ -242,8 +246,7 @@
     <Compile Include="Domain\QuoteGenerator.cs" />
     <Compile Include="Domain\DataModel\SnoopableContext.cs" />
     <Compile Include="Domain\DataModel\ValueContainers\IListElementIdHandler.cs" />
-    <Compile Include="Domain\DataModel\ValueObjects\DeclaringType.cs" />
-    <Compile Include="Domain\DataModel\ValueObjects\Label.cs" />
+    <Compile Include="Domain\DataModel\Streams\Base\DeclaringType.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\MemberAccessorFactory.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\Element\Element_Id.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\HostObject\HostObject_FindInserts.cs" />
@@ -358,12 +361,12 @@
       <DependentUpon>ListView.xaml</DependentUpon>
     </Compile>
     <Compile Include="UIComponents\List\ListVM.cs" />
-    <Compile Include="UIComponents\List\ValueEditors\ExecuteEditorVM.cs" />
-    <Compile Include="UIComponents\List\ValueEditors\DoubleEditorVM.cs" />
-    <Compile Include="UIComponents\List\ValueEditors\IntegerEditorVM.cs" />
-    <Compile Include="UIComponents\List\ValueEditors\StringEditorVM.cs" />
-    <Compile Include="UIComponents\List\ValuePresenters\ErrorPresenterVM.cs" />
-    <Compile Include="UIComponents\List\ValuePresenters\DefaultPresenterVM.cs" />
+    <Compile Include="Domain\DataModel\ViewModels\ExecuteEditorVM.cs" />
+    <Compile Include="Domain\DataModel\ViewModels\DoubleEditorVM.cs" />
+    <Compile Include="Domain\DataModel\ViewModels\IntegerEditorVM.cs" />
+    <Compile Include="Domain\DataModel\ViewModels\StringEditorVM.cs" />
+    <Compile Include="Domain\DataModel\ViewModels\ErrorPresenterVM.cs" />
+    <Compile Include="Domain\DataModel\ViewModels\DefaultPresenterVM.cs" />
     <Compile Include="UIComponents\QueryVisualization\QueryVisualizationVM.cs" />
     <Compile Include="UIComponents\QueryVisualization\CommandVM.cs" />
     <Compile Include="UIComponents\Tree\GroupTreeVM.cs" />
@@ -536,6 +539,7 @@
       <Link>Resources\RDBE.Icon.16.png</Link>
     </Resource>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\System.Text.Json.6.0.0\build\System.Text.Json.targets" Condition="Exists('..\packages\System.Text.Json.6.0.0\build\System.Text.Json.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

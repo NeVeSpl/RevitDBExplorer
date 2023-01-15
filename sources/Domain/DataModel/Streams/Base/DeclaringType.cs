@@ -2,7 +2,7 @@
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
-namespace RevitDBExplorer.Domain.DataModel.ValueObjects
+namespace RevitDBExplorer.Domain.DataModel.Streams.Base
 {
     internal class DeclaringType: IEquatable<DeclaringType>, IComparable<DeclaringType>
     {
