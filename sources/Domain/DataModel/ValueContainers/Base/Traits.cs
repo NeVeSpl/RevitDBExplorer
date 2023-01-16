@@ -8,7 +8,7 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers.Base
     {
         bool CanBeSnooped(SnoopableContext context, object value);
     }
-    internal interface ICanBeSnooped<T>
+    internal interface ICanBeSnooped<in T>
     {
         bool CanBeSnooped(SnoopableContext context, T value);
     }
@@ -17,7 +17,7 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers.Base
     {
         string ToLabel(SnoopableContext context, object value);
     }
-    internal interface IToLabel<T>
+    internal interface IToLabel<in T>
     {
         string ToLabel(SnoopableContext context, T value);
     }
@@ -26,13 +26,13 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers.Base
     {
         IEnumerable<SnoopableObject> Snoop(SnoopableContext context, object value);
     }
-    internal interface ISnoop<T>
+    internal interface ISnoop<in T>
     {
         IEnumerable<SnoopableObject> Snoop(SnoopableContext context, T value);
     }
 
 
-    internal interface IHaveToolTip<T>
+    internal interface IHaveToolTip<in T>
     {
         string GetToolTip(SnoopableContext context, T value);
     }

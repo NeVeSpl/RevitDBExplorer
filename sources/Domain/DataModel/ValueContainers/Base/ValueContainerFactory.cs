@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
@@ -20,8 +19,7 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers.Base
             new StringHandler(),
             new DoubleHandler(),
             new GuidHandler(),
-            new EnumHandler(),
-
+            new EnumHandler<System.Enum>(),
             // 
             new DoubleNullableHandler(),
 
@@ -71,12 +69,13 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers.Base
             foreach (var typeHandler in TypeHandlers)
             {
                 var closedType = typeof(ValueContainer<>).MakeGenericType(new Type[] { typeHandler.Type });
-                var field = closedType.GetField("typeHandler", BindingFlags.NonPublic | BindingFlags.Static);
-                field.SetValue(null, typeHandler);
+                //var field = closedType.GetField("typeHandler", BindingFlags.NonPublic | BindingFlags.Static);
+                //field.SetValue(null, typeHandler);
 
                 FactoryMethodsForValueContainers.Add((typeHandler.Type, closedType.CompileFactoryMethod<IValueContainer>()));
             }
         }
+                
 
 
         private static readonly Dictionary<Type, Func<IValueContainer>> Cache_Factories = new();
@@ -108,6 +107,13 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers.Base
         }
         private static ITypeHandler SelectTypeHandlerInternal(Type type)
         {
+            if (type.IsEnum)
+            {
+                var closedType = typeof(EnumHandler<>).MakeGenericType(new Type[] { type });
+                var typehandler = Activator.CreateInstance(closedType) as ITypeHandler;
+                return typehandler;
+            }
+
             foreach (var typeHandler in TypeHandlers)
             {
                 if (typeHandler.Type.IsAssignableFrom(type))

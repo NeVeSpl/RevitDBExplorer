@@ -9,36 +9,37 @@ using RevitDBExplorer.Domain.DataModel.ValueContainers.Base;
 
 namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
-    internal class MemberAccessorByIteration : MemberAccessorTyped<object>
+    internal sealed class MemberAccessorByIteration<TSnoopedObjectType, TReturnType> : MemberAccessorTyped<TSnoopedObjectType>
     {
         private readonly MethodInfo getMethod;
-
+        private readonly Func<TSnoopedObjectType, object, TReturnType> func;
 
         public MemberAccessorByIteration(MethodInfo getMethod)
         {
             this.getMethod = getMethod;
+
+            var factory = new GenericFactory2<TSnoopedObjectType, TReturnType>();
+            func = factory.CreateLambdaInternalWithOneParam<object>(getMethod);
         }
 
 
-        public override ReadResult Read(SnoopableContext context, object @object)
+        public override ReadResult Read(SnoopableContext context, TSnoopedObjectType @object)
         {
             var typeName = getMethod.ReturnType.GetCSharpName();
-            return new ReadResult($"[{typeName}]", nameof(MemberAccessorByIteration), true);
+            return new ReadResult($"[{typeName}]", "[ByIte]", true);
         }
-        public override IEnumerable<SnoopableObject> Snoop(SnoopableContext context, object @object, IValueContainer state)
+        public override IEnumerable<SnoopableObject> Snoop(SnoopableContext context, TSnoopedObjectType @object, IValueContainer state)
         {            
             var result = new List<SnoopableObject>();
             var parameter = getMethod.GetParameters().First();
 
-            var arg = new object[1];
+            
             foreach (var input in StreamValues(context, parameter.ParameterType))
-            {    
-                arg[0] = input;     
+            {                   
                 object resultOfInvocation = null;
                 try
                 {
-
-                    resultOfInvocation = getMethod.Invoke(@object, arg);                    
+                    resultOfInvocation = func(@object, input);          
                 }
                 catch (Exception ex)
                 {
@@ -89,10 +90,11 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
                     yield return level;
                 }
             }
-
         }
+    }
 
-
+    internal sealed class MemberAccessorByIteration
+    {
         public static Type[] HandledParameterTypes = new[] { typeof(int), typeof(bool), typeof(Enum), typeof(Phase), typeof(Level) };
     }
 }

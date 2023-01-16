@@ -17,5 +17,5 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers.Base
         bool CanBeSnooped { get; }
         string ToolTip { get;  }
         IEnumerable<SnoopableObject> Snoop();
-    }
+    } 
 }

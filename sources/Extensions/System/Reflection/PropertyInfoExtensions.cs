@@ -9,6 +9,7 @@ namespace System.Reflection
         /// </summary>
         public static MethodInfo GetGetGetMethod(this PropertyInfo property)
         {
+            // todo : add cache
             var declaringType = property.DeclaringType;
             var prop = property;
 

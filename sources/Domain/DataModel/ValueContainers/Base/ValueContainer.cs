@@ -26,8 +26,12 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers.Base
         }
 
 
+        static ValueContainer()
+        {
+            typeHandler ??= ValueContainerFactory.SelectTypeHandler(typeof(T)) as ITypeHandler<T>;
+        }
         public ValueContainer()
-        {           
+        {
             
         }
 
@@ -39,6 +43,14 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers.Base
          
             return this;
         }
+        public ValueContainer<T> SetValueTyped(SnoopableContext context, T value)
+        {
+            this.context = context;
+            this.value = value;
+
+            return this;
+        }
+
 
         public string ValueAsString => typeHandler.ToLabel(context, value);
         public bool CanBeSnooped => typeHandler.CanBeSnooped(context, value);
@@ -55,7 +67,6 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers.Base
             }
         }
 
-        public IEnumerable<SnoopableObject> Snoop() => typeHandler.Snoop(context, value);
-       
+        public IEnumerable<SnoopableObject> Snoop() => typeHandler.Snoop(context, value);      
     }
 }

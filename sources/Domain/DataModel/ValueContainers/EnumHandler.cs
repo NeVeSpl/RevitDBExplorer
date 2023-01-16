@@ -5,10 +5,10 @@ using RevitDBExplorer.Domain.DataModel.ValueContainers.Base;
 
 namespace RevitDBExplorer.Domain.DataModel.ValueContainers
 {
-    internal sealed class EnumHandler : TypeHandler<System.Enum>
+    internal sealed class EnumHandler<TEnumType> : TypeHandler<TEnumType> where TEnumType : System.Enum
     {
-        protected override bool CanBeSnoooped(SnoopableContext context, Enum enumValue) => false;
-        protected override string ToLabel(SnoopableContext context, Enum enumValue)
+        protected override bool CanBeSnoooped(SnoopableContext context, TEnumType enumValue) => false;
+        protected override string ToLabel(SnoopableContext context, TEnumType enumValue)
         {
             return $"{enumValue?.GetType()?.Name}.{enumValue}";
         }

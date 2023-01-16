@@ -17,8 +17,6 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
         {
 
         }
-
-
         static MemberAccessorFactory()
         {
             var accessors = GetAllInstancesThatImplement<ICanCreateMemberAccessor>();
@@ -31,8 +29,6 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
                 }
             }
         }
-
-
         private static IEnumerable<T> GetAllInstancesThatImplement<T>() where T : class
         {
             var type = typeof(T);
@@ -51,11 +47,21 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
             }
 
             var @params = getMethod.GetParameters();
+          
+            if (@params.Length == 0)
+            {
+                var genericFactory = GenericFactory.GetInstance(getMethod.DeclaringType, getMethod.ReturnType);
+                var accessor = genericFactory.CreateMemberAccessorByRefCompiled(getMethod);
+                return accessor;
+            }            
+
             if (@params.Length == 1)
             {
                 if (MemberAccessorByIteration.HandledParameterTypes.Contains(@params[0].ParameterType) || @params[0].ParameterType.IsEnum)
                 {
-                    return new MemberAccessorByIteration(getMethod);
+                    var genericFactory = GenericFactory.GetInstance(getMethod.DeclaringType, getMethod.ReturnType);
+                    var accessor = genericFactory.CreateMemberAccessorByIteration(getMethod);
+                    return accessor;
                 }
             }
             if (@params.All(x => MemberAccessorByRef.HandledParameterTypes.Contains(x.ParameterType)))

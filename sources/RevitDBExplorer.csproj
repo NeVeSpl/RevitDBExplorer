@@ -60,7 +60,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug2024|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>bin\Debug2024\</OutputPath>
     <DefineConstants>TRACE;DEBUG;R2021b, R2022b, R2023b, R2024b, R2024e</DefineConstants>
     <DebugType>full</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -195,6 +195,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Domain\AddInManifestWizard.cs" />
+    <Compile Include="Domain\DataModel\MemberAccessors\GenericFactory.cs" />
+    <Compile Include="Domain\DataModel\MemberAccessors\MemberAccessorByRefCompiled.cs" />
     <Compile Include="Domain\DataModel\ValueContainers\Base\Traits.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\DialogBoxShowingEventArgs\DialogBoxShowingEventArgs_OverrideResult.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\Element\Element_GetMaterialVolume.cs" />
@@ -250,7 +252,7 @@
     <Compile Include="Domain\DataModel\MemberAccessors\MemberAccessorFactory.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\Element\Element_Id.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\HostObject\HostObject_FindInserts.cs" />
-    <Compile Include="Domain\DataModel\MemberTemplates\Accessors\IsCuttingElementInJoin.cs" />
+    <Compile Include="Domain\DataModel\MemberTemplates\Accessors\JoinGeometryUtils_IsCuttingElementInJoin.cs" />
     <Compile Include="Domain\DataModel\MemberTemplates\JoinGeometryUtils_Templates.cs" />
     <Compile Include="Domain\DataModel\MemberTemplates\Base\SnoopableMemberTemplate.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\AssetProperties\AssetProperties_Item.cs" />

@@ -15,7 +15,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
             string label = GetLabel(context.Document, @object);
             bool canBeSnooped = CanBeSnoooped(context.Document, @object);
 
-            return new ReadResult(label, GetType().GetCSharpName(), canBeSnooped);
+            return new ReadResult(label, "[ByType] " + GetType().GetCSharpName(), canBeSnooped);
         }
         protected abstract bool CanBeSnoooped(Document document, TSnoopedObjectType value);
         protected abstract string GetLabel(Document document, TSnoopedObjectType value);
