@@ -38,7 +38,7 @@ namespace RevitDBExplorer.Domain.DataModel.Streams
         }
         private static readonly Dictionary<Type, IReadOnlyList<MemberDescriptor>> Cache_Descriptors = new();
 
-        public static IEnumerable<MemberDescriptor> StreamDescriptorsForPropsAndMethods(object snoopableObject)
+        private static IEnumerable<MemberDescriptor> StreamDescriptorsForPropsAndMethods(object snoopableObject)
         {
             var type = snoopableObject.GetType();
 

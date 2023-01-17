@@ -11,12 +11,15 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
     internal sealed class MemberAccessorByIteration<TSnoopedObjectType, TReturnType> : MemberAccessorTyped<TSnoopedObjectType>
     {
-        private readonly MethodInfo getMethod;
+        private readonly string getMethodReturnTypeName;
+        private readonly ParameterInfo getMethodParameter;
         private readonly Func<TSnoopedObjectType, object, TReturnType> func;
+        
 
         public MemberAccessorByIteration(MethodInfo getMethod)
         {
-            this.getMethod = getMethod;
+            getMethodReturnTypeName = getMethod.ReturnType.GetCSharpName();
+            getMethodParameter = getMethod.GetParameters().First();
 
             var factory = new GenericFactory2<TSnoopedObjectType, TReturnType>();
             func = factory.CreateLambdaInternalWithOneParam<object>(getMethod);
@@ -25,16 +28,14 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 
         public override ReadResult Read(SnoopableContext context, TSnoopedObjectType @object)
         {
-            var typeName = getMethod.ReturnType.GetCSharpName();
-            return new ReadResult($"[{typeName}]", "[ByIte]", true);
+            var count = CountValues(context, getMethodParameter.ParameterType);
+            return new ReadResult(Labeler.GetLabelForCollection(getMethodReturnTypeName, count), "[ByIteration]", true);
         }
         public override IEnumerable<SnoopableObject> Snoop(SnoopableContext context, TSnoopedObjectType @object, IValueContainer state)
         {            
-            var result = new List<SnoopableObject>();
-            var parameter = getMethod.GetParameters().First();
+            var result = new List<SnoopableObject>();           
 
-            
-            foreach (var input in StreamValues(context, parameter.ParameterType))
+            foreach (var input in StreamValues(context, getMethodParameter.ParameterType))
             {                   
                 object resultOfInvocation = null;
                 try
@@ -43,13 +44,13 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
                 }
                 catch (Exception ex)
                 {
-                    if (parameter.ParameterType == typeof(int))
+                    if (getMethodParameter.ParameterType == typeof(int))
                     {
                         break;
                     }
                     resultOfInvocation = Labeler.GetLabelForException(ex);
                 }
-                result.Add(SnoopableObject.CreateInOutPair(context.Document, input, resultOfInvocation, keyPrefix: parameter.Name + ":"));
+                result.Add(SnoopableObject.CreateInOutPair(context.Document, input, resultOfInvocation, keyPrefix: getMethodParameter.Name + ":"));
             }
 
             return result;
@@ -90,6 +91,31 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
                     yield return level;
                 }
             }
+        }
+        private int? CountValues(SnoopableContext context, Type type)
+        {
+            if (type == typeof(int))
+            {
+                return null;
+            }
+            if (type.IsEnum)
+            {
+                return Enum.GetNames(type).Length;
+            }
+            if (type == typeof(bool))
+            {
+                return 2;
+            }
+            if (type == typeof(Phase))
+            {
+                return context.Document.Phases.Size;
+            }
+            if (type == typeof(Level))
+            {
+                return null;
+            }
+
+            return null;
         }
     }
 

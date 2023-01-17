@@ -22,15 +22,23 @@ namespace System
         public static object GetDefaultValue(this Type type)
         {
             if ((type.IsValueType) && (type != typeof(void)))
-            {
+            { 
                 if (type == typeof(int))
                 {
                     return default(int);
                 }
+                if (type == typeof(long))
+                {
+                    return default(long);
+                }
+                if (type == typeof(float))
+                {
+                    return default(float);
+                }
                 if (type == typeof(double))
                 {
                     return default(double);
-                }
+                }                
                 if (type == typeof(bool))
                 {
                     return default(bool);
@@ -100,7 +108,5 @@ namespace System
             var factoryMethod = factoryLambda.Compile();
             return factoryMethod;
         }
-
-       
     }
 }

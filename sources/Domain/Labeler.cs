@@ -39,5 +39,15 @@ namespace RevitDBExplorer.Domain
             }
             return "[invalid category]";
         }
+
+
+        public static string GetLabelForCollection(string typeName, int? count)
+        {
+            if (count.HasValue)
+            {
+                return $"[{typeName}: {count.Value}]";
+            }
+            return $"[{typeName}: ?]";
+        }
     }
 }

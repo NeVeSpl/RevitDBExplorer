@@ -52,7 +52,7 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers.Base
         }
 
 
-        public string ValueAsString => typeHandler.ToLabel(context, value);
+        public string ValueAsString => typeHandler?.ToLabel(context, value) ?? "RDBE Error";
         public bool CanBeSnooped => typeHandler.CanBeSnooped(context, value);
 
         public string ToolTip

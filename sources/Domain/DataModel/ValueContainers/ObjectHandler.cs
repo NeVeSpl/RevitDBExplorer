@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reflection;
 using Autodesk.Revit.DB;
 using RevitDBExplorer.Domain.DataModel.ValueContainers.Base;
 
@@ -14,8 +13,13 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers
         protected override string ToLabel(SnoopableContext context, object @object)
         {
             string name = @object.TryGetPropertyValue(propertyThatContainsName);
-            string typeName = @object.GetType()?.GetCSharpName();     
-            return $"{typeName}: {name}";
+            string typeName = @object.GetType()?.GetCSharpName();
+
+            if (!string.IsNullOrEmpty(name))
+            {
+                return $"{typeName}: {name}";
+            }
+            return $"{typeName}";
         }
         protected override IEnumerable<SnoopableObject> Snooop(Document document, object @object)
         {

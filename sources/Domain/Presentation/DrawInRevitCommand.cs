@@ -37,11 +37,11 @@ namespace RevitDBExplorer.Domain.Presentation
                 {
                     if (treeViewItem.Object?.Object is GeometryObject geometryObject)
                     {
-                        Draw(treeViewItem.Object.Document, geometryObject);
+                        Draw(treeViewItem.Object.Context.Document, geometryObject);
                     }
                     if (treeViewItem.Object?.Object is BoundingBoxXYZ boundingBoxXYZ)
                     {
-                        Draw(treeViewItem.Object.Document, boundingBoxXYZ);
+                        Draw(treeViewItem.Object.Context.Document, boundingBoxXYZ);
                     }
                 }, null, nameof(DrawInRevitCommand));      
             }

@@ -202,6 +202,7 @@
     <Compile Include="Domain\DataModel\MemberAccessors\Element\Element_GetMaterialVolume.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\Element\Element_GetMaterialArea.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\FailureHandlingOptions\FailureHandlingOptions.cs" />
+    <Compile Include="Domain\DataModel\ValueContainers\ValueTypeHandler.cs" />
     <Compile Include="Domain\DataModel\ViewModels\Base\ValueEditorVM.cs" />
     <Compile Include="Domain\DataModel\ViewModels\Base\IValueEditor.cs" />
     <Compile Include="Domain\DataModel\ViewModels\Base\IValueViewModel.cs" />

@@ -17,17 +17,20 @@ namespace RevitDBExplorer.Domain.DataModel
         private readonly List<SnoopableObject> items;   
 
         public SnoopableContext Context { get; }
-        public object Object { get; }
-        public Document Document { get; }
+        public object Object { get; }     
         public string Name { get; init; }
         public string NamePrefix { get; init; }
         public Icon NamePrefixIcon { get; init; }
         public string TypeName { get; }       
         public IEnumerable<SnoopableObject> Items => items;
         public int Index { get; init; } = -1;
-        
 
-        public SnoopableObject(Document document, object @object, IEnumerable<SnoopableObject> subObjects = null)
+
+        public SnoopableObject(Document document, object @object) : this(document, @object, null)
+        {
+
+        }
+        public SnoopableObject(Document document, object @object, IEnumerable<SnoopableObject> subObjects)
         {
             if (@object is ElementId id)
             {
@@ -38,8 +41,7 @@ namespace RevitDBExplorer.Domain.DataModel
                 }
             }            
             this.Context = new SnoopableContext() { Document = document };
-            this.Object = @object;
-            this.Document = document;            
+            this.Object = @object;               
             this.Name = @object is not null ? Labeler.GetLabelForObject(@object, this.Context) : "<null>";
             this.TypeName = @object?.GetType().GetCSharpName();
 

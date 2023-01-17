@@ -114,14 +114,25 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers.Base
                 return typehandler;
             }
 
+            var selectedHandler = TypeHandlers.Last();
+
             foreach (var typeHandler in TypeHandlers)
             {
                 if (typeHandler.Type.IsAssignableFrom(type))
                 {
-                    return typeHandler;
+                    selectedHandler = typeHandler;
+                    break;
                 }
+            }     
+            
+            if (type.IsValueType && selectedHandler is ObjectHandler)
+            {
+                var closedType = typeof(ValueTypeHandler<>).MakeGenericType(new Type[] { type });
+                var typehandler = Activator.CreateInstance(closedType) as ITypeHandler;
+                return typehandler;
             }
-            return TypeHandlers.Last();
+
+            return selectedHandler;
         }
     }
 }

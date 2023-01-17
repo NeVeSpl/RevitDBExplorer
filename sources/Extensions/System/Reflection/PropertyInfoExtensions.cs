@@ -1,15 +1,23 @@
 ﻿// (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
+using System.Collections.Generic;
+
 namespace System.Reflection
 {
     internal static class PropertyInfoExtensions
     {
+        private static readonly Dictionary<PropertyInfo, MethodInfo> Cache_GetGetGetMethod = new();
+
         /// <summary>
         /// In case that the type has overridden property with only setter, we need to find a getter
         /// </summary>
         public static MethodInfo GetGetGetMethod(this PropertyInfo property)
         {
-            // todo : add cache
+            var getMethod = Cache_GetGetGetMethod.GetOrCreate(property, GetGetGetMethodInternal);
+            return getMethod;
+        }
+        private static MethodInfo GetGetGetMethodInternal(this PropertyInfo property)
+        {            
             var declaringType = property.DeclaringType;
             var prop = property;
 
@@ -20,7 +28,7 @@ namespace System.Reflection
                 {
                     return result;
                 }
-                declaringType = declaringType.BaseType;               
+                declaringType = declaringType.BaseType;
                 try
                 {
                     prop = declaringType?.GetProperty(property.Name);
@@ -28,7 +36,7 @@ namespace System.Reflection
                 catch
                 {
 
-                }                
+                }
             }
 
             return null;
