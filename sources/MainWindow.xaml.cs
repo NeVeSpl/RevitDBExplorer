@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -8,7 +7,6 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Interop;
 using System.Windows.Threading;
 using RevitDBExplorer.Domain;
 using RevitDBExplorer.Domain.DataModel;
@@ -24,68 +22,60 @@ using RDQCommand = RevitDBExplorer.Domain.RevitDatabaseQuery.Command;
 
 namespace RevitDBExplorer
 {
+    internal enum RightView { None, List }
+
     internal partial class MainWindow : Window, INotifyPropertyChanged
     {
-        private ObservableCollection<TreeViewItemVM> treeItems = new();        
+        private readonly TreeVM treeVM = new();
         private readonly ListVM listVM = new();
-        private readonly QueryVisualizationVM queryVisualizationVM = new();        
-        private string listItemsFilterPhrase = string.Empty;
-        private string treeItemsFilterPhrase = string.Empty;
+        private readonly QueryVisualizationVM queryVisualizationVM = new();
+        private RightView rightView;
+        private string rightFilterPhrase = string.Empty;
+        private string leftFilterPhrase = string.Empty;
         private string databaseQuery = string.Empty;
         private string databaseQueryToolTip = string.Empty;
         private bool isRevitBusy;
         private readonly DispatcherTimer isRevitBusyDispatcher;
 
-
-        public ObservableCollection<TreeViewItemVM> TreeItems
+            
+        public ListVM List => listVM;
+        public TreeVM Tree => treeVM;
+        public RightView RightView
         {
             get
             {
-                return treeItems;
+                return rightView;
             }
             set
             {
-                treeItems = value;
-                OnPropertyChanged();
-            }
-        }      
-        public ListVM List
-        {
-            get
-            {
-                return listVM;
-            }
-        }
-        public QueryVisualizationVM QueryVisualization
-        {
-            get
-            {
-                return queryVisualizationVM;
-            }
-        }        
-        public string ListItemsFilterPhrase
-        {
-            get
-            {
-                return listItemsFilterPhrase;
-            }
-            set
-            {
-                listItemsFilterPhrase = value;
-                List.FilterListView();                
+                rightView = value;
                 OnPropertyChanged();
             }
         }
-        public string TreeItemsFilterPhrase
+        public QueryVisualizationVM QueryVisualization => queryVisualizationVM;         
+        public string RightFilterPhrase
         {
             get
             {
-                return treeItemsFilterPhrase;
+                return rightFilterPhrase;
             }
             set
             {
-                treeItemsFilterPhrase = value;
-                FilterTreeView();
+                rightFilterPhrase = value;
+                List.FilterListView(value);                
+                OnPropertyChanged();
+            }
+        }
+        public string LeftFilterPhrase
+        {
+            get
+            {
+                return leftFilterPhrase;
+            }
+            set
+            {
+                leftFilterPhrase = value;
+                Tree.FilterTreeView(value);
                 OnPropertyChanged();
             }
         }
@@ -136,6 +126,7 @@ namespace RevitDBExplorer
             Dispatcher.UnhandledException += Dispatcher_UnhandledException;
             InitializeComponent();
             this.DataContext = this;
+
             var ver = GetType().Assembly.GetName().Version;
             var revit_ver = typeof(Autodesk.Revit.DB.Element).Assembly.GetName().Version;
             Title += $" 20{revit_ver.Major} - {ver.ToGitHubTag()}";
@@ -144,11 +135,13 @@ namespace RevitDBExplorer
 
             CheckIfNewVersionIsAvailable(ver).Forget();
 
-            List.MemberSnooped += () => ListViewItem_MouseLeftButtonUp(null, null);
+            List.MemberSnooped += List_MemberSnooped;
+            List.MemberValueHasChanged += () => ReloadButton_Click(null, null);
+            Tree.SelectedItemChanged += Tree_SelectedItemChanged;
         }  
         public MainWindow(IList<SnoopableObject> objects) : this()
         {
-            PopulateTreeView(objects);
+            Tree.PopulateTreeView(objects);
         }
 
 
@@ -166,9 +159,10 @@ namespace RevitDBExplorer
             }
         }
         private async void SelectorButton_Click(object sender, RoutedEventArgs e)
-        {                           
-            ResetTreeItems();
-            ResetListItems();
+        {
+            Tree.ClearItems();            
+            List.ClearItems();
+            LeftFilterPhrase = "";
             ResetDatabaseQuery();
 
             var tag = ((Control)sender).Tag as string;
@@ -183,46 +177,47 @@ namespace RevitDBExplorer
                 //this.WindowState = WindowState.Normal;
             }       
                 
-            PopulateTreeView(snoopableObjects);            
+            Tree.PopulateTreeView(snoopableObjects);            
         }
         private void SnoopEvents_Click(object sender, RoutedEventArgs e)
         {           
-            ResetTreeItems();
-            ResetListItems();
+            Tree.ClearItems();            
+            List.ClearItems();
+            LeftFilterPhrase = "";
             ResetDatabaseQuery();
 
             var snoopableObjects = EventMonitor.GetEvents().Select(x => new SnoopableObjectTreeVM(x) { IsExpanded = true }).ToList();
-            TreeItems = new(snoopableObjects);            
+            Tree.PopulateWithEvents(snoopableObjects);            
         }
-        private async void TreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        private async void Tree_SelectedItemChanged(TreeViewItemVM treeViewItemVM)
         {
-            ResetListItems();
-            
-            if (e.NewValue is SnoopableObjectTreeVM snoopableObjectVM)
+            List.ClearItems();
+
+            if (treeViewItemVM is SnoopableObjectTreeVM snoopableObjectVM)
             {
-                var snoopableMembers = await ExternalExecutor.ExecuteInRevitContextAsync(x => snoopableObjectVM.Object.GetMembers(x).ToList());
-                snoopableMembers.ForEach(x => x.SnoopableObjectChanged += () => ReloadButton_Click(null, null));
-                List.PopulateListView(snoopableMembers, ListViewFilter);
+                RightView = RightView.List;
+                var snoopableMembers = await ExternalExecutor.ExecuteInRevitContextAsync(x => snoopableObjectVM.Object.GetMembers(x).ToList());            
+                List.PopulateListView(snoopableMembers);
+                return;
             }
+            RightView = RightView.None;
         }
-        private async void ListViewItem_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {           
-            if (List.ListSelectedItem?.CanBeSnooped == true)
-            {
-                var snoopableObjects = await ExternalExecutor.ExecuteInRevitContextAsync(x => List.ListSelectedItem.Snooop().ToList());
-                var window = new MainWindow(snoopableObjects);
-                window.Owner = this;
-                window.Show();
-            }            
+        private async void List_MemberSnooped(SnoopableMember member)
+        { 
+            var snoopableObjects = await ExternalExecutor.ExecuteInRevitContextAsync(x => member.Snooop().ToList());
+            var window = new MainWindow(snoopableObjects);
+            window.Owner = this;
+            window.Show();                      
         }
         private async void ReloadButton_Click(object sender, RoutedEventArgs e)
         {            
             await ExternalExecutor.ExecuteInRevitContextAsync(uiApp => List.ReloadItems());    
         }
         private async void TryQueryDatabase(string query)
-        {            
-            ResetTreeItems();
-            ResetListItems();
+        {
+            Tree.ClearItems();
+            List.ClearItems();
+            LeftFilterPhrase = "";            
 
             var snoopableObjects = await ExternalExecutor.ExecuteInRevitContextAsync(uiApp =>
             {
@@ -235,72 +230,16 @@ namespace RevitDBExplorer
                 QueryVisualization.Update(result.Commands).Forget();
                 return result.Collector.ToElements().Select(x => new SnoopableObject(document, x)).ToList();
             });
-            PopulateTreeView(snoopableObjects);            
-        }        
-
-        
-        private void PopulateTreeView(IList<SnoopableObject> objects)
-        {
-            GroupTreeVM groupTreeVM = new GroupTreeVM("", objects, TreeViewFilter, GroupBy.TypeName);
-            groupTreeVM.Expand(true);
-            groupTreeVM.SelectFirstDeepestVisibleItem();
-
-            if (groupTreeVM.Items.Count == 1)
-            {
-                TreeItems = new(new[] { groupTreeVM.Items.First() });
-            }
-            else
-            {
-                TreeItems = new(new[] { groupTreeVM });
-            }
-        }
-        
-        private bool ListViewFilter(object item)
-        {
-            if (item is SnoopableMember snoopableMember)
-            {
-                return snoopableMember.Name.IndexOf(listItemsFilterPhrase, StringComparison.OrdinalIgnoreCase) >= 0;
-            }
-            return true;
-        }
-        private bool TreeViewFilter(object item)
-        {
-            if (item is SnoopableObjectTreeVM snoopableObjectVM)
-            {
-                return snoopableObjectVM.Object.Name.IndexOf(treeItemsFilterPhrase, StringComparison.OrdinalIgnoreCase) >= 0;
-            }
-            return true;
-        }        
-        
-        private void FilterTreeView()
-        {
-            if (TreeItems != null)
-            {
-                foreach (var item in TreeItems.OfType<GroupTreeVM>())
-                {
-                    item.Refresh();
-                }
-            }
-        }       
-        
-        private void ResetListItems()
-        {
-            List.PopulateListView(System.Array.Empty<SnoopableMember>(), ListViewFilter);
-        }
-        private void ResetTreeItems()
-        {
-            treeItemsFilterPhrase = "";
-            OnPropertyChanged(nameof(TreeItemsFilterPhrase));
-            PopulateTreeView(System.Array.Empty<SnoopableObject>());             
-        }
+            Tree.PopulateTreeView(snoopableObjects);            
+        }                                    
+     
         private void ResetDatabaseQuery()
         {
             databaseQuery = "";
             OnPropertyChanged(nameof(DatabaseQuery));
             DatabaseQueryToolTip = "";
             queryVisualizationVM.Update(Enumerable.Empty<RDQCommand>()).Forget();
-        }
-              
+        }              
      
         private void ButtonWithSubMenu_Click(object sender, RoutedEventArgs e)
         {
@@ -338,26 +277,15 @@ namespace RevitDBExplorer
             AppSettings.Default.FirstColumnWidth = cFirstColumnDefinition.Width.Value;
             AppSettings.Default.Save();
         }
-
-        private void Window_MenuItemSelectTheme_Click(object sender, RoutedEventArgs e)
+        private void Window_MenuItem_ConfigurationClick(object sender, RoutedEventArgs e)
         {
-            if (sender is MenuItem menuItem)
+            var window = new ConfigWindow();
+            window.Owner = this;
+            window.ShowDialog();
+            foreach (ResourceDictionary dict in Resources.MergedDictionaries)
             {
-                AppSettings.Default.Theme = menuItem.Tag.ToString();
-                foreach (ResourceDictionary dict in Resources.MergedDictionaries)
-                {
-                    if (dict is ThemeResourceDictionary skinDict)
-                        skinDict.UpdateSource();
-                    //else
-                     //   dict.Source = dict.Source;
-                }
-            }
-        }
-        private void Window_MenuItemSnoopEvents_Checked(object sender, RoutedEventArgs e)
-        {
-            if (sender is MenuItem menuItem)
-            {
-                AppSettings.Default.IsEventMonitorEnabled = menuItem.IsChecked;
+                if (dict is ThemeResourceDictionary skinDict)
+                    skinDict.UpdateSource();                
             }
         }
         private void TextBox_MenuItem_CopyFilteredElementCollector(object sender, RoutedEventArgs e)

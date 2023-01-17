@@ -14,8 +14,10 @@ namespace RevitDBExplorer.UIComponents.List
     {
         private ObservableCollection<SnoopableMember> listItems = new();
         private SnoopableMember listSelectedItem = null;
+        private string listItemsFilterPhrase = "";
 
-        public event Action MemberSnooped;
+        public event Action<SnoopableMember> MemberSnooped;
+        public event Action MemberValueHasChanged;
         public ObservableCollection<SnoopableMember> ListItems
         {
             get
@@ -49,10 +51,14 @@ namespace RevitDBExplorer.UIComponents.List
             KeyDown_Enter_Command = new RelayCommand(KeyDown_Enter);            
             ListItem_Click_Command = new RelayCommand(ListItem_Click);
         }
-       
 
-        public void PopulateListView(IList<SnoopableMember> members, Predicate<object> listViewFilter)
-        {            
+        public void ClearItems()
+        {
+            PopulateListView(System.Array.Empty<SnoopableMember>());
+        }
+        public void PopulateListView(IList<SnoopableMember> members)
+        {
+            members.ForEach(x => x.SnoopableObjectChanged += RaiseMemberValueHasChanged);
             ListItems = new(members);
 
             var lcv = (ListCollectionView)CollectionViewSource.GetDefaultView(ListItems);
@@ -61,7 +67,15 @@ namespace RevitDBExplorer.UIComponents.List
             lcv.SortDescriptions.Add(new SortDescription(nameof(SnoopableMember.DeclaringTypeLevel), ListSortDirection.Ascending));
             lcv.SortDescriptions.Add(new SortDescription(nameof(SnoopableMember.MemberKind), ListSortDirection.Ascending));
             lcv.SortDescriptions.Add(new SortDescription(nameof(SnoopableMember.Name), ListSortDirection.Ascending));
-            lcv.Filter = listViewFilter;
+            lcv.Filter = ListViewFilter;
+        }
+        private bool ListViewFilter(object item)
+        {
+            if (item is SnoopableMember snoopableMember)
+            {
+                return snoopableMember.Name.IndexOf(listItemsFilterPhrase, StringComparison.OrdinalIgnoreCase) >= 0;
+            }
+            return true;
         }
         public void ReloadItems()
         {
@@ -70,8 +84,9 @@ namespace RevitDBExplorer.UIComponents.List
                 item.Read();
             }
         }
-        public void FilterListView()
+        public void FilterListView(string listItemsFilterPhrase)
         {
+            this.listItemsFilterPhrase = listItemsFilterPhrase;
             if (ListItems != null)
             {
                 CollectionViewSource.GetDefaultView(ListItems).Refresh();
@@ -81,12 +96,23 @@ namespace RevitDBExplorer.UIComponents.List
 
         private void KeyDown_Enter(object obj)
         {
-            MemberSnooped?.Invoke();
+            RaiseMemberSnoopedEvent();
         }
         private void ListItem_Click(object obj)
         {
             ListSelectedItem = obj as SnoopableMember;
-            MemberSnooped?.Invoke();
-        }      
+            RaiseMemberSnoopedEvent();
+        }     
+        private void RaiseMemberSnoopedEvent()
+        {
+            if (ListSelectedItem?.CanBeSnooped == true)
+            {
+                MemberSnooped?.Invoke(ListSelectedItem);
+            }
+        }
+        private void RaiseMemberValueHasChanged()
+        {
+            MemberValueHasChanged?.Invoke();
+        }
     }
 }

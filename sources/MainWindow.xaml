@@ -5,8 +5,9 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
         xmlns:componentQueryVisualization="clr-namespace:RevitDBExplorer.UIComponents.QueryVisualization"
+        xmlns:componentBusyIndicator="clr-namespace:RevitDBExplorer.UIComponents.BusyIndicator"
         xmlns:componentList="clr-namespace:RevitDBExplorer.UIComponents.List"
-        xmlns:componentTree="clr-namespace:RevitDBExplorer.UIComponents.Tree"
+        xmlns:componentTree="clr-namespace:RevitDBExplorer.UIComponents.Tree"        
         xmlns:converters="clr-namespace:RevitDBExplorer.WPF.Converters"       
         xmlns:controls="clr-namespace:RevitDBExplorer.WPF.Controls" 
         xmlns:ext="clr-namespace:RevitDBExplorer.WPF.MarkupExtensions"    
@@ -31,19 +32,14 @@
                 <ResourceDictionary Source="Resources/VectorGraphic.xaml"/>
             </ResourceDictionary.MergedDictionaries>           
             
-            <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>   
-            
+            <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+            <converters:EnumMatchToVisibilityConverter x:Key="EnumMatchToVisibilityConverter"/>
         </ResourceDictionary>
     </Window.Resources>
 
     <Window.ContextMenu>
-        <ContextMenu>
-            <MenuItem Header="Theme" >
-                <MenuItem Header ="Light - default" Tag="Default" Click="Window_MenuItemSelectTheme_Click"/>
-                <MenuItem Header ="Dark - be ready" Tag="Dark" Click="Window_MenuItemSelectTheme_Click"/>
-                <MenuItem Header ="Dark - R2024" Tag="DarkR2024" Click="Window_MenuItemSelectTheme_Click"/>
-            </MenuItem>
-            <MenuItem Header="Is event monitor enabled" IsCheckable="True" IsChecked="{ext:SettingBinding IsEventMonitorEnabled}" Checked="Window_MenuItemSnoopEvents_Checked"  Unchecked="Window_MenuItemSnoopEvents_Checked"/>
+        <ContextMenu>            
+            <MenuItem Header="Configuration" Click="Window_MenuItem_ConfigurationClick" />
         </ContextMenu>
     </Window.ContextMenu>
 
@@ -153,7 +149,7 @@
             <componentQueryVisualization:QueryVisualizationView  Grid.Row="1" Margin="0 1 0 0" DataContext="{Binding QueryVisualization}"/>
         </Grid>
 
-        <controls:TextBoxWithPlaceholder Grid.Row="2" Grid.Column="0" Margin="0 0 2 3" Text="{Binding TreeItemsFilterPhrase, Mode=TwoWay, Delay=500, UpdateSourceTrigger=PropertyChanged}" Placeholder="Filter tree by item name"/>
+        <controls:TextBoxWithPlaceholder Grid.Row="2" Grid.Column="0" Margin="0 0 2 3" Text="{Binding LeftFilterPhrase, Mode=TwoWay, Delay=500, UpdateSourceTrigger=PropertyChanged}" Placeholder="Filter tree by item name"/>
 
         <Grid Grid.Row="2" Grid.Column="2" Margin="0 0 0 3">
             <Grid.ColumnDefinitions>
@@ -161,148 +157,22 @@
                 <ColumnDefinition Width="auto"/>
             </Grid.ColumnDefinitions>
 
-            <controls:TextBoxWithPlaceholder Margin="0 0 2 0" Text="{Binding ListItemsFilterPhrase, Mode=TwoWay, Delay=200, UpdateSourceTrigger=PropertyChanged}" Placeholder="Filter list by property/method name"/>
+            <controls:TextBoxWithPlaceholder Margin="0 0 2 0" Text="{Binding RightFilterPhrase, Mode=TwoWay, Delay=200, UpdateSourceTrigger=PropertyChanged}" Placeholder="Filter list by property/method name"/>
 
             <Button Grid.Column="1" Margin="2 0 0 0" MinWidth="22" MinHeight="22" Padding="2 1 1 1" ToolTip="Reload data from Revit in the list" Background="Transparent"  Click="ReloadButton_Click">
                 <Path Style="{StaticResource IconReload}" Width="18" />
             </Button>
         </Grid>
 
-
-        <TreeView Grid.Row="3" Grid.Column="0" ItemsSource="{Binding TreeItems}" Margin="0 2 2 0" BorderThickness="0"  SelectedItemChanged="TreeView_SelectedItemChanged" VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling" SizeChanged="Window_SizeChanged" x:Name="cTreeSecretName">
-            <TreeView.Resources>
-                <converters:ToResourceWithKeyConverter x:Key="ToResourceWithKeyConverter" FrameworkElement="{Binding ElementName=cTreeSecretName}" />
-                
-                <HierarchicalDataTemplate DataType="{x:Type componentTree:GroupTreeVM}" ItemsSource="{Binding Items}">
-                    <StackPanel Orientation="Horizontal">
-                        <StackPanel.ContextMenu>
-                            <ContextMenu>
-                                <MenuItem Header="Select in Revit" Command="{Binding SelectInRevit}" CommandParameter="{Binding}"/>
-                            </ContextMenu>
-                        </StackPanel.ContextMenu>
-                        <StackPanel.Resources>
-                            <Style TargetType="{x:Type TextBlock}" x:Key="postfix">
-                                <Style.Triggers>
-                                    <MultiDataTrigger >
-                                        <MultiDataTrigger.Conditions>
-                                            <Condition Binding="{Binding Path=IsSelected}" Value="False" />                                           
-                                        </MultiDataTrigger.Conditions>
-                                        <Setter Property="Foreground" Value="{DynamicResource TreeView.Category.Postfix}"/>
-                                    </MultiDataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                            <Style TargetType="{x:Type StackPanel}">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Count}" Value="0">
-                                        <Setter Property="Opacity" Value="0.4"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </StackPanel.Resources>
-                        <TextBlock Text="{Binding Name, Mode=OneWay}" />
-                        <TextBlock Text="[" Margin="0 -1 0 0" Style="{StaticResource postfix}"/>
-                        <TextBlock Text="{Binding Count, Mode=OneWay}"  Style="{StaticResource postfix}"/>
-                        <TextBlock Text="]" Margin="0 -1 0 0" Style="{StaticResource postfix}"/>                        
-                    </StackPanel>                                  
-                </HierarchicalDataTemplate>
-
-                <HierarchicalDataTemplate DataType="{x:Type componentTree:SnoopableObjectTreeVM}" ItemsSource="{Binding Items}">
-                    <StackPanel Orientation="Horizontal">
-                        <StackPanel.ContextMenu>
-                            <ContextMenu>
-                                <MenuItem Header="Select in Revit" Command="{Binding SelectInRevit}" CommandParameter="{Binding}"/>
-                                <MenuItem Header="Show in Revit" Command="{Binding ShowInRevit}" CommandParameter="{Binding}"/>
-                                <MenuItem Header="Isolate in Revit" Command="{Binding IsolateInRevit}" CommandParameter="{Binding}"/>
-                                <MenuItem Header="Draw in Revit (using model lines)" Command="{Binding DrawInRevit}" CommandParameter="{Binding}"/>
-                                <MenuItem Header="Snoop in a new window" Command="{Binding SnoopInNewWindow}" CommandParameter="{Binding}" />                               
-                            </ContextMenu>
-                        </StackPanel.ContextMenu>
-
-                        <Path Style="{Binding Object.NamePrefixIcon, Converter={StaticResource ToResourceWithKeyConverter}, ConverterParameter=Icon}" Margin="0 1 4 0" Fill="{Binding ElementName=cTextBlock, Path=Foreground}"  />
-                        <TextBlock x:Name="cTextBlock">             
-                             <Run Text="{Binding Prefix, Mode=OneWay}">
-                                 <Run.Style>
-                                     <Style TargetType="{x:Type Run}">
-                                        <Style.Triggers>
-                                            <MultiDataTrigger >
-                                                <MultiDataTrigger.Conditions>
-                                                    <Condition Binding="{Binding Path=IsSelected}" Value="False" />                                                
-                                                </MultiDataTrigger.Conditions>                                               
-                                                <Setter Property="Foreground" Value="{DynamicResource TreeView.Object.Prefix}"/>
-                                            </MultiDataTrigger>                                        
-                                        </Style.Triggers>
-                                     </Style>
-                                 </Run.Style>
-                              </Run>
-                            <Run Text="{Binding Object.Name, Mode=OneWay}" />
-                        </TextBlock>
-                    </StackPanel>
-                </HierarchicalDataTemplate>
-            </TreeView.Resources>
-
-            <TreeView.ItemContainerStyle>
-                <Style TargetType="{x:Type TreeViewItem}">                    
-                    <Setter Property="BorderThickness" Value="1" />
-                    <Setter Property="HorizontalAlignment" Value="Stretch" />
-                    <Setter Property="IsSelected" Value="{Binding Path=IsSelected, Mode=TwoWay}" />
-                    <Setter Property="IsEnabled" Value="{Binding Path=IsEnabled, Mode=TwoWay}"/>
-                    <Setter Property="IsExpanded" Value="{Binding Path=IsExpanded, Mode=TwoWay}" />
-                    <Setter Property="Padding" Value="2 1 2 1"/>
-                    <Setter Property="Margin" Value="-3 0 0 0"/>
-
-                    <Style.Resources>
-                        <Style TargetType="Border">
-                            <Setter Property="CornerRadius" Value="2" />
-                            <Setter Property="BorderBrush" Value="{DynamicResource TreeViewItem.BorderBrush}" />
-                            <Setter Property="BorderThickness" Value="1" />
-                            
-                        </Style>
-                        <!--<SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="Yellow"/>-->
-                    </Style.Resources>
-                    <Style.Triggers>
-                        <Trigger Property="IsSelected" Value="True">
-                            <Setter Property="BorderBrush" Value="{DynamicResource TreeViewItem.BorderBrush.IsSelected}" />
-                        </Trigger>
-                        <MultiTrigger>
-                            <MultiTrigger.Conditions>
-                                <Condition Property="IsSelected" Value="true"/>
-                                <Condition Property="IsSelectionActive" Value="false"/>
-                            </MultiTrigger.Conditions>
-                            <Setter Property="Foreground" Value="{DynamicResource TreeViewItem.InactiveSelectionHighlightTextBrushKey}"/>
-                            <Setter Property="Border.Background" Value="red"/>
-                        </MultiTrigger>
-                    </Style.Triggers>
-                </Style>
-            </TreeView.ItemContainerStyle>
-        </TreeView>
+        <componentTree:TreeView Grid.Row="3" Grid.Column="0" DataContext="{Binding Tree}" Margin="0 2 2 0" SizeChanged="Window_SizeChanged" />
 
         <GridSplitter Grid.Row="3" Grid.Column="1" Background="{DynamicResource GridSplitter.Background}"  Width="2" Margin="0 2 2 0" HorizontalAlignment="Left" VerticalAlignment="Stretch" />
 
-        <componentList:ListView Grid.Row="3" Grid.Column="3" Margin="-2 2 0 0" DataContext="{Binding List}"  />        
-
-        <Grid Grid.Row="3" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="150" Height="35" Margin="0 0 0 0" Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}" Opacity="0.90"  IsHitTestVisible="False"  Visibility="{Binding IsRevitBusy, Converter={StaticResource BoolToVisibilityConverter}}" >
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="10"/>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
-            
-            <Path Grid.Column="1" Style="{StaticResource BusyIndicator}" RenderTransformOrigin="0.5,0.5" >
-                <Path.RenderTransform>
-                    <RotateTransform x:Name="MyAnimatedTransform" Angle="0" />                    
-                </Path.RenderTransform>
-                <Path.Triggers>
-                    <EventTrigger RoutedEvent="Loaded">                       
-                        <BeginStoryboard>
-                            <Storyboard>
-                                <DoubleAnimation Storyboard.TargetProperty="(RenderTransform).(RotateTransform.Angle)"  To="-360" Duration="0:0:5" RepeatBehavior="Forever" />
-                            </Storyboard>
-                        </BeginStoryboard>                            
-                    </EventTrigger>
-                </Path.Triggers>
-            </Path>
-            <TextBlock Grid.Column="2" Text="Revit is busy!" FontSize="18" Margin="8 4 0 0" RenderTransformOrigin="0.5,0.5" Foreground="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>       
-            
+        <Grid Grid.Row="3" Grid.Column="3" Margin="-2 2 0 0">
+            <componentList:ListView DataContext="{Binding List}" Visibility="{Binding DataContext.RightView, Converter={StaticResource EnumMatchToVisibilityConverter}, ConverterParameter=List, RelativeSource={RelativeSource AncestorType=Grid}}"/>
         </Grid>
+
+        <componentBusyIndicator:BusyIndicator Grid.Row="3" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="150" Height="35" Margin="0 0 0 0" Visibility="{Binding IsRevitBusy, Converter={StaticResource BoolToVisibilityConverter}}" />
+
     </Grid>
 </Window>

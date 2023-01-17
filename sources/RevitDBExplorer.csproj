@@ -194,6 +194,9 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConfigWindow.xaml.cs">
+      <DependentUpon>ConfigWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Domain\AddInManifestWizard.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\GenericFactory.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\MemberAccessorByRefCompiled.cs" />
@@ -360,6 +363,9 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>AppSettings.settings</DependentUpon>
     </Compile>
+    <Compile Include="UIComponents\BusyIndicator\BusyIndicator.xaml.cs">
+      <DependentUpon>BusyIndicator.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UIComponents\List\ListView.xaml.cs">
       <DependentUpon>ListView.xaml</DependentUpon>
     </Compile>
@@ -374,10 +380,14 @@
     <Compile Include="UIComponents\QueryVisualization\CommandVM.cs" />
     <Compile Include="UIComponents\Tree\GroupTreeVM.cs" />
     <Compile Include="UIComponents\Tree\SnoopableObjectTreeVM.cs" />
+    <Compile Include="UIComponents\Tree\TreeView.xaml.cs">
+      <DependentUpon>TreeView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UIComponents\Tree\TreeViewItemVM.cs" />
     <Compile Include="UIComponents\QueryVisualization\QueryVisualizationView.xaml.cs">
       <DependentUpon>QueryVisualizationView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UIComponents\Tree\TreeVM.cs" />
     <Compile Include="WPF\BaseCommand.cs" />
     <Compile Include="WPF\BindingProxy.cs" />
     <Compile Include="WPF\Controls\TextBoxWithPlaceholder.xaml.cs">
@@ -413,6 +423,10 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>AppSettings.Designer.cs</LastGenOutput>
     </None>
+    <Page Include="ConfigWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -473,6 +487,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="UIComponents\BusyIndicator\BusyIndicator.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UIComponents\List\DataTemplates.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -510,6 +528,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="UIComponents\QueryVisualization\QueryVisualizationView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UIComponents\Tree\TreeView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
