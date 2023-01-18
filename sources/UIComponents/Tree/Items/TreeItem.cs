@@ -8,14 +8,14 @@ using RevitDBExplorer.WPF;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
-namespace RevitDBExplorer.UIComponents.Tree
+namespace RevitDBExplorer.UIComponents.Tree.Items
 {
-    internal abstract class TreeViewItemVM : BaseViewModel
+    internal abstract class TreeItem : BaseViewModel
     {
         private bool isSelected = false;
         private bool isExpanded = false;
         private bool isEnabled  = true;
-        private ObservableCollection<TreeViewItemVM> items = null;
+        private ObservableCollection<TreeItem> items = null;
 
         public bool IsSelected
         {
@@ -58,7 +58,7 @@ namespace RevitDBExplorer.UIComponents.Tree
         public SnoopInNewWindowCommand SnoopInNewWindow { get; } = SnoopInNewWindowCommand.Instance;
         public IsolateInRevitCommand IsolateInRevit { get; } = IsolateInRevitCommand.Instance;
         public DrawInRevitCommand DrawInRevit { get; } = DrawInRevitCommand.Instance;
-        public ObservableCollection<TreeViewItemVM> Items
+        public ObservableCollection<TreeItem> Items
         {
             get
             {
@@ -70,7 +70,6 @@ namespace RevitDBExplorer.UIComponents.Tree
                 OnPropertyChanged();
             }
         }
-
 
 
         public void Expand(bool isSingleChild = false, int maxHeight = 33)
@@ -90,7 +89,7 @@ namespace RevitDBExplorer.UIComponents.Tree
         }
         public void SelectFirstDeepestVisibleItem()
         {
-            TreeViewItemVM candidate = null;
+            TreeItem candidate = null;
 
             if (isExpanded)
             {
@@ -108,21 +107,21 @@ namespace RevitDBExplorer.UIComponents.Tree
         }
         public IEnumerable<SnoopableObject> GetAllSnoopableObjects()
         {
-            if (this is SnoopableObjectTreeVM snoopableObjectTreeVM)
+            if (this is SnoopableObjectTreeItem snoopableObjectTreeVM)
             {
                 yield return snoopableObjectTreeVM.Object;
             }
             if (Items != null)
             {
                 var collectionView = CollectionViewSource.GetDefaultView(Items);
-                foreach (var item in collectionView.OfType<SnoopableObjectTreeVM>())
+                foreach (var item in collectionView.OfType<SnoopableObjectTreeItem>())
                 {
                     if (item.Object != null)
                     {
                         yield return item.Object;
                     }
                 }
-                foreach (var group in Items.OfType<GroupTreeVM>())
+                foreach (var group in Items.OfType<GroupTreeItem>())
                 {
                     foreach (var item in group.GetAllSnoopableObjects())
                     {

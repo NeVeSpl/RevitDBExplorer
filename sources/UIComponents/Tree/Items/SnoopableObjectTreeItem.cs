@@ -1,13 +1,12 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq;
 using RevitDBExplorer.Domain.DataModel;
-using RevitDBExplorer.Domain.Presentation;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
-namespace RevitDBExplorer.UIComponents.Tree
+namespace RevitDBExplorer.UIComponents.Tree.Items
 {
-    internal class SnoopableObjectTreeVM : TreeViewItemVM
+    internal class SnoopableObjectTreeItem : TreeItem
     {
         public SnoopableObject Object { get; }     
         public string Prefix
@@ -24,16 +23,15 @@ namespace RevitDBExplorer.UIComponents.Tree
                 }
                 return  "";
             }
-        }            
-        
+        } 
 
 
-        public SnoopableObjectTreeVM(SnoopableObject @object)
+        public SnoopableObjectTreeItem(SnoopableObject @object)
         {
             Object = @object;
             if (@object.Items?.Any() == true)
             {
-                Items = new ObservableCollection<TreeViewItemVM>(@object.Items.Select(x => new SnoopableObjectTreeVM(x)));
+                Items = new ObservableCollection<TreeItem>(@object.Items.Select(x => new SnoopableObjectTreeItem(x)));
             }
         }
     }

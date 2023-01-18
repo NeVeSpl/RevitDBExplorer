@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using RevitDBExplorer.UIComponents.Tree.Items;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
@@ -17,7 +18,7 @@ namespace RevitDBExplorer.UIComponents.Tree
         {
             if (this.DataContext is TreeVM treeView) 
             {
-                if (e.NewValue is TreeViewItemVM treeViewItemVM)
+                if (e.NewValue is TreeItem treeViewItemVM)
                 {
                     treeView.RaiseSelectedItemChanged(treeViewItemVM);
                 }

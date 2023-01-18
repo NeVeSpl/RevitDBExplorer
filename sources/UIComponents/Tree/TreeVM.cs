@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using RevitDBExplorer.Domain.DataModel;
 using RevitDBExplorer.Domain.Presentation;
+using RevitDBExplorer.UIComponents.Tree.Items;
 using RevitDBExplorer.WPF;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
@@ -12,14 +13,14 @@ namespace RevitDBExplorer.UIComponents.Tree
 {
     internal class TreeVM : BaseViewModel
     {
-        private ObservableCollection<TreeViewItemVM> treeItems = new();
+        private ObservableCollection<TreeItem> treeItems = new();
         private string treeItemsFilterPhrase = string.Empty;
-        private TreeViewItemVM selectedItem;
+        private TreeItem selectedItem;
 
-        public event Action<TreeViewItemVM> SelectedItemChanged;
+        public event Action<TreeItem> SelectedItemChanged;
 
         public SelectInRevitCommand SelectInRevit { get; } = SelectInRevitCommand.Instance;
-        public ObservableCollection<TreeViewItemVM> TreeItems
+        public ObservableCollection<TreeItem> TreeItems
         {
             get
             {
@@ -31,7 +32,7 @@ namespace RevitDBExplorer.UIComponents.Tree
                 OnPropertyChanged();
             }
         }
-        public TreeViewItemVM SelectedItem
+        public TreeItem SelectedItem
         {
             get
             {
@@ -47,13 +48,13 @@ namespace RevitDBExplorer.UIComponents.Tree
 
         public void ClearItems()
         {
-            PopulateTreeView(System.Array.Empty<SnoopableObject>());
+            PopulateTreeView(new());
         }
-        public void PopulateTreeView(IList<SnoopableObject> objects)
+        public void PopulateTreeView(ResultOfSnooping resultOfSnooping)
         {
             treeItemsFilterPhrase = "";
 
-            GroupTreeVM groupTreeVM = new GroupTreeVM("", objects, TreeViewFilter, GroupBy.TypeName);
+            GroupTreeItem groupTreeVM = new GroupTreeItem(resultOfSnooping, TreeViewFilter, GroupBy.TypeName);
             groupTreeVM.Expand(true);
             groupTreeVM.SelectFirstDeepestVisibleItem();
 
@@ -66,13 +67,13 @@ namespace RevitDBExplorer.UIComponents.Tree
                 TreeItems = new(new[] { groupTreeVM });
             }
         }
-        public void PopulateWithEvents(IList<SnoopableObjectTreeVM> snoopableObjects)
+        public void PopulateWithEvents(IList<SnoopableObjectTreeItem> snoopableObjects)
         {
             TreeItems = new(snoopableObjects);
         }
         private bool TreeViewFilter(object item)
         {
-            if (item is SnoopableObjectTreeVM snoopableObjectVM)
+            if (item is SnoopableObjectTreeItem snoopableObjectVM)
             {
                 return snoopableObjectVM.Object.Name.IndexOf(treeItemsFilterPhrase, StringComparison.OrdinalIgnoreCase) >= 0;
             }
@@ -85,14 +86,14 @@ namespace RevitDBExplorer.UIComponents.Tree
             this.treeItemsFilterPhrase = treeItemsFilterPhrase;
             if (TreeItems != null)
             {
-                foreach (var item in TreeItems.OfType<GroupTreeVM>())
+                foreach (var item in TreeItems.OfType<GroupTreeItem>())
                 {
                     item.Refresh();
                 }
             }
         }
 
-        public void RaiseSelectedItemChanged(TreeViewItemVM item)
+        public void RaiseSelectedItemChanged(TreeItem item)
         {
             SelectedItem = item;
             SelectedItemChanged?.Invoke(item);

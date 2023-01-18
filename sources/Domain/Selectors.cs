@@ -37,7 +37,12 @@ namespace RevitDBExplorer.Domain
 
     internal static class Selectors
     {
-        public static IEnumerable<SnoopableObject> Snoop(UIApplication uiApplication, Selector selector)
+        public static ResultOfSnooping Snoop(UIApplication uiApplication, Selector selector)
+        {
+            return new(SnoopInternal(uiApplication, selector).ToArray());
+        }
+
+        private static IEnumerable<SnoopableObject> SnoopInternal(UIApplication uiApplication, Selector selector)
         {
             var result = selector switch
             {

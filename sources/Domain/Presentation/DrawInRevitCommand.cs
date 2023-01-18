@@ -3,6 +3,7 @@ using System.Linq;
 using System.Windows.Documents;
 using Autodesk.Revit.DB;
 using RevitDBExplorer.UIComponents.Tree;
+using RevitDBExplorer.UIComponents.Tree.Items;
 using RevitDBExplorer.WPF;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
@@ -15,7 +16,7 @@ namespace RevitDBExplorer.Domain.Presentation
 
         public override bool CanExecute(object parameter)
         {
-            if (parameter is SnoopableObjectTreeVM treeViewItem)
+            if (parameter is SnoopableObjectTreeItem treeViewItem)
             {
                 if (treeViewItem.Object?.Object is GeometryObject)
                 {
@@ -31,7 +32,7 @@ namespace RevitDBExplorer.Domain.Presentation
 
         public override void Execute(object parameter)
         {
-            if (parameter is SnoopableObjectTreeVM treeViewItem)
+            if (parameter is SnoopableObjectTreeItem treeViewItem)
             {                
                 ExternalExecutorExt.ExecuteInRevitContextInsideTransactionAsync(x =>
                 {

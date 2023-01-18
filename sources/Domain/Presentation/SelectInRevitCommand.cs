@@ -2,6 +2,7 @@
 using Autodesk.Revit.DB;
 using RevitDBExplorer.Domain.DataModel;
 using RevitDBExplorer.UIComponents.Tree;
+using RevitDBExplorer.UIComponents.Tree.Items;
 using RevitDBExplorer.WPF;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
@@ -15,7 +16,7 @@ namespace RevitDBExplorer.Domain.Presentation
 
         public override bool CanExecute(object parameter)
         {
-            if (parameter is TreeViewItemVM treeViewItem)
+            if (parameter is TreeItem treeViewItem)
             {
                 var isAvailable = treeViewItem.GetAllSnoopableObjects().All(x => IsSelectInRevitAvailable(x));
 
@@ -29,7 +30,7 @@ namespace RevitDBExplorer.Domain.Presentation
 
         public override void Execute(object parameter)
         {
-            if (parameter is TreeViewItemVM treeViewItem)
+            if (parameter is TreeItem treeViewItem)
             {
                 var snoopableObjects = treeViewItem.GetAllSnoopableObjects().ToList();
                 var elementIds = snoopableObjects.Select(x => x.Object).OfType<Element>().Select(x => x.Id).ToList();

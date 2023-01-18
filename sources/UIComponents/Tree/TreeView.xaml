@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:RevitDBExplorer.UIComponents.Tree"
+             xmlns:local="clr-namespace:RevitDBExplorer.UIComponents.Tree.Items"
              xmlns:converters="clr-namespace:RevitDBExplorer.WPF.Converters"    
              xmlns:wpf="clr-namespace:RevitDBExplorer.WPF"
              mc:Ignorable="d" 
@@ -19,11 +19,11 @@
             </ResourceDictionary>
         </Grid.Resources>
 
-        <TreeView  ItemsSource="{Binding TreeItems}" BorderThickness="0"  SelectedItemChanged="TreeView_SelectedItemChanged" VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling" ScrollViewer.HorizontalScrollBarVisibility="Disabled"  x:Name="cTreeSecretName">
+        <TreeView  ItemsSource="{Binding TreeItems}" BorderThickness="0"  SelectedItemChanged="TreeView_SelectedItemChanged" VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Standard" ScrollViewer.HorizontalScrollBarVisibility="Disabled"  x:Name="cTreeSecretName">
             <TreeView.Resources>
                 <converters:ToResourceWithKeyConverter x:Key="ToResourceWithKeyConverter" FrameworkElement="{Binding ElementName=cTreeSecretName}" />
 
-                <HierarchicalDataTemplate DataType="{x:Type local:GroupTreeVM}" ItemsSource="{Binding Items}">
+                <HierarchicalDataTemplate DataType="{x:Type local:GroupTreeItem}" ItemsSource="{Binding Items}">
                     <StackPanel Orientation="Horizontal">
                         <StackPanel.ContextMenu>
                             <ContextMenu>
@@ -49,14 +49,14 @@
                                 </Style.Triggers>
                             </Style>
                         </StackPanel.Resources>
-                        <TextBlock Text="{Binding Name, Mode=OneWay}" />
+                        <TextBlock Text="{Binding Name, Mode=OneWay}" ToolTip="{Binding GroupedByToolTip}"/>
                         <TextBlock Text="[" Margin="0 -1 0 0" Style="{StaticResource postfix}"/>
-                        <TextBlock Text="{Binding Count, Mode=OneWay}"  Style="{StaticResource postfix}"/>
+                        <TextBlock Text="{Binding Count, Mode=OneWay}"  Style="{StaticResource postfix}" />
                         <TextBlock Text="]" Margin="0 -1 0 0" Style="{StaticResource postfix}"/>
                     </StackPanel>
                 </HierarchicalDataTemplate>
 
-                <HierarchicalDataTemplate DataType="{x:Type local:SnoopableObjectTreeVM}" ItemsSource="{Binding Items}">
+                <HierarchicalDataTemplate DataType="{x:Type local:SnoopableObjectTreeItem}" ItemsSource="{Binding Items}">
                     <StackPanel Orientation="Horizontal">
                         <StackPanel.ContextMenu>
                             <ContextMenu>

@@ -15,6 +15,7 @@ using RevitDBExplorer.Properties;
 using RevitDBExplorer.UIComponents.List;
 using RevitDBExplorer.UIComponents.QueryVisualization;
 using RevitDBExplorer.UIComponents.Tree;
+using RevitDBExplorer.UIComponents.Tree.Items;
 using RevitDBExplorer.WPF;
 using RDQCommand = RevitDBExplorer.Domain.RevitDatabaseQuery.Command;
 
@@ -139,9 +140,9 @@ namespace RevitDBExplorer
             List.MemberValueHasChanged += () => ReloadButton_Click(null, null);
             Tree.SelectedItemChanged += Tree_SelectedItemChanged;
         }  
-        public MainWindow(IList<SnoopableObject> objects) : this()
+        public MainWindow(ResultOfSnooping resultOfSnooping) : this()
         {
-            Tree.PopulateTreeView(objects);
+            Tree.PopulateTreeView(resultOfSnooping);
         }
 
 
@@ -171,13 +172,13 @@ namespace RevitDBExplorer
             {
                 //this.WindowState = WindowState.Minimized;
             }
-            var snoopableObjects = await ExternalExecutor.ExecuteInRevitContextAsync(x => Selectors.Snoop(x, selector).ToList());
+            var resultOfSnooping = await ExternalExecutor.ExecuteInRevitContextAsync(x => Selectors.Snoop(x, selector));
             if (selector == Selector.PickEdge || selector == Selector.PickFace)
             {
                 //this.WindowState = WindowState.Normal;
             }       
                 
-            Tree.PopulateTreeView(snoopableObjects);            
+            Tree.PopulateTreeView(resultOfSnooping);            
         }
         private void SnoopEvents_Click(object sender, RoutedEventArgs e)
         {           
@@ -186,14 +187,14 @@ namespace RevitDBExplorer
             LeftFilterPhrase = "";
             ResetDatabaseQuery();
 
-            var snoopableObjects = EventMonitor.GetEvents().Select(x => new SnoopableObjectTreeVM(x) { IsExpanded = true }).ToList();
+            var snoopableObjects = EventMonitor.GetEvents().Select(x => new SnoopableObjectTreeItem(x) { IsExpanded = true }).ToList();
             Tree.PopulateWithEvents(snoopableObjects);            
         }
-        private async void Tree_SelectedItemChanged(TreeViewItemVM treeViewItemVM)
+        private async void Tree_SelectedItemChanged(TreeItem treeViewItemVM)
         {
             List.ClearItems();
 
-            if (treeViewItemVM is SnoopableObjectTreeVM snoopableObjectVM)
+            if (treeViewItemVM is SnoopableObjectTreeItem snoopableObjectVM)
             {
                 RightView = RightView.List;
                 var snoopableMembers = await ExternalExecutor.ExecuteInRevitContextAsync(x => snoopableObjectVM.Object.GetMembers(x).ToList());            
@@ -204,8 +205,8 @@ namespace RevitDBExplorer
         }
         private async void List_MemberSnooped(SnoopableMember member)
         { 
-            var snoopableObjects = await ExternalExecutor.ExecuteInRevitContextAsync(x => member.Snooop().ToList());
-            var window = new MainWindow(snoopableObjects);
+            var resultOfSnooping = await ExternalExecutor.ExecuteInRevitContextAsync(x => member.Snooop());
+            var window = new MainWindow(resultOfSnooping);
             window.Owner = this;
             window.Show();                      
         }
@@ -223,12 +224,13 @@ namespace RevitDBExplorer
             {
                 var document = uiApp?.ActiveUIDocument?.Document;
 
-                if (document == null) return Enumerable.Empty<SnoopableObject>().ToList();
+                if (document == null) return new ResultOfSnooping();
 
                 var result = RevitDatabaseQueryService.Parse(document, query);
                 DatabaseQueryToolTip = result.CollectorSyntax;
                 QueryVisualization.Update(result.Commands).Forget();
-                return result.Collector.ToElements().Select(x => new SnoopableObject(document, x)).ToList();
+                var snoopableObjects = result.Collector.ToElements().Select(x => new SnoopableObject(document, x));
+                return new ResultOfSnooping(snoopableObjects.ToArray());
             });
             Tree.PopulateTreeView(snoopableObjects);            
         }                                    
