@@ -7,6 +7,7 @@ namespace RevitDBExplorer.Domain.DataModel.Streams.Base
     internal class DeclaringType: IEquatable<DeclaringType>, IComparable<DeclaringType>
     {
         public static readonly DeclaringType NotExposed = new DeclaringType("Not exposed", 256);
+        public static readonly DeclaringType Separator = new DeclaringType("", 14);
         private readonly Lazy<DocXml> documentation = null;
 
         public string Name { get; init; }

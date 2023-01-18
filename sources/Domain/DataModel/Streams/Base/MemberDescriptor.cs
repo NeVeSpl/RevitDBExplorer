@@ -40,5 +40,16 @@ namespace RevitDBExplorer.Domain.DataModel.Streams.Base
                 DeclaringType = DeclaringType.NotExposed;
             }
         }
+
+        private MemberDescriptor()
+        {
+            DeclaringType = DeclaringType.Separator;
+            Name = "";
+            Kind = MemberKind.None;
+        }
+        public static MemberDescriptor CreateSeparator()
+        {
+            return new MemberDescriptor();
+        }
     }
 }

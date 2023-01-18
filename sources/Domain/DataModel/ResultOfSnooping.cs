@@ -6,6 +6,7 @@ namespace RevitDBExplorer.Domain.DataModel
 {
     internal class ResultOfSnooping
     {
+        public string Title { get; init; }
         public IList<SnoopableObject> Objects { get; }
 
 

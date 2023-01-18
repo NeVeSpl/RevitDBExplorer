@@ -2,5 +2,5 @@
 
 namespace RevitDBExplorer.Domain.DataModel.Streams.Base
 {
-    internal enum MemberKind { Property, Method, StaticMethod, Extra, AsArgument }
+    internal enum MemberKind { Property, Method, StaticMethod, Extra, AsArgument, None }
 }

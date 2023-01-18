@@ -22,6 +22,7 @@ namespace RevitDBExplorer.Domain.DataModel.Streams
             }
             if (shouldEndAllStreaming) yield break;
 
+            yield return MemberDescriptor.CreateSeparator();
 
             foreach (var member in MemberStreamerForTemplates.Stream(snoopableObject))
             {

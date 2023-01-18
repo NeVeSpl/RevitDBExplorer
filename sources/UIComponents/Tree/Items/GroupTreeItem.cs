@@ -62,6 +62,7 @@ namespace RevitDBExplorer.UIComponents.Tree.Items
         {
             GroupedBy = GroupBy.Root;
             Count = resultOfSnooping.Objects.Count;
+            Name = resultOfSnooping.Title;
 
             IEnumerable<GroupTreeItem> groupedItems = null;
             switch (groupBy)

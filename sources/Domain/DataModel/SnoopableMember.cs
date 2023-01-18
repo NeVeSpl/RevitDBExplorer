@@ -93,7 +93,7 @@ namespace RevitDBExplorer.Domain.DataModel
             if (isFrozen) return frozenSnooopResult;           
             if (memberDescriptor.MemberAccessor is IMemberAccessorWithSnoop snooper)
             {
-                return new(snooper.Snoop(parent.Context, parent.Object, state).ToArray());
+                return new(snooper.Snoop(parent.Context, parent.Object, state).ToArray()) { Title = Name };
             }
             return new();
         }
