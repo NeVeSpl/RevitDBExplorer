@@ -172,7 +172,7 @@ namespace RevitDBExplorer
             {
                 //this.WindowState = WindowState.Minimized;
             }
-            var resultOfSnooping = await ExternalExecutor.ExecuteInRevitContextAsync(x => Selectors.Snoop(x, selector));
+            var resultOfSnooping = await ExternalExecutor.ExecuteInRevitContextAsync(x => SelectorExecutor.Snoop(x, selector));
             if (selector == Selector.PickEdge || selector == Selector.PickFace)
             {
                 //this.WindowState = WindowState.Normal;

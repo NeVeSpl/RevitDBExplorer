@@ -340,6 +340,20 @@
     <Compile Include="Domain\RevitDatabaseQuery\QueryParser.cs" />
     <Compile Include="Domain\RevitDatabaseQuery\RevitDatabaseQueryService.cs" />
     <Compile Include="Domain\RevitDocumentationReader.cs" />
+    <Compile Include="Domain\Selectors\Base\ISelector.cs" />
+    <Compile Include="Domain\Selectors\SnoopActiveDocument.cs" />
+    <Compile Include="Domain\Selectors\SnoopActiveView.cs" />
+    <Compile Include="Domain\Selectors\SnoopApplication.cs" />
+    <Compile Include="Domain\Selectors\SnoopCategories.cs" />
+    <Compile Include="Domain\Selectors\SnoopCurrentSelection.cs" />
+    <Compile Include="Domain\Selectors\SnoopDatabase.cs" />
+    <Compile Include="Domain\Selectors\SnoopDependentElements.cs" />
+    <Compile Include="Domain\Selectors\SnoopForge.cs" />
+    <Compile Include="Domain\Selectors\SnoopLinkedElement.cs" />
+    <Compile Include="Domain\Selectors\SnoopLoadedApplications.cs" />
+    <Compile Include="Domain\Selectors\SnoopParameters.cs" />
+    <Compile Include="Domain\Selectors\SnoopSchemas.cs" />
+    <Compile Include="Domain\Selectors\SnoopUpdaters.cs" />
     <Compile Include="Domain\UpdaterInfoWizard.cs" />
     <Compile Include="Domain\VersionChecker.cs" />
     <Compile Include="Extensions\Autodesk.Revit.DB\DocumentExtensions.cs" />
@@ -419,6 +433,7 @@
     <Compile Include="WPF\RelayCommand.cs" />
     <Compile Include="WPF\ThemeResourceDictionary.cs" />
     <None Include="app.config" />
+    <Compile Include="Domain\Selectors\SnoopPick.cs" />
     <None Include="packages.config" />
     <None Include="Properties\AppSettings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

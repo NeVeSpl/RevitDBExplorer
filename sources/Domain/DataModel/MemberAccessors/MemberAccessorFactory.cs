@@ -41,6 +41,8 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
         
         public static IMemberAccessor CreateMemberAccessor(MethodInfo getMethod, MethodInfo setMethod)
         {
+            if (getMethod.ReturnType == typeof(void) && getMethod.Name != "GetOverridableHookParameters") return null;
+
             if (forTypeMembers.TryGetValue(getMethod.GetUniqueId(), out Func<IMemberAccessor> factory))
             {
                 return factory();

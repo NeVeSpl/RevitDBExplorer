@@ -12,7 +12,7 @@ namespace RevitDBExplorer
     {
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
-            var window = new MainWindow(Selectors.Snoop(commandData.Application, Selector.CurrentSelection));
+            var window = new MainWindow(SelectorExecutor.Snoop(commandData.Application, Selector.CurrentSelection));
             new WindowInteropHelper(window).Owner = commandData.Application.MainWindowHandle;
             window.Show();
 

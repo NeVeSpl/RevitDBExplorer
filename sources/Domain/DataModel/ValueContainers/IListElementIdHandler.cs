@@ -14,8 +14,8 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers
             return list.Count > 0;
         }
         protected override string ToLabel(SnoopableContext context, IList<ElementId> list)
-        {            
-            return $" [ElementId : {list.Count}]";
+        {
+            return Labeler.GetLabelForCollection("ElementId", list.Count);
         }
         protected override IEnumerable<SnoopableObject> Snooop(Document document, IList<ElementId> ids)
         {

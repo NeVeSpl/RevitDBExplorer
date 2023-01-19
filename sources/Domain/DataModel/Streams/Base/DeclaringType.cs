@@ -6,7 +6,7 @@ namespace RevitDBExplorer.Domain.DataModel.Streams.Base
 {
     internal class DeclaringType: IEquatable<DeclaringType>, IComparable<DeclaringType>
     {
-        public static readonly DeclaringType NotExposed = new DeclaringType("Not exposed", 256);
+        public static readonly DeclaringType NotExposed = new DeclaringType(" ", 256);
         public static readonly DeclaringType Separator = new DeclaringType("", 14);
         private readonly Lazy<DocXml> documentation = null;
 
@@ -15,7 +15,7 @@ namespace RevitDBExplorer.Domain.DataModel.Streams.Base
         public DocXml Documentation => documentation?.Value ?? DocXml.Empty;
 
 
-        public DeclaringType(string name, int level,  Func<DocXml> documentationFactoryMethod = null)
+        private DeclaringType(string name, int level,  Func<DocXml> documentationFactoryMethod = null)
         {
             Name = name;
             InheritanceLevel = level;
@@ -26,7 +26,7 @@ namespace RevitDBExplorer.Domain.DataModel.Streams.Base
         }
 
 
-        public static DeclaringType Create(Type declaringType, Type snoopableObjectType)
+        public static DeclaringType Create(Type declaringType, Type snoopableObjectType, bool withoutMemberAccessor)
         {
             string name = declaringType.GetCSharpName();            
             int level = declaringType.NumberOfBaseTypes();
@@ -38,6 +38,12 @@ namespace RevitDBExplorer.Domain.DataModel.Streams.Base
                 {
                     level += name[0];
                 }
+            }
+
+            if (withoutMemberAccessor)
+            {
+                name += " - Not exposed";
+                level += 256;
             }
 
             var result = new DeclaringType(name, level, () => RevitDocumentationReader.GetTypeComments(declaringType));            

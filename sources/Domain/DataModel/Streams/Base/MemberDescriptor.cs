@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using RevitDBExplorer.Domain.DataModel.MemberAccessors;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
@@ -11,9 +12,9 @@ namespace RevitDBExplorer.Domain.DataModel.Streams.Base
         private readonly Lazy<DocXml> documentation;
 
         public Type ForType { get; }
-        public MemberKind Kind { get; }
-        public string Name { get; }
-        public DeclaringType DeclaringType { get; }
+        public MemberKind Kind { get; init; }
+        public string Name { get; init; }
+        public DeclaringType DeclaringType { get; init; }
         public IMemberAccessor MemberAccessor { get; }
         public Func<DocXml> DocumentationFactoryMethod { get; }
         public DocXml Documentation => documentation?.Value ?? DocXml.Empty;
@@ -33,23 +34,19 @@ namespace RevitDBExplorer.Domain.DataModel.Streams.Base
 
             if (declaringType != null)
             {
-                DeclaringType = DeclaringType.Create(declaringType, forType);
-            }
-            if (memberAccessor == null)
-            {
-                DeclaringType = DeclaringType.NotExposed;
-            }
+                bool withoutMemberAccessor = memberAccessor == null;
+                DeclaringType = DeclaringType.Create(declaringType, forType, withoutMemberAccessor);
+            }            
         }
 
         private MemberDescriptor()
         {
-            DeclaringType = DeclaringType.Separator;
-            Name = "";
-            Kind = MemberKind.None;
+           
         }
-        public static MemberDescriptor CreateSeparator()
+        public static IEnumerable<MemberDescriptor> CreateSeparators()
         {
-            return new MemberDescriptor();
+            yield return new MemberDescriptor() { DeclaringType = DeclaringType.Separator, Name="", Kind = MemberKind.None };
+            yield return new MemberDescriptor() { DeclaringType = DeclaringType.NotExposed, Name = "", Kind = MemberKind.None };
         }
     }
 }

@@ -22,7 +22,10 @@ namespace RevitDBExplorer.Domain.DataModel.Streams
             }
             if (shouldEndAllStreaming) yield break;
 
-            yield return MemberDescriptor.CreateSeparator();
+            foreach (var member in MemberDescriptor.CreateSeparators())
+            {  
+                yield return member;
+            }
 
             foreach (var member in MemberStreamerForTemplates.Stream(snoopableObject))
             {
@@ -65,8 +68,7 @@ namespace RevitDBExplorer.Domain.DataModel.Streams
 
             var methods = type.GetMethods(BindingFlags.Instance | BindingFlags.Public);
             foreach (var method in methods)
-            {
-                if (method.ReturnType == typeof(void) && method.Name != "GetOverridableHookParameters") continue;
+            {                
                 if (method.IsSpecialName) continue;
                 if (method.DeclaringType == typeof(object)) continue;
 
