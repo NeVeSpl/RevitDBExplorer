@@ -11,7 +11,7 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers
         protected override bool CanBeSnoooped(SnoopableContext context, Category category) => category is not null;
         protected override string ToLabel(SnoopableContext context, Category category)
         {
-            return $"{category.Name}";
+            return $"{category.Name} ({category.Id})";
         }
         protected override IEnumerable<SnoopableObject> Snooop(Document document, Category category)
         {

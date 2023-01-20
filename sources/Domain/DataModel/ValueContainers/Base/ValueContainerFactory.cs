@@ -20,6 +20,7 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers.Base
             new DoubleHandler(),
             new GuidHandler(),
             new EnumHandler<System.Enum>(),
+            new TypeHandler(),
             // 
             new DoubleNullableHandler(),
 

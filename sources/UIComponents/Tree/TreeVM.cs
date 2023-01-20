@@ -16,10 +16,13 @@ namespace RevitDBExplorer.UIComponents.Tree
         private ObservableCollection<TreeItem> treeItems = new();
         private string treeItemsFilterPhrase = string.Empty;
         private TreeItem selectedItem;
+        private ResultOfSnooping resultOfSnooping;
+        private GroupBy groupBy;
 
         public event Action<TreeItem> SelectedItemChanged;
 
         public SelectInRevitCommand SelectInRevit { get; } = SelectInRevitCommand.Instance;
+        public RelayCommand SwitchViewCommand { get; }
         public ObservableCollection<TreeItem> TreeItems
         {
             get
@@ -46,15 +49,23 @@ namespace RevitDBExplorer.UIComponents.Tree
         }
 
 
+        public TreeVM()
+        {
+            SwitchViewCommand = new RelayCommand(SwitchView);
+        }
+
+
         public void ClearItems()
         {
             PopulateTreeView(new());
         }
-        public void PopulateTreeView(ResultOfSnooping resultOfSnooping)
+        public void PopulateTreeView(ResultOfSnooping resultOfSnooping, GroupBy groupBy = GroupBy.TypeName)
         {
             treeItemsFilterPhrase = "";
+            this.resultOfSnooping = resultOfSnooping;
+            this.groupBy = groupBy;
 
-            GroupTreeItem groupTreeVM = new GroupTreeItem(resultOfSnooping, TreeViewFilter, GroupBy.TypeName);
+            GroupTreeItem groupTreeVM = new GroupTreeItem(resultOfSnooping, TreeViewFilter, groupBy);
             groupTreeVM.Expand(true);
             groupTreeVM.SelectFirstDeepestVisibleItem();
 
@@ -97,6 +108,13 @@ namespace RevitDBExplorer.UIComponents.Tree
         {
             SelectedItem = item;
             SelectedItemChanged?.Invoke(item);
+        }
+
+
+        private void SwitchView(object parameter)
+        {
+            groupBy = groupBy == GroupBy.TypeName ? GroupBy.Category : GroupBy.TypeName;
+            PopulateTreeView(resultOfSnooping, groupBy);
         }
     }
 }

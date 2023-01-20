@@ -70,7 +70,7 @@ namespace RevitDBExplorer.Domain.DataModel.Streams
             foreach (var method in methods)
             {                
                 if (method.IsSpecialName) continue;
-                if (method.DeclaringType == typeof(object)) continue;
+                if (method.DeclaringType == typeof(object) && method.Name != "GetType") continue;
 
                 if (method.Name == "Set" && snoopableObject is Parameter parameter)
                 {

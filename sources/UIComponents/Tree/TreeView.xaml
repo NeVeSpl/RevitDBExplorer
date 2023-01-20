@@ -126,6 +126,10 @@
             </TreeView.ItemContainerStyle>
         </TreeView>
 
+        <Grid HorizontalAlignment="Right" VerticalAlignment="Top" Visibility="Collapsed">
+            <Button Content="s" ToolTip="Switch between grouping by TypeName and Category" Command="{Binding SwitchViewCommand}" />
+        </Grid>
+        
 
         <Grid HorizontalAlignment="Right" VerticalAlignment="Bottom" Visibility="Collapsed">
             <Button Content="x" ToolTip="Select in Revit" Command="{Binding SelectInRevit}" CommandParameter="{Binding SelectedItem}"/>

@@ -19,7 +19,7 @@
             </ResourceDictionary>
         </Grid.Resources>
 
-        <ListView BorderThickness="0" ItemsSource="{Binding ListItems}" SelectionMode="Single" SelectedItem="{Binding ListSelectedItem}" AlternationCount="2" VirtualizingStackPanel.IsVirtualizing="True" x:Name="cSecretName">
+        <ListView BorderThickness="0" ItemsSource="{Binding ListItems}" SelectionMode="Single" SelectedItem="{Binding ListSelectedItem}" AlternationCount="2"  VirtualizingPanel.IsVirtualizing="True" VirtualizingPanel.IsVirtualizingWhenGrouping="False" VirtualizingPanel.CacheLengthUnit="Page" VirtualizingPanel.CacheLength="7,7"  x:Name="cSecretName">
 
             <ListView.InputBindings>
                 <KeyBinding Key="Enter" Command="{Binding KeyDown_Enter_Command}"/>

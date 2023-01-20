@@ -13,6 +13,22 @@ namespace RevitDBExplorer.Domain.DataModel.Streams
         public static IEnumerable<MemberDescriptor> Stream(SnoopableContext context, object target)
         {
             var type = target.GetType();
+
+            if (target is Type { IsEnum : true } runtimeType)
+            {                
+                var values = Enum.GetValues(runtimeType);
+                var isLong = Enum.GetUnderlyingType(runtimeType) == typeof(long);
+
+                foreach (var item in values)
+                {
+                    var enumLabel = item.ToString();
+                    var value =  Convert.ToInt64(item);
+                    var valueLabel = value.ToString();
+
+                    var member = new MemberDescriptor(runtimeType, MemberKind.Property, valueLabel, runtimeType, new MemberAccessorForConstValue(typeof(string), context, enumLabel), null);
+                    yield return member;
+                }
+            }
          
 
             if ((type.IsEnum) || (type.IsPrimitive) || (type == typeof(string)))
