@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Documents;
 using Autodesk.Revit.DB;
-using RevitDBExplorer.UIComponents.Tree;
 using RevitDBExplorer.UIComponents.Tree.Items;
 using RevitDBExplorer.WPF;
 

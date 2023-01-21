@@ -24,9 +24,8 @@ namespace RevitDBExplorer.Domain.Selectors
                 var paramIds = ParameterFilterUtilities.GetFilterableParametersInCommon(document, new[] { category.Id });
                 IEnumerable<SnoopableObject> snoopableParameters = Enumerable.Empty<SnoopableObject>();
                 if (paramIds.Any())
-                {
-                    var parameters = new FilteredElementCollector(document).WherePasses(new ElementIdSetFilter(paramIds)).ToList();
-                    snoopableParameters = parameters.Select(x => new SnoopableObject(document, x));
+                {                     
+                    snoopableParameters = paramIds.Select(x => new SnoopableObject(document, x));
                 }
 
                 yield return new SnoopableObject(document, category, snoopableParameters);
