@@ -49,7 +49,7 @@ namespace RevitDBExplorer.UIComponents.Tree.Items
         }
         public GroupBy GroupedBy
         {
-            get;
+            get; set;
         }
         public string GroupedByToolTip
         {

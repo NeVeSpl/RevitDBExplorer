@@ -71,7 +71,13 @@ namespace RevitDBExplorer.UIComponents.Tree
 
             if (groupTreeVM.Items.Count == 1)
             {
-                TreeItems = new(new[] { groupTreeVM.Items.First() });
+                var firstChild = groupTreeVM.Items[0];
+                if ((firstChild is GroupTreeItem group) && (groupTreeVM.Name != null) && false) // todo
+                {
+                    group.Name = groupTreeVM.Name;
+                    group.GroupedBy = GroupBy.Source;
+                }
+                TreeItems = new(new[] { firstChild });
             }
             else
             {

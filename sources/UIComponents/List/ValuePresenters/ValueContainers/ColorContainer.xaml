@@ -12,7 +12,7 @@
             </StackPanel.Resources>
 
             <Border Width="11" Height="11" Margin="0 0 5 0" Background="{Binding ValueViewModel.ValueContainer.Value, Converter={StaticResource ColorToBrushConverter}}"/>
-            <TextBlock Text="{Binding Label.Text, Mode=OneWay}" TextWrapping="NoWrap"/>
+            <TextBlock Text="{Binding ValueViewModel.Label, Mode=OneWay}" TextWrapping="NoWrap"/>
             
         </StackPanel>
 

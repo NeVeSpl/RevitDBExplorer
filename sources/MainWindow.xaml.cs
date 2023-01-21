@@ -217,21 +217,13 @@ namespace RevitDBExplorer
         {
             Tree.ClearItems();
             List.ClearItems();
-            LeftFilterPhrase = "";            
+            LeftFilterPhrase = "";
 
-            var snoopableObjects = await ExternalExecutor.ExecuteInRevitContextAsync(uiApp =>
-            {
-                var document = uiApp?.ActiveUIDocument?.Document;
+            var result = await ExternalExecutor.ExecuteInRevitContextAsync(uiApp => RevitDatabaseQueryService.ParseAndExecute(uiApp?.ActiveUIDocument?.Document, query));
 
-                if (document == null) return new ResultOfSnooping();
-
-                var result = RevitDatabaseQueryService.Parse(document, query);
-                DatabaseQueryToolTip = result.CollectorSyntax;
-                QueryVisualization.Update(result.Commands).Forget();
-                var snoopableObjects = result.Collector.ToElements().Select(x => new SnoopableObject(document, x));
-                return new ResultOfSnooping(snoopableObjects.ToArray());
-            });
-            Tree.PopulateTreeView(snoopableObjects);            
+            DatabaseQueryToolTip = result.GeneratedCSharpSyntax;
+            QueryVisualization.Update(result.Commands).Forget();
+            Tree.PopulateTreeView(result.ResultOfSnooping);            
         }                                    
      
         private void ResetDatabaseQuery()

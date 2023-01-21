@@ -6,3 +6,5 @@ setup/obj/
 setup/bin/
 .idea
 sources/RevitDBExplorer.csproj.user
+RevitDBExplorer.Tests/bin/
+RevitDBExplorer.Tests/obj/

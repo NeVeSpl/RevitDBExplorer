@@ -141,7 +141,7 @@
                         <MenuItem Command="ApplicationCommands.Cut" />
                         <MenuItem Command="ApplicationCommands.Paste" />
                         <Separator/>
-                        <MenuItem Header ="Copy generated FilteredElementCollector syntax" Tag="Default" Click="TextBox_MenuItem_CopyFilteredElementCollector"/>
+                        <MenuItem Header ="Copy generated C# syntax" Tag="Default" Click="TextBox_MenuItem_CopyFilteredElementCollector"/>
                     </ContextMenu>
                 </controls:TextBoxWithPlaceholder.ContextMenu>
             </controls:TextBoxWithPlaceholder>

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Autodesk.Revit.DB;
+using RevitDBExplorer.Domain.DataModel;
 using RevitDBExplorer.Domain.RevitDatabaseQuery.Filters;
 using VisibleInViewFilter = RevitDBExplorer.Domain.RevitDatabaseQuery.Filters.VisibleInViewFilter;
 
@@ -17,8 +18,11 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
         }
 
 
-        public static Result Parse(Document document, string query)
+        public static Result ParseAndExecute(Document document, string query)
         {
+            if (document is null) return new(null, null, new List<Command>());  
+
+
             FuzzySearchEngine.LoadDocumentSpecificData(document);
             var commands = QueryParser.Parse(query);
             commands.SelectMany(x => x.MatchedArguments).OfType<ParameterMatch>().ToList().ForEach(x => x.ResolveStorageType(document));
@@ -48,10 +52,15 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
             }
             collectorSyntax += Environment.NewLine + "    .ToElements();";
 
-            return new(collector, collectorSyntax, commands);
+            var snoopableObjects = collector.ToElements().Select(x => new SnoopableObject(document, x));
+            var ros =  new ResultOfSnooping(snoopableObjects.ToArray());
+
+            return new(ros, collectorSyntax, commands);
         }  
+
+        
    
 
-        public record Result(FilteredElementCollector Collector, string CollectorSyntax, IList<Command> Commands);
+        public record Result(ResultOfSnooping ResultOfSnooping, string GeneratedCSharpSyntax, IList<Command> Commands);
     }
 }
