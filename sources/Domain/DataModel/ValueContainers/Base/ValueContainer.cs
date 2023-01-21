@@ -59,7 +59,7 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers.Base
         {
             get
             {
-                if (typeHandler is IHaveToolTip<T> typeHandlerWithToolTip)
+                if (value is not null && typeHandler is IHaveToolTip<T> typeHandlerWithToolTip)
                 {
                     return typeHandlerWithToolTip.GetToolTip(context, value);
                 }
