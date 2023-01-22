@@ -26,7 +26,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberTemplates
                 SnoopableMemberTemplate<ForgeTypeId>.Create((doc, forgeId) => Category.IsBuiltInCategory(forgeId)),
                 SnoopableMemberTemplate<ForgeTypeId>.Create((doc, forgeId) => Category.GetBuiltInCategory(forgeId), x => Category.IsBuiltInCategory(x)),
                 SnoopableMemberTemplate<ForgeTypeId>.Create((doc, forgeId) => doc.GetTypeOfStorage(forgeId), x=> ParameterUtils.IsBuiltInParameter(x)),
-                SnoopableMemberTemplate<ForgeTypeId>.Create((doc, forgeId) => doc.GetUnits().GetFormatOptions(forgeId), x => UnitUtils.IsMeasurableSpec(x)),
+                SnoopableMemberTemplate<ForgeTypeId>.Create((doc, forgeId) => doc.GetUnits().GetFormatOptions(forgeId), x => UnitUtils.IsMeasurableSpec(x), Streams.Base.MemberKind.AsArgument),
                 SnoopableMemberTemplate<ForgeTypeId>.Create((doc, forgeId) => ParameterUtils.IsBuiltInParameter(forgeId)),
                 SnoopableMemberTemplate<ForgeTypeId>.Create((doc, forgeId) => ParameterUtils.GetBuiltInParameter(forgeId), x=> ParameterUtils.IsBuiltInParameter(x)),
                 SnoopableMemberTemplate<ForgeTypeId>.Create((doc, forgeId) => ParameterUtils.IsBuiltInGroup(forgeId), x => true),
@@ -67,6 +67,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberTemplates
             {
 #if R2022b
                 SnoopableMemberTemplate<Category>.Create((doc, category) => Category.GetBuiltInCategoryTypeId((BuiltInCategory)category.Id.Value())),
+                SnoopableMemberTemplate<Category>.Create((doc, category) => ParameterFilterUtilities.GetFilterableParametersInCommon(doc, new[] { category.Id } )),
 #endif
             };
             ForParameter = new ISnoopableMemberTemplate[]

@@ -352,7 +352,6 @@
     <Compile Include="Domain\Selectors\SnoopForge.cs" />
     <Compile Include="Domain\Selectors\SnoopLinkedElement.cs" />
     <Compile Include="Domain\Selectors\SnoopLoadedApplications.cs" />
-    <Compile Include="Domain\Selectors\SnoopParameters.cs" />
     <Compile Include="Domain\Selectors\SnoopSchemas.cs" />
     <Compile Include="Domain\Selectors\SnoopUpdaters.cs" />
     <Compile Include="Domain\UpdaterInfoWizard.cs" />
