@@ -11,7 +11,7 @@
         TextOptions.TextFormattingMode="Display"    
         MinHeight="250" 
         MaxHeight="500"
-        MinWidth="500" 
+        MinWidth="550" 
         MaxWidth="800"
         SizeToContent="WidthAndHeight"
        
@@ -23,10 +23,12 @@
         </Grid.RowDefinitions>
         <Grid  VerticalAlignment="Top" >
             <Grid.ColumnDefinitions>
-                <ColumnDefinition />
+                <ColumnDefinition Width="0.3*"/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
+                <RowDefinition Height="27"/>
+                <RowDefinition Height="27"/>
                 <RowDefinition Height="27"/>
                 <RowDefinition Height="27"/>
                 <RowDefinition Height="27"/>
@@ -37,6 +39,7 @@
                 </Style>
                 <Style TargetType="TextBlock" BasedOn="{StaticResource DefaultStyle}"/>
                 <Style TargetType="ComboBox" BasedOn="{StaticResource DefaultStyle}"/>
+                <Style TargetType="TextBox" BasedOn="{StaticResource DefaultStyle}"/>
                 <Style TargetType="CheckBox" BasedOn="{StaticResource DefaultStyle}"/>
             </Grid.Resources>
 
@@ -51,7 +54,12 @@
 
             <ComboBox Grid.Row="1" Grid.Column="1" ItemsSource="{Binding Themes}" SelectedItem="{Binding SelectedTheme}" DisplayMemberPath="Title"/>
 
-            <CheckBox Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Content="Is event monitor enabled" IsChecked="{Binding IsEventMonitorEnabled}"  />            
+            <CheckBox Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Content="Is (REM) Revit event monitor enabled" IsChecked="{Binding IsEventMonitorEnabled}"  />
+
+            <CheckBox Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" Content="(FeatureFlag) Show features that are under development and may not work correctly (or at all)" IsChecked="{Binding FeatureFlag}"  />
+
+            <TextBlock Text="RevitAPI.chm file location" Grid.Row="4" Grid.Column="0" />
+            <TextBox Text="{Binding RevitAPICHMFilePath}" Grid.Row="4" Grid.Column="1"/>
             
         </Grid>
 

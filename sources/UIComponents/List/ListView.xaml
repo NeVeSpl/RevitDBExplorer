@@ -37,6 +37,10 @@
 
                     <ContextMenu x:Key="ItemContextMenu">
                         <MenuItem Header="Copy" Click="ListViewItem_MenuItemCopy_Click" />
+                        <MenuItem Header="Open RevitAPI.chm" Click="ListViewItem_MenuItemOpenCHM_Click" />
+                    </ContextMenu>
+                    <ContextMenu x:Key="GroupContextMenu">
+                        <MenuItem Header="Copy" Click="GroupItem_MenuItemCopy_Click" />
                     </ContextMenu>
 
                     <ToolTip x:Key="ToolTipWithRevitHelp">
@@ -176,6 +180,7 @@
                     <GroupStyle.ContainerStyle>
                         <Style TargetType="{x:Type GroupItem}">
                             <Setter Property="Margin" Value="2" />
+                            <Setter Property="ContextMenu" Value="{StaticResource GroupContextMenu}" />
                         </Style>
                     </GroupStyle.ContainerStyle>
                 </GroupStyle>

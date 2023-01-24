@@ -21,6 +21,8 @@ namespace RevitDBExplorer
             new Theme("DarkR2024", "Dark - R2024") 
         };
         private Theme _selectedTheme;
+        private bool _featureFlag;
+        private string _revitAPICHMFilePath;
 
         public bool IsEventMonitorEnabled
         {
@@ -58,15 +60,38 @@ namespace RevitDBExplorer
                 OnPropertyChanged();
             }
         }
-
-
-
+        public bool FeatureFlag
+        {
+            get
+            {
+                return _featureFlag;
+            }
+            set
+            {
+                _featureFlag = value;
+                OnPropertyChanged();
+            }
+        }
+        public string RevitAPICHMFilePath
+        {
+            get
+            {
+                return _revitAPICHMFilePath;
+            }
+            set
+            {
+                _revitAPICHMFilePath = value;
+                OnPropertyChanged();
+            }
+        }
 
         public ConfigWindow()
         {
             InitializeComponent();
             IsEventMonitorEnabled = AppSettings.Default.IsEventMonitorEnabled;
             SelectedTheme = _themes.Where(x => x.Id == AppSettings.Default.Theme).FirstOrDefault() ?? _themes.First();
+            FeatureFlag = AppSettings.Default.FeatureFlag;
+            RevitAPICHMFilePath = AppSettings.Default.RevitAPICHMFilePath;
             this.DataContext = this;
         }
 
@@ -87,6 +112,8 @@ namespace RevitDBExplorer
         {
             AppSettings.Default.IsEventMonitorEnabled = IsEventMonitorEnabled;
             AppSettings.Default.Theme = SelectedTheme.Id;
+            AppSettings.Default.FeatureFlag = FeatureFlag;
+            AppSettings.Default.RevitAPICHMFilePath = RevitAPICHMFilePath;
             Close();
         }
 

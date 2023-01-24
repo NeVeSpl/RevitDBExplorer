@@ -10,6 +10,7 @@ namespace RevitDBExplorer.Domain.DataModel.Streams.Base
         public static readonly DeclaringType Separator = new DeclaringType("", 14);
         private readonly Lazy<DocXml> documentation = null;
 
+        public string BareName { get; init; }
         public string Name { get; init; }
         public int InheritanceLevel { get; init; }
         public DocXml Documentation => documentation?.Value ?? DocXml.Empty;
@@ -39,14 +40,14 @@ namespace RevitDBExplorer.Domain.DataModel.Streams.Base
                     level += name[0];
                 }
             }
-
+            string nameWithPostfix = name;
             if (withoutMemberAccessor)
             {
-                name += " - Not exposed";
+                nameWithPostfix += " - Not exposed";
                 level += 256;
             }
 
-            var result = new DeclaringType(name, level, () => RevitDocumentationReader.GetTypeComments(declaringType));            
+            var result = new DeclaringType(nameWithPostfix, level, () => RevitDocumentationReader.GetTypeComments(declaringType)) { BareName = name};            
 
             return result;
         }

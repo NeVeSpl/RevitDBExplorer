@@ -17,5 +17,11 @@
     <Setting Name="IsEventMonitorEnabled" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
+    <Setting Name="FeatureFlag" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="RevitAPICHMFilePath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">D:\Autodesk\Revit 2023 SDK\RevitAPI.chm</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
