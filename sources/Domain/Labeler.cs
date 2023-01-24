@@ -55,5 +55,13 @@ namespace RevitDBExplorer.Domain
             }
             return $"[{typeName}: ?]";
         }
+        public static string GetLabelForObjectWithId(string typeName, int? id)
+        {
+            if (id.HasValue)
+            {
+                return $"{typeName} ({id.Value})";
+            }
+            return $"{typeName}";
+        }
     }
 }

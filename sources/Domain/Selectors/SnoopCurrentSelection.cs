@@ -30,6 +30,17 @@ namespace RevitDBExplorer.Domain.Selectors
                 collector = new FilteredElementCollector(document, document.ActiveView.Id); //.WherePasses(new VisibleInViewFilter(document, document.ActiveView.Id));
             }
 
+            if (collector.GetElementCount() == 0 && selectedIds.Count > 0)
+            {
+                var someOutliers = new List<SnoopableObject>(selectedIds.Count);
+                foreach (var id in selectedIds)
+                {
+                    var element = document.GetElement(id);
+                    if (element != null) someOutliers.Add(new SnoopableObject(document, element));
+                }
+                return someOutliers;
+            }
+            
             return collector.ToElements().Select(x => new SnoopableObject(document, x));
         }
     }
