@@ -200,6 +200,7 @@
     <Compile Include="Domain\AddInManifestWizard.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\GenericFactory.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\MemberAccessorByRefCompiled.cs" />
+    <Compile Include="Domain\DataModel\MemberAccessors\SpatialFieldManager\SpatialFieldManager_GetResultSchema.cs" />
     <Compile Include="Domain\DataModel\MemberTemplates\View_Templates.cs" />
     <Compile Include="Domain\DataModel\ResultOfSnooping.cs" />
     <Compile Include="Domain\DataModel\ValueContainers\Base\Traits.cs" />

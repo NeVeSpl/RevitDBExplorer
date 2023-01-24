@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Autodesk.Revit.DB;
+using Autodesk.Revit.DB.Structure.StructuralSections;
 using Autodesk.Revit.UI;
 using RevitDBExplorer.Domain.DataModel.Streams;
 using RevitDBExplorer.WPF;
@@ -51,7 +52,7 @@ namespace RevitDBExplorer.Domain.DataModel
             }
             else
             {
-                if (@object is IEnumerable enumerable && @object?.GetType()?.FullName.StartsWith("System") == false)
+                if (@object is IEnumerable enumerable && @object?.GetType()?.FullName.StartsWith("System") == false && (@object is not StructuralSection))
                 {
                     items = new List<SnoopableObject>();
                     foreach (var item in enumerable)
