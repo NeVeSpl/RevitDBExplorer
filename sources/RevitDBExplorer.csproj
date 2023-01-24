@@ -359,6 +359,7 @@
     <Compile Include="Domain\Selectors\SnoopUpdaters.cs" />
     <Compile Include="Domain\UpdaterInfoWizard.cs" />
     <Compile Include="Domain\VersionChecker.cs" />
+    <Compile Include="Extensions\Autodesk.Revit.DB\BoundingBoxXYZExtensions.cs" />
     <Compile Include="Extensions\Autodesk.Revit.DB\DocumentExtensions.cs" />
     <Compile Include="Extensions\Autodesk.Revit.DB\ElementIdExtensions.cs" />
     <Compile Include="Extensions\Autodesk.Revit.DB\GeometryObjectExtensions.cs" />
