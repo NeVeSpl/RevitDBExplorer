@@ -21,6 +21,8 @@ namespace RevitDBExplorer.Domain.DataModel.MemberTemplates
                 SnoopableMemberTemplate<Element>.Create((doc, target) => doc.ActiveView.GetElementOverrides(target.Id), kind: MemberKind.AsArgument),
                 SnoopableMemberTemplate<Element>.Create((doc, target) => doc.GetWorksetId(target.Id), kind: MemberKind.AsArgument),
                 SnoopableMemberTemplate<FamilyInstance>.Create((doc, target) => StructuralSectionUtils.GetStructuralSection(doc, target.Id), kind: MemberKind.StaticMethod),
+
+                SnoopableMemberTemplate<Reference>.Create((doc, target) => doc.GetElement(target.ElementId).GetGeometryObjectFromReference(target), canBeUsed: x=>x.ElementId != null, kind: MemberKind.AsArgument),
             };
         }
 
