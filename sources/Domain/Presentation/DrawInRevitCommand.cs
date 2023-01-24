@@ -27,7 +27,6 @@ namespace RevitDBExplorer.Domain.Presentation
             }
             return false;
         }
-
         public override void Execute(object parameter)
         {
             if (parameter is SnoopableObjectTreeItem treeViewItem)
@@ -36,117 +35,26 @@ namespace RevitDBExplorer.Domain.Presentation
                 {
                     if (treeViewItem.Object?.Object is GeometryObject geometryObject)
                     {
-                        Draw(treeViewItem.Object.Context.Document, geometryObject);
+                        Draw(treeViewItem.Object.Context.Document, geometryObject.StreamCurves());
                     }
                     if (treeViewItem.Object?.Object is BoundingBoxXYZ boundingBoxXYZ)
                     {
-                        Draw(treeViewItem.Object.Context.Document, boundingBoxXYZ);
+                        Draw(treeViewItem.Object.Context.Document, boundingBoxXYZ.GetEdges());
                     }
                 }, null, nameof(DrawInRevitCommand));      
             }
         }
 
 
-        private static void Draw(Document document, GeometryObject geometryObject)
-        {
-            if (geometryObject is GeometryElement geometryElement)
-            {
-                DrawGeometryElement(document, geometryElement);
-            }
-            if (geometryObject is GeometryInstance geometryInstance)
-            {
-                DrawGeometryInstance(document, geometryInstance);
-            }
-            if (geometryObject is Solid solid)
-            {
-                DrawSolid(document, solid);
-            }
-            if (geometryObject is Face face)
-            {
-                DrawFace(document, face);
-            }
-            if (geometryObject is Edge edge)
-            {
-                DrawEdge(document, edge);
-            }
-            if (geometryObject is Curve curve)
+        private static void Draw(Document document, IEnumerable<Curve> curves)
+        {            
+            foreach (var curve in curves)
             {
                 DrawCurve(document, curve);
             }
         }
-        private static void Draw(Document document, BoundingBoxXYZ bb)
-        {
-            var min = bb.Transform.OfPoint(bb.Min);
-            var max = bb.Transform.OfPoint(bb.Max);
-
-            XYZ pt0 = new XYZ(min.X, min.Y, min.Z);
-            XYZ pt1 = new XYZ(max.X, min.Y, min.Z);
-            XYZ pt2 = new XYZ(min.X, max.Y, min.Z);
-            XYZ pt3 = new XYZ(min.X, min.Y, max.Z);
-            XYZ pt4 = new XYZ(max.X, max.Y, max.Z);
-            XYZ pt5 = new XYZ(min.X, max.Y, max.Z);
-            XYZ pt6 = new XYZ(max.X, min.Y, max.Z);
-            XYZ pt7 = new XYZ(max.X, max.Y, min.Z);
-
-            var edges = new List<Line>()
-            {
-                Line.CreateBound(pt0, pt1),
-                Line.CreateBound(pt0, pt2),
-                Line.CreateBound(pt0, pt3),
-
-                Line.CreateBound(pt1, pt6),
-                Line.CreateBound(pt1, pt7),
-
-                Line.CreateBound(pt2, pt5),
-                Line.CreateBound(pt2, pt7),
-
-                Line.CreateBound(pt3, pt5),
-                Line.CreateBound(pt3, pt6),
-
-                Line.CreateBound(pt4, pt5),
-                Line.CreateBound(pt4, pt6),
-                Line.CreateBound(pt4, pt7),
-            };
-          
-            foreach (var edge in edges)
-            {
-                DrawCurve(document, edge);
-            }
-        }
-
-
-        private static void DrawGeometryElement(Document document, GeometryElement geoElement)
-        {
-            foreach (var geometryObject in geoElement)
-            {
-                Draw(document, geometryObject);
-            }
-        }
-        private static void DrawGeometryInstance(Document document, GeometryInstance geometryInstance)
-        {
-            DrawGeometryElement(document, geometryInstance.GetInstanceGeometry());
-        }
-        private static void DrawSolid(Document document, Solid solid)
-        {
-            foreach (Face  face in solid.Faces)
-            {
-                DrawFace(document, face);
-            }
-        }
-        private static void DrawFace(Document document, Face face)
-        {
-            foreach (EdgeArray loop in face.EdgeLoops)
-            {
-                foreach (Edge edge in loop)
-                {
-                    DrawEdge(document, edge);
-                }
-            }
-        }
-        private static void DrawEdge(Document document, Edge edge)
-        {
-            DrawCurve(document, edge.AsCurve());
-        }
+            
+     
         private static void DrawCurve(Document document, Curve curve)
         {
             IList<XYZ> points = new List<XYZ>();             

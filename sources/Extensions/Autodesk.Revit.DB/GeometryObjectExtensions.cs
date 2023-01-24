@@ -1,4 +1,9 @@
-﻿// (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Windows.Forms.VisualStyles;
+using Autodesk.Revit.Creation;
+
+// (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
 namespace Autodesk.Revit.DB
 {
@@ -16,6 +21,53 @@ namespace Autodesk.Revit.DB
             };
 
             return reference;
+        }
+
+
+
+        public static IEnumerable<Curve> StreamCurves(this GeometryObject geometryObject)
+        {            
+            if (geometryObject is GeometryElement geometryElement)
+            {
+                foreach (var geometryObject_ in geometryElement)
+                {
+                    var result = StreamCurves(geometryObject_);
+                    foreach (var item in result) yield return item;
+                }
+            }
+            if (geometryObject is GeometryInstance geometryInstance)
+            {
+                var result = StreamCurves(geometryInstance.GetInstanceGeometry());
+                foreach (var item in result) yield return item;
+            }
+            if (geometryObject is Solid solid)
+            {
+                foreach (Face face_ in solid.Faces)
+                {
+                    var result = StreamCurves(face_);
+                    foreach (var item in result) yield return item;
+                }
+            }
+            if (geometryObject is Face face)
+            {
+                foreach (EdgeArray loop in face.EdgeLoops)
+                {
+                    foreach (Edge edge_ in loop)
+                    {
+                        var result = StreamCurves(edge_);
+                        foreach (var item in result) yield return item;
+                    }
+                }
+            }
+            if (geometryObject is Edge edge)
+            {
+                var result = StreamCurves(edge.AsCurve());
+                foreach (var item in result) yield return item;
+            }
+            if (geometryObject is Curve curve)
+            {
+                yield return curve;
+            }
         }
     }
 }

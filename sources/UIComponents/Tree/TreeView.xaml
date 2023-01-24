@@ -64,6 +64,7 @@
                                 <MenuItem Header="Show in Revit" Command="{Binding ShowInRevit}" CommandParameter="{Binding}"/>
                                 <MenuItem Header="Isolate in Revit" Command="{Binding IsolateInRevit}" CommandParameter="{Binding}"/>
                                 <MenuItem Header="Draw in Revit (using model lines)" Command="{Binding DrawInRevit}" CommandParameter="{Binding}"/>
+                                <MenuItem Header="Draw in Revit (AVF)" Command="{Binding DrawInRevitAVF}" CommandParameter="{Binding}"/>
                                 <MenuItem Header="Snoop in a new window" Command="{Binding SnoopInNewWindow}" CommandParameter="{Binding}" />
                             </ContextMenu>
                         </StackPanel.ContextMenu>

@@ -200,6 +200,7 @@
     <Compile Include="Domain\AddInManifestWizard.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\GenericFactory.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\MemberAccessorByRefCompiled.cs" />
+    <Compile Include="Domain\DataModel\MemberTemplates\View_Templates.cs" />
     <Compile Include="Domain\DataModel\ResultOfSnooping.cs" />
     <Compile Include="Domain\DataModel\ValueContainers\Base\Traits.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\DialogBoxShowingEventArgs\DialogBoxShowingEventArgs_OverrideResult.cs" />
@@ -247,6 +248,7 @@
     <Compile Include="Domain\DataModel\ViewModels\Base\IValuePresenter.cs" />
     <Compile Include="Domain\DataModel\ViewModels\Base\ValuePresenterVM.cs" />
     <Compile Include="Domain\EventMonitor.cs" />
+    <Compile Include="Domain\Presentation\DrawInRevitWithAVFCommand.cs" />
     <Compile Include="Domain\Presentation\DrawInRevitCommand.cs" />
     <Compile Include="Domain\Presentation\IsolateInRevitCommand.cs" />
     <Compile Include="Domain\Presentation\SelectInRevitCommand.cs" />

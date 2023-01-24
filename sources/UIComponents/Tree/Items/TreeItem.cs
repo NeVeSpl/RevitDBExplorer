@@ -58,6 +58,7 @@ namespace RevitDBExplorer.UIComponents.Tree.Items
         public SnoopInNewWindowCommand SnoopInNewWindow { get; } = SnoopInNewWindowCommand.Instance;
         public IsolateInRevitCommand IsolateInRevit { get; } = IsolateInRevitCommand.Instance;
         public DrawInRevitCommand DrawInRevit { get; } = DrawInRevitCommand.Instance;
+        public DrawInRevitWithAVFCommand DrawInRevitAVF { get; } = DrawInRevitWithAVFCommand.Instance;
         public ObservableCollection<TreeItem> Items
         {
             get

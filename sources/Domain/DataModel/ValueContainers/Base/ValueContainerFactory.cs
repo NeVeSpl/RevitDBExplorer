@@ -34,6 +34,7 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers.Base
             new BoundingBoxXYZHandler(),      
 
             //
+            new GeometryElementHandler(),
             new TransformHandler(),
             new ParameterHandler(),
             new FamilyParameterHandler(),
