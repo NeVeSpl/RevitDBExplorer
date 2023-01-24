@@ -33,6 +33,9 @@
     <StreamGeometry x:Key="vAccountOutline">M12,4A4,4 0 0,1 16,8A4,4 0 0,1 12,12A4,4 0 0,1 8,8A4,4 0 0,1 12,4M12,6A2,2 0 0,0 10,8A2,2 0 0,0 12,10A2,2 0 0,0 14,8A2,2 0 0,0 12,6M12,13C14.67,13 20,14.33 20,17V20H4V17C4,14.33 9.33,13 12,13M12,14.9C9.03,14.9 5.9,16.36 5.9,17V18.1H18.1V17C18.1,16.36 14.97,14.9 12,14.9Z</StreamGeometry>
     <StreamGeometry x:Key="vAccountMultiple">M16 17V19H2V17S2 13 9 13 16 17 16 17M12.5 7.5A3.5 3.5 0 1 0 9 11A3.5 3.5 0 0 0 12.5 7.5M15.94 13A5.32 5.32 0 0 1 18 17V19H22V17S22 13.37 15.94 13M15 4A3.39 3.39 0 0 0 13.07 4.59A5 5 0 0 1 13.07 10.41A3.39 3.39 0 0 0 15 11A3.5 3.5 0 0 0 15 4Z</StreamGeometry>
 
+    <StreamGeometry x:Key="vArrowSelectorTool">M355.095,284.612L512,183.087L0,0l183.085,512l101.527-156.905L394.53,465.013c19.463,19.463,51.019,19.462,70.483,0c19.462-19.463,19.462-51.019,0-70.483L355.095,284.612z</StreamGeometry>
+
+
     <Style x:Key="IconMemberKind" TargetType="Path" >
         <Setter Property="Fill" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
         <Setter Property="Stretch" Value="Uniform"/>
@@ -60,7 +63,10 @@
         <Setter Property="ToolTip" Value="Parameter of method from different type" />
         <Setter Property="Width" Value="10"/>
     </Style>
-
+    <Style x:Key="IconArrowSelectorTool" TargetType="Path" BasedOn="{StaticResource IconMemberKind}">
+        <Setter Property="Data" Value="{StaticResource vArrowSelectorTool}"/>        
+        <Setter Property="Width" Value="10"/>
+    </Style>
 
 
     <Style x:Key="IconTree" TargetType="Path" >        

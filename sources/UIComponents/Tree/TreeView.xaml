@@ -16,12 +16,27 @@
                     <ResourceDictionary Source="../../Resources/VectorGraphic.xaml"/>
                     
                 </ResourceDictionary.MergedDictionaries>
+
+                <Style x:Key="ToolButton" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                    <Setter Property="Background" Value="{DynamicResource TextBox.Background}"/>
+                    <Setter Property="Padding" Value="3 2 2 2"/>
+                    <Setter Property="Margin" Value="2 0"/>
+                    <Setter Property="Width" Value="15"/>
+                    <Setter Property="Height" Value="15"/>
+                    <Setter Property="BorderThickness" Value="0"/>
+                    <Style.Resources>
+                        <Style TargetType="Border">
+                            <Setter Property="CornerRadius" Value="4" />
+                        </Style>
+                    </Style.Resources>
+                </Style>
             </ResourceDictionary>
         </Grid.Resources>
 
         <TreeView  ItemsSource="{Binding TreeItems}" BorderThickness="0"  SelectedItemChanged="TreeView_SelectedItemChanged" VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Standard" ScrollViewer.HorizontalScrollBarVisibility="Disabled"  x:Name="cTreeSecretName">
             <TreeView.Resources>
                 <converters:ToResourceWithKeyConverter x:Key="ToResourceWithKeyConverter" FrameworkElement="{Binding ElementName=cTreeSecretName}" />
+                <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" WhenFalse="Collapsed"/>
 
                 <HierarchicalDataTemplate DataType="{x:Type local:GroupTreeItem}" ItemsSource="{Binding Items}">
                     <StackPanel Orientation="Horizontal">
@@ -87,6 +102,11 @@
                               </Run>
                             <Run Text="{Binding Object.Name, Mode=OneWay}" />
                         </TextBlock>
+                        <StackPanel Visibility="{Binding IsSelected, Converter={StaticResource BoolToVisibilityConverter}}" Margin="3 0 0 0">
+                            <Button Style="{StaticResource ToolButton}"  ToolTip="Select in Revit" Command="{Binding SelectInRevit}" CommandParameter="{Binding .}">
+                                <Path Style="{StaticResource IconArrowSelectorTool}" />
+                            </Button>
+                        </StackPanel>
                     </StackPanel>
                 </HierarchicalDataTemplate>
             </TreeView.Resources>
@@ -132,8 +152,6 @@
         </Grid>
         
 
-        <Grid HorizontalAlignment="Right" VerticalAlignment="Bottom" Visibility="Collapsed">
-            <Button Content="x" ToolTip="Select in Revit" Command="{Binding SelectInRevit}" CommandParameter="{Binding SelectedItem}"/>
-        </Grid>
+       
     </Grid>
 </UserControl>
