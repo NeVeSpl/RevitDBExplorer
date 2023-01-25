@@ -98,7 +98,7 @@ namespace RevitDBExplorer.UIComponents.Tree.Items
         internal static readonly HashSet<string> NamesToGroupByCategory = new HashSet<string>() { nameof(FamilyInstance), nameof(Element), nameof(FamilySymbol), nameof(IndependentTag), nameof(Family) };
 
 
-        private GroupTreeItem(string name, IEnumerable<SnoopableObject> items, Predicate<object> itemFilter, GroupBy groupedBy, GroupTreeItem parent)
+        protected GroupTreeItem(string name, IEnumerable<SnoopableObject> items, Predicate<object> itemFilter, GroupBy groupedBy, GroupTreeItem parent)
         {
             this.parent = parent;
             Name = name;
@@ -144,7 +144,7 @@ namespace RevitDBExplorer.UIComponents.Tree.Items
                 }
             }
             // 3rd level
-            if ((parent?.GroupedBy == GroupBy.TypeName) && (GroupedBy == GroupBy.Category))
+            if ((parent?.GroupedBy == GroupBy.TypeName) && (GroupedBy == GroupBy.Category) || (parent?.GroupedBy == GroupBy.Category) && (GroupedBy == GroupBy.TypeName))
             {
                 if (items.FirstOrDefault()?.Object is FamilySymbol)
                 {
@@ -163,7 +163,7 @@ namespace RevitDBExplorer.UIComponents.Tree.Items
 
         private IEnumerable<GroupTreeItem> GroupByTypeName(IEnumerable<SnoopableObject> items, Predicate<object> itemFilter, GroupTreeItem parent)
         {            
-            var groupedItems = items.GroupBy(x => x.TypeName).Select(x => new GroupTreeItem(x.Key, x, itemFilter, GroupBy.TypeName, parent)).OrderBy(x => x.Name);
+            var groupedItems = items.GroupBy(x => x.TypeName).Select(x => new TypeGroupTreeItem(x.Key, x, itemFilter, parent)).OrderBy(x => x.Name);
             return groupedItems;
         }
         private IEnumerable<GroupTreeItem> GroupByCategory(IEnumerable<SnoopableObject> items, Predicate<object> itemFilter, GroupTreeItem parent)
@@ -171,11 +171,11 @@ namespace RevitDBExplorer.UIComponents.Tree.Items
             IEnumerable<GroupTreeItem> groupedItems = null;           
             if (name == nameof(Family))
             {
-                groupedItems = items.GroupBy(x => (x.Object as Family).FamilyCategoryId).Select(x => new GroupTreeItem(Labeler.GetLabelForCategory(x.Key), x, itemFilter, GroupBy.Category, parent));
+                groupedItems = items.GroupBy(x => (x.Object as Family).FamilyCategoryId).Select(x => new CategoryGroupTreeItem(Labeler.GetLabelForCategory(x.Key), x, itemFilter, parent, x.Key));
             }
             else
             {
-                groupedItems = items.GroupBy(x => (x.Object as Element)?.Category?.Id).Select(x => new GroupTreeItem(Labeler.GetLabelForCategory(x.Key), x, itemFilter, GroupBy.Category, parent));
+                groupedItems = items.GroupBy(x => (x.Object as Element)?.Category?.Id).Select(x => new CategoryGroupTreeItem(Labeler.GetLabelForCategory(x.Key), x, itemFilter, parent, x.Key));
             }
             return groupedItems;
         }
@@ -227,4 +227,24 @@ namespace RevitDBExplorer.UIComponents.Tree.Items
             }
         }
     }    
+
+    internal class CategoryGroupTreeItem : GroupTreeItem
+    {
+        private readonly ElementId categoryId;
+
+        public CategoryGroupTreeItem(string name, IEnumerable<SnoopableObject> items, Predicate<object> itemFilter, GroupTreeItem parent, ElementId categoryId) : base(name, items, itemFilter, GroupBy.Category, parent)
+        {
+            this.categoryId = categoryId;
+        }
+    }
+
+    internal class TypeGroupTreeItem : GroupTreeItem
+    {
+        private readonly string typeName;
+
+        public TypeGroupTreeItem(string name, IEnumerable<SnoopableObject> items, Predicate<object> itemFilter, GroupTreeItem parent) : base(name, items, itemFilter, GroupBy.TypeName, parent)
+        {
+            typeName = name;
+        }
+    }
 }

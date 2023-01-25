@@ -13,12 +13,11 @@ namespace RevitDBExplorer.UIComponents.Tree
 {
     internal class TreeVM : BaseViewModel
     {
-        private ObservableCollection<TreeItem> treeItems = new();
-        private string treeItemsFilterPhrase = string.Empty;
+        private ObservableCollection<TreeItem> treeItems = new();        
         private TreeItem selectedItem;
         private ResultOfSnooping resultOfSnooping;
         private GroupBy groupBy;
-
+        private string filterPhrase = string.Empty;
         public event Action<TreeItem> SelectedItemChanged;
 
         public SelectInRevitCommand SelectInRevit { get; } = SelectInRevitCommand.Instance;
@@ -47,6 +46,19 @@ namespace RevitDBExplorer.UIComponents.Tree
                 OnPropertyChanged();
             }
         }
+        public string FilterPhrase
+        {
+            get
+            {
+                return filterPhrase;
+            }
+            set
+            {
+                filterPhrase = value;
+                FilterTreeView();
+                OnPropertyChanged();
+            }
+        }
 
 
         public TreeVM()
@@ -58,10 +70,11 @@ namespace RevitDBExplorer.UIComponents.Tree
         public void ClearItems()
         {
             PopulateTreeView(new());
+            FilterPhrase = "";
         }
         public void PopulateTreeView(ResultOfSnooping resultOfSnooping, GroupBy groupBy = GroupBy.TypeName)
         {
-            treeItemsFilterPhrase = "";
+            FilterPhrase = "";
             this.resultOfSnooping = resultOfSnooping;
             this.groupBy = groupBy;
 
@@ -92,15 +105,12 @@ namespace RevitDBExplorer.UIComponents.Tree
         {
             if (item is SnoopableObjectTreeItem snoopableObjectVM)
             {
-                return snoopableObjectVM.Object.Name.IndexOf(treeItemsFilterPhrase, StringComparison.OrdinalIgnoreCase) >= 0;
+                return snoopableObjectVM.Object.Name.IndexOf(filterPhrase, StringComparison.OrdinalIgnoreCase) >= 0;
             }
             return true;
         }
-        public void FilterTreeView(string treeItemsFilterPhrase)
-        {
-            if (string.Equals(treeItemsFilterPhrase, this.treeItemsFilterPhrase)) return;
-
-            this.treeItemsFilterPhrase = treeItemsFilterPhrase;
+        public void FilterTreeView()
+        {          
             if (TreeItems != null)
             {
                 foreach (var item in TreeItems.OfType<GroupTreeItem>())

@@ -149,8 +149,6 @@
             <componentQueryVisualization:QueryVisualizationView  Grid.Row="1" Margin="0 1 0 0" DataContext="{Binding QueryVisualization}"/>
         </Grid>
 
-        <controls:TextBoxWithPlaceholder Grid.Row="2" Grid.Column="0" Margin="0 0 2 3" Text="{Binding LeftFilterPhrase, Mode=TwoWay, Delay=500, UpdateSourceTrigger=PropertyChanged}" Placeholder="Filter tree by item name"/>
-
         <Grid Grid.Row="2" Grid.Column="2" Margin="0 0 0 3">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
@@ -164,7 +162,7 @@
             </Button>
         </Grid>
 
-        <componentTree:TreeView Grid.Row="3" Grid.Column="0" DataContext="{Binding Tree}" Margin="0 2 2 0" SizeChanged="Window_SizeChanged" />
+        <componentTree:TreeView Grid.Row="2" Grid.Column="0" Grid.RowSpan="2" DataContext="{Binding Tree}" Margin="0 0 2 0" SizeChanged="Window_SizeChanged" />
 
         <GridSplitter Grid.Row="3" Grid.Column="1" Background="{DynamicResource GridSplitter.Background}"  Width="2" Margin="0 2 2 0" HorizontalAlignment="Left" VerticalAlignment="Stretch" />
 

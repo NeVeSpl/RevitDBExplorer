@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:RevitDBExplorer.UIComponents.Tree.Items"
              xmlns:converters="clr-namespace:RevitDBExplorer.WPF.Converters"    
+             xmlns:controls="clr-namespace:RevitDBExplorer.WPF.Controls" 
              xmlns:wpf="clr-namespace:RevitDBExplorer.WPF"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
@@ -17,7 +18,7 @@
                     
                 </ResourceDictionary.MergedDictionaries>
 
-                <Style x:Key="ToolButton" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                <Style x:Key="TreeToolButton" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
                     <Setter Property="Background" Value="{DynamicResource TextBox.Background}"/>
                     <Setter Property="Padding" Value="3 2 2 2"/>
                     <Setter Property="Margin" Value="2 0"/>
@@ -30,10 +31,38 @@
                         </Style>
                     </Style.Resources>
                 </Style>
+
+                <Style x:Key="ToolButton" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                    <Setter Property="Padding" Value="2 0 1 1"/>
+                    <Setter Property="Margin" Value="4 0 0 0"/>
+                    <Setter Property="MinWidth" Value="21"/>
+                    <Setter Property="MinHeight" Value="21"/>
+                    <Setter Property="Width" Value="23"/>
+                    <Setter Property="Height" Value="21"/>
+                    <Setter Property="Background" Value="Transparent"/>
+                    <Setter Property="Padding" Value="2 0 1 1"/>
+                </Style>
             </ResourceDictionary>
         </Grid.Resources>
+        <Grid.RowDefinitions>          
+            <RowDefinition Height="auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
 
-        <TreeView  ItemsSource="{Binding TreeItems}" BorderThickness="0"  SelectedItemChanged="TreeView_SelectedItemChanged" VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Standard" ScrollViewer.HorizontalScrollBarVisibility="Disabled"  x:Name="cTreeSecretName">
+        <Grid  Margin="0 0 0 3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="auto"/>
+            </Grid.ColumnDefinitions>
+
+            <controls:TextBoxWithPlaceholder Text="{Binding FilterPhrase, Mode=TwoWay, Delay=500, UpdateSourceTrigger=PropertyChanged}" Placeholder="Filter tree by item name"/>
+
+            <Button Grid.Column="1" Style="{StaticResource ToolButton}"  ToolTip="Switch between grouping by TypeName and Category" Command="{Binding SwitchViewCommand}" >
+                <Path Style="{StaticResource IconReload}"  />
+            </Button>
+        </Grid>
+
+        <TreeView Margin="0 2 0 0" Grid.Row="1"  ItemsSource="{Binding TreeItems}" BorderThickness="0"  SelectedItemChanged="TreeView_SelectedItemChanged" VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Standard" ScrollViewer.HorizontalScrollBarVisibility="Disabled"  x:Name="cTreeSecretName">
             <TreeView.Resources>
                 <converters:ToResourceWithKeyConverter x:Key="ToResourceWithKeyConverter" FrameworkElement="{Binding ElementName=cTreeSecretName}" />
                 <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" WhenFalse="Collapsed"/>
@@ -103,7 +132,7 @@
                             <Run Text="{Binding Object.Name, Mode=OneWay}" />
                         </TextBlock>
                         <StackPanel Visibility="{Binding IsSelected, Converter={StaticResource BoolToVisibilityConverter}}" Margin="3 0 0 0">
-                            <Button Style="{StaticResource ToolButton}"  ToolTip="Select in Revit" Command="{Binding SelectInRevit}" CommandParameter="{Binding .}">
+                            <Button Style="{StaticResource TreeToolButton}"  ToolTip="Select in Revit" Command="{Binding SelectInRevit}" CommandParameter="{Binding .}" Visibility="{Binding RelativeSource={RelativeSource Mode=Self}, Path=IsEnabled, Converter={StaticResource BoolToVisibilityConverter}}">
                                 <Path Style="{StaticResource IconArrowSelectorTool}" />
                             </Button>
                         </StackPanel>
@@ -146,12 +175,6 @@
                 </Style>
             </TreeView.ItemContainerStyle>
         </TreeView>
-
-        <Grid HorizontalAlignment="Right" VerticalAlignment="Top" Visibility="Collapsed">
-            <Button Content="s" ToolTip="Switch between grouping by TypeName and Category" Command="{Binding SwitchViewCommand}" />
-        </Grid>
         
-
-       
     </Grid>
 </UserControl>

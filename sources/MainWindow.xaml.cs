@@ -30,8 +30,7 @@ namespace RevitDBExplorer
         private readonly ListVM listVM = new();
         private readonly QueryVisualizationVM queryVisualizationVM = new();
         private RightView rightView;
-        private string rightFilterPhrase = string.Empty;
-        private string leftFilterPhrase = string.Empty;
+        private string rightFilterPhrase = string.Empty;       
         private string databaseQuery = string.Empty;
         private string databaseQueryToolTip = string.Empty;
         private bool isRevitBusy;
@@ -65,20 +64,7 @@ namespace RevitDBExplorer
                 List.FilterListView(value);                
                 OnPropertyChanged();
             }
-        }
-        public string LeftFilterPhrase
-        {
-            get
-            {
-                return leftFilterPhrase;
-            }
-            set
-            {
-                leftFilterPhrase = value;
-                Tree.FilterTreeView(value);
-                OnPropertyChanged();
-            }
-        }
+        }       
         public string DatabaseQuery
         {
             get
@@ -161,8 +147,7 @@ namespace RevitDBExplorer
         private async void SelectorButton_Click(object sender, RoutedEventArgs e)
         {
             Tree.ClearItems();            
-            List.ClearItems();
-            LeftFilterPhrase = "";
+            List.ClearItems();           
             ResetDatabaseQuery();
 
             var tag = ((Control)sender).Tag as string;
@@ -182,8 +167,7 @@ namespace RevitDBExplorer
         private void SnoopEvents_Click(object sender, RoutedEventArgs e)
         {           
             Tree.ClearItems();            
-            List.ClearItems();
-            LeftFilterPhrase = "";
+            List.ClearItems();         
             ResetDatabaseQuery();
 
             var snoopableObjects = EventMonitor.GetEvents().Select(x => new SnoopableObjectTreeItem(x) { IsExpanded = true }).ToList();
@@ -217,7 +201,6 @@ namespace RevitDBExplorer
         {
             Tree.ClearItems();
             List.ClearItems();
-            LeftFilterPhrase = "";
 
             var result = await ExternalExecutor.ExecuteInRevitContextAsync(uiApp => RevitDatabaseQueryService.ParseAndExecute(uiApp?.ActiveUIDocument?.Document, query));
 
