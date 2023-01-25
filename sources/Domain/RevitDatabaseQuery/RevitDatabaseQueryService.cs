@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Autodesk.Revit.DB;
+using Autodesk.Revit.UI;
 using RevitDBExplorer.Domain.DataModel;
 using RevitDBExplorer.Domain.RevitDatabaseQuery.Filters;
 using VisibleInViewFilter = RevitDBExplorer.Domain.RevitDatabaseQuery.Filters.VisibleInViewFilter;
@@ -20,7 +21,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
 
         public static Result ParseAndExecute(Document document, string query)
         {
-            if (document is null) return new(null, null, new List<Command>());  
+            if (document is null) return new Result(null, new List<Command>(), new SourceOfObjects());  
 
 
             FuzzySearchEngine.LoadDocumentSpecificData(document);
@@ -52,15 +53,30 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
             }
             collectorSyntax += Environment.NewLine + "    .ToElements();";
 
-            var snoopableObjects = collector.ToElements().Select(x => new SnoopableObject(document, x));
-            var ros =  new ResultOfSnooping(snoopableObjects.ToArray());
+            return new Result(collectorSyntax, commands, new SourceOfObjects(new RemoteExecutor(collector, document)));
+        }
 
-            return new(ros, collectorSyntax, commands);
-        }  
+        public record Result(string GeneratedCSharpSyntax, IList<Command> Commands, SourceOfObjects SourceOfObjects);
 
-        
-   
+        public class RemoteExecutor : IAmSourceOfEverything
+        {
+            private readonly FilteredElementCollector collector;
+            private readonly Document document;
 
-        public record Result(ResultOfSnooping ResultOfSnooping, string GeneratedCSharpSyntax, IList<Command> Commands);
+
+            public RemoteExecutor(FilteredElementCollector collector, Document document)
+            {              
+                this.collector = collector;
+                this.document = document;
+            }
+
+
+            public IEnumerable<SnoopableObject> Snoop(UIApplication app)
+            {
+                if (document == null) return null;
+                var snoopableObjects = collector.ToElements().Select(x => new SnoopableObject(document, x));
+                return snoopableObjects;
+            }
+        }
     }
 }

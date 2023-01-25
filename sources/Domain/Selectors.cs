@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.UI.Selection;
-using RevitDBExplorer.Domain.DataModel;
 using RevitDBExplorer.Domain.Selectors;
 using RevitDBExplorer.Domain.Selectors.Base;
 
@@ -36,14 +33,14 @@ namespace RevitDBExplorer.Domain
 
     internal static class SelectorExecutor
     {
-        public static ResultOfSnooping Snoop(UIApplication uiApplication, Selector selector)
+        public static SourceOfObjects Snoop(Selector selector)
         {
-            var snooper = CreateSelector(uiApplication, selector);
-            var result = snooper.Snoop(uiApplication) ?? Enumerable.Empty<SnoopableObject>();
-            return new(result.ToArray());
+            var snooper = CreateSelector(selector);
+            var sourceOfObjects = new SourceOfObjects(snooper);
+            return sourceOfObjects;            
         }
 
-        private static ISelector CreateSelector(UIApplication uiApplication, Selector selector)
+        private static ISelector CreateSelector(Selector selector)
         {
             ISelector result = selector switch
             {

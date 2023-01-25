@@ -60,25 +60,25 @@ namespace RevitDBExplorer.UIComponents.Tree.Items
         }
                 
 
-        public GroupTreeItem(ResultOfSnooping resultOfSnooping, Predicate<object> itemFilter, GroupBy groupBy = GroupBy.TypeName)
+        public GroupTreeItem(SourceOfObjects sourceOfObjects, Predicate<object> itemFilter, GroupBy groupBy = GroupBy.TypeName)
         {
             GroupedBy = GroupBy.Source;
-            Count = resultOfSnooping.Objects.Count;
-            Name = resultOfSnooping.Title;
+            Count = sourceOfObjects.Objects.Count;
+            Name = sourceOfObjects.Title;
 
             IEnumerable<GroupTreeItem> groupedItems = null;
             switch (groupBy)
             {
                 case GroupBy.TypeName:
-                    groupedItems = GroupByTypeName(resultOfSnooping.Objects, itemFilter, this);
+                    groupedItems = GroupByTypeName(sourceOfObjects.Objects, itemFilter, this);
                     break;
 
                 case GroupBy.Category:
-                    groupedItems = GroupByCategory(resultOfSnooping.Objects, itemFilter, this);
+                    groupedItems = GroupByCategory(sourceOfObjects.Objects, itemFilter, this);
                     break;
             }
 
-            SetItems(groupedItems, resultOfSnooping.Objects, itemFilter);
+            SetItems(groupedItems, sourceOfObjects.Objects, itemFilter);
         }
         private void SetItems(IEnumerable<GroupTreeItem> groupedItems, IEnumerable<SnoopableObject> items, Predicate<object> itemFilter)
         {

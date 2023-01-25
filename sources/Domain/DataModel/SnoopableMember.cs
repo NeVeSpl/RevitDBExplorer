@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Autodesk.Revit.UI;
 using RevitDBExplorer.Domain.DataModel.MemberAccessors;
 using RevitDBExplorer.Domain.DataModel.Streams.Base;
 using RevitDBExplorer.Domain.DataModel.ValueContainers.Base;
@@ -13,7 +14,7 @@ using RevitDBExplorer.WPF;
 
 namespace RevitDBExplorer.Domain.DataModel
 {
-    internal class SnoopableMember : BaseViewModel
+    internal class SnoopableMember : BaseViewModel, IAmSourceOfEverything
     {
         private readonly SnoopableObject parent;
         private readonly MemberDescriptor memberDescriptor;      
@@ -88,25 +89,30 @@ namespace RevitDBExplorer.Domain.DataModel
             OnPropertyChanged(nameof(CanBeSnooped));
         }
 
-        public ResultOfSnooping Snooop()
+
+        public SourceOfObjects Snoop()
         {
-            if (isFrozen) return frozenSnooopResult;           
+            var title = Name;
+            if (!string.IsNullOrEmpty(Documentation.Name))
+            {
+                title = $"{Documentation.ReturnType} {Documentation.Name}{Documentation.Invocation}";
+            }
+            if (MemberKind == MemberKind.Property)
+            {
+                title = null;
+            }
+            return new SourceOfObjects(this) { Title = title };
+        }
+        public IEnumerable<SnoopableObject> Snoop(UIApplication app)
+        {
+            if (isFrozen) return frozenSnooopResult;
             if (memberDescriptor.MemberAccessor is IMemberAccessorWithSnoop snooper)
             {
-                var title = Name;
-                if (!string.IsNullOrEmpty(Documentation.Name))
-                {
-                    title = $"{Documentation.ReturnType} {Documentation.Name}{Documentation.Invocation}";
-                }
-                if (MemberKind == MemberKind.Property)
-                {
-                    title = null;
-                }
-
-                return new(snooper.Snoop(parent.Context, parent.Object, state).ToArray()) { Title = title };
+                return snooper.Snoop(parent.Context, parent.Object, state);
             }
-            return new();
+            return Enumerable.Empty<SnoopableObject>();
         }
+
 
         public void Write()
         {
@@ -126,13 +132,13 @@ namespace RevitDBExplorer.Domain.DataModel
 
 
         private bool isFrozen = false;
-        private ResultOfSnooping frozenSnooopResult;
+        private IList<SnoopableObject> frozenSnooopResult;
         public void Freeze()
-        {            
+        {
             if (CanBeSnooped)
             {
-                frozenSnooopResult = Snooop();
-                frozenSnooopResult.Objects.ForEach(x => x.Freeze());
+                frozenSnooopResult = Snoop(null).ToList();
+                frozenSnooopResult.ForEach(x => x.Freeze());
             }
             isFrozen = true;
         }

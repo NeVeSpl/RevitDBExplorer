@@ -53,12 +53,17 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="auto"/>
             </Grid.ColumnDefinitions>
 
             <controls:TextBoxWithPlaceholder Text="{Binding FilterPhrase, Mode=TwoWay, Delay=500, UpdateSourceTrigger=PropertyChanged}" Placeholder="Filter tree by item name"/>
 
-            <Button Grid.Column="1" Style="{StaticResource ToolButton}"  ToolTip="Switch between grouping by TypeName and Category" Command="{Binding SwitchViewCommand}" >
+            <Button Grid.Column="1" Style="{StaticResource ToolButton}"  ToolTip="Reload data from Revit in the tree" Command="{Binding ReloadCommand}" >
                 <Path Style="{StaticResource IconReload}"  />
+            </Button>
+
+            <Button Grid.Column="2" Style="{StaticResource ToolButton}"  ToolTip="Switch between grouping by TypeName and Category" Command="{Binding SwitchViewCommand}" >
+                <Path Style="{StaticResource IconSwitch}"  />
             </Button>
         </Grid>
 
@@ -97,6 +102,11 @@
                         <TextBlock Text="[" Margin="0 -1 0 0" Style="{StaticResource postfix}"/>
                         <TextBlock Text="{Binding Count, Mode=OneWay}"  Style="{StaticResource postfix}" />
                         <TextBlock Text="]" Margin="0 -1 0 0" Style="{StaticResource postfix}"/>
+                        <StackPanel Visibility="{Binding IsSelected, Converter={StaticResource BoolToVisibilityConverter}}" Margin="3 0 0 0">
+                            <Button Style="{StaticResource TreeToolButton}"  ToolTip="Select in Revit" Command="{Binding SelectInRevit}" CommandParameter="{Binding .}" Visibility="{Binding RelativeSource={RelativeSource Mode=Self}, Path=IsEnabled, Converter={StaticResource BoolToVisibilityConverter}}">
+                                <Path Style="{StaticResource IconArrowSelectorTool}" />
+                            </Button>
+                        </StackPanel>
                     </StackPanel>
                 </HierarchicalDataTemplate>
 

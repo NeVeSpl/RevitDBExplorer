@@ -34,6 +34,10 @@
     <StreamGeometry x:Key="vAccountMultiple">M16 17V19H2V17S2 13 9 13 16 17 16 17M12.5 7.5A3.5 3.5 0 1 0 9 11A3.5 3.5 0 0 0 12.5 7.5M15.94 13A5.32 5.32 0 0 1 18 17V19H22V17S22 13.37 15.94 13M15 4A3.39 3.39 0 0 0 13.07 4.59A5 5 0 0 1 13.07 10.41A3.39 3.39 0 0 0 15 11A3.5 3.5 0 0 0 15 4Z</StreamGeometry>
 
     <StreamGeometry x:Key="vArrowSelectorTool">M355.095,284.612L512,183.087L0,0l183.085,512l101.527-156.905L394.53,465.013c19.463,19.463,51.019,19.462,70.483,0c19.462-19.463,19.462-51.019,0-70.483L355.095,284.612z</StreamGeometry>
+    <StreamGeometry x:Key="vToggleSwitchOutline">M17 6H7C3.69 6 1 8.69 1 12S3.69 18 7 18H17C20.31 18 23 15.31 23 12S20.31 6 17 6M17 16H7C4.79 16 3 14.21 3 12S4.79 8 7 8H17C19.21 8 21 9.79 21 12S19.21 16 17 16M17 9C15.34 9 14 10.34 14 12S15.34 15 17 15 20 13.66 20 12 18.66 9 17 9Z</StreamGeometry>
+    <StreamGeometry x:Key="vCollapseAll">M14,4H4V14H2V4A2,2 0 0,1 4,2H14V4M18,6H8A2,2 0 0,0 6,8V18H8V8H18V6M22,12V20A2,2 0 0,1 20,22H12A2,2 0 0,1 10,20V12A2,2 0 0,1 12,10H20A2,2 0 0,1 22,12M20,15H12V17H20V15Z</StreamGeometry>
+
+
 
 
     <Style x:Key="IconMemberKind" TargetType="Path" >
@@ -154,6 +158,9 @@
     </Style>
     <Style x:Key="IconAddin" TargetType="Path" BasedOn="{StaticResource IconSelector}">
         <Setter Property="Data" Value="{StaticResource vPlusBox}"/>
+    </Style>
+    <Style x:Key="IconSwitch" TargetType="Path" BasedOn="{StaticResource IconSelector}">
+        <Setter Property="Data" Value="{StaticResource vToggleSwitchOutline}"/>
     </Style>
 </ResourceDictionary>
                     

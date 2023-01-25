@@ -125,9 +125,9 @@ namespace RevitDBExplorer
             List.MemberValueHasChanged += () => ReloadButton_Click(null, null);
             Tree.SelectedItemChanged += Tree_SelectedItemChanged;
         }  
-        public MainWindow(ResultOfSnooping resultOfSnooping) : this()
+        public MainWindow(SourceOfObjects sourceOfObjects) : this()
         {
-            Tree.PopulateTreeView(resultOfSnooping);
+            Tree.PopulateTreeView(sourceOfObjects);
         }
 
 
@@ -156,13 +156,20 @@ namespace RevitDBExplorer
             {
                 //this.WindowState = WindowState.Minimized;
             }
-            var resultOfSnooping = await ExternalExecutor.ExecuteInRevitContextAsync(x => SelectorExecutor.Snoop(x, selector));
+            
+            var sourceOfObjects = await ExternalExecutor.ExecuteInRevitContextAsync(x =>
+            {
+                var source = SelectorExecutor.Snoop(selector);
+                source.ReadFromTheSource(x);
+                return source;
+            });
+
             if (selector == Selector.PickEdge || selector == Selector.PickFace)
             {
                 //this.WindowState = WindowState.Normal;
             }       
                 
-            Tree.PopulateTreeView(resultOfSnooping);            
+            Tree.PopulateTreeView(sourceOfObjects);            
         }
         private void SnoopEvents_Click(object sender, RoutedEventArgs e)
         {           
@@ -184,12 +191,26 @@ namespace RevitDBExplorer
                 List.PopulateListView(snoopableMembers);
                 return;
             }
+            if (treeViewItemVM is GroupTreeItem groupTreeItemVM)
+            {
+                //if (AppSettings.Default.FeatureFlag)
+                //{
+                //    RightView = RightView.CommandAndControl;
+                //    await CommandAndControl.SetInput(groupTreeItemVM);
+                //    return;
+                //}
+            }
             RightView = RightView.None;
         }
         private async void List_MemberSnooped(SnoopableMember member)
-        { 
-            var resultOfSnooping = await ExternalExecutor.ExecuteInRevitContextAsync(x => member.Snooop());
-            var window = new MainWindow(resultOfSnooping);
+        {            
+            var sourceOfObjects = await ExternalExecutor.ExecuteInRevitContextAsync(x =>
+            {
+                var source = member.Snoop();
+                source.ReadFromTheSource(x);
+                return source;
+            });
+            var window = new MainWindow(sourceOfObjects);
             window.Owner = this;
             window.Show();                      
         }
@@ -200,13 +221,18 @@ namespace RevitDBExplorer
         private async void TryQueryDatabase(string query)
         {
             Tree.ClearItems();
-            List.ClearItems();
+            List.ClearItems();            
+            
+            var rdqResult =  await ExternalExecutor.ExecuteInRevitContextAsync(x => 
+            {
+                var result = RevitDatabaseQueryService.ParseAndExecute(x.ActiveUIDocument?.Document, query);
+                result.SourceOfObjects.ReadFromTheSource(x);
+                return result;
+            });
 
-            var result = await ExternalExecutor.ExecuteInRevitContextAsync(uiApp => RevitDatabaseQueryService.ParseAndExecute(uiApp?.ActiveUIDocument?.Document, query));
-
-            DatabaseQueryToolTip = result.GeneratedCSharpSyntax;
-            QueryVisualization.Update(result.Commands).Forget();
-            Tree.PopulateTreeView(result.ResultOfSnooping);            
+            DatabaseQueryToolTip = rdqResult.GeneratedCSharpSyntax;
+            QueryVisualization.Update(rdqResult.Commands).Forget();
+            Tree.PopulateTreeView(rdqResult.SourceOfObjects);            
         }                                    
      
         private void ResetDatabaseQuery()

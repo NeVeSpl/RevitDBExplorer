@@ -54,7 +54,7 @@ namespace RevitDBExplorer.Domain.Presentation
         }
 
 
-        private bool IsSelectInRevitAvailable(SnoopableObject snoopableObject)
+        public static bool IsSelectInRevitAvailable(SnoopableObject snoopableObject)
         {
             if (snoopableObject.Object is Element)
             {

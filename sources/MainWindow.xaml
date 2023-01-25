@@ -134,7 +134,7 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
 
-            <controls:TextBoxWithPlaceholder Text="{Binding DatabaseQuery, Mode=TwoWay, Delay=1000, UpdateSourceTrigger=PropertyChanged}" Placeholder="Query Revit database" ToolTip="{Binding DatabaseQueryToolTip}" ToolTipService.ShowDuration="50000">
+            <controls:TextBoxWithPlaceholder Text="{Binding DatabaseQuery, Mode=TwoWay, Delay=1000, UpdateSourceTrigger=PropertyChanged}" Placeholder="Query Revit database with RDQ" ToolTip="{Binding DatabaseQueryToolTip}" ToolTipService.ShowDuration="50000">
                 <controls:TextBoxWithPlaceholder.ContextMenu>
                     <ContextMenu>                       
                         <MenuItem Command="ApplicationCommands.Copy" />
@@ -157,7 +157,7 @@
 
             <controls:TextBoxWithPlaceholder Margin="0 0 2 0" Text="{Binding RightFilterPhrase, Mode=TwoWay, Delay=200, UpdateSourceTrigger=PropertyChanged}" Placeholder="Filter list by property/method name"/>
 
-            <Button Grid.Column="1" Margin="2 0 0 0" MinWidth="22" MinHeight="22" Padding="2 1 1 1" ToolTip="Reload data from Revit in the list" Background="Transparent"  Click="ReloadButton_Click">
+            <Button Grid.Column="1" Margin="2 0 0 0" MinWidth="21" MinHeight="21" Padding="2 0 1 1" ToolTip="Reload data from Revit in the list" Background="Transparent"  Click="ReloadButton_Click">
                 <Path Style="{StaticResource IconReload}" Width="18" />
             </Button>
         </Grid>

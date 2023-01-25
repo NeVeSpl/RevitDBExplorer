@@ -6,7 +6,7 @@ using RevitDBExplorer.Domain.DataModel;
 
 namespace RevitDBExplorer.Domain.Selectors.Base
 {
-    internal interface ISelector
+    internal interface ISelector: IAmSourceOfEverything
     {
         IEnumerable<SnoopableObject> Snoop(UIApplication app);
     }
