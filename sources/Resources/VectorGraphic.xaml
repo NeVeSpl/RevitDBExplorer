@@ -162,5 +162,8 @@
     <Style x:Key="IconSwitch" TargetType="Path" BasedOn="{StaticResource IconSelector}">
         <Setter Property="Data" Value="{StaticResource vToggleSwitchOutline}"/>
     </Style>
+    <Style x:Key="IconCollapse" TargetType="Path" BasedOn="{StaticResource IconSelector}">
+        <Setter Property="Data" Value="{StaticResource vCollapseAll}"/>
+    </Style>
 </ResourceDictionary>
                     

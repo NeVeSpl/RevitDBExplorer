@@ -88,6 +88,20 @@ namespace RevitDBExplorer.UIComponents.Tree.Items
                 }
             }
         }
+        public void Collapse()
+        {
+            if(IsExpanded == true)
+            {
+                IsExpanded = false;
+                if (Items != null)
+                {
+                    foreach (var item in Items)
+                    {
+                        item.Collapse();
+                    }
+                }
+            }
+        }
         public void SelectFirstDeepestVisibleItem()
         {
             TreeItem candidate = null;

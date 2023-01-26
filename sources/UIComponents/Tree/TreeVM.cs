@@ -19,11 +19,13 @@ namespace RevitDBExplorer.UIComponents.Tree
         private SourceOfObjects sourceOfObjects;
         private GroupBy groupBy = GroupBy.TypeName;
         private string filterPhrase = string.Empty;
+        private bool isExpanded = true;
         public event Action<TreeItem> SelectedItemChanged;
 
         public SelectInRevitCommand SelectInRevit { get; } = SelectInRevitCommand.Instance;
         public RelayCommand SwitchViewCommand { get; }
         public RelayCommand ReloadCommand { get; }
+        public RelayCommand CollapseCommand { get; }
         public ObservableCollection<TreeItem> TreeItems
         {
             get
@@ -67,6 +69,7 @@ namespace RevitDBExplorer.UIComponents.Tree
         {
             SwitchViewCommand = new RelayCommand(SwitchView);
             ReloadCommand = new RelayCommand(Reload);
+            CollapseCommand = new RelayCommand(Collapse);
         }
 
 
@@ -74,6 +77,7 @@ namespace RevitDBExplorer.UIComponents.Tree
         {
             PopulateTreeView(null);
             FilterPhrase = "";
+            isExpanded = true;
         }
         public void PopulateTreeView(SourceOfObjects sourceOfObjects)
         {
@@ -87,8 +91,15 @@ namespace RevitDBExplorer.UIComponents.Tree
             }
 
             GroupTreeItem groupTreeVM = new GroupTreeItem(sourceOfObjects, TreeViewFilter, groupBy);
-            groupTreeVM.Expand(true);
-            groupTreeVM.SelectFirstDeepestVisibleItem();
+            if (isExpanded)
+            {
+                groupTreeVM.Expand(true);
+            }
+            else
+            {
+                groupTreeVM.IsExpanded = true;
+            }
+            groupTreeVM.SelectFirstDeepestVisibleItem();           
 
             if (groupTreeVM.Items.Count == 1)
             {
@@ -144,6 +155,25 @@ namespace RevitDBExplorer.UIComponents.Tree
         {
            await ExternalExecutor.ExecuteInRevitContextAsync(x => sourceOfObjects.ReadFromTheSource(x));
            PopulateTreeView(sourceOfObjects);
+        }
+        private async void Collapse(object parameter)
+        {            
+            var first = treeItems.FirstOrDefault();
+            if (first == null) return;
+
+            if (isExpanded)
+            {
+                first.Collapse();
+                first.IsExpanded = true;
+            }
+            else
+            {
+                if (first is GroupTreeItem { Count : < 666 } group)
+                {
+                    first.Expand(true, 666);
+                }
+            }
+            isExpanded = !isExpanded;
         }
     }
 }
