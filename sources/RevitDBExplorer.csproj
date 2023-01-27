@@ -427,7 +427,7 @@
     <Compile Include="Domain\DataModel\ValueContainers\XYZHandler.cs" />
     <Compile Include="Domain\ExternalExecutor.cs" />
     <Compile Include="Domain\Labeler.cs" />
-    <Compile Include="Domain\Selectors.cs" />
+    <Compile Include="Domain\Selectors\SelectorFactory.cs" />
     <Compile Include="Extensions\System\ObjectExtensions.cs" />
     <Compile Include="Extensions\System\TypeExtensions.cs" />
     <Compile Include="WPF\BaseViewModel.cs" />

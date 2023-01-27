@@ -1,12 +1,10 @@
 ﻿using System;
-using Autodesk.Revit.UI;
 using Autodesk.Revit.UI.Selection;
-using RevitDBExplorer.Domain.Selectors;
 using RevitDBExplorer.Domain.Selectors.Base;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
-namespace RevitDBExplorer.Domain
+namespace RevitDBExplorer.Domain.Selectors
 {
     public enum Selector
     {
@@ -31,7 +29,7 @@ namespace RevitDBExplorer.Domain
         LoadedApplications
     }
 
-    internal static class SelectorExecutor
+    internal static class SelectorFactory
     {
         public static SourceOfObjects Snoop(Selector selector)
         {

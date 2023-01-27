@@ -2,7 +2,7 @@
 using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
-using RevitDBExplorer.Domain;
+using RevitDBExplorer.Domain.Selectors;
 
 namespace RevitDBExplorer
 {
@@ -11,7 +11,7 @@ namespace RevitDBExplorer
     {
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
-            var source = SelectorExecutor.Snoop(Selector.CurrentSelection);
+            var source = SelectorFactory.Snoop(Selector.CurrentSelection);
             source.ReadFromTheSource(commandData.Application);
             var window = new MainWindow(source);
             new WindowInteropHelper(window).Owner = commandData.Application.MainWindowHandle;

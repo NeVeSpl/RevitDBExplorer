@@ -10,6 +10,7 @@ using System.Windows.Threading;
 using RevitDBExplorer.Domain;
 using RevitDBExplorer.Domain.DataModel;
 using RevitDBExplorer.Domain.RevitDatabaseQuery;
+using RevitDBExplorer.Domain.Selectors;
 using RevitDBExplorer.Properties;
 using RevitDBExplorer.UIComponents.List;
 using RevitDBExplorer.UIComponents.QueryVisualization;
@@ -159,7 +160,7 @@ namespace RevitDBExplorer
             
             var sourceOfObjects = await ExternalExecutor.ExecuteInRevitContextAsync(x =>
             {
-                var source = SelectorExecutor.Snoop(selector);
+                var source = SelectorFactory.Snoop(selector);
                 source.ReadFromTheSource(x);
                 return source;
             });
