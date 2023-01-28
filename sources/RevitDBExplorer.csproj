@@ -202,7 +202,7 @@
     <Compile Include="Domain\DataModel\MemberAccessors\MemberAccessorByRefCompiled.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\SpatialFieldManager\SpatialFieldManager_GetResultSchema.cs" />
     <Compile Include="Domain\DataModel\MemberTemplates\View_Templates.cs" />
-    <Compile Include="Domain\RevitDatabaseQuery\Parser\Commands\ElementTypeFactory.cs" />
+    <Compile Include="Domain\RevitDatabaseQuery\Parser\Commands\ElementTypeCmdFactory.cs" />
     <Compile Include="Domain\RevitDatabaseQuery\Parser\ICommand.cs" />
     <Compile Include="Domain\RevitDatabaseQuery\Parser\CommandParser.cs" />
     <Compile Include="Domain\RevitDatabaseQuery\Parser\Commands\ElementIdCmdFactory.cs" />
