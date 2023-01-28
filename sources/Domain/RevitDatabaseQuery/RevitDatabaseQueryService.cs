@@ -5,6 +5,7 @@ using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using RevitDBExplorer.Domain.DataModel;
 using RevitDBExplorer.Domain.RevitDatabaseQuery.Filters;
+using RevitDBExplorer.Domain.RevitDatabaseQuery.Parser;
 using VisibleInViewFilter = RevitDBExplorer.Domain.RevitDatabaseQuery.Filters.VisibleInViewFilter;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
@@ -77,6 +78,22 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
                 var snoopableObjects = collector.ToElements().Select(x => new SnoopableObject(document, x));
                 return snoopableObjects;
             }
+        }
+
+
+
+
+
+
+
+
+        public static Result ParseAndBuild(Document document, string query)
+        {
+            var commandsText = RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.QueryParser.Parse(query);
+            var commands = commandsText.SelectMany(x => RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.CommandParser.Parse(x)).ToArray();
+
+
+            return null;
         }
     }
 }

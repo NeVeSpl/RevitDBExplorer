@@ -13,7 +13,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SetupBuilder", "setup\SetupBuilder.csproj", "{CC0F60CB-981C-48C1-B709-31C28D9B9AB3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RevitDBExplorer.Tests", "RevitDBExplorer.Tests\RevitDBExplorer.Tests.csproj", "{DC6DE964-9472-47AF-B744-6D4E39EA2209}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RevitDBExplorer.Tests", "tests\RevitDBExplorer.Tests.csproj", "{DC6DE964-9472-47AF-B744-6D4E39EA2209}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

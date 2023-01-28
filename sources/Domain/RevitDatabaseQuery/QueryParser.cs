@@ -5,6 +5,7 @@ using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.Structure;
 using RevitDBExplorer.Domain.RevitDatabaseQuery.Filters;
 using RevitDBExplorer.Domain.RevitDatabaseQuery.Internals;
+using RevitDBExplorer.Domain.RevitDatabaseQuery.Parser;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
@@ -84,7 +85,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
     }
 
 
-    internal class Command
+    internal class Command : ICommand
     {      
         public CmdType Type { get; init; } = CmdType.WhoKnows;
         public string Text { get; init; } = "";       

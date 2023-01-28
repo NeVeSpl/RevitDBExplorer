@@ -9,6 +9,7 @@ using RevitDBExplorer.Domain.RevitDatabaseQuery;
 
 namespace RevitDBExplorer
 {
+    
     public class Application : IExternalApplication
     {
         public static IntPtr RevitWindowHandle;
