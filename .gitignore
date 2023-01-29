@@ -8,3 +8,5 @@ setup/bin/
 sources/RevitDBExplorer.csproj.user
 RevitDBExplorer.Tests/bin/
 RevitDBExplorer.Tests/obj/
+tests/bin/
+tests/obj/

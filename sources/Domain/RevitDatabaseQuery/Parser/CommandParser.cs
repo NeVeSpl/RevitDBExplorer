@@ -31,7 +31,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser
             {
                 foreach (var classifier in factory.GetClassifiers())
                 {
-                    string key = classifier.Normalize();
+                    string key = classifier.NormalizeForLookup();
                     if (classifierToFactoryMap.ContainsKey(key))
                     {
                         throw new Exception("Should it not be possible to be here, but here we are...");
@@ -46,7 +46,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser
             {
                 foreach (var keyword in factory.GetKeywords())
                 {
-                    string key = keyword.Normalize();
+                    string key = keyword.NormalizeForLookup();
                     if (keywordToFactoryMap.ContainsKey(key))
                     {
                         throw new Exception("Should it not be possible to be here, but here we are...");
@@ -80,13 +80,13 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser
 
             if (splittedByClassifier.Length == 1)
             {
-                var keyword = cmdText.Normalize();
+                var keyword = cmdText.NormalizeForLookup();
                 keywordToFactoryMap.TryGetValue(keyword, out selectedFactory);
                 argument = splittedByClassifier[0];                
             }
             if (splittedByClassifier.Length == 2)
             {
-                var classifier = splittedByClassifier[0].Normalize();
+                var classifier = splittedByClassifier[0].NormalizeForLookup();
                 classifierToFactoryMap.TryGetValue(classifier, out selectedFactory);
                 argument = splittedByClassifier[1];
             }
@@ -159,7 +159,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser
             return null;
         }
 
-        private static string Normalize(this String text)
+        private static string NormalizeForLookup(this String text)
         {
             return text.ToLower().RemoveWhitespace();
         }

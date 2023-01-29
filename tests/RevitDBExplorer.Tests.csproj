@@ -56,17 +56,17 @@
     </Reference>
     <Reference Include="netstandard" />
     <Reference Include="RevitAddInUtility, Version=23.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\RevitTestLibrary.0.0.2\lib\net48\RevitAddInUtility.dll</HintPath>
+      <HintPath>..\packages\RevitTestLibrary.0.0.4\lib\net48\RevitAddInUtility.dll</HintPath>
     </Reference>
     <Reference Include="RevitAPIUI">
       <HintPath>..\binaries\revit\2023\RevitAPIUI.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="RevitTestLibrary, Version=0.0.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\RevitTestLibrary.0.0.2\lib\net48\RevitTestLibrary.dll</HintPath>
+    <Reference Include="RevitTestLibrary, Version=0.0.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\RevitTestLibrary.0.0.4\lib\net48\RevitTestLibrary.dll</HintPath>
     </Reference>
-    <Reference Include="RevitTestLibrary.MSTest, Version=0.0.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\RevitTestLibrary.MSTest.0.0.3\lib\net48\RevitTestLibrary.MSTest.dll</HintPath>
+    <Reference Include="RevitTestLibrary.MSTest, Version=0.0.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\RevitTestLibrary.MSTest.0.0.4\lib\net48\RevitTestLibrary.MSTest.dll</HintPath>
     </Reference>
     <Reference Include="ServiceWire, Version=5.5.3.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ServiceWire.5.5.3\lib\netstandard2.0\ServiceWire.dll</HintPath>

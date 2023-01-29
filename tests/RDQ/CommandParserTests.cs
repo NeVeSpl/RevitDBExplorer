@@ -10,13 +10,22 @@ namespace RevitDBExplorer.Tests.RDQ
     public class CommandParserTests
     {
         [RevitTestMethod]
-        //[DataRow("123456")]
-        // [DataRow("i:123456")]
-        public void CanParseElementIdCommand(UIApplication uia)
+        [DataRow("123456")]
+        [DataRow("i:123456")]
+        public void CanParseElementIdCommand(UIApplication uia, string cmd)
         {
-            var result = CommandParser.Parse("123456").ToList();
-            Assert.AreEqual(Domain.RevitDatabaseQuery.CmdType.ElementId, result[0].Type);
-           
+            var result = CommandParser.Parse(cmd).ToList();
+            Assert.AreEqual(Domain.RevitDatabaseQuery.CmdType.ElementId, result[0].Type);           
+        }
+
+        [RevitTestMethod]
+        [DataRow("element type")]
+        [DataRow("elementtype")]
+        [DataRow("type")]
+        public void CanParseElementTypeCommand(UIApplication uia, string cmd)
+        {
+            var result = CommandParser.Parse(cmd).ToList();
+            Assert.AreEqual(Domain.RevitDatabaseQuery.CmdType.ElementType, result[0].Type);
         }
     }
 }
