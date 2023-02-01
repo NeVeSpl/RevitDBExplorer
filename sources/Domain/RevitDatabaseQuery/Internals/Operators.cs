@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Autodesk.Revit.DB;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
@@ -38,17 +37,14 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Internals
         {            
             return GetOperator(text) != None;
         }
-        internal static Operator GetOperator(string text)
+        private static Operator GetOperator(string text)
         {
             foreach (var op in operators)
-            {
-                if (op.Type != OperatorType.None)
+            {                
+                if (text.IndexOf(op.Symbol, System.StringComparison.Ordinal) >= 0)
                 {
-                    if (text.IndexOf(op.Symbol, System.StringComparison.Ordinal) >= 0)
-                    {
-                        return op;
-                    }
-                }
+                    return op;
+                }                
             }
             return None;
         }
@@ -74,6 +70,18 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Internals
             };
 
             return op;
+        }
+        public static string GetLeftSideOfOperator(string text)
+        {
+            foreach (var op in operators)
+            {
+                var index = text.IndexOf(op.Symbol, System.StringComparison.Ordinal);
+                if (index >= 0)
+                {
+                    return text.Substring(0, index);
+                }
+            }
+            return text;
         }
     }
 

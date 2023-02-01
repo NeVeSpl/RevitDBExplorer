@@ -295,7 +295,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
 
         private static string Clean(this string text)
         {
-            return text.RemoveWhitespace().ToLower();
+            return text?.RemoveWhitespace()?.ToLower();
         }
 
         private class Bucket

@@ -58,5 +58,14 @@ namespace System
                 return s;
             }
         }
+
+        public static string RemovePrefix(this string input, string prefix)
+        {
+            if (input.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
+            {
+                return input.Remove(0, prefix.Length + 1);
+            }
+            return input;
+        }
     }
 }

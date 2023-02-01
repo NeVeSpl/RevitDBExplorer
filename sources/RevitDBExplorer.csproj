@@ -202,7 +202,17 @@
     <Compile Include="Domain\DataModel\MemberAccessors\MemberAccessorByRefCompiled.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\SpatialFieldManager\SpatialFieldManager_GetResultSchema.cs" />
     <Compile Include="Domain\DataModel\MemberTemplates\View_Templates.cs" />
+    <Compile Include="Domain\RevitDatabaseQuery\Parser\Commands\CategoryCmdFactory.cs" />
+    <Compile Include="Domain\RevitDatabaseQuery\Parser\Commands\ClassCmdFactory.cs" />
+    <Compile Include="Domain\RevitDatabaseQuery\Parser\Commands\NameCmdFactory.cs" />
+    <Compile Include="Domain\RevitDatabaseQuery\Parser\Commands\VisibleInViewCmdFactory.cs" />
+    <Compile Include="Domain\RevitDatabaseQuery\Parser\Commands\NotElementTypeCmdFactory.cs" />
     <Compile Include="Domain\RevitDatabaseQuery\Parser\Commands\ElementTypeCmdFactory.cs" />
+    <Compile Include="Domain\RevitDatabaseQuery\Parser\Commands\LevelCmdFactory.cs" />
+    <Compile Include="Domain\RevitDatabaseQuery\Parser\Commands\ParameterCmdFactory.cs" />
+    <Compile Include="Domain\RevitDatabaseQuery\Parser\Commands\StructuralTypeCmdFactory.cs" />
+    <Compile Include="Domain\RevitDatabaseQuery\Parser\Commands\RuleBasedFilterCmdFactory.cs" />
+    <Compile Include="Domain\RevitDatabaseQuery\Parser\Commands\RoomCmdFactory.cs" />
     <Compile Include="Domain\RevitDatabaseQuery\Parser\ICommand.cs" />
     <Compile Include="Domain\RevitDatabaseQuery\Parser\CommandParser.cs" />
     <Compile Include="Domain\RevitDatabaseQuery\Parser\Commands\ElementIdCmdFactory.cs" />

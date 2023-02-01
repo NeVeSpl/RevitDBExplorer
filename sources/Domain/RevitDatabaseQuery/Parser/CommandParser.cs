@@ -10,14 +10,24 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser
 {
     internal static class CommandParser
     {
-        public static readonly List<ICommandFactory> factories = new List<ICommandFactory>()
+        private static readonly List<ICommandFactory> factories = new List<ICommandFactory>()
         {
+            new CategoryCmdFactory(),
+            new ClassCmdFactory(),
             new ElementIdCmdFactory(),
-            new ElementTypeCmdFactory(),
+            new ElementTypeCmdFactory(), 
+            new LevelCmdFactory(),
+            new NameCmdFactory(),
+            new NotElementTypeCmdFactory(),
+            new ParameterCmdFactory(),
+            new RoomCmdFactory(),
+            new RuleBasedFilterCmdFactory(),
+            new StructuralTypeCmdFactory(),
+            new VisibleInViewCmdFactory(),
         };
-        public static readonly Dictionary<string, ICommandFactory> classifierToFactoryMap = new Dictionary<string, ICommandFactory>();
-        public static readonly Dictionary<string, ICommandFactory> keywordToFactoryMap = new Dictionary<string, ICommandFactory>();
-        public static readonly Dictionary<Type, ICommandFactory> matchTypeToFactoryMap = new Dictionary<Type, ICommandFactory>();
+        private static readonly Dictionary<string, ICommandFactory> classifierToFactoryMap = new Dictionary<string, ICommandFactory>();
+        private static readonly Dictionary<string, ICommandFactory> keywordToFactoryMap = new Dictionary<string, ICommandFactory>();
+        private static readonly Dictionary<Type, ICommandFactory> matchTypeToFactoryMap = new Dictionary<Type, ICommandFactory>();
 
         static CommandParser()
         {
@@ -110,13 +120,14 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser
                 yield break;
             }
 
-            var matchedArguments = FuzzySearchEngine.Lookup(argument, FuzzySearchEngine.LookFor.ElementId |
-                                                                      FuzzySearchEngine.LookFor.Category |
+            if (string.IsNullOrEmpty(argument)) yield break;
+
+            var matchedArguments = FuzzySearchEngine.Lookup(argument, FuzzySearchEngine.LookFor.Category |
                                                                       FuzzySearchEngine.LookFor.Class |
                                                                       FuzzySearchEngine.LookFor.Level |
                                                                       FuzzySearchEngine.LookFor.Room |
                                                                       FuzzySearchEngine.LookFor.RuleBasedFilter
-                                                           ).ToList();
+                                                           ).ToArray();
 
             if (!matchedArguments.IsEmpty())
             {
@@ -128,19 +139,16 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser
                     yield return factory.Create(cmdText, group.ToArray());
                 }
                 yield break;
-            }                
+            }
 
-            
-
-             yield break;
+            var parsedArgs = NameCmdFactory.Instance.ParseArgument(argument);
+            yield return NameCmdFactory.Instance.Create(cmdText, parsedArgs.ToArray());                         
         }
 
         private static Type MapCmdToType(RevitDBExplorer.Domain.RevitDatabaseQuery.CmdType cmdType)
         {
             switch (cmdType)
-            {              
-                case CmdType.ElementId:
-                    return typeof(ElementIdMatch);               
+            {   
                 case CmdType.Category:
                     return typeof(CategoryMatch);
                 case CmdType.Class:
