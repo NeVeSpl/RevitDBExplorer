@@ -31,12 +31,22 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
 
         public override ICommand Create(string cmdText, IList<ILookupResult> arguments)
         {
-            return new Command(CmdType.StructuralType, cmdText, arguments, null);
+            return new Command(CmdType.StructuralType, cmdText, arguments, null) { IsBasedOnQuickFilter = true };
         }
         public override IEnumerable<ILookupResult> ParseArgument(string argument)
         {
             var arg = argument.RemovePrefix(nameof(StructuralType));
             return FuzzySearchEngine.Lookup(arg, FuzzySearchEngine.LookFor.StructuralType);
+        }
+    }
+
+
+    internal class StructuralTypeMatch : LookupResult<StructuralType>
+    {
+        public StructuralTypeMatch(StructuralType value, double levensteinScore) : base(value, levensteinScore)
+        {
+            CmdType = CmdType.StructuralType;
+            Name = $"StructuralType.{value}";
         }
     }
 }

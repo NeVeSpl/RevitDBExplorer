@@ -3,7 +3,7 @@ using Autodesk.Revit.DB;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
-namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Filters
+namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
 {
     internal class ParameterMatch : LookupResult<ElementId>
     {

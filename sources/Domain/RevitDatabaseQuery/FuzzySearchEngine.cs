@@ -5,7 +5,8 @@ using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.Architecture;
 using Autodesk.Revit.DB.Mechanical;
 using Autodesk.Revit.DB.Structure;
-using RevitDBExplorer.Domain.RevitDatabaseQuery.Filters;
+using RevitDBExplorer.Domain.RevitDatabaseQuery.Parser;
+using RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands;
 using SimMetrics.Net;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md

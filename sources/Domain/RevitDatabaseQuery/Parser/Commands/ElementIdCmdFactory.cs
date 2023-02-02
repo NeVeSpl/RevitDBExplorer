@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using RevitDBExplorer.Domain.RevitDatabaseQuery.Filters;
+using Autodesk.Revit.DB;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
@@ -29,11 +29,22 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
 
         public override ICommand Create(string cmdText, IList<ILookupResult> arguments)
         {
-            return new Command(CmdType.ElementId, cmdText, arguments, null);
+            return new Command(CmdType.ElementId, cmdText, arguments, null) { IsBasedOnQuickFilter = true };
         }
         public override IEnumerable<ILookupResult> ParseArgument(string argument)
         {
             return FuzzySearchEngine.Lookup(argument, FuzzySearchEngine.LookFor.ElementId);
+        }
+    }
+
+
+    internal class ElementIdMatch : LookupResult<ElementId>
+    {
+        public ElementIdMatch(ElementId value, double levensteinScore) : base(value, levensteinScore)
+        {
+            CmdType = CmdType.ElementId;
+            Name = $"new ElementId({value})";
+            Label = value.Value().ToString();
         }
     }
 }

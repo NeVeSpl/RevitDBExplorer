@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Autodesk.Revit.DB;
 using RevitDBExplorer.Domain.RevitDatabaseQuery.Filters;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
@@ -30,6 +31,17 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
         public override IEnumerable<ILookupResult> ParseArgument(string argument)
         {
             return FuzzySearchEngine.Lookup(argument, FuzzySearchEngine.LookFor.Level);
+        }
+    }
+
+
+    internal class LevelMatch : LookupResult<ElementId>
+    {
+        public LevelMatch(ElementId levelId, double levensteinScore, string name) : base(levelId, levensteinScore)
+        {
+            CmdType = CmdType.Level;
+            Name = $"new ElementId({levelId})";
+            Label = name;
         }
     }
 }

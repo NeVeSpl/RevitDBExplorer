@@ -3,7 +3,7 @@ using Autodesk.Revit.DB;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
-namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Internals
+namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser
 {
     internal enum OperatorType { None, Equals, Greater, GreaterOrEqual, Less, LessOrEqual, HasNoValue, HasValue, NotEquals, Exists }
 

@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Autodesk.Revit.DB;
-using RevitDBExplorer.Domain.RevitDatabaseQuery.Filters;
-using RevitDBExplorer.Domain.RevitDatabaseQuery.Internals;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 

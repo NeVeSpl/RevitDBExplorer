@@ -134,7 +134,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser
                 var groupedByType = matchedArguments.GroupBy(x => x.CmdType);
                 foreach (var group in groupedByType)
                 {
-                    var type = MapCmdToType(group.Key);
+                    var type = group.First().GetType();
                     var factory = matchTypeToFactoryMap[type];
                     yield return factory.Create(cmdText, group.ToArray());
                 }
@@ -143,28 +143,6 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser
 
             var parsedArgs = NameCmdFactory.Instance.ParseArgument(argument);
             yield return NameCmdFactory.Instance.Create(cmdText, parsedArgs.ToArray());                         
-        }
-
-        private static Type MapCmdToType(RevitDBExplorer.Domain.RevitDatabaseQuery.CmdType cmdType)
-        {
-            switch (cmdType)
-            {   
-                case CmdType.Category:
-                    return typeof(CategoryMatch);
-                case CmdType.Class:
-                    return typeof(ClassMatch);              
-                case CmdType.Parameter:
-                    return typeof(ParameterMatch);
-                case CmdType.StructuralType:
-                    return typeof(StructuralTypeMatch);                  
-                case CmdType.Level:
-                    return typeof(LevelMatch);
-                case CmdType.Room:
-                    return typeof(RoomMatch);
-                case CmdType.RuleBasedFilter:
-                    return typeof(RuleMatch);              
-            }
-            return null;
         }
 
         private static string NormalizeForLookup(this String text)

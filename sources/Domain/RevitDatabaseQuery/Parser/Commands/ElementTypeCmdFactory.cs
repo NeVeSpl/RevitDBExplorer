@@ -27,7 +27,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
 
         public ICommand Create(string cmdText, IList<ILookupResult> arguments)
         {
-            return new Command(CmdType.ElementType, cmdText, null, null);
+            return new Command(CmdType.ElementType, cmdText, null, null) { IsBasedOnQuickFilter = true };
         }
         public IEnumerable<ILookupResult> ParseArgument(string argument)
         {

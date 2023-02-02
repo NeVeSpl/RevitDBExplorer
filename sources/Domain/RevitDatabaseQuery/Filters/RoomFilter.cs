@@ -2,6 +2,8 @@
 using System.Linq;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.Architecture;
+using RevitDBExplorer.Domain.RevitDatabaseQuery.Parser;
+using RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
@@ -28,7 +30,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Filters
         }
 
 
-        public static IEnumerable<QueryItem> Create(List<Command> commands, Document document)
+        public static IEnumerable<QueryItem> Create(IList<ICommand> commands, Document document)
         {
             var rooms = commands.Where(x => x.Type == CmdType.Room).SelectMany(x => x.MatchedArguments).OfType<RoomMatch>().ToList();
             if (rooms.Count == 1)
@@ -40,5 +42,5 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Filters
                 yield return new Group(rooms.Select(x => new RoomFilter(x, document.GetElement(x.Value) as Room)).Where(x => x.Filter != null).ToList());
             }
         }
-    }
+    }    
 }

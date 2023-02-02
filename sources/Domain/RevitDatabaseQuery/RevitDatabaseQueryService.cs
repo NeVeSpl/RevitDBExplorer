@@ -6,6 +6,7 @@ using Autodesk.Revit.UI;
 using RevitDBExplorer.Domain.DataModel;
 using RevitDBExplorer.Domain.RevitDatabaseQuery.Filters;
 using RevitDBExplorer.Domain.RevitDatabaseQuery.Parser;
+using RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands;
 using VisibleInViewFilter = RevitDBExplorer.Domain.RevitDatabaseQuery.Filters.VisibleInViewFilter;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
@@ -22,7 +23,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
 
         public static Result ParseAndExecute(Document document, string query)
         {
-            if (document is null) return new Result(null, new List<Command>(), new SourceOfObjects());  
+            if (document is null) return new Result(null, new List<ICommand>(), new SourceOfObjects());  
 
 
             FuzzySearchEngine.LoadDocumentSpecificData(document);
@@ -54,46 +55,34 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
             }
             collectorSyntax += Environment.NewLine + "    .ToElements();";
 
-            return new Result(collectorSyntax, commands, new SourceOfObjects(new RemoteExecutor(collector, document)));
+            bool atLeastOneFilter = pipe.Any();
+
+            return new Result(collectorSyntax, commands, new SourceOfObjects(new RemoteExecutor(collector, document, atLeastOneFilter)));
         }
 
-        public record Result(string GeneratedCSharpSyntax, IList<Command> Commands, SourceOfObjects SourceOfObjects);
+        public record Result(string GeneratedCSharpSyntax, IList<ICommand> Commands, SourceOfObjects SourceOfObjects);
 
         public class RemoteExecutor : IAmSourceOfEverything
         {
             private readonly FilteredElementCollector collector;
             private readonly Document document;
+            private readonly bool atLeastOneFilter;
 
-
-            public RemoteExecutor(FilteredElementCollector collector, Document document)
+            public RemoteExecutor(FilteredElementCollector collector, Document document, bool atLeastOneFilter)
             {              
                 this.collector = collector;
                 this.document = document;
+                this.atLeastOneFilter = atLeastOneFilter;
             }
 
 
             public IEnumerable<SnoopableObject> Snoop(UIApplication app)
             {
                 if (document == null) return null;
+                if (atLeastOneFilter == false) return null;
                 var snoopableObjects = collector.ToElements().Select(x => new SnoopableObject(document, x));
                 return snoopableObjects;
             }
-        }
-
-
-
-
-
-
-
-
-        public static Result ParseAndBuild(Document document, string query)
-        {
-            var commandsText = RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.QueryParser.Parse(query);
-            var commands = commandsText.SelectMany(x => RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.CommandParser.Parse(x)).ToArray();
-
-
-            return null;
         }
     }
 }

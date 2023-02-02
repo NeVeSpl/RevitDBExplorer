@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Autodesk.Revit.DB;
-using RevitDBExplorer.Domain.RevitDatabaseQuery.Internals;
+using RevitDBExplorer.Domain.RevitDatabaseQuery.Parser;
+using RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
@@ -66,7 +67,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Filters
         }
 
 
-        public static IEnumerable<QueryItem> Create(List<Command> commands)
+        public static IEnumerable<QueryItem> Create(IList<ICommand> commands)
         {
             var parameterCmds = commands.Where(x => x.Type == CmdType.Parameter).ToList();
             var filters = parameterCmds.Select(x => Create(x)).Where(x => x != null).ToList();
@@ -80,7 +81,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Filters
             }
         }
 
-        private static QueryItem Create(Command command)
+        private static QueryItem Create(ICommand command)
         {
             var arguments = command.MatchedArguments.OfType<ParameterMatch>().ToList();
             var rules = arguments.SelectMany(x => CreateFilterRule(x, command.Operator)).ToList();

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Autodesk.Revit.DB;
+using RevitDBExplorer.Domain.RevitDatabaseQuery.Parser;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
@@ -34,7 +35,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Filters
         }
 
 
-        public static IEnumerable<Filter> Create(List<Command> commands)
+        public static IEnumerable<Filter> Create(IList<ICommand> commands)
         {
             var isElementTypePresent = commands.Any(x => x.Type == CmdType.ElementType);
             var isNotElementTypePresent = commands.Any(x => x.Type == CmdType.NotElementType);

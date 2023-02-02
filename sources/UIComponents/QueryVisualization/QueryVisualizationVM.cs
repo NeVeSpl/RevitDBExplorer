@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using RevitDBExplorer.WPF;
-using RDQCommand = RevitDBExplorer.Domain.RevitDatabaseQuery.Command;
+using RDQCommand = RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.ICommand;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 

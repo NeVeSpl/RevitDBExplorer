@@ -7,8 +7,8 @@ using Autodesk.Revit.DB.Structure;
 using Autodesk.Revit.UI;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RevitDBExplorer.Domain.RevitDatabaseQuery;
-using RevitDBExplorer.Domain.RevitDatabaseQuery.Filters;
 using RevitDBExplorer.Domain.RevitDatabaseQuery.Parser;
+using RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands;
 using RevitTestLibrary.MSTest;
 
 namespace RevitDBExplorer.Tests.RDQ
@@ -148,7 +148,7 @@ namespace RevitDBExplorer.Tests.RDQ
             Assert.IsNotNull(match);
             //Assert.AreEqual(???, match.Value);
 
-            document.Close();
+            document.Close(false);
         }
 
         [RevitTestMethod]
@@ -167,7 +167,7 @@ namespace RevitDBExplorer.Tests.RDQ
             Assert.IsNotNull(match);
             //Assert.AreEqual(???, match.Value);
 
-            document.Close();
+            document.Close(false);
         }
 
         [RevitTestMethod]

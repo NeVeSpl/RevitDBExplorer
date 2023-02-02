@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Autodesk.Revit.DB;
 using RevitDBExplorer.Domain.RevitDatabaseQuery;
-using RevitDBExplorer.Domain.RevitDatabaseQuery.Filters;
+using RevitDBExplorer.Domain.RevitDatabaseQuery.Parser;
+using RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands;
 using RevitDBExplorer.WPF;
-using RDQCommand = RevitDBExplorer.Domain.RevitDatabaseQuery.Command;
+using RDQCommand = RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.ICommand;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 

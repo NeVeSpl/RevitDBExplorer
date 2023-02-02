@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Autodesk.Revit.DB;
+using RevitDBExplorer.Domain.RevitDatabaseQuery.Parser;
+using RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
@@ -20,7 +22,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Filters
         }
 
 
-        public static IEnumerable<Filter> Create(List<Command> commands)
+        public static IEnumerable<Filter> Create(IList<ICommand> commands)
         {
             var ids = commands.Where(x => x.Type == CmdType.ElementId).SelectMany(x => x.MatchedArguments).OfType<ElementIdMatch>().ToList();
             if (ids.Any())
@@ -28,5 +30,5 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Filters
                 yield return new ElementIdFilter(ids);
             }
         }
-    }
+    }    
 }

@@ -1,75 +1,77 @@
 ﻿using System.Linq;
+using Autodesk.Revit.UI;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using RevitDBExplorer.Domain.RevitDatabaseQuery.Parser;
+using RevitDBExplorer.Domain.RevitDatabaseQuery;
+using RevitTestLibrary.MSTest;
 
 namespace RevitDBExplorer.Tests
 {
     [TestClass]
     public class QueryParserTests
     {
-        [DataTestMethod]
+        [RevitTestMethod]
         [DataRow("active")]
         [DataRow("active ,")]
         [DataRow("active; ")]
         [DataRow(" , active , ")]
-        public void CanParseSingleCommand(string query)
+        public void CanParseSingleCommand(UIApplication uia, string query)
         {           
             var result = QueryParser.Parse(query).ToList();
-            Assert.AreEqual("active", result[0]);
+            Assert.AreEqual("active", result[0].Text);
             Assert.AreEqual(1, result.Count());
         }
 
-        [DataTestMethod]
+        [RevitTestMethod]
         [DataRow("active, mark = 1")]
         [DataRow("active, mark = 1 ,")] 
         [DataRow(",active, mark = 1 ,")]
-        public void CanParseTwoCommands(string query)
+        public void CanParseTwoCommands(UIApplication uia, string query)
         {
             var result = QueryParser.Parse(query).ToList();
-            Assert.AreEqual("active", result[0]);
-            Assert.AreEqual("mark = 1", result[1]);
+            Assert.AreEqual("active", result[0].Text);
+            Assert.AreEqual("mark = 1", result[1].Text);
             Assert.AreEqual(2, result.Count());
         }
 
-        [DataTestMethod]
+        [RevitTestMethod]
         [DataRow("mark = 1,00,view")]
         [DataRow(",mark = 1,00,view,")]   
-        public void CanParseDecimalWithComma(string query)
+        public void CanParseDecimalWithComma(UIApplication uia, string query)
         {
             var result = QueryParser.Parse(query).ToList();
-            Assert.AreEqual("mark = 1,00", result[0]);
-            Assert.AreEqual("view", result[1]);
+            Assert.AreEqual("mark = 1,00", result[0].Text);
+            Assert.AreEqual("view", result[1].Text);
             Assert.AreEqual(2, result.Count());
         }
 
-        [DataTestMethod]
+        [RevitTestMethod]
         [DataRow("mark = 1,00,12345")]
         [DataRow(",mark = 1,00,12345,")]
-        public void CanParseDecimalWithCommaFollowedByInteger(string query)
+        public void CanParseDecimalWithCommaFollowedByInteger(UIApplication uia, string query)
         {
             var result = QueryParser.Parse(query).ToList();
-            Assert.AreEqual("mark = 1,00", result[0]);
-            Assert.AreEqual("12345", result[1]);
+            Assert.AreEqual("mark = 1,00", result[0].Text);
+            Assert.AreEqual("12345", result[1].Text);
             Assert.AreEqual(2, result.Count());
         }
 
-        [DataTestMethod]
+        [RevitTestMethod]
         [DataRow(",mark = 1,00m,view,")]
-        public void CanParseDecimalWithCommaAndUnit(string query)
+        public void CanParseDecimalWithCommaAndUnit(UIApplication uia, string query)
         {
             var result = QueryParser.Parse(query).ToList();
-            Assert.AreEqual("mark = 1,00m", result[0]);
-            Assert.AreEqual("view", result[1]);
+            Assert.AreEqual("mark = 1,00m", result[0].Text);
+            Assert.AreEqual("view", result[1].Text);
             Assert.AreEqual(2, result.Count());
         }
 
-        [DataTestMethod]
+        [RevitTestMethod]
         [DataRow(",mark = 1,00m,12234,")]
-        public void CanParseDecimalWithCommaAndUnitFollowedByInteger(string query)
+        public void CanParseDecimalWithCommaAndUnitFollowedByInteger(UIApplication uia, string query)
         {
             var result = QueryParser.Parse(query).ToList();
-            Assert.AreEqual("mark = 1,00m", result[0]);
-            Assert.AreEqual("12234", result[1]);
+            Assert.AreEqual("mark = 1,00m", result[0].Text);
+            Assert.AreEqual("12234", result[1].Text);
             Assert.AreEqual(2, result.Count());
         }
     }
