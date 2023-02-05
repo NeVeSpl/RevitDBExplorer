@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using RevitDBExplorer.WPF.Controls;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
@@ -7,6 +8,8 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
 {
     internal class ElementTypeCmdFactory : ICommandFactory
     {
+        public IAutocompleteItem GetAutocompleteItem() => new AutocompleteItem("type - select element types", "type");
+
         public Type MatchType => null;
 
         public IEnumerable<string> GetClassifiers()
@@ -15,10 +18,10 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
         }
         public IEnumerable<string> GetKeywords()
         {
-            yield return "element type";
-            yield return "not element";
             yield return "type";
             yield return "types";
+            yield return "element type";
+            yield return "not element";           
         }
         public bool CanRecognizeArgument(string argument)
         {

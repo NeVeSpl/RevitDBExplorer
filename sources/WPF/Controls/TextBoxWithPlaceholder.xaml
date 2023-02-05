@@ -7,11 +7,17 @@
              xmlns:local="clr-namespace:RevitDBExplorer.WPF.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid x:Name="cMainGrid" Background="{DynamicResource TextBox.Background}">
+    <Grid x:Name="cMainGrid" Background="{DynamicResource TextBox.Background}" PreviewLostKeyboardFocus="MainGrid_PreviewLostKeyboardFocus">
         <Grid.Resources>
             <converters:StringIsNotNullOrEmptyToBoolConverter x:Key="StringIsNotNullOrEmptyToBoolConverter"/>
         </Grid.Resources>
-        <TextBox Text="{Binding Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Padding="1 2" KeyDown="TextBox_KeyDown" ContextMenu="{Binding ContextMenu, RelativeSource={RelativeSource Mode=FindAncestor,  AncestorType={x:Type UserControl}}}">
+        <TextBox x:Name="cTextBox"
+                 Text="{Binding Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                 TextChanged="TextBox_TextChanged" Padding="1 2"
+                 KeyDown="TextBox_KeyDown"
+                 PreviewKeyDown="TextBox_PreviewKeyDown" 
+                 PreviewMouseLeftButtonDown ="TextBox_MouseDown"
+                 ContextMenu="{Binding ContextMenu, RelativeSource={RelativeSource Mode=FindAncestor,  AncestorType={x:Type UserControl}}}">
             <TextBox.Background>
                 <VisualBrush AlignmentX="Left" AlignmentY="Center" Stretch="None" >
                  
@@ -26,6 +32,9 @@
                                         <DataTrigger Binding="{Binding IsKeyboardFocused, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}" Value="True">
                                             <Setter Property="Visibility" Value="Hidden" />
                                         </DataTrigger>
+                                        <DataTrigger Binding="{Binding IsOpen, ElementName=cPopup}" Value="True">
+                                            <Setter Property="Visibility" Value="Hidden" />
+                                        </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
                             </Label.Style>
@@ -34,5 +43,28 @@
                 </VisualBrush>
             </TextBox.Background>  
         </TextBox>
+        <Popup x:Name="cPopup"
+               AllowsTransparency="false" 
+               Placement="Custom"
+               IsOpen="False"              
+               PopupAnimation="{DynamicResource {x:Static SystemParameters.ComboBoxPopupAnimationKey}}"
+               VerticalOffset="{Binding Path=Top, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"
+               HorizontalOffset="{Binding Path=Left, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" 
+               CustomPopupPlacementCallback="CustomPopupPlacementCallback"
+               >
+            <Border Background="Red" >
+                <ListBox x:Name="cListBox" 
+                         SnapsToDevicePixels="True"                                                     
+                         VerticalContentAlignment="Stretch"
+                         HorizontalContentAlignment="Stretch"                                                    
+                         KeyboardNavigation.DirectionalNavigation="Cycle" 
+                         PreviewMouseDown="ListBox_PreviewMouseDown"
+                         KeyDown="ListBox_KeyDown"                       
+                         DisplayMemberPath="Label"
+                         />
+            </Border>
+           
+        </Popup>
+    
     </Grid>
 </UserControl>

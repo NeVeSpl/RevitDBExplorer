@@ -36,6 +36,7 @@ namespace RevitDBExplorer
         private string databaseQueryToolTip = string.Empty;
         private bool isRevitBusy;
         private readonly DispatcherTimer isRevitBusyDispatcher;
+        private readonly IAutocompleteItemProvider databaseQueryAutocompleteItemProvider = new AutocompleteItemProvider();
 
             
         public ListVM List => listVM;
@@ -106,7 +107,13 @@ namespace RevitDBExplorer
                 }
             }
         }
-        
+        public IAutocompleteItemProvider DatabaseQueryAutocompleteItemProvider
+        {
+            get
+            {
+                return databaseQueryAutocompleteItemProvider;
+            }
+        }
 
         public MainWindow()
         {

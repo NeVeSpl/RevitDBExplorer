@@ -134,7 +134,11 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
 
-            <controls:TextBoxWithPlaceholder Text="{Binding DatabaseQuery, Mode=TwoWay, Delay=1000, UpdateSourceTrigger=PropertyChanged}" Placeholder="Query Revit database with RDQ" ToolTip="{Binding DatabaseQueryToolTip}" ToolTipService.ShowDuration="50000">
+            <controls:TextBoxWithPlaceholder Text="{Binding DatabaseQuery, Mode=TwoWay, Delay=1000, UpdateSourceTrigger=PropertyChanged}" 
+                                             AutocompleteItemProvider="{Binding DatabaseQueryAutocompleteItemProvider}"
+                                             Placeholder="Query Revit database with RDQ"
+                                             ToolTip="{Binding DatabaseQueryToolTip}"
+                                             ToolTipService.ShowDuration="50000">
                 <controls:TextBoxWithPlaceholder.ContextMenu>
                     <ContextMenu>                       
                         <MenuItem Command="ApplicationCommands.Copy" />

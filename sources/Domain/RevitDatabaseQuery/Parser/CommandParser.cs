@@ -10,20 +10,20 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser
 {
     internal static class CommandParser
     {
-        private static readonly List<ICommandFactory> factories = new List<ICommandFactory>()
+        public static readonly List<ICommandFactory> Factories = new List<ICommandFactory>()
         {
+            new ElementTypeCmdFactory(),
+            new NotElementTypeCmdFactory(),
+            new VisibleInViewCmdFactory(),
             new CategoryCmdFactory(),
             new ClassCmdFactory(),
-            new ElementIdCmdFactory(),
-            new ElementTypeCmdFactory(), 
+            new ElementIdCmdFactory(),            
             new LevelCmdFactory(),
-            new NameCmdFactory(),
-            new NotElementTypeCmdFactory(),
+            new NameCmdFactory(),          
             new ParameterCmdFactory(),
             new RoomCmdFactory(),
             new RuleBasedFilterCmdFactory(),
-            new StructuralTypeCmdFactory(),
-            new VisibleInViewCmdFactory(),
+            new StructuralTypeCmdFactory(),           
         };
         private static readonly Dictionary<string, ICommandFactory> classifierToFactoryMap = new Dictionary<string, ICommandFactory>();
         private static readonly Dictionary<string, ICommandFactory> keywordToFactoryMap = new Dictionary<string, ICommandFactory>();
@@ -37,7 +37,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser
         }
         private static void RegisterClassifiers()
         {
-            foreach (var factory in factories)
+            foreach (var factory in Factories)
             {
                 foreach (var classifier in factory.GetClassifiers())
                 {
@@ -52,7 +52,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser
         }
         private static void RegisterKeywords()
         {
-            foreach (var factory in factories)
+            foreach (var factory in Factories)
             {
                 foreach (var keyword in factory.GetKeywords())
                 {
@@ -67,7 +67,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser
         }
         private static void RegisterMatchTypes()
         {
-            foreach (var factory in factories)
+            foreach (var factory in Factories)
             {
                 if(factory.MatchType != null)
                 {                    
@@ -83,7 +83,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser
 
         public static IEnumerable<ICommand> Parse(string cmdText)
         {
-            var splittedByClassifier = cmdText.Split(new[] { ':' }, 2, System.StringSplitOptions.RemoveEmptyEntries);
+            var splittedByClassifier = cmdText.Split(new[] { ':' }, 2, System.StringSplitOptions.None);
            
             string argument = null;
             ICommandFactory selectedFactory = null;
@@ -103,7 +103,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser
 
             if (selectedFactory == null)
             {
-                foreach (var factory in factories)
+                foreach (var factory in Factories)
                 {
                     if (factory.CanRecognizeArgument(argument))
                     {

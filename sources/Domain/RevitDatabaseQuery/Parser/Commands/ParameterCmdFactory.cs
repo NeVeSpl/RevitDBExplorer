@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Autodesk.Revit.DB;
+using RevitDBExplorer.WPF.Controls;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
@@ -8,9 +9,11 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
 {
     internal class ParameterCmdFactory : CommandFactory<ParameterMatch>
     {
+        public override IAutocompleteItem GetAutocompleteItem() => new AutocompleteItem("p:[parametr] = [value] - ", "p: ");
+
         public override IEnumerable<string> GetClassifiers()
         {
-            yield break;
+            yield return "p";
         }
         public override IEnumerable<string> GetKeywords()
         {

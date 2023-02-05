@@ -202,6 +202,7 @@
     <Compile Include="Domain\DataModel\MemberAccessors\MemberAccessorByRefCompiled.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\SpatialFieldManager\SpatialFieldManager_GetResultSchema.cs" />
     <Compile Include="Domain\DataModel\MemberTemplates\View_Templates.cs" />
+    <Compile Include="Domain\RevitDatabaseQuery\AutocompleteItemProvider.cs" />
     <Compile Include="Domain\RevitDatabaseQuery\CmdType.cs" />
     <Compile Include="Domain\RevitDatabaseQuery\Parser\Commands\CategoryCmdFactory.cs" />
     <Compile Include="Domain\RevitDatabaseQuery\Parser\Commands\ClassCmdFactory.cs" />
@@ -386,6 +387,7 @@
     <Compile Include="Extensions\System\DoubleExtensions.cs" />
     <Compile Include="Extensions\System\VersionExtensions.cs" />
     <Compile Include="Extensions\System\Windows.Threading\DispatcherTimerExtensions.cs" />
+    <Compile Include="Extensions\System\Windows\DependencyObjectExtensions.cs" />
     <Compile Include="Properties\AppSettings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>

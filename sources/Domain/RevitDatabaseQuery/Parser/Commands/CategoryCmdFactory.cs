@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Autodesk.Revit.DB;
+using RevitDBExplorer.WPF.Controls;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
@@ -8,6 +9,9 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
 {
     internal class CategoryCmdFactory : CommandFactory<CategoryMatch>
     {
+        public override IAutocompleteItem GetAutocompleteItem() => new AutocompleteItem("c:[category] - select elements of given category", "c: ");
+
+
         public override IEnumerable<string> GetClassifiers()
         {
             yield return "c";
@@ -37,6 +41,8 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
             var arg = argument.RemovePrefix(nameof(BuiltInCategory));
             return FuzzySearchEngine.Lookup(arg, FuzzySearchEngine.LookFor.Category);
         }
+
+        
     }
 
 

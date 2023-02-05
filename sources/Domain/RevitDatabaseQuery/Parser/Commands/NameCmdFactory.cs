@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Autodesk.Revit.DB;
+using RevitDBExplorer.WPF.Controls;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
@@ -10,7 +11,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
     internal class NameCmdFactory : ICommandFactory
     {
         public static readonly NameCmdFactory Instance = new NameCmdFactory();
-
+        public IAutocompleteItem GetAutocompleteItem() => new AutocompleteItem("n:[text] - wildcard search for a given text", "n: ");
 
         public Type MatchType => null;
 

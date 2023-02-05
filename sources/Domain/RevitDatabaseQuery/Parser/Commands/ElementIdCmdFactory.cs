@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Autodesk.Revit.DB;
+using RevitDBExplorer.WPF.Controls;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
@@ -7,6 +8,8 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
 {
     internal class ElementIdCmdFactory : CommandFactory<ElementIdMatch>
     {
+        public override IAutocompleteItem GetAutocompleteItem() => new AutocompleteItem("i:[number] - select elements with given id", "i: ");
+
         public override IEnumerable<string> GetClassifiers()
         {
             yield return "i";

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using RevitDBExplorer.WPF.Controls;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
@@ -8,6 +9,8 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser
     internal interface ICommandFactory
     {
         Type MatchType { get; }
+
+        IAutocompleteItem GetAutocompleteItem();
 
         IEnumerable<string> GetClassifiers();
         IEnumerable<string> GetKeywords();
@@ -21,8 +24,10 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser
     {
         public Type MatchType => typeof(T);
 
+        public abstract IAutocompleteItem GetAutocompleteItem();
+
         public abstract bool CanRecognizeArgument(string argument);
-        public abstract ICommand Create(string cmdText, IList<ILookupResult> arguments);
+        public abstract ICommand Create(string cmdText, IList<ILookupResult> arguments);        
         public abstract IEnumerable<string> GetClassifiers();
         public abstract IEnumerable<string> GetKeywords();
         public abstract IEnumerable<ILookupResult> ParseArgument(string argument);
