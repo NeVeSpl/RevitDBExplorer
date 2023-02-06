@@ -8,7 +8,10 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
 {
     internal class RoomCmdFactory : CommandFactory<RoomMatch>
     {
-        public override IAutocompleteItem GetAutocompleteItem() => new AutocompleteItem("r:[room] - select elements from a given room", "r: ");
+        private static readonly AutocompleteItem AutocompleteItem = new AutocompleteItem("r: ", "r:[room]", "select elements from a given room");
+
+        public override IAutocompleteItem GetAutocompleteItem() => AutocompleteItem;
+        
 
         public override IEnumerable<string> GetClassifiers()
         {

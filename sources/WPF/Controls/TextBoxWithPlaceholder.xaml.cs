@@ -11,18 +11,22 @@ namespace RevitDBExplorer.WPF.Controls
 {
     public interface IAutocompleteItem
     {
-        string Label { get; }
         string TextToInsert { get; }
+        string Label { get; }
+        string Description { get; }
     }
     public class AutocompleteItem : IAutocompleteItem
     {
         public string Label { get; init; }
         public string TextToInsert { get; init; }
+        public string Description { get; init; }
+        
 
-        public AutocompleteItem(string label, string textToInsert)
+        public AutocompleteItem(string textToInsert, string label, string description)
         {
             Label = label;
             TextToInsert = textToInsert;
+            Description = description;
         }
     }
     public interface IAutocompleteItemProvider

@@ -38,7 +38,7 @@ namespace RevitDBExplorer.Domain
 
         public void ReadFromTheSource(UIApplication uiApplication)
         {
-            var result = source.Snoop(uiApplication) ?? Enumerable.Empty<SnoopableObject>();
+            var result = source?.Snoop(uiApplication) ?? Enumerable.Empty<SnoopableObject>();
             this.snoopableObjects = result.ToArray();
         }
     }

@@ -8,7 +8,10 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
 {
     internal class NotElementTypeCmdFactory : ICommandFactory
     {
-        public IAutocompleteItem GetAutocompleteItem() => new AutocompleteItem("element - select elements", "element");
+        private static readonly AutocompleteItem AutocompleteItem = new AutocompleteItem("element ", "element", "select elements");
+
+        public IAutocompleteItem GetAutocompleteItem() => AutocompleteItem;
+      
         public Type MatchType => null;
 
         public IEnumerable<string> GetClassifiers()

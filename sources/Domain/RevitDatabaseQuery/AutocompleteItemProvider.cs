@@ -1,6 +1,4 @@
 ﻿using System.Collections.ObjectModel;
-using System.Linq;
-using System.Windows.Controls;
 using RevitDBExplorer.Domain.RevitDatabaseQuery.Parser;
 using RevitDBExplorer.WPF.Controls;
 
@@ -14,12 +12,21 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
         {
             var items = new ObservableCollection<IAutocompleteItem>();
 
-            if (string.IsNullOrEmpty(fullText) || textOnTheLeftSideOfCaret.EndsWith(";") || textOnTheLeftSideOfCaret.EndsWith("; ") || textOnTheLeftSideOfCaret.EndsWith(",") || textOnTheLeftSideOfCaret.EndsWith(", "))
+            if (string.IsNullOrEmpty(fullText) ||
+                textOnTheLeftSideOfCaret.EndsWith(";") || 
+                textOnTheLeftSideOfCaret.EndsWith("; ") || 
+                textOnTheLeftSideOfCaret.EndsWith(",") || 
+                textOnTheLeftSideOfCaret.EndsWith(", ")
+                )
             {
                 foreach (var factory in CommandParser.Factories)
                 {                   
                     items.Add(factory.GetAutocompleteItem());
                 }
+            }
+            else
+            {
+
             }
             
 

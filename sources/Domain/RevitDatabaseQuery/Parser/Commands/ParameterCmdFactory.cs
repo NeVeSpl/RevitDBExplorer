@@ -9,7 +9,10 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
 {
     internal class ParameterCmdFactory : CommandFactory<ParameterMatch>
     {
-        public override IAutocompleteItem GetAutocompleteItem() => new AutocompleteItem("p:[parametr] = [value] - ", "p: ");
+        private static readonly AutocompleteItem AutocompleteItem = new AutocompleteItem("p: ", "p:[parametr] = [value]", "search for a parameter (value)");
+
+        public override IAutocompleteItem GetAutocompleteItem() => AutocompleteItem;
+       
 
         public override IEnumerable<string> GetClassifiers()
         {

@@ -8,7 +8,10 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
 {
     internal class VisibleInViewCmdFactory : ICommandFactory
     {
-        public IAutocompleteItem GetAutocompleteItem() => new AutocompleteItem("active - select elements from the active view", "active");
+        private static readonly AutocompleteItem AutocompleteItem = new AutocompleteItem("active ", "active", "select elements from the active view");
+
+        public IAutocompleteItem GetAutocompleteItem() => AutocompleteItem;
+  
 
         public Type MatchType => null;
 

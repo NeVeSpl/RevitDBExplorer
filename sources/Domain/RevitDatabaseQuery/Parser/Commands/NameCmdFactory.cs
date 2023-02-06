@@ -11,7 +11,10 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
     internal class NameCmdFactory : ICommandFactory
     {
         public static readonly NameCmdFactory Instance = new NameCmdFactory();
-        public IAutocompleteItem GetAutocompleteItem() => new AutocompleteItem("n:[text] - wildcard search for a given text", "n: ");
+        private static readonly AutocompleteItem AutocompleteItem = new AutocompleteItem("n: ", "n:[text]", "wildcard search for a given text");
+
+        public IAutocompleteItem GetAutocompleteItem() => AutocompleteItem;
+      
 
         public Type MatchType => null;
 

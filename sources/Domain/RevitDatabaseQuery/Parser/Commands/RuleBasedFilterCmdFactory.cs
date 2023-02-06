@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Autodesk.Revit.DB;
-using RevitDBExplorer.Domain.RevitDatabaseQuery.Filters;
 using RevitDBExplorer.WPF.Controls;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
@@ -9,7 +8,10 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
 {
     internal class RuleBasedFilterCmdFactory : CommandFactory<RuleMatch>
     {
-        public override IAutocompleteItem GetAutocompleteItem() => new AutocompleteItem("f:[filter] - select elements that pass rule-based filter defined in Revit", "f: ");
+        private static readonly AutocompleteItem AutocompleteItem = new AutocompleteItem("f: ", "f:[filter]", "select elements that pass rule-based filter defined in Revit");
+
+        public override IAutocompleteItem GetAutocompleteItem() => AutocompleteItem;
+       
 
         public override IEnumerable<string> GetClassifiers()
         {

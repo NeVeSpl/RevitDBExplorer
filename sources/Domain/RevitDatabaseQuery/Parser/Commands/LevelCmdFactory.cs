@@ -8,7 +8,10 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
 {
     internal class LevelCmdFactory : CommandFactory<LevelMatch>
     {
-        public override IAutocompleteItem GetAutocompleteItem() => new AutocompleteItem("l:[level] - select elements from a given level", "l: ");
+        private static readonly AutocompleteItem AutocompleteItem = new AutocompleteItem("l: ", "l:[level]", "select elements from a given level");
+
+        public override IAutocompleteItem GetAutocompleteItem() => AutocompleteItem;
+      
 
         public override IEnumerable<string> GetClassifiers()
         {

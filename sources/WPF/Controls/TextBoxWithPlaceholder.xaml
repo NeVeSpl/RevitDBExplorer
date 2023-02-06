@@ -51,6 +51,7 @@
                VerticalOffset="{Binding Path=Top, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"
                HorizontalOffset="{Binding Path=Left, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" 
                CustomPopupPlacementCallback="CustomPopupPlacementCallback"
+               
                >
             <Border Background="Red" >
                 <ListBox x:Name="cListBox" 
@@ -59,9 +60,23 @@
                          HorizontalContentAlignment="Stretch"                                                    
                          KeyboardNavigation.DirectionalNavigation="Cycle" 
                          PreviewMouseDown="ListBox_PreviewMouseDown"
-                         KeyDown="ListBox_KeyDown"                       
-                         DisplayMemberPath="Label"
-                         />
+                         KeyDown="ListBox_KeyDown"  
+                         MinWidth="300"
+                         Grid.IsSharedSizeScope="True"
+                         >
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid  >
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto" SharedSizeGroup="FirstColumn" />
+                                    <ColumnDefinition Width="0.6*" SharedSizeGroup="SecondColumn" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="{Binding Label}" Grid.Column="0" Margin="0 0 7 0" />
+                                <TextBlock Text="{Binding Description}" Grid.Column="1"/>
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
             </Border>
            
         </Popup>

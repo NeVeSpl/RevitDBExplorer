@@ -9,7 +9,9 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
 {
     internal class CategoryCmdFactory : CommandFactory<CategoryMatch>
     {
-        public override IAutocompleteItem GetAutocompleteItem() => new AutocompleteItem("c:[category] - select elements of given category", "c: ");
+        private static readonly AutocompleteItem AutocompleteItem = new AutocompleteItem("c: ", "c:[category]", "select elements of given category");
+
+        public override IAutocompleteItem GetAutocompleteItem() => AutocompleteItem;
 
 
         public override IEnumerable<string> GetClassifiers()

@@ -8,7 +8,10 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
 {
     internal class ClassCmdFactory : CommandFactory<ClassMatch>
     {
-        public override IAutocompleteItem GetAutocompleteItem() => new AutocompleteItem("t:[class] - select elements of given class", "t: ");
+        private static readonly AutocompleteItem AutocompleteItem = new AutocompleteItem("t: ", "t:[class]", "select elements of given class");
+
+        public override IAutocompleteItem GetAutocompleteItem() => AutocompleteItem;
+             
 
         public override IEnumerable<string> GetClassifiers()
         {
