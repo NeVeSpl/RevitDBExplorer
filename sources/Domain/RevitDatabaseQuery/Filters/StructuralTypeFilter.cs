@@ -10,10 +10,10 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Filters
 {
     internal class StructuralTypeFilter : Filter
     {
-        private readonly StructuralTypeMatch structuralType;
+        private readonly StructuralTypeCmdArgument structuralType;
 
 
-        public StructuralTypeFilter(StructuralTypeMatch structuralType)
+        public StructuralTypeFilter(StructuralTypeCmdArgument structuralType)
         {
             this.structuralType = structuralType;           
             Filter = new ElementStructuralTypeFilter(structuralType.Value);
@@ -23,7 +23,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Filters
 
         public static IEnumerable<QueryItem> Create(IList<ICommand> commands)
         {
-            var structuralTypes = commands.Where(x => x.Type == CmdType.StructuralType).SelectMany(x => x.MatchedArguments).OfType<StructuralTypeMatch>().ToList();
+            var structuralTypes = commands.OfType<StructuralTypeCmd>().SelectMany(x => x.Arguments).ToList();
             if (structuralTypes.Count == 1)
             {
                 yield return new StructuralTypeFilter(structuralTypes.First());

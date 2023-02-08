@@ -56,7 +56,7 @@ namespace RevitDBExplorer.UIComponents.QueryVisualization
                 OnPropertyChanged();
             }
         }
-        public IEnumerable<ILookupResult> Arguments => command.MatchedArguments;
+        public IEnumerable<ICommandArgument> Arguments => command.MatchedArguments;
         public CmdType Type => command.Type;
 
 

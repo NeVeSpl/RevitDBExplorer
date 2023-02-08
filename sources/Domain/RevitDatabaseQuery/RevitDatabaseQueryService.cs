@@ -17,16 +17,15 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
     {
         public static void Init()
         {
-            FuzzySearchEngine.Init();
+            CommandParser.Init();          
         }
 
 
         public static Result ParseAndExecute(Document document, string query)
         {
             if (document is null) return new Result(null, new List<ICommand>(), new SourceOfObjects());  
-
-
-            FuzzySearchEngine.LoadDocumentSpecificData(document);
+                      
+            CommandParser.LoadDocumentSpecificData(document);
             var commands = QueryParser.Parse(query);
             commands.SelectMany(x => x.MatchedArguments).OfType<ParameterMatch>().ToList().ForEach(x => x.ResolveStorageType(document));
 

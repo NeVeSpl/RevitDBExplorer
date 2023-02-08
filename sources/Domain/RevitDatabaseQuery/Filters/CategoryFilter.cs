@@ -11,10 +11,10 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Filters
 {
     internal class CategoryFilter : Filter
     {
-        private readonly List<CategoryMatch> categories;
+        private readonly List<CategoryCmdArgument> categories;
 
 
-        public CategoryFilter(List<CategoryMatch> categories)
+        public CategoryFilter(List<CategoryCmdArgument> categories)
         {
             this.categories = categories;
             if (categories.Count == 1)
@@ -31,7 +31,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Filters
 
         public static IEnumerable<Filter> Create(IList<ICommand> commands)
         {
-            var categories = commands.Where(x => x.Type == CmdType.Category).SelectMany(x => x.MatchedArguments).OfType<CategoryMatch>().ToList();
+            var categories = commands.Where(x => x.Type == CmdType.Category).SelectMany(x => x.MatchedArguments).OfType<CategoryCmdArgument>().ToList();
             if (categories.Any())
             {
                 yield return new CategoryFilter(categories);

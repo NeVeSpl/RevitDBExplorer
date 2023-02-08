@@ -10,10 +10,10 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Filters
 {
     internal class LevelFilter : Filter
     {
-        private readonly LevelMatch levelMatch;
+        private readonly LevelCmdArgument levelMatch;
 
 
-        public LevelFilter(LevelMatch level)
+        public LevelFilter(LevelCmdArgument level)
         {
             this.levelMatch = level;           
             Filter = new ElementLevelFilter(level.Value);
@@ -23,7 +23,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Filters
 
         public static IEnumerable<QueryItem> Create(IList<ICommand> commands)
         {
-            var levels = commands.Where(x => x.Type == CmdType.Level).SelectMany(x => x.MatchedArguments).OfType<LevelMatch>().ToList();
+            var levels = commands.Where(x => x.Type == CmdType.Level).SelectMany(x => x.MatchedArguments).OfType<LevelCmdArgument>().ToList();
             if (levels.Count == 1)
             {
                 yield return new LevelFilter(levels.First());

@@ -10,15 +10,9 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
     internal class QueryParser
     {
         public static List<ICommand> Parse(string query)
-        {
-            IList<string> splitted = query.Split(new[] { ';', ',' }, System.StringSplitOptions.RemoveEmptyEntries).ToArray();
-            var commandsText = ReconcilePotentialDoubleNumbers(splitted)
-                                      .Where(x => !string.IsNullOrWhiteSpace(x))
-                                      .Select(x => x.Trim())
-                                      .ToArray();
-
-          
-            var commands = commandsText.SelectMany(x => CommandParser.Parse(x)).ToList();          
+        {            
+            var commandStrings = SplitIntoCmdStrings(query);
+            var commands = commandStrings.SelectMany(x => CommandParser.Parse(x)).ToList();          
 
             if (!DoesContainQuickFilter(commands))
             {
@@ -27,6 +21,17 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
             }
 
             return commands.OfType<ICommand>().ToList();
+        }
+
+        public static readonly char[] Separators = new[] { ';', ',' };
+        public static IList<string> SplitIntoCmdStrings(string query)
+        {            
+            IList<string> splitted = query.Split(Separators, StringSplitOptions.RemoveEmptyEntries).ToArray();
+            var commandsText = ReconcilePotentialDoubleNumbers(splitted)
+                                      .Where(x => !string.IsNullOrWhiteSpace(x))
+                                      .Select(x => x.Trim())
+                                      .ToArray();
+            return commandsText;
         }
 
         private static IEnumerable<string> ReconcilePotentialDoubleNumbers(IList<string> splitted)

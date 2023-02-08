@@ -7,6 +7,7 @@ using Autodesk.Revit.DB.Structure;
 using Autodesk.Revit.UI;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RevitDBExplorer.Domain.RevitDatabaseQuery;
+using RevitDBExplorer.Domain.RevitDatabaseQuery.FuzzySearch;
 using RevitDBExplorer.Domain.RevitDatabaseQuery.Parser;
 using RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands;
 using RevitTestLibrary.MSTest;
@@ -28,7 +29,7 @@ namespace RevitDBExplorer.Tests.RDQ
             var result = CommandParser.Parse(cmd).First();
             Assert.AreEqual(Domain.RevitDatabaseQuery.CmdType.Category, result.Type);
 
-            var match = result.MatchedArguments.First() as CategoryMatch;
+            var match = (result.MatchedArguments.First() as IFuzzySearchResult).Argument as CategoryCmdArgument;
             Assert.IsNotNull(match);
             Assert.AreEqual(BuiltInCategory.OST_Walls, match.Value);
         }
@@ -41,7 +42,7 @@ namespace RevitDBExplorer.Tests.RDQ
             var result = CommandParser.Parse(cmd).First();
             Assert.AreEqual(Domain.RevitDatabaseQuery.CmdType.Class, result.Type);
 
-            var match = result.MatchedArguments.First() as ClassMatch;
+            var match = (result.MatchedArguments.First() as IFuzzySearchResult).Argument as ClassCmdArgument;
             Assert.IsNotNull(match);
             Assert.AreEqual(typeof(Wall), match.Value);
 
@@ -55,7 +56,7 @@ namespace RevitDBExplorer.Tests.RDQ
             var result = CommandParser.Parse(cmd).First();
             Assert.AreEqual(Domain.RevitDatabaseQuery.CmdType.ElementId, result.Type);
 
-            var match = result.MatchedArguments.First() as ElementIdMatch;
+            var match = result.MatchedArguments.First() as ElementIdCmdArgument;
             Assert.IsNotNull(match);
             Assert.AreEqual(new ElementId(123456), match.Value);
         }
@@ -77,11 +78,12 @@ namespace RevitDBExplorer.Tests.RDQ
         {
             var document = uia.Application.NewProjectDocument(UnitSystem.Metric);
 
-            FuzzySearchEngine.LoadDocumentSpecificData(document);
+            
+            CommandParser.LoadDocumentSpecificData(document);
             var result = CommandParser.Parse(cmd).First();
             Assert.AreEqual(Domain.RevitDatabaseQuery.CmdType.Level, result.Type);
 
-            var match = result.MatchedArguments.First() as LevelMatch;
+            var match = (result.MatchedArguments.First() as IFuzzySearchResult).Argument as LevelCmdArgument;
             Assert.IsNotNull(match);
             //Assert.AreEqual(new ElementId(????), match.Value);
 
@@ -123,7 +125,7 @@ namespace RevitDBExplorer.Tests.RDQ
             var result = CommandParser.Parse(cmd).First();
             Assert.AreEqual(Domain.RevitDatabaseQuery.CmdType.Parameter, result.Type);
 
-            var match = result.MatchedArguments.First() as ParameterMatch;
+            var match = (result.MatchedArguments.First() as IFuzzySearchResult).Argument as ParameterMatch;
             Assert.IsNotNull(match);
             Assert.AreEqual(BuiltInParameter.DOOR_NUMBER, match.BuiltInParameter);
 
@@ -139,12 +141,13 @@ namespace RevitDBExplorer.Tests.RDQ
         {
             var path = Path.Combine(GetDir(), @"..\..\assets\testmodel_rdq.rvt");
             var document = uia.Application.OpenDocumentFile(path);
-            FuzzySearchEngine.LoadDocumentSpecificData(document);
+            
+            CommandParser.LoadDocumentSpecificData(document);
 
             var result = CommandParser.Parse(cmd).First();
             Assert.AreEqual(Domain.RevitDatabaseQuery.CmdType.Room, result.Type);
 
-            var match = result.MatchedArguments.First() as RoomMatch;
+            var match = (result.MatchedArguments.First() as IFuzzySearchResult).Argument as RoomCmdArgument;
             Assert.IsNotNull(match);
             //Assert.AreEqual(???, match.Value);
 
@@ -158,12 +161,13 @@ namespace RevitDBExplorer.Tests.RDQ
         {
             var path = Path.Combine(GetDir(), @"..\..\assets\testmodel_rdq.rvt");
             var document = uia.Application.OpenDocumentFile(path);
-            FuzzySearchEngine.LoadDocumentSpecificData(document);
+     
+            CommandParser.LoadDocumentSpecificData(document);
 
             var result = CommandParser.Parse(cmd).First();
             Assert.AreEqual(Domain.RevitDatabaseQuery.CmdType.RuleBasedFilter, result.Type);
 
-            var match = result.MatchedArguments.First() as RuleMatch;
+            var match = (result.MatchedArguments.First() as IFuzzySearchResult).Argument as RuleBasedFilterCmdArgument;
             Assert.IsNotNull(match);
             //Assert.AreEqual(???, match.Value);
 
@@ -178,7 +182,7 @@ namespace RevitDBExplorer.Tests.RDQ
             var result = CommandParser.Parse(cmd).First();
             Assert.AreEqual(Domain.RevitDatabaseQuery.CmdType.StructuralType, result.Type);
 
-            var match = result.MatchedArguments.First() as StructuralTypeMatch;
+            var match = (result.MatchedArguments.First() as IFuzzySearchResult).Argument as StructuralTypeCmdArgument;
             Assert.IsNotNull(match);
             Assert.AreEqual(StructuralType.Brace, match.Value);            
         }

@@ -10,10 +10,10 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Filters
 {
     internal class RuleFilter : Filter
     {
-        private readonly RuleMatch ruleMatch;
+        private readonly RuleBasedFilterCmdArgument ruleMatch;
 
 
-        public RuleFilter(RuleMatch ruleFilter, Document document)
+        public RuleFilter(RuleBasedFilterCmdArgument ruleFilter, Document document)
         {
             this.ruleMatch = ruleFilter;
 
@@ -26,7 +26,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Filters
 
         public static IEnumerable<QueryItem> Create(IList<ICommand> commands, Document document)
         {
-            var rules = commands.Where(x => x.Type == CmdType.RuleBasedFilter).SelectMany(x => x.MatchedArguments).OfType<RuleMatch>().ToList();
+            var rules = commands.Where(x => x.Type == CmdType.RuleBasedFilter).SelectMany(x => x.MatchedArguments).OfType<RuleBasedFilterCmdArgument>().ToList();
             if (rules.Count == 1)
             {
                 yield return new RuleFilter(rules.First(), document);

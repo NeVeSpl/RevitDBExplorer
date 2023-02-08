@@ -46,6 +46,7 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers.Base
             new BindingMapHandler(),
             new CategoryNameMapHandler(),
             new ScheduleFieldHandler(),
+            new SchedulableFieldHandler(),
             new FailuresProcessingEventArgsHandler(),
             new DocumentChangedEventArgsHandler(),
             new RevitApiEventArgsHandler(),            

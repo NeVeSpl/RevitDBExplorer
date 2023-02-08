@@ -11,10 +11,10 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Filters
 {
     internal class ClassFilter : Filter
     {
-        private readonly List<ClassMatch> types;
+        private readonly List<ClassCmdArgument> types;
         
 
-        public ClassFilter(List<ClassMatch> types)
+        public ClassFilter(List<ClassCmdArgument> types)
         {
             this.types = types;
             if (types.Count == 1)
@@ -31,7 +31,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Filters
 
         public static IEnumerable<Filter> Create(IList<ICommand> commands)
         {
-            var types = commands.Where(x => x.Type == CmdType.Class).SelectMany(x => x.MatchedArguments).OfType<ClassMatch>().ToList();
+            var types = commands.Where(x => x.Type == CmdType.Class).SelectMany(x => x.MatchedArguments).OfType<ClassCmdArgument>().ToList();
             if (types.Any())
             {
                 yield return new ClassFilter(types);

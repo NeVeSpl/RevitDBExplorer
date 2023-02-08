@@ -156,7 +156,7 @@ namespace RevitDBExplorer.UIComponents.Tree
            await ExternalExecutor.ExecuteInRevitContextAsync(x => sourceOfObjects.ReadFromTheSource(x));
            PopulateTreeView(sourceOfObjects);
         }
-        private async void Collapse(object parameter)
+        private void Collapse(object parameter)
         {            
             var first = treeItems.FirstOrDefault();
             if (first == null) return;

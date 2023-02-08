@@ -8,15 +8,14 @@ using RevitDBExplorer.WPF.Controls;
 
 namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
 {
-    internal class NameCmdFactory : ICommandFactory
+    internal class NameCmdDefinition : ICommandDefinition
     {
-        public static readonly NameCmdFactory Instance = new NameCmdFactory();
+        public static readonly NameCmdDefinition Instance = new NameCmdDefinition();
         private static readonly AutocompleteItem AutocompleteItem = new AutocompleteItem("n: ", "n:[text]", "wildcard search for a given text");
 
-        public IAutocompleteItem GetAutocompleteItem() => AutocompleteItem;
-      
 
-        public Type MatchType => null;
+        public IAutocompleteItem GetCommandAutocompleteItem() => AutocompleteItem;
+            
 
         public IEnumerable<string> GetClassifiers()
         {
@@ -27,23 +26,18 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
         {
             yield break;
         }
-        public bool CanRecognizeArgument(string argument)
-        {
-            return false;
-        }
+        public bool CanRecognizeArgument(string argument) => false;
+        public bool CanParticipateInGenericSearch() => false;
 
-        public ICommand Create(string cmdText, IList<ILookupResult> arguments)
+
+        public ICommand Create(string cmdText, string argument)
         {
+            var matchedArguments = NameLikeParameters.Select(x => new ParameterMatch(x)).ToArray();
+
             var arg = cmdText.Split(new[] { ':' }, 2, StringSplitOptions.RemoveEmptyEntries).LastOrDefault();
             var @operator = Operators.Parse($"=%{arg}%");
-            return new Command(CmdType.Parameter, cmdText, arguments, @operator);
+            return new Command(CmdType.Parameter, cmdText, matchedArguments, @operator);
         }
-        public IEnumerable<ILookupResult> ParseArgument(string argument)
-        {
-            var matchedArguments = NameLikeParameters.Select(x => new ParameterMatch(x, 1)).ToArray();
-            return matchedArguments;
-        }
-
 
         private static readonly List<BuiltInParameter> NameLikeParameters = new List<BuiltInParameter>()
         {

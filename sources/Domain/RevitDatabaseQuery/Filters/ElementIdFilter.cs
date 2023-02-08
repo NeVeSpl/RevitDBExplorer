@@ -11,10 +11,10 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Filters
 {
     internal class ElementIdFilter : Filter
     {
-        private readonly List<ElementIdMatch> ids;
+        private readonly List<ElementIdCmdArgument> ids;
 
 
-        public ElementIdFilter(List<ElementIdMatch> ids)
+        public ElementIdFilter(List<ElementIdCmdArgument> ids)
         {
             this.ids = ids;
             Filter = new ElementIdSetFilter(ids.Select(x => x.Value).ToList());
@@ -24,7 +24,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Filters
 
         public static IEnumerable<Filter> Create(IList<ICommand> commands)
         {
-            var ids = commands.Where(x => x.Type == CmdType.ElementId).SelectMany(x => x.MatchedArguments).OfType<ElementIdMatch>().ToList();
+            var ids = commands.Where(x => x.Type == CmdType.ElementId).SelectMany(x => x.MatchedArguments).OfType<ElementIdCmdArgument>().ToList();
             if (ids.Any())
             {
                 yield return new ElementIdFilter(ids);

@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -31,7 +33,7 @@ namespace RevitDBExplorer.WPF.Controls
     }
     public interface IAutocompleteItemProvider
     {
-        ObservableCollection<IAutocompleteItem> GetAutocompleteItems(string fullText, string textOnTheLeftSideOfCaret);
+        IEnumerable<IAutocompleteItem> GetAutocompleteItems(string fullText, int caretPosition);
     }
 
 
@@ -90,9 +92,11 @@ namespace RevitDBExplorer.WPF.Controls
             {
                 parentWindow.Deactivated += ParentWindow_Deactivated;
                 parentWindow.Activated += ParentWindow_Activated;
+                parentWindow.MouseDown += ParentWindow_MouseDown;
             }
         }
 
+       
 
         private void ParentWindow_Deactivated(object sender, EventArgs e)
         {            
@@ -102,7 +106,11 @@ namespace RevitDBExplorer.WPF.Controls
         {
            
         }
-                
+        private void ParentWindow_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            cPopup.IsOpen = false;
+        }
+
 
         private void TextBox_KeyDown(object sender, KeyEventArgs e)
         {
@@ -162,7 +170,8 @@ namespace RevitDBExplorer.WPF.Controls
                 {
                     e.Handled = true;
                     InserText(item.TextToInsert);
-                    cPopup.IsOpen = false;
+                    TryOpen(true);
+                    
                     Keyboard.Focus(cTextBox);                   
                 }
             }            
@@ -176,25 +185,37 @@ namespace RevitDBExplorer.WPF.Controls
             {
                 InserText(item.TextToInsert);
                 e.Handled = true;
+                TryOpen(true);               
             }
             if (e.Key== Key.Escape) 
-            {                
+            {
+                cPopup.IsOpen = false;
                 e.Handled = true;
             }
             if (e.Handled)
-            {
-                cPopup.IsOpen = false;
+            {                
                 Keyboard.Focus(cTextBox);               
             }
         }   
 
-        private bool TryOpen()
+        private bool TryOpen(bool again = false)
         {
-            AutocompleteItems = AutocompleteItemProvider?.GetAutocompleteItems(cTextBox.Text, cTextBox.Text.Substring(0, cTextBox.CaretIndex));
+            var autocompleteItems = AutocompleteItemProvider?.GetAutocompleteItems(cTextBox.Text, cTextBox.CaretIndex);
+        
+            bool shouldBeOpened = autocompleteItems?.Count() > 0;
 
-            if (cListBox.Items.Count == 0) return false;
-            cPopup.IsOpen = true;
-            return true;
+            if (shouldBeOpened && again)
+            {
+                shouldBeOpened = autocompleteItems.Count() != AutocompleteItems.Count();
+            }
+
+            if (shouldBeOpened)
+            {
+                AutocompleteItems = new ObservableCollection<IAutocompleteItem>(autocompleteItems);
+            }
+          
+            cPopup.IsOpen = shouldBeOpened;
+            return shouldBeOpened;
         }
         private void InserText(string text)
         {

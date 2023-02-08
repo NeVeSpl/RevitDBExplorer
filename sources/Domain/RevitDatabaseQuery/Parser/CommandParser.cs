@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
-using RevitDBExplorer.Domain.RevitDatabaseQuery.Filters;
+using Autodesk.Revit.DB;
+using RevitDBExplorer.Domain.RevitDatabaseQuery.FuzzySearch;
 using RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
@@ -10,139 +12,169 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser
 {
     internal static class CommandParser
     {
-        public static readonly List<ICommandFactory> Factories = new List<ICommandFactory>()
+        public static readonly List<ICommandDefinition> Definitions = new List<ICommandDefinition>()
         {
-            new ElementTypeCmdFactory(),
-            new NotElementTypeCmdFactory(),
-            new VisibleInViewCmdFactory(),
-            new CategoryCmdFactory(),
-            new ClassCmdFactory(),
-            new ElementIdCmdFactory(),            
-            new LevelCmdFactory(),
-            new NameCmdFactory(),          
-            new ParameterCmdFactory(),
-            new RoomCmdFactory(),
-            new RuleBasedFilterCmdFactory(),
-            new StructuralTypeCmdFactory(),           
+            new ElementTypeCmdDefinition(),
+            new NotElementTypeCmdDefinition(),
+            new VisibleInViewCmdDefinition(),
+            new CategoryCmdDefinition(),
+            new ClassCmdDefinition(),
+            new ElementIdCmdDefinition(),            
+            new LevelCmdDefinition(),
+            new NameCmdDefinition(),          
+            new ParameterCmdDefinition(),
+            new RoomCmdDefinition(),
+            new RuleBasedFilterCmdDefinition(),
+            new StructuralTypeCmdDefinition(),           
         };
-        private static readonly Dictionary<string, ICommandFactory> classifierToFactoryMap = new Dictionary<string, ICommandFactory>();
-        private static readonly Dictionary<string, ICommandFactory> keywordToFactoryMap = new Dictionary<string, ICommandFactory>();
-        private static readonly Dictionary<Type, ICommandFactory> matchTypeToFactoryMap = new Dictionary<Type, ICommandFactory>();
+        private static readonly Dictionary<string, ICommandDefinition> classifierToDefinitionMap = new Dictionary<string, ICommandDefinition>();
+        private static readonly Dictionary<string, ICommandDefinition> keywordToDefinitionMap = new Dictionary<string, ICommandDefinition>();        
 
+
+        public static void Init()
+        {
+
+        }
         static CommandParser()
         {
             RegisterClassifiers();
-            RegisterKeywords();
-            RegisterMatchTypes();
+            RegisterKeywords();          
+            InitDefinitions();
         }
         private static void RegisterClassifiers()
         {
-            foreach (var factory in Factories)
+            foreach (var definition in Definitions)
             {
-                foreach (var classifier in factory.GetClassifiers())
+                foreach (var classifier in definition.GetClassifiers())
                 {
                     string key = classifier.NormalizeForLookup();
-                    if (classifierToFactoryMap.ContainsKey(key))
+                    if (classifierToDefinitionMap.ContainsKey(key))
                     {
                         throw new Exception("Should it not be possible to be here, but here we are...");
                     }
-                    classifierToFactoryMap[key] = factory;
+                    classifierToDefinitionMap[key] = definition;
                 }
             }
         }
         private static void RegisterKeywords()
         {
-            foreach (var factory in Factories)
+            foreach (var definition in Definitions)
             {
-                foreach (var keyword in factory.GetKeywords())
+                foreach (var keyword in definition.GetKeywords())
                 {
                     string key = keyword.NormalizeForLookup();
-                    if (keywordToFactoryMap.ContainsKey(key))
+                    if (keywordToDefinitionMap.ContainsKey(key))
                     {
                         throw new Exception("Should it not be possible to be here, but here we are...");
                     }
-                    keywordToFactoryMap[key] = factory;
+                    keywordToDefinitionMap[key] = definition;
                 }
             }
-        }
-        private static void RegisterMatchTypes()
+        }       
+        private static void InitDefinitions()
         {
-            foreach (var factory in Factories)
+            foreach (var definition in Definitions.OfType<INeedInitialization>())
             {
-                if(factory.MatchType != null)
-                {                    
-                    if (matchTypeToFactoryMap.ContainsKey(factory.MatchType))
-                    {
-                        throw new Exception("Should it not be possible to be here, but here we are...");
-                    }
-                    matchTypeToFactoryMap[factory.MatchType] = factory;
-                }
+                definition.Init();
+            }
+        }
+        public static void LoadDocumentSpecificData(Document document)
+        {
+            foreach (var definition in Definitions.OfType<INeedInitializationWithDocument>())
+            {
+                definition.Init(document);
             }
         }
 
 
+        public static readonly char[] Separators = new[] { ':' };
         public static IEnumerable<ICommand> Parse(string cmdText)
         {
-            var splittedByClassifier = cmdText.Split(new[] { ':' }, 2, System.StringSplitOptions.None);
+            var splittedByClassifier = cmdText.Split(Separators, 2, System.StringSplitOptions.None);
            
             string argument = null;
-            ICommandFactory selectedFactory = null;
+            ICommandDefinition selectedDefinition = null;
 
             if (splittedByClassifier.Length == 1)
             {
                 var keyword = cmdText.NormalizeForLookup();
-                keywordToFactoryMap.TryGetValue(keyword, out selectedFactory);
-                argument = splittedByClassifier[0];                
+                keywordToDefinitionMap.TryGetValue(keyword, out selectedDefinition);
+                argument = splittedByClassifier[0].Trim();                
             }
             if (splittedByClassifier.Length == 2)
             {
                 var classifier = splittedByClassifier[0].NormalizeForLookup();
-                classifierToFactoryMap.TryGetValue(classifier, out selectedFactory);
-                argument = splittedByClassifier[1];
+                classifierToDefinitionMap.TryGetValue(classifier, out selectedDefinition);
+                argument = splittedByClassifier[1].Trim();
             }
 
-            if (selectedFactory == null)
+            if (selectedDefinition == null)
             {
-                foreach (var factory in Factories)
+                foreach (var definition in Definitions)
                 {
-                    if (factory.CanRecognizeArgument(argument))
+                    if (definition.CanRecognizeArgument(argument))
                     {
-                        selectedFactory = factory;
+                        selectedDefinition = definition;
                         break;
                     }
                 }
             }
 
-            if (selectedFactory != null)
-            {     
-                var args = selectedFactory.ParseArgument(argument);
-                yield return selectedFactory.Create(cmdText, args.ToArray());
-                yield break;
+            if (selectedDefinition != null)
+            {               
+                yield return selectedDefinition.Create(cmdText, argument);
+                yield break;                
             }
 
-            if (string.IsNullOrEmpty(argument)) yield break;
-
-            var matchedArguments = FuzzySearchEngine.Lookup(argument, FuzzySearchEngine.LookFor.Category |
-                                                                      FuzzySearchEngine.LookFor.Class |
-                                                                      FuzzySearchEngine.LookFor.Level |
-                                                                      FuzzySearchEngine.LookFor.Room |
-                                                                      FuzzySearchEngine.LookFor.RuleBasedFilter
-                                                           ).ToArray();
-
-            if (!matchedArguments.IsEmpty())
+            if (string.IsNullOrEmpty(argument)) yield break;   
+          
+            var genericSearchResult = DoGenericSearch(cmdText, argument);
+            if (genericSearchResult.Any())
             {
-                var groupedByType = matchedArguments.GroupBy(x => x.CmdType);
-                foreach (var group in groupedByType)
+                var ordered = genericSearchResult.OrderByDescending(x => x.Score).ToArray();
+
+                double prevScore = ordered.First().Score;
+
+                foreach (var item in ordered)
                 {
-                    var type = group.First().GetType();
-                    var factory = matchTypeToFactoryMap[type];
-                    yield return factory.Create(cmdText, group.ToArray());
+                    if (Math.Abs(item.Score - prevScore) < 0.13)
+                    {
+                        yield return item;
+                    }
+                    else
+                    {
+                        yield break;
+                    }
                 }
+
                 yield break;
             }
 
-            var parsedArgs = NameCmdFactory.Instance.ParseArgument(argument);
-            yield return NameCmdFactory.Instance.Create(cmdText, parsedArgs.ToArray());                         
+            //
+          
+            yield return NameCmdDefinition.Instance.Create(cmdText, argument);                         
+        }
+
+        private static IEnumerable<ICommand> DoGenericSearch(string cmdText, string argument)
+        {
+            foreach (var definition in Definitions)
+            {
+                if (definition.CanParticipateInGenericSearch())
+                {
+                    var result = definition.Create(cmdText, argument);
+                    if (result.MatchedArguments.Any())
+                    {                     
+                        yield return result;
+                    }
+                }
+            }
+        }
+
+        public static ICommandDefinition GetCommandDefinitionForClassifier(string classifier)
+        {
+            ICommandDefinition result;
+            classifierToDefinitionMap.TryGetValue(classifier.NormalizeForLookup(), out result);
+            return result;
         }
 
         private static string NormalizeForLookup(this String text)
