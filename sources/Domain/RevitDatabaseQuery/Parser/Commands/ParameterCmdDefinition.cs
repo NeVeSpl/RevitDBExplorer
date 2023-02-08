@@ -88,7 +88,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
 
         public ICommand Create(string cmdText, string argument)
         {
-            var @operator = Operators.Parse(cmdText);
+            var @operator = Operators.Parse(argument);
             var leftSide = Operators.GetLeftSideOfOperator(argument);
             var bareArgument = leftSide.RemovePrefix(nameof(BuiltInParameter));
             var argsBIP = dataBucket.FuzzySearch(bareArgument);
@@ -102,7 +102,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
 
     internal class ParameterCmd : Command
     {
-        public ParameterCmd(string text, IEnumerable<ICommandArgument> matchedArguments = null, OperatorWithArgument @operator = null) : base(CmdType.Parameter, text, matchedArguments, @operator)
+        public ParameterCmd(string text, IEnumerable<IFuzzySearchResult> matchedArguments = null, OperatorWithArgument @operator = null) : base(CmdType.Parameter, text, matchedArguments, @operator)
         {
         }
     }

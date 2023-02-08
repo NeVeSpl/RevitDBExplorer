@@ -2,6 +2,7 @@
 using System.Linq;
 using Autodesk.Revit.DB;
 using RevitDBExplorer.Domain.RevitDatabaseQuery.Parser;
+using RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
@@ -22,7 +23,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Filters
 
         public static IEnumerable<Filter> Create(IList<ICommand> commands, Document document)
         {
-            if (commands.Any(x => x.Type == CmdType.ActiveView))
+            if (commands.OfType<VisibleInViewCmd>().Any())
             {
                 yield return new VisibleInViewFilter(document.ActiveView);
             }

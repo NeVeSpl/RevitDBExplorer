@@ -92,7 +92,7 @@ namespace RevitDBExplorer.UIComponents.QueryVisualization
                     FilterName = ".OfClass()";                   
                     break;                
                 case CmdType.Parameter:
-                    var arguments = command.MatchedArguments.OfType<ParameterMatch>();
+                    var arguments = command.Arguments.OfType<ParameterMatch>();
                     var firstArg = arguments.First();
                     
                     string count = "";

@@ -26,7 +26,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Filters
 
         public static IEnumerable<QueryItem> Create(IList<ICommand> commands, Document document)
         {
-            var rules = commands.Where(x => x.Type == CmdType.RuleBasedFilter).SelectMany(x => x.MatchedArguments).OfType<RuleBasedFilterCmdArgument>().ToList();
+            var rules = commands.OfType<RuleBasedFilterCmd>().SelectMany(x => x.Arguments).OfType<RuleBasedFilterCmdArgument>().ToList();
             if (rules.Count == 1)
             {
                 yield return new RuleFilter(rules.First(), document);

@@ -73,6 +73,13 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.FuzzySearch
                 }
             }
         }
+        public IEnumerable<IFuzzySearchResult> CreateMatch(params T[] args)
+        {
+            foreach (var item in args)
+            {
+                yield return new FuzzySearchResult<T>(item, 1.0);
+            }
+        }
 
 
         public IEnumerable<IAutocompleteItem> ProvideAutoCompletion(string prefix)
@@ -113,7 +120,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.FuzzySearch
         private class FuzzySearchResult<T2> : ICommandArgument, IFuzzySearchResult where T2 : ICommandArgument
         {
             private readonly T2 argument;
-            public object Argument => argument;
+            public ICommandArgument Argument => argument;
             public double LevensteinScore { get; init; }
             public string Name => argument.Name;
             public string Label => argument.Label;
@@ -130,7 +137,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.FuzzySearch
 
     internal interface IFuzzySearchResult : ICommandArgument
     {
-        object Argument { get; }
+        ICommandArgument Argument { get; }
         public double LevensteinScore { get;  }
 
     }

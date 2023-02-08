@@ -3,6 +3,7 @@ using Autodesk.Revit.DB;
 using RevitDBExplorer.Domain.RevitDatabaseQuery.FuzzySearch;
 using RevitDBExplorer.WPF.Controls;
 
+
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
 namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
@@ -42,7 +43,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
             long.TryParse(argument, out long longValue);
             var id = ElementIdFactory.Create(longValue);
             
-            return new ElementIdCmd(cmdText, new[] { new ElementIdCmdArgument(id) });
+            return new ElementIdCmd(cmdText, dataBucket.CreateMatch(new ElementIdCmdArgument(id)));
         }
     }
 
@@ -60,7 +61,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
 
     internal class ElementIdCmd : Command
     {
-        public ElementIdCmd(string text, IEnumerable<ICommandArgument> matchedArguments = null) : base(CmdType.ElementId, text, matchedArguments, null)
+        public ElementIdCmd(string text, IEnumerable<IFuzzySearchResult> matchedArguments = null) : base(CmdType.ElementId, text, matchedArguments, null)
         {
             IsBasedOnQuickFilter = true;
         }

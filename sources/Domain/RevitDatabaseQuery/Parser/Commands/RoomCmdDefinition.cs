@@ -62,7 +62,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
 
     internal class RoomCmd : Command
     {
-        public RoomCmd(string text, IEnumerable<ICommandArgument> matchedArguments = null) : base(CmdType.Room, text, matchedArguments, null)
+        public RoomCmd(string text, IEnumerable<IFuzzySearchResult> matchedArguments = null) : base(CmdType.Room, text, matchedArguments, null)
         {
         }
     }

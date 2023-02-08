@@ -32,7 +32,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Filters
 
         public static IEnumerable<QueryItem> Create(IList<ICommand> commands, Document document)
         {
-            var rooms = commands.Where(x => x.Type == CmdType.Room).SelectMany(x => x.MatchedArguments).OfType<RoomCmdArgument>().ToList();
+            var rooms = commands.OfType<RoomCmd>().SelectMany(x => x.Arguments).OfType<RoomCmdArgument>().ToList();
             if (rooms.Count == 1)
             {
                 yield return new RoomFilter(rooms.First(), document.GetElement(rooms.First().Value) as Room);

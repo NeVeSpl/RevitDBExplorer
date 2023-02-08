@@ -63,7 +63,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
 
     internal class LevelCmd : Command
     {
-        public LevelCmd(string text, IEnumerable<ICommandArgument> matchedArguments = null) : base(CmdType.Level, text, matchedArguments, null)
+        public LevelCmd(string text, IEnumerable<IFuzzySearchResult> matchedArguments = null) : base(CmdType.Level, text, matchedArguments, null)
         {
         }
     }

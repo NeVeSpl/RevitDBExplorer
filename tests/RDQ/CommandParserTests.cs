@@ -56,7 +56,7 @@ namespace RevitDBExplorer.Tests.RDQ
             var result = CommandParser.Parse(cmd).First();
             Assert.AreEqual(Domain.RevitDatabaseQuery.CmdType.ElementId, result.Type);
 
-            var match = result.MatchedArguments.First() as ElementIdCmdArgument;
+            var match = result.Arguments.First() as ElementIdCmdArgument;
             Assert.IsNotNull(match);
             Assert.AreEqual(new ElementId(123456), match.Value);
         }
@@ -98,7 +98,7 @@ namespace RevitDBExplorer.Tests.RDQ
             var result = CommandParser.Parse(cmd).First();
             Assert.AreEqual(Domain.RevitDatabaseQuery.CmdType.Parameter, result.Type);
 
-            var match = result.MatchedArguments.First() as ParameterMatch;
+            var match = result.Arguments.First() as ParameterMatch;
             Assert.IsNotNull(match);
             Assert.AreEqual(BuiltInParameter.ALL_MODEL_TYPE_NAME, match.BuiltInParameter);
 

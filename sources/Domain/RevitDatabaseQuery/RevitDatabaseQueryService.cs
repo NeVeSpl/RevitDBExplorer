@@ -27,7 +27,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
                       
             CommandParser.LoadDocumentSpecificData(document);
             var commands = QueryParser.Parse(query);
-            commands.SelectMany(x => x.MatchedArguments).OfType<ParameterMatch>().ToList().ForEach(x => x.ResolveStorageType(document));
+            commands.SelectMany(x => x.Arguments).OfType<ParameterMatch>().ToList().ForEach(x => x.ResolveStorageType(document));
 
             var pipe = new List<QueryItem>();
             pipe.AddRange(VisibleInViewFilter.Create(commands, document));

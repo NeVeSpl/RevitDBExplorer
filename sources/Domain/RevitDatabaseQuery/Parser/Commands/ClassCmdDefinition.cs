@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml.Linq;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.Architecture;
 using Autodesk.Revit.DB.Mechanical;
@@ -12,7 +13,7 @@ using RevitDBExplorer.WPF.Controls;
 
 namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
 {
-    internal class ClassCmdDefinition : ICommandDefinition, INeedInitialization
+    internal class ClassCmdDefinition : ICommandDefinition, INeedInitialization, IOfferArgumentAutocompletion
     {
         private static readonly HashSet<string> ClassesBlackList = new()
         {
@@ -52,14 +53,22 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
                                               .Where(x => !ClassesBlackList.Contains(x.FullName));
             foreach (var @class in classes)
             {
-                dataBucket.Add(null, new ClassCmdArgument(@class), @class.Name);
+                dataBucket.Add(new AutocompleteItem(@class.Name, @class.Name, @class.Name), new ClassCmdArgument(@class), @class.Name);
             }
             dataBucket.Rebuild();
         }
 
 
         public IAutocompleteItem GetCommandAutocompleteItem() => AutocompleteItem;
-             
+        public IEnumerable<IAutocompleteItem> GetAutocompleteItems(string prefix)
+        {
+            if (string.IsNullOrWhiteSpace(prefix))
+            {
+                return dataBucket.ProvideAutoCompletion(prefix);
+            }
+            return Enumerable.Empty<IAutocompleteItem>();
+        }
+
 
         public IEnumerable<string> GetClassifiers()
         {
@@ -97,7 +106,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
 
     internal class ClassCmd : Command
     {
-        public ClassCmd(string text, IEnumerable<ICommandArgument> matchedArguments = null) : base(CmdType.Class, text, matchedArguments, null)
+        public ClassCmd(string text, IEnumerable<IFuzzySearchResult> matchedArguments = null) : base(CmdType.Class, text, matchedArguments, null)
         {
             IsBasedOnQuickFilter = true;
         }

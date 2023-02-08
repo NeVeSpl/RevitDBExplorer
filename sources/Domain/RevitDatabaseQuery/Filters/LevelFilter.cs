@@ -23,7 +23,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Filters
 
         public static IEnumerable<QueryItem> Create(IList<ICommand> commands)
         {
-            var levels = commands.Where(x => x.Type == CmdType.Level).SelectMany(x => x.MatchedArguments).OfType<LevelCmdArgument>().ToList();
+            var levels = commands.OfType<LevelCmd>().SelectMany(x => x.Arguments).OfType<LevelCmdArgument>().ToList();
             if (levels.Count == 1)
             {
                 yield return new LevelFilter(levels.First());

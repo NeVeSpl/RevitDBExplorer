@@ -80,7 +80,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
 
     internal class CategoryCmd : Command
     {
-        public CategoryCmd(string text, IEnumerable<ICommandArgument> matchedArguments) : base(CmdType.Category, text, matchedArguments, null)
+        public CategoryCmd(string text, IEnumerable<IFuzzySearchResult> matchedArguments) : base(CmdType.Category, text, matchedArguments, null)
         {
             IsBasedOnQuickFilter = true;
         }

@@ -51,7 +51,7 @@
                VerticalOffset="{Binding Path=Top, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"
                HorizontalOffset="{Binding Path=Left, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" 
                CustomPopupPlacementCallback="CustomPopupPlacementCallback"
-               
+               MaxHeight="400"
                >
             <Border Background="Red" >
                 <ListBox x:Name="cListBox" 
@@ -61,7 +61,7 @@
                          KeyboardNavigation.DirectionalNavigation="Cycle" 
                          PreviewMouseDown="ListBox_PreviewMouseDown"
                          KeyDown="ListBox_KeyDown"  
-                         MinWidth="300"
+                         MinWidth="400"
                          Grid.IsSharedSizeScope="True"
                          >
                     <ListBox.ItemTemplate>

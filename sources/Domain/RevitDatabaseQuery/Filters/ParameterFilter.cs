@@ -69,7 +69,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Filters
 
         public static IEnumerable<QueryItem> Create(IList<ICommand> commands)
         {
-            var parameterCmds = commands.Where(x => x.Type == CmdType.Parameter).ToList();
+            var parameterCmds = commands.OfType<ParameterCmd>().ToList();
             var filters = parameterCmds.Select(x => Create(x)).Where(x => x != null).ToList();
             if (filters.Count == 1)
             {                
@@ -83,7 +83,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Filters
 
         private static QueryItem Create(ICommand command)
         {
-            var arguments = command.MatchedArguments.OfType<ParameterMatch>().ToList();
+            var arguments = command.Arguments.OfType<ParameterMatch>().ToList();
             var rules = arguments.SelectMany(x => CreateFilterRule(x, command.Operator)).ToList();
             var filters = rules.Select(x => new ParameterFilter(x.Item2, x.Item1, x.Item3)).ToList();
             if (filters.Count == 1)

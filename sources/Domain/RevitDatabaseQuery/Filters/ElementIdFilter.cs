@@ -24,7 +24,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Filters
 
         public static IEnumerable<Filter> Create(IList<ICommand> commands)
         {
-            var ids = commands.Where(x => x.Type == CmdType.ElementId).SelectMany(x => x.MatchedArguments).OfType<ElementIdCmdArgument>().ToList();
+            var ids = commands.OfType<ElementIdCmd>().SelectMany(x => x.Arguments).OfType<ElementIdCmdArgument>().ToList();
             if (ids.Any())
             {
                 yield return new ElementIdFilter(ids);

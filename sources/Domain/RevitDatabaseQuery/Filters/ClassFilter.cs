@@ -31,7 +31,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Filters
 
         public static IEnumerable<Filter> Create(IList<ICommand> commands)
         {
-            var types = commands.Where(x => x.Type == CmdType.Class).SelectMany(x => x.MatchedArguments).OfType<ClassCmdArgument>().ToList();
+            var types = commands.OfType<ClassCmd>().SelectMany(x => x.Arguments).OfType<ClassCmdArgument>().ToList();
             if (types.Any())
             {
                 yield return new ClassFilter(types);

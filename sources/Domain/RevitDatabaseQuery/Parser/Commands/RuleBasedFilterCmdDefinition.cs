@@ -62,7 +62,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
 
     internal class RuleBasedFilterCmd : Command
     {
-        public RuleBasedFilterCmd(string text, IEnumerable<ICommandArgument> matchedArguments = null) : base(CmdType.RuleBasedFilter, text, matchedArguments, null)
+        public RuleBasedFilterCmd(string text, IEnumerable<IFuzzySearchResult> matchedArguments = null) : base(CmdType.RuleBasedFilter, text, matchedArguments, null)
         {
         }
     }
