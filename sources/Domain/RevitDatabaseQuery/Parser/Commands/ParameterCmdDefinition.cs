@@ -90,7 +90,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
         {
             var @operator = Operators.Parse(argument);
             var leftSide = Operators.GetLeftSideOfOperator(argument);
-            var bareArgument = leftSide.RemovePrefix(nameof(BuiltInParameter));
+            var bareArgument = leftSide.RemovePrefix("BuiltInParameter.");
             var argsBIP = dataBucket.FuzzySearch(bareArgument);
             var argsUser = dataBucketForUser.FuzzySearch(bareArgument);
             var args = argsBIP.Union(argsUser);

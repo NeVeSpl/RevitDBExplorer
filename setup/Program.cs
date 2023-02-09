@@ -61,7 +61,8 @@ namespace SetupBuilder
             "System.Text.Encodings.Web.dll",
             "System.Text.Json.dll",
             "System.Threading.Tasks.Extensions.dll",
-            "System.ValueTuple.dll"
+            "System.ValueTuple.dll",
+            "TrieNet.dll"
         };
         static Dir CreateDirFor(string year)
         {

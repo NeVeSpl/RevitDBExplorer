@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gma.DataStructures.StringSearch;
 using RevitDBExplorer.Domain.RevitDatabaseQuery.Parser;
 using RevitDBExplorer.WPF.Controls;
 using SimMetrics.Net;
@@ -13,7 +14,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.FuzzySearch
     {
         private readonly List<DataBucketItem<T>> items = new List<DataBucketItem<T>>();
         private readonly double fuzzySearchMatchingThreshold;
-
+        private ITrie<IAutocompleteItem> trie = new Trie<IAutocompleteItem>();
 
         public DataBucket(double fuzzySearchMatchingThreshold)
         {
@@ -30,7 +31,16 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.FuzzySearch
             if (items.Count > 0 && items.First().autocompleteItem != null)
             {
                 items.Sort((x, y) => x.autocompleteItem.Label.CompareTo(y.autocompleteItem.Label));
-            }
+
+                trie = new Trie<IAutocompleteItem>();
+                foreach (var item in items)
+                {
+                    if (item.autocompleteItem != null)
+                    {
+                        trie.Add(item.autocompleteItem.Label.ToLowerInvariant(), item.autocompleteItem);
+                    }
+                }
+            }                   
         }
         public void Clear()
         {
@@ -84,11 +94,24 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.FuzzySearch
 
         public IEnumerable<IAutocompleteItem> ProvideAutoCompletion(string prefix)
         {
-            foreach (var item in items)
+            if (string.IsNullOrWhiteSpace(prefix))
             {
-                if (item.autocompleteItem != null)
+                foreach (var item in items)
                 {
-                    yield return item.autocompleteItem;
+                    if (item.autocompleteItem != null)
+                    {                       
+                        yield return item.autocompleteItem;                        
+                    }
+                }
+            }
+            else
+            {
+                foreach (var item in trie.Retrieve(prefix))
+                {
+                    if (!prefix.Equals(item.TextToInsert, StringComparison.OrdinalIgnoreCase))
+                    {
+                        yield return item;
+                    }
                 }
             }
         }

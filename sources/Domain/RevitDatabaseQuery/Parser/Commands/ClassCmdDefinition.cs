@@ -62,11 +62,9 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
         public IAutocompleteItem GetCommandAutocompleteItem() => AutocompleteItem;
         public IEnumerable<IAutocompleteItem> GetAutocompleteItems(string prefix)
         {
-            if (string.IsNullOrWhiteSpace(prefix))
-            {
-                return dataBucket.ProvideAutoCompletion(prefix);
-            }
-            return Enumerable.Empty<IAutocompleteItem>();
+          
+            return dataBucket.ProvideAutoCompletion(prefix);
+        
         }
 
 

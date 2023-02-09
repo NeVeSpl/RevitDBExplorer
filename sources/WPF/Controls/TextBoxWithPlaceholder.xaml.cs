@@ -33,7 +33,7 @@ namespace RevitDBExplorer.WPF.Controls
     }
     public interface IAutocompleteItemProvider
     {
-        IEnumerable<IAutocompleteItem> GetAutocompleteItems(string fullText, int caretPosition);
+        (IEnumerable<IAutocompleteItem> items, int prefixLength) GetAutocompleteItems(string fullText, int caretPosition);
     }
 
 
@@ -196,11 +196,14 @@ namespace RevitDBExplorer.WPF.Controls
             {                
                 Keyboard.Focus(cTextBox);               
             }
-        }   
+        }
 
+        int prefixLength;
         private bool TryOpen(bool again = false)
         {
-            var autocompleteItems = AutocompleteItemProvider?.GetAutocompleteItems(cTextBox.Text, cTextBox.CaretIndex);
+            if (AutocompleteItemProvider == null) return false;
+
+            (var autocompleteItems, prefixLength) = AutocompleteItemProvider.GetAutocompleteItems(cTextBox.Text, cTextBox.CaretIndex);
         
             bool shouldBeOpened = autocompleteItems?.Count() > 0;
 
@@ -221,8 +224,9 @@ namespace RevitDBExplorer.WPF.Controls
         {
             internalChange = true;
             int indx = cTextBox.CaretIndex;
+            cTextBox.Select(indx - prefixLength, prefixLength);
             cTextBox.SelectedText = text;
-            cTextBox.Select(indx + text.Length, 0);
+            cTextBox.Select(indx + text.Length- prefixLength, 0);
             internalChange = false;
         }
 

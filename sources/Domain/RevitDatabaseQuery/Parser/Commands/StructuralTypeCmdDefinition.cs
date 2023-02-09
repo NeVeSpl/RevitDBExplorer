@@ -11,7 +11,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
 {
     internal class StructuralTypeCmdDefinition : ICommandDefinition, INeedInitialization, IOfferArgumentAutocompletion
     {
-        private static readonly AutocompleteItem CmdDefAutocompleteItem = new AutocompleteItem("s: ", "s:[structural type]", "select elements matching a structural type");
+        private static readonly AutocompleteItem CmdDefAutocompleteItem = new AutocompleteItem("s: StructuralType.", "s:[structural type]", "select elements matching a structural type");
         private readonly DataBucket<StructuralTypeCmdArgument> dataBucket = new DataBucket<StructuralTypeCmdArgument>(0.61);
 
 
@@ -32,12 +32,8 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
 
         public IAutocompleteItem GetCommandAutocompleteItem() => CmdDefAutocompleteItem;
         public IEnumerable<IAutocompleteItem> GetAutocompleteItems(string prefix)
-        {
-            if (string.IsNullOrWhiteSpace(prefix))
-            {
-                return dataBucket.ProvideAutoCompletion(prefix);
-            }
-            return Enumerable.Empty<IAutocompleteItem>();
+        {            
+            return dataBucket.ProvideAutoCompletion(prefix);            
         }
 
 
@@ -64,7 +60,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
 
         public ICommand Create(string cmdText, string argument)
         {
-            var arg = argument.RemovePrefix(nameof(StructuralType));
+            var arg = argument.RemovePrefix("StructuralType.");
             var args = dataBucket.FuzzySearch(arg);
             return new StructuralTypeCmd(cmdText, args);
         }        

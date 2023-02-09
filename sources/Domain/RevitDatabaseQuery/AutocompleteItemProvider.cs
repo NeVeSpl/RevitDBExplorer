@@ -20,12 +20,13 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
 
 
 
-        public IEnumerable<IAutocompleteItem> GetAutocompleteItems(string fullText, int caretPosition)
+        public (IEnumerable<IAutocompleteItem>, int) GetAutocompleteItems(string fullText, int caretPosition)
         {
             string textOnTheLeftSideOfCaret = fullText.Substring(0, caretPosition).Trim();
             //string textOnTheRightSideOfCaret = fullText.Substring(caretPosition).Trim();
 
             var items = new List<IAutocompleteItem>();
+            int prefixLength = 0;
 
             if (string.IsNullOrEmpty(fullText) || IsSeparator(textOnTheLeftSideOfCaret.LastOrDefault()))
             {
@@ -34,21 +35,23 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
             else
             {
                 var lastCmd = QueryParser.SplitIntoCmdStrings(textOnTheLeftSideOfCaret).LastOrDefault();
-                if (IsClassifierSymbol(lastCmd.Last()))
+                //if (IsClassifierSymbol(lastCmd.Last()))
                 {
                     var splittedByClassifier = lastCmd.Split(CommandParser.Separators, 2, System.StringSplitOptions.None);
                     if (splittedByClassifier.Length == 2)
                     {
-                        var definition = CommandParser.GetCommandDefinitionForClassifier(splittedByClassifier[0]);
+                        var definition = CommandParser.GetCommandDefinitionForClassifier(splittedByClassifier[0].Trim().ToLowerInvariant());
                         if (definition is IOfferArgumentAutocompletion argumentAutocompletion)
                         {
-                            items.AddRange(argumentAutocompletion.GetAutocompleteItems(splittedByClassifier[1]));
+                            var prefix = splittedByClassifier[1].Trim().ToLowerInvariant();
+                            prefixLength = prefix.Length;
+                            items.AddRange(argumentAutocompletion.GetAutocompleteItems(prefix));
                         }
                     }
                 }
             }            
 
-            return items;
+            return (items, prefixLength);
         }
 
 

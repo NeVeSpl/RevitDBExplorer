@@ -189,6 +189,9 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
+    <Reference Include="TrieNet, Version=1.0.3.26316, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\TrieNet.1.0.3.26316\lib\net461\TrieNet.dll</HintPath>
+    </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />

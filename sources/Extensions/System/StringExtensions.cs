@@ -63,7 +63,7 @@ namespace System
         {
             if (input.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
             {
-                return input.Remove(0, prefix.Length + 1);
+                return input.Remove(0, prefix.Length);
             }
             return input;
         }

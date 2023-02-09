@@ -60,7 +60,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
 
         public ICommand Create(string cmdText, string argument)
         {
-            var arg = argument.RemovePrefix(nameof(BuiltInCategory));
+            var arg = argument.RemovePrefix("BuiltInCategory.");
             var args = dataBucket.FuzzySearch(arg);
             return new CategoryCmd(cmdText, args);
         }
