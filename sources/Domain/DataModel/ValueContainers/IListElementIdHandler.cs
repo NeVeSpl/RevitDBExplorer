@@ -21,8 +21,8 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers
         {
             if (ids.Any())
             {
-                var elements = new FilteredElementCollector(document).WherePasses(new ElementIdSetFilter(ids)).ToElements();
-                return elements.Select(x => new SnoopableObject(document, x));
+                //var elements = new FilteredElementCollector(document).WherePasses(new ElementIdSetFilter(ids)).ToElements();
+                return ids.Select(x => new SnoopableObject(document, x));
             }
             return Enumerable.Empty<SnoopableObject>();
         }

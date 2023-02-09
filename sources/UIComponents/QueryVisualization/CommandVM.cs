@@ -93,7 +93,7 @@ namespace RevitDBExplorer.UIComponents.QueryVisualization
                     break;                
                 case CmdType.Parameter:
                     var arguments = command.Arguments.OfType<ParameterMatch>();
-                    var firstArg = arguments.First();
+                    var firstArg = arguments?.First();
                     
                     string count = "";
                     if (arguments.Count() > 1)

@@ -53,7 +53,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
                                               .Where(x => !ClassesBlackList.Contains(x.FullName));
             foreach (var @class in classes)
             {
-                dataBucket.Add(new AutocompleteItem(@class.Name, @class.Name, @class.Name), new ClassCmdArgument(@class), @class.Name);
+                dataBucket.Add(new AutocompleteItem(@class.Name, @class.Name, ""), new ClassCmdArgument(@class), @class.Name);
             }
             dataBucket.Rebuild();
         }

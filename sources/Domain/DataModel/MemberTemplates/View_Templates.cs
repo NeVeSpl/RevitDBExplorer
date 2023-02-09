@@ -19,7 +19,8 @@ namespace RevitDBExplorer.Domain.DataModel.MemberTemplates
         {
             templates = new ISnoopableMemberTemplate[]
             {       
-               SnoopableMemberTemplate<View>.Create((document, target) => SpatialFieldManager.GetSpatialFieldManager(target), kind: MemberKind.StaticMethod),               
+               SnoopableMemberTemplate<View>.Create((document, target) => SpatialFieldManager.GetSpatialFieldManager(target), kind: MemberKind.StaticMethod),
+               SnoopableMemberTemplate<ViewSchedule>.Create((document, target) => TableView.GetAvailableParameters(document, target.Definition.CategoryId), kind: MemberKind.StaticMethod),
             }; 
         }
 

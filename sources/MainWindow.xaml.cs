@@ -301,7 +301,10 @@ namespace RevitDBExplorer
         }
         private void TextBox_MenuItem_CopyFilteredElementCollector(object sender, RoutedEventArgs e)
         {
-            Clipboard.SetText(DatabaseQueryToolTip);
+            try
+            {
+                Clipboard.SetText(DatabaseQueryToolTip);
+            } catch { }
         }
         
 

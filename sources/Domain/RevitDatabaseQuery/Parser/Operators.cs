@@ -56,6 +56,10 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser
             {
                 argument = argument.Substring(argument.IndexOf(@operator.Symbol) + @operator.Symbol.Length);
             }
+            else
+            {
+                @operator = operators.FirstOrDefault(x => x.Type == OperatorType.Exists);
+            }
 
             bool isInt = int.TryParse(argument, out int intArg);
             bool isDouble = double.TryParse(argument, out double doubleArg);
