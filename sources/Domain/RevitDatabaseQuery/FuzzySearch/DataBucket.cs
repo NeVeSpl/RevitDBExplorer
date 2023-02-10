@@ -37,7 +37,8 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.FuzzySearch
                 {
                     if (item.autocompleteItem != null)
                     {
-                        trie.Add(item.autocompleteItem.Label.ToLowerInvariant(), item.autocompleteItem);
+                        var key = item.autocompleteItem.Description ?? item.autocompleteItem.Label;
+                        trie.Add(key.ToLowerInvariant(), item.autocompleteItem);
                     }
                 }
             }                   

@@ -35,6 +35,7 @@ namespace RevitDBExplorer
         private string rightFilterPhrase = string.Empty;       
         private string databaseQuery = string.Empty;
         private string databaseQueryToolTip = string.Empty;
+        private bool isPopupOpen;
         private bool isRevitBusy;
         private readonly DispatcherTimer isRevitBusyDispatcher;
         private readonly IAutocompleteItemProvider databaseQueryAutocompleteItemProvider = new AutocompleteItemProvider();
@@ -77,7 +78,10 @@ namespace RevitDBExplorer
             set
             {
                 databaseQuery = value;
-                TryQueryDatabase(value);
+                if (IsPopupOpen == false)
+                {
+                    TryQueryDatabase(value);
+                }
                 OnPropertyChanged();
             }
         }
@@ -90,6 +94,18 @@ namespace RevitDBExplorer
             set
             {
                 databaseQueryToolTip = value;               
+                OnPropertyChanged();
+            }
+        }
+        public bool IsPopupOpen
+        {
+            get
+            {
+                return isPopupOpen;
+            }
+            set
+            {
+                isPopupOpen = value;
                 OnPropertyChanged();
             }
         }

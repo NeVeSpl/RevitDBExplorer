@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Windows.Media.Imaging;
 using Autodesk.Revit.UI;
+using Autodesk.Windows;
 using RevitDBExplorer.Domain;
 using RevitDBExplorer.Domain.DataModel.MemberAccessors;
 using RevitDBExplorer.Domain.DataModel.Streams;
 using RevitDBExplorer.Domain.DataModel.ValueContainers.Base;
 using RevitDBExplorer.Domain.RevitDatabaseQuery;
+using AdW = Autodesk.Windows;
 
 namespace RevitDBExplorer
 {
@@ -25,6 +27,15 @@ namespace RevitDBExplorer
             pushButtonData.Image = new BitmapImage(new Uri("pack://application:,,,/RevitDBExplorer;component/Resources/RDBE.Icon.16.png", UriKind.RelativeOrAbsolute));
             pushButtonData.LargeImage = new BitmapImage(new Uri("pack://application:,,,/RevitDBExplorer;component/Resources/RDBE.Icon.32.png", UriKind.RelativeOrAbsolute));
             panel.AddItem(pushButtonData);
+
+            var tab = ComponentManager.Ribbon.FindTab("Modify");
+            if (tab != null)
+            {
+                var adwPanel = new AdW.RibbonPanel();
+                adwPanel.CopyFrom(panel.GetRibbonPanel());
+                tab.Panels.Add(adwPanel);
+            }
+
 
             ExternalExecutor.CreateExternalEvent();
             MemberAccessorFactory.Init();

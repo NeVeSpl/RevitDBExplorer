@@ -7,7 +7,7 @@ using RevitDBExplorer.WPF.Controls;
 
 namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
 {
-    internal class RoomCmdDefinition : ICommandDefinition, INeedInitializationWithDocument
+    internal class RoomCmdDefinition : ICommandDefinition, INeedInitializationWithDocument, IOfferArgumentAutocompletion
     {
         private static readonly AutocompleteItem AutocompleteItem = new AutocompleteItem("r: ", "r:[room]", "select elements from a given room");
         private readonly DataBucket<RoomCmdArgument> dataBucket = new DataBucket<RoomCmdArgument>(0.61);
@@ -18,7 +18,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
             dataBucket.Clear();
             foreach (var room in new FilteredElementCollector(document).WherePasses(new Autodesk.Revit.DB.Architecture.RoomFilter()))
             {
-                dataBucket.Add(null, new RoomCmdArgument(room.Id, room.Name), room.Name);
+                dataBucket.Add(new AutocompleteItem(room.Name, room.Name, null), new RoomCmdArgument(room.Id, room.Name), room.Name);
 
             }
             dataBucket.Rebuild();
@@ -26,7 +26,11 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
 
 
         public IAutocompleteItem GetCommandAutocompleteItem() => AutocompleteItem;
-        
+        public IEnumerable<IAutocompleteItem> GetAutocompleteItems(string prefix)
+        {
+            return dataBucket.ProvideAutoCompletion(prefix);
+        }
+
 
         public IEnumerable<string> GetClassifiers()
         {

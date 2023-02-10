@@ -52,6 +52,8 @@
                HorizontalOffset="{Binding Path=Left, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" 
                CustomPopupPlacementCallback="CustomPopupPlacementCallback"
                MaxHeight="400"
+               Closed="cPopup_Closed"
+               Opened="cPopup_Opened"
                >
             <Border Background="Red" >
                 <ListBox x:Name="cListBox" 

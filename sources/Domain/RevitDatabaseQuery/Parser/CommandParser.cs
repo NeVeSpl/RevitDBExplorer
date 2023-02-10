@@ -80,6 +80,8 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser
         }
         public static void LoadDocumentSpecificData(Document document)
         {
+            if (document == null) return;
+
             foreach (var definition in Definitions.OfType<INeedInitializationWithDocument>())
             {
                 definition.Init(document);

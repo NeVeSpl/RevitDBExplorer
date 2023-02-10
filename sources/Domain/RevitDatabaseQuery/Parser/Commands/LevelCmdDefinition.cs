@@ -7,7 +7,7 @@ using RevitDBExplorer.WPF.Controls;
 
 namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
 {
-    internal class LevelCmdDefinition : ICommandDefinition, INeedInitializationWithDocument
+    internal class LevelCmdDefinition : ICommandDefinition, INeedInitializationWithDocument, IOfferArgumentAutocompletion
     {
         private static readonly AutocompleteItem AutocompleteItem = new AutocompleteItem("l: ", "l:[level]", "select elements from a given level");
         private readonly DataBucket<LevelCmdArgument> dataBucket = new DataBucket<LevelCmdArgument>(0.61);
@@ -18,15 +18,18 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
             dataBucket.Clear();
             foreach (var element in new FilteredElementCollector(document).OfClass(typeof(Level)))
             {
-                dataBucket.Add(null, new LevelCmdArgument(element.Id, element.Name), element.Name);
-
+                dataBucket.Add(new AutocompleteItem(element.Name, element.Name, null), new LevelCmdArgument(element.Id, element.Name), element.Name);
             }
             dataBucket.Rebuild();
         }
 
 
         public IAutocompleteItem GetCommandAutocompleteItem() => AutocompleteItem;
-      
+        public IEnumerable<IAutocompleteItem> GetAutocompleteItems(string prefix)
+        {
+            return dataBucket.ProvideAutoCompletion(prefix);
+        }
+
 
         public IEnumerable<string> GetClassifiers()
         {

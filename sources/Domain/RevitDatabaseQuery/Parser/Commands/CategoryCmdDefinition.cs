@@ -8,7 +8,7 @@ using RevitDBExplorer.WPF.Controls;
 
 namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
 {
-    internal class CategoryCmdDefinition : ICommandDefinition, INeedInitialization
+    internal class CategoryCmdDefinition : ICommandDefinition, INeedInitialization, IOfferArgumentAutocompletion
     {
         private static readonly AutocompleteItem AutocompleteItem = new AutocompleteItem("c: ", "c:[category]", "select elements of given category");
         private readonly DataBucket<CategoryCmdArgument> dataBucket = new DataBucket<CategoryCmdArgument>(0.59);
@@ -23,11 +23,13 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
                 var category = (BuiltInCategory)categoryId.Value();
                 var label = LabelUtils.GetLabelFor(category);
 
+                var strCategory = category.ToString();
+
                 if (!Category.IsBuiltInCategoryValid(category))
                 {
                     continue;
                 }
-                dataBucket.Add(null, new CategoryCmdArgument(category), label, category.ToString());             
+                dataBucket.Add(new AutocompleteItem(strCategory, strCategory, label), new CategoryCmdArgument(category), label, strCategory);             
             }
 
             dataBucket.Rebuild();
@@ -35,6 +37,11 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
 
 
         public IAutocompleteItem GetCommandAutocompleteItem() => AutocompleteItem;
+        public IEnumerable<IAutocompleteItem> GetAutocompleteItems(string prefix)
+        {
+
+            return dataBucket.ProvideAutoCompletion(prefix);
+        }
 
 
         public IEnumerable<string> GetClassifiers()

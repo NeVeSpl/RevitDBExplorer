@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using System.Windows.Data;
 using System.Windows.Input;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
@@ -40,6 +41,7 @@ namespace RevitDBExplorer.WPF.Controls
     public partial class TextBoxWithPlaceholder : UserControl
     {
         public static readonly DependencyProperty TextProperty = DependencyProperty.Register(nameof(Text), typeof(string), typeof(TextBoxWithPlaceholder), new FrameworkPropertyMetadata(string.Empty, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+        public static readonly DependencyProperty IsPopupOpenProperty = DependencyProperty.Register(nameof(IsPopupOpen), typeof(bool), typeof(TextBoxWithPlaceholder), new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
         public static readonly DependencyProperty PlaceholderProperty = DependencyProperty.Register(nameof(Placeholder), typeof(string), typeof(TextBoxWithPlaceholder), new FrameworkPropertyMetadata("Placeholder"));
 
@@ -50,7 +52,18 @@ namespace RevitDBExplorer.WPF.Controls
         public string Text
         {
             get { return (string)GetValue(TextProperty); }
-            set { SetValue(TextProperty, value); }
+            set 
+            { 
+                SetValue(TextProperty, value); 
+            }
+        }
+        public bool IsPopupOpen
+        {
+            get { return (bool)GetValue(IsPopupOpenProperty); }
+            set
+            {
+                SetValue(IsPopupOpenProperty, value);
+            }
         }
         public string Placeholder
         {
@@ -84,6 +97,7 @@ namespace RevitDBExplorer.WPF.Controls
                     
         }
 
+        Binding myBinding;
         public override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
@@ -94,6 +108,8 @@ namespace RevitDBExplorer.WPF.Controls
                 parentWindow.Activated += ParentWindow_Activated;
                 parentWindow.MouseDown += ParentWindow_MouseDown;
             }
+
+            myBinding = BindingOperations.GetBinding(cTextBox, TextBox.TextProperty);
         }
 
        
@@ -151,7 +167,10 @@ namespace RevitDBExplorer.WPF.Controls
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {            
             if (internalChange) return;
-            TryOpen();
+            if (cTextBox.IsFocused)
+            {
+                TryOpen();
+            }
         }
         private void TextBox_MouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -246,7 +265,19 @@ namespace RevitDBExplorer.WPF.Controls
             return new CustomPopupPlacement[] {new CustomPopupPlacement(new Point((0.01 - offset.X), (cMainGrid.ActualHeight - offset.Y)), PopupPrimaryAxis.None) };
         }
 
-       
-    
+        private void cPopup_Closed(object sender, EventArgs e)
+        {
+            IsPopupOpen = false;
+            //internalChange = true;
+            //Text = cTextBox.Text;
+            //BindingOperations.SetBinding(cTextBox, TextBox.TextProperty, myBinding);
+            //internalChange = false;
+        }
+
+        private void cPopup_Opened(object sender, EventArgs e)
+        {
+            IsPopupOpen = true; ;
+            //BindingOperations.ClearBinding(cTextBox, TextBox.TextProperty);
+        }
     }
 }

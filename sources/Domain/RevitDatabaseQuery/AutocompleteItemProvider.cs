@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using RevitDBExplorer.Domain.RevitDatabaseQuery.Parser;
 using RevitDBExplorer.WPF.Controls;
 
@@ -28,6 +30,11 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
             var items = new List<IAutocompleteItem>();
             int prefixLength = 0;
 
+            if (string.IsNullOrEmpty(fullText))
+            {
+                LoadDocumentSpecificData();
+            }
+
             if (string.IsNullOrEmpty(fullText) || IsSeparator(textOnTheLeftSideOfCaret.LastOrDefault()))
             {
                 items.AddRange(CommandAutocompleteItems);
@@ -35,7 +42,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
             else
             {
                 var lastCmd = QueryParser.SplitIntoCmdStrings(textOnTheLeftSideOfCaret).LastOrDefault();
-                //if (IsClassifierSymbol(lastCmd.Last()))
+                if (!string.IsNullOrEmpty(lastCmd))
                 {
                     var splittedByClassifier = lastCmd.Split(CommandParser.Separators, 2, System.StringSplitOptions.None);
                     if (splittedByClassifier.Length == 2)
@@ -73,6 +80,16 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
                 if (c == separator) return true;
             }
             return false;
+        }
+
+
+        private void LoadDocumentSpecificData()
+        {
+            ExternalExecutor.ExecuteInRevitContextAsync(x =>
+            {
+                CommandParser.LoadDocumentSpecificData(x.ActiveUIDocument?.Document);
+
+            }).Forget();
         }
     }
 }

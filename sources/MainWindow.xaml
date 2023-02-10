@@ -136,6 +136,7 @@
 
             <controls:TextBoxWithPlaceholder Text="{Binding DatabaseQuery, Mode=TwoWay, Delay=1000, UpdateSourceTrigger=PropertyChanged}" 
                                              AutocompleteItemProvider="{Binding DatabaseQueryAutocompleteItemProvider}"
+                                             IsPopupOpen="{Binding IsPopupOpen}"
                                              Placeholder="Query Revit database with RDQ"
                                              ToolTip="{Binding DatabaseQueryToolTip}"
                                              ToolTipService.ShowDuration="50000">

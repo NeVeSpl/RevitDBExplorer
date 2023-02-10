@@ -19,7 +19,12 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Filters
 
             var ruleElement = document.GetElement(ruleMatch.Value) as ParameterFilterElement;
             var elementFilter = ruleElement.GetElementFilter();
-            Filter = elementFilter;
+            var categories = ruleElement.GetCategories();
+            var categoryFilter = new ElementMulticategoryFilter(categories);
+            var filters = new[] { categoryFilter, elementFilter };
+            var andFilter = new LogicalAndFilter(filters.Where(x => x != null).ToArray());
+
+            Filter = andFilter;
             FilterSyntax = $"(document.GetElement({ruleFilter.Name}) as ParameterFilterElement).GetElementFilter()";
         }
 

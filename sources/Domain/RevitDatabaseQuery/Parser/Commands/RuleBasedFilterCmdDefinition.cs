@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Xml.Linq;
 using Autodesk.Revit.DB;
 using RevitDBExplorer.Domain.RevitDatabaseQuery.FuzzySearch;
 using RevitDBExplorer.WPF.Controls;
@@ -7,7 +8,7 @@ using RevitDBExplorer.WPF.Controls;
 
 namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
 {
-    internal class RuleBasedFilterCmdDefinition : ICommandDefinition, INeedInitializationWithDocument
+    internal class RuleBasedFilterCmdDefinition : ICommandDefinition, INeedInitializationWithDocument, IOfferArgumentAutocompletion
     {
         private static readonly AutocompleteItem AutocompleteItem = new AutocompleteItem("f: ", "f:[filter]", "select elements that pass rule-based filter defined in Revit");
         private readonly DataBucket<RuleBasedFilterCmdArgument> dataBucket = new DataBucket<RuleBasedFilterCmdArgument>(0.61);
@@ -18,7 +19,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
             dataBucket.Clear();
             foreach (var element in new FilteredElementCollector(document).OfClass(typeof(ParameterFilterElement)))
             {
-                dataBucket.Add(null, new RuleBasedFilterCmdArgument(element.Id, element.Name), element.Name);
+                dataBucket.Add(new AutocompleteItem(element.Name, element.Name, null), new RuleBasedFilterCmdArgument(element.Id, element.Name), element.Name);
                 
             }
             dataBucket.Rebuild();
@@ -26,7 +27,10 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
 
 
         public IAutocompleteItem GetCommandAutocompleteItem() => AutocompleteItem;
-       
+        public IEnumerable<IAutocompleteItem> GetAutocompleteItems(string prefix)
+        {
+            return dataBucket.ProvideAutoCompletion(prefix);
+        }
 
         public IEnumerable<string> GetClassifiers()
         {
