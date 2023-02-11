@@ -11,7 +11,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
 {
     internal class ParameterCmdDefinition : ICommandDefinition, INeedInitialization, INeedInitializationWithDocument, IOfferArgumentAutocompletion
     {
-        private static readonly AutocompleteItem AutocompleteItem = new AutocompleteItem("p: ", "p:[parametr] = [value]", "search for a parameter (value)");
+        private static readonly AutocompleteItem AutocompleteItem = new AutocompleteItem("p: ", "p:[parametr] = [value]", "search for a parameter (value)", AutocompleteItemGroups.Commands);
         private readonly DataBucket<ParameterArgument> dataBucket = new DataBucket<ParameterArgument>(0.69);
         private readonly DataBucket<ParameterArgument> dataBucketForUser = new DataBucket<ParameterArgument>(0.67);
 
@@ -52,7 +52,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
                 }
 
 
-                dataBucket.Add(new AutocompleteItem(strParam, $"{strParam} ({(long)param})", label), new ParameterArgument(param), label, strParam);              
+                dataBucket.Add(new AutocompleteItem(strParam, $"{strParam} ({(long)param})", label, AutocompleteItemGroups.BuiltInParameter), new ParameterArgument(param), label, strParam);              
             }
             dataBucket.Rebuild();
         }
@@ -61,7 +61,12 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
             dataBucketForUser.Clear();         
             foreach (var userParam in new FilteredElementCollector(document).OfClass(typeof(ParameterElement)))
             {
-                dataBucketForUser.Add(new AutocompleteItem(userParam.Name, userParam.Name, null), new ParameterArgument(userParam.Id, userParam.Name), userParam.Name);
+                var group = AutocompleteItemGroups.ProjectParameter;
+                if (userParam is SharedParameterElement)
+                {
+                    group = AutocompleteItemGroups.SharedParameter;
+                }
+                dataBucketForUser.Add(new AutocompleteItem(userParam.Name, userParam.Name, null, group), new ParameterArgument(userParam.Id, userParam.Name), userParam.Name);
             }
             dataBucketForUser.Rebuild();
         }

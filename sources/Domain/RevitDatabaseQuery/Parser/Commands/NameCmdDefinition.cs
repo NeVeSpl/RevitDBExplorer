@@ -12,7 +12,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
     internal class NameCmdDefinition : ICommandDefinition
     {
         public static readonly NameCmdDefinition Instance = new NameCmdDefinition();
-        private static readonly AutocompleteItem AutocompleteItem = new AutocompleteItem("n: ", "n:[text]", "wildcard search for a given text");
+        private static readonly AutocompleteItem AutocompleteItem = new AutocompleteItem("n: ", "n:[text]", "wildcard search for a given text", AutocompleteItemGroups.Commands);
         private readonly DataBucket<ParameterArgument> dataBucket = new DataBucket<ParameterArgument>(0.69);
 
         public IAutocompleteItem GetCommandAutocompleteItem() => AutocompleteItem;

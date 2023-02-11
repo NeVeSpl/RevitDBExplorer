@@ -6,7 +6,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser
     {
         string Name { get;  }
         string Label { get; }       
-        public CmdType CmdType { get;  }        
+       
     }
 
     internal abstract class CommandArgument<T> : ICommandArgument
@@ -14,7 +14,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser
         public T Value { get; init; }
         public string Name { get; init; }
         public string Label { get; init; }     
-        public CmdType CmdType { get; init; }        
+        
 
 
         public CommandArgument(T value)

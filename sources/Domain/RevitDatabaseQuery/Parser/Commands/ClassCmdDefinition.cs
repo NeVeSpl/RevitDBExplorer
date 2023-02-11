@@ -41,7 +41,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
             typeof(Element).FullName,
             typeof(ElementType).FullName,
         };
-        private static readonly AutocompleteItem AutocompleteItem = new AutocompleteItem("t: ", "t:[class]", "select elements of given class");
+        private static readonly AutocompleteItem AutocompleteItem = new AutocompleteItem("t: ", "t:[class]", "select elements of given class", AutocompleteItemGroups.Commands);
         private readonly DataBucket<ClassCmdArgument> dataBucket = new DataBucket<ClassCmdArgument>(0.61);
 
 
@@ -95,7 +95,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
     {
         public ClassCmdArgument(Type value) : base(value)
         {
-            CmdType = CmdType.Class;
+           
             Name = $"typeof({value.Name})";
             Label = value.Name;
         }

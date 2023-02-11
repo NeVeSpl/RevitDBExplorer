@@ -160,7 +160,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.FuzzySearch
             public double LevensteinScore { get; init; }
             public string Name => argument.Name;
             public string Label => argument.Label;
-            public CmdType CmdType => argument.CmdType;
+         
 
 
             public FuzzySearchResult(T2 argument, double levensteinScore)

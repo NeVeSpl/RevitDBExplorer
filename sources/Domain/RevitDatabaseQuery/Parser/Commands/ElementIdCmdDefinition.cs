@@ -10,7 +10,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
 {
     internal class ElementIdCmdDefinition : ICommandDefinition
     {
-        private static readonly AutocompleteItem AutocompleteItem = new AutocompleteItem("i: ", "i:[number] ", "select elements with given id");
+        private static readonly AutocompleteItem AutocompleteItem = new AutocompleteItem("i: ", "i:[number] ", "select elements with given id", AutocompleteItemGroups.Commands);
         private readonly DataBucket<ElementIdCmdArgument> dataBucket = new DataBucket<ElementIdCmdArgument>(0.666);
 
 
@@ -52,7 +52,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
     {
         public ElementIdCmdArgument(ElementId value) : base(value)
         {
-            CmdType = CmdType.ElementId;
+           
             Name = $"new ElementId({value})";
             Label = value.Value().ToString();
         }

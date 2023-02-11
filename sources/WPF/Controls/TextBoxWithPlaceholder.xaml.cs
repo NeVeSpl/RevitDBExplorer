@@ -6,7 +6,9 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
+using System.Windows.Documents;
 using System.Windows.Input;
+using RevitDBExplorer.Domain.DataModel;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
@@ -18,6 +20,7 @@ namespace RevitDBExplorer.WPF.Controls
         string Label { get; }
         string Description { get; }
         bool IsChosenOne { get; set; }
+        string GroupName { get; }
     }
     public class AutocompleteItem : IAutocompleteItem
     {
@@ -25,17 +28,27 @@ namespace RevitDBExplorer.WPF.Controls
         public string TextToInsert { get; init; }
         public string Description { get; init; }
         public bool IsChosenOne { get; set; }
+        public string GroupName { get; init; }
 
-        public AutocompleteItem(string textToInsert, string label, string description)
+        public AutocompleteItem(string textToInsert, string label, string description, string group = null)
         {
             Label = label;
             TextToInsert = textToInsert;
             Description = description;
+            GroupName = group;
         }
     }
     public interface IAutocompleteItemProvider
     {
         (IEnumerable<IAutocompleteItem> items, int prefixLength) GetAutocompleteItems(string fullText, int caretPosition);
+    }
+
+    public static class AutocompleteItemGroups
+    {
+        public static readonly string Commands = "Commands";
+        public static readonly string BuiltInParameter = "Built-in parameters";
+        public static readonly string SharedParameter = "Shared parameters";
+        public static readonly string ProjectParameter = "Project parameters";
     }
 
 
@@ -169,10 +182,12 @@ namespace RevitDBExplorer.WPF.Controls
                     if (e.Key == Key.Up)
                     {
                         cListBox.SelectedIndex = Math.Max(0, cListBox.SelectedIndex - 1);
+                        cListBox.ScrollIntoView(cListBox.SelectedItem);
                     }
                     if (e.Key == Key.Down)
                     {
                         cListBox.SelectedIndex = Math.Min(cListBox.Items.Count, cListBox.SelectedIndex + 1);
+                        cListBox.ScrollIntoView(cListBox.SelectedItem);
                     }
                 }
                 else
@@ -247,7 +262,11 @@ namespace RevitDBExplorer.WPF.Controls
             
             if (shouldBeOpened)
             {
-                AutocompleteItems = new ObservableCollection<IAutocompleteItem>(autocompleteItems);
+                var items = new ObservableCollection<IAutocompleteItem>(autocompleteItems);
+                var lcv = (ListCollectionView)CollectionViewSource.GetDefaultView(items);
+                lcv.GroupDescriptions.Add(new PropertyGroupDescription(nameof(IAutocompleteItem.GroupName)));
+
+                AutocompleteItems = items;
             }
 
             Popup_SetIsOpen(shouldBeOpened);

@@ -10,7 +10,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
 {
     internal class CategoryCmdDefinition : ICommandDefinition, INeedInitialization, IOfferArgumentAutocompletion
     {
-        private static readonly AutocompleteItem AutocompleteItem = new AutocompleteItem("c: ", "c:[category]", "select elements of given category");
+        private static readonly AutocompleteItem AutocompleteItem = new AutocompleteItem("c: ", "c:[category]", "select elements of given category", AutocompleteItemGroups.Commands);
         private readonly DataBucket<CategoryCmdArgument> dataBucket = new DataBucket<CategoryCmdArgument>(0.59);
 
 
@@ -78,7 +78,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
     {
         public CategoryCmdArgument(BuiltInCategory value) : base(value)
         {
-            CmdType = CmdType.Category;
+            
             Name = $"BuiltInCategory.{value}";
             Label = LabelUtils.GetLabelFor(value);
         }

@@ -15,7 +15,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
 
         public ParameterArgument(BuiltInParameter value) : base(new ElementId(value))
         {
-            CmdType = CmdType.Parameter;
+            
             IsBuiltInParameter = true;
             BuiltInParameter = value;
             Name = $"BuiltInParameter.{value}";
@@ -23,7 +23,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
         }
         public ParameterArgument(ElementId value, string name) : base(value)
         {
-            CmdType = CmdType.Parameter;
+           
             IsBuiltInParameter = false;
             Name = $"new ElementId({value})";
             Label = name;

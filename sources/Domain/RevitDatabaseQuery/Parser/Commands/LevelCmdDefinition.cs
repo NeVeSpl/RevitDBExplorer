@@ -9,7 +9,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
 {
     internal class LevelCmdDefinition : ICommandDefinition, INeedInitializationWithDocument, IOfferArgumentAutocompletion
     {
-        private static readonly AutocompleteItem AutocompleteItem = new AutocompleteItem("l: ", "l:[level]", "select elements from a given level");
+        private static readonly AutocompleteItem AutocompleteItem = new AutocompleteItem("l: ", "l:[level]", "select elements from a given level", AutocompleteItemGroups.Commands);
         private readonly DataBucket<LevelCmdArgument> dataBucket = new DataBucket<LevelCmdArgument>(0.61);
 
       
@@ -57,7 +57,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
     {
         public LevelCmdArgument(ElementId levelId, string name) : base(levelId)
         {
-            CmdType = CmdType.Level;
+           
             Name = $"new ElementId({levelId})";
             Label = name;
         }

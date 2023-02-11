@@ -9,7 +9,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
 {
     internal class RoomCmdDefinition : ICommandDefinition, INeedInitializationWithDocument, IOfferArgumentAutocompletion
     {
-        private static readonly AutocompleteItem AutocompleteItem = new AutocompleteItem("r: ", "r:[room]", "select elements from a given room");
+        private static readonly AutocompleteItem AutocompleteItem = new AutocompleteItem("r: ", "r:[room]", "select elements from a given room", AutocompleteItemGroups.Commands);
         private readonly DataBucket<RoomCmdArgument> dataBucket = new DataBucket<RoomCmdArgument>(0.61);
               
 
@@ -57,7 +57,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
     {
         public RoomCmdArgument(ElementId roomId, string name) : base(roomId)
         {
-            CmdType = CmdType.Room;
+          
             Name = $"{name}.ClosedShell";
             Label = name;
         }

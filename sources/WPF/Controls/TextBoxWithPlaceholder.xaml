@@ -77,7 +77,12 @@
                          PreviewMouseDown="ListBox_PreviewMouseDown"                        
                          MinWidth="400"
                          Grid.IsSharedSizeScope="True"
-                         Background="{DynamicResource TextBox.Background}"                        
+                         Background="{DynamicResource TextBox.Background}"     
+                         VirtualizingPanel.IsVirtualizing="True"
+                         VirtualizingPanel.VirtualizationMode="Recycling"
+                         VirtualizingPanel.IsVirtualizingWhenGrouping="True"
+                         VirtualizingPanel.CacheLengthUnit="Page" 
+                         VirtualizingPanel.CacheLength="7,7"
                          >                   
                     <ListBox.ItemTemplate>
                         <DataTemplate>
@@ -91,6 +96,9 @@
                             </Grid>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
+                    <ListBox.GroupStyle>
+                        <GroupStyle />
+                    </ListBox.GroupStyle>
                 </ListBox>
             </Border>
            

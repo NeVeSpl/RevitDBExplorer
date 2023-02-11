@@ -27,7 +27,7 @@ namespace RevitDBExplorer.Tests.RDQ
         public void CanParseCategoryCommand(UIApplication uia, string cmd)
         {           
             var result = CommandParser.Parse(cmd).First();
-            Assert.AreEqual(Domain.RevitDatabaseQuery.CmdType.Category, result.Type);
+            Assert.IsInstanceOfType(result, typeof(CategoryCmd));
 
             var match = (result.MatchedArguments.First() as IFuzzySearchResult).Argument as CategoryCmdArgument;
             Assert.IsNotNull(match);
@@ -40,7 +40,7 @@ namespace RevitDBExplorer.Tests.RDQ
         public void CanParseClassCommand(UIApplication uia, string cmd)
         {
             var result = CommandParser.Parse(cmd).First();
-            Assert.AreEqual(Domain.RevitDatabaseQuery.CmdType.Class, result.Type);
+            Assert.IsInstanceOfType(result, typeof(ClassCmd));
 
             var match = (result.MatchedArguments.First() as IFuzzySearchResult).Argument as ClassCmdArgument;
             Assert.IsNotNull(match);
@@ -54,7 +54,7 @@ namespace RevitDBExplorer.Tests.RDQ
         public void CanParseElementIdCommand(UIApplication uia, string cmd)
         {
             var result = CommandParser.Parse(cmd).First();
-            Assert.AreEqual(Domain.RevitDatabaseQuery.CmdType.ElementId, result.Type);
+            Assert.IsInstanceOfType(result, typeof(ElementIdCmd));
 
             var match = result.Arguments.First() as ElementIdCmdArgument;
             Assert.IsNotNull(match);
@@ -68,7 +68,7 @@ namespace RevitDBExplorer.Tests.RDQ
         public void CanParseElementTypeCommand(UIApplication uia, string cmd)
         {
             var result = CommandParser.Parse(cmd).First();
-            Assert.AreEqual(Domain.RevitDatabaseQuery.CmdType.ElementType, result.Type);
+            Assert.IsInstanceOfType(result, typeof(ElementTypeCmd));
         }
 
         [RevitTestMethod]
@@ -81,7 +81,7 @@ namespace RevitDBExplorer.Tests.RDQ
             
             CommandParser.LoadDocumentSpecificData(document);
             var result = CommandParser.Parse(cmd).First();
-            Assert.AreEqual(Domain.RevitDatabaseQuery.CmdType.Level, result.Type);
+            Assert.IsInstanceOfType(result, typeof(LevelCmd));
 
             var match = (result.MatchedArguments.First() as IFuzzySearchResult).Argument as LevelCmdArgument;
             Assert.IsNotNull(match);
@@ -96,7 +96,7 @@ namespace RevitDBExplorer.Tests.RDQ
         public void CanParseNameCommand(UIApplication uia, string cmd)
         { 
             var result = CommandParser.Parse(cmd).First();
-            Assert.AreEqual(Domain.RevitDatabaseQuery.CmdType.Parameter, result.Type);
+            Assert.IsInstanceOfType(result, typeof(ParameterCmd));
 
             var match = result.Arguments.First() as ParameterArgument;
             Assert.IsNotNull(match);
@@ -113,7 +113,7 @@ namespace RevitDBExplorer.Tests.RDQ
         public void CanParseNotElementTypeCommand(UIApplication uia, string cmd)
         {
             var result = CommandParser.Parse(cmd).First();
-            Assert.AreEqual(Domain.RevitDatabaseQuery.CmdType.NotElementType, result.Type);
+            Assert.IsInstanceOfType(result, typeof(NotElementTypeCmd));
         }
 
         [RevitTestMethod]
@@ -123,7 +123,7 @@ namespace RevitDBExplorer.Tests.RDQ
         public void CanParseParameterCommand(UIApplication uia, string cmd)
         {
             var result = CommandParser.Parse(cmd).First();
-            Assert.AreEqual(Domain.RevitDatabaseQuery.CmdType.Parameter, result.Type);
+            Assert.IsInstanceOfType(result, typeof(ParameterCmd));
 
             var match = (result.MatchedArguments.First() as IFuzzySearchResult).Argument as ParameterArgument;
             Assert.IsNotNull(match);
@@ -145,7 +145,7 @@ namespace RevitDBExplorer.Tests.RDQ
             CommandParser.LoadDocumentSpecificData(document);
 
             var result = CommandParser.Parse(cmd).First();
-            Assert.AreEqual(Domain.RevitDatabaseQuery.CmdType.Room, result.Type);
+            Assert.IsInstanceOfType(result, typeof(RoomCmd));
 
             var match = (result.MatchedArguments.First() as IFuzzySearchResult).Argument as RoomCmdArgument;
             Assert.IsNotNull(match);
@@ -165,7 +165,7 @@ namespace RevitDBExplorer.Tests.RDQ
             CommandParser.LoadDocumentSpecificData(document);
 
             var result = CommandParser.Parse(cmd).First();
-            Assert.AreEqual(Domain.RevitDatabaseQuery.CmdType.RuleBasedFilter, result.Type);
+            Assert.IsInstanceOfType(result, typeof(RuleBasedFilterCmd));
 
             var match = (result.MatchedArguments.First() as IFuzzySearchResult).Argument as RuleBasedFilterCmdArgument;
             Assert.IsNotNull(match);
@@ -180,7 +180,7 @@ namespace RevitDBExplorer.Tests.RDQ
         public void CanParseStructuralTypeCommand(UIApplication uia, string cmd)
         { 
             var result = CommandParser.Parse(cmd).First();
-            Assert.AreEqual(Domain.RevitDatabaseQuery.CmdType.StructuralType, result.Type);
+            Assert.IsInstanceOfType(result, typeof(StructuralTypeCmd));
 
             var match = (result.MatchedArguments.First() as IFuzzySearchResult).Argument as StructuralTypeCmdArgument;
             Assert.IsNotNull(match);
@@ -194,7 +194,7 @@ namespace RevitDBExplorer.Tests.RDQ
         public void CanParseVisibleInViewCommand(UIApplication uia, string cmd)
         {
             var result = CommandParser.Parse(cmd).First();
-            Assert.AreEqual(Domain.RevitDatabaseQuery.CmdType.ActiveView, result.Type);
+            Assert.IsInstanceOfType(result, typeof(VisibleInViewCmd));
 
             //var match = result.MatchedArguments.First() as VisibleInViewMatch;
             //Assert.IsNotNull(match);
