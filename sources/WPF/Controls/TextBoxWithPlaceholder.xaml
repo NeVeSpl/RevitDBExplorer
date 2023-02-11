@@ -7,6 +7,15 @@
              xmlns:local="clr-namespace:RevitDBExplorer.WPF.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../../Resources/Templates/All.xaml"/>              
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+
     <Grid x:Name="cMainGrid" Background="{DynamicResource TextBox.Background}" PreviewLostKeyboardFocus="MainGrid_PreviewLostKeyboardFocus">
         <Grid.Resources>
             <converters:StringIsNotNullOrEmptyToBoolConverter x:Key="StringIsNotNullOrEmptyToBoolConverter"/>
@@ -17,6 +26,7 @@
                  KeyDown="TextBox_KeyDown"
                  PreviewKeyDown="TextBox_PreviewKeyDown" 
                  PreviewMouseLeftButtonDown ="TextBox_MouseDown"
+                 BorderThickness="0 0 0 1"
                  ContextMenu="{Binding ContextMenu, RelativeSource={RelativeSource Mode=FindAncestor,  AncestorType={x:Type UserControl}}}">
             <TextBox.Background>
                 <VisualBrush AlignmentX="Left" AlignmentY="Center" Stretch="None" >
@@ -52,8 +62,7 @@
                HorizontalOffset="{Binding Path=Left, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" 
                CustomPopupPlacementCallback="CustomPopupPlacementCallback"
                MaxHeight="400"
-               Closed="Popup_Closed"
-               Opened="Popup_Opened"
+             
                ToolTip = "{x:Null}"
                ToolTipService.IsEnabled="False"
                FocusManager.IsFocusScope="True"
@@ -68,8 +77,8 @@
                          PreviewMouseDown="ListBox_PreviewMouseDown"                        
                          MinWidth="400"
                          Grid.IsSharedSizeScope="True"
-                         Background="{DynamicResource TextBox.Background}"
-                         >
+                         Background="{DynamicResource TextBox.Background}"                        
+                         >                   
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <Grid  >

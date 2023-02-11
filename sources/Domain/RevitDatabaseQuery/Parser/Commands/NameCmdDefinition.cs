@@ -13,7 +13,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
     {
         public static readonly NameCmdDefinition Instance = new NameCmdDefinition();
         private static readonly AutocompleteItem AutocompleteItem = new AutocompleteItem("n: ", "n:[text]", "wildcard search for a given text");
-        private readonly DataBucket<ParameterMatch> dataBucket = new DataBucket<ParameterMatch>(0.69);
+        private readonly DataBucket<ParameterArgument> dataBucket = new DataBucket<ParameterArgument>(0.69);
 
         public IAutocompleteItem GetCommandAutocompleteItem() => AutocompleteItem;
             
@@ -33,7 +33,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
 
         public ICommand Create(string cmdText, string argument)
         {
-            var matchedArguments = NameLikeParameters.Select(x => new ParameterMatch(x)).ToArray();
+            var matchedArguments = NameLikeParameters.Select(x => new ParameterArgument(x)).ToArray();
           
             var @operator = Operators.Parse($"=%{argument}%");
             return new ParameterCmd(cmdText, dataBucket.CreateMatch(matchedArguments), @operator);

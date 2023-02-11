@@ -378,7 +378,7 @@
     <Compile Include="Domain\RevitDatabaseQuery\Filters\Internals\Filter.cs" />
     <Compile Include="Domain\RevitDatabaseQuery\Filters\Internals\Group.cs" />
     <Compile Include="Domain\RevitDatabaseQuery\Parser\Operators.cs" />
-    <Compile Include="Domain\RevitDatabaseQuery\Parser\Commands\ParameterMatch.cs" />
+    <Compile Include="Domain\RevitDatabaseQuery\Parser\Commands\ParameterArgument.cs" />
     <Compile Include="Domain\RevitDatabaseQuery\QueryParser.cs" />
     <Compile Include="Domain\RevitDatabaseQuery\RevitDatabaseQueryService.cs" />
     <Compile Include="Domain\RevitDocumentationReader.cs" />
@@ -506,6 +506,10 @@
     <Page Include="Resources\Templates\GridViewColumnHeader.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\Templates\ListBoxItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Resources\Templates\ListViewItem.xaml">
       <SubType>Designer</SubType>

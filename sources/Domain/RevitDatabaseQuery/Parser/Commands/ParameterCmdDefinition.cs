@@ -9,11 +9,11 @@ using RevitDBExplorer.WPF.Controls;
 
 namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
 {
-    internal class ParameterCmdDefinition : ICommandDefinition, INeedInitialization, INeedInitializationWithDocument
+    internal class ParameterCmdDefinition : ICommandDefinition, INeedInitialization, INeedInitializationWithDocument, IOfferArgumentAutocompletion
     {
         private static readonly AutocompleteItem AutocompleteItem = new AutocompleteItem("p: ", "p:[parametr] = [value]", "search for a parameter (value)");
-        private readonly DataBucket<ParameterMatch> dataBucket = new DataBucket<ParameterMatch>(0.69);
-        private readonly DataBucket<ParameterMatch> dataBucketForUser = new DataBucket<ParameterMatch>(0.67);
+        private readonly DataBucket<ParameterArgument> dataBucket = new DataBucket<ParameterArgument>(0.69);
+        private readonly DataBucket<ParameterArgument> dataBucketForUser = new DataBucket<ParameterArgument>(0.67);
 
         public void Init()
         {
@@ -40,12 +40,19 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
             foreach (var param in ids)
             {
                 var label = LabelUtils.GetLabelFor(param);
+                var strParam = param.ToString();
 
                 if (param == BuiltInParameter.INVALID)
                 {
                     continue;
                 }
-                dataBucket.Add(null, new ParameterMatch(param), label, param.ToString());              
+                if (string.IsNullOrEmpty(label))
+                {
+                    continue;
+                }
+
+
+                dataBucket.Add(new AutocompleteItem(strParam, $"{strParam} ({(long)param})", label), new ParameterArgument(param), label, strParam);              
             }
             dataBucket.Rebuild();
         }
@@ -54,14 +61,18 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
             dataBucketForUser.Clear();         
             foreach (var userParam in new FilteredElementCollector(document).OfClass(typeof(ParameterElement)))
             {
-                dataBucketForUser.Add(null, new ParameterMatch(userParam.Id, userParam.Name), userParam.Name);
+                dataBucketForUser.Add(new AutocompleteItem(userParam.Name, userParam.Name, null), new ParameterArgument(userParam.Id, userParam.Name), userParam.Name);
             }
             dataBucketForUser.Rebuild();
         }
 
 
         public IAutocompleteItem GetCommandAutocompleteItem() => AutocompleteItem;
-       
+        public IEnumerable<IAutocompleteItem> GetAutocompleteItems(string prefix)
+        {
+            return dataBucketForUser.ProvideAutoCompletion(prefix).Union(dataBucket.ProvideAutoCompletion(prefix));
+        }
+
 
         public IEnumerable<string> GetClassifiers()
         {

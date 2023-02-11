@@ -5,7 +5,7 @@ using Autodesk.Revit.DB;
 
 namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
 {
-    internal class ParameterMatch : CommandArgument<ElementId>
+    internal class ParameterArgument : CommandArgument<ElementId>
     {
         private static readonly Dictionary<ElementId, StorageType> storageTypeForUserParameters = new();
         public bool IsBuiltInParameter { get; }
@@ -13,7 +13,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
         public StorageType StorageType { get; private set; } = StorageType.None;
 
 
-        public ParameterMatch(BuiltInParameter value) : base(new ElementId(value))
+        public ParameterArgument(BuiltInParameter value) : base(new ElementId(value))
         {
             CmdType = CmdType.Parameter;
             IsBuiltInParameter = true;
@@ -21,7 +21,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
             Name = $"BuiltInParameter.{value}";
             Label = LabelUtils.GetLabelFor(value);
         }
-        public ParameterMatch(ElementId value, string name) : base(value)
+        public ParameterArgument(ElementId value, string name) : base(value)
         {
             CmdType = CmdType.Parameter;
             IsBuiltInParameter = false;

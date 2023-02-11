@@ -98,7 +98,7 @@ namespace RevitDBExplorer.Tests.RDQ
             var result = CommandParser.Parse(cmd).First();
             Assert.AreEqual(Domain.RevitDatabaseQuery.CmdType.Parameter, result.Type);
 
-            var match = result.Arguments.First() as ParameterMatch;
+            var match = result.Arguments.First() as ParameterArgument;
             Assert.IsNotNull(match);
             Assert.AreEqual(BuiltInParameter.ALL_MODEL_TYPE_NAME, match.BuiltInParameter);
 
@@ -125,7 +125,7 @@ namespace RevitDBExplorer.Tests.RDQ
             var result = CommandParser.Parse(cmd).First();
             Assert.AreEqual(Domain.RevitDatabaseQuery.CmdType.Parameter, result.Type);
 
-            var match = (result.MatchedArguments.First() as IFuzzySearchResult).Argument as ParameterMatch;
+            var match = (result.MatchedArguments.First() as IFuzzySearchResult).Argument as ParameterArgument;
             Assert.IsNotNull(match);
             Assert.AreEqual(BuiltInParameter.DOOR_NUMBER, match.BuiltInParameter);
 

@@ -10,12 +10,12 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Filters
 {
     internal class ParameterFilter : Filter
     {
-        private readonly ParameterMatch parameterMatch;
+        private readonly ParameterArgument parameterMatch;
         private readonly FilterRule rule;
         private readonly OperatorWithArgument @operator;
 
 
-        public ParameterFilter(ParameterMatch parameterMatch, FilterRule rule, OperatorWithArgument @operator)
+        public ParameterFilter(ParameterArgument parameterMatch, FilterRule rule, OperatorWithArgument @operator)
         {
             this.parameterMatch = parameterMatch;
             this.rule = rule;
@@ -83,7 +83,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Filters
 
         private static QueryItem Create(ICommand command)
         {
-            var arguments = command.Arguments.OfType<ParameterMatch>().ToList();
+            var arguments = command.Arguments.OfType<ParameterArgument>().ToList();
             var rules = arguments.SelectMany(x => CreateFilterRule(x, command.Operator)).ToList();
             var filters = rules.Select(x => new ParameterFilter(x.Item2, x.Item1, x.Item3)).ToList();
             if (filters.Count == 1)
@@ -97,7 +97,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Filters
             return null;
         }
 
-        private static IEnumerable<(FilterRule, ParameterMatch, OperatorWithArgument)> CreateFilterRule(ParameterMatch parameterMatch, OperatorWithArgument @operator)
+        private static IEnumerable<(FilterRule, ParameterArgument, OperatorWithArgument)> CreateFilterRule(ParameterArgument parameterMatch, OperatorWithArgument @operator)
         {
             var parameter = parameterMatch.Value;
             var storageType = parameterMatch.StorageType;

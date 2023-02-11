@@ -107,8 +107,8 @@ namespace RevitDBExplorer.WPF.Controls
        
 
         private void ParentWindow_Deactivated(object sender, EventArgs e)
-        {            
-            cPopup.IsOpen = false;
+        {
+            Popup_SetIsOpen(false);
         }
         private void ParentWindow_Activated(object sender, EventArgs e)
         {
@@ -116,7 +116,7 @@ namespace RevitDBExplorer.WPF.Controls
         }
         private void ParentWindow_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            cPopup.IsOpen = false;
+            Popup_SetIsOpen(false);
         }
 
 
@@ -125,20 +125,25 @@ namespace RevitDBExplorer.WPF.Controls
             if (e.Key == Key.Escape)
             {
                 e.Handled = true;
-                cPopup.IsOpen = false;
-            }
+                Popup_SetIsOpen(false);
+            }           
             if (e.Key == Key.Enter)
             {
                 e.Handled = true;
                 if (IsPopupOpen)
                 {
                     var item = cListBox.SelectedItem as IAutocompleteItem;
-                    cPopup.IsOpen = false;
+                    Popup_SetIsOpen(false);
+
                     if (item != null)
                     {
                         InserText(item.TextToInsert);
                         TryOpen(true);
-                    }                    
+                    }
+                    else
+                    {
+                        this.GetBindingExpression(TextBoxWithPlaceholder.TextProperty).UpdateSource();
+                    }
                 }
                 else
                 {
@@ -148,17 +153,26 @@ namespace RevitDBExplorer.WPF.Controls
         }
         private void TextBox_PreviewKeyDown(object sender, KeyEventArgs e)
         {
+            if (e.Key == Key.Back)
+            {
+                if (IsPopupOpen && Text.Length == 0)
+                {
+                    e.Handled = true;
+                    Popup_SetIsOpen(false);
+                    this.GetBindingExpression(TextBoxWithPlaceholder.TextProperty).UpdateSource();
+                }
+            }
             if (e.Key == Key.Up || e.Key == Key.Down)
             {
                 if (IsPopupOpen)
                 {
                     if (e.Key == Key.Up)
                     {
-                        cListBox.SelectedIndex = Math.Max(0, --cListBox.SelectedIndex);
+                        cListBox.SelectedIndex = Math.Max(0, cListBox.SelectedIndex - 1);
                     }
                     if (e.Key == Key.Down)
                     {
-                        cListBox.SelectedIndex = Math.Min(cListBox.Items.Count, ++cListBox.SelectedIndex);
+                        cListBox.SelectedIndex = Math.Min(cListBox.Items.Count, cListBox.SelectedIndex + 1);
                     }
                 }
                 else
@@ -235,8 +249,8 @@ namespace RevitDBExplorer.WPF.Controls
             {
                 AutocompleteItems = new ObservableCollection<IAutocompleteItem>(autocompleteItems);
             }
-          
-            cPopup.IsOpen = shouldBeOpened;
+
+            Popup_SetIsOpen(shouldBeOpened);
             return shouldBeOpened;
         }
         private void InserText(string text)
@@ -256,27 +270,19 @@ namespace RevitDBExplorer.WPF.Controls
             {
                 if (e.NewFocus is not IAutocompleteItem)
                 {
-                    cPopup.IsOpen = false;
+                    Popup_SetIsOpen(false);
                 }
             }
         }
         private CustomPopupPlacement[] CustomPopupPlacementCallback(Size popupSize, Size targetSize, Point offset)
         {
-            return new CustomPopupPlacement[] {new CustomPopupPlacement(new Point((0.01 - offset.X), (cMainGrid.ActualHeight - offset.Y)), PopupPrimaryAxis.None) };
+            return new CustomPopupPlacement[] {new CustomPopupPlacement(new Point((0.01 - offset.X), (cMainGrid.ActualHeight - offset.Y -1)), PopupPrimaryAxis.None) };
         }
 
-        private void Popup_Closed(object sender, EventArgs e)
+        private void Popup_SetIsOpen(bool state)
         {
-            IsPopupOpen = false;
-            //internalChange = true;
-            //Text = cTextBox.Text;
-            //BindingOperations.SetBinding(cTextBox, TextBox.TextProperty, myBinding);
-            //internalChange = false;
-        }
-        private void Popup_Opened(object sender, EventArgs e)
-        {
-            IsPopupOpen = true; ;
-            //BindingOperations.ClearBinding(cTextBox, TextBox.TextProperty);
-        }
+            cPopup.IsOpen = state;
+            IsPopupOpen = state;           
+        }      
     }
 }

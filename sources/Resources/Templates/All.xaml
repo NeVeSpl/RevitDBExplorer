@@ -4,6 +4,7 @@
         <ResourceDictionary Source="Button.xaml"/>
         <ResourceDictionary Source="GridViewColumnHeader.xaml"/>
         <ResourceDictionary Source="ListViewItem.xaml"/>
+        <ResourceDictionary Source="ListBoxItem.xaml"/>
         <ResourceDictionary Source="ScrollBar.xaml"/>
         <ResourceDictionary Source="ScrollViewer.xaml"/>
         <ResourceDictionary Source="TextBox.xaml"/>
