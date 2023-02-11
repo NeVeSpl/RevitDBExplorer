@@ -52,19 +52,23 @@
                HorizontalOffset="{Binding Path=Left, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" 
                CustomPopupPlacementCallback="CustomPopupPlacementCallback"
                MaxHeight="400"
-               Closed="cPopup_Closed"
-               Opened="cPopup_Opened"
+               Closed="Popup_Closed"
+               Opened="Popup_Opened"
+               ToolTip = "{x:Null}"
+               ToolTipService.IsEnabled="False"
+               FocusManager.IsFocusScope="True"
+               IsHitTestVisible="False"
                >
-            <Border Background="Red" >
+            <Border >
                 <ListBox x:Name="cListBox" 
                          SnapsToDevicePixels="True"                                                     
                          VerticalContentAlignment="Stretch"
                          HorizontalContentAlignment="Stretch"                                                    
                          KeyboardNavigation.DirectionalNavigation="Cycle" 
-                         PreviewMouseDown="ListBox_PreviewMouseDown"
-                         KeyDown="ListBox_KeyDown"  
+                         PreviewMouseDown="ListBox_PreviewMouseDown"                        
                          MinWidth="400"
                          Grid.IsSharedSizeScope="True"
+                         Background="{DynamicResource TextBox.Background}"
                          >
                     <ListBox.ItemTemplate>
                         <DataTemplate>

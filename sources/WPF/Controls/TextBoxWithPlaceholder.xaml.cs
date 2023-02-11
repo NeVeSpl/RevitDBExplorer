@@ -17,13 +17,14 @@ namespace RevitDBExplorer.WPF.Controls
         string TextToInsert { get; }
         string Label { get; }
         string Description { get; }
+        bool IsChosenOne { get; set; }
     }
     public class AutocompleteItem : IAutocompleteItem
     {
         public string Label { get; init; }
         public string TextToInsert { get; init; }
         public string Description { get; init; }
-        
+        public bool IsChosenOne { get; set; }
 
         public AutocompleteItem(string textToInsert, string label, string description)
         {
@@ -42,40 +43,32 @@ namespace RevitDBExplorer.WPF.Controls
     {
         public static readonly DependencyProperty TextProperty = DependencyProperty.Register(nameof(Text), typeof(string), typeof(TextBoxWithPlaceholder), new FrameworkPropertyMetadata(string.Empty, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
         public static readonly DependencyProperty IsPopupOpenProperty = DependencyProperty.Register(nameof(IsPopupOpen), typeof(bool), typeof(TextBoxWithPlaceholder), new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
-
         public static readonly DependencyProperty PlaceholderProperty = DependencyProperty.Register(nameof(Placeholder), typeof(string), typeof(TextBoxWithPlaceholder), new FrameworkPropertyMetadata("Placeholder"));
-
         public static readonly DependencyProperty AutocompleteItemProviderProperty = DependencyProperty.Register(nameof(AutocompleteItemProvider), typeof(IAutocompleteItemProvider), typeof(TextBoxWithPlaceholder), new FrameworkPropertyMetadata(null));
 
 
 
         public string Text
         {
-            get { return (string)GetValue(TextProperty); }
-            set 
-            { 
-                SetValue(TextProperty, value); 
-            }
+            get => (string)GetValue(TextProperty);
+            set => SetValue(TextProperty, value);
         }
         public bool IsPopupOpen
         {
-            get { return (bool)GetValue(IsPopupOpenProperty); }
-            set
-            {
-                SetValue(IsPopupOpenProperty, value);
-            }
+            get => (bool)GetValue(IsPopupOpenProperty);
+            set => SetValue(IsPopupOpenProperty, value);
         }
         public string Placeholder
         {
-            get { return (string)GetValue(PlaceholderProperty); }
-            set { SetValue(PlaceholderProperty, value); }
+            get => (string)GetValue(PlaceholderProperty); 
+            set => SetValue(PlaceholderProperty, value);
         }
         public IAutocompleteItemProvider AutocompleteItemProvider
         {
-            get { return (IAutocompleteItemProvider)GetValue(AutocompleteItemProviderProperty); }
-            set { SetValue(AutocompleteItemProviderProperty, value); }
+            get => (IAutocompleteItemProvider)GetValue(AutocompleteItemProviderProperty);
+            set => SetValue(AutocompleteItemProviderProperty, value);
         }
-       
+
         public ObservableCollection<IAutocompleteItem> AutocompleteItems
         {
             get
@@ -92,10 +85,9 @@ namespace RevitDBExplorer.WPF.Controls
         public TextBoxWithPlaceholder()
         {            
             InitializeComponent();
-            cMainGrid.DataContext = this;
-
-                    
+            cMainGrid.DataContext = this;                    
         }
+
 
         Binding myBinding;
         public override void OnApplyTemplate()
@@ -137,30 +129,51 @@ namespace RevitDBExplorer.WPF.Controls
             }
             if (e.Key == Key.Enter)
             {
-                cPopup.IsOpen = false;
-            }
+                e.Handled = true;
+                if (IsPopupOpen)
+                {
+                    var item = cListBox.SelectedItem as IAutocompleteItem;
+                    cPopup.IsOpen = false;
+                    if (item != null)
+                    {
+                        InserText(item.TextToInsert);
+                        TryOpen(true);
+                    }                    
+                }
+                else
+                {
+                    this.GetBindingExpression(TextBoxWithPlaceholder.TextProperty).UpdateSource();
+                }
+            }   
         }
         private void TextBox_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.OriginalSource is ListBoxItem) return;
-
-            switch (e.Key)
+            if (e.Key == Key.Up || e.Key == Key.Down)
             {
-                case Key.Up:
-                case Key.Down:
-                case Key.Prior:
-                case Key.Next:
+                if (IsPopupOpen)
+                {
+                    if (e.Key == Key.Up)
+                    {
+                        cListBox.SelectedIndex = Math.Max(0, --cListBox.SelectedIndex);
+                    }
+                    if (e.Key == Key.Down)
+                    {
+                        cListBox.SelectedIndex = Math.Min(cListBox.Items.Count, ++cListBox.SelectedIndex);
+                    }
+                }
+                else
+                {
                     if (TryOpen())
                     {
-                        cListBox.Focus();
+                        //cListBox.Focus();
                         cListBox.SelectedIndex = 0;
                         cListBox.ScrollIntoView(cListBox.SelectedItem);
-                        var cfi = cListBox.ItemContainerGenerator.ContainerFromItem(cListBox.SelectedItem);
-                        var lbi = cfi as ListBoxItem;
-                        lbi.Focus();                       
+                        //var cfi = cListBox.ItemContainerGenerator.ContainerFromItem(cListBox.SelectedItem);
+                        //var lbi = cfi as ListBoxItem;
+                        //lbi.Focus();      
                     }
-                    e.Handled = true;
-                    break;
+                }
+                e.Handled = true;
             }
         }
         bool internalChange = false;
@@ -179,7 +192,6 @@ namespace RevitDBExplorer.WPF.Controls
                 TryOpen();
             }
         }
-
         private void ListBox_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
             if (e.LeftButton == MouseButtonState.Pressed)
@@ -195,27 +207,7 @@ namespace RevitDBExplorer.WPF.Controls
                 }
             }            
         }
-        private void ListBox_KeyDown(object sender, KeyEventArgs e)
-        {
-            var item = (e.OriginalSource as FrameworkElement)?.DataContext as IAutocompleteItem;
-            if (item == null) return;  
-            
-            if (e.Key== Key.Enter) 
-            {
-                InserText(item.TextToInsert);
-                e.Handled = true;
-                TryOpen(true);               
-            }
-            if (e.Key== Key.Escape) 
-            {
-                cPopup.IsOpen = false;
-                e.Handled = true;
-            }
-            if (e.Handled)
-            {                
-                Keyboard.Focus(cTextBox);               
-            }
-        }
+     
 
         int prefixLength;
         private bool TryOpen(bool again = false)
@@ -229,8 +221,16 @@ namespace RevitDBExplorer.WPF.Controls
             if (shouldBeOpened && again)
             {
                 shouldBeOpened = autocompleteItems.Count() != AutocompleteItems.Count();
-            }
 
+                if (autocompleteItems.Count() == 1)
+                {
+                    if (autocompleteItems.First().TextToInsert.Length == prefixLength)
+                    {
+                        shouldBeOpened = false;
+                    }
+                }                    
+            }
+            
             if (shouldBeOpened)
             {
                 AutocompleteItems = new ObservableCollection<IAutocompleteItem>(autocompleteItems);
@@ -265,7 +265,7 @@ namespace RevitDBExplorer.WPF.Controls
             return new CustomPopupPlacement[] {new CustomPopupPlacement(new Point((0.01 - offset.X), (cMainGrid.ActualHeight - offset.Y)), PopupPrimaryAxis.None) };
         }
 
-        private void cPopup_Closed(object sender, EventArgs e)
+        private void Popup_Closed(object sender, EventArgs e)
         {
             IsPopupOpen = false;
             //internalChange = true;
@@ -273,8 +273,7 @@ namespace RevitDBExplorer.WPF.Controls
             //BindingOperations.SetBinding(cTextBox, TextBox.TextProperty, myBinding);
             //internalChange = false;
         }
-
-        private void cPopup_Opened(object sender, EventArgs e)
+        private void Popup_Opened(object sender, EventArgs e)
         {
             IsPopupOpen = true; ;
             //BindingOperations.ClearBinding(cTextBox, TextBox.TextProperty);

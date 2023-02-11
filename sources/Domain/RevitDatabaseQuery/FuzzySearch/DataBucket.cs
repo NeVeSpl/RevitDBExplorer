@@ -14,7 +14,9 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.FuzzySearch
     {
         private readonly List<DataBucketItem<T>> items = new List<DataBucketItem<T>>();
         private readonly double fuzzySearchMatchingThreshold;
-        private ITrie<IAutocompleteItem> trie = new Trie<IAutocompleteItem>();
+
+        private readonly List<IAutocompleteItem> autocompleteItems = new List<IAutocompleteItem>();
+        private ITrie<IAutocompleteItem> autocompleteTrie = new Trie<IAutocompleteItem>();
 
         public DataBucket(double fuzzySearchMatchingThreshold)
         {
@@ -25,27 +27,33 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.FuzzySearch
         public void Add(IAutocompleteItem item, T argument, params string[] keys)
         {
             items.Add(new DataBucketItem<T>(item, argument, keys.Select(x => Clean(x)).Where(x => string.IsNullOrWhiteSpace(x) == false).ToArray()));
+            if (item != null)
+            {
+                autocompleteItems.Add(item);
+            }
         }
         public void Rebuild()
-        {
-            if (items.Count > 0 && items.First().autocompleteItem != null)
-            {
-                items.Sort((x, y) => x.autocompleteItem.Label.CompareTo(y.autocompleteItem.Label));
+        {            
+            autocompleteItems.Sort((x, y) => x.Label.CompareTo(y.Label));
 
-                trie = new Trie<IAutocompleteItem>();
-                foreach (var item in items)
+            autocompleteTrie = new UkkonenTrie<IAutocompleteItem>();
+            foreach (var item in autocompleteItems)
+            {
+                if (!string.IsNullOrWhiteSpace(item.Label))
                 {
-                    if (item.autocompleteItem != null)
-                    {
-                        var key = item.autocompleteItem.Description ?? item.autocompleteItem.Label;
-                        trie.Add(key.ToLowerInvariant(), item.autocompleteItem);
-                    }
+                    autocompleteTrie.Add(item.Label.ToLowerInvariant(), item);
                 }
-            }                   
+                if (!string.IsNullOrWhiteSpace(item.Description))
+                {
+                    autocompleteTrie.Add(item.Description.ToLowerInvariant(), item);
+                }
+            }
+                            
         }
         public void Clear()
         {
             items.Clear();
+            autocompleteItems.Clear();
         }
 
         public IEnumerable<IFuzzySearchResult> FuzzySearch(string text)
@@ -97,19 +105,23 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.FuzzySearch
         {
             if (string.IsNullOrWhiteSpace(prefix))
             {
-                foreach (var item in items)
-                {
-                    if (item.autocompleteItem != null)
-                    {                       
-                        yield return item.autocompleteItem;                        
-                    }
+                foreach (var item in autocompleteItems)
+                {                                        
+                     yield return item;  
                 }
             }
             else
             {
-                foreach (var item in trie.Retrieve(prefix))
+                autocompleteItems.ForEach(x => x.IsChosenOne = false);
+
+                foreach (var item in autocompleteTrie.Retrieve(prefix))
                 {
-                    if (!prefix.Equals(item.TextToInsert, StringComparison.OrdinalIgnoreCase))
+                    item.IsChosenOne = true;                    
+                }
+
+                foreach (var item in autocompleteItems)
+                {
+                    if (item.IsChosenOne)
                     {
                         yield return item;
                     }

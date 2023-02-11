@@ -41,6 +41,7 @@
                     <Setter Property="Height" Value="21"/>
                     <Setter Property="Background" Value="Transparent"/>
                     <Setter Property="Padding" Value="2 0 1 1"/>
+                    <Setter Property="BorderBrush" Value="Transparent"/>
                 </Style>
             </ResourceDictionary>
         </Grid.Resources>

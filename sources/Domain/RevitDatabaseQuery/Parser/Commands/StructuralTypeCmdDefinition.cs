@@ -11,7 +11,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
 {
     internal class StructuralTypeCmdDefinition : ICommandDefinition, INeedInitialization, IOfferArgumentAutocompletion
     {
-        private static readonly AutocompleteItem CmdDefAutocompleteItem = new AutocompleteItem("s: StructuralType.", "s:[structural type]", "select elements matching a structural type");
+        private static readonly AutocompleteItem CmdDefAutocompleteItem = new AutocompleteItem("s: ", "s:[structural type]", "select elements matching a structural type");
         private readonly DataBucket<StructuralTypeCmdArgument> dataBucket = new DataBucket<StructuralTypeCmdArgument>(0.61);
 
 

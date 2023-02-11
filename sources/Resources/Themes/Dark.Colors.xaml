@@ -91,7 +91,7 @@
     <SolidColorBrush x:Key="Query.Class.Background" Color="#76ff03"/>
     <SolidColorBrush x:Key="Query.Parameter.Background" Color="#b0bec5"/>
     <SolidColorBrush x:Key="Query.Incorrect.Background" Color="#ff1744"/>
-    <SolidColorBrush x:Key="Query.WhoKnows.Background" Color="#e040fb"/>
+    <SolidColorBrush x:Key="Query.WhoKnows.Background" Color="#E363F9"/>
 
     <SolidColorBrush x:Key="Query.Incorrect.Foreground" Color="white"/>
     <SolidColorBrush x:Key="Query.Foreground" Color="black"/>

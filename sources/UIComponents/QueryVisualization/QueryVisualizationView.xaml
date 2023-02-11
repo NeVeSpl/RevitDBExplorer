@@ -104,7 +104,7 @@
                                         <DataTrigger Binding="{Binding Type}" Value="Room">
                                             <Setter Property="Background" Value="{DynamicResource Query.WhoKnows.Background}"/>
                                         </DataTrigger>
-                                        <DataTrigger Binding="{Binding Type}" Value="RuleFilter">
+                                        <DataTrigger Binding="{Binding Type}" Value="RuleBasedFilter">
                                             <Setter Property="Background" Value="{DynamicResource Query.WhoKnows.Background}"/>
                                         </DataTrigger>
                                         <DataTrigger Binding="{Binding Type}" Value="Incorrect">

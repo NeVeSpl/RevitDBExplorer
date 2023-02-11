@@ -7,7 +7,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
 {
     internal class ElementTypeCmdDefinition : ICommandDefinition
     {
-        private static readonly AutocompleteItem AutocompleteItem = new AutocompleteItem("type, ", "type", "select element types");
+        private static readonly AutocompleteItem AutocompleteItem = new AutocompleteItem("type", "type", "select element types");
               
 
         public IAutocompleteItem GetCommandAutocompleteItem() => AutocompleteItem;
