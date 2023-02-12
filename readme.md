@@ -87,7 +87,7 @@ operator | meaning | example
 
 ### filterable tree of elements and list of properties and methods
 
-![filterable-list-of-properties-and-methods](documentation/examples/filterable-tree-of-elements-and-list-of-properties-and-methods.gif)
+![filterable-list-of-properties-and-methods](documentation/examples/filterable-tree-of-elements-and-list-of-properties-and-methods.v2.gif)
 
 
 ### easy access to Revit API documentation
@@ -124,7 +124,7 @@ RDBE allows you to snoop all schemas that are loaded into Revit memory, and you 
 
 Not only you have faster access to a geometry of an element, but you can also select an instance of GeometryObject in Revit if it has a valid reference.  
 
-![easier-work-with-geometry](documentation/examples/easier-work-with-geometry.gif)
+![easier-work-with-geometry](documentation/examples/easier-work-with-element-geometry.gif)
 
 
 ### dark and light UI themes
