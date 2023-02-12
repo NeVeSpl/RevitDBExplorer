@@ -19,8 +19,9 @@ Yet another [RevitLookup](https://github.com/jeremytammik/RevitLookup) clone. Re
 - [snoop Revit events](#snoop-revit-events-with-rem-revit-event-monitor)
 - [snoop external applications](#snoop-external-applications)
 - [snoop updaters](#snoop-updaters)
-- [more data exposed](#more-data-exposed)
-- [elements of Family, FamilySymbol, FamilyInstance are grouped by category in tree](#grouping)
+- [more advanced tree view](#more-advanced-tree-view)
+- [more data exposed](#more-data-exposed-from-revit-database)
+
 
 ## Installation
 
@@ -128,30 +129,36 @@ Not only you have faster access to a geometry of an element, but you can also se
 
 ### dark and light UI themes
 
-![themes](documentation/examples/dark-and-light-ui-themes.gif)
+![dark-and-light-ui-themes](documentation/examples/dark-and-light-ui-themes.gif)
 
 ### snoop Revit events with REM (Revit Event Monitor)
 
 A new take on [EventsMonitor from  RevitSdkSamples
 ](https://github.com/jeremytammik/RevitSdkSamples/tree/master/SDK/Samples/Events/EventsMonitor/CS). RDBE stores the latest 30 events that occurred during Revit session and allows to snoop them. UIControlledApplication.Idling event and ControlledApplication.ProgressChanged event are not stored because they are too noisy - they happen too often. In order to use this feature, you need to enable event monitor, which by default is disabled.
 
-![themes](documentation/examples/snooping-events.gif)
+![snooping-events](documentation/examples/snooping-events.gif)
 
 ### <a name="snoop-external-applications"></a>snoop external applications (aka add-ons) loaded into Revit
 
 RDBE allows to look deeper into UIApplication.LoadedApplications
 
-![themes](documentation/examples/snooping-loaded-external-applications.gif)
+![snooping-loaded-external-applications](documentation/examples/snooping-loaded-external-applications.gif)
 
 ### snoop updaters
 
 RDBE allows to look deeper into UpdaterRegistry.GetRegisteredUpdaterInfos(). What is special about this feature is that, with a bit of luck, it is able to get UpdaterId, as a first publicly available tool.
 
-![themes](documentation/examples/snooping-updaters.gif)
+![snooping-updaters](documentation/examples/snooping-updaters.gif)
 
 
+### more advanced tree view
 
-### <a name="more-data-exposed"></a>more data exposed from Revit database
+With grouping on many levels, and possibility to switch between grouping by Type or Category on the first level.
+
+![more-advanced-tree-view](documentation/examples/more-advanced-tree-view.gif)
+
+
+### more data exposed from Revit database
 
 In comparison to RevitLookup, RDBE in addition gives access to:
 
@@ -222,11 +229,16 @@ In comparison to RevitLookup, RDBE in addition gives access to:
 - ScheduleDefinition
     - GetFilter
     - GetSortGroupField
+- SpatialFieldManager
+    - GetSpatialFieldManager
+    - GetResultSchema
 - SpecUtils
     - IsValidDataType
     - IsSpec
 - StructuralSectionUtils
--   - GetStructuralSection
+    - GetStructuralSection
+- TableView
+    - GetAvailableParameters
 - UnitFormatUtils
     - Format
 - UnitUtils
@@ -251,13 +263,4 @@ In comparison to RevitLookup, RDBE in addition gives access to:
 - ViewCropRegionShapeManage
     - GetSplitRegionMaximum
     - GetSplitRegionMinimum
-
-
-
-### <a name="grouping"></a>elements of Family, FamilySymbol, FamilyInstance are grouped by category in the tree
-
-![grouping](documentation/examples/grouping.png)
-
-
-
 
