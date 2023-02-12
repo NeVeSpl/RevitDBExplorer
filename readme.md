@@ -15,7 +15,7 @@ Yet another [RevitLookup](https://github.com/jeremytammik/RevitLookup) clone. Re
 - [extensive support for ForgeTypeId](#extensive-support-for-forgetypeid)
 - [better support for Revit Extensible Storage](#better-support-for-revit-extensible-storage)
 - [easier work with Element.Geometry](#easier-work-with-geometry)
-- [UI themes: dark and light](#themes)
+- [dark and light UI themes](#dark-and-light-ui-themes)
 - [snoop Revit events](#snoop-revit-events-with-rem-revit-event-monitor)
 - [snoop external applications](#snoop-external-applications)
 - [snoop updaters](#snoop-updaters)
@@ -91,7 +91,7 @@ operator | meaning | example
 
 ### easy access to Revit API documentation
 
- Tooltips work out-of-box, RevitApi.chm file is part of Revit SDK and path to it needs to be set manually.
+ Tooltips work out-of-box, RevitApi.chm file is part of [Revit SDK](https://www.autodesk.com/developer-network/platform-technologies/revit) and path to it needs to be set manually.
 
 ![tooltips-with-Revit-documentations](documentation/examples/easy-access-to-revit-api-documentation.gif)
 
@@ -126,11 +126,9 @@ Not only you have faster access to a geometry of an element, but you can also se
 ![easier-work-with-geometry](documentation/examples/easier-work-with-geometry.gif)
 
 
-### <a name="themes"></a>UI themes: dark and light
+### dark and light UI themes
 
-It is getting dark out there. **Be ready** for [Revit 2024 Dark Theme](https://trello.com/c/BybVTpZK), with a new dark theme for RDBE.
-
-![themes](documentation/examples/themes.gif)
+![themes](documentation/examples/dark-and-light-ui-themes.gif)
 
 ### snoop Revit events with REM (Revit Event Monitor)
 

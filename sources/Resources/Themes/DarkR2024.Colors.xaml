@@ -14,7 +14,7 @@
     <Color x:Key="TextOnPrimary">#F5F5F5</Color>
     <Color x:Key="TextOnPrimaryLight">#E6E6E6</Color>
     <Color x:Key="TextOnSecondary">#000000</Color>
-    <Color x:Key="Error">#e9565f</Color>
+    <Color x:Key="Error">#FFDE5C</Color>
 
     <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="white"/>    
     <SolidColorBrush x:Key="{x:Static SystemColors.ControlTextBrushKey}" Color="{StaticResource TextOnPrimary}"/>

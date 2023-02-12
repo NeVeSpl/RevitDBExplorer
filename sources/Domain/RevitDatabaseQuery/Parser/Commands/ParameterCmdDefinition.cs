@@ -36,7 +36,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
                 }
             }
 #endif            
-            var parameters = new List<(string, BuiltInParameter)>(ids.Count * 2);
+           
             foreach (var param in ids)
             {
                 var label = LabelUtils.GetLabelFor(param);
