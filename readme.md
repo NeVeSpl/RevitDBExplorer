@@ -8,7 +8,7 @@ The fastest, modern, asynchronous Revit database exploration tool for Revit 2021
 
 Yet another [RevitLookup](https://github.com/jeremytammik/RevitLookup) clone. RevitLookup is a mature and indispensable tool to work with Revit. But its code had many authors and architectural changes(reflection, modeless) through time which led to quite significant technical debt and lack of consistency. For worse, its UI is still based on WinForms ... When I was adding support for [modeless windows #93](https://github.com/jeremytammik/RevitLookup/pull/93) to RevitLookup , I knew that at some point in time I will rewrite it whole. So here we are, let me introduce you to RDBE, a completely rewritten RevitLookup with WPF UI and a few small improvements:
 
-- [query Revit database from UI](#possibility-to-query-Revit-database)
+- [query Revit database](#query-revit-database-with-rql-revit-query-language)
 - [filterable tree of elements and list of properties and methods](#filterable-tree-of-elements-and-list-of-properties-and-methods)
 - [easy access to Revit API documentation](#easy-access-to-revit-api-documentation)
 - [edit parameter value](#edit-parameter-value)
@@ -29,11 +29,11 @@ Yet another [RevitLookup](https://github.com/jeremytammik/RevitLookup) clone. Re
 
 ## Features
 
-### <a name="possibility-to-query-Revit-database"></a>query Revit database (RDQ) from UI with RQL (Revit query language)
+### query Revit database with RQL (Revit query language)
 
-RDQ is able to interpret words separated by `,` as element ids, Revit classes, categories and parameters. It builds from them FilteredElementCollector and uses it to query Revit database. The table with a description of RQL is below the example.
+RDQ (Revit database query) is able to interpret words separated by `,` as element ids, Revit classes, categories, parameters and many more. RDQ builds from them FilteredElementCollector and uses it to query Revit database. The table with a description of RQL is below the example.
 
-![possibility-to-query-Revit-database-from-UI](documentation/examples/rdq-revit-database-query-with-rql-revit-query-language.gif)
+![possibility-to-query-Revit-database-from-UI](documentation/examples/rdq-revit-database-query-with-rql-revit-query-language.v2.gif)
 
 #### RQL - Revit query language
  

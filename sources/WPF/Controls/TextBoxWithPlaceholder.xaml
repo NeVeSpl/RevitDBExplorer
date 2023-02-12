@@ -63,10 +63,10 @@
                CustomPopupPlacementCallback="CustomPopupPlacementCallback"
                MaxHeight="400"
              
-               ToolTip = "{x:Null}"
-               ToolTipService.IsEnabled="False"
+             
+               
                FocusManager.IsFocusScope="True"
-               IsHitTestVisible="False"
+               IsHitTestVisible="True"
                >
             <Border >
                 <ListBox x:Name="cListBox" 
@@ -83,10 +83,11 @@
                          VirtualizingPanel.IsVirtualizingWhenGrouping="True"
                          VirtualizingPanel.CacheLengthUnit="Page" 
                          VirtualizingPanel.CacheLength="7,7"
+                         ToolTipService.IsEnabled="False"
                          >                   
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <Grid  >
+                            <Grid   ToolTip = "{Binding Description}" >
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="auto" SharedSizeGroup="FirstColumn" />
                                     <ColumnDefinition Width="0.6*" SharedSizeGroup="SecondColumn" />
