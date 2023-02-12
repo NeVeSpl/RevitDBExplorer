@@ -14,12 +14,12 @@ Yet another [RevitLookup](https://github.com/jeremytammik/RevitLookup) clone. Re
 - [edit parameter value](#edit-parameter-value)
 - [extensive support for ForgeTypeId](#extensive-support-for-forgetypeid)
 - [better support for Revit Extensible Storage](#better-support-for-revit-extensible-storage)
-- [easier work with Element.Geometry](#easier-work-with-geometry)
+- [easier work with Element.Geometry](#easier-work-with-elementgeometry)
 - [dark and light UI themes](#dark-and-light-ui-themes)
-- [snoop Revit events](#snoop-revit-events-with-rem-revit-event-monitor)
-- [snoop external applications](#snoop-external-applications)
-- [snoop updaters](#snoop-updaters)
 - [more advanced tree view](#more-advanced-tree-view)
+- [snoop Revit events](#snoop-revit-events-with-rem-revit-event-monitor)
+- [snoop external applications](#snoop-external-applications-aka-add-ons-loaded-into-revit)
+- [snoop updaters](#snoop-updaters)
 - [more data exposed](#more-data-exposed-from-revit-database)
 
 
@@ -120,7 +120,7 @@ RDBE allows you to snoop all schemas that are loaded into Revit memory, and you 
 ![better-support-for-revit-extensible-storage](documentation/examples/better-support-for-revit-extensible-storage.gif)
 
 
-### <a name="easier-work-with-geometry"></a>easier work with Element.Geometry
+### easier work with Element.Geometry
 
 Not only you have faster access to a geometry of an element, but you can also select an instance of GeometryObject in Revit if it has a valid reference.  
 
@@ -131,6 +131,12 @@ Not only you have faster access to a geometry of an element, but you can also se
 
 ![dark-and-light-ui-themes](documentation/examples/dark-and-light-ui-themes.gif)
 
+### more advanced tree view
+
+With grouping on many levels, and possibility to switch between grouping by Type or Category on the first level.
+
+![more-advanced-tree-view](documentation/examples/more-advanced-tree-view.gif)
+
 ### snoop Revit events with REM (Revit Event Monitor)
 
 A new take on [EventsMonitor from  RevitSdkSamples
@@ -138,7 +144,7 @@ A new take on [EventsMonitor from  RevitSdkSamples
 
 ![snooping-events](documentation/examples/snooping-events.gif)
 
-### <a name="snoop-external-applications"></a>snoop external applications (aka add-ons) loaded into Revit
+### snoop external applications (aka add-ons) loaded into Revit
 
 RDBE allows to look deeper into UIApplication.LoadedApplications
 
@@ -149,14 +155,6 @@ RDBE allows to look deeper into UIApplication.LoadedApplications
 RDBE allows to look deeper into UpdaterRegistry.GetRegisteredUpdaterInfos(). What is special about this feature is that, with a bit of luck, it is able to get UpdaterId, as a first publicly available tool.
 
 ![snooping-updaters](documentation/examples/snooping-updaters.gif)
-
-
-### more advanced tree view
-
-With grouping on many levels, and possibility to switch between grouping by Type or Category on the first level.
-
-![more-advanced-tree-view](documentation/examples/more-advanced-tree-view.gif)
-
 
 ### more data exposed from Revit database
 
