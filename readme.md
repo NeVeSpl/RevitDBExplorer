@@ -10,7 +10,7 @@ Yet another [RevitLookup](https://github.com/jeremytammik/RevitLookup) clone. Re
 
 - [query Revit database from UI](#possibility-to-query-Revit-database)
 - [filterable tree of elements and list of properties and methods](#filterable-tree-of-elements-and-list-of-properties-and-methods)
-- [tooltips with Revit documentation](#tooltips-with-revit-documentation)
+- [easy access to Revit API documentation](#easy-access-to-revit-api-documentation)
 - [edit parameter value](#edit-parameter-value)
 - [extensive support for ForgeTypeId](#extensive-support-for-forgetypeid)
 - [better support for Revit Extensible Storage](#better-support-for-revit-extensible-storage)
@@ -89,9 +89,11 @@ operator | meaning | example
 ![filterable-list-of-properties-and-methods](documentation/examples/filterable-tree-of-elements-and-list-of-properties-and-methods.gif)
 
 
-### tooltips with Revit documentation
+### easy access to Revit API documentation
 
-![tooltips-with-Revit-documentations](documentation/examples/tooltips-with-Revit-documentation.png)
+ Tooltips work out-of-box, RevitApi.chm file is part of Revit SDK and path to it needs to be set manually.
+
+![tooltips-with-Revit-documentations](documentation/examples/easy-access-to-revit-api-documentation.gif)
 
 ### edit parameter value
 
