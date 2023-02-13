@@ -123,8 +123,9 @@
             <Button.ContextMenu>
                 <ContextMenu>
                     <MenuItem Header="Snoop loaded external applications" Click="SelectorButton_Click" Tag="LoadedApplications" ToolTip="UIApplication.LoadedApplications"/>
-                    <MenuItem Header="Snoop updaters applicable to the given document" Icon="" Click="SelectorButton_Click" Tag="Updaters" ToolTip="UpdaterRegistry.GetRegisteredUpdaterInfos()"/>                              
-                </ContextMenu>
+                    <MenuItem Header="Snoop updaters applicable to the given document" Icon="" Click="SelectorButton_Click" Tag="Updaters" ToolTip="UpdaterRegistry.GetRegisteredUpdaterInfos()"/>
+                        <MenuItem Header="Snoop external services" Icon="" Click="SelectorButton_Click" Tag="ExternalServices" ToolTip="ExternalServiceRegistry.GetServices()"/>
+                 </ContextMenu>
             </Button.ContextMenu>
             </Button>
         </UniformGrid>

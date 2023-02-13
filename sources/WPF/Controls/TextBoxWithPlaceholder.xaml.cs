@@ -217,8 +217,15 @@ namespace RevitDBExplorer.WPF.Controls
         private void TextBox_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (string.IsNullOrEmpty(Text))
-            { 
-                TryOpen();
+            {
+                if (IsPopupOpen)
+                {
+                    Popup_SetIsOpen(false);
+                }
+                else
+                {
+                    TryOpen();
+                }
             }
         }
         private void ListBox_PreviewMouseDown(object sender, MouseButtonEventArgs e)

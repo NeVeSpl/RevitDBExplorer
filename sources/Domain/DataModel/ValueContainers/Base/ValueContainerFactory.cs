@@ -49,7 +49,8 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers.Base
             new SchedulableFieldHandler(),
             new FailuresProcessingEventArgsHandler(),
             new DocumentChangedEventArgsHandler(),
-            new RevitApiEventArgsHandler(),            
+            new RevitApiEventArgsHandler(),   
+            new WorksetIdHandler(),
             
             // generic
             new ElementHandler(),

@@ -117,6 +117,10 @@ namespace RevitDBExplorer.UIComponents.QueryVisualization
                     Name = labels;
                     FilterName = "new ElementLevelFilter()";
                     break;
+                case CmdType.Workset:
+                    Name = labels;
+                    FilterName = "new ElementWorksetFilter()";
+                    break;
                 case CmdType.StructuralType:
                     Name = args;
                     FilterName = "new ElementStructuralTypeFilter()";

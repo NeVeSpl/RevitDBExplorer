@@ -25,7 +25,8 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser
             new ParameterCmdDefinition(),
             new RoomCmdDefinition(),
             new RuleBasedFilterCmdDefinition(),
-            new StructuralTypeCmdDefinition(),           
+            new StructuralTypeCmdDefinition(),
+            new WorksetCmdDefinition(),
         };
         private static readonly Dictionary<string, ICommandDefinition> classifierToDefinitionMap = new Dictionary<string, ICommandDefinition>();
         private static readonly Dictionary<string, ICommandDefinition> keywordToDefinitionMap = new Dictionary<string, ICommandDefinition>();        

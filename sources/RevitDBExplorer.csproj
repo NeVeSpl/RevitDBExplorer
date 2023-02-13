@@ -231,8 +231,10 @@
     <Compile Include="Domain\DataModel\MemberAccessors\SpatialFieldManager\SpatialFieldManager_GetResultSchema.cs" />
     <Compile Include="Domain\DataModel\MemberTemplates\View_Templates.cs" />
     <Compile Include="Domain\DataModel\ValueContainers\SchedulableFieldHandler.cs" />
+    <Compile Include="Domain\DataModel\ValueContainers\WorksetIdHandler.cs" />
     <Compile Include="Domain\RevitDatabaseQuery\AutocompleteItemProvider.cs" />
     <Compile Include="Domain\RevitDatabaseQuery\CmdType.cs" />
+    <Compile Include="Domain\RevitDatabaseQuery\Filters\WorksetFilter.cs" />
     <Compile Include="Domain\RevitDatabaseQuery\FuzzySearch\DataBucket.cs" />
     <Compile Include="Domain\RevitDatabaseQuery\Parser\Commands\CategoryCmdDefinition.cs" />
     <Compile Include="Domain\RevitDatabaseQuery\Parser\Commands\ClassCmdDefinition.cs" />
@@ -245,10 +247,12 @@
     <Compile Include="Domain\RevitDatabaseQuery\Parser\Commands\StructuralTypeCmdDefinition.cs" />
     <Compile Include="Domain\RevitDatabaseQuery\Parser\Commands\RuleBasedFilterCmdDefinition.cs" />
     <Compile Include="Domain\RevitDatabaseQuery\Parser\Commands\RoomCmdDefinition.cs" />
+    <Compile Include="Domain\RevitDatabaseQuery\Parser\Commands\WorksetCmdDefinition.cs" />
     <Compile Include="Domain\RevitDatabaseQuery\Parser\ICommand.cs" />
     <Compile Include="Domain\RevitDatabaseQuery\Parser\CommandParser.cs" />
     <Compile Include="Domain\RevitDatabaseQuery\Parser\Commands\ElementIdCmdDefinition.cs" />
     <Compile Include="Domain\RevitDatabaseQuery\Parser\ICommandDefinition.cs" />
+    <Compile Include="Domain\Selectors\SnoopExternalServices.cs" />
     <Compile Include="Domain\SourceOfObjects.cs" />
     <Compile Include="Domain\DataModel\ValueContainers\Base\Traits.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\DialogBoxShowingEventArgs\DialogBoxShowingEventArgs_OverrideResult.cs" />

@@ -26,7 +26,8 @@ namespace RevitDBExplorer.Domain.Selectors
         ForgeUnitUtilsGetAllDisciplines,
         ForgeSpecUtilsGetAllSpecs,
         Updaters,
-        LoadedApplications
+        LoadedApplications,
+        ExternalServices,
     }
 
     internal static class SelectorFactory
@@ -61,6 +62,7 @@ namespace RevitDBExplorer.Domain.Selectors
                 Selector.ForgeSpecUtilsGetAllSpecs => new SnoopForge(selector),
                 Selector.Updaters => new SnoopUpdaters(),
                 Selector.LoadedApplications => new SnoopLoadedApplications(),
+                Selector.ExternalServices => new SnoopExternalServices(),
                 _ => throw new NotImplementedException()
             };
             return result;

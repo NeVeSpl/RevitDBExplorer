@@ -15,11 +15,10 @@ namespace RevitDBExplorer.Domain
 
     internal sealed class SourceOfObjects
     {        
-        private readonly IAmSourceOfEverything source;
-        private IList<SnoopableObject> snoopableObjects;
+        private readonly IAmSourceOfEverything source;   
 
         public string Title { get; init; }
-        public IList<SnoopableObject> Objects  => snoopableObjects ?? new SnoopableObject[0];
+        public IList<SnoopableObject> Objects { get; private set; }
 
 
         public SourceOfObjects()
@@ -32,14 +31,15 @@ namespace RevitDBExplorer.Domain
         }
         public SourceOfObjects(IList<SnoopableObject> snoopableObjects)
         {
-            this.snoopableObjects = snoopableObjects;
+            Objects = snoopableObjects ?? new SnoopableObject[0];
         }
 
 
         public void ReadFromTheSource(UIApplication uiApplication)
         {
-            var result = source?.Snoop(uiApplication) ?? Enumerable.Empty<SnoopableObject>();
-            this.snoopableObjects = result.ToArray();
+            if (source == null) return;
+            var result = source.Snoop(uiApplication) ?? Enumerable.Empty<SnoopableObject>();
+            Objects = result.ToArray();
         }
     }
 }
