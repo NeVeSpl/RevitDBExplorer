@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Data;
+using RevitDBExplorer.Domain;
 using RevitDBExplorer.Domain.DataModel;
 using RevitDBExplorer.WPF;
 
@@ -14,7 +15,7 @@ namespace RevitDBExplorer.UIComponents.List
     {
         private ObservableCollection<SnoopableMember> listItems = new();
         private SnoopableMember listSelectedItem = null;
-        private string listItemsFilterPhrase = "";
+        private string filterPhrase = "";
 
         public event Action<SnoopableMember> MemberSnooped;
         public event Action MemberValueHasChanged;
@@ -44,12 +45,27 @@ namespace RevitDBExplorer.UIComponents.List
         }
         public RelayCommand KeyDown_Enter_Command { get; }        
         public RelayCommand ListItem_Click_Command { get; }
+        public RelayCommand ReloadCommand { get; }
+        public string FilterPhrase
+        {
+            get
+            {
+                return filterPhrase;
+            }
+            set
+            {
+                filterPhrase = value;
+                FilterListView();
+                OnPropertyChanged();
+            }
+        }
 
 
         public ListVM()
         {
             KeyDown_Enter_Command = new RelayCommand(KeyDown_Enter);            
             ListItem_Click_Command = new RelayCommand(ListItem_Click);
+            ReloadCommand = new RelayCommand(Reload);
         }
 
         public void ClearItems()
@@ -76,20 +92,19 @@ namespace RevitDBExplorer.UIComponents.List
         {
             if (item is SnoopableMember snoopableMember)
             {
-                return snoopableMember.Name.IndexOf(listItemsFilterPhrase, StringComparison.OrdinalIgnoreCase) >= 0;
+                return snoopableMember.Name.IndexOf(filterPhrase, StringComparison.OrdinalIgnoreCase) >= 0;
             }
             return true;
         }
-        public void ReloadItems()
+        private void ReloadItems()
         {
             foreach (var item in ListItems)
             {
                 item.Read();
             }
         }
-        public void FilterListView(string listItemsFilterPhrase)
-        {
-            this.listItemsFilterPhrase = listItemsFilterPhrase;
+        private void FilterListView()
+        {            
             if (ListItems != null)
             {
                 CollectionViewSource.GetDefaultView(ListItems).Refresh();
@@ -116,6 +131,13 @@ namespace RevitDBExplorer.UIComponents.List
         private void RaiseMemberValueHasChanged()
         {
             MemberValueHasChanged?.Invoke();
+            Reload(null);
+        }
+
+
+        private async void Reload(object parameter)
+        {
+            await ExternalExecutor.ExecuteInRevitContextAsync(uiApp => ReloadItems());
         }
     }
 }

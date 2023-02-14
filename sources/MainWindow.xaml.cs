@@ -12,6 +12,7 @@ using RevitDBExplorer.Domain.DataModel;
 using RevitDBExplorer.Domain.RevitDatabaseQuery;
 using RevitDBExplorer.Domain.Selectors;
 using RevitDBExplorer.Properties;
+using RevitDBExplorer.UIComponents.CommandAndControl;
 using RevitDBExplorer.UIComponents.List;
 using RevitDBExplorer.UIComponents.QueryVisualization;
 using RevitDBExplorer.UIComponents.Tree;
@@ -24,15 +25,15 @@ using RDQCommand = RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Command;
 
 namespace RevitDBExplorer
 {
-    internal enum RightView { None, List }
+    internal enum RightView { None, List, CommandAndControl }
 
     internal partial class MainWindow : Window, INotifyPropertyChanged
     {
         private readonly TreeVM treeVM = new();
         private readonly ListVM listVM = new();
+        private readonly CommandAndControlVM commandAndControlVM = new();
         private readonly QueryVisualizationVM queryVisualizationVM = new();
-        private RightView rightView;
-        private string rightFilterPhrase = string.Empty;       
+        private RightView rightView;          
         private string databaseQuery = string.Empty;
         private string databaseQueryToolTip = string.Empty;
         private bool isPopupOpen;
@@ -40,9 +41,11 @@ namespace RevitDBExplorer
         private readonly DispatcherTimer isRevitBusyDispatcher;
         private readonly IAutocompleteItemProvider databaseQueryAutocompleteItemProvider = new AutocompleteItemProvider();
 
-            
+
         public ListVM List => listVM;
         public TreeVM Tree => treeVM;
+        public CommandAndControlVM CommandAndControl => commandAndControlVM;
+        public QueryVisualizationVM QueryVisualization => queryVisualizationVM;
         public RightView RightView
         {
             get
@@ -54,21 +57,7 @@ namespace RevitDBExplorer
                 rightView = value;
                 OnPropertyChanged();
             }
-        }
-        public QueryVisualizationVM QueryVisualization => queryVisualizationVM;         
-        public string RightFilterPhrase
-        {
-            get
-            {
-                return rightFilterPhrase;
-            }
-            set
-            {
-                rightFilterPhrase = value;
-                List.FilterListView(value);                
-                OnPropertyChanged();
-            }
-        }       
+        }                      
         public string DatabaseQuery
         {
             get
@@ -131,7 +120,7 @@ namespace RevitDBExplorer
                 return databaseQueryAutocompleteItemProvider;
             }
         }
-
+        
         public MainWindow()
         {
             Dispatcher.UnhandledException += Dispatcher_UnhandledException;
@@ -146,8 +135,7 @@ namespace RevitDBExplorer
 
             CheckIfNewVersionIsAvailable(ver).Forget();
 
-            List.MemberSnooped += List_MemberSnooped;
-            List.MemberValueHasChanged += () => ReloadButton_Click(null, null);
+            List.MemberSnooped += List_MemberSnooped;          
             Tree.SelectedItemChanged += Tree_SelectedItemChanged;
         }  
         public MainWindow(SourceOfObjects sourceOfObjects) : this()
@@ -238,10 +226,6 @@ namespace RevitDBExplorer
             var window = new MainWindow(sourceOfObjects);
             window.Owner = this;
             window.Show();                      
-        }
-        private async void ReloadButton_Click(object sender, RoutedEventArgs e)
-        {            
-            await ExternalExecutor.ExecuteInRevitContextAsync(uiApp => List.ReloadItems());    
         }
         private async void TryQueryDatabase(string query)
         {

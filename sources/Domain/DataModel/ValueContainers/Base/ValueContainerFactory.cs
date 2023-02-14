@@ -51,6 +51,7 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers.Base
             new DocumentChangedEventArgsHandler(),
             new RevitApiEventArgsHandler(),   
             new WorksetIdHandler(),
+            new FailureDefinitionIdHandler(),
             
             // generic
             new ElementHandler(),

@@ -128,7 +128,7 @@ namespace RevitDBExplorer.UIComponents.Tree
             }
             return true;
         }
-        public void FilterTreeView()
+        private void FilterTreeView()
         {
             if (TreeItems != null)
             {

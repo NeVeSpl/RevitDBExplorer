@@ -41,6 +41,8 @@
     <SolidColorBrush x:Key="TreeViewItem.InactiveSelectionHighlightTextBrushKey" Color="#000000" />
 
     <SolidColorBrush x:Key="GridSplitter.Background" Color="LightGray"/>
+    
+    <SolidColorBrush x:Key="StatusBar.Background" Color="#F1F1F1"/>
 
     <SolidColorBrush x:Key="Member.Link" Color="#1a0dab"/>
     <SolidColorBrush x:Key="Member.Error" Color="#FF0000"/>

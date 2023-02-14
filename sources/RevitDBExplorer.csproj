@@ -230,6 +230,7 @@
     <Compile Include="Domain\DataModel\MemberAccessors\RevitLinkType\RevitLinkType_Load.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\SpatialFieldManager\SpatialFieldManager_GetResultSchema.cs" />
     <Compile Include="Domain\DataModel\MemberTemplates\View_Templates.cs" />
+    <Compile Include="Domain\DataModel\ValueContainers\FailureDefinitionIdHandler.cs" />
     <Compile Include="Domain\DataModel\ValueContainers\SchedulableFieldHandler.cs" />
     <Compile Include="Domain\DataModel\ValueContainers\WorksetIdHandler.cs" />
     <Compile Include="Domain\RevitDatabaseQuery\AutocompleteItemProvider.cs" />
@@ -386,6 +387,10 @@
     <Compile Include="Domain\RevitDatabaseQuery\Parser\Commands\ParameterArgument.cs" />
     <Compile Include="Domain\RevitDatabaseQuery\QueryParser.cs" />
     <Compile Include="Domain\RevitDatabaseQuery\RevitDatabaseQueryService.cs" />
+    <Compile Include="Domain\RevitDatabaseView\Cell.cs" />
+    <Compile Include="Domain\RevitDatabaseView\Column.cs" />
+    <Compile Include="Domain\RevitDatabaseView\Row.cs" />
+    <Compile Include="Domain\RevitDatabaseView\View.cs" />
     <Compile Include="Domain\RevitDocumentationReader.cs" />
     <Compile Include="Domain\Selectors\Base\ISelector.cs" />
     <Compile Include="Domain\Selectors\SnoopActiveDocument.cs" />
@@ -430,6 +435,10 @@
     <Compile Include="UIComponents\BusyIndicator\BusyIndicator.xaml.cs">
       <DependentUpon>BusyIndicator.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UIComponents\CommandAndControl\CommandAndControlView.xaml.cs">
+      <DependentUpon>CommandAndControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UIComponents\CommandAndControl\CommandAndControlVM.cs" />
     <Compile Include="UIComponents\List\ListView.xaml.cs">
       <DependentUpon>ListView.xaml</DependentUpon>
     </Compile>
@@ -452,6 +461,7 @@
       <DependentUpon>QueryVisualizationView.xaml</DependentUpon>
     </Compile>
     <Compile Include="UIComponents\Tree\TreeVM.cs" />
+    <Compile Include="WPF\AttachedProperties\DataGridAP.cs" />
     <Compile Include="WPF\BaseCommand.cs" />
     <Compile Include="WPF\BindingProxy.cs" />
     <Compile Include="WPF\Controls\TextBoxWithPlaceholder.xaml.cs">
@@ -557,6 +567,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UIComponents\BusyIndicator\BusyIndicator.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UIComponents\CommandAndControl\CommandAndControlView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

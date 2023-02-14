@@ -62,6 +62,8 @@
 
     <SolidColorBrush x:Key="GridSplitter.Background" Color="{StaticResource PrimaryLight}"/>
 
+    <SolidColorBrush x:Key="StatusBar.Background" Color="#333333"/>
+
     <SolidColorBrush x:Key="Member.Link" Color="{StaticResource SecondaryLight}"/>
     <SolidColorBrush x:Key="Member.Error" Color="{StaticResource Error}"/>
 

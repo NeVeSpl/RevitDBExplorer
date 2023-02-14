@@ -7,7 +7,8 @@
         xmlns:componentQueryVisualization="clr-namespace:RevitDBExplorer.UIComponents.QueryVisualization"
         xmlns:componentBusyIndicator="clr-namespace:RevitDBExplorer.UIComponents.BusyIndicator"
         xmlns:componentList="clr-namespace:RevitDBExplorer.UIComponents.List"
-        xmlns:componentTree="clr-namespace:RevitDBExplorer.UIComponents.Tree"        
+        xmlns:componentTree="clr-namespace:RevitDBExplorer.UIComponents.Tree"    
+        xmlns:componentCAndC="clr-namespace:RevitDBExplorer.UIComponents.CommandAndControl"    
         xmlns:converters="clr-namespace:RevitDBExplorer.WPF.Converters"       
         xmlns:controls="clr-namespace:RevitDBExplorer.WPF.Controls" 
         xmlns:ext="clr-namespace:RevitDBExplorer.WPF.MarkupExtensions"    
@@ -15,8 +16,8 @@
         mc:Ignorable="d"
         WindowStartupLocation="CenterOwner"
         Title="Revit database explorer and editor"
-        MinHeight="383" Height="{ext:SettingBinding MainWindowHeight}"
-        MinWidth="643" Width="{ext:SettingBinding MainWindowWidth}" 
+        MinHeight="353" Height="{ext:SettingBinding MainWindowHeight}"
+        MinWidth="599" Width="{ext:SettingBinding MainWindowWidth}" 
         Icon="/RevitDBExplorer;component/Resources/RDBE.ico" 
         Closed="Window_Closed"
         KeyDown="Window_KeyDown" 
@@ -42,142 +43,141 @@
             <MenuItem Header="Configuration" Click="Window_MenuItem_ConfigurationClick" />
         </ContextMenu>
     </Window.ContextMenu>
-
-    <Grid Margin="2" >
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="{ext:SettingBinding FirstColumnWidth}" MinWidth="100" x:Name="cFirstColumnDefinition" />
-            <ColumnDefinition Width="auto" />
-            <ColumnDefinition Width="*" MinWidth="100"/>
-        </Grid.ColumnDefinitions>
+    <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="1*" MinHeight="200"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition/>
         </Grid.RowDefinitions>
 
-        <UniformGrid Grid.ColumnSpan="3" Columns="13" Margin="0 0 0 2">
-            <UniformGrid.Resources>
-                <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
-                    <Setter Property="Background" Value="Transparent"/>
-                    <Setter Property="Padding" Value="3 3 3 4"/>
-                    <Setter Property="Margin" Value="2 0 2 0"/>
-                    <Setter Property="BorderBrush" Value="Transparent"/>
-                </Style>
-            </UniformGrid.Resources>
-
-            <Button Click="SelectorButton_Click" Tag="CurrentSelection" Margin="0 0 2 0" ToolTip="Snoop already selected elements in Revit; if none selected, snoop all elements from active view">
-                <Path Style="{StaticResource IconSelection}"  />
-            </Button>
-            <Button Click="SelectorButton_Click" Tag="Db" ToolTip="Snoop DB" >
-                <Path Style="{StaticResource IconDb}"  />
-            </Button>
-            <Button Click="SelectorButton_Click" Tag="ActiveView" ToolTip="Snoop active view">
-                <Path Style="{StaticResource IconActiveView}" />
-            </Button>
-            <Button Click="SelectorButton_Click" Tag="ActiveDocument" ToolTip="Snoop active document">
-                <Path Style="{StaticResource IconActiveDocument}" />
-            </Button>
-            <Button Click="SelectorButton_Click" Tag="Application" ToolTip="Snoop application">
-                <Path Style="{StaticResource IconApplication}" />
-            </Button>
-            <Button Click="SelectorButton_Click" Tag="PickFace" ToolTip="Snoop by selecting face in Revit">
-                <Path Style="{StaticResource IconPickFace}" />
-            </Button>
-            <Button Click="SelectorButton_Click" Tag="PickEdge" ToolTip="Snoop by selecting edge in Revit">
-                <Path Style="{StaticResource IconPickEdge}"  />
-            </Button>
-            <Button Click="SelectorButton_Click" Tag="LinkedElement" ToolTip="Snoop by selecting linked element in Revit">
-                <Path Style="{StaticResource IconLinkedElement}" />
-            </Button>
-            <!--<Button Click="SelectorButton_Click" Tag="DependentElements" ToolTip="Snoop dependent elements of already selected elements in Revit">
-                <Path Style="{StaticResource IconDependentElements}" />
-            </Button>-->
-            <Button Click="SelectorButton_Click" Tag="Schemas" ToolTip="Snoop Extensible Storage framework schemas located in memory">
-                <Path Style="{StaticResource IconSchemas}" />
-            </Button>
-            <Button Click="SelectorButton_Click"  Tag="FilterableCategories" ToolTip="Snoop categories that may be used in a ParameterFilterElement">
-                <Path Style="{StaticResource IconCategories}" SnapsToDevicePixels="True" />
-            </Button>
-            <Button Click="ButtonWithSubMenu_Click"  ToolTip="Snoop Forge types">
-                <Path Style="{StaticResource IconForge}" />
-                <Button.ContextMenu>
-                    <ContextMenu>
-                        <MenuItem Header="ParameterUtils.GetAllBuiltInGroups()" Click="SelectorButton_Click" Tag="ForgeParameterUtilsGetAllBuiltInGroups"/>
-                        <MenuItem Header="ParameterUtils.GetAllBuiltInParameters()" Click="SelectorButton_Click" Tag="ForgeParameterUtilsGetAllBuiltInParameters"/>
-                        <MenuItem Header="UnitUtils.GetAllMeasurableSpecs()" Click="SelectorButton_Click" Tag="ForgeUnitUtilsGetAllMeasurableSpecs"/>
-                        <MenuItem Header="UnitUtils.GetAllUnits()" Click="SelectorButton_Click" Tag="ForgeUnitUtilsGetAllUnits"/>
-                        <MenuItem Header="UnitUtils.GetAllDisciplines()" Click="SelectorButton_Click" Tag="ForgeUnitUtilsGetAllDisciplines"/>
-                        <MenuItem Header="SpecUtils.GetAllSpecs()" Click="SelectorButton_Click" Tag="ForgeSpecUtilsGetAllSpecs"/>
-                    </ContextMenu>
-                </Button.ContextMenu>
-            </Button>
-            <Button Click="SnoopEvents_Click"  ToolTip="Snoop events">
-                <Path Style="{StaticResource IconEvent}" SnapsToDevicePixels="True" />
-            </Button>
-            <!--<Button Click="SelectorButton_Click" Tag="Updaters" >
-                <Path Style="{StaticResource IconUpdater}" />
-            </Button>-->
-            <Button Click="ButtonWithSubMenu_Click" Margin="2 0 0 0" ToolTip="Snoop addins">
-            <Path Style="{StaticResource IconAddin}" />
-            <Button.ContextMenu>
-                <ContextMenu>
-                    <MenuItem Header="Snoop loaded external applications" Click="SelectorButton_Click" Tag="LoadedApplications" ToolTip="UIApplication.LoadedApplications"/>
-                    <MenuItem Header="Snoop updaters applicable to the given document" Icon="" Click="SelectorButton_Click" Tag="Updaters" ToolTip="UpdaterRegistry.GetRegisteredUpdaterInfos()"/>
-                        <MenuItem Header="Snoop external services" Icon="" Click="SelectorButton_Click" Tag="ExternalServices" ToolTip="ExternalServiceRegistry.GetServices()"/>
-                 </ContextMenu>
-            </Button.ContextMenu>
-            </Button>
-        </UniformGrid>
-
-        <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Margin="0 3 0 3" >
+        <Grid Margin="2 2 2 0" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="{ext:SettingBinding FirstColumnWidth}" MinWidth="100" x:Name="cFirstColumnDefinition" />
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="*" MinWidth="100"/>
+            </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>                
+                <RowDefinition Height="*"  MinHeight="100"/>
+                <RowDefinition Height="18"/>
             </Grid.RowDefinitions>
 
-            <controls:TextBoxWithPlaceholder Text="{Binding DatabaseQuery, Mode=TwoWay, Delay=1000, UpdateSourceTrigger=PropertyChanged}" 
-                                             AutocompleteItemProvider="{Binding DatabaseQueryAutocompleteItemProvider}"
-                                             IsPopupOpen="{Binding IsPopupOpen}"
-                                             Placeholder="Query Revit database with RDQ"
-                                             ToolTip="{Binding DatabaseQueryToolTip}"
-                                             ToolTipService.ShowDuration="50000">
-                <controls:TextBoxWithPlaceholder.ContextMenu>
-                    <ContextMenu>                       
-                        <MenuItem Command="ApplicationCommands.Copy" />
-                        <MenuItem Command="ApplicationCommands.Cut" />
-                        <MenuItem Command="ApplicationCommands.Paste" />
-                        <Separator/>
-                        <MenuItem Header ="Copy generated C# syntax" Tag="Default" Click="TextBox_MenuItem_CopyFilteredElementCollector"/>
-                    </ContextMenu>
-                </controls:TextBoxWithPlaceholder.ContextMenu>
-            </controls:TextBoxWithPlaceholder>
+            <UniformGrid Grid.ColumnSpan="3" Columns="13" Margin="0 0 0 2">
+                <UniformGrid.Resources>
+                    <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                        <Setter Property="Background" Value="Transparent"/>
+                        <Setter Property="Padding" Value="3 3 3 4"/>
+                        <Setter Property="Margin" Value="2 0 2 0"/>
+                        <Setter Property="BorderBrush" Value="Transparent"/>
+                    </Style>
+                </UniformGrid.Resources>
 
-            <componentQueryVisualization:QueryVisualizationView  Grid.Row="1" Margin="0 1 0 0" DataContext="{Binding QueryVisualization}"/>
+                <Button Click="SelectorButton_Click" Tag="CurrentSelection" Margin="0 0 2 0" ToolTip="Snoop already selected elements in Revit; if none selected, snoop all elements from active view">
+                    <Path Style="{StaticResource IconSelection}"  />
+                </Button>
+                <Button Click="SelectorButton_Click" Tag="Db" ToolTip="Snoop DB" >
+                    <Path Style="{StaticResource IconDb}"  />
+                </Button>
+                <Button Click="SelectorButton_Click" Tag="ActiveView" ToolTip="Snoop active view">
+                    <Path Style="{StaticResource IconActiveView}" />
+                </Button>
+                <Button Click="SelectorButton_Click" Tag="ActiveDocument" ToolTip="Snoop active document">
+                    <Path Style="{StaticResource IconActiveDocument}" />
+                </Button>
+                <Button Click="SelectorButton_Click" Tag="Application" ToolTip="Snoop application">
+                    <Path Style="{StaticResource IconApplication}" />
+                </Button>
+                <Button Click="SelectorButton_Click" Tag="PickFace" ToolTip="Snoop by selecting face in Revit">
+                    <Path Style="{StaticResource IconPickFace}" />
+                </Button>
+                <Button Click="SelectorButton_Click" Tag="PickEdge" ToolTip="Snoop by selecting edge in Revit">
+                    <Path Style="{StaticResource IconPickEdge}"  />
+                </Button>
+                <Button Click="SelectorButton_Click" Tag="LinkedElement" ToolTip="Snoop by selecting linked element in Revit">
+                    <Path Style="{StaticResource IconLinkedElement}" />
+                </Button>
+                <!--<Button Click="SelectorButton_Click" Tag="DependentElements" ToolTip="Snoop dependent elements of already selected elements in Revit">
+                    <Path Style="{StaticResource IconDependentElements}" />
+                </Button>-->
+                <Button Click="SelectorButton_Click" Tag="Schemas" ToolTip="Snoop Extensible Storage framework schemas located in memory">
+                    <Path Style="{StaticResource IconSchemas}" />
+                </Button>
+                <Button Click="SelectorButton_Click"  Tag="FilterableCategories" ToolTip="Snoop categories that may be used in a ParameterFilterElement">
+                    <Path Style="{StaticResource IconCategories}" SnapsToDevicePixels="True" />
+                </Button>
+                <Button Click="ButtonWithSubMenu_Click"  ToolTip="Snoop Forge types">
+                    <Path Style="{StaticResource IconForge}" />
+                    <Button.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="ParameterUtils.GetAllBuiltInGroups()" Click="SelectorButton_Click" Tag="ForgeParameterUtilsGetAllBuiltInGroups"/>
+                            <MenuItem Header="ParameterUtils.GetAllBuiltInParameters()" Click="SelectorButton_Click" Tag="ForgeParameterUtilsGetAllBuiltInParameters"/>
+                            <MenuItem Header="UnitUtils.GetAllMeasurableSpecs()" Click="SelectorButton_Click" Tag="ForgeUnitUtilsGetAllMeasurableSpecs"/>
+                            <MenuItem Header="UnitUtils.GetAllUnits()" Click="SelectorButton_Click" Tag="ForgeUnitUtilsGetAllUnits"/>
+                            <MenuItem Header="UnitUtils.GetAllDisciplines()" Click="SelectorButton_Click" Tag="ForgeUnitUtilsGetAllDisciplines"/>
+                            <MenuItem Header="SpecUtils.GetAllSpecs()" Click="SelectorButton_Click" Tag="ForgeSpecUtilsGetAllSpecs"/>
+                        </ContextMenu>
+                    </Button.ContextMenu>
+                </Button>
+                <Button Click="SnoopEvents_Click"  ToolTip="Snoop events">
+                    <Path Style="{StaticResource IconEvent}" SnapsToDevicePixels="True" />
+                </Button>               
+                <Button Click="ButtonWithSubMenu_Click" Margin="2 0 0 0" ToolTip="Snoop addins">
+                    <Path Style="{StaticResource IconAddin}" />
+                    <Button.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Snoop loaded external applications" Click="SelectorButton_Click" Tag="LoadedApplications" ToolTip="UIApplication.LoadedApplications"/>
+                            <MenuItem Header="Snoop updaters applicable to the given document" Icon="" Click="SelectorButton_Click" Tag="Updaters" ToolTip="UpdaterRegistry.GetRegisteredUpdaterInfos()"/>
+                            <MenuItem Header="Snoop external services" Icon="" Click="SelectorButton_Click" Tag="ExternalServices" ToolTip="ExternalServiceRegistry.GetServices()"/>
+                        </ContextMenu>
+                    </Button.ContextMenu>
+                </Button>
+            </UniformGrid>
+
+            <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Margin="0 3 0 3" >
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <controls:TextBoxWithPlaceholder Text="{Binding DatabaseQuery, Mode=TwoWay, Delay=1000, UpdateSourceTrigger=PropertyChanged}" 
+                                                 AutocompleteItemProvider="{Binding DatabaseQueryAutocompleteItemProvider}"
+                                                 IsPopupOpen="{Binding IsPopupOpen}"
+                                                 Placeholder="Query Revit database with RDQ"
+                                                 ToolTip="{Binding DatabaseQueryToolTip}"
+                                                 ToolTipService.ShowDuration="50000">
+                    <controls:TextBoxWithPlaceholder.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Command="ApplicationCommands.Copy" />
+                            <MenuItem Command="ApplicationCommands.Cut" />
+                            <MenuItem Command="ApplicationCommands.Paste" />
+                            <Separator/>
+                            <MenuItem Header ="Copy generated C# syntax" Tag="Default" Click="TextBox_MenuItem_CopyFilteredElementCollector"/>
+                        </ContextMenu>
+                    </controls:TextBoxWithPlaceholder.ContextMenu>
+                </controls:TextBoxWithPlaceholder>
+
+                <componentQueryVisualization:QueryVisualizationView  Grid.Row="1" Margin="0 1 0 0" DataContext="{Binding QueryVisualization}"/>
+            </Grid>
+
+
+            <componentTree:TreeView Grid.Row="2" Grid.Column="0"  DataContext="{Binding Tree}" Margin="0 0 2 0" SizeChanged="Window_SizeChanged" />
+
+            <GridSplitter Grid.Row="2" Grid.Column="1"  Background="{DynamicResource GridSplitter.Background}"  Width="2" Margin="0 25 2 5" HorizontalAlignment="Left" VerticalAlignment="Stretch" />
+
+            <Grid Grid.Row="2" Grid.Column="2"  Margin="-2 0 0 0">
+                <componentList:ListView DataContext="{Binding List}" Visibility="{Binding DataContext.RightView, Converter={StaticResource EnumMatchToVisibilityConverter}, ConverterParameter=List, RelativeSource={RelativeSource AncestorType=Grid}}"/>
+                <componentCAndC:CommandAndControlView DataContext="{Binding CommandAndControl}" Margin="2 2 0 0" Visibility="{Binding DataContext.RightView, Converter={StaticResource EnumMatchToVisibilityConverter}, ConverterParameter=CommandAndControl, RelativeSource={RelativeSource AncestorType=Grid}}"/>
+            </Grid>
+
+            <componentBusyIndicator:BusyIndicator Grid.Row="2" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="150" Height="35" Margin="0 0 0 0" Visibility="{Binding IsRevitBusy, Converter={StaticResource BoolToVisibilityConverter}}" />
+
+            <Border Background="{DynamicResource StatusBar.Background}" Margin="-2 0 -2 0"  Grid.ColumnSpan="3"  Grid.Row="3"/>
         </Grid>
 
-        <Grid Grid.Row="2" Grid.Column="2" Margin="0 0 0 3">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition Width="auto"/>
-            </Grid.ColumnDefinitions>
+        <GridSplitter Grid.Row="1"  Background="{DynamicResource GridSplitter.Background}" Height="2" HorizontalAlignment="Stretch" Visibility="Collapsed"/>
 
-            <controls:TextBoxWithPlaceholder Margin="0 0 2 0" Text="{Binding RightFilterPhrase, Mode=TwoWay, Delay=200, UpdateSourceTrigger=PropertyChanged}" Placeholder="Filter list by name"/>
-
-            <Button Grid.Column="1" BorderBrush="Transparent" Margin="2 0 0 0" MinWidth="21" MinHeight="21" Padding="2 0 1 1" ToolTip="Reload data from Revit in the list" Background="Transparent"  Click="ReloadButton_Click">
-                <Path Style="{StaticResource IconReload}" Width="18" />
-            </Button>
-        </Grid>
-
-        <componentTree:TreeView Grid.Row="2" Grid.Column="0" Grid.RowSpan="2" DataContext="{Binding Tree}" Margin="0 0 2 0" SizeChanged="Window_SizeChanged" />
-
-        <GridSplitter Grid.Row="3" Grid.Column="1" Background="{DynamicResource GridSplitter.Background}"  Width="2" Margin="0 2 2 0" HorizontalAlignment="Left" VerticalAlignment="Stretch" />
-
-        <Grid Grid.Row="3" Grid.Column="3" Margin="-2 2 0 0">
-            <componentList:ListView DataContext="{Binding List}" Visibility="{Binding DataContext.RightView, Converter={StaticResource EnumMatchToVisibilityConverter}, ConverterParameter=List, RelativeSource={RelativeSource AncestorType=Grid}}"/>
-        </Grid>
-
-        <componentBusyIndicator:BusyIndicator Grid.Row="3" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="150" Height="35" Margin="0 0 0 0" Visibility="{Binding IsRevitBusy, Converter={StaticResource BoolToVisibilityConverter}}" />
+        <Border Background="AntiqueWhite"  Grid.Row="2"  Visibility="Collapsed"/>
 
     </Grid>
 </Window>
