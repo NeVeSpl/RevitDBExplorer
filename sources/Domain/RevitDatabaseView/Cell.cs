@@ -46,8 +46,8 @@ namespace RevitDBExplorer.Domain.RevitDatabaseView
 
             if (parameter != null)
             {
-                var dataType = parameter.Definition?.GetDataType();
-                bool isMeasurableSpec = UnitUtils.IsMeasurableSpec(dataType);
+                //var dataType = parameter.Definition?.GetDataType();
+                //bool isMeasurableSpec = UnitUtils.IsMeasurableSpec(dataType);
 
                 if (true)
                 {
