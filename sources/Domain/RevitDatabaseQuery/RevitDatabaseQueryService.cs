@@ -23,8 +23,8 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
 
         public static Result ParseAndExecute(Document document, string query)
         {
-            if (document is null) return new Result(null, new List<ICommand>(), new SourceOfObjects());  
-                      
+            if (document is null) return new Result(null, new List<ICommand>(), new SourceOfObjects() { Title = "Query" });
+
             CommandParser.LoadDocumentSpecificData(document);
             var commands = QueryParser.Parse(query);
             commands.SelectMany(x => x.Arguments).OfType<ParameterArgument>().ToList().ForEach(x => x.ResolveStorageType(document));
@@ -42,44 +42,47 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
             pipe.AddRange(ParameterFilter.Create(commands));
             pipe.AddRange(Filters.WorksetFilter.Create(commands));
 
-            var collector = new FilteredElementCollector(document);
-            var collectorSyntax = "new FilteredElementCollector(document)";
+            string collectorSyntax = "";
+            CollectorQueryExecutor queryExecutor = null;
 
-            foreach (var filter in pipe)
-            {
-                if (filter.Filter != null)
+            if (pipe.Any())
+            { 
+                var collector = new FilteredElementCollector(document);
+                collectorSyntax = "new FilteredElementCollector(document)";
+
+                foreach (var filter in pipe)
                 {
-                    collector.WherePasses(filter.Filter);
-                    collectorSyntax += Environment.NewLine + "    " + filter.CollectorSyntax;
+                    if (filter.Filter != null)
+                    {
+                        collector.WherePasses(filter.Filter);
+                        collectorSyntax += Environment.NewLine + "    " + filter.CollectorSyntax;
+                    }
                 }
-            }
-            collectorSyntax += Environment.NewLine + "    .ToElements();";
+                collectorSyntax += Environment.NewLine + "    .ToElements()";
 
-            bool atLeastOneFilter = pipe.Any();
+                queryExecutor = new CollectorQueryExecutor(collector, document);
+            }           
 
-            return new Result(collectorSyntax, commands, new SourceOfObjects(new RemoteExecutor(collector, document, atLeastOneFilter)));
+            return new Result(collectorSyntax, commands, new SourceOfObjects(queryExecutor) { Title ="Query" });
         }
 
         public record Result(string GeneratedCSharpSyntax, IList<ICommand> Commands, SourceOfObjects SourceOfObjects);
 
-        public class RemoteExecutor : IAmSourceOfEverything
+        private class CollectorQueryExecutor : IAmSourceOfEverything
         {
             private readonly FilteredElementCollector collector;
             private readonly Document document;
-            private readonly bool atLeastOneFilter;
+           
 
-            public RemoteExecutor(FilteredElementCollector collector, Document document, bool atLeastOneFilter)
-            {              
+            public CollectorQueryExecutor(FilteredElementCollector collector, Document document)
+            {
                 this.collector = collector;
-                this.document = document;
-                this.atLeastOneFilter = atLeastOneFilter;
+                this.document = document;                
             }
 
 
             public IEnumerable<SnoopableObject> Snoop(UIApplication app)
             {
-                if (document == null) return null;
-                if (atLeastOneFilter == false) return null;
                 var snoopableObjects = collector.ToElements().Select(x => new SnoopableObject(document, x));
                 return snoopableObjects;
             }

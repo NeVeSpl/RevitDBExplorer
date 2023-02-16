@@ -12,18 +12,22 @@ namespace RevitDBExplorer.Domain
         IEnumerable<SnoopableObject> Snoop(UIApplication app);
     }
 
+    internal interface IAmCommand
+    {
+        void Execute(UIApplication app);
+    }
 
     internal sealed class SourceOfObjects
     {        
         private readonly IAmSourceOfEverything source;   
 
         public string Title { get; init; }
-        public IList<SnoopableObject> Objects { get; private set; }
+        public IList<SnoopableObject> Objects { get; private set; } = new SnoopableObject[0];
 
 
         public SourceOfObjects()
         {
-
+            
         }
         public SourceOfObjects(IAmSourceOfEverything source)
         {

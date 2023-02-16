@@ -15,6 +15,7 @@ using RevitDBExplorer.Properties;
 using RevitDBExplorer.UIComponents.CommandAndControl;
 using RevitDBExplorer.UIComponents.List;
 using RevitDBExplorer.UIComponents.QueryVisualization;
+using RevitDBExplorer.UIComponents.Scripting;
 using RevitDBExplorer.UIComponents.Tree;
 using RevitDBExplorer.UIComponents.Tree.Items;
 using RevitDBExplorer.WPF;
@@ -27,16 +28,17 @@ namespace RevitDBExplorer
 {
     internal enum RightView { None, List, CommandAndControl }
 
-    internal partial class MainWindow : Window, INotifyPropertyChanged
+    internal partial class MainWindow : Window, INotifyPropertyChanged, IScriptRunner
     {
         private readonly TreeVM treeVM = new();
         private readonly ListVM listVM = new();
         private readonly CommandAndControlVM commandAndControlVM = new();
         private readonly QueryVisualizationVM queryVisualizationVM = new();
+        private readonly RDScriptingVM rdscriptingVM;
         private RightView rightView;          
         private string databaseQuery = string.Empty;
         private string databaseQueryToolTip = string.Empty;
-        private bool isPopupOpen;
+        private bool isPopupOpen;        
         private bool isRevitBusy;
         private readonly DispatcherTimer isRevitBusyDispatcher;
         private readonly IAutocompleteItemProvider databaseQueryAutocompleteItemProvider = new AutocompleteItemProvider();
@@ -46,6 +48,7 @@ namespace RevitDBExplorer
         public TreeVM Tree => treeVM;
         public CommandAndControlVM CommandAndControl => commandAndControlVM;
         public QueryVisualizationVM QueryVisualization => queryVisualizationVM;
+        public RDScriptingVM Scripting => rdscriptingVM;
         public RightView RightView
         {
             get
@@ -97,7 +100,7 @@ namespace RevitDBExplorer
                 isPopupOpen = value;
                 OnPropertyChanged();
             }
-        }
+        }        
         public bool IsRevitBusy
         {
             get
@@ -120,12 +123,15 @@ namespace RevitDBExplorer
                 return databaseQueryAutocompleteItemProvider;
             }
         }
-        
+        public RelayCommand OpenScriptingWithQueryCommand { get; }
+
+
         public MainWindow()
         {
             Dispatcher.UnhandledException += Dispatcher_UnhandledException;
             InitializeComponent();
             this.DataContext = this;
+            rdscriptingVM = new RDScriptingVM(this);
 
             var ver = GetType().Assembly.GetName().Version;
             var revit_ver = typeof(Autodesk.Revit.DB.Element).Assembly.GetName().Version;
@@ -137,6 +143,7 @@ namespace RevitDBExplorer
 
             List.MemberSnooped += List_MemberSnooped;          
             Tree.SelectedItemChanged += Tree_SelectedItemChanged;
+            OpenScriptingWithQueryCommand = new RelayCommand(OpenScriptingWithQuery);
         }  
         public MainWindow(SourceOfObjects sourceOfObjects) : this()
         {
@@ -242,7 +249,21 @@ namespace RevitDBExplorer
             DatabaseQueryToolTip = rdqResult.GeneratedCSharpSyntax;
             QueryVisualization.Update(rdqResult.Commands).Forget();
             Tree.PopulateTreeView(rdqResult.SourceOfObjects);            
-        }                                    
+        }    
+        async Task IScriptRunner.TryExecuteScript(SourceOfObjects source)
+        {
+            Tree.ClearItems();
+            List.ClearItems();
+            ResetDatabaseQuery();
+
+            var sourceOfObjects = await ExternalExecutor.ExecuteInRevitContextAsync(x =>
+            {                
+                source.ReadFromTheSource(x);
+                return source;
+            });
+
+            Tree.PopulateTreeView(sourceOfObjects);
+        }
      
         private void ResetDatabaseQuery()
         {
@@ -250,8 +271,15 @@ namespace RevitDBExplorer
             OnPropertyChanged(nameof(DatabaseQuery));
             DatabaseQueryToolTip = "";
             queryVisualizationVM.Update(Enumerable.Empty<RDQCommand>()).Forget();
-        }              
-     
+        }
+
+
+        private void OpenScriptingWithQuery(object parameter)
+        {
+            Scripting.Open(DatabaseQueryToolTip);
+        }
+
+
         private void ButtonWithSubMenu_Click(object sender, RoutedEventArgs e)
         {
             var contextMenu = ContextMenuService.GetContextMenu(sender as DependencyObject);
@@ -298,13 +326,6 @@ namespace RevitDBExplorer
                 if (dict is ThemeResourceDictionary skinDict)
                     skinDict.UpdateSource();                
             }
-        }
-        private void TextBox_MenuItem_CopyFilteredElementCollector(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                Clipboard.SetText(DatabaseQueryToolTip);
-            } catch { }
         }
         
 

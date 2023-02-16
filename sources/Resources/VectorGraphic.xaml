@@ -36,8 +36,10 @@
     <StreamGeometry x:Key="vArrowSelectorTool">M355.095,284.612L512,183.087L0,0l183.085,512l101.527-156.905L394.53,465.013c19.463,19.463,51.019,19.462,70.483,0c19.462-19.463,19.462-51.019,0-70.483L355.095,284.612z</StreamGeometry>
     <StreamGeometry x:Key="vToggleSwitchOutline">M17 6H7C3.69 6 1 8.69 1 12S3.69 18 7 18H17C20.31 18 23 15.31 23 12S20.31 6 17 6M17 16H7C4.79 16 3 14.21 3 12S4.79 8 7 8H17C19.21 8 21 9.79 21 12S19.21 16 17 16M17 9C15.34 9 14 10.34 14 12S15.34 15 17 15 20 13.66 20 12 18.66 9 17 9Z</StreamGeometry>
     <StreamGeometry x:Key="vCollapseAll">M14,4H4V14H2V4A2,2 0 0,1 4,2H14V4M18,6H8A2,2 0 0,0 6,8V18H8V8H18V6M22,12V20A2,2 0 0,1 20,22H12A2,2 0 0,1 10,20V12A2,2 0 0,1 12,10H20A2,2 0 0,1 22,12M20,15H12V17H20V15Z</StreamGeometry>
-
-
+    <StreamGeometry x:Key="vFunction">M15.6,5.29C14.5,5.19 13.53,6 13.43,7.11L13.18,10H16V12H13L12.56,17.07C12.37,19.27 10.43,20.9 8.23,20.7C6.92,20.59 5.82,19.86 5.17,18.83L6.67,17.33C6.91,18.07 7.57,18.64 8.4,18.71C9.5,18.81 10.47,18 10.57,16.89L11,12H8V10H11.17L11.44,6.93C11.63,4.73 13.57,3.1 15.77,3.3C17.08,3.41 18.18,4.14 18.83,5.17L17.33,6.67C17.09,5.93 16.43,5.36 15.6,5.29Z</StreamGeometry>
+    <StreamGeometry x:Key="vMusicAccidentalSharp">M17 9.5V7.5L15 8.1V5.5H13V8.7L11 9.3V6.5H9V9.9L7 10.5V12.5L9 11.9V13.9L7 14.5V16.5L9 15.9V18.5H11V15.3L13 14.7V17.5H15V14.1L17 13.5V11.5L15 12.1V10.1L17 9.5M13 12.7L11 13.3V11.3L13 10.7V12.7Z</StreamGeometry>
+    <StreamGeometry x:Key="vWindowClose">M13.46,12L19,17.54V19H17.54L12,13.46L6.46,19H5V17.54L10.54,12L5,6.46V5H6.46L12,10.54L17.54,5H19V6.46L13.46,12Z</StreamGeometry>
+    <StreamGeometry x:Key="vPlayOutline">M8.5,8.64L13.77,12L8.5,15.36V8.64M6.5,5V19L17.5,12</StreamGeometry>
 
 
     <Style x:Key="IconMemberKind" TargetType="Path" >
@@ -164,6 +166,15 @@
     </Style>
     <Style x:Key="IconCollapse" TargetType="Path" BasedOn="{StaticResource IconSelector}">
         <Setter Property="Data" Value="{StaticResource vCollapseAll}"/>
+    </Style>
+    <Style x:Key="IconQuery" TargetType="Path" BasedOn="{StaticResource IconSelector}">
+        <Setter Property="Data" Value="{StaticResource vFunction}"/>
+    </Style>
+    <Style x:Key="IconClose" TargetType="Path" BasedOn="{StaticResource IconSelector}">
+        <Setter Property="Data" Value="{StaticResource vWindowClose}"/>
+    </Style>
+    <Style x:Key="IconRun" TargetType="Path" BasedOn="{StaticResource IconSelector}">
+        <Setter Property="Data" Value="{StaticResource vPlayOutline}"/>
     </Style>
 </ResourceDictionary>
                     

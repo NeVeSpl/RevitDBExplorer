@@ -9,6 +9,7 @@
         xmlns:componentList="clr-namespace:RevitDBExplorer.UIComponents.List"
         xmlns:componentTree="clr-namespace:RevitDBExplorer.UIComponents.Tree"    
         xmlns:componentCAndC="clr-namespace:RevitDBExplorer.UIComponents.CommandAndControl"    
+        xmlns:componentScripting="clr-namespace:RevitDBExplorer.UIComponents.Scripting"    
         xmlns:converters="clr-namespace:RevitDBExplorer.WPF.Converters"       
         xmlns:controls="clr-namespace:RevitDBExplorer.WPF.Controls" 
         xmlns:ext="clr-namespace:RevitDBExplorer.WPF.MarkupExtensions"    
@@ -34,6 +35,7 @@
             </ResourceDictionary.MergedDictionaries>           
             
             <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+            <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverterCollapsed" WhenFalse="Collapsed"/>
             <converters:EnumMatchToVisibilityConverter x:Key="EnumMatchToVisibilityConverter"/>
         </ResourceDictionary>
     </Window.Resources>
@@ -47,7 +49,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="1*" MinHeight="200"/>
             <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
+            <RowDefinition Height="{Binding Scripting.Height, Mode=TwoWay}" />
         </Grid.RowDefinitions>
 
         <Grid Margin="2 2 2 0" >
@@ -59,17 +61,18 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>                
-                <RowDefinition Height="*"  MinHeight="100"/>
+                <RowDefinition Height="*"  />
                 <RowDefinition Height="18"/>
             </Grid.RowDefinitions>
 
-            <UniformGrid Grid.ColumnSpan="3" Columns="13" Margin="0 0 0 2">
+            <UniformGrid Grid.ColumnSpan="3" Columns="13" Margin="0 0 0 2" >
                 <UniformGrid.Resources>
                     <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
                         <Setter Property="Background" Value="Transparent"/>
                         <Setter Property="Padding" Value="3 3 3 4"/>
                         <Setter Property="Margin" Value="2 0 2 0"/>
                         <Setter Property="BorderBrush" Value="Transparent"/>
+                        <Setter Property="ToolTipService.InitialShowDelay" Value="100"/>
                     </Style>
                 </UniformGrid.Resources>
 
@@ -139,6 +142,10 @@
                     <RowDefinition/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
 
                 <controls:TextBoxWithPlaceholder Text="{Binding DatabaseQuery, Mode=TwoWay, Delay=1000, UpdateSourceTrigger=PropertyChanged}" 
                                                  AutocompleteItemProvider="{Binding DatabaseQueryAutocompleteItemProvider}"
@@ -146,7 +153,7 @@
                                                  Placeholder="Query Revit database with RDQ"
                                                  ToolTip="{Binding DatabaseQueryToolTip}"
                                                  ToolTipService.ShowDuration="50000">
-                    <controls:TextBoxWithPlaceholder.ContextMenu>
+                    <!--<controls:TextBoxWithPlaceholder.ContextMenu>
                         <ContextMenu>
                             <MenuItem Command="ApplicationCommands.Copy" />
                             <MenuItem Command="ApplicationCommands.Cut" />
@@ -154,10 +161,14 @@
                             <Separator/>
                             <MenuItem Header ="Copy generated C# syntax" Tag="Default" Click="TextBox_MenuItem_CopyFilteredElementCollector"/>
                         </ContextMenu>
-                    </controls:TextBoxWithPlaceholder.ContextMenu>
+                    </controls:TextBoxWithPlaceholder.ContextMenu>-->
                 </controls:TextBoxWithPlaceholder>
 
-                <componentQueryVisualization:QueryVisualizationView  Grid.Row="1" Margin="0 1 0 0" DataContext="{Binding QueryVisualization}"/>
+                <Button Grid.Column="1" BorderBrush="Transparent" Margin="2 0 0 0" MinWidth="21" MinHeight="21" Padding="2 0 1 1" ToolTip="Load generated collector C# syntax into RDS (Revit Database Scripting)" Background="Transparent"  Command="{Binding OpenScriptingWithQueryCommand}">
+                    <Path Style="{StaticResource IconQuery}" Width="12" />
+                </Button>
+
+                <componentQueryVisualization:QueryVisualizationView  Grid.Row="1" Grid.ColumnSpan="2" Margin="0 1 0 0" DataContext="{Binding QueryVisualization}"/>
             </Grid>
 
 
@@ -175,9 +186,9 @@
             <Border Background="{DynamicResource StatusBar.Background}" Margin="-2 0 -2 0"  Grid.ColumnSpan="3"  Grid.Row="3"/>
         </Grid>
 
-        <GridSplitter Grid.Row="1"  Background="{DynamicResource GridSplitter.Background}" Height="2" HorizontalAlignment="Stretch" Visibility="Collapsed"/>
+        <GridSplitter Grid.Row="1"  Background="{DynamicResource GridSplitter.Background}" Height="2" HorizontalAlignment="Stretch" Visibility="{Binding Scripting.IsOpen, Converter={StaticResource BoolToVisibilityConverterCollapsed}}"/>
 
-        <Border Background="AntiqueWhite"  Grid.Row="2"  Visibility="Collapsed"/>
+        <componentScripting:RDScriptingView DataContext="{Binding Scripting}"   Grid.Row="2"   Visibility="{Binding IsOpen, Converter={StaticResource BoolToVisibilityConverterCollapsed}}"/>
 
     </Grid>
 </Window>
