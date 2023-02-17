@@ -17,6 +17,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
         Room,
         RuleBasedFilter,
         Workset,
+        Owned,
         Incorrect = 383,      
     }
 }

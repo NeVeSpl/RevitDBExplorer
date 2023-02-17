@@ -299,7 +299,12 @@ namespace RevitDBExplorer
         {
             if (e.Key == Key.Escape)
             {
-                Close();
+                Close();                
+            }
+            if (e.Key == Key.Delete) 
+            {
+                //var vkey = KeyInterop.VirtualKeyFromKey(e.Key);
+                //Application.RevitWindowHandle.PostKeyMessage(vkey);
             }
         }
    

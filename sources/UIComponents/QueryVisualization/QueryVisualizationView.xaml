@@ -77,6 +77,9 @@
                                         <DataTrigger Binding="{Binding Type}" Value="ActiveView">
                                             <Setter Property="Background" Value="{DynamicResource Query.ActiveView.Background}"/>
                                         </DataTrigger>
+                                        <DataTrigger Binding="{Binding Type}" Value="Owned">
+                                            <Setter Property="Background" Value="{DynamicResource Query.ActiveView.Background}"/>
+                                        </DataTrigger>
                                         <DataTrigger Binding="{Binding Type}" Value="ElementId">
                                             <Setter Property="Background" Value="{DynamicResource Query.ElementId.Background}"/>
                                         </DataTrigger>

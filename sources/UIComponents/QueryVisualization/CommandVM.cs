@@ -70,7 +70,11 @@ namespace RevitDBExplorer.UIComponents.QueryVisualization
                 case CmdType.ActiveView:
                     Name = "active view";
                     FilterName = "new VisibleInViewFilter(document, document.ActiveView.Id)"; 
-                    break;               
+                    break;
+                case CmdType.Owned:
+                    Name = "owned by active view";
+                    FilterName = "new ElementOwnerViewFilter(document.ActiveView.Id)";
+                    break;
                 case CmdType.ElementId:
                     Name = args;
                     FilterName = "new ElementIdSetFilter()";                   

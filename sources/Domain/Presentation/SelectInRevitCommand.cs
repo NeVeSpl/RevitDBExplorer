@@ -1,7 +1,7 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Autodesk.Revit.DB;
 using RevitDBExplorer.Domain.DataModel;
-using RevitDBExplorer.UIComponents.Tree;
 using RevitDBExplorer.UIComponents.Tree.Items;
 using RevitDBExplorer.WPF;
 
@@ -50,7 +50,7 @@ namespace RevitDBExplorer.Domain.Presentation
                     }
                 }
             }
-          
+            Application.RevitWindowHandle.BringWindowToFront();
         }
 
 
