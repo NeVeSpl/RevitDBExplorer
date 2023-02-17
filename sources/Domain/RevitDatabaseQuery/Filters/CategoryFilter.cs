@@ -24,8 +24,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Filters
             else
             {               
                 FilterSyntax = "new ElementMulticategoryFilter(new [] {" + String.Join(", ", categories.Select(x => x.Name)) + "})";
-            }
-            Filter = new ElementMulticategoryFilter(categories.Select(x => x.Value).ToList());
+            }            
         }
 
 
@@ -36,6 +35,11 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Filters
             {
                 yield return new CategoryFilter(categories);
             }
+        }
+
+        public override ElementFilter CreateElementFilter(Document document)
+        {
+            return new ElementMulticategoryFilter(categories.Select(x => x.Value).ToList());
         }
     }
 }

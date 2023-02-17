@@ -21,15 +21,20 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
             Operator = logicalOperator;
             Items = items;
 
-            if (logicalOperator == LogicalOperator.Or)
+            var filterName = logicalOperator == LogicalOperator.Or ? "LogicalOrFilter" : "LogicalAndFilter";
+                          
+            FilterSyntax = $"new {filterName}(new [] {{" + String.Join(", ", Items.Select(x => Environment.NewLine + "        " + x.FilterSyntax)) + Environment.NewLine + "    })";
+        }
+
+        public override ElementFilter CreateElementFilter(Document document)
+        {
+            if (Operator == LogicalOperator.Or)
             {
-                Filter = new LogicalOrFilter(Items.Select(x => x.Filter).ToList());
-                FilterSyntax = "new LogicalOrFilter(new [] {" + String.Join(", ", Items.Select(x => Environment.NewLine + "        " + x.FilterSyntax)) + Environment.NewLine + "    })";
+                return new LogicalOrFilter(Items.Select(x => x.CreateElementFilter(document)).ToList());
             }
             else
             {
-                Filter = new LogicalAndFilter(Items.Select(x => x.Filter).ToList());
-                FilterSyntax = "new LogicalAndFilter(new [] {" + String.Join(", ", Items.Select(x => Environment.NewLine + "        " + x.FilterSyntax)) + Environment.NewLine + "    })";
+                return new LogicalAndFilter(Items.Select(x => x.CreateElementFilter(document)).ToList());
             }
         }
     }

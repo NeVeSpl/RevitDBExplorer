@@ -11,36 +11,44 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Filters
 {
     internal class RoomFilter : Filter
     {
-        private readonly RoomCmdArgument roomMatch;
-        private readonly Room room;
+        private readonly RoomCmdArgument arg;
+     
 
-        public RoomFilter(RoomCmdArgument roomMatch, Room room)
+        public RoomFilter(RoomCmdArgument arg)
         {
-            this.roomMatch = roomMatch;
-            var solid = room.ClosedShell.OfType<Solid>().FirstOrDefault();
-            if (solid?.Volume > 0)
-            {
-                var orgin = solid.ComputeCentroid();
-                var tranTranslation = Transform.CreateTranslation(orgin.Negate());
-                var tranScale = Transform.Identity.ScaleBasis(1.05);
-                var solidWithDelta = SolidUtils.CreateTransformed(solid, tranTranslation.Inverse * tranScale * tranTranslation);              
-                Filter = new ElementIntersectsSolidFilter(solidWithDelta);
-                FilterSyntax = $"new ElementIntersectsSolidFilter({roomMatch.Name})";
-            }
+            this.arg = arg;          
+            FilterSyntax = $"new ElementIntersectsSolidFilter({arg.Name})";            
         }
 
 
-        public static IEnumerable<QueryItem> Create(IList<ICommand> commands, Document document)
+        public static IEnumerable<QueryItem> Create(IList<ICommand> commands)
         {
             var rooms = commands.OfType<RoomCmd>().SelectMany(x => x.Arguments).OfType<RoomCmdArgument>().ToList();
             if (rooms.Count == 1)
             {
-                yield return new RoomFilter(rooms.First(), document.GetElement(rooms.First().Value) as Room);
+                yield return new RoomFilter(rooms.First());
             }
             if (rooms.Count > 1)
             {
-                yield return new Group(rooms.Select(x => new RoomFilter(x, document.GetElement(x.Value) as Room)).Where(x => x.Filter != null).ToList());
+                yield return new Group(rooms.Select(x => new RoomFilter(x)));
             }
+        }
+
+        public override ElementFilter CreateElementFilter(Document document)
+        {
+            var room = document.GetElement(arg.Value) as Room;
+
+            var solid = room.ClosedShell.OfType<Solid>().FirstOrDefault(x => x.Volume > 0) ?? room.ClosedShell.OfType<Solid>().FirstOrDefault();
+
+            if (solid.Volume > 0)
+            {
+                var orgin = solid.ComputeCentroid();
+                var tranTranslation = Transform.CreateTranslation(orgin.Negate());
+                var tranScale = Transform.Identity.ScaleBasis(1.05);
+                solid = SolidUtils.CreateTransformed(solid, tranTranslation.Inverse * tranScale * tranTranslation);
+            }
+
+            return new ElementIntersectsSolidFilter(solid);
         }
     }    
 }

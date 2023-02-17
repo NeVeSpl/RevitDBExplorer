@@ -97,20 +97,24 @@ namespace RevitDBExplorer.UIComponents.QueryVisualization
                     break;                
                 case CmdType.Parameter:
                     var arguments = command.Arguments.OfType<ParameterArgument>();
-                    var firstArg = arguments?.First();
-                    
-                    string count = "";
-                    if (arguments.Count() > 1)
+                    var firstArg = arguments?.FirstOrDefault();
+
+                    if (firstArg != null)
                     {
-                        count = $" [+{arguments.Count() - 1} more]";
+                        string count = "";
+                        if (arguments.Count() > 1)
+                        {
+                            count = $" [+{arguments.Count() - 1} more]";
+                        }
+                        string name = firstArg?.Name;
+                        if (!firstArg.IsBuiltInParameter)
+                        {
+                            name = firstArg.Label;
+                        }
+
+                        Name = $"{name}{count} {command.Operator.ToString(firstArg.StorageType)}";
                     }
-                    string name = firstArg.Name;
-                    if(!firstArg.IsBuiltInParameter)
-                    {
-                        name = firstArg.Label;
-                    }
-                    
-                    Name = $"{name}{count} {command.Operator.ToString(firstArg.StorageType)}";
+
                     FilterName = "new ElementParameterFilter()";                   
                     break;
                 case CmdType.Incorrect:

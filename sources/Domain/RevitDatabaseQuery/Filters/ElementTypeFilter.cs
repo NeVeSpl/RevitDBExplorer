@@ -10,27 +10,25 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Filters
 {
     internal class ElementTypeFilter : Filter
     {
-        private readonly bool isElementTypePresent;
-        private readonly bool isNotElementTypePresent;
+        private enum Version { Element, Type, Both }
 
+        private readonly Version version;
 
         public ElementTypeFilter(bool isElementTypePresent, bool isNotElementTypePresent)
-        {
-            this.isElementTypePresent = isElementTypePresent;
-            this.isNotElementTypePresent = isNotElementTypePresent;
+        {           
             if (isElementTypePresent == true && isNotElementTypePresent == false)
             {
-                Filter = new ElementIsElementTypeFilter(false);
+                version = Version.Type;
                 FilterSyntax = ".WhereElementIsElementType()";
             }
             if (isElementTypePresent == false && isNotElementTypePresent == true)
             {
-                Filter = new ElementIsElementTypeFilter(true);
+                version = Version.Element;                
                 FilterSyntax = ".WhereElementIsNotElementType()";
             }
             if (isElementTypePresent == true && isNotElementTypePresent == true)
             {
-                Filter = new LogicalOrFilter(new ElementIsElementTypeFilter(true), new ElementIsElementTypeFilter(false));
+                version = Version.Both;               
                 FilterSyntax = "new LogicalOrFilter(new ElementIsElementTypeFilter(true), new ElementIsElementTypeFilter(false))";
             }
         }
@@ -44,6 +42,16 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Filters
             {
                 yield return new ElementTypeFilter(isElementTypePresent, isNotElementTypePresent);
             }
+        }
+
+        public override ElementFilter CreateElementFilter(Document document)
+        {
+            return version switch
+            {
+                Version.Element => new ElementIsElementTypeFilter(true),
+                Version.Type => new ElementIsElementTypeFilter(false),
+                Version.Both => new LogicalOrFilter(new ElementIsElementTypeFilter(true), new ElementIsElementTypeFilter(false)),
+            };
         }
     }
 }

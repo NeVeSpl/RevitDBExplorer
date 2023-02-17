@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
@@ -23,7 +24,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
 
         public (IEnumerable<IAutocompleteItem>, int) GetAutocompleteItems(string fullText, int caretPosition)
         {
-            string textOnTheLeftSideOfCaret = fullText.Substring(0, caretPosition).Trim();
+            string textOnTheLeftSideOfCaret = fullText.Substring(0, caretPosition);
             //string textOnTheRightSideOfCaret = fullText.Substring(caretPosition).Trim();
 
             var items = new List<IAutocompleteItem>();
@@ -34,7 +35,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
                 LoadDocumentSpecificData();
             }
 
-            if (string.IsNullOrEmpty(fullText) || IsSeparator(textOnTheLeftSideOfCaret.LastOrDefault()))
+            if (string.IsNullOrEmpty(fullText) || IsSeparator(textOnTheLeftSideOfCaret.Trim().LastOrDefault()))
             {
                 items.AddRange(CommandAutocompleteItems);
             }
@@ -50,13 +51,15 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
                         if (definition is IOfferArgumentAutocompletion argumentAutocompletion)
                         {
                             var prefix = splittedByClassifier[1].Trim().ToLowerInvariant();
-                            prefixLength = prefix.Length;
+                            //
+                            prefixLength = splittedByClassifier[1].TrimStart().Length + textOnTheLeftSideOfCaret.Reverse().TakeWhile(c => char.IsWhiteSpace(c)).Count();
+                            //
                             items.AddRange(argumentAutocompletion.GetAutocompleteItems(prefix));
                         }
                     }
                 }
-            }            
-
+            }
+            
             return (items, prefixLength);
         }
 

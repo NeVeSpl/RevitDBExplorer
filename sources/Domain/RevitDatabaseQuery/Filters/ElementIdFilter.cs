@@ -16,8 +16,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Filters
 
         public ElementIdFilter(List<ElementIdCmdArgument> ids)
         {
-            this.ids = ids;
-            Filter = new ElementIdSetFilter(ids.Select(x => x.Value).ToList());
+            this.ids = ids;          
             FilterSyntax = "new ElementIdSetFilter(new [] {" + String.Join(", ", ids.Select(x => x.Name)) + "})";
         }
 
@@ -29,6 +28,11 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Filters
             {
                 yield return new ElementIdFilter(ids);
             }
+        }
+
+        public override ElementFilter CreateElementFilter(Document document)
+        {
+            return new ElementIdSetFilter(ids.Select(x => x.Value).ToList());
         }
     }    
 }

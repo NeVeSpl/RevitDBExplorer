@@ -6,12 +6,7 @@ using Autodesk.Revit.DB;
 namespace RevitDBExplorer.Domain.RevitDatabaseQuery
 {
     internal abstract class QueryItem
-    {
-        public ElementFilter Filter 
-        { 
-            get; 
-            init; 
-        }
+    {       
         public string FilterSyntax
         {
             get; 
@@ -27,6 +22,9 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
                 }
                 return FilterSyntax;
             }
-        } 
+        }
+
+
+        public abstract ElementFilter CreateElementFilter(Document document);
     }
 }

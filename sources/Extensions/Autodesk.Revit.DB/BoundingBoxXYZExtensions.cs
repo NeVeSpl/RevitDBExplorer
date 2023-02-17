@@ -41,6 +41,37 @@ namespace Autodesk.Revit.DB
             };
 
             return edges;
-        }     
+        }
+
+
+        public static Solid CreateSolidFromBoundingBox(this BoundingBoxXYZ bbox)
+        {
+            var pt0 = new XYZ(bbox.Min.X, bbox.Min.Y, bbox.Min.Z);
+            var pt1 = new XYZ(bbox.Max.X, bbox.Min.Y, bbox.Min.Z);
+            var pt2 = new XYZ(bbox.Max.X, bbox.Max.Y, bbox.Min.Z);
+            var pt3 = new XYZ(bbox.Min.X, bbox.Max.Y, bbox.Min.Z);
+
+            var edge0 = Line.CreateBound(pt0, pt1);
+            var edge1 = Line.CreateBound(pt1, pt2);
+            var edge2 = Line.CreateBound(pt2, pt3);
+            var edge3 = Line.CreateBound(pt3, pt0);
+
+            var edges = new Curve[]
+            {
+                edge0,
+                edge1,
+                edge2,
+                edge3
+            };
+
+            double height = bbox.Max.Z - bbox.Min.Z;
+           
+            var loopList = new List<CurveLoop>() { CurveLoop.Create(edges) };          
+
+            Solid preTransformBox = GeometryCreationUtilities.CreateExtrusionGeometry(loopList, XYZ.BasisZ, height);
+            Solid transformBox = SolidUtils.CreateTransformed(preTransformBox, bbox.Transform);
+
+            return transformBox;
+        }
     }
 }

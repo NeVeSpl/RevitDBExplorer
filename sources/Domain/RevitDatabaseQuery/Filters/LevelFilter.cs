@@ -10,13 +10,12 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Filters
 {
     internal class LevelFilter : Filter
     {
-        private readonly LevelCmdArgument levelMatch;
+        private readonly LevelCmdArgument levelArg;
 
 
         public LevelFilter(LevelCmdArgument level)
         {
-            this.levelMatch = level;           
-            Filter = new ElementLevelFilter(level.Value);
+            this.levelArg = level;  
             FilterSyntax = $"new ElementLevelFilter({level.Name})";
         }
 
@@ -32,6 +31,11 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Filters
             {
                 yield return new Group(levels.Select(x => new LevelFilter(x)).ToList());
             }
+        }
+
+        public override ElementFilter CreateElementFilter(Document document)
+        {
+            return new ElementLevelFilter(levelArg.Value);
         }
     }   
 }

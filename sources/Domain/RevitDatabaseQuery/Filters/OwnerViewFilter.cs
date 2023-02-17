@@ -10,19 +10,23 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Filters
 {
     internal class OwnerViewFilter : Filter
     {       
-        public OwnerViewFilter(View view)
-        {          
-            Filter = new Autodesk.Revit.DB.ElementOwnerViewFilter(view.Id);
+        public OwnerViewFilter()
+        {   
             FilterSyntax = "new ElementOwnerViewFilter(document.ActiveView.Id)";
         }
 
 
-        public static IEnumerable<Filter> Create(IList<ICommand> commands, Document document)
+        public static IEnumerable<Filter> Create(IList<ICommand> commands)
         {
             if (commands.OfType<OwnerViewFilterCmd>().Any())
             {
-                yield return new OwnerViewFilter(document.ActiveView);
+                yield return new OwnerViewFilter();
             }
+        }
+
+        public override ElementFilter CreateElementFilter(Document document)
+        {
+            return new Autodesk.Revit.DB.ElementOwnerViewFilter(document.ActiveView.Id);
         }
     }
 }

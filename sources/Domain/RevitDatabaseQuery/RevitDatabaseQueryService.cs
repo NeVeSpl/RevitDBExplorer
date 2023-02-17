@@ -30,38 +30,33 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
             commands.SelectMany(x => x.Arguments).OfType<ParameterArgument>().ToList().ForEach(x => x.ResolveStorageType(document));
 
             var pipe = new List<QueryItem>();
-            pipe.AddRange(VisibleInViewFilter.Create(commands, document));
+            pipe.AddRange(VisibleInViewFilter.Create(commands));
             pipe.AddRange(ElementTypeFilter.Create(commands));
             pipe.AddRange(ElementIdFilter.Create(commands));
             pipe.AddRange(ClassFilter.Create(commands));
             pipe.AddRange(CategoryFilter.Create(commands));
             pipe.AddRange(StructuralTypeFilter.Create(commands));
             pipe.AddRange(LevelFilter.Create(commands));
-            pipe.AddRange(OwnerViewFilter.Create(commands, document));
-            pipe.AddRange(RoomFilter.Create(commands, document));
-            pipe.AddRange(RuleFilter.Create(commands, document));
+            pipe.AddRange(OwnerViewFilter.Create(commands));
+            pipe.AddRange(RoomFilter.Create(commands));
+            pipe.AddRange(RuleFilter.Create(commands));
             pipe.AddRange(ParameterFilter.Create(commands));
             pipe.AddRange(Filters.WorksetFilter.Create(commands));
 
             string collectorSyntax = "";
-            CollectorQueryExecutor queryExecutor = null;
+            QueryPipeExecutor queryExecutor = null;
 
             if (pipe.Any())
-            { 
-                var collector = new FilteredElementCollector(document);
+            {  
                 collectorSyntax = "new FilteredElementCollector(document)";
 
                 foreach (var filter in pipe)
                 {
-                    if (filter.Filter != null)
-                    {
-                        collector.WherePasses(filter.Filter);
-                        collectorSyntax += Environment.NewLine + "    " + filter.CollectorSyntax;
-                    }
+                   collectorSyntax += Environment.NewLine + "    " + filter.CollectorSyntax;                    
                 }
                 collectorSyntax += Environment.NewLine + "    .ToElements()";
 
-                queryExecutor = new CollectorQueryExecutor(collector, document);
+                queryExecutor = new QueryPipeExecutor(pipe);
             }           
 
             return new Result(collectorSyntax, commands, new SourceOfObjects(queryExecutor) { Title ="Query" });
@@ -69,23 +64,38 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
 
         public record Result(string GeneratedCSharpSyntax, IList<ICommand> Commands, SourceOfObjects SourceOfObjects);
 
-        private class CollectorQueryExecutor : IAmSourceOfEverything
+        private class QueryPipeExecutor : IAmSourceOfEverything
         {
-            private readonly FilteredElementCollector collector;
-            private readonly Document document;
+            private readonly IReadOnlyList<QueryItem> pipe;         
            
 
-            public CollectorQueryExecutor(FilteredElementCollector collector, Document document)
+            public QueryPipeExecutor(IReadOnlyList<QueryItem> pipe)
             {
-                this.collector = collector;
-                this.document = document;                
+                this.pipe = pipe;                          
             }
 
 
             public IEnumerable<SnoopableObject> Snoop(UIApplication app)
             {
+                var document = app.ActiveUIDocument.Document;
+                var collector = BuildCollector(document);
                 var snoopableObjects = collector.ToElements().Select(x => new SnoopableObject(document, x));
                 return snoopableObjects;
+            }
+
+            private FilteredElementCollector BuildCollector(Document document)
+            {
+                var collector = new FilteredElementCollector(document);              
+
+                foreach (var filter in pipe)
+                {
+                    var elementFilter = filter.CreateElementFilter(document);
+                    if (elementFilter != null)
+                    {
+                        collector.WherePasses(elementFilter);                        
+                    }
+                }
+                return collector;
             }
         }
     }

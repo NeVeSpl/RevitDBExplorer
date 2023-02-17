@@ -19,9 +19,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Filters
         {
             this.parameterMatch = parameterMatch;
             this.rule = rule;
-            this.@operator = @operator;
-
-            Filter = new ElementParameterFilter(rule, false);
+            this.@operator = @operator;       
 
             var argForSyntax = $"\"{@operator.ArgumentAsString.Trim('*', '%')}\"";
 
@@ -79,6 +77,11 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Filters
             { 
                 yield return new Group(filters, LogicalOperator.And);                
             }
+        }
+
+        public override ElementFilter CreateElementFilter(Document document)
+        {
+            return new ElementParameterFilter(rule, false);
         }
 
         private static QueryItem Create(ICommand command)
@@ -223,5 +226,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Filters
                 yield return (ParameterFilterRuleFactory.CreateHasNoValueParameterRule(parameter), parameterMatch, @operator);              
             }
         }
+
+       
     }
 }

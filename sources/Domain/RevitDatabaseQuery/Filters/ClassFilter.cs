@@ -24,8 +24,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Filters
             else
             {                
                 FilterSyntax = "new ElementMulticlassFilter(new [] {" + String.Join(", ", types.Select(x => x.Name)) + "})";
-            }
-            Filter = new ElementMulticlassFilter(types.Select(x => x.Value).ToList());
+            }           
         }
 
 
@@ -36,6 +35,11 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Filters
             {
                 yield return new ClassFilter(types);
             }
+        }
+
+        public override ElementFilter CreateElementFilter(Document document)
+        {
+            return new ElementMulticlassFilter(types.Select(x => x.Value).ToList());
         }
     }    
 }

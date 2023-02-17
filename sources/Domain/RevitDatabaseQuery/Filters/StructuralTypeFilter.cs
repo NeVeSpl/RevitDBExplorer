@@ -15,8 +15,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Filters
 
         public StructuralTypeFilter(StructuralTypeCmdArgument structuralType)
         {
-            this.structuralType = structuralType;           
-            Filter = new ElementStructuralTypeFilter(structuralType.Value);
+            this.structuralType = structuralType;  
             FilterSyntax = $"new ElementStructuralTypeFilter({structuralType.Name})";
         }
 
@@ -32,6 +31,11 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Filters
             {
                 yield return new Group(structuralTypes.Select(x => new StructuralTypeFilter(x)).ToList());
             }
+        }
+
+        public override ElementFilter CreateElementFilter(Document document)
+        {
+            return new ElementStructuralTypeFilter(structuralType.Value);
         }
     }   
 }

@@ -72,7 +72,7 @@ namespace RevitDBExplorer.UIComponents.Scripting
             Height = new GridLength(Math.Max(Height.Value, 100));
 
             var text = 
-@$"IEnumerable<Element> Query(Document document)
+@$"IEnumerable<object> Select(Document document)
 {{
     return {databaseQueryToolTip};    
 }}";

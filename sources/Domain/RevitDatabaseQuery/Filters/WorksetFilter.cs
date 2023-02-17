@@ -10,9 +10,12 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Filters
 {
     internal class WorksetFilter : Filter
     {
+        private readonly WorksetCmdArgument arg;
+
+
         public WorksetFilter(WorksetCmdArgument arg)
-        {            
-            Filter = new ElementWorksetFilter(arg.Value);
+        {
+            this.arg = arg;
             FilterSyntax = $"new ElementWorksetFilter ({arg.Name})";
         }
 
@@ -28,6 +31,11 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Filters
             {
                 yield return new Group(worksets.Select(x => new WorksetFilter(x)).ToList());
             }
+        }
+
+        public override ElementFilter CreateElementFilter(Document document)
+        {
+            return new ElementWorksetFilter(arg.Value);
         }
     }
 }

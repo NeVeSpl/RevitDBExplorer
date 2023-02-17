@@ -10,23 +10,23 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Filters
 {
     internal class VisibleInViewFilter : Filter
     {
-        private readonly View activeView;
-
-
-        public VisibleInViewFilter(View activeView)
-        {
-            this.activeView = activeView;
-            Filter = new Autodesk.Revit.DB.VisibleInViewFilter(activeView.Document, activeView.Id);
+        public VisibleInViewFilter()
+        {                  
             FilterSyntax = "new VisibleInViewFilter(document, document.ActiveView.Id)";
         }
 
 
-        public static IEnumerable<Filter> Create(IList<ICommand> commands, Document document)
+        public static IEnumerable<Filter> Create(IList<ICommand> commands)
         {
             if (commands.OfType<VisibleInViewCmd>().Any())
             {
-                yield return new VisibleInViewFilter(document.ActiveView);
+                yield return new VisibleInViewFilter();
             }
+        }
+
+        public override ElementFilter CreateElementFilter(Document document)
+        {
+            return new Autodesk.Revit.DB.VisibleInViewFilter(document, document.ActiveView.Id);
         }
     }
 }
