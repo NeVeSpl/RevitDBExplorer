@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq.Expressions;
-using System.Xml.Linq;
 using Autodesk.Revit.DB;
-using Autodesk.Revit.DB.ExtensibleStorage;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
