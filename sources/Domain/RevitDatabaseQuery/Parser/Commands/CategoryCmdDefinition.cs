@@ -88,7 +88,8 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
     internal class CategoryCmd : Command, ICommandForVisualization
     {
         public string Label => String.Join(", ", Arguments.Select(x => x.Name));
-        public string Description => "collector.OfCategory()";
+        public string Description => "A filter used to find elements whose category matches any of a given set of categories.";
+        public string APIDescription => "collector.OfCategory() or new ElementMulticategoryFilter()";
         public CmdType Type => CmdType.Category;
 
 

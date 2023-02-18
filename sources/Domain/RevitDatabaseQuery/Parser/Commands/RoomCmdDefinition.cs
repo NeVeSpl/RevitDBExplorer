@@ -69,7 +69,8 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
     internal class RoomCmd : Command, ICommandForVisualization
     {
         public string Label => "Room: " + String.Join(", ", Arguments.Select(x => x.Label));
-        public string Description => "new ElementIntersectsSolidFilter()";
+        public string Description => "A filter used to match elements which are inside a given room shell/solid.  A slow filter.";
+        public string APIDescription => "new ElementIntersectsSolidFilter()";
         public CmdType Type => CmdType.DocumentSpecific;
 
 

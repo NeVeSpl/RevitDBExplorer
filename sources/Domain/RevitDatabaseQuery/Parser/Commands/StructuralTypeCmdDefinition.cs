@@ -79,7 +79,8 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
     internal class StructuralTypeCmd : Command, ICommandForVisualization
     {
         public string Label => String.Join(", ", Arguments.Select(x => x.Name));
-        public string Description => "new ElementStructuralTypeFilter()";
+        public string Description => "A filter used to find elements matching a structural type.";
+        public string APIDescription => "new ElementStructuralTypeFilter()";
         public CmdType Type => CmdType.EnumBased;
 
 

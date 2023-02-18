@@ -5,7 +5,6 @@ using Autodesk.Revit.DB;
 using RevitDBExplorer.Domain.RevitDatabaseQuery.FuzzySearch;
 using RevitDBExplorer.WPF.Controls;
 
-
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
 namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
@@ -63,7 +62,8 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
     internal class ElementIdCmd : Command, ICommandForVisualization
     {
         public string Label => String.Join(", ", Arguments.Select(x => x.Name));
-        public string Description => "new ElementIdSetFilter()";
+        public string Description => "A filter used to match elements by their id.";
+        public string APIDescription => "new ElementIdSetFilter()";
         public CmdType Type => CmdType.ElementId;
 
 

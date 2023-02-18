@@ -68,7 +68,8 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
     internal class WorksetCmd : Command, ICommandForVisualization
     {
         public string Label => "Workset: " + String.Join(", ", Arguments.Select(x => x.Label));
-        public string Description => "new ElementWorksetFilter()";
+        public string Description => "A filter used to match elements which reside in a given workset.";
+        public string APIDescription => "new ElementWorksetFilter()";
         public CmdType Type => CmdType.DocumentSpecific;
 
 

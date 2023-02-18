@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using System.Xml.Linq;
 using Autodesk.Revit.DB;
 using RevitDBExplorer.Domain.RevitDatabaseQuery.FuzzySearch;
 using RevitDBExplorer.WPF.Controls;
@@ -149,7 +147,8 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
                 return "";
             }
         }
-        public string Description => "new ElementParameterFilter()";
+        public string Description => "A filter used to match elements by one or more parameter filter rules. A slow filter.";
+        public string APIDescription => "new ElementParameterFilter()";
         public CmdType Type => CmdType.Parameter;
 
 

@@ -40,7 +40,8 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
     internal class NotElementTypeCmd : Command, ICommandForVisualization
     {
         public string Label => "element";
-        public string Description => "collector.WhereElementIsNotElementType()";
+        public string Description => "A filter used to match elements which are not ElementTypes.";
+        public string APIDescription => "collector.WhereElementIsNotElementType() or or new ElementIsElementTypeFilter(false)";
         public CmdType Type => CmdType.WithoutArgument;
 
 

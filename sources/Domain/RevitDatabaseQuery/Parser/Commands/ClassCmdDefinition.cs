@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Xml.Linq;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.Architecture;
 using Autodesk.Revit.DB.Mechanical;
@@ -104,7 +103,8 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
     internal class ClassCmd : Command, ICommandForVisualization
     {
         public string Label => String.Join(", ", Arguments.Select(x => x.Name));
-        public string Description => "collector.OfClass()";
+        public string Description => "A filter used to match elements by their class.";
+        public string APIDescription => "collector.OfClass() or new ElementMulticlassFilter()";
         public CmdType Type => CmdType.Class;
 
 

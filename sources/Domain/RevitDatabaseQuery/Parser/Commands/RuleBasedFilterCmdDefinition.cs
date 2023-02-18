@@ -67,7 +67,8 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
     internal class RuleBasedFilterCmd : Command, ICommandForVisualization
     {
         public string Label => "Rule-based filter: " + String.Join(", ", Arguments.Select(x => x.Label));
-        public string Description => "ParameterFilterElement.GetElementFilter()";
+        public string Description => "A filter used to match elements which pass rule-based filter defined in Revit.";
+        public string APIDescription => "ParameterFilterElement.GetElementFilter()";
         public CmdType Type => CmdType.DocumentSpecific;
 
 

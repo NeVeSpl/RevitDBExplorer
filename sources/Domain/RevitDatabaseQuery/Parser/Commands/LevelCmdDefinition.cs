@@ -68,7 +68,8 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
     internal class LevelCmd : Command, ICommandForVisualization
     {
         public string Label => "Level: " + String.Join(", ", Arguments.Select(x => x.Label));
-        public string Description => "new ElementLevelFilter()";
+        public string Description => "A filter used to match elements by their associated level. A slow filter.";
+        public string APIDescription => "new ElementLevelFilter()";
         public CmdType Type => CmdType.DocumentSpecific;
 
 

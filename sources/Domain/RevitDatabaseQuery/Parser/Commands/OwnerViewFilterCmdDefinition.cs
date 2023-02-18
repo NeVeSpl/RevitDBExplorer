@@ -37,7 +37,8 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
     internal class OwnerViewFilterCmd : Command, ICommandForVisualization
     {
         public string Label => "owned by active view";
-        public string Description => "new ElementOwnerViewFilter(document.ActiveView.Id)";
+        public string Description => "A filter used to match elements which are owned by a particular view.";
+        public string APIDescription => "new ElementOwnerViewFilter(document.ActiveView.Id)";
         public CmdType Type => CmdType.WithoutArgument;
 
 

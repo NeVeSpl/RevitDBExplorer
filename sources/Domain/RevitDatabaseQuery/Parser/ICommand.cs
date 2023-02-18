@@ -22,6 +22,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser
     {
         public string Label { get; }
         public string Description { get; }
+        public string APIDescription { get; }
         CmdType Type { get; }
     }
 
