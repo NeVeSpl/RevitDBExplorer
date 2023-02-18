@@ -14,7 +14,6 @@ namespace RevitDBExplorer.UIComponents.Scripting
         private IScriptRunner scriptRunner;
         private bool isOpen = false;
         private GridLength height;
-        private string text;
         private IRoslynCodeEditor roslynCodeEditor;
 
 
@@ -71,14 +70,19 @@ namespace RevitDBExplorer.UIComponents.Scripting
             IsOpen = true;
             Height = new GridLength(Math.Max(Height.Value, 100));
 
+            var appArg = "";
+            if (databaseQueryToolTip.Contains("uia."))
+            {
+                appArg = ", UIApplication uia";
+            }
+
+
             var text = 
-@$"IEnumerable<object> Select(Document document)
+@$"IEnumerable<object> Select(Document document{appArg})
 {{
     return {databaseQueryToolTip};    
 }}";
             RoslynCodeEditor.SetText(text);
-
-
         }
 
 

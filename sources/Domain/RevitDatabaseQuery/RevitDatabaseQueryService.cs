@@ -50,7 +50,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
 
             if (pipe.Any() || useRevitSelection)
             {  
-                collectorSyntax = useRevitSelection ? "new FilteredElementCollector(document, app.ActiveUIDocument.Selection.GetElementIds())" : "new FilteredElementCollector(document)";
+                collectorSyntax = useRevitSelection ? "new FilteredElementCollector(document, uia.ActiveUIDocument.Selection.GetElementIds())" : "new FilteredElementCollector(document)";
 
                 foreach (var filter in pipe)
                 {

@@ -22,6 +22,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseScripting
             typeof(Enumerable).Assembly,
             typeof(ISet<>).Assembly,
             typeof(Document).Assembly,
+            typeof(UIApplication).Assembly,
         };
         public static readonly string[] Imports = new[]
         {
@@ -35,7 +36,8 @@ namespace RevitDBExplorer.Domain.RevitDatabaseScripting
             "System.Linq",
             "Autodesk.Revit.DB",
             "Autodesk.Revit.DB.Structure",
-            "Autodesk.Revit.DB.Architecture"
+            "Autodesk.Revit.DB.Architecture",
+            "Autodesk.Revit.UI",
         };
 
 
@@ -45,35 +47,67 @@ namespace RevitDBExplorer.Domain.RevitDatabaseScripting
             var script = CSharpScript.Create<object>(code, options);
 
             var compilation = script.GetCompilation();
-            var diagnostics = script.Compile();
-
-            var id = lambdaToBe.ReturnType + "_" + string.Join(", ", lambdaToBe.Parameters);
+            var diagnostics = script.Compile();           
 
             if (diagnostics.Any(x => x.Severity == Microsoft.CodeAnalysis.DiagnosticSeverity.Error))
             {
                 return new ResultOfCompilation(null, null);
             }
 
+            
+
             Query query = null;
-            switch (id)
+
+            var (invocation, isResolved) = PrepereInvocation(lambdaToBe);
+
+            if (isResolved)
             {
-                case "Autodesk.Revit.DB.FilteredElementCollector_Autodesk.Revit.DB.Document":
+                if (lambdaToBe.IsReturnTypeEnumerable)
+                {
+                    // query, returns collection
+                    var lambda = await script.ContinueWith<Func<UIApplication, IEnumerable<object>>>($"(UIApplication uia) => {lambdaToBe.Name}({invocation})").RunAsync();
+                    query = Query.Create(lambda.ReturnValue);
+                }
+                else
+                {
+                    if (!lambdaToBe.IsReturnTypeVoid)
                     {
-                        var lambda = await script.ContinueWith<Func<Document, FilteredElementCollector>>($"(Document document) => {lambdaToBe.Name}(document)").RunAsync();
+                        // query, retruns single object
+                        var lambda = await script.ContinueWith<Func<UIApplication, object>>($"(UIApplication uia) => {lambdaToBe.Name}({invocation})").RunAsync();
                         query = Query.Create(lambda.ReturnValue);
-                        break;
                     }
-                case "System.Collections.Generic.IEnumerable<Autodesk.Revit.DB.Element>_Autodesk.Revit.DB.Document":
-                case "System.Collections.Generic.IEnumerable<System.Object>_Autodesk.Revit.DB.Document":
+                    else
                     {
-                        var lambda = await script.ContinueWith<Func<Document, IEnumerable<object>>>($"(Document document) => {lambdaToBe.Name}(document)").RunAsync();
-                        query = Query.Create(lambda.ReturnValue);
-                        break;
+                        // command
                     }
+                }
             }
 
             return new ResultOfCompilation(query, null);
         }
+
+        public static (string invocation, bool isResolved) PrepereInvocation(LambdaToBe lambdaToBe)
+        {
+            List<string> arguments = new List<string>();
+            foreach (var parameter in lambdaToBe.Parameters)
+            {
+                switch(parameter)
+                {
+                    case "Autodesk.Revit.DB.Document":
+                        arguments.Add("uia?.ActiveUIDocument?.Document");
+                        break;
+                    case "Autodesk.Revit.UI.UIApplication":
+                        arguments.Add("uia");
+                        break;
+                    default:
+                        return ("", false);
+                }
+            }
+
+            var invocation = String.Join(", ", arguments);
+            return (invocation, true);
+        }
+
 
         internal class Query : IAmSourceOfEverything
         {
@@ -85,7 +119,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseScripting
             }
 
 
-            public static Query Create(Func<Document, FilteredElementCollector> lambda)
+            public static Query Create(Func<UIApplication, object> lambda)
             {
                 if (lambda == null) return null;
 
@@ -94,11 +128,18 @@ namespace RevitDBExplorer.Domain.RevitDatabaseScripting
                     var document = uia.ActiveUIDocument?.Document;
                     if (document == null) return null;
 
-                    return lambda(document).ToElements().Select(x => new SnoopableObject(document, x));
+                    var returnValue = lambda(uia);
+
+                    if (returnValue is FilteredElementCollector collector)
+                    {
+                        return collector.ToElements().Select(x => new SnoopableObject(document, x));
+                    }
+
+                    return new[] { new SnoopableObject(document, returnValue) };
                 });               
                 return query;
             }
-            public static Query Create(Func<Document, IEnumerable<object>> lambda)
+            public static Query Create(Func<UIApplication, IEnumerable<object>> lambda)
             {
                 if (lambda == null) return null;
 
@@ -107,7 +148,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseScripting
                     var document = uia.ActiveUIDocument?.Document;
                     if (document == null) return null;
 
-                    return lambda(document).Select(x => new SnoopableObject(document, x));
+                    return lambda(uia).Select(x => new SnoopableObject(document, x));
                 });
                 return query;
             }

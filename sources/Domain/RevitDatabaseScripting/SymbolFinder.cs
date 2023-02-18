@@ -61,6 +61,8 @@ namespace RevitDBExplorer.Domain.RevitDatabaseScripting
 
         public string Name { get; }
         public string ReturnType { get; }
+        public bool IsReturnTypeEnumerable { get; }
+        public bool IsReturnTypeVoid { get; }
         public IEnumerable<string> Parameters { get; }
 
 
@@ -68,6 +70,8 @@ namespace RevitDBExplorer.Domain.RevitDatabaseScripting
         {
             Name = method.Name;
             ReturnType = method.ReturnType.ToDisplayString(symbolDisplayFormat);
+            IsReturnTypeEnumerable = method.ReturnType.AllInterfaces.Any(x => x.ToString() == "System.Collections.IEnumerable");
+            IsReturnTypeVoid = method.ReturnType.SpecialType == SpecialType.System_Void;
             Parameters = method.Parameters.Select(x => x.Type.ToDisplayString(symbolDisplayFormat)).ToArray();
         }
     }
