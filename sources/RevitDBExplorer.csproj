@@ -302,6 +302,7 @@
       <DependentUpon>ConfigWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Domain\AddInManifestWizard.cs" />
+    <Compile Include="Domain\DataModel\MemberAccessors\Element\Element_BoundingBox.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\GenericFactory.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\MemberAccessorByRefCompiled.cs" />
     <Compile Include="Domain\DataModel\MemberAccessors\RevitLinkType\RevitLinkType_Load.cs" />

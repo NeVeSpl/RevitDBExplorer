@@ -9,12 +9,13 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
     internal class MemberAccessorByFunc<TSnoopedObjectType, TReturnType> : MemberAccessorTyped<TSnoopedObjectType>
     {     
-        private readonly Func<Document, TSnoopedObjectType, TReturnType> get;      
+        private readonly Func<Document, TSnoopedObjectType, TReturnType> get;
+        private readonly Func<Document, TSnoopedObjectType, IEnumerable<SnoopableObject>> snoop;
 
-
-        public MemberAccessorByFunc(Func<Document, TSnoopedObjectType, TReturnType> get)
+        public MemberAccessorByFunc(Func<Document, TSnoopedObjectType, TReturnType> get, Func<Document, TSnoopedObjectType, IEnumerable<SnoopableObject>> snoop = null)
         {
             this.get = get;            
+            this.snoop = snoop;
         }
         
 
@@ -27,6 +28,10 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
         }
         public override IEnumerable<SnoopableObject> Snoop(SnoopableContext context, TSnoopedObjectType @object, IValueContainer state)
         {
+            if (snoop != null)
+            {
+                return snoop(context.Document, @object);
+            }
             return state.Snoop();
         }
     }
