@@ -76,11 +76,17 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
     }
 
 
-    internal class StructuralTypeCmd : Command
+    internal class StructuralTypeCmd : Command, ICommandForVisualization
     {
+        public string Label => String.Join(", ", Arguments.Select(x => x.Name));
+        public string Description => "new ElementStructuralTypeFilter()";
+        public CmdType Type => CmdType.EnumBased;
+
+
         public IEnumerable<StructuralTypeCmdArgument> Arguments { get; }
 
-        public StructuralTypeCmd(string text, IEnumerable<IFuzzySearchResult> matchedArguments) : base(CmdType.StructuralType, text, matchedArguments, null)
+
+        public StructuralTypeCmd(string text, IEnumerable<IFuzzySearchResult> matchedArguments) : base(text, matchedArguments, null)
         {
             Arguments = matchedArguments.Select(x => x.Argument as StructuralTypeCmdArgument)?.ToArray();
             IsBasedOnQuickFilter = true;

@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using RevitDBExplorer.WPF.Controls;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
@@ -35,9 +37,14 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
     }
 
 
-    internal class ElementTypeCmd : Command
+    internal class ElementTypeCmd : Command, ICommandForVisualization
     {
-        public ElementTypeCmd(string text) : base(CmdType.ElementType, text, null, null)
+        public string Label => "element type";
+        public string Description => "collector.WhereElementIsElementType()";
+        public CmdType Type => CmdType.WithoutArgument;
+
+
+        public ElementTypeCmd(string text) : base(text, null, null)
         {
             IsBasedOnQuickFilter = true;
         }

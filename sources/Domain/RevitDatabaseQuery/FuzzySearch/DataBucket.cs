@@ -63,9 +63,11 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.FuzzySearch
             if (!sorted.Any()) yield break;
 
             double prevScore = sorted.First().LevensteinScore;
+            double cutOffTreshold = prevScore == 1.0 ? 0.05 : 0.13;
+
             foreach (var item in sorted.Take(27))
             {
-                if (Math.Abs(item.LevensteinScore - prevScore) < 0.13)
+                if (Math.Abs(item.LevensteinScore - prevScore) < cutOffTreshold)
                 {
                     yield return item;
                 }

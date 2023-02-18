@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Autodesk.Revit.DB;
 using RevitDBExplorer.Domain.RevitDatabaseQuery.FuzzySearch;
 using RevitDBExplorer.WPF.Controls;
@@ -57,16 +59,20 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
     {
         public WorksetCmdArgument(WorksetId worksetId, string name) : base(worksetId)
         {
-
             Name = $"new WorksetId({worksetId})";
             Label = name;
         }
     }
 
 
-    internal class WorksetCmd : Command
+    internal class WorksetCmd : Command, ICommandForVisualization
     {
-        public WorksetCmd(string text, IEnumerable<IFuzzySearchResult> matchedArguments = null) : base(CmdType.Workset, text, matchedArguments, null)
+        public string Label => "Workset: " + String.Join(", ", Arguments.Select(x => x.Label));
+        public string Description => "new ElementWorksetFilter()";
+        public CmdType Type => CmdType.DocumentSpecific;
+
+
+        public WorksetCmd(string text, IEnumerable<IFuzzySearchResult> matchedArguments = null) : base(text, matchedArguments, null)
         {
             IsBasedOnQuickFilter = true;
         }

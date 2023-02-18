@@ -4,20 +4,12 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
 {
     internal enum CmdType
     {
-        ActiveView,       
-        ElementId,
-        ElementType,
-        NotElementType,
+        WithoutArgument,    
+        DocumentSpecific,
+        ElementId,      
         Category,
-        Class,
-        NameParam, 
+        Class,     
         Parameter,
-        StructuralType,
-        Level,
-        Room,
-        RuleBasedFilter,
-        Workset,
-        Owned,
-        Incorrect = 383,      
+        EnumBased,      
     }
 }

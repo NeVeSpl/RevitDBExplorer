@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Autodesk.Revit.DB;
 using RevitDBExplorer.Domain.RevitDatabaseQuery.FuzzySearch;
 using RevitDBExplorer.WPF.Controls;
@@ -56,17 +58,21 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
     internal class LevelCmdArgument : CommandArgument<ElementId>
     {
         public LevelCmdArgument(ElementId levelId, string name) : base(levelId)
-        {
-           
+        {           
             Name = $"new ElementId({levelId})";
             Label = name;
         }
     }
 
 
-    internal class LevelCmd : Command
+    internal class LevelCmd : Command, ICommandForVisualization
     {
-        public LevelCmd(string text, IEnumerable<IFuzzySearchResult> matchedArguments = null) : base(CmdType.Level, text, matchedArguments, null)
+        public string Label => "Level: " + String.Join(", ", Arguments.Select(x => x.Label));
+        public string Description => "new ElementLevelFilter()";
+        public CmdType Type => CmdType.DocumentSpecific;
+
+
+        public LevelCmd(string text, IEnumerable<IFuzzySearchResult> matchedArguments = null) : base(text, matchedArguments, null)
         {
         }
     }

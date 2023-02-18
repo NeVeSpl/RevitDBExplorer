@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Autodesk.Revit.DB;
 using RevitDBExplorer.Domain.RevitDatabaseQuery.FuzzySearch;
 using RevitDBExplorer.WPF.Controls;
@@ -77,19 +78,23 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
     internal class CategoryCmdArgument : CommandArgument<BuiltInCategory>
     {
         public CategoryCmdArgument(BuiltInCategory value) : base(value)
-        {
-            
+        {            
             Name = $"BuiltInCategory.{value}";
             Label = LabelUtils.GetLabelFor(value);
         }
     }
 
 
-    internal class CategoryCmd : Command
+    internal class CategoryCmd : Command, ICommandForVisualization
     {
-        public CategoryCmd(string text, IEnumerable<IFuzzySearchResult> matchedArguments) : base(CmdType.Category, text, matchedArguments, null)
+        public string Label => String.Join(", ", Arguments.Select(x => x.Name));
+        public string Description => "collector.OfCategory()";
+        public CmdType Type => CmdType.Category;
+
+
+        public CategoryCmd(string text, IEnumerable<IFuzzySearchResult> matchedArguments) : base(text, matchedArguments, null)
         {
             IsBasedOnQuickFilter = true;
-        }
+        }        
     }
 }

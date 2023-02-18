@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using RevitDBExplorer.WPF.Controls;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
@@ -32,9 +34,14 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
     }
 
 
-    internal class OwnerViewFilterCmd : Command
+    internal class OwnerViewFilterCmd : Command, ICommandForVisualization
     {
-        public OwnerViewFilterCmd(string text) : base(CmdType.Owned, text, null, null)
+        public string Label => "owned by active view";
+        public string Description => "new ElementOwnerViewFilter(document.ActiveView.Id)";
+        public CmdType Type => CmdType.WithoutArgument;
+
+
+        public OwnerViewFilterCmd(string text) : base(text, null, null)
         {
             IsBasedOnQuickFilter = true;
         }

@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Autodesk.Revit.DB;
 using RevitDBExplorer.Domain.RevitDatabaseQuery.FuzzySearch;
 using RevitDBExplorer.WPF.Controls;
@@ -58,15 +60,20 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
         public RoomCmdArgument(ElementId roomId, string name) : base(roomId)
         {
           
-            Name = $"{name}.ClosedShell";
+            Name = $"new ElementId({roomId})";
             Label = name;
         }
     }
 
 
-    internal class RoomCmd : Command
+    internal class RoomCmd : Command, ICommandForVisualization
     {
-        public RoomCmd(string text, IEnumerable<IFuzzySearchResult> matchedArguments = null) : base(CmdType.Room, text, matchedArguments, null)
+        public string Label => "Room: " + String.Join(", ", Arguments.Select(x => x.Label));
+        public string Description => "new ElementIntersectsSolidFilter()";
+        public CmdType Type => CmdType.DocumentSpecific;
+
+
+        public RoomCmd(string text, IEnumerable<IFuzzySearchResult> matchedArguments = null) : base(text, matchedArguments, null)
         {
         }
     }

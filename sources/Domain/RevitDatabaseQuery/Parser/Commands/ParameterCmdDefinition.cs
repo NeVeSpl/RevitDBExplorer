@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
+using System.Xml.Linq;
 using Autodesk.Revit.DB;
 using RevitDBExplorer.Domain.RevitDatabaseQuery.FuzzySearch;
 using RevitDBExplorer.WPF.Controls;
@@ -116,9 +118,42 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
     }
 
 
-    internal class ParameterCmd : Command
+    internal class ParameterCmd : Command, ICommandForVisualization
     {
-        public ParameterCmd(string text, IEnumerable<IFuzzySearchResult> matchedArguments = null, OperatorWithArgument @operator = null) : base(CmdType.Parameter, text, matchedArguments, @operator)
+        public string Label
+        {
+            get
+            {
+                var arguments = Arguments.OfType<ParameterArgument>();
+                var firstArg = arguments?.FirstOrDefault();
+
+                if (firstArg != null)
+                {
+                    string count = "";
+                    if (arguments.Count() > 1)
+                    {
+                        count = $" [+{arguments.Count() - 1} more]";
+                    }
+
+                    string name = firstArg?.Name;
+                    if (!firstArg.IsBuiltInParameter)
+                    {
+                        name = firstArg.Label;
+                    }
+
+                    var finalName = $"{name}{count} {Operator.ToString(firstArg.StorageType)}";
+
+                    return finalName;
+                }
+
+                return "";
+            }
+        }
+        public string Description => "new ElementParameterFilter()";
+        public CmdType Type => CmdType.Parameter;
+
+
+        public ParameterCmd(string text, IEnumerable<IFuzzySearchResult> matchedArguments = null, OperatorWithArgument @operator = null) : base(text, matchedArguments, @operator)
         {
         }
     }

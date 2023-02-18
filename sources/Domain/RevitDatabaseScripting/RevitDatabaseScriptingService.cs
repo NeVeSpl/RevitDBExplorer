@@ -91,7 +91,9 @@ namespace RevitDBExplorer.Domain.RevitDatabaseScripting
 
                 var query = new Query((UIApplication uia) => 
                 {
-                    var document = uia.ActiveUIDocument.Document;
+                    var document = uia.ActiveUIDocument?.Document;
+                    if (document == null) return null;
+
                     return lambda(document).ToElements().Select(x => new SnoopableObject(document, x));
                 });               
                 return query;
@@ -102,7 +104,9 @@ namespace RevitDBExplorer.Domain.RevitDatabaseScripting
 
                 var query = new Query((UIApplication uia) =>
                 {
-                    var document = uia.ActiveUIDocument.Document;
+                    var document = uia.ActiveUIDocument?.Document;
+                    if (document == null) return null;
+
                     return lambda(document).Select(x => new SnoopableObject(document, x));
                 });
                 return query;

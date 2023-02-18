@@ -1,5 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Xml.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Autodesk.Revit.DB;
 using RevitDBExplorer.Domain.RevitDatabaseQuery.FuzzySearch;
 using RevitDBExplorer.WPF.Controls;
@@ -56,17 +57,21 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
     internal class RuleBasedFilterCmdArgument : CommandArgument<ElementId>
     {
         public RuleBasedFilterCmdArgument(ElementId filterId, string name) : base(filterId)
-        {
-           
+        {           
             Name = $"new ElementId({filterId})";
             Label = name;
         }
     }
 
 
-    internal class RuleBasedFilterCmd : Command
+    internal class RuleBasedFilterCmd : Command, ICommandForVisualization
     {
-        public RuleBasedFilterCmd(string text, IEnumerable<IFuzzySearchResult> matchedArguments = null) : base(CmdType.RuleBasedFilter, text, matchedArguments, null)
+        public string Label => "Rule-based filter: " + String.Join(", ", Arguments.Select(x => x.Label));
+        public string Description => "ParameterFilterElement.GetElementFilter()";
+        public CmdType Type => CmdType.DocumentSpecific;
+
+
+        public RuleBasedFilterCmd(string text, IEnumerable<IFuzzySearchResult> matchedArguments = null) : base(text, matchedArguments, null)
         {
         }
     }

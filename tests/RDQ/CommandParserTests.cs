@@ -29,7 +29,7 @@ namespace RevitDBExplorer.Tests.RDQ
             var result = CommandParser.Parse(cmd).First();
             Assert.IsInstanceOfType(result, typeof(CategoryCmd));
 
-            var match = (result.MatchedArguments.First() as IFuzzySearchResult).Argument as CategoryCmdArgument;
+            var match = result.Arguments.First() as CategoryCmdArgument;
             Assert.IsNotNull(match);
             Assert.AreEqual(BuiltInCategory.OST_Walls, match.Value);
         }
@@ -42,7 +42,7 @@ namespace RevitDBExplorer.Tests.RDQ
             var result = CommandParser.Parse(cmd).First();
             Assert.IsInstanceOfType(result, typeof(ClassCmd));
 
-            var match = (result.MatchedArguments.First() as IFuzzySearchResult).Argument as ClassCmdArgument;
+            var match = result.Arguments.First() as ClassCmdArgument;
             Assert.IsNotNull(match);
             Assert.AreEqual(typeof(Wall), match.Value);
 
@@ -83,7 +83,7 @@ namespace RevitDBExplorer.Tests.RDQ
             var result = CommandParser.Parse(cmd).First();
             Assert.IsInstanceOfType(result, typeof(LevelCmd));
 
-            var match = (result.MatchedArguments.First() as IFuzzySearchResult).Argument as LevelCmdArgument;
+            var match = result.Arguments.First() as LevelCmdArgument;
             Assert.IsNotNull(match);
             //Assert.AreEqual(new ElementId(????), match.Value);
 
@@ -125,7 +125,7 @@ namespace RevitDBExplorer.Tests.RDQ
             var result = CommandParser.Parse(cmd).First();
             Assert.IsInstanceOfType(result, typeof(ParameterCmd));
 
-            var match = (result.MatchedArguments.First() as IFuzzySearchResult).Argument as ParameterArgument;
+            var match = result.Arguments.First() as ParameterArgument;
             Assert.IsNotNull(match);
             Assert.AreEqual(BuiltInParameter.DOOR_NUMBER, match.BuiltInParameter);
 
@@ -147,7 +147,7 @@ namespace RevitDBExplorer.Tests.RDQ
             var result = CommandParser.Parse(cmd).First();
             Assert.IsInstanceOfType(result, typeof(RoomCmd));
 
-            var match = (result.MatchedArguments.First() as IFuzzySearchResult).Argument as RoomCmdArgument;
+            var match = result.Arguments.First() as RoomCmdArgument;
             Assert.IsNotNull(match);
             //Assert.AreEqual(???, match.Value);
 
@@ -167,7 +167,7 @@ namespace RevitDBExplorer.Tests.RDQ
             var result = CommandParser.Parse(cmd).First();
             Assert.IsInstanceOfType(result, typeof(RuleBasedFilterCmd));
 
-            var match = (result.MatchedArguments.First() as IFuzzySearchResult).Argument as RuleBasedFilterCmdArgument;
+            var match = result.Arguments.First() as RuleBasedFilterCmdArgument;
             Assert.IsNotNull(match);
             //Assert.AreEqual(???, match.Value);
 
@@ -182,7 +182,7 @@ namespace RevitDBExplorer.Tests.RDQ
             var result = CommandParser.Parse(cmd).First();
             Assert.IsInstanceOfType(result, typeof(StructuralTypeCmd));
 
-            var match = (result.MatchedArguments.First() as IFuzzySearchResult).Argument as StructuralTypeCmdArgument;
+            var match = result.Arguments.First() as StructuralTypeCmdArgument;
             Assert.IsNotNull(match);
             Assert.AreEqual(StructuralType.Brace, match.Value);            
         }

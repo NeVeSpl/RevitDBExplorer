@@ -77,7 +77,9 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
 
             public IEnumerable<SnoopableObject> Snoop(UIApplication app)
             {
-                var document = app.ActiveUIDocument.Document;
+                var document = app.ActiveUIDocument?.Document;
+                if (document == null) return null;
+
                 var collector = BuildCollector(document);
                 var snoopableObjects = collector.ToElements().Select(x => new SnoopableObject(document, x));
                 return snoopableObjects;

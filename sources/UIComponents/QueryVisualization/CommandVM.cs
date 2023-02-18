@@ -57,94 +57,20 @@ namespace RevitDBExplorer.UIComponents.QueryVisualization
             }
         }
         public IEnumerable<ICommandArgument> Arguments => command.MatchedArguments;
-        public CmdType Type => command.Type;
+        public CmdType Type { get; set; }
 
 
         public CommandVM(RDQCommand command)
         {
             this.command = command; 
             args = String.Join(", ", command.MatchedArguments.Select(x => x.Name));
-            var labels = String.Join(", ", command.MatchedArguments.Select(x => x.Label));
-            switch (command.Type)
+
+            if (command is ICommandForVisualization cmdforVisualization) 
             {
-                case CmdType.ActiveView:
-                    Name = "active view";
-                    FilterName = "new VisibleInViewFilter(document, document.ActiveView.Id)"; 
-                    break;
-                case CmdType.Owned:
-                    Name = "owned by active view";
-                    FilterName = "new ElementOwnerViewFilter(document.ActiveView.Id)";
-                    break;
-                case CmdType.ElementId:
-                    Name = args;
-                    FilterName = "new ElementIdSetFilter()";                   
-                    break;
-                case CmdType.ElementType:
-                    Name = "element type";
-                    FilterName = ".WhereElementIsElementType()";                  
-                    break;
-                case CmdType.NotElementType:
-                    Name = "element";
-                    FilterName = ".WhereElementIsNotElementType()";                 
-                    break;
-                case CmdType.Category:
-                    Name = args;
-                    FilterName = ".OfCategory()";                 
-                    break;
-                case CmdType.Class:
-                    Name = args;
-                    FilterName = ".OfClass()";                   
-                    break;                
-                case CmdType.Parameter:
-                    var arguments = command.Arguments.OfType<ParameterArgument>();
-                    var firstArg = arguments?.FirstOrDefault();
-
-                    if (firstArg != null)
-                    {
-                        string count = "";
-                        if (arguments.Count() > 1)
-                        {
-                            count = $" [+{arguments.Count() - 1} more]";
-                        }
-                        string name = firstArg?.Name;
-                        if (!firstArg.IsBuiltInParameter)
-                        {
-                            name = firstArg.Label;
-                        }
-
-                        Name = $"{name}{count} {command.Operator.ToString(firstArg.StorageType)}";
-                    }
-
-                    FilterName = "new ElementParameterFilter()";                   
-                    break;
-                case CmdType.Incorrect:
-                    Name = command.Text;
-                    FilterName = "could not recognize phrase";  
-                    break;
-                case CmdType.Level:
-                    Name = labels;
-                    FilterName = "new ElementLevelFilter()";
-                    break;
-                case CmdType.Workset:
-                    Name = labels;
-                    FilterName = "new ElementWorksetFilter()";
-                    break;
-                case CmdType.StructuralType:
-                    Name = args;
-                    FilterName = "new ElementStructuralTypeFilter()";
-                    break;
-                case CmdType.Room:                   
-                    Name = args;
-                    FilterName = "new ElementIntersectsSolidFilter()";
-                    break;
-                case CmdType.RuleBasedFilter:                    
-                    Name = "Rule-based filter: " + labels;
-                    FilterName = "ParameterFilterElement.GetElementFilter()";
-                    break;
-                default:
-                    Name = args;
-                    break;
-            };
+                Name = cmdforVisualization.Label;
+                FilterName = cmdforVisualization.Description;
+                Type = cmdforVisualization.Type;
+            }
         }
 
         public bool Equals(CommandVM other)

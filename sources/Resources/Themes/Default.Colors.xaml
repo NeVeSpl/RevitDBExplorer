@@ -66,15 +66,15 @@
     <SolidColorBrush x:Key="ToolTip.Name" Color="#745320"/>
     <SolidColorBrush x:Key="ToolTip.Invocation" Color="#21377F"/>
 
-    <SolidColorBrush x:Key="Query.ActiveView.Background" Color="#FFF2CC"/>
+    <SolidColorBrush x:Key="Query.WithoutArgument.Background" Color="#FFF2CC"/>
+    <SolidColorBrush x:Key="Query.DocumentSpecific.Background" Color="#E3D6EC"/>
     <SolidColorBrush x:Key="Query.ElementId.Background" Color="#FBE5D5"/>
-    <SolidColorBrush x:Key="Query.ElementType.Background" Color="#FFF2CC"/>
-    <SolidColorBrush x:Key="Query.NotElementType.Background" Color="#FFF2CC"/>
     <SolidColorBrush x:Key="Query.Category.Background" Color="#DEEBF6"/>
     <SolidColorBrush x:Key="Query.Class.Background" Color="#E2EFD9"/>
     <SolidColorBrush x:Key="Query.Parameter.Background" Color="#EDEDED"/>
+    <SolidColorBrush x:Key="Query.EnumBased.Background" Color="#FFE0FA"/>
     <SolidColorBrush x:Key="Query.Incorrect.Background" Color="#FF0000"/>
-    <SolidColorBrush x:Key="Query.WhoKnows.Background" Color="#E3D6EC"/>
+
 
     <SolidColorBrush x:Key="Query.Incorrect.Foreground" Color="white"/>
     <SolidColorBrush x:Key="Query.Foreground" Color="black"/>

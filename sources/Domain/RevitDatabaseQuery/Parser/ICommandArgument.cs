@@ -19,8 +19,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser
 
         public CommandArgument(T value)
         {
-            Value = value;
-           
+            Value = value;           
         }
     }
 }

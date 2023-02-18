@@ -17,7 +17,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Filters
         public RoomFilter(RoomCmdArgument arg)
         {
             this.arg = arg;          
-            FilterSyntax = $"new ElementIntersectsSolidFilter({arg.Name})";            
+            FilterSyntax = $"new ElementIntersectsSolidFilter((document.GetElement({arg.Name}) as Room).ClosedShell.OfType<Solid>().FirstOrDefault())";            
         }
 
 

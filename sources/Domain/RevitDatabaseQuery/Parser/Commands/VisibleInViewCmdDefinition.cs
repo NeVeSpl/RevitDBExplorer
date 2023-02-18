@@ -33,9 +33,14 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
     }
 
 
-    internal class VisibleInViewCmd : Command
+    internal class VisibleInViewCmd : Command, ICommandForVisualization
     {
-        public VisibleInViewCmd(string text) : base(CmdType.ActiveView, text, null, null)
+        public string Label => "active view";
+        public string Description => "new VisibleInViewFilter(document, document.ActiveView.Id)";
+        public CmdType Type => CmdType.WithoutArgument;
+
+
+        public VisibleInViewCmd(string text) : base(text, null, null)
         {
             IsBasedOnQuickFilter = true;
         }

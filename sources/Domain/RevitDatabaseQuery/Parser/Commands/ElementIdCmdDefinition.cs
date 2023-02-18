@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Autodesk.Revit.DB;
 using RevitDBExplorer.Domain.RevitDatabaseQuery.FuzzySearch;
 using RevitDBExplorer.WPF.Controls;
@@ -51,17 +53,21 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
     internal class ElementIdCmdArgument : CommandArgument<ElementId>
     {
         public ElementIdCmdArgument(ElementId value) : base(value)
-        {
-           
+        {           
             Name = $"new ElementId({value})";
             Label = value.Value().ToString();
         }
     }
 
 
-    internal class ElementIdCmd : Command
+    internal class ElementIdCmd : Command, ICommandForVisualization
     {
-        public ElementIdCmd(string text, IEnumerable<IFuzzySearchResult> matchedArguments = null) : base(CmdType.ElementId, text, matchedArguments, null)
+        public string Label => String.Join(", ", Arguments.Select(x => x.Name));
+        public string Description => "new ElementIdSetFilter()";
+        public CmdType Type => CmdType.ElementId;
+
+
+        public ElementIdCmd(string text, IEnumerable<IFuzzySearchResult> matchedArguments = null) : base(text, matchedArguments, null)
         {
             IsBasedOnQuickFilter = true;
         }

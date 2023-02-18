@@ -94,17 +94,21 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
     internal class ClassCmdArgument : CommandArgument<Type>
     {
         public ClassCmdArgument(Type value) : base(value)
-        {
-           
+        {           
             Name = $"typeof({value.Name})";
             Label = value.Name;
         }
     }
 
 
-    internal class ClassCmd : Command
+    internal class ClassCmd : Command, ICommandForVisualization
     {
-        public ClassCmd(string text, IEnumerable<IFuzzySearchResult> matchedArguments = null) : base(CmdType.Class, text, matchedArguments, null)
+        public string Label => String.Join(", ", Arguments.Select(x => x.Name));
+        public string Description => "collector.OfClass()";
+        public CmdType Type => CmdType.Class;
+
+
+        public ClassCmd(string text, IEnumerable<IFuzzySearchResult> matchedArguments = null) : base(text, matchedArguments, null)
         {
             IsBasedOnQuickFilter = true;
         }

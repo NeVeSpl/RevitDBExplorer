@@ -1,15 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using RevitDBExplorer.Domain.RevitDatabaseQuery.FuzzySearch;
-using RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
 namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser
 {
     internal interface ICommand
-    {
-        CmdType Type { get;  }
+    {       
         string Text { get; }
         IEnumerable<IFuzzySearchResult> MatchedArguments { get;  }
         OperatorWithArgument Operator { get; }
@@ -20,10 +18,16 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser
         double Score { get; }
     }
 
+    internal interface ICommandForVisualization
+    {
+        public string Label { get; }
+        public string Description { get; }
+        CmdType Type { get; }
+    }
+
 
     internal class Command : ICommand
-    {
-        public CmdType Type { get; init; } = CmdType.Incorrect;
+    {     
         public string Text { get; init; } = "";
         public IEnumerable<IFuzzySearchResult> MatchedArguments { get; init; } = Enumerable.Empty<IFuzzySearchResult>();
         public OperatorWithArgument Operator { get; init; } = new OperatorWithArgument();
@@ -49,9 +53,8 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser
         }
 
 
-        public Command(CmdType type, string text, IEnumerable<IFuzzySearchResult> matchedArguments = null, OperatorWithArgument @operator = null)
-        {
-            Type = type;
+        public Command(string text, IEnumerable<IFuzzySearchResult> matchedArguments = null, OperatorWithArgument @operator = null)
+        {           
             Text = text;
             MatchedArguments = matchedArguments?.ToArray() ?? MatchedArguments;
             Operator = @operator ?? Operator;

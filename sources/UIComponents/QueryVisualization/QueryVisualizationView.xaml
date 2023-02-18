@@ -30,7 +30,7 @@
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <Grid x:Name="cQueryVisualizationGrid" Opacity="1">
-                        <Border Margin="0 3 5 2" Padding="7 3" BorderThickness="1" BorderBrush="{DynamicResource Query.BorderBrush}"  CornerRadius="10"  ToolTipService.ShowDuration="50000">
+                        <Border Margin="0 3 5 2" Padding="7 3" BorderThickness="0.5" BorderBrush="{DynamicResource Query.BorderBrush}"  CornerRadius="10"  ToolTipService.ShowDuration="50000">
                             <TextBlock Text="{Binding Name}"  TextTrimming="CharacterEllipsis"/>
 
                             <Border.ToolTip>
@@ -74,20 +74,14 @@
                                 <Style TargetType="Border">
                                     <Setter Property="TextBlock.Foreground" Value="{DynamicResource Query.Foreground}"/>
                                     <Style.Triggers>
-                                        <DataTrigger Binding="{Binding Type}" Value="ActiveView">
-                                            <Setter Property="Background" Value="{DynamicResource Query.ActiveView.Background}"/>
+                                        <DataTrigger Binding="{Binding Type}" Value="WithoutArgument">
+                                            <Setter Property="Background" Value="{DynamicResource Query.WithoutArgument.Background}"/>
                                         </DataTrigger>
-                                        <DataTrigger Binding="{Binding Type}" Value="Owned">
-                                            <Setter Property="Background" Value="{DynamicResource Query.ActiveView.Background}"/>
-                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Type}" Value="DocumentSpecific">
+                                            <Setter Property="Background" Value="{DynamicResource Query.DocumentSpecific.Background}"/>
+                                        </DataTrigger>                                        
                                         <DataTrigger Binding="{Binding Type}" Value="ElementId">
                                             <Setter Property="Background" Value="{DynamicResource Query.ElementId.Background}"/>
-                                        </DataTrigger>
-                                        <DataTrigger Binding="{Binding Type}" Value="ElementType">
-                                            <Setter Property="Background" Value="{DynamicResource Query.ElementType.Background}"/>
-                                        </DataTrigger>
-                                        <DataTrigger Binding="{Binding Type}" Value="NotElementType">
-                                            <Setter Property="Background" Value="{DynamicResource Query.NotElementType.Background}"/>
                                         </DataTrigger>
                                         <DataTrigger Binding="{Binding Type}" Value="Category">
                                             <Setter Property="Background" Value="{DynamicResource Query.Category.Background}"/>
@@ -98,27 +92,14 @@
                                         <DataTrigger Binding="{Binding Type}" Value="Parameter">
                                             <Setter Property="Background" Value="{DynamicResource Query.Parameter.Background}"/>
                                         </DataTrigger>
-                                        <DataTrigger Binding="{Binding Type}" Value="StructuralType">
-                                            <Setter Property="Background" Value="{DynamicResource Query.WhoKnows.Background}"/>
-                                        </DataTrigger>
-                                        <DataTrigger Binding="{Binding Type}" Value="Level">
-                                            <Setter Property="Background" Value="{DynamicResource Query.WhoKnows.Background}"/>
-                                        </DataTrigger>
-                                        <DataTrigger Binding="{Binding Type}" Value="Room">
-                                            <Setter Property="Background" Value="{DynamicResource Query.WhoKnows.Background}"/>
-                                        </DataTrigger>
-                                        <DataTrigger Binding="{Binding Type}" Value="RuleBasedFilter">
-                                            <Setter Property="Background" Value="{DynamicResource Query.WhoKnows.Background}"/>
-                                        </DataTrigger>
-                                        <DataTrigger Binding="{Binding Type}" Value="Workset">
-                                            <Setter Property="Background" Value="{DynamicResource Query.WhoKnows.Background}"/>
+                                        <DataTrigger Binding="{Binding Type}" Value="EnumBased">
+                                            <Setter Property="Background" Value="{DynamicResource Query.EnumBased.Background}"/>
                                         </DataTrigger>
 
                                         <DataTrigger Binding="{Binding Type}" Value="Incorrect">
                                             <Setter Property="Background" Value="{DynamicResource Query.Incorrect.Background}"/>
                                             <Setter Property="TextBlock.Foreground" Value="{DynamicResource Query.Incorrect.Foreground}"/>
-                                        </DataTrigger>
-                                        
+                                        </DataTrigger>                                        
                                     </Style.Triggers>
                                 </Style>
                             </Border.Style>

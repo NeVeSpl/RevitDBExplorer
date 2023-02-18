@@ -164,7 +164,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser
                 if (definition.CanParticipateInGenericSearch())
                 {
                     var result = definition.Create(cmdText, argument);
-                    if (result.MatchedArguments.Any())
+                    if (result.Arguments.Any())
                     {                     
                         yield return result;
                     }
