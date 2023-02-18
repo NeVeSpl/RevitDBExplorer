@@ -62,7 +62,7 @@
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>                
                 <RowDefinition Height="*"  />
-                <RowDefinition Height="18"/>
+                <RowDefinition Height="20"/>
             </Grid.RowDefinitions>
 
             <UniformGrid Grid.ColumnSpan="3" Columns="13" Margin="0 0 0 2" >
@@ -99,10 +99,7 @@
                 </Button>
                 <Button Click="SelectorButton_Click" Tag="LinkedElement" ToolTip="Snoop by selecting linked element in Revit">
                     <Path Style="{StaticResource IconLinkedElement}" />
-                </Button>
-                <!--<Button Click="SelectorButton_Click" Tag="DependentElements" ToolTip="Snoop dependent elements of already selected elements in Revit">
-                    <Path Style="{StaticResource IconDependentElements}" />
-                </Button>-->
+                </Button>               
                 <Button Click="SelectorButton_Click" Tag="Schemas" ToolTip="Snoop Extensible Storage framework schemas located in memory">
                     <Path Style="{StaticResource IconSchemas}" />
                 </Button>
@@ -184,7 +181,37 @@
 
             <componentBusyIndicator:BusyIndicator Grid.Row="2" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="150" Height="35" Margin="0 0 0 0" Visibility="{Binding IsRevitBusy, Converter={StaticResource BoolToVisibilityConverter}}" />
 
-            <Border Background="{DynamicResource StatusBar.Background}" Margin="-2 0 -2 0"  Grid.ColumnSpan="3"  Grid.Row="3"/>
+            <Grid Background="{DynamicResource StatusBar.Background}" Margin="-2 0 0 0"  Grid.ColumnSpan="1"  Grid.Row="3">
+                <Grid.Resources>
+                    <Style x:Key="ToolButton" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                        <Setter Property="Padding" Value="1"/>
+                        <Setter Property="Margin" Value="4 0 0 0"/>
+                        <Setter Property="MinWidth" Value="16"/>
+                        <Setter Property="MinHeight" Value="16"/>
+                        <Setter Property="Width" Value="18"/>
+                        <Setter Property="Height" Value="18"/>
+                       
+                        <Setter Property="Background" Value="Transparent"/>                        
+                        <Setter Property="BorderBrush" Value="Transparent"/>
+                    </Style>
+                </Grid.Resources>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+
+                <Button Grid.Column="1" Style="{StaticResource ToolButton}"  ToolTip="RDBE Configuration" Click="Window_MenuItem_ConfigurationClick" >
+                    <Path Style="{StaticResource IconConfig}" Opacity="0.87"  />
+                </Button>
+            </Grid>
+            <Grid  Background="{DynamicResource StatusBar.Background}" Margin="0 0 -2 0"  Grid.ColumnSpan="2" Grid.Column="1"  Grid.Row="3">
+                <TextBlock  Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding IsNewVerAvailable, Converter={StaticResource BoolToVisibilityConverterCollapsed}}">    
+                    <Run Foreground="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}">a new version of RDBE is available :</Run>
+                    <Hyperlink NavigateUri="{Binding NewVersionLink}" RequestNavigate="Hyperlink_RequestNavigate" Foreground="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" TextDecorations="None"  >
+                        <Run Text="{Binding NewVersionLink}" />
+                    </Hyperlink>
+                </TextBlock>
+            </Grid>
         </Grid>
 
         <GridSplitter Grid.Row="1"  Background="{DynamicResource GridSplitter.Background}" Height="2" HorizontalAlignment="Stretch" Visibility="{Binding Scripting.IsOpen, Converter={StaticResource BoolToVisibilityConverterCollapsed}}"/>

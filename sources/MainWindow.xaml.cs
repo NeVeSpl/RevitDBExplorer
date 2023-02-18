@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
@@ -40,6 +41,8 @@ namespace RevitDBExplorer
         private string databaseQueryToolTip = string.Empty;
         private bool isPopupOpen;        
         private bool isRevitBusy;
+        public bool isNewVerAvailable;
+        private string newVersionLink;
         private readonly DispatcherTimer isRevitBusyDispatcher;
         private readonly IAutocompleteItemProvider databaseQueryAutocompleteItemProvider = new AutocompleteItemProvider();
 
@@ -116,6 +119,30 @@ namespace RevitDBExplorer
                 }
             }
         }
+        public bool IsNewVerAvailable
+        {
+            get
+            {
+                return isNewVerAvailable;
+            }
+            set
+            {
+                isNewVerAvailable = value;
+                OnPropertyChanged();
+            }
+        }
+        public string NewVersionLink
+        {
+            get
+            {
+                return newVersionLink;
+            }
+            set
+            {
+                newVersionLink = value;
+                OnPropertyChanged();
+            }
+        }
         public IAutocompleteItemProvider DatabaseQueryAutocompleteItemProvider
         {
             get
@@ -158,10 +185,10 @@ namespace RevitDBExplorer
         }
         private async Task CheckIfNewVersionIsAvailable(Version ver)
         {
-            var (isNew, link) = await VersionChecker.Check(ver);
-            if (isNew) 
+            (IsNewVerAvailable, var link) = await VersionChecker.Check(ver);
+            if (IsNewVerAvailable) 
             {
-                Title += $" - (a new version is available: {link})";
+                NewVersionLink = link;
             }
         }
         private async void SelectorButton_Click(object sender, RoutedEventArgs e)
@@ -309,7 +336,8 @@ namespace RevitDBExplorer
         }
    
 
-        private DispatcherTimer window_SizeChanged_Debouncer;
+        private DispatcherTimer window_SizeChanged_Debouncer;        
+
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             window_SizeChanged_Debouncer = window_SizeChanged_Debouncer.Debounce(TimeSpan.FromSeconds(1), SaveUserSettings);               
@@ -332,7 +360,12 @@ namespace RevitDBExplorer
                     skinDict.UpdateSource();                
             }
         }
-        
+
+        private void Hyperlink_RequestNavigate(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)
+        {
+            Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
+            e.Handled = true;
+        }
 
         #region INotifyPropertyChanged
 
@@ -343,6 +376,6 @@ namespace RevitDBExplorer
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        #endregion              
+        #endregion        
     }
 }
