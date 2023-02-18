@@ -69,45 +69,89 @@
                 <UniformGrid.Resources>
                     <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
                         <Setter Property="Background" Value="Transparent"/>
-                        <Setter Property="Padding" Value="3 3 3 4"/>
+                        <Setter Property="Padding" Value="3 3 3 0"/>
                         <Setter Property="Margin" Value="2 0 2 0"/>
                         <Setter Property="BorderBrush" Value="Transparent"/>
                         <Setter Property="ToolTipService.InitialShowDelay" Value="100"/>
                     </Style>
+                    <Style TargetType="TextBlock" >
+                       
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsWiderThan800px}" Value="False">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsWiderThan800px}" Value="True">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
                 </UniformGrid.Resources>
 
                 <Button Click="SelectorButton_Click" Tag="CurrentSelection" Margin="0 0 2 0" ToolTip="Snoop already selected elements in Revit; if none selected, snoop all elements from active view">
-                    <Path Style="{StaticResource IconSelection}"  />
+                    <StackPanel>
+                        <Path Style="{StaticResource IconSelection}"  />
+                        <TextBlock Margin="0 0 0 0">Selection/Visible</TextBlock>
+                    </StackPanel>
                 </Button>
                 <Button Click="SelectorButton_Click" Tag="Db" ToolTip="Snoop DB" >
-                    <Path Style="{StaticResource IconDb}"  />
+                    <StackPanel>
+                        <Path DockPanel.Dock="Top" Style="{StaticResource IconDb}"  />
+                        <TextBlock Margin="0 2 0 0">Database</TextBlock>
+                    </StackPanel>
                 </Button>
                 <Button Click="SelectorButton_Click" Tag="ActiveView" ToolTip="Snoop active view">
-                    <Path Style="{StaticResource IconActiveView}" />
+                    <StackPanel>
+                        <Path Style="{StaticResource IconActiveView}" />
+                        <TextBlock Margin="0 4 0 0">View</TextBlock>
+                    </StackPanel>
                 </Button>
                 <Button Click="SelectorButton_Click" Tag="ActiveDocument" ToolTip="Snoop active document">
-                    <Path Style="{StaticResource IconActiveDocument}" />
+                    <StackPanel>
+                        <Path Style="{StaticResource IconActiveDocument}" />
+                        <TextBlock>Document</TextBlock>
+                    </StackPanel>
                 </Button>
                 <Button Click="SelectorButton_Click" Tag="Application" ToolTip="Snoop application">
-                    <Path Style="{StaticResource IconApplication}" />
+                    <StackPanel>
+                        <Path Style="{StaticResource IconApplication}" />
+                        <TextBlock>Application</TextBlock>
+                    </StackPanel>
                 </Button>
                 <Button Click="SelectorButton_Click" Tag="PickFace" ToolTip="Snoop by selecting face in Revit">
-                    <Path Style="{StaticResource IconPickFace}" />
+                    <StackPanel>
+                        <Path Style="{StaticResource IconPickFace}" />
+                        <TextBlock Margin="0 2 0 0">Face</TextBlock>
+                    </StackPanel>
                 </Button>
                 <Button Click="SelectorButton_Click" Tag="PickEdge" ToolTip="Snoop by selecting edge in Revit">
-                    <Path Style="{StaticResource IconPickEdge}"  />
+                    <StackPanel>
+                        <Path Style="{StaticResource IconPickEdge}"  />
+                        <TextBlock Margin="0 2 0 0">Edge</TextBlock>
+                    </StackPanel>
                 </Button>
                 <Button Click="SelectorButton_Click" Tag="LinkedElement" ToolTip="Snoop by selecting linked element in Revit">
-                    <Path Style="{StaticResource IconLinkedElement}" />
+                    <StackPanel>
+                        <Path Style="{StaticResource IconLinkedElement}" />
+                        <TextBlock Margin="0 2 0 0">Linked</TextBlock>
+                    </StackPanel>
                 </Button>               
                 <Button Click="SelectorButton_Click" Tag="Schemas" ToolTip="Snoop Extensible Storage framework schemas located in memory">
-                    <Path Style="{StaticResource IconSchemas}" />
+                    <StackPanel>
+                        <Path Style="{StaticResource IconSchemas}" />
+                        <TextBlock Margin="0 0 0 0">Storage</TextBlock>
+                    </StackPanel>
                 </Button>
                 <Button Click="SelectorButton_Click"  Tag="FilterableCategories" ToolTip="Snoop categories that may be used in a ParameterFilterElement">
-                    <Path Style="{StaticResource IconCategories}" SnapsToDevicePixels="True" />
+                    <StackPanel>
+                        <Path Style="{StaticResource IconCategories}" SnapsToDevicePixels="True" />
+                        <TextBlock Margin="0 0 0 0">Categories</TextBlock>
+                    </StackPanel>
                 </Button>
                 <Button Click="ButtonWithSubMenu_Click"  ToolTip="Snoop Forge types">
-                    <Path Style="{StaticResource IconForge}" />
+                    <StackPanel>
+                        <Path Style="{StaticResource IconForge}" />
+                        <TextBlock Margin="0 6 0 0">Forge</TextBlock>
+                    </StackPanel>
                     <Button.ContextMenu>
                         <ContextMenu>
                             <MenuItem Header="ParameterUtils.GetAllBuiltInGroups()" Click="SelectorButton_Click" Tag="ForgeParameterUtilsGetAllBuiltInGroups"/>
@@ -120,10 +164,16 @@
                     </Button.ContextMenu>
                 </Button>
                 <Button Click="SnoopEvents_Click"  ToolTip="Snoop events">
-                    <Path Style="{StaticResource IconEvent}" SnapsToDevicePixels="True" />
+                    <StackPanel>
+                        <Path Style="{StaticResource IconEvent}" SnapsToDevicePixels="True" />
+                        <TextBlock Margin="0 0 0 0">Events</TextBlock>
+                    </StackPanel>
                 </Button>               
                 <Button Click="ButtonWithSubMenu_Click" Margin="2 0 0 0" ToolTip="Snoop addins">
-                    <Path Style="{StaticResource IconAddin}" />
+                    <StackPanel>
+                        <Path Style="{StaticResource IconAddin}" />
+                        <TextBlock Margin="0 2 0 0">Addins</TextBlock>
+                    </StackPanel>
                     <Button.ContextMenu>
                         <ContextMenu>
                             <MenuItem Header="Snoop loaded external applications" Click="SelectorButton_Click" Tag="LoadedApplications" ToolTip="UIApplication.LoadedApplications"/>

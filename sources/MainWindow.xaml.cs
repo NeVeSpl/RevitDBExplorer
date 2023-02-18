@@ -43,6 +43,7 @@ namespace RevitDBExplorer
         private bool isRevitBusy;
         public bool isNewVerAvailable;
         private string newVersionLink;
+        private bool isWiderThan800px;
         private readonly DispatcherTimer isRevitBusyDispatcher;
         private readonly IAutocompleteItemProvider databaseQueryAutocompleteItemProvider = new AutocompleteItemProvider();
 
@@ -143,6 +144,18 @@ namespace RevitDBExplorer
                 OnPropertyChanged();
             }
         }
+        public bool IsWiderThan800px
+        {
+            get
+            {
+                return isWiderThan800px;
+            }
+            set
+            {
+                isWiderThan800px = value;
+                OnPropertyChanged();
+            }
+        }
         public IAutocompleteItemProvider DatabaseQueryAutocompleteItemProvider
         {
             get
@@ -151,7 +164,7 @@ namespace RevitDBExplorer
             }
         }
         public RelayCommand OpenScriptingWithQueryCommand { get; }
-
+        
 
         public MainWindow()
         {
@@ -340,6 +353,7 @@ namespace RevitDBExplorer
 
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
         {
+            IsWiderThan800px = this.Width > 919;
             window_SizeChanged_Debouncer = window_SizeChanged_Debouncer.Debounce(TimeSpan.FromSeconds(1), SaveUserSettings);               
         }
         private void SaveUserSettings()
