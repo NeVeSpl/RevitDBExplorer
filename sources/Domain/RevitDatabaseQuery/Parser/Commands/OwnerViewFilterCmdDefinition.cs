@@ -21,7 +21,9 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
         }
         public IEnumerable<string> GetKeywords()
         {
-            yield return "owned";            
+            yield return "owned";
+            yield return "owned by view";
+            yield return "owned by active view";
         }
         public bool CanRecognizeArgument(string argument) => false;
         public bool CanParticipateInGenericSearch() => false;

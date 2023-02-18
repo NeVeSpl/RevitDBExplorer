@@ -319,6 +319,7 @@
     <Compile Include="Domain\RevitDatabaseQuery\Parser\Commands\ClassCmdDefinition.cs" />
     <Compile Include="Domain\RevitDatabaseQuery\Parser\Commands\NameCmdDefinition.cs" />
     <Compile Include="Domain\RevitDatabaseQuery\Parser\Commands\OwnerViewFilterCmdDefinition.cs" />
+    <Compile Include="Domain\RevitDatabaseQuery\Parser\Commands\SelectionCmdDefinition.cs" />
     <Compile Include="Domain\RevitDatabaseQuery\Parser\Commands\VisibleInViewCmdDefinition.cs" />
     <Compile Include="Domain\RevitDatabaseQuery\Parser\Commands\NotElementTypeCmdDefinition.cs" />
     <Compile Include="Domain\RevitDatabaseQuery\Parser\Commands\ElementTypeCmdDefinition.cs" />

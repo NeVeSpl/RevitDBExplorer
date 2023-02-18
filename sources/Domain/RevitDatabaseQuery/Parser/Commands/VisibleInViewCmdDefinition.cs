@@ -7,7 +7,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
 {
     internal class VisibleInViewCmdDefinition : ICommandDefinition
     {
-        private static readonly AutocompleteItem AutocompleteItem = new AutocompleteItem("active view", "active view", "select elements from the active view", AutocompleteItemGroups.Commands);
+        private static readonly AutocompleteItem AutocompleteItem = new AutocompleteItem("visible in view", "visible", "select visible elements from the active view", AutocompleteItemGroups.Commands);
 
 
         public IAutocompleteItem GetCommandAutocompleteItem() => AutocompleteItem;  
@@ -18,9 +18,10 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
             yield break;
         }
         public IEnumerable<string> GetKeywords()
-        {
-            yield return "active";
-            yield return "active view";
+        {            
+            yield return "visible";
+            yield return "visible in view";       
+            yield return "visible in active view";
         }
         public bool CanRecognizeArgument(string argument) => false;
         public bool CanParticipateInGenericSearch() => false;

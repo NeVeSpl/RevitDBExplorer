@@ -12,17 +12,18 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser
     {
         public static readonly List<ICommandDefinition> Definitions = new List<ICommandDefinition>()
         {
-            new ElementTypeCmdDefinition(),
             new NotElementTypeCmdDefinition(),
-            new VisibleInViewCmdDefinition(),
+            new ElementTypeCmdDefinition(),
             new OwnerViewFilterCmdDefinition(),
+            new SelectionCmdDefinition(),
+            new VisibleInViewCmdDefinition(),   
             new CategoryCmdDefinition(),
             new ClassCmdDefinition(),
             new ElementIdCmdDefinition(),            
             new LevelCmdDefinition(),
             new NameCmdDefinition(),          
             new ParameterCmdDefinition(),
-            new RoomCmdDefinition(),
+            new RoomCmdDefinition(),          
             new RuleBasedFilterCmdDefinition(),
             new StructuralTypeCmdDefinition(),
             new WorksetCmdDefinition(),

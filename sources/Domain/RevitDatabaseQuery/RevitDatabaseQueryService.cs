@@ -46,9 +46,11 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
             string collectorSyntax = "";
             QueryPipeExecutor queryExecutor = null;
 
-            if (pipe.Any())
+            bool useRevitSelection = commands.OfType<SelectionCmd>().Any();
+
+            if (pipe.Any() || useRevitSelection)
             {  
-                collectorSyntax = "new FilteredElementCollector(document)";
+                collectorSyntax = useRevitSelection ? "new FilteredElementCollector(document, app.ActiveUIDocument.Selection.GetElementIds())" : "new FilteredElementCollector(document)";
 
                 foreach (var filter in pipe)
                 {
@@ -56,7 +58,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
                 }
                 collectorSyntax += Environment.NewLine + "    .ToElements()";
 
-                queryExecutor = new QueryPipeExecutor(pipe);
+                queryExecutor = new QueryPipeExecutor(pipe, useRevitSelection);
             }           
 
             return new Result(collectorSyntax, commands, new SourceOfObjects(queryExecutor) { Title ="Query" });
@@ -66,12 +68,13 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
 
         private class QueryPipeExecutor : IAmSourceOfEverything
         {
-            private readonly IReadOnlyList<QueryItem> pipe;         
-           
+            private readonly IReadOnlyList<QueryItem> pipe;
+            private readonly bool useRevitSelection;
 
-            public QueryPipeExecutor(IReadOnlyList<QueryItem> pipe)
+            public QueryPipeExecutor(IReadOnlyList<QueryItem> pipe, bool useSelection)
             {
-                this.pipe = pipe;                          
+                this.pipe = pipe;
+                this.useRevitSelection = useSelection;
             }
 
 
@@ -80,14 +83,25 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
                 var document = app.ActiveUIDocument?.Document;
                 if (document == null) return null;
 
-                var collector = BuildCollector(document);
+                ICollection<ElementId> selectedIds = null;
+
+                if (useRevitSelection)
+                {
+                    selectedIds = app.ActiveUIDocument.Selection.GetElementIds();
+                    if (selectedIds.Any() == false)
+                    {
+                        return null;
+                    }
+                }
+
+                var collector = BuildCollector(document, selectedIds);
                 var snoopableObjects = collector.ToElements().Select(x => new SnoopableObject(document, x));
                 return snoopableObjects;
             }
 
-            private FilteredElementCollector BuildCollector(Document document)
+            private FilteredElementCollector BuildCollector(Document document, ICollection<ElementId> selectedIds)
             {
-                var collector = new FilteredElementCollector(document);              
+                var collector = selectedIds != null ? new FilteredElementCollector(document, selectedIds) : new FilteredElementCollector(document);              
 
                 foreach (var filter in pipe)
                 {
