@@ -106,8 +106,9 @@
                 <TabItem.Header>
                     <TextBlock Text="Output" />
                 </TabItem.Header>
-
-                <TextBlock Background="White" Foreground="Black" ap:TextBlockAP.BindableInlines="{Binding Output}"  Padding="21 3 3 3"  />
+                <ScrollViewer>
+                    <TextBlock Background="White" Foreground="Black" ap:TextBlockAP.BindableInlines="{Binding Output}"  Padding="21 3 3 3"  />
+                </ScrollViewer>
             </TabItem>
 
         </TabControl>

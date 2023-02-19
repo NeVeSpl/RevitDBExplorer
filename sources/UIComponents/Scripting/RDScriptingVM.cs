@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Documents;
+using System.Windows.Media;
+using Microsoft.CodeAnalysis;
 using RevitDBExplorer.Domain;
 using RevitDBExplorer.Domain.RevitDatabaseScripting;
 using RevitDBExplorer.WPF;
@@ -126,16 +129,38 @@ namespace RevitDBExplorer.UIComponents.Scripting
 
             var result = await RevitDatabaseScriptingService.Compile(code, lambdaToBe);
 
-            if (result.Query != null)
+            var originalConsoleOut = Console.Out;
+            var writer = new StringWriter();
+            try
             {
-                await scriptRunner.TryExecuteQuery(new SourceOfObjects(result.Query) { Title = "User query" });
+                Console.SetOut(writer);
+
+                if (result.Query != null)
+                {
+                    await scriptRunner.TryExecuteQuery(new SourceOfObjects(result.Query) { Title = "User query" });
+                }
             }
+            finally
+            {
+                Console.SetOut(originalConsoleOut);
+            }
+
             var output = new List<Inline>();
             foreach (var diagnostic in result.Diagnostics)
             {
-                output.Add(new Run() { Text = diagnostic } );
+                output.Add(new Run() { Text = diagnostic, Foreground = Brushes.Red } );
+                output.Add(new LineBreak());
                 SelectedTabIndex = 1;
             }
+
+            var consoleLines = writer.ToString().Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
+
+            foreach (var line in consoleLines)
+            {
+                output.Add(new Run() { Text = line });
+                output.Add(new LineBreak());
+            }
+
             Output = output;
         }
     }
