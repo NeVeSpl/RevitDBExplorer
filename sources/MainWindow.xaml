@@ -69,13 +69,17 @@
                 <UniformGrid.Resources>
                     <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
                         <Setter Property="Background" Value="Transparent"/>
-                        <Setter Property="Padding" Value="3 3 3 0"/>
+                        <Setter Property="Padding" Value="3 3 3 3"/>
                         <Setter Property="Margin" Value="2 0 2 0"/>
                         <Setter Property="BorderBrush" Value="Transparent"/>
                         <Setter Property="ToolTipService.InitialShowDelay" Value="100"/>
+                        <Style.Triggers>                            
+                            <DataTrigger Binding="{Binding IsWiderThan800px}" Value="True">
+                                <Setter Property="Padding" Value="3 3 3 0"/>
+                            </DataTrigger>
+                        </Style.Triggers>                        
                     </Style>
-                    <Style TargetType="TextBlock" >
-                       
+                    <Style TargetType="TextBlock" >                       
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding IsWiderThan800px}" Value="False">
                                 <Setter Property="Visibility" Value="Collapsed"/>

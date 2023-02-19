@@ -51,7 +51,7 @@ namespace RevitDBExplorer.UIComponents.Tree.Items
         {
             get; set;
         }
-        public string GroupedByToolTip
+        public virtual string GroupedByToolTip
         {
             get 
             { 
@@ -231,10 +231,25 @@ namespace RevitDBExplorer.UIComponents.Tree.Items
     internal class CategoryGroupTreeItem : GroupTreeItem
     {
         private readonly ElementId categoryId;
+        private readonly string tooltip = "Category";
+
+        public override string GroupedByToolTip
+        {
+            get
+            {
+                return tooltip;
+            }
+        }
+
+
 
         public CategoryGroupTreeItem(string name, IEnumerable<SnoopableObject> items, Predicate<object> itemFilter, GroupTreeItem parent, ElementId categoryId) : base(name, items, itemFilter, GroupBy.Category, parent)
         {
             this.categoryId = categoryId;
+            if (categoryId != null)
+            {
+                tooltip = $"Category: {Enum.GetName(typeof(BuiltInCategory), categoryId?.Value())}({categoryId?.Value()})";
+            }
         }
     }
 

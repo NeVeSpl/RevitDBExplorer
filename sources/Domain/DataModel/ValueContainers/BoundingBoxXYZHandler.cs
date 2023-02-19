@@ -21,7 +21,9 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers
 
         public string GetToolTip(SnoopableContext context, BoundingBoxXYZ value)
         {
-            var units = context.Document.GetUnits();
+            var units = context.Document?.GetUnits();
+            if (units == null) return null;
+
             return 
 @$"{ToLabel(context, value)}
 Min({value.Min.X.ToLengthDisplayString(units)}, {value.Min.Y.ToLengthDisplayString(units)}, {value.Min.Z.ToLengthDisplayString(units)}), Max({value.Max.X.ToLengthDisplayString(units)}, {value.Max.Y.ToLengthDisplayString(units)}, {value.Max.Z.ToLengthDisplayString(units)})

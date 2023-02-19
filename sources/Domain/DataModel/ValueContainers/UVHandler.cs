@@ -14,8 +14,10 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers
             return $"({uv.U}, {uv.V})";
         }
         public string GetToolTip(SnoopableContext context, UV value)
-        {
-            var units = context.Document.GetUnits();
+        {            
+            var units = context.Document?.GetUnits();
+            if (units == null) return null;
+
             return $"{ToLabel(context, value)}\n({value.U.ToLengthDisplayString(units)}, {value.V.ToLengthDisplayString(units)})";
         }
     }
