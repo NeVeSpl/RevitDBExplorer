@@ -189,8 +189,8 @@ namespace RevitDBExplorer.Tests.RDQ
 
 
         [RevitTestMethod]
-        [DataRow("active")]
-        [DataRow("active view")]
+        [DataRow("visible")]
+        [DataRow("visible in view")]
         public void CanParseVisibleInViewCommand(UIApplication uia, string cmd)
         {
             var result = CommandParser.Parse(cmd).First();

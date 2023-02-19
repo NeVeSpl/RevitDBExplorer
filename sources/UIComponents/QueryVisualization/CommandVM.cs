@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using RevitDBExplorer.Domain.RevitDatabaseQuery;
+using RevitDBExplorer.Domain.RevitDatabaseQuery.FuzzySearch;
 using RevitDBExplorer.Domain.RevitDatabaseQuery.Parser;
 using RevitDBExplorer.WPF;
 using RDQCommand = RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.ICommand;
@@ -21,7 +22,7 @@ namespace RevitDBExplorer.UIComponents.QueryVisualization
         public string Description { get; init; }
         public string APIDescription { get; init; }
         public CmdType Type { get; init; }
-        public IEnumerable<ICommandArgument> Arguments => command.MatchedArguments;
+        public IEnumerable<IFuzzySearchResult> Arguments => command.MatchedArguments;
         public bool ToRemove
         {
             get
@@ -40,7 +41,7 @@ namespace RevitDBExplorer.UIComponents.QueryVisualization
         public CommandVM(RDQCommand command)
         {
             this.command = command;
-            this.argsHash = String.Join(", ", command.MatchedArguments.Select(x => x.Name));
+            this.argsHash = String.Join(", ", command.Arguments.Select(x => x.Name));
 
             if (command is ICommandForVisualization cmdforVisualization) 
             {

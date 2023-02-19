@@ -10,25 +10,25 @@ namespace RevitDBExplorer.Tests
     public class QueryParserTests
     {
         [RevitTestMethod]
-        [DataRow("active")]
-        [DataRow("active ,")]
-        [DataRow("active; ")]
-        [DataRow(" , active , ")]
+        [DataRow("visible")]
+        [DataRow("visible ,")]
+        [DataRow("visible; ")]
+        [DataRow(" , visible , ")]
         public void CanParseSingleCommand(UIApplication uia, string query)
         {           
             var result = QueryParser.Parse(query).ToList();
-            Assert.AreEqual("active", result[0].Text);
+            Assert.AreEqual("visible", result[0].Text);
             Assert.AreEqual(1, result.Count());
         }
 
         [RevitTestMethod]
-        [DataRow("active, mark = 1")]
-        [DataRow("active, mark = 1 ,")] 
-        [DataRow(",active, mark = 1 ,")]
+        [DataRow("visible, mark = 1")]
+        [DataRow("visible, mark = 1 ,")] 
+        [DataRow(",visible, mark = 1 ,")]
         public void CanParseTwoCommands(UIApplication uia, string query)
         {
             var result = QueryParser.Parse(query).ToList();
-            Assert.AreEqual("active", result[0].Text);
+            Assert.AreEqual("visible", result[0].Text);
             Assert.AreEqual("mark = 1", result[1].Text);
             Assert.AreEqual(2, result.Count());
         }

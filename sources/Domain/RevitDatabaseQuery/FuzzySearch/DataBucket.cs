@@ -155,13 +155,11 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.FuzzySearch
             }
         }
 
-        private class FuzzySearchResult<T2> : ICommandArgument, IFuzzySearchResult where T2 : ICommandArgument
+        private class FuzzySearchResult<T2> : IFuzzySearchResult where T2 : ICommandArgument
         {
             private readonly T2 argument;
             public ICommandArgument Argument => argument;
-            public double LevensteinScore { get; init; }
-            public string Name => argument.Name;
-            public string Label => argument.Label;
+            public double LevensteinScore { get; init; }         
          
 
 
@@ -173,7 +171,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.FuzzySearch
         }
     }
 
-    internal interface IFuzzySearchResult : ICommandArgument
+    internal interface IFuzzySearchResult
     {
         ICommandArgument Argument { get; }
         public double LevensteinScore { get;  }

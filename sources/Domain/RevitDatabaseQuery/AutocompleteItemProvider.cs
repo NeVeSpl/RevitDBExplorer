@@ -46,12 +46,12 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
                     var splittedByClassifier = lastCmd.Split(CommandParser.Separators, 2, System.StringSplitOptions.None);
                     if (splittedByClassifier.Length == 2)
                     {
-                        var definition = CommandParser.GetCommandDefinitionForClassifier(splittedByClassifier[0].Trim().ToLowerInvariant());
+                        var definition = CommandParser.GetCommandDefinitionForClassifier(splittedByClassifier[0]);
                         if (definition is IOfferArgumentAutocompletion argumentAutocompletion)
                         {
                             var prefix = splittedByClassifier[1].Trim().ToLowerInvariant();
                             //
-                            prefixLength = splittedByClassifier[1].TrimStart().Length + textOnTheLeftSideOfCaret.Reverse().TakeWhile(c => char.IsWhiteSpace(c)).Count();
+                            prefixLength = splittedByClassifier[1].TrimStart().Length;
                             //
                             items.AddRange(argumentAutocompletion.GetAutocompleteItems(prefix));
                         }

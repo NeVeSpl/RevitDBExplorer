@@ -148,7 +148,12 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
             }
         }
         public string Description => "A filter used to match elements by one or more parameter filter rules. A slow filter.";
-        public string APIDescription => "new ElementParameterFilter()";
+        public string APIDescription => @"new ElementParameterFilter() 
+
+Operators that can be used : !=, <>, >=, <=, =, <, >
+?? - HasNoValue, parameter exists but has no value
+!! - HasValue, paramater exists and has value
+?! - Exists, element has given parameter, with or without value";
         public CmdType Type => CmdType.Parameter;
 
 

@@ -11,7 +11,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
     {
         public static List<ICommand> Parse(string query)
         {            
-            var commandStrings = SplitIntoCmdStrings(query);
+            var commandStrings = SplitIntoCmdStrings(query).Select(x => x.Trim());
             var commands = commandStrings.SelectMany(x => CommandParser.Parse(x)).ToList();          
 
             if (!DoesContainQuickFilter(commands))
@@ -29,7 +29,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
             IList<string> splitted = query.Split(Separators, StringSplitOptions.RemoveEmptyEntries).ToArray();
             var commandsText = ReconcilePotentialDoubleNumbers(splitted)
                                       .Where(x => !string.IsNullOrWhiteSpace(x))
-                                      .Select(x => x.Trim())
+                                      
                                       .ToArray();
             return commandsText;
         }

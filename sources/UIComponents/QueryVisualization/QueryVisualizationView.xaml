@@ -30,7 +30,7 @@
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <Grid x:Name="cQueryVisualizationGrid" Opacity="1">
-                        <Border Margin="0 3 5 2" Padding="7 3" BorderThickness="0.5" BorderBrush="{DynamicResource Query.BorderBrush}"  CornerRadius="10"  ToolTipService.ShowDuration="50000">
+                        <Border Margin="0 3 5 2" Padding="7 3" BorderThickness="0.5" BorderBrush="{DynamicResource Query.BorderBrush}"  CornerRadius="10"  ToolTipService.ShowDuration="50000" Grid.IsSharedSizeScope="True">
                             <TextBlock Text="{Binding Label}"  TextTrimming="CharacterEllipsis"/>
 
                             <Border.ToolTip>
@@ -38,12 +38,16 @@
                                     <Grid.RowDefinitions>
                                         <RowDefinition/>
                                         <RowDefinition/>
+                                        <RowDefinition/>
                                         <RowDefinition Height="auto"/>
                                     </Grid.RowDefinitions>
                                     <TextBlock Text="{Binding Description}" FontWeight="Bold" />
                                     <TextBlock Grid.Row="1" Text="{Binding APIDescription}" Margin="0 5 0 5" />
-                                    
-                                    <ItemsControl Grid.Row="2" Margin="0 7 0 0" ItemsSource="{Binding Arguments}" Grid.IsSharedSizeScope="True" >
+
+
+                    
+
+                                    <ItemsControl Grid.Row="3" Margin="0 7 0 0" ItemsSource="{Binding Arguments}" Grid.IsSharedSizeScope="True" >
                                         <ItemsControl.ItemsPanel>
                                             <ItemsPanelTemplate>
                                                 <StackPanel Orientation="Vertical">
@@ -58,12 +62,16 @@
                                                     <Grid.ColumnDefinitions>
                                                         <ColumnDefinition SharedSizeGroup="FirstColumn" />
                                                         <ColumnDefinition SharedSizeGroup="SecondColumn"/>
+                                                        <ColumnDefinition SharedSizeGroup="ThirdColumn" />
+                                                        <ColumnDefinition SharedSizeGroup="FourthColumn"/>
                                                         <ColumnDefinition/>
                                                     </Grid.ColumnDefinitions>
 
                                                     <TextBlock Grid.Column="0" Text="{Binding LevensteinScore, StringFormat=P0}" Margin="0 0 5 0"/>
-                                                    <TextBlock Grid.Column="1" Text="{Binding Name}" Margin="5 0 5 0"/>
-                                                    <TextBlock Grid.Column="2" Text="{Binding Label}" Margin="5 0 0 0"/>
+                                                    <TextBlock Grid.Column="1" Text="{Binding Argument.Name}" Margin="5 0 5 0"/>
+                                                    <TextBlock Grid.Column="2" Text="{Binding Argument.Label}" Margin="5 0 5 0"/>
+                                                    <TextBlock Grid.Column="3" Text="{Binding Argument.StorageType}" Margin="5 0 5 0"/>
+                                                    <TextBlock Grid.Column="4" Text="{Binding Argument.DataType.TypeId}" Margin="5 0 0 0"/>
                                                 </Grid>
 
                                             </DataTemplate>
