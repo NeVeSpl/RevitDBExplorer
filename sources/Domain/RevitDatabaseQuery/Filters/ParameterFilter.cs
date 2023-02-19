@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Autodesk.Revit.DB;
 using RevitDBExplorer.Domain.RevitDatabaseQuery.Parser;
@@ -19,31 +20,38 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Filters
         {
             this.parameterMatch = parameterMatch;
             this.rule = rule;
-            this.@operator = @operator;       
+            this.@operator = @operator;
+            var argument = @operator.Evaluate(parameterMatch.DataType);
 
-            var argForSyntax = $"\"{@operator.ArgumentAsString.Trim('*', '%')}\"";
+            var argForSyntax = $"\"{argument.String.Trim('*', '%')}\"";
 
             if (parameterMatch.StorageType == StorageType.Integer )
             {
-                argForSyntax = @operator.ArgumentAsInt.ToString();
+                argForSyntax = argument.Int.ToString();
             }
-            if (parameterMatch.StorageType == StorageType.ElementId && @operator.IsArgumentInt)
+            if (parameterMatch.StorageType == StorageType.ElementId && argument.IsArgumentInt)
             {
-                argForSyntax = $"new ElementId({@operator.ArgumentAsInt})";
+                argForSyntax = $"new ElementId({argument.Int})";
             }
             if (parameterMatch.StorageType == StorageType.Double)
             {
-                argForSyntax = @operator.ArgumentAsDouble.ToString();
+                argForSyntax = argument.Double.ToString(CultureInfo.InvariantCulture);
             }
 
             string parameterName = $"new ElementId({(parameterMatch.IsBuiltInParameter ? parameterMatch.Name : parameterMatch.Value)})";
             string ruleName = "";
             string secondArg = $", {argForSyntax}";
+            string thirdArg = $"";
 
             if (rule is FilterNumericValueRule numericValueRule)
             {
                 var evaluator = numericValueRule.GetEvaluator();
                 ruleName = evaluator.GetType().Name.Substring("FilterNumeric".Length);
+            }
+            if (rule is FilterDoubleRule)
+            {
+                double epsilon = 1e-6;
+                thirdArg = $", {epsilon}";
             }
             if (rule is FilterStringRule stringRule)
             {
@@ -61,7 +69,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Filters
                 secondArg = "";
             }
 
-            FilterSyntax = $"new ElementParameterFilter(ParameterFilterRuleFactory.Create{ruleName}Rule({parameterName}{secondArg}))";
+            FilterSyntax = $"new ElementParameterFilter(ParameterFilterRuleFactory.Create{ruleName}Rule({parameterName}{secondArg}{thirdArg}))";
         }
 
 
@@ -104,12 +112,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Filters
         {
             var parameter = parameterMatch.Value;
             var storageType = parameterMatch.StorageType;
-            var argAsInt = @operator.ArgumentAsInt;
-            var argAsDouble = @operator.ArgumentAsDouble;
-            var argAsString = @operator.ArgumentAsString;
-            bool startsWithWildcard = argAsString.StartsWith("*") || argAsString.StartsWith("%");
-            bool endsWithWildcard = argAsString.EndsWith("*") || argAsString.EndsWith("%");
-            var serchTerm = argAsString.Trim('*', '%');          
+            var argument = @operator.Evaluate(parameterMatch.DataType);  
 
             FilterRule rule = null;
 
@@ -117,18 +120,24 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Filters
             {
                 rule = @operator.Type switch
                 {
-                    OperatorType.Equals => ParameterFilterRuleFactory.CreateEqualsRule(parameter, argAsInt),
-                    OperatorType.NotEquals => ParameterFilterRuleFactory.CreateNotEqualsRule(parameter, argAsInt),
-                    OperatorType.Greater => ParameterFilterRuleFactory.CreateGreaterRule(parameter, argAsInt),
-                    OperatorType.GreaterOrEqual => ParameterFilterRuleFactory.CreateGreaterOrEqualRule(parameter, argAsInt),
-                    OperatorType.Less => ParameterFilterRuleFactory.CreateLessRule(parameter, argAsInt),
-                    OperatorType.LessOrEqual => ParameterFilterRuleFactory.CreateLessOrEqualRule(parameter, argAsInt),
+                    OperatorType.Equals => ParameterFilterRuleFactory.CreateEqualsRule(parameter, argument.Int),
+                    OperatorType.NotEquals => ParameterFilterRuleFactory.CreateNotEqualsRule(parameter, argument.Int),
+                    OperatorType.Greater => ParameterFilterRuleFactory.CreateGreaterRule(parameter, argument.Int),
+                    OperatorType.GreaterOrEqual => ParameterFilterRuleFactory.CreateGreaterOrEqualRule(parameter, argument.Int),
+                    OperatorType.Less => ParameterFilterRuleFactory.CreateLessRule(parameter, argument.Int),
+                    OperatorType.LessOrEqual => ParameterFilterRuleFactory.CreateLessOrEqualRule(parameter, argument.Int),
                     _ => null
                 };
             }
 
-            if (storageType == StorageType.String || storageType == StorageType.None|| (storageType == (StorageType.ElementId) && !@operator.IsArgumentInt) || (storageType == (StorageType.Double) && !@operator.IsArgumentDouble))
+
+            if (storageType == StorageType.String || storageType == StorageType.None|| (storageType == (StorageType.ElementId) && !argument.IsArgumentInt))
             {
+                var argAsString = argument.String;
+                bool startsWithWildcard = argAsString.StartsWith("*") || argAsString.StartsWith("%");
+                bool endsWithWildcard = argAsString.EndsWith("*") || argAsString.EndsWith("%");
+                var serchTerm = argAsString.Trim('*', '%');
+
                 rule = @operator.Type switch
                 {
 #if R2022e
@@ -179,36 +188,37 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Filters
 
             }
 
-            double epsilon = 1e-6;
-            if (storageType == (StorageType.Double) && @operator.IsArgumentDouble)
+            
+            if (storageType == (StorageType.Double))
             {
+                double epsilon = 1e-6;
                 rule = @operator.Type switch
                 {
-                    OperatorType.Equals => ParameterFilterRuleFactory.CreateEqualsRule(parameter, argAsDouble, epsilon),
-                    OperatorType.NotEquals => ParameterFilterRuleFactory.CreateNotEqualsRule(parameter, argAsDouble, epsilon),
-                    OperatorType.Greater => ParameterFilterRuleFactory.CreateGreaterRule(parameter, argAsDouble, epsilon),
-                    OperatorType.GreaterOrEqual => ParameterFilterRuleFactory.CreateGreaterOrEqualRule(parameter, argAsDouble, epsilon),
-                    OperatorType.Less => ParameterFilterRuleFactory.CreateLessRule(parameter, argAsDouble, epsilon),
-                    OperatorType.LessOrEqual => ParameterFilterRuleFactory.CreateLessOrEqualRule(parameter, argAsDouble, epsilon),
-                    _ => null
-                };
-
-            }
-
-            if (storageType == (StorageType.ElementId) && @operator.IsArgumentInt)
-            {
-                var argAsId = ElementIdFactory.Create(@operator.ArgumentAsInt);
-                rule = @operator.Type switch
-                {
-                    OperatorType.Equals => ParameterFilterRuleFactory.CreateEqualsRule(parameter, argAsId),
-                    OperatorType.NotEquals => ParameterFilterRuleFactory.CreateNotEqualsRule(parameter, argAsId),
-                    OperatorType.Greater => ParameterFilterRuleFactory.CreateGreaterRule(parameter, argAsId),
-                    OperatorType.GreaterOrEqual => ParameterFilterRuleFactory.CreateGreaterOrEqualRule(parameter, argAsId),
-                    OperatorType.Less => ParameterFilterRuleFactory.CreateLessRule(parameter, argAsId),
-                    OperatorType.LessOrEqual => ParameterFilterRuleFactory.CreateLessOrEqualRule(parameter, argAsId),
+                    OperatorType.Equals => ParameterFilterRuleFactory.CreateEqualsRule(parameter, argument.Double, epsilon),
+                    OperatorType.NotEquals => ParameterFilterRuleFactory.CreateNotEqualsRule(parameter, argument.Double, epsilon),
+                    OperatorType.Greater => ParameterFilterRuleFactory.CreateGreaterRule(parameter, argument.Double, epsilon),
+                    OperatorType.GreaterOrEqual => ParameterFilterRuleFactory.CreateGreaterOrEqualRule(parameter, argument.Double, epsilon),
+                    OperatorType.Less => ParameterFilterRuleFactory.CreateLessRule(parameter, argument.Double, epsilon),
+                    OperatorType.LessOrEqual => ParameterFilterRuleFactory.CreateLessOrEqualRule(parameter, argument.Double, epsilon),
                     _ => null
                 };
             }
+
+
+            if (storageType == (StorageType.ElementId) && argument.IsArgumentInt)
+            {              
+                rule = @operator.Type switch
+                {
+                    OperatorType.Equals => ParameterFilterRuleFactory.CreateEqualsRule(parameter, argument.ElementId),
+                    OperatorType.NotEquals => ParameterFilterRuleFactory.CreateNotEqualsRule(parameter, argument.ElementId),
+                    OperatorType.Greater => ParameterFilterRuleFactory.CreateGreaterRule(parameter, argument.ElementId),
+                    OperatorType.GreaterOrEqual => ParameterFilterRuleFactory.CreateGreaterOrEqualRule(parameter, argument.ElementId),
+                    OperatorType.Less => ParameterFilterRuleFactory.CreateLessRule(parameter, argument.ElementId),
+                    OperatorType.LessOrEqual => ParameterFilterRuleFactory.CreateLessOrEqualRule(parameter, argument.ElementId),
+                    _ => null
+                };
+            }
+
 
             rule = @operator.Type switch
             {
@@ -226,7 +236,5 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Filters
                 yield return (ParameterFilterRuleFactory.CreateHasNoValueParameterRule(parameter), parameterMatch, @operator);              
             }
         }
-
-       
     }
 }

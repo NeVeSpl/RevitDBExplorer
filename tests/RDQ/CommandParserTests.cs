@@ -104,7 +104,7 @@ namespace RevitDBExplorer.Tests.RDQ
 
             var op = result.Operator;
             Assert.IsNotNull(op);
-            Assert.AreEqual(op.ArgumentAsString, "%W1%");            
+            Assert.AreEqual(op.Evaluate().String, "%W1%");            
         }
 
         [RevitTestMethod]
@@ -131,7 +131,7 @@ namespace RevitDBExplorer.Tests.RDQ
 
             var op = result.Operator;
             Assert.IsNotNull(op);
-            Assert.AreEqual(op.ArgumentAsInt, 7);
+            Assert.AreEqual(op.Evaluate().Int, 7);
         }
 
         [RevitTestMethod]

@@ -139,7 +139,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
                         name = firstArg.Label;
                     }
 
-                    var finalName = $"{name}{count} {Operator.ToString(firstArg.StorageType)}";
+                    var finalName = $"{name}{count} {Operator.ToLabel(firstArg.StorageType, firstArg.DataType)}";
 
                     return finalName;
                 }

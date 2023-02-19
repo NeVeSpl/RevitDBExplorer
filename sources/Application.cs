@@ -15,7 +15,7 @@ namespace RevitDBExplorer
     public class Application : IExternalApplication
     {
         public static IntPtr RevitWindowHandle;
-
+        public static UIApplication UIApplication;
 
         public Result OnStartup(UIControlledApplication application)
         {

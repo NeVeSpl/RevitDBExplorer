@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Reactive;
 using Autodesk.Revit.DB;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
@@ -51,29 +52,18 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser
         public static OperatorWithArgument Parse(string argument)
         {
             var @operator = GetOperator(argument);
+            var opArgument = "";
 
             if (@operator.Type != OperatorType.None)
             {
-                argument = argument.Substring(argument.IndexOf(@operator.Symbol) + @operator.Symbol.Length);
+                opArgument = argument.Substring(argument.IndexOf(@operator.Symbol) + @operator.Symbol.Length);
             }
             else
             {
                 @operator = operators.FirstOrDefault(x => x.Type == OperatorType.Exists);
             }
 
-            bool isInt = int.TryParse(argument, out int intArg);
-            bool isDouble = double.TryParse(argument, out double doubleArg);
-
-            var op = new OperatorWithArgument(@operator)
-            {             
-                ArgumentAsString = argument.Trim(),
-                ArgumentAsDouble = doubleArg,
-                ArgumentAsInt = intArg,  
-                IsArgumentInt = isInt,
-                IsArgumentDouble = isDouble,
-            };
-
-            return op;
+            return new OperatorWithArgument(@operator, opArgument);
         }
         public static string GetLeftSideOfOperator(string text)
         {
@@ -103,49 +93,90 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser
         }
     }
 
+    internal class ArgumentValue
+    {
+        public int Int { get; init; }
+        public string String { get; init; }
+        public double Double { get; init; }
+        public ElementId ElementId { get; init; }
 
-    internal class OperatorWithArgument 
-    {        
-        private readonly Operator @operator;
-
-        public OperatorType Type => @operator.Type;
-        public string Symbol => @operator.Symbol;
-        public string ArgumentAsString { get; init; } = "";
-        public double ArgumentAsDouble { get; init; } = double.NaN;
-        public int ArgumentAsInt { get; init; } = 0;
         public bool IsArgumentInt { get; init; }
-        public bool IsArgumentDouble { get; init; }
+     
 
 
-        public OperatorWithArgument(Operator @operator = null)
+        public ArgumentValue(string s, int i, double d)
         {
-            this.@operator = @operator ?? Operators.None;
+            Int = i;
+            String = s;
+            Double = d;
+            ElementId = ElementIdFactory.Create(i);
         }
 
 
-        public string ToString(StorageType storageType)
+        public static ArgumentValue Create(string text, ForgeTypeId dataTypeSpecId)
+        {
+            bool isInt = int.TryParse(text, out int intArg);
+            bool isDouble = double.TryParse(text, out double doubleArg);
+
+#if R2022b
+            if ((dataTypeSpecId != null) && (SpecUtils.IsValidDataType(dataTypeSpecId) && UnitUtils.IsMeasurableSpec(dataTypeSpecId)))
+            {
+                var units = Application.UIApplication?.ActiveUIDocument?.Document?.GetUnits();
+                if (units != null)
+                {
+                    bool isRevitDouble = UnitFormatUtils.TryParse(units, dataTypeSpecId, text, out doubleArg);
+                }
+            }
+#endif
+
+            return new ArgumentValue(text, intArg, doubleArg) { IsArgumentInt = isInt };
+        }
+    }
+    internal class OperatorWithArgument 
+    {        
+        private readonly Operator @operator;
+        private readonly string opArgument;
+
+        public OperatorType Type => @operator.Type;
+
+
+        public OperatorWithArgument(Operator @operator = null, string opArgument = "")
+        {
+            this.@operator = @operator ?? Operators.None;
+            this.opArgument = opArgument.Trim();
+        }
+
+
+        public ArgumentValue Evaluate(ForgeTypeId dataTypeSpecId = null)
+        {
+            return ArgumentValue.Create(opArgument, dataTypeSpecId);
+        }
+
+        public string ToLabel(StorageType storageType, ForgeTypeId dataTypeSpecId)
         {
             if ((Type == OperatorType.HasValue) || (Type == OperatorType.HasNoValue) || (Type == OperatorType.Exists))
             {
-                return Symbol;
+                return @operator.Symbol;
             }
 
-            string arg = $"\"{ArgumentAsString}\"";
+            var evaluated = Evaluate(dataTypeSpecId);
+
+            string arg = $"\"{opArgument}\"";
 
             if (storageType == StorageType.Integer)
             {
-                arg = ArgumentAsInt.ToString();
+                arg = evaluated.Int.ToString();
             }
-            if (storageType == StorageType.ElementId && IsArgumentInt)
+            if (storageType == StorageType.ElementId && evaluated.IsArgumentInt)
             {
-                arg = $"new ElementId({ArgumentAsInt})";
+                arg = $"new ElementId({evaluated.Int})";
             }
             if (storageType == StorageType.Double)
-            {
-                arg = ArgumentAsDouble.ToString();
+            {                
+                arg = evaluated.Double.ToString();
             }
                   
-            return $"{Symbol} {arg}";
+            return $"{@operator.Symbol} {arg}";
         }
     }
 }
