@@ -55,8 +55,10 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
                 var parameter = first?.get_Parameter(BuiltInParameter);
                 if (parameter != null)
                 {
+#if R2022b
                     DataType = parameter.Definition.GetDataType();
                     dataTypeCache[Value] = DataType;
+#endif
                 }
             }
             else
@@ -65,9 +67,10 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
                 if (parameterElement != null)
                 {
                     var definition = parameterElement.GetDefinition();
+#if R2022b
                     DataType = definition.GetDataType();
                     dataTypeCache[Value] = DataType;
-
+#endif
                     var parameter = first?.get_Parameter(definition);
                     if (parameter != null)
                     {
