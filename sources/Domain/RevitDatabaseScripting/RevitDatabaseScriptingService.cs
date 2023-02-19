@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -9,6 +10,8 @@ using Autodesk.Revit.UI;
 using Microsoft.CodeAnalysis.CSharp.Scripting;
 using Microsoft.CodeAnalysis.Scripting;
 using RevitDBExplorer.Domain.DataModel;
+using static RevitDBExplorer.Domain.RevitDatabaseQuery.RevitDatabaseQueryService;
+using Diagnostic = Microsoft.CodeAnalysis.Diagnostic;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
@@ -43,47 +46,62 @@ namespace RevitDBExplorer.Domain.RevitDatabaseScripting
 
         public static async Task<ResultOfCompilation> Compile(string code, LambdaToBe lambdaToBe)
         {
+            var errors = new List<string>();
+
+            if (lambdaToBe == null)
+            {
+                errors.Add("Could not find any suitable method to run.");
+                return new ResultOfCompilation(null, null, errors);
+            }
+
             var options = ScriptOptions.Default.AddReferences(RevitDatabaseScriptingService.AssemblyReferences).AddImports(RevitDatabaseScriptingService.Imports);  
             var script = CSharpScript.Create<object>(code, options);
 
             var compilation = script.GetCompilation();
-            var diagnostics = script.Compile();           
+            var diagnostics = script.Compile();       
 
             if (diagnostics.Any(x => x.Severity == Microsoft.CodeAnalysis.DiagnosticSeverity.Error))
             {
-                return new ResultOfCompilation(null, null);
-            }
+                foreach (var diagnostic in diagnostics.Where(x => x.Severity == Microsoft.CodeAnalysis.DiagnosticSeverity.Error))
+                {
+                    errors.Add(diagnostic.ToString());
+                }
 
-            
+                return new ResultOfCompilation(null, null, errors);
+            }           
 
             Query query = null;
 
             var (invocation, isResolved) = PrepereInvocation(lambdaToBe);
 
-            if (isResolved)
+            if (isResolved == false)
             {
-                if (lambdaToBe.IsReturnTypeEnumerable)
+                errors.Add("Could not resolve method arguments");
+                return new ResultOfCompilation(null, null, errors);
+            }
+
+            if (lambdaToBe.IsReturnTypeEnumerable)
+            {
+                // query, returns collection
+                var lambda = await script.ContinueWith<Func<UIApplication, IEnumerable<object>>>($"(UIApplication uia) => {lambdaToBe.Name}({invocation})").RunAsync();
+                query = Query.Create(lambda.ReturnValue);
+            }
+            else
+            {
+                if (!lambdaToBe.IsReturnTypeVoid)
                 {
-                    // query, returns collection
-                    var lambda = await script.ContinueWith<Func<UIApplication, IEnumerable<object>>>($"(UIApplication uia) => {lambdaToBe.Name}({invocation})").RunAsync();
+                    // query, retruns single object
+                    var lambda = await script.ContinueWith<Func<UIApplication, object>>($"(UIApplication uia) => {lambdaToBe.Name}({invocation})").RunAsync();
                     query = Query.Create(lambda.ReturnValue);
                 }
                 else
                 {
-                    if (!lambdaToBe.IsReturnTypeVoid)
-                    {
-                        // query, retruns single object
-                        var lambda = await script.ContinueWith<Func<UIApplication, object>>($"(UIApplication uia) => {lambdaToBe.Name}({invocation})").RunAsync();
-                        query = Query.Create(lambda.ReturnValue);
-                    }
-                    else
-                    {
-                        // command
-                    }
+                    // command
+                    errors.Add("Command are not supported (yet)");
                 }
             }
 
-            return new ResultOfCompilation(query, null);
+            return new ResultOfCompilation(query, null, errors);
         }
 
         public static (string invocation, bool isResolved) PrepereInvocation(LambdaToBe lambdaToBe)
@@ -165,12 +183,14 @@ namespace RevitDBExplorer.Domain.RevitDatabaseScripting
     {        
         public IAmSourceOfEverything Query { get; }
         public ICommand Command { get; }
+        public IEnumerable<string> Diagnostics { get; }
+     
 
-
-        public ResultOfCompilation(IAmSourceOfEverything query, ICommand command)
+        public ResultOfCompilation(IAmSourceOfEverything query, ICommand command, IEnumerable<string> diagnostics)
         {
             Query = query;
             Command = command;
+            Diagnostics = diagnostics;
         }
     }
 }

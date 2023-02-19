@@ -290,7 +290,7 @@ namespace RevitDBExplorer
             QueryVisualization.Update(rdqResult.Commands).Forget();
             Tree.PopulateTreeView(rdqResult.SourceOfObjects);            
         }    
-        async Task IScriptRunner.TryExecuteScript(SourceOfObjects source)
+        async Task IScriptRunner.TryExecuteQuery(SourceOfObjects source)
         {
             Tree.ClearItems();
             List.ClearItems();

@@ -551,6 +551,7 @@
     </Compile>
     <Compile Include="UIComponents\Tree\TreeVM.cs" />
     <Compile Include="WPF\AttachedProperties\DataGridAP.cs" />
+    <Compile Include="WPF\AttachedProperties\TextBlockAP.cs" />
     <Compile Include="WPF\BaseCommand.cs" />
     <Compile Include="WPF\BindingProxy.cs" />
     <Compile Include="WPF\Controls\TextBoxWithPlaceholder.xaml.cs">

@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Documents;
 using RevitDBExplorer.Domain;
 using RevitDBExplorer.Domain.RevitDatabaseScripting;
 using RevitDBExplorer.WPF;
@@ -12,20 +15,21 @@ namespace RevitDBExplorer.UIComponents.Scripting
     internal class RDScriptingVM : BaseViewModel
     {
         private IScriptRunner scriptRunner;
-        private bool isOpen = false;
+        private bool isPanelOpen = false;
         private GridLength height;
         private IRoslynCodeEditor roslynCodeEditor;
-
+        private IEnumerable<Inline> output;
+        private int selectedTabIndex;
 
         public bool IsOpen
         {
             get
             {
-                return isOpen;
+                return isPanelOpen;
             }
             set
             {
-                isOpen = value;
+                isPanelOpen = value;
                 OnPropertyChanged();
             }
         }
@@ -57,6 +61,32 @@ namespace RevitDBExplorer.UIComponents.Scripting
                 OnPropertyChanged();
             }
         }
+        public IEnumerable<Inline> Output
+        {
+            get
+            {
+                return output;
+            }
+            set
+            {
+                output = value;
+                OnPropertyChanged();
+            }
+        }
+        public int SelectedTabIndex
+        {
+            get
+            {
+                return selectedTabIndex;
+            }
+            set
+            {
+                selectedTabIndex = value;
+                OnPropertyChanged();
+            }
+        }
+
+
         public RDScriptingVM(IScriptRunner scriptRunner)
         {
             CloseCommand = new RelayCommand(Close);
@@ -76,17 +106,14 @@ namespace RevitDBExplorer.UIComponents.Scripting
                 appArg = ", UIApplication uia";
             }
 
-
             var text = 
 @$"IEnumerable<object> Select(Document document{appArg})
 {{
     return {databaseQueryToolTip};    
 }}";
+
             RoslynCodeEditor.SetText(text);
         }
-
-
-
         private void Close(object parameter)
         {
             IsOpen = false;
@@ -101,13 +128,20 @@ namespace RevitDBExplorer.UIComponents.Scripting
 
             if (result.Query != null)
             {
-                await scriptRunner.TryExecuteScript(new SourceOfObjects(result.Query) { Title = "User query" });
+                await scriptRunner.TryExecuteQuery(new SourceOfObjects(result.Query) { Title = "User query" });
             }
+            var output = new List<Inline>();
+            foreach (var diagnostic in result.Diagnostics)
+            {
+                output.Add(new Run() { Text = diagnostic } );
+                SelectedTabIndex = 1;
+            }
+            Output = output;
         }
     }
 
     internal interface IScriptRunner
     {
-        Task TryExecuteScript(SourceOfObjects source);
+        Task TryExecuteQuery(SourceOfObjects source);
     }
 }

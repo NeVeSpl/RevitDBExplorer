@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:RevitDBExplorer.UIComponents.Scripting"
              xmlns:editor="clr-namespace:RoslynPad.Editor;assembly=RoslynPad.Editor.Windows"
+             xmlns:ap="clr-namespace:RevitDBExplorer.WPF.AttachedProperties" 
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid  >
@@ -26,9 +27,7 @@
                     <Setter Property="Background" Value="Transparent"/>
                     <Setter Property="Padding" Value="2 0 1 1"/>
                     <Setter Property="BorderBrush" Value="Transparent"/>
-                </Style>
-
-              
+                </Style>              
 
                 <Style TargetType="{x:Type TabItem}">
                     <Setter Property="Template">
@@ -69,7 +68,6 @@
                         </Setter.Value>
                     </Setter>
                 </Style>
-
             </ResourceDictionary>           
         </Grid.Resources>
 
@@ -78,7 +76,7 @@
             <ColumnDefinition Width="auto" />
         </Grid.ColumnDefinitions>        
 
-        <TabControl TabStripPlacement="Left" BorderThickness="0" Margin="0 0 0 0" Padding="0">
+        <TabControl TabStripPlacement="Left" BorderThickness="0" Margin="0 0 0 0" Padding="0" SelectedIndex="{Binding SelectedTabIndex}">
             <TabControl.Resources>
                 <Style TargetType="{x:Type TabItem}" BasedOn="{StaticResource {x:Type TabItem}}">
                     <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
@@ -92,10 +90,7 @@
 
             
 
-            <TabItem Header="Code" >               
-
-                
-
+            <TabItem Header="Code" >    
                 <editor:RoslynCodeEditor  Background="White"                       
 		                                  Name="cRoslynCodeEditor"
                                           FontFamily="Consolas"
@@ -103,6 +98,7 @@
 		                                  VerticalScrollBarVisibility="Auto"
 		                                  HorizontalScrollBarVisibility="Auto"
                                           ShowLineNumbers="False"
+                                          Padding="0 3 0 0"
                                           >
                 </editor:RoslynCodeEditor>
             </TabItem>
@@ -111,7 +107,7 @@
                     <TextBlock Text="Output" />
                 </TabItem.Header>
 
-                <Border Background="White"/>
+                <TextBlock Background="White" Foreground="Black" ap:TextBlockAP.BindableInlines="{Binding Output}"  Padding="21 3 3 3"  />
             </TabItem>
 
         </TabControl>
