@@ -76,24 +76,23 @@
                          KeyboardNavigation.DirectionalNavigation="Cycle" 
                          PreviewMouseDown="ListBox_PreviewMouseDown"                        
                          MinWidth="400"
-                         Grid.IsSharedSizeScope="True"
+                       
                          Background="{DynamicResource TextBox.Background}"     
                          VirtualizingPanel.IsVirtualizing="True"
                          VirtualizingPanel.VirtualizationMode="Recycling"
-                         VirtualizingPanel.IsVirtualizingWhenGrouping="True"
-                         VirtualizingPanel.CacheLengthUnit="Page" 
-                         VirtualizingPanel.CacheLength="7,7"
-                         ToolTipService.IsEnabled="False"
-                         >                   
+                         VirtualizingPanel.IsVirtualizingWhenGrouping="True"   
+                         >
+                    <!--VirtualizingPanel.CacheLengthUnit="Item" 
+                         VirtualizingPanel.CacheLength="7,7"-->
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <Grid   ToolTip = "{Binding Description}" >
+                            <Grid ToolTip = "{Binding Description, Mode=OneWay}" >
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="auto" SharedSizeGroup="FirstColumn" />
-                                    <ColumnDefinition Width="0.6*" SharedSizeGroup="SecondColumn" />
+                                    <ColumnDefinition Width="250"  />
+                                    <ColumnDefinition Width="250"  />
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Text="{Binding Label}" Grid.Column="0" Margin="0 0 7 0" />
-                                <TextBlock Text="{Binding Description}" Grid.Column="1"/>
+                                <TextBlock Text="{Binding Label, Mode=OneWay}" Grid.Column="0" Margin="0 0 7 0" />
+                                <TextBlock Text="{Binding Description, Mode=OneWay}" Grid.Column="1"/>
                             </Grid>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
