@@ -39,13 +39,22 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.FuzzySearch
             autocompleteTrie = new UkkonenTrie<IAutocompleteItem>();
             foreach (var item in autocompleteItems)
             {
-                if (!string.IsNullOrWhiteSpace(item.Label))
+                try
                 {
-                    autocompleteTrie.Add(item.Label.ToLowerInvariant(), item);
+                    if (!string.IsNullOrWhiteSpace(item.Label))
+                    {
+                        autocompleteTrie.Add(item.Label.ToLowerInvariant(), item);
+                    }
+                    if (!string.IsNullOrWhiteSpace(item.Description))
+                    {
+                        autocompleteTrie.Add(item.Description.ToLowerInvariant(), item);
+                    }
                 }
-                if (!string.IsNullOrWhiteSpace(item.Description))
+                catch(Exception e)
                 {
-                    autocompleteTrie.Add(item.Description.ToLowerInvariant(), item);
+#if DEBUG
+                    throw;
+#endif
                 }
             }
                             
