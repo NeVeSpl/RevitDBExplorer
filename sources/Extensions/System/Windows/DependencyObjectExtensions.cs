@@ -34,5 +34,35 @@ namespace System.Windows
             }
             return false;
         }
+
+
+        public static T GetParentOfType<T>(this DependencyObject dependencyObject) where T : DependencyObject
+        {
+            var pointer = dependencyObject;
+            var type = typeof(T);
+            while (pointer != null)
+            {
+                if (pointer is T)
+                {
+                    return pointer as T;
+                }
+                pointer = VisualTreeHelper.GetParent(pointer);
+            }
+            return null;
+        }
+   
+        public static FrameworkElement GetParent(this DependencyObject dependencyObject, Func<FrameworkElement, bool> predicate)
+        {
+            var pointer = dependencyObject;          
+            while (pointer != null)
+            {
+                if ((pointer is FrameworkElement frameworkElement) && (predicate(frameworkElement)))
+                {
+                    return frameworkElement;
+                }
+                pointer = VisualTreeHelper.GetParent(pointer);
+            }
+            return null;
+        }
     }
 }

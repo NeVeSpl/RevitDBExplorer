@@ -185,7 +185,7 @@ namespace RevitDBExplorer.UIComponents.Tree
         {
             if (parameter is TreeItem treeViewItem)
             {
-                var objects = treeViewItem.GetAllSnoopableObjects().Where(x => x.Object != null).Select(x => x.Object).ToArray();
+                var objects = GetObjectsForTransfer(treeViewItem);
                 InputForRDSHasChanged?.Invoke(objects);
             }
         }
@@ -217,6 +217,12 @@ namespace RevitDBExplorer.UIComponents.Tree
             }
 
             ScriptForRDSHasChanged?.Invoke(text);
+        }
+
+
+        public static IEnumerable<object> GetObjectsForTransfer(TreeItem treeViewItem)
+        {
+            return treeViewItem.GetAllSnoopableObjects().Where(x => x.Object != null).Select(x => x.Object).ToArray();
         }
     }
 }

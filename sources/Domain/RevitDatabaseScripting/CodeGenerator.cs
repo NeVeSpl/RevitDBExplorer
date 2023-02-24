@@ -32,7 +32,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseScripting
 {{
     foreach (var item in objects)
     {{
-        
+        item.
     }}
 }}
 ";
@@ -83,7 +83,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseScripting
 {{
     foreach (var item in objects)
     {{
-        
+        item.
     }}
 }}
 ";

@@ -76,7 +76,15 @@
             <ColumnDefinition Width="auto" />
         </Grid.ColumnDefinitions>        
 
-        <TabControl TabStripPlacement="Left" BorderThickness="0" Margin="0 0 0 0" Padding="0" SelectedIndex="{Binding SelectedTabIndex}">
+        <TabControl TabStripPlacement="Left"
+                    BorderThickness="0"
+                    Margin="0 0 0 0" 
+                    Padding="0"
+                    SelectedIndex="{Binding SelectedTabIndex}"
+                    DragOver="TabControl_DragOver"
+                    Drop="TabControl_Drop"
+                    AllowDrop="True"
+                    >
             <TabControl.Resources>
                 <Style TargetType="{x:Type TabItem}" BasedOn="{StaticResource {x:Type TabItem}}">
                     <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>

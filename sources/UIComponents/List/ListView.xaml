@@ -95,7 +95,7 @@
                 </ToolTip>
 
                 <Style TargetType="{x:Type ListViewItem}" BasedOn="{StaticResource {x:Type ListViewItem}}" >
-                    <Setter Property="ContextMenu" Value="{StaticResource ItemContextMenu}" />
+                  
                     <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
                     <Setter Property="HorizontalAlignment" Value="Stretch"/>
                     <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
@@ -135,21 +135,31 @@
                                     <Setter Property="ToolTipService.ShowDuration" Value="50000"></Setter>
                                 </Style>
                             </DataTemplate.Resources>
-                            <StackPanel Orientation="Horizontal">
+                            <StackPanel Orientation="Horizontal" ContextMenu="{StaticResource ItemContextMenu}"  Background="Transparent" Tag="NameColumn">
                                 <Path Style="{Binding MemberKind, Converter={StaticResource ToResourceWithKeyConverter}, ConverterParameter=Icon}" Margin="0 1 4 0"  />
                                 <TextBlock Text="{Binding Name, Mode=OneWay}" Foreground="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"  />
                             </StackPanel>
                         </DataTemplate>
                     </GridViewColumn.CellTemplate>
+                    
                 </GridViewColumn>
 
                 <GridViewColumn Header="Value" Width="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListView}}, Path=ActualWidth, Converter={StaticResource PercentageOfValueConverter}, ConverterParameter=62}"  >
                     <GridViewColumn.CellTemplate>
                         <DataTemplate>
-                            <ContentControl Content="{Binding}" ContentTemplateSelector="{StaticResource DataTemplateSelectorForPropertyType}"  x:Name="cTextBlock" HorizontalContentAlignment="Stretch" HorizontalAlignment="Stretch">
-                                <ContentControl.InputBindings>
-                                    <MouseBinding MouseAction="LeftClick" Command="{Binding Data.ListItem_Click_Command, Source={StaticResource Proxy}}" CommandParameter="{Binding}"  />
-                                </ContentControl.InputBindings>
+                            <ContentControl
+                                MouseUp="ListViewItem_MouseUp"
+                                Content="{Binding}"
+                                ContextMenu="{StaticResource ItemContextMenu}"
+                                ContentTemplateSelector="{StaticResource DataTemplateSelectorForPropertyType}" 
+                                x:Name="cTextBlock"
+                                HorizontalContentAlignment="Stretch"
+                                HorizontalAlignment="Stretch"
+                                Tag="ValueColumn"
+                                >
+                                <!--<ContentControl.InputBindings>
+                                    <MouseBinding MouseAction="LeftClick"  Command="{Binding Data.ListItem_Click_Command, Source={StaticResource Proxy}}" CommandParameter="{Binding}"  />
+                                </ContentControl.InputBindings>-->
                             </ContentControl>
 
                             <DataTemplate.Triggers>

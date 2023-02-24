@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using RevitDBExplorer.Domain.RevitDatabaseScripting;
 using RoslynPad.Editor;
 using RoslynPad.Roslyn;
@@ -21,6 +24,7 @@ namespace RevitDBExplorer.UIComponents.Scripting
 {
     public partial class RDScriptingView : UserControl, IRoslynCodeEditor
     {
+        private RDScriptingVM scriptingVM;
         private RoslynHost roslynHost = null;
         private bool isRoslynCodeEditorInitialized = false;
         private Microsoft.CodeAnalysis.DocumentId documentId;
@@ -37,6 +41,7 @@ namespace RevitDBExplorer.UIComponents.Scripting
             if (this.DataContext is RDScriptingVM vm)
             {
                 vm.RoslynCodeEditor = this;
+                scriptingVM = vm;
             }
         }
 
@@ -104,6 +109,23 @@ namespace RevitDBExplorer.UIComponents.Scripting
                 return symbolFinder.Result;
             }
             return null;
+        }
+
+        private void TabControl_DragOver(object sender, DragEventArgs e)
+        {
+
+        }
+        private void TabControl_Drop(object sender, DragEventArgs e)
+        {
+            base.OnDrop(e);
+            
+            if (e.Data.GetDataPresent("Inputs"))
+            {
+                var inputs = e.Data.GetData("Inputs") as IEnumerable<object>;
+
+                scriptingVM?.SetInput(inputs);
+            }
+            e.Handled = true;
         }
     }
 }

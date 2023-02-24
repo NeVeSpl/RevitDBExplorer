@@ -268,7 +268,7 @@
             </Grid>
         </Grid>
 
-        <GridSplitter Grid.Row="1"  Background="{DynamicResource GridSplitter.Background}" Height="2" HorizontalAlignment="Stretch" Visibility="{Binding Scripting.IsOpen, Converter={StaticResource BoolToVisibilityConverterCollapsed}}"/>
+        <GridSplitter Grid.Row="1"  Background="{DynamicResource GridSplitter.Background}" Height="3" HorizontalAlignment="Stretch" Visibility="{Binding Scripting.IsOpen, Converter={StaticResource BoolToVisibilityConverterCollapsed}}"/>
 
         <componentScripting:RDScriptingView DataContext="{Binding Scripting}"   Grid.Row="2"   Visibility="{Binding IsOpen, Converter={StaticResource BoolToVisibilityConverterCollapsed}}"/>
 
