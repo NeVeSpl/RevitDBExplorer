@@ -82,7 +82,18 @@
                     <StackPanel Orientation="Horizontal">
                         <StackPanel.ContextMenu>
                             <ContextMenu>
-                                <MenuItem Header="Select in Revit" Command="{Binding SelectInRevit}" CommandParameter="{Binding}"/>
+                                <MenuItem Header="Select in Revit" Command="{Binding Commands.SelectInRevit}" CommandParameter="{Binding}"/>
+                                <Separator />
+                                <MenuItem Header="Use as a input for the script (RDS)" Command="{Binding Commands.UseAsInpputForRDSCommand}" CommandParameter="{Binding}">
+                                    <MenuItem.Icon>
+                                        <Path Style="{StaticResource IconInput}" Width="12" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <MenuItem Header="Generate C# code for UPDATE command (RDS)" Command="{Binding Commands.GenerateUpdateQueryRDSCommand}" CommandParameter="{Binding}">
+                                    <MenuItem.Icon>
+                                        <Path Style="{StaticResource IconQuery}" Width="11" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
                             </ContextMenu>
                         </StackPanel.ContextMenu>
                         <StackPanel.Resources>
@@ -109,7 +120,7 @@
                         <TextBlock Text="{Binding Count, Mode=OneWay}"  Style="{StaticResource postfix}" />
                         <TextBlock Text="]" Margin="0 -1 0 0" Style="{StaticResource postfix}"/>
                         <StackPanel Visibility="{Binding IsSelected, Converter={StaticResource BoolToVisibilityConverter}}" Margin="3 0 0 0">
-                            <Button Style="{StaticResource TreeToolButton}"  ToolTip="Select in Revit" Command="{Binding SelectInRevit}" CommandParameter="{Binding .}" Visibility="{Binding RelativeSource={RelativeSource Mode=Self}, Path=IsEnabled, Converter={StaticResource BoolToVisibilityConverter}}">
+                            <Button Style="{StaticResource TreeToolButton}"  ToolTip="Select in Revit" Command="{Binding Commands.SelectInRevit}" CommandParameter="{Binding .}" Visibility="{Binding RelativeSource={RelativeSource Mode=Self}, Path=IsEnabled, Converter={StaticResource BoolToVisibilityConverter}}">
                                 <Path Style="{StaticResource IconArrowSelectorTool}" />
                             </Button>
                         </StackPanel>
@@ -120,12 +131,24 @@
                     <StackPanel Orientation="Horizontal">
                         <StackPanel.ContextMenu>
                             <ContextMenu>
-                                <MenuItem Header="Select in Revit" Command="{Binding SelectInRevit}" CommandParameter="{Binding}"/>
-                                <MenuItem Header="Show in Revit" Command="{Binding ShowInRevit}" CommandParameter="{Binding}"/>
-                                <MenuItem Header="Isolate in Revit" Command="{Binding IsolateInRevit}" CommandParameter="{Binding}"/>
-                                <MenuItem Header="Draw in Revit (using model lines)" Command="{Binding DrawInRevit}" CommandParameter="{Binding}"/>
-                                <MenuItem Header="Draw in Revit (AVF)" Command="{Binding DrawInRevitAVF}" CommandParameter="{Binding}"/>
-                                <MenuItem Header="Snoop in a new window" Command="{Binding SnoopInNewWindow}" CommandParameter="{Binding}" />
+                                <MenuItem Header="Select in Revit" Command="{Binding Commands.SelectInRevit}" CommandParameter="{Binding}"/>
+                                <MenuItem Header="Show in Revit" Command="{Binding Commands.ShowInRevit}" CommandParameter="{Binding}"/>
+                                <MenuItem Header="Isolate in Revit" Command="{Binding Commands.IsolateInRevit}" CommandParameter="{Binding}"/>
+                                <MenuItem Header="Draw in Revit (using model lines)" Command="{Binding Commands.DrawInRevit}" CommandParameter="{Binding}"/>
+                                <MenuItem Header="Draw in Revit (AVF)" Command="{Binding Commands.DrawInRevitAVF}" CommandParameter="{Binding}"/>
+                                <Separator />
+                                <MenuItem Header="Use as a input for the script (RDS)" Command="{Binding Commands.UseAsInpputForRDSCommand}" CommandParameter="{Binding}">
+                                    <MenuItem.Icon>
+                                        <Path Style="{StaticResource IconInput}" Width="12" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <MenuItem Header="Generate C# code for a UPDATE command (RDS) " Command="{Binding Commands.GenerateUpdateQueryRDSCommand}" CommandParameter="{Binding}">
+                                    <MenuItem.Icon>
+                                        <Path Style="{StaticResource IconQuery}" Width="11" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <Separator />
+                                <MenuItem Header="Snoop in a new window" Command="{Binding Commands.SnoopInNewWindow}" CommandParameter="{Binding}" />
                             </ContextMenu>
                         </StackPanel.ContextMenu>
 
@@ -148,7 +171,7 @@
                             <Run Text="{Binding Object.Name, Mode=OneWay}" />
                         </TextBlock>
                         <StackPanel Visibility="{Binding IsSelected, Converter={StaticResource BoolToVisibilityConverter}}" Margin="3 0 0 0">
-                            <Button Style="{StaticResource TreeToolButton}"  ToolTip="Select in Revit" Command="{Binding SelectInRevit}" CommandParameter="{Binding .}" Visibility="{Binding RelativeSource={RelativeSource Mode=Self}, Path=IsEnabled, Converter={StaticResource BoolToVisibilityConverter}}">
+                            <Button Style="{StaticResource TreeToolButton}"  ToolTip="Select in Revit" Command="{Binding Commands.SelectInRevit}" CommandParameter="{Binding .}" Visibility="{Binding RelativeSource={RelativeSource Mode=Self}, Path=IsEnabled, Converter={StaticResource BoolToVisibilityConverter}}">
                                 <Path Style="{StaticResource IconArrowSelectorTool}" />
                             </Button>
                         </StackPanel>

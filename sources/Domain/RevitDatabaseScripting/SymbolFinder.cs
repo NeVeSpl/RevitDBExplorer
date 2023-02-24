@@ -56,23 +56,40 @@ namespace RevitDBExplorer.Domain.RevitDatabaseScripting
 
     internal class LambdaToBe
     {
-        private static readonly SymbolDisplayFormat symbolDisplayFormat = SymbolDisplayFormat.FullyQualifiedFormat.WithGlobalNamespaceStyle(SymbolDisplayGlobalNamespaceStyle.OmittedAsContaining).WithMiscellaneousOptions(SymbolDisplayMiscellaneousOptions.None);
-
-
+       
         public string Name { get; }
-        public string ReturnType { get; }
-        public bool IsReturnTypeEnumerable { get; }
-        public bool IsReturnTypeVoid { get; }
-        public IEnumerable<string> Parameters { get; }
+        public RoslynTypeInfo ReturnType { get; }      
+        public IEnumerable<RoslynTypeInfo> Parameters { get; }
 
 
         public LambdaToBe(IMethodSymbol method)
         {
             Name = method.Name;
-            ReturnType = method.ReturnType.ToDisplayString(symbolDisplayFormat);
-            IsReturnTypeEnumerable = method.ReturnType.AllInterfaces.Any(x => x.ToString() == "System.Collections.IEnumerable");
-            IsReturnTypeVoid = method.ReturnType.SpecialType == SpecialType.System_Void;
-            Parameters = method.Parameters.Select(x => x.Type.ToDisplayString(symbolDisplayFormat)).ToArray();
+            ReturnType = new RoslynTypeInfo(method.ReturnType);          
+            Parameters = method.Parameters.Select(x => new RoslynTypeInfo(x.Type)).ToArray();
+        }
+    }
+
+    public class RoslynTypeInfo
+    {
+        private static readonly SymbolDisplayFormat symbolDisplayFormat = SymbolDisplayFormat.FullyQualifiedFormat.WithGlobalNamespaceStyle(SymbolDisplayGlobalNamespaceStyle.OmittedAsContaining).WithMiscellaneousOptions(SymbolDisplayMiscellaneousOptions.None);
+
+
+        public string Name { get; }
+        public string FirstTypeArgumentName { get; }
+        public bool IsEnumerable { get; }
+        public bool IsVoid { get; }
+
+
+        public RoslynTypeInfo(ITypeSymbol symbol)
+        {
+            Name = symbol.ToDisplayString(symbolDisplayFormat);
+            IsEnumerable = symbol.AllInterfaces.Any(x => x.ToString() == "System.Collections.IEnumerable");
+            IsVoid = symbol.SpecialType == SpecialType.System_Void;
+            if (IsEnumerable && (symbol is INamedTypeSymbol namedSymbol))
+            {
+                FirstTypeArgumentName = namedSymbol.TypeArguments.FirstOrDefault()?.ToDisplayString(symbolDisplayFormat);
+            }
         }
     }
 }

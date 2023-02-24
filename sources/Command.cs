@@ -15,6 +15,7 @@ namespace RevitDBExplorer
             var source = SelectorFactory.Snoop(Selector.CurrentSelection);
             source.ReadFromTheSource(commandData.Application);
             var window = new MainWindow(source);
+            Application.DefaultFontFamily = window.FontFamily;
             new WindowInteropHelper(window).Owner = commandData.Application.MainWindowHandle;
             window.Show();
 

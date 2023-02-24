@@ -336,6 +336,7 @@
     <Compile Include="Domain\RevitDatabaseQuery\Parser\CommandParser.cs" />
     <Compile Include="Domain\RevitDatabaseQuery\Parser\Commands\ElementIdCmdDefinition.cs" />
     <Compile Include="Domain\RevitDatabaseQuery\Parser\ICommandDefinition.cs" />
+    <Compile Include="Domain\RevitDatabaseScripting\CodeGenerator.cs" />
     <Compile Include="Domain\RevitDatabaseScripting\RevitDatabaseScriptingService.cs" />
     <Compile Include="Domain\RevitDatabaseScripting\SymbolFinder.cs" />
     <Compile Include="Domain\Selectors\SnoopExternalServices.cs" />
@@ -542,6 +543,7 @@
     <Compile Include="UIComponents\Scripting\RDScriptingVM.cs" />
     <Compile Include="UIComponents\Tree\Items\GroupTreeItem.cs" />
     <Compile Include="UIComponents\Tree\Items\SnoopableObjectTreeItem.cs" />
+    <Compile Include="UIComponents\Tree\Items\TreeItemsCommands.cs" />
     <Compile Include="UIComponents\Tree\TreeView.xaml.cs">
       <DependentUpon>TreeView.xaml</DependentUpon>
     </Compile>

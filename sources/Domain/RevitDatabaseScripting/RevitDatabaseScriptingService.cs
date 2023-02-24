@@ -1,17 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using System.Windows.Input;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using Microsoft.CodeAnalysis.CSharp.Scripting;
 using Microsoft.CodeAnalysis.Scripting;
 using RevitDBExplorer.Domain.DataModel;
-using static RevitDBExplorer.Domain.RevitDatabaseQuery.RevitDatabaseQueryService;
-using Diagnostic = Microsoft.CodeAnalysis.Diagnostic;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
@@ -26,6 +22,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseScripting
             typeof(ISet<>).Assembly,
             typeof(Document).Assembly,
             typeof(UIApplication).Assembly,
+            typeof(RevitDatabaseScriptingService).Assembly,
         };
         public static readonly string[] Imports = new[]
         {
@@ -41,6 +38,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseScripting
             "Autodesk.Revit.DB.Structure",
             "Autodesk.Revit.DB.Architecture",
             "Autodesk.Revit.UI",
+            "RevitDBExplorer.Domain.RevitDatabaseScripting"
         };
 
 
@@ -71,7 +69,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseScripting
             }           
 
             Query query = null;
-
+            Query command = null;
             var (invocation, isResolved) = PrepereInvocation(lambdaToBe);
 
             if (isResolved == false)
@@ -79,29 +77,21 @@ namespace RevitDBExplorer.Domain.RevitDatabaseScripting
                 errors.Add("Could not resolve method arguments");
                 return new ResultOfCompilation(null, null, errors);
             }
-
-            if (lambdaToBe.IsReturnTypeEnumerable)
+          
+            if (!lambdaToBe.ReturnType.IsVoid)
             {
-                // query, returns collection
-                var lambda = await script.ContinueWith<Func<UIApplication, IEnumerable<object>>>($"(UIApplication uia) => {lambdaToBe.Name}({invocation})").RunAsync();
+                // query
+                var lambda = await script.ContinueWith<Func<LambdaParams, object>>($"(LambdaParams parameters) => {lambdaToBe.Name}({invocation})").RunAsync();
                 query = Query.Create(lambda.ReturnValue);
             }
             else
             {
-                if (!lambdaToBe.IsReturnTypeVoid)
-                {
-                    // query, retruns single object
-                    var lambda = await script.ContinueWith<Func<UIApplication, object>>($"(UIApplication uia) => {lambdaToBe.Name}({invocation})").RunAsync();
-                    query = Query.Create(lambda.ReturnValue);
-                }
-                else
-                {
-                    // command
-                    errors.Add("Command are not supported (yet)");
-                }
-            }
+                // command
+                var lambda = await script.ContinueWith<Func<LambdaParams, object>>($"(LambdaParams parameters) => {{{lambdaToBe.Name}({invocation}); return null;}}").RunAsync();
+                command = Query.Create(lambda.ReturnValue);               
+            }            
 
-            return new ResultOfCompilation(query, null, errors);
+            return new ResultOfCompilation(query, command, errors);
         }
 
         public static (string invocation, bool isResolved) PrepereInvocation(LambdaToBe lambdaToBe)
@@ -109,88 +99,126 @@ namespace RevitDBExplorer.Domain.RevitDatabaseScripting
             List<string> arguments = new List<string>();
             foreach (var parameter in lambdaToBe.Parameters)
             {
-                switch(parameter)
+                if (parameter.Name == "Autodesk.Revit.DB.Document")
                 {
-                    case "Autodesk.Revit.DB.Document":
-                        arguments.Add("uia?.ActiveUIDocument?.Document");
-                        break;
-                    case "Autodesk.Revit.UI.UIApplication":
-                        arguments.Add("uia");
-                        break;
-                    default:
-                        return ("", false);
+                    arguments.Add("parameters.uia?.ActiveUIDocument?.Document");
+                    continue;
                 }
+                if (parameter.Name == "Autodesk.Revit.UI.UIApplication")
+                {
+                    arguments.Add("parameters.uia");
+                    continue;
+                }
+                if (parameter.IsEnumerable)
+                {
+                    arguments.Add($"parameters.objects.OfType<{parameter.FirstTypeArgumentName}>()");
+                    continue;
+                }              
+                  
+                return ("", false);                
             }
 
             var invocation = String.Join(", ", arguments);
             return (invocation, true);
         }
 
+        
 
-        internal class Query : IAmSourceOfEverything
+        internal class Query : IAmSourceOfEverything, IAcceptInput, IAmCommand
         {
-            private readonly Func<UIApplication, IEnumerable<SnoopableObject>> query;
+            private readonly Func<LambdaParams, IEnumerable<SnoopableObject>> query;
+            private IEnumerable<object> inputObjects = Enumerable.Empty<object>();
 
-            private Query(Func<UIApplication, IEnumerable<SnoopableObject>> query)
+            private Query(Func<LambdaParams, IEnumerable<SnoopableObject>> query)
             {
                 this.query = query;
             }
 
 
-            public static Query Create(Func<UIApplication, object> lambda)
+            public static Query Create(Func<LambdaParams, object> lambda)
             {
                 if (lambda == null) return null;
 
-                var query = new Query((UIApplication uia) => 
+                var query = new Query((LambdaParams parameters) => 
                 {
-                    var document = uia.ActiveUIDocument?.Document;
+                    var document = parameters.uia.ActiveUIDocument?.Document;
                     if (document == null) return null;
 
-                    var returnValue = lambda(uia);
+                    var returnValue = lambda(parameters);
 
                     if (returnValue is FilteredElementCollector collector)
                     {
                         return collector.ToElements().Select(x => new SnoopableObject(document, x));
+                    }
+                    if (returnValue is IEnumerable<object> enumerable)
+                    {
+                        return enumerable.Select(x => new SnoopableObject(document, x));
                     }
 
                     return new[] { new SnoopableObject(document, returnValue) };
                 });               
                 return query;
             }
-            public static Query Create(Func<UIApplication, IEnumerable<object>> lambda)
+
+            public void Execute(UIApplication app)
             {
-                if (lambda == null) return null;
-
-                var query = new Query((UIApplication uia) =>
-                {
-                    var document = uia.ActiveUIDocument?.Document;
-                    if (document == null) return null;
-
-                    return lambda(uia)?.Select(x => new SnoopableObject(document, x));
-                });
-                return query;
+                query(new LambdaParams(app, inputObjects));
             }
 
             public IEnumerable<SnoopableObject> Snoop(UIApplication app)
             {
-                return query(app);
+                return query(new LambdaParams(app, inputObjects));
+            }
+
+            void IAcceptInput.SetInput(IEnumerable<object> inputs)
+            {
+                inputObjects = inputs;
             }
         }
     }
-    
+
+    public interface IAcceptInput
+    {
+        void SetInput(IEnumerable<object> inputs);
+    }
+
+    public class LambdaParams
+    {
+        public readonly UIApplication uia;
+        public readonly IEnumerable<object> objects; 
+
+
+        public LambdaParams(UIApplication app, IEnumerable<object> inputObjects)
+        {
+            uia = app;
+            objects = inputObjects;
+        }
+    }
 
     internal class ResultOfCompilation
     {        
-        public IAmSourceOfEverything Query { get; }
-        public ICommand Command { get; }
+        public IAmSourceOfEverything SelectQuery { get; }
+        public IAmCommand UpdateQuery { get; }
         public IEnumerable<string> Diagnostics { get; }
      
 
-        public ResultOfCompilation(IAmSourceOfEverything query, ICommand command, IEnumerable<string> diagnostics)
+        public ResultOfCompilation(IAmSourceOfEverything selectQuery, IAmCommand updateQuery, IEnumerable<string> diagnostics)
         {
-            Query = query;
-            Command = command;
+            SelectQuery = selectQuery;
+            UpdateQuery = updateQuery;
             Diagnostics = diagnostics;
+        }
+
+        public void SetInputObjects(IEnumerable<object> inputs)
+        {
+            if (SelectQuery is IAcceptInput acceptInput)
+            {
+                acceptInput.SetInput(inputs);
+            }
+            if (UpdateQuery is IAcceptInput acceptInputToo)
+            {
+                acceptInputToo.SetInput(inputs);
+            }
         }
     }
 }

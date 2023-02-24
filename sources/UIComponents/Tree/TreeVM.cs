@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Autodesk.Revit.DB;
 using RevitDBExplorer.Domain;
 using RevitDBExplorer.Domain.DataModel;
 using RevitDBExplorer.Domain.Presentation;
+using RevitDBExplorer.Domain.RevitDatabaseScripting;
 using RevitDBExplorer.UIComponents.Tree.Items;
 using RevitDBExplorer.WPF;
 
@@ -14,6 +16,7 @@ namespace RevitDBExplorer.UIComponents.Tree
 {
     internal class TreeVM : BaseViewModel
     {
+        private readonly TreeItemsCommands TreeItemsCommands;
         private ObservableCollection<TreeItem> treeItems = new();
         private TreeItem selectedItem;
         private SourceOfObjects sourceOfObjects;
@@ -21,8 +24,9 @@ namespace RevitDBExplorer.UIComponents.Tree
         private string filterPhrase = string.Empty;
         private bool isExpanded = true;
         public event Action<TreeItem> SelectedItemChanged;
+        public event Action<IEnumerable<object>> InputForRDSHasChanged;
+        public event Action<string> ScriptForRDSHasChanged;
 
-        public SelectInRevitCommand SelectInRevit { get; } = SelectInRevitCommand.Instance;
         public RelayCommand SwitchViewCommand { get; }
         public RelayCommand ReloadCommand { get; }
         public RelayCommand CollapseCommand { get; }
@@ -70,6 +74,7 @@ namespace RevitDBExplorer.UIComponents.Tree
             SwitchViewCommand = new RelayCommand(SwitchView);
             ReloadCommand = new RelayCommand(Reload);
             CollapseCommand = new RelayCommand(Collapse);
+            TreeItemsCommands = new TreeItemsCommands(new RelayCommand(UseAsInpputForRDS), new RelayCommand(GenerateUpdateQueryRDS));
         }
 
 
@@ -90,7 +95,7 @@ namespace RevitDBExplorer.UIComponents.Tree
                 return;
             }
 
-            GroupTreeItem groupTreeVM = new GroupTreeItem(sourceOfObjects, TreeViewFilter, groupBy);
+            GroupTreeItem groupTreeVM = new GroupTreeItem(sourceOfObjects, TreeViewFilter, groupBy, TreeItemsCommands);
             if (isExpanded)
             {
                 groupTreeVM.Expand(true);
@@ -116,9 +121,10 @@ namespace RevitDBExplorer.UIComponents.Tree
                 TreeItems = new(new[] { groupTreeVM });
             }
         }
-        public void PopulateWithEvents(IList<SnoopableObjectTreeItem> snoopableObjects)
+        public void PopulateWithEvents(IList<SnoopableObject> snoopableObjects)
         {
-            TreeItems = new(snoopableObjects);
+            var snoopableTreeObjects = snoopableObjects.Select(x => new SnoopableObjectTreeItem(x, TreeItemsCommands) { IsExpanded = true }).ToList();
+            TreeItems = new(snoopableTreeObjects);
         }
         private bool TreeViewFilter(object item)
         {
@@ -174,6 +180,43 @@ namespace RevitDBExplorer.UIComponents.Tree
                 }
             }
             isExpanded = !isExpanded;
+        }
+        private void UseAsInpputForRDS(object parameter)
+        {
+            if (parameter is TreeItem treeViewItem)
+            {
+                var objects = treeViewItem.GetAllSnoopableObjects().Where(x => x.Object != null).Select(x => x.Object).ToArray();
+                InputForRDSHasChanged?.Invoke(objects);
+            }
+        }
+        private void GenerateUpdateQueryRDS(object parameter)
+        {
+            string text = "";
+
+            if (parameter is SnoopableObjectTreeItem snoopableObjectTreeItem)
+            {
+                if (snoopableObjectTreeItem.Object.Object is Parameter revitParameter)
+                {
+                    text = CodeGenerator.GenerateUpdateCommandForParameter(revitParameter);
+                }
+                else
+                {
+                    text = CodeGenerator.GenerateUpdateCommandForType(snoopableObjectTreeItem.Object.Object?.GetType());
+                }
+            }
+            if (parameter is GroupTreeItem groupTreeItem)
+            {
+                if (groupTreeItem is TypeGroupTreeItem typeGroupTreeItem)
+                {
+                    text = CodeGenerator.GenerateUpdateCommandForType(typeGroupTreeItem.GetAllSnoopableObjects().FirstOrDefault()?.Object?.GetType());
+                }
+                else
+                {
+                    text = CodeGenerator.GenerateUpdateCommandForAnyObject();
+                }
+            }
+
+            ScriptForRDSHasChanged?.Invoke(text);
         }
     }
 }

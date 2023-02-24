@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Media;
-using Microsoft.CodeAnalysis;
 using RevitDBExplorer.Domain;
 using RevitDBExplorer.Domain.RevitDatabaseScripting;
 using RevitDBExplorer.WPF;
@@ -22,7 +21,10 @@ namespace RevitDBExplorer.UIComponents.Scripting
         private GridLength height;
         private IRoslynCodeEditor roslynCodeEditor;
         private IEnumerable<Inline> output;
+        private FlowDocument outputDocument;
+        private IEnumerable<Inline> input;
         private int selectedTabIndex;
+        private IEnumerable<object> inputs = Enumerable.Empty<object>();
 
         public bool IsOpen
         {
@@ -76,6 +78,30 @@ namespace RevitDBExplorer.UIComponents.Scripting
                 OnPropertyChanged();
             }
         }
+        public FlowDocument OutputDocument
+        {
+            get
+            {
+                return outputDocument;
+            }
+            set
+            {
+                outputDocument = value;
+                OnPropertyChanged();
+            }
+        }
+        public IEnumerable<Inline> Input
+        {
+            get
+            {
+                return input;
+            }
+            set
+            {
+                input = value;
+                OnPropertyChanged();
+            }
+        }
         public int SelectedTabIndex
         {
             get
@@ -88,6 +114,10 @@ namespace RevitDBExplorer.UIComponents.Scripting
                 OnPropertyChanged();
             }
         }
+        public int InputsCount
+        {
+            get => inputs.Count();
+        }
 
 
         public RDScriptingVM(IScriptRunner scriptRunner)
@@ -98,24 +128,12 @@ namespace RevitDBExplorer.UIComponents.Scripting
         }
 
 
-        public void Open(string databaseQueryToolTip)
+        public void Open()
         {
             IsOpen = true;
-            Height = new GridLength(Math.Max(Height.Value, 100));
-
-            var appArg = "";
-            if (databaseQueryToolTip.Contains("uia."))
-            {
-                appArg = ", UIApplication uia";
-            }
-
-            var text = 
-@$"IEnumerable<object> Select(Document document{appArg})
-{{
-    return {databaseQueryToolTip};    
-}}";
-
-            RoslynCodeEditor.SetText(text);
+            Height = new GridLength(Math.Max(Height.Value, 198));
+            SelectedTabIndex = 1;
+            PrintInputs(); 
         }
         private void Close(object parameter)
         {
@@ -128,6 +146,7 @@ namespace RevitDBExplorer.UIComponents.Scripting
             var lambdaToBe = await roslynCodeEditor.GetTypeOfLambda();
 
             var result = await RevitDatabaseScriptingService.Compile(code, lambdaToBe);
+            result.SetInputObjects(inputs);
 
             var originalConsoleOut = Console.Out;
             var writer = new StringWriter();
@@ -135,9 +154,15 @@ namespace RevitDBExplorer.UIComponents.Scripting
             {
                 Console.SetOut(writer);
 
-                if (result.Query != null)
+                if (result.SelectQuery != null)
+                {                    
+                    await scriptRunner.TryExecuteQuery(new SourceOfObjects(result.SelectQuery) { Title = "User query" }); 
+                    writer.WriteLine($"{DateTimeOffset.Now.ToString("hh:mm:ss")} : query completed");
+                }
+                if (result.UpdateQuery != null)
                 {
-                    await scriptRunner.TryExecuteQuery(new SourceOfObjects(result.Query) { Title = "User query" });
+                    await ExternalExecutorExt.ExecuteInRevitContextInsideTransactionAsync(x => result.UpdateQuery.Execute(x), null, "RDS update command");
+                    writer.WriteLine($"{DateTimeOffset.Now.ToString("HH:mm:ss")} : query completed");
                 }
             }
             finally
@@ -146,11 +171,12 @@ namespace RevitDBExplorer.UIComponents.Scripting
             }
 
             var output = new List<Inline>();
+            var outputDocument = new FlowDocument() { PagePadding = new Thickness(0), FontFamily= Application.DefaultFontFamily };
             foreach (var diagnostic in result.Diagnostics)
             {
                 output.Add(new Run() { Text = diagnostic, Foreground = Brushes.Red } );
                 output.Add(new LineBreak());
-                SelectedTabIndex = 1;
+                SelectedTabIndex = 2;
             }
 
             var consoleLines = writer.ToString().Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
@@ -161,7 +187,40 @@ namespace RevitDBExplorer.UIComponents.Scripting
                 output.Add(new LineBreak());
             }
 
+            var paragraph = new Paragraph() { FontSize = 12, };
+            paragraph.Inlines.AddRange(output);
+            outputDocument.Blocks.Add(paragraph);
+
             Output = output;
+            OutputDocument = outputDocument;
+        }
+
+        public void SetScript(string scriptText)
+        {
+            RoslynCodeEditor.SetText(scriptText);
+        }
+        public void SetInput(IEnumerable<object> inputs)
+        {
+            this.inputs = inputs;
+            //SelectedTabIndex = 0;
+            OnPropertyChanged(nameof(InputsCount));
+            PrintInputs();
+        }
+
+        private readonly SolidColorBrush typeBrush = (SolidColorBrush)new BrushConverter().ConvertFrom("#008080");
+        private void PrintInputs()
+        {
+            var input = new List<Inline>()
+            {
+                new Run("Parameters that can be used in the method header:"),
+                new LineBreak(),
+                new Run("    Document ") {Foreground=typeBrush }, new Run("document"),
+                new LineBreak(),
+                new Run("    UIApplication ") {Foreground=typeBrush }, new Run("uia"),
+                new LineBreak(),
+                new Run("    IEnumerable") {Foreground=typeBrush }, new Run("<object>") {Foreground=typeBrush }, new Run(" objects - which contains curently "), new Run($"{inputs.Count()}"){Foreground=Brushes.Blue, FontWeight=FontWeights.Bold }, new Run(" objects"),
+            };
+            Input = input;
         }
     }
 

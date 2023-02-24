@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
@@ -11,6 +12,7 @@ using System.Windows.Threading;
 using RevitDBExplorer.Domain;
 using RevitDBExplorer.Domain.DataModel;
 using RevitDBExplorer.Domain.RevitDatabaseQuery;
+using RevitDBExplorer.Domain.RevitDatabaseScripting;
 using RevitDBExplorer.Domain.Selectors;
 using RevitDBExplorer.Properties;
 using RevitDBExplorer.UIComponents.CommandAndControl;
@@ -183,6 +185,8 @@ namespace RevitDBExplorer
 
             List.MemberSnooped += List_MemberSnooped;          
             Tree.SelectedItemChanged += Tree_SelectedItemChanged;
+            Tree.InputForRDSHasChanged += (IEnumerable<object> objects) => rdscriptingVM.SetInput(objects);
+            Tree.ScriptForRDSHasChanged += OpenScriptingWithCommand;
             OpenScriptingWithQueryCommand = new RelayCommand(OpenScriptingWithQuery);
         }  
         public MainWindow(SourceOfObjects sourceOfObjects) : this()
@@ -237,7 +241,7 @@ namespace RevitDBExplorer
             List.ClearItems();         
             ResetDatabaseQuery();
 
-            var snoopableObjects = EventMonitor.GetEvents().Select(x => new SnoopableObjectTreeItem(x) { IsExpanded = true }).ToList();
+            var snoopableObjects = EventMonitor.GetEvents().ToList();
             Tree.PopulateWithEvents(snoopableObjects);            
         }
         private async void Tree_SelectedItemChanged(TreeItem treeViewItemVM)
@@ -316,7 +320,14 @@ namespace RevitDBExplorer
 
         private void OpenScriptingWithQuery(object parameter)
         {
-            Scripting.Open(DatabaseQueryToolTip);
+            var text = CodeGenerator.GenerateQueryFor(DatabaseQueryToolTip);
+            Scripting.Open();
+            Scripting.SetScript(text);
+        }
+        private void OpenScriptingWithCommand(string scriptText)
+        {
+            Scripting.Open();
+            Scripting.SetScript(scriptText);
         }
 
 

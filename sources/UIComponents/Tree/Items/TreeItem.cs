@@ -53,12 +53,7 @@ namespace RevitDBExplorer.UIComponents.Tree.Items
                 OnPropertyChanged();
             }
         }
-        public SelectInRevitCommand SelectInRevit { get; } = SelectInRevitCommand.Instance;
-        public ShowInRevitCommand ShowInRevit { get; } = ShowInRevitCommand.Instance;
-        public SnoopInNewWindowCommand SnoopInNewWindow { get; } = SnoopInNewWindowCommand.Instance;
-        public IsolateInRevitCommand IsolateInRevit { get; } = IsolateInRevitCommand.Instance;
-        public DrawInRevitCommand DrawInRevit { get; } = DrawInRevitCommand.Instance;
-        public DrawInRevitWithAVFCommand DrawInRevitAVF { get; } = DrawInRevitWithAVFCommand.Instance;
+        public TreeItemsCommands Commands { get; }
         public ObservableCollection<TreeItem> Items
         {
             get
@@ -70,6 +65,12 @@ namespace RevitDBExplorer.UIComponents.Tree.Items
                 items = value;
                 OnPropertyChanged();
             }
+        }
+
+
+        public TreeItem(TreeItemsCommands commands)
+        {
+            Commands = commands;
         }
 
 

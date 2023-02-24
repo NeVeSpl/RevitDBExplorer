@@ -80,6 +80,7 @@
             <TabControl.Resources>
                 <Style TargetType="{x:Type TabItem}" BasedOn="{StaticResource {x:Type TabItem}}">
                     <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+                    <Setter Property="MinWidth" Value="88"/>
                     <Style.Triggers>
                         <Trigger Property="IsSelected" Value="True">
                             <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
@@ -87,8 +88,20 @@
                     </Style.Triggers>                    
                 </Style>
             </TabControl.Resources>
+            <TabItem >
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Input" />
+                        <TextBlock Text=" [" />
+                        <TextBlock Text="{Binding InputsCount}" />
+                        <TextBlock Text="]" />
+                    </StackPanel>
+                </TabItem.Header>
+                <ScrollViewer>
+                    <TextBlock Background="White" Foreground="Black" ap:TextBlockAP.BindableInlines="{Binding Input}"  Padding="21 3 3 3"  />
+                </ScrollViewer>
+            </TabItem>
 
-            
 
             <TabItem Header="Code" >    
                 <editor:RoslynCodeEditor  Background="White"                       
@@ -106,9 +119,21 @@
                 <TabItem.Header>
                     <TextBlock Text="Output" />
                 </TabItem.Header>
-                <ScrollViewer>
+
+                <FlowDocumentScrollViewer 
+                    BorderThickness="0"
+                    Background="White"
+                    Foreground="Black" 
+                    FontSize="11"
+                    Padding="21 3 3 3" 
+                    Margin="0"
+                    VerticalScrollBarVisibility="Auto"  
+                    Document="{Binding OutputDocument}"
+                    />
+                
+                <!--<ScrollViewer>
                     <TextBlock Background="White" Foreground="Black" ap:TextBlockAP.BindableInlines="{Binding Output}"  Padding="21 3 3 3"  />
-                </ScrollViewer>
+                </ScrollViewer>-->
             </TabItem>
 
         </TabControl>

@@ -26,12 +26,12 @@ namespace RevitDBExplorer.UIComponents.Tree.Items
         } 
 
 
-        public SnoopableObjectTreeItem(SnoopableObject @object)
+        public SnoopableObjectTreeItem(SnoopableObject @object, TreeItemsCommands commands) : base(commands)
         {
             Object = @object;
             if (@object.Items?.Any() == true)
             {
-                Items = new ObservableCollection<TreeItem>(@object.Items.Select(x => new SnoopableObjectTreeItem(x)));
+                Items = new ObservableCollection<TreeItem>(@object.Items.Select(x => new SnoopableObjectTreeItem(x, commands)));
             }
         }
     }

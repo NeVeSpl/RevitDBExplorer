@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Data;
-using System.Windows.Media;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.Structure;
 using RevitDBExplorer.Domain;
 using RevitDBExplorer.Domain.DataModel;
+using RevitDBExplorer.WPF;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
@@ -17,7 +17,7 @@ namespace RevitDBExplorer.UIComponents.Tree.Items
 
 
     internal class GroupTreeItem : TreeItem
-    {
+    {        
         private string name;
         private int count;
         private GroupTreeItem parent;
@@ -60,11 +60,11 @@ namespace RevitDBExplorer.UIComponents.Tree.Items
         }
                 
 
-        public GroupTreeItem(SourceOfObjects sourceOfObjects, Predicate<object> itemFilter, GroupBy groupBy = GroupBy.TypeName)
+        public GroupTreeItem(SourceOfObjects sourceOfObjects, Predicate<object> itemFilter, GroupBy groupBy, TreeItemsCommands commands) : base(commands)
         {
             GroupedBy = GroupBy.Source;
             Count = sourceOfObjects.Objects.Count;
-            Name = sourceOfObjects.Title;
+            Name = sourceOfObjects.Title;        
 
             IEnumerable<GroupTreeItem> groupedItems = null;
             switch (groupBy)
@@ -88,7 +88,7 @@ namespace RevitDBExplorer.UIComponents.Tree.Items
             }
             if (Items == null)
             {
-                Items = new ObservableCollection<TreeItem>(items.OrderBy(x => x.Index).ThenBy(x => x.Name).Select(x => new SnoopableObjectTreeItem(x)));
+                Items = new ObservableCollection<TreeItem>(items.OrderBy(x => x.Index).ThenBy(x => x.Name).Select(x => new SnoopableObjectTreeItem(x, Commands)));
             }
             var listCollectionView = (ListCollectionView)CollectionViewSource.GetDefaultView(Items);
             listCollectionView.Filter = itemFilter;
@@ -98,7 +98,7 @@ namespace RevitDBExplorer.UIComponents.Tree.Items
         internal static readonly HashSet<string> NamesToGroupByCategory = new HashSet<string>() { nameof(FamilyInstance), nameof(Element), nameof(FamilySymbol), nameof(IndependentTag), nameof(Family) };
 
 
-        protected GroupTreeItem(string name, IEnumerable<SnoopableObject> items, Predicate<object> itemFilter, GroupBy groupedBy, GroupTreeItem parent)
+        protected GroupTreeItem(string name, IEnumerable<SnoopableObject> items, Predicate<object> itemFilter, GroupBy groupedBy, GroupTreeItem parent) : base(parent.Commands)
         {
             this.parent = parent;
             Name = name;

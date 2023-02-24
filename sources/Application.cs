@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Autodesk.Revit.UI;
 using Autodesk.Windows;
@@ -16,6 +17,7 @@ namespace RevitDBExplorer
     {
         public static IntPtr RevitWindowHandle;
         public static UIApplication UIApplication;
+        public static FontFamily DefaultFontFamily;
 
         public Result OnStartup(UIControlledApplication application)
         {
