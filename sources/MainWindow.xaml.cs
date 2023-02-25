@@ -167,7 +167,7 @@ namespace RevitDBExplorer
             }
         }
         public RelayCommand OpenScriptingWithQueryCommand { get; }
-        
+        public RelayCommand SaveQueryAsFavoriteCommand { get; }
 
         public MainWindow()
         {
@@ -189,6 +189,7 @@ namespace RevitDBExplorer
             Tree.InputForRDSHasChanged += (IEnumerable<object> objects) => rdscriptingVM.SetInput(objects);
             Tree.ScriptForRDSHasChanged += OpenScriptingWithCommand;
             OpenScriptingWithQueryCommand = new RelayCommand(OpenScriptingWithQuery);
+            SaveQueryAsFavoriteCommand = new RelayCommand(SaveQueryAsFavorite);
         }  
         public MainWindow(SourceOfObjects sourceOfObjects) : this()
         {
@@ -324,11 +325,15 @@ namespace RevitDBExplorer
             var text = CodeGenerator.GenerateQueryFor(DatabaseQueryToolTip);
             Scripting.Open();
             Scripting.SetScript(text);
-        }
+        }        
         private void OpenScriptingWithCommand(string scriptText)
         {
             Scripting.Open();
             Scripting.SetScript(scriptText);
+        }
+        private void SaveQueryAsFavorite(object parameter)
+        {
+            FavoritesManager.Add(DatabaseQuery);
         }
 
 

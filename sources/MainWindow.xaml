@@ -196,6 +196,7 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
                     <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
                 </Grid.ColumnDefinitions>
 
                 <controls:TextBoxWithPlaceholder Text="{Binding DatabaseQuery, Mode=TwoWay, Delay=1000, UpdateSourceTrigger=PropertyChanged}" 
@@ -216,7 +217,11 @@
                     </controls:TextBoxWithPlaceholder.ContextMenu>-->
                 </controls:TextBoxWithPlaceholder>
 
-                <Button Grid.Column="1" BorderBrush="Transparent" Margin="2 0 0 0" MinWidth="21" MinHeight="21" Padding="2 0 1 1" ToolTip="Generate C# code for this SELECT query (RDS)" Background="Transparent"  Command="{Binding OpenScriptingWithQueryCommand}">
+                <Button Grid.Column="1" BorderBrush="Transparent" Margin="2 0 0 0" MinWidth="21" MinHeight="21" Padding="2 0 1 1" ToolTip="Save query as favorite" Background="Transparent"  Command="{Binding SaveQueryAsFavoriteCommand}">
+                    <Path Style="{StaticResource IconFavorite}"  Width="18"/>
+                </Button>
+
+                <Button Grid.Column="2" BorderBrush="Transparent" Margin="2 0 0 0" MinWidth="21" MinHeight="21" Padding="2 0 1 1" ToolTip="Generate C# code for this SELECT query (RDS)" Background="Transparent"  Command="{Binding OpenScriptingWithQueryCommand}">
                     <Path Style="{StaticResource IconQuery}" Width="12" />
                 </Button>
 

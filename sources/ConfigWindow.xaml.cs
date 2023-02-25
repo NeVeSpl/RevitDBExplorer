@@ -5,13 +5,16 @@ using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
+using System.Windows.Controls;
+using RevitDBExplorer.Domain.RevitDatabaseQuery.Autocompletion;
 using RevitDBExplorer.Properties;
+using RevitDBExplorer.WPF;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
 namespace RevitDBExplorer
 {
-    public partial class ConfigWindow : Window, INotifyPropertyChanged
+    internal partial class ConfigWindow : Window, INotifyPropertyChanged
     {
         private bool _isEventMonitorEnabled;
         private ObservableCollection<Theme> _themes = new() 
@@ -23,6 +26,7 @@ namespace RevitDBExplorer
         private Theme _selectedTheme;
         private bool _featureFlag;
         private string _revitAPICHMFilePath;
+        private ObservableCollection<FavoriteQueryDTO> favoriteQueries;
 
         public bool IsEventMonitorEnabled
         {
@@ -84,6 +88,20 @@ namespace RevitDBExplorer
                 OnPropertyChanged();
             }
         }
+        public ObservableCollection<FavoriteQueryDTO> FavoriteQueries
+        {
+            get
+            {
+                return favoriteQueries;
+            }
+            set
+            {
+                favoriteQueries = value;
+                OnPropertyChanged();
+            }
+        }
+        public RelayCommand DeleteQueryCommand { get; }
+
 
         public ConfigWindow()
         {
@@ -93,9 +111,31 @@ namespace RevitDBExplorer
             FeatureFlag = AppSettings.Default.FeatureFlag;
             RevitAPICHMFilePath = AppSettings.Default.RevitAPICHMFilePath;
             this.DataContext = this;
+            FavoriteQueries = new ObservableCollection<FavoriteQueryDTO>(FavoritesManager.FavoriteQueries);
+            DeleteQueryCommand = new RelayCommand(DeleteQuery);
         }
 
+        private void DeleteQuery(object obj)
+        {
+            FavoriteQueries.Remove(obj as FavoriteQueryDTO);
+        }        
 
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            AppSettings.Default.IsEventMonitorEnabled = IsEventMonitorEnabled;
+            AppSettings.Default.Theme = SelectedTheme.Id;
+            AppSettings.Default.FeatureFlag = FeatureFlag;
+            AppSettings.Default.RevitAPICHMFilePath = RevitAPICHMFilePath;
+            FavoritesManager.FavoriteQueries = FavoriteQueries.ToList();
+            FavoritesManager.Save();
+            Close();
+        }
+
+        private void Hyperlink_RequestNavigate(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)
+        {
+            Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
+            e.Handled = true;
+        }
 
         #region INotifyPropertyChanged
 
@@ -108,19 +148,14 @@ namespace RevitDBExplorer
 
         #endregion
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void DataGrid_Selected(object sender, RoutedEventArgs e)
         {
-            AppSettings.Default.IsEventMonitorEnabled = IsEventMonitorEnabled;
-            AppSettings.Default.Theme = SelectedTheme.Id;
-            AppSettings.Default.FeatureFlag = FeatureFlag;
-            AppSettings.Default.RevitAPICHMFilePath = RevitAPICHMFilePath;
-            Close();
-        }
-
-        private void Hyperlink_RequestNavigate(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)
-        {
-            Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
-            e.Handled = true;
+            if (e.OriginalSource.GetType() == typeof(DataGridCell))
+            {
+                // Starts the Edit on the row;
+                DataGrid grd = (DataGrid)sender;
+                grd.BeginEdit(e);
+            }
         }
     }
 

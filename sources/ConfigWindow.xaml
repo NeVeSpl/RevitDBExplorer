@@ -3,66 +3,123 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:wpf="clr-namespace:RevitDBExplorer.WPF"
+        x:ClassModifier="internal"
         WindowStartupLocation="CenterOwner"
         xmlns:local="clr-namespace:RevitDBExplorer"
         mc:Ignorable="d"
         Title="Configuration" 
         Icon="/RevitDBExplorer;component/Resources/RDBE.ico" 
         TextOptions.TextFormattingMode="Display"    
-        MinHeight="250" 
-        MaxHeight="500"
-        MinWidth="550" 
-        MaxWidth="800"
+        MinHeight="350" 
+        MaxHeight="600"
+        MinWidth="700" 
+        MaxWidth="700"
         SizeToContent="WidthAndHeight"
        
         >
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>      
+                <ResourceDictionary Source="Resources/VectorGraphic.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
     <Grid Margin="7">
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="auto"/>
+            <RowDefinition Height="27"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
         </Grid.RowDefinitions>
-        <Grid  VerticalAlignment="Top" >
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="0.3*"/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="27"/>
-                <RowDefinition Height="27"/>
-                <RowDefinition Height="27"/>
-                <RowDefinition Height="27"/>
-                <RowDefinition Height="27"/>
-            </Grid.RowDefinitions>
-            <Grid.Resources>
-                <Style x:Key="DefaultStyle" TargetType="{x:Type FrameworkElement}">
-                    <Setter Property="VerticalAlignment" Value="Center"/>
-                </Style>
-                <Style TargetType="TextBlock" BasedOn="{StaticResource DefaultStyle}"/>
-                <Style TargetType="ComboBox" BasedOn="{StaticResource DefaultStyle}"/>
-                <Style TargetType="TextBox" BasedOn="{StaticResource DefaultStyle}"/>
-                <Style TargetType="CheckBox" BasedOn="{StaticResource DefaultStyle}"/>
-            </Grid.Resources>
 
-            <TextBlock  Grid.ColumnSpan="2" HorizontalAlignment="Center">           
+        <TextBlock   HorizontalAlignment="Center">           
                 <Hyperlink NavigateUri="https://github.com/NeVeSpl/RevitDBExplorer" RequestNavigate="Hyperlink_RequestNavigate">
                     https://github.com/NeVeSpl/RevitDBExplorer
                 </Hyperlink>
-            </TextBlock>
+        </TextBlock>
 
+        <TabControl Grid.Row="1" Margin="0 0 0 7" Padding="7">
+            <TabItem Header="General">
+                <Grid  VerticalAlignment="Top" >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="0.3*"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="27"/>
+                        <RowDefinition Height="27"/>
+                        <RowDefinition Height="27"/>
+                        <RowDefinition Height="27"/>
+                        <RowDefinition Height="27"/>
+                    </Grid.RowDefinitions>
+                    <Grid.Resources>
+                        <Style x:Key="DefaultStyle" TargetType="{x:Type FrameworkElement}">
+                            <Setter Property="VerticalAlignment" Value="Center"/>
+                        </Style>
+                        <Style TargetType="TextBlock" BasedOn="{StaticResource DefaultStyle}"/>
+                        <Style TargetType="ComboBox" BasedOn="{StaticResource DefaultStyle}"/>
+                        <Style TargetType="TextBox" BasedOn="{StaticResource DefaultStyle}"/>
+                        <Style TargetType="CheckBox" BasedOn="{StaticResource DefaultStyle}"/>
+                    </Grid.Resources>
 
-            <TextBlock Text="Theme" Grid.Row="1" Grid.Column="0" />
+                    <TextBlock Text="Theme" Grid.Row="0" Grid.Column="0" />
 
-            <ComboBox Grid.Row="1" Grid.Column="1" ItemsSource="{Binding Themes}" SelectedItem="{Binding SelectedTheme}" DisplayMemberPath="Title"/>
+                    <ComboBox Grid.Row="0" Grid.Column="1" ItemsSource="{Binding Themes}" SelectedItem="{Binding SelectedTheme}" DisplayMemberPath="Title"/>
 
-            <CheckBox Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Content="Is (REM) Revit event monitor enabled" IsChecked="{Binding IsEventMonitorEnabled}"  />
+                    <CheckBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Content="Is (REM) Revit event monitor enabled" IsChecked="{Binding IsEventMonitorEnabled}"  />
 
-            <CheckBox Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" Content="(FeatureFlag) Show features that are under development and may not work correctly (or at all)" IsChecked="{Binding FeatureFlag}"  />
+                    <CheckBox Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" Content="(FeatureFlag) Show features that are under development and may not work correctly (or at all)" IsChecked="{Binding FeatureFlag}"  />
 
-            <TextBlock Text="RevitAPI.chm file location" Grid.Row="4" Grid.Column="0" />
-            <TextBox Text="{Binding RevitAPICHMFilePath}" Grid.Row="4" Grid.Column="1"/>
-            
-        </Grid>
+                    <TextBlock Text="RevitAPI.chm file location" Grid.Row="3" Grid.Column="0" />
+                    <TextBox Text="{Binding RevitAPICHMFilePath}" Grid.Row="3" Grid.Column="1"/>
+                </Grid>
+            </TabItem>
 
-        <Button Grid.Row="1" Content="Ok"  IsDefault="True" Click="Button_Click"/>
+            <TabItem Header="Favourite queries">
+                <DataGrid  ItemsSource="{Binding FavoriteQueries}" AutoGenerateColumns="False" CanUserAddRows="False"  SelectionMode="Single" SelectionUnit="Cell"  CanUserResizeRows="False" RowDetailsVisibilityMode="Collapsed" DataGridCell.Selected="DataGrid_Selected">
+                    <DataGrid.Resources>
+                        <wpf:BindingProxy x:Key="Proxy" Data="{Binding}" />
+
+                        <Style x:Key="Body_Content_DataGrid_Centering" TargetType="{x:Type DataGridCell}">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type DataGridCell}">
+                                        <Grid Background="{TemplateBinding Background}">
+                                            <ContentPresenter VerticalAlignment="Center"  />
+                                        </Grid>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+
+                            <Style.Triggers>
+                                <Trigger Property="DataGridCell.IsSelected" Value="True">
+                                    <Setter Property="Background" Value="Transparent" />
+                                    <Setter Property="Foreground" Value="Black" />
+                                </Trigger>
+                              
+                            </Style.Triggers>
+
+                        </Style>
+                    </DataGrid.Resources>
+
+                    <DataGrid.Columns>
+                        <DataGridTextColumn  Header="Query" Width="1*" Binding="{Binding Query}" CellStyle="{StaticResource Body_Content_DataGrid_Centering}"/>
+                        <DataGridTextColumn  Header="Description" Width="1*" Binding="{Binding Description}" CellStyle="{StaticResource Body_Content_DataGrid_Centering}"/>
+                        <DataGridTemplateColumn Header="" Width="25">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Command="{Binding Data.DeleteQueryCommand, Source={StaticResource Proxy}}" CommandParameter="{Binding}"  Background="Transparent" BorderThickness="0" ToolTip="Delete" Margin="-1" Padding="3" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" >
+                                        <Path Style="{StaticResource IconDelete}" Width="14" />
+                                    </Button>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                    </DataGrid.Columns>                   
+                </DataGrid>
+            </TabItem>
+        </TabControl>
+
+        <Button Grid.Row="2" Content="Ok"  IsDefault="True" Click="Button_Click"/>
     </Grid>
 </Window>

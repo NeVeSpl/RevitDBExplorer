@@ -225,11 +225,11 @@ namespace RevitDBExplorer.WPF.Controls
             {
                 shouldBeOpened = autocompleteItems.Count() != AutocompleteItems.Count();
 
-                if (autocompleteItems.Count() == 1)
+                if (autocompleteItems.Count() < 4)
                 {
                     var postfix = cTextBox.Text.Substring(cTextBox.CaretIndex - prefixLength, prefixLength);
 
-                    if (autocompleteItems.First().TextToInsert.Trim() == postfix.Trim())
+                    if (autocompleteItems.Any(x => x.TextToInsert.Trim() == postfix.Trim()))
                     {
                         shouldBeOpened = false;
                     }
