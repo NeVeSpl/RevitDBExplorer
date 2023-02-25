@@ -86,13 +86,21 @@
                          VirtualizingPanel.CacheLength="7,7"-->
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <Grid ToolTip = "{Binding Description, Mode=OneWay}" >
+                            <Grid >
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="250"  />
-                                    <ColumnDefinition Width="313"  />
+                                    <ColumnDefinition Width="222"  />
+                                    <ColumnDefinition Width="333"  />
                                 </Grid.ColumnDefinitions>
                                 <TextBlock Text="{Binding Label, Mode=OneWay}" Grid.Column="0" Margin="0 0 7 0" />
                                 <TextBlock Text="{Binding Description, Mode=OneWay}" Grid.Column="1"/>
+
+                                <Grid.ToolTip>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding Label, Mode=OneWay}" />
+                                        <TextBlock Text=" - " />
+                                        <TextBlock Text="{Binding Description, Mode=OneWay}" />
+                                    </StackPanel>
+                                </Grid.ToolTip>
                             </Grid>
                         </DataTemplate>
                     </ListBox.ItemTemplate>

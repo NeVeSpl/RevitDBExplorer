@@ -37,6 +37,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Autocompletion
             if (string.IsNullOrEmpty(fullText) || IsSeparator(textOnTheLeftSideOfCaret.Trim().LastOrDefault()))
             {
                 items.AddRange(CommandAutocompleteItems);
+                items.AddRange(FavoritesManager.GetFavorites());
             }
             else
             {
