@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Autodesk.Revit.DB;
+using RevitDBExplorer.Domain.RevitDatabaseQuery.Autocompletion.Internals;
 using RevitDBExplorer.Domain.RevitDatabaseQuery.FuzzySearch;
-using RevitDBExplorer.WPF.Controls;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 

@@ -206,13 +206,18 @@ namespace RevitDBExplorer.UIComponents.Tree
             }
             if (parameter is GroupTreeItem groupTreeItem)
             {
-                if (groupTreeItem is TypeGroupTreeItem typeGroupTreeItem)
+                text = CodeGenerator.GenerateUpdateCommandForType(typeof(object));
+
+                var pointer = groupTreeItem;
+                while (pointer != null) 
                 {
-                    text = CodeGenerator.GenerateUpdateCommandForType(typeGroupTreeItem.GetAllSnoopableObjects().FirstOrDefault()?.Object?.GetType());
-                }
-                else
-                {
-                    text = CodeGenerator.GenerateUpdateCommandForAnyObject();
+                    if (pointer is TypeGroupTreeItem typeGroupTreeItem)
+                    {
+                        text = CodeGenerator.GenerateUpdateCommandForType(typeGroupTreeItem.GetAllSnoopableObjects().FirstOrDefault()?.Object?.GetType());
+                        break;
+                    }
+
+                    pointer = pointer.Parent;
                 }
             }
 

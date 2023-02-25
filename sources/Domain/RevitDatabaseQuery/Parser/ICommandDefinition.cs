@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using Autodesk.Revit.DB;
-using RevitDBExplorer.WPF.Controls;
+using RevitDBExplorer.Domain.RevitDatabaseQuery.Autocompletion.Internals;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 

@@ -25,18 +25,8 @@ namespace RevitDBExplorer.Domain.RevitDatabaseScripting
         }
 
 
-        public static string GenerateUpdateCommandForAnyObject()
-        {
-            return
-@$"void Update(IEnumerable<object> objects)
-{{
-    foreach (var item in objects)
-    {{
-        item.
-    }}
-}}
-";
-        }
+
+        
         public static string GenerateUpdateCommandForParameter(Autodesk.Revit.DB.Parameter revitParameter)
         {            
             var paramIdText = "";

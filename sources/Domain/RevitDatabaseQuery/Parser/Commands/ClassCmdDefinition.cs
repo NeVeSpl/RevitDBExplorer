@@ -5,8 +5,8 @@ using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.Architecture;
 using Autodesk.Revit.DB.Mechanical;
 using Autodesk.Revit.DB.Structure;
+using RevitDBExplorer.Domain.RevitDatabaseQuery.Autocompletion.Internals;
 using RevitDBExplorer.Domain.RevitDatabaseQuery.FuzzySearch;
-using RevitDBExplorer.WPF.Controls;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 

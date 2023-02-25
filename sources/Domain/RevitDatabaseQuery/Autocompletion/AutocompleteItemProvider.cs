@@ -2,12 +2,13 @@
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using RevitDBExplorer.Domain.RevitDatabaseQuery.Autocompletion.Internals;
 using RevitDBExplorer.Domain.RevitDatabaseQuery.Parser;
 using RevitDBExplorer.WPF.Controls;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
-namespace RevitDBExplorer.Domain.RevitDatabaseQuery
+namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Autocompletion
 {
     internal class AutocompleteItemProvider : IAutocompleteItemProvider
     {
@@ -23,8 +24,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
 
         public (IEnumerable<IAutocompleteItem>, int) GetAutocompleteItems(string fullText, int caretPosition)
         {
-            string textOnTheLeftSideOfCaret = fullText.Substring(0, caretPosition);
-            //string textOnTheRightSideOfCaret = fullText.Substring(caretPosition).Trim();
+            string textOnTheLeftSideOfCaret = fullText.Substring(0, caretPosition);           
 
             var items = new List<IAutocompleteItem>();
             int prefixLength = 0;

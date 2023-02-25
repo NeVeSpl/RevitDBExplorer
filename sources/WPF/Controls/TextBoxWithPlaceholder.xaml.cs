@@ -6,49 +6,16 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using RevitDBExplorer.Domain.DataModel;
+using RevitDBExplorer.Domain.RevitDatabaseQuery.Autocompletion.Internals;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
 namespace RevitDBExplorer.WPF.Controls
 {
-    public interface IAutocompleteItem
-    {
-        string TextToInsert { get; }
-        string Label { get; }
-        string Description { get; }
-        bool IsChosenOne { get; set; }
-        string GroupName { get; }
-    }
-    public class AutocompleteItem : IAutocompleteItem
-    {
-        public string Label { get; init; }
-        public string TextToInsert { get; init; }
-        public string Description { get; init; }
-        public bool IsChosenOne { get; set; }
-        public string GroupName { get; init; }
-
-        public AutocompleteItem(string textToInsert, string label, string description, string group = null)
-        {
-            Label = label;
-            TextToInsert = textToInsert;
-            Description = description;
-            GroupName = group;
-        }
-    }
     public interface IAutocompleteItemProvider
     {
         (IEnumerable<IAutocompleteItem> items, int prefixLength) GetAutocompleteItems(string fullText, int caretPosition);
-    }
-
-    public static class AutocompleteItemGroups
-    {
-        public static readonly string Commands = "Commands";
-        public static readonly string BuiltInParameter = "Built-in parameters";
-        public static readonly string SharedParameter = "Shared parameters";
-        public static readonly string ProjectParameter = "Project parameters";
     }
 
 

@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Gma.DataStructures.StringSearch;
+using RevitDBExplorer.Domain.RevitDatabaseQuery.Autocompletion.Internals;
 using RevitDBExplorer.Domain.RevitDatabaseQuery.Parser;
-using RevitDBExplorer.WPF.Controls;
 using SimMetrics.Net;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md

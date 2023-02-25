@@ -12,6 +12,7 @@ using System.Windows.Threading;
 using RevitDBExplorer.Domain;
 using RevitDBExplorer.Domain.DataModel;
 using RevitDBExplorer.Domain.RevitDatabaseQuery;
+using RevitDBExplorer.Domain.RevitDatabaseQuery.Autocompletion;
 using RevitDBExplorer.Domain.RevitDatabaseScripting;
 using RevitDBExplorer.Domain.Selectors;
 using RevitDBExplorer.Properties;

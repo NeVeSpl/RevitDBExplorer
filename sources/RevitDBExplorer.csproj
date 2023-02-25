@@ -313,7 +313,7 @@
     <Compile Include="Domain\DataModel\ValueContainers\FailureDefinitionIdHandler.cs" />
     <Compile Include="Domain\DataModel\ValueContainers\SchedulableFieldHandler.cs" />
     <Compile Include="Domain\DataModel\ValueContainers\WorksetIdHandler.cs" />
-    <Compile Include="Domain\RevitDatabaseQuery\AutocompleteItemProvider.cs" />
+    <Compile Include="Domain\RevitDatabaseQuery\Autocompletion\AutocompleteItemProvider.cs" />
     <Compile Include="Domain\RevitDatabaseQuery\CmdType.cs" />
     <Compile Include="Domain\RevitDatabaseQuery\Filters\WorksetFilter.cs" />
     <Compile Include="Domain\RevitDatabaseQuery\FuzzySearch\DataBucket.cs" />
@@ -560,6 +560,9 @@
     <Compile Include="WPF\AttachedProperties\TextBlockAP.cs" />
     <Compile Include="WPF\BaseCommand.cs" />
     <Compile Include="WPF\BindingProxy.cs" />
+    <Compile Include="Domain\RevitDatabaseQuery\Autocompletion\Internals\AutocompleteItem.cs" />
+    <Compile Include="Domain\RevitDatabaseQuery\Autocompletion\Internals\AutocompleteItemGroups.cs" />
+    <Compile Include="Domain\RevitDatabaseQuery\Autocompletion\Internals\IAutocompleteItem.cs" />
     <Compile Include="WPF\Controls\TextBoxWithPlaceholder.xaml.cs">
       <DependentUpon>TextBoxWithPlaceholder.xaml</DependentUpon>
     </Compile>

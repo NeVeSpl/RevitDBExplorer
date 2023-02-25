@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using RevitDBExplorer.WPF.Controls;
+﻿using System.Collections.Generic;
+using RevitDBExplorer.Domain.RevitDatabaseQuery.Autocompletion.Internals;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 

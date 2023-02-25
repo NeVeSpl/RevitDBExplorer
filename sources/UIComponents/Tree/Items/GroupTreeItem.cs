@@ -58,7 +58,8 @@ namespace RevitDBExplorer.UIComponents.Tree.Items
                 return Enum.GetName(typeof(GroupBy), GroupedBy);
             }
         }
-                
+        public GroupTreeItem Parent => parent;
+
 
         public GroupTreeItem(SourceOfObjects sourceOfObjects, Predicate<object> itemFilter, GroupBy groupBy, TreeItemsCommands commands) : base(commands)
         {
