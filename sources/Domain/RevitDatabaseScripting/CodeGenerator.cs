@@ -19,7 +19,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseScripting
             var scriptText =
 @$"IEnumerable<object> Select(Document document{appArg})
 {{
-    return {text};    
+{text}    
 }}";
             return scriptText;
         }

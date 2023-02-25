@@ -320,6 +320,7 @@
     <Compile Include="Domain\RevitDatabaseQuery\Filters\OwnerViewFilter.cs" />
     <Compile Include="Domain\RevitDatabaseQuery\Parser\Commands\CategoryCmdDefinition.cs" />
     <Compile Include="Domain\RevitDatabaseQuery\Parser\Commands\ClassCmdDefinition.cs" />
+    <Compile Include="Domain\RevitDatabaseQuery\Parser\Commands\UniqueIdCmdDefinition.cs" />
     <Compile Include="Domain\RevitDatabaseQuery\Parser\Commands\NameCmdDefinition.cs" />
     <Compile Include="Domain\RevitDatabaseQuery\Parser\Commands\OwnerViewFilterCmdDefinition.cs" />
     <Compile Include="Domain\RevitDatabaseQuery\Parser\Commands\SelectionCmdDefinition.cs" />
@@ -336,6 +337,9 @@
     <Compile Include="Domain\RevitDatabaseQuery\Parser\CommandParser.cs" />
     <Compile Include="Domain\RevitDatabaseQuery\Parser\Commands\ElementIdCmdDefinition.cs" />
     <Compile Include="Domain\RevitDatabaseQuery\Parser\ICommandDefinition.cs" />
+    <Compile Include="Domain\RevitDatabaseQuery\SeedProviders\Internals\Provider.cs" />
+    <Compile Include="Domain\RevitDatabaseQuery\SeedProviders\UniqueIdProvider.cs" />
+    <Compile Include="Domain\RevitDatabaseQuery\SeedProviders\SelectionProvider.cs" />
     <Compile Include="Domain\RevitDatabaseScripting\CodeGenerator.cs" />
     <Compile Include="Domain\RevitDatabaseScripting\RevitDatabaseScriptingService.cs" />
     <Compile Include="Domain\RevitDatabaseScripting\SymbolFinder.cs" />

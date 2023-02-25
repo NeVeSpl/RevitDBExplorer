@@ -7,6 +7,8 @@ using RevitDBExplorer.Domain.DataModel;
 using RevitDBExplorer.Domain.RevitDatabaseQuery.Filters;
 using RevitDBExplorer.Domain.RevitDatabaseQuery.Parser;
 using RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands;
+using RevitDBExplorer.Domain.RevitDatabaseQuery.Providers;
+using RevitDBExplorer.Domain.RevitDatabaseQuery.Providers.Internals;
 using VisibleInViewFilter = RevitDBExplorer.Domain.RevitDatabaseQuery.Filters.VisibleInViewFilter;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
@@ -43,38 +45,57 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
             pipe.AddRange(ParameterFilter.Create(commands));
             pipe.AddRange(Filters.WorksetFilter.Create(commands));
 
+            string providerSyntax = "";
             string collectorSyntax = "";
             QueryPipeExecutor queryExecutor = null;
 
-            bool useRevitSelection = commands.OfType<SelectionCmd>().Any();
+            var providers = new List<Provider>();
+            providers.AddRange(SelectionProvider.Create(commands));
+            providers.AddRange(UniqueIdProvider.Create(commands));
 
-            if (pipe.Any() || useRevitSelection)
-            {  
-                collectorSyntax = useRevitSelection ? "new FilteredElementCollector(document, uia.ActiveUIDocument.Selection.GetElementIds())" : "new FilteredElementCollector(document)";
+            if (pipe.Any())
+            {
+                var elementIdsSyntax = "";
+
+                if (providers.Any())
+                {
+                    providerSyntax = "    var elementIds = new List<ElementId>();";
+
+                    foreach (var provider in providers)
+                    {
+                        providerSyntax += Environment.NewLine + "    " + provider.Syntax;
+                    }
+
+                    providerSyntax += Environment.NewLine + Environment.NewLine;
+                    elementIdsSyntax = ", elementIds";
+                }
+
+                collectorSyntax = $"    return new FilteredElementCollector(document{elementIdsSyntax})";
 
                 foreach (var filter in pipe)
                 {
                    collectorSyntax += Environment.NewLine + "    " + filter.CollectorSyntax;                    
                 }
-                collectorSyntax += Environment.NewLine + "    .ToElements()";
+                collectorSyntax += Environment.NewLine + "    .ToElements();";
 
-                queryExecutor = new QueryPipeExecutor(pipe, useRevitSelection);
+                queryExecutor = new QueryPipeExecutor(pipe, providers);
             }           
 
-            return new Result(collectorSyntax, commands, new SourceOfObjects(queryExecutor) { Title ="Query" });
+            return new Result(providerSyntax + collectorSyntax, commands, new SourceOfObjects(queryExecutor) { Title ="Query" });
         }
 
         public record Result(string GeneratedCSharpSyntax, IList<ICommand> Commands, SourceOfObjects SourceOfObjects);
 
         private class QueryPipeExecutor : IAmSourceOfEverything
         {
-            private readonly IReadOnlyList<QueryItem> pipe;
-            private readonly bool useRevitSelection;
+            private readonly IReadOnlyList<QueryItem> filterPipe;
+            private readonly IReadOnlyList<Provider> seedPipe;
 
-            public QueryPipeExecutor(IReadOnlyList<QueryItem> pipe, bool useSelection)
+
+            public QueryPipeExecutor(IReadOnlyList<QueryItem> filterPipe, IReadOnlyList<Provider> seedPipe)
             {
-                this.pipe = pipe;
-                this.useRevitSelection = useSelection;
+                this.filterPipe = filterPipe;
+                this.seedPipe = seedPipe;
             }
 
 
@@ -83,27 +104,42 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
                 var document = app.ActiveUIDocument?.Document;
                 if (document == null) return null;
 
-                ICollection<ElementId> selectedIds = null;
+                ICollection<ElementId> elementIds = GatherInitialSeed(app.ActiveUIDocument).ToArray();
 
-                if (useRevitSelection)
+                if (seedPipe.Any() && elementIds.IsEmpty())
                 {
-                    selectedIds = app.ActiveUIDocument.Selection.GetElementIds();
-                    if (selectedIds.Any() == false)
-                    {
-                        return null;
-                    }
+                     return null;
                 }
 
-                var collector = BuildCollector(document, selectedIds);
+                var collector = BuildCollector(document, elementIds);
                 var snoopableObjects = collector.ToElements().Select(x => new SnoopableObject(document, x));
+
                 return snoopableObjects;
             }
 
-            private FilteredElementCollector BuildCollector(Document document, ICollection<ElementId> selectedIds)
+            private IEnumerable<ElementId> GatherInitialSeed(UIDocument uiDocument)
             {
-                var collector = selectedIds != null ? new FilteredElementCollector(document, selectedIds) : new FilteredElementCollector(document);              
+                foreach (var provider in seedPipe)
+                {
+                    foreach (var id in provider.GetIds(uiDocument))
+                    {
+                        yield return id;
+                    }
+                }
+            }
+            private FilteredElementCollector BuildCollector(Document document, ICollection<ElementId> elementIds)
+            {
+                FilteredElementCollector collector;
+                if (elementIds?.Any() == true)
+                {
+                    collector = new FilteredElementCollector(document, elementIds);
+                }
+                else
+                {
+                    collector = new FilteredElementCollector(document);
+                }
 
-                foreach (var filter in pipe)
+                foreach (var filter in filterPipe)
                 {
                     var elementFilter = filter.CreateElementFilter(document);
                     if (elementFilter != null)
@@ -111,6 +147,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
                         collector.WherePasses(elementFilter);                        
                     }
                 }
+
                 return collector;
             }
         }

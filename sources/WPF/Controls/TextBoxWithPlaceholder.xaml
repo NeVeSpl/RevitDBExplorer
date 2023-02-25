@@ -89,7 +89,7 @@
                             <Grid ToolTip = "{Binding Description, Mode=OneWay}" >
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="250"  />
-                                    <ColumnDefinition Width="250"  />
+                                    <ColumnDefinition Width="313"  />
                                 </Grid.ColumnDefinitions>
                                 <TextBlock Text="{Binding Label, Mode=OneWay}" Grid.Column="0" Margin="0 0 7 0" />
                                 <TextBlock Text="{Binding Description, Mode=OneWay}" Grid.Column="1"/>

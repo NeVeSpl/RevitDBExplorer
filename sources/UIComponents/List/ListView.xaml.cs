@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Documents;
 using System.Windows.Input;
 using RevitDBExplorer.Domain.DataModel;
 using RevitDBExplorer.Domain.DataModel.ViewModels.Base;
@@ -117,18 +118,19 @@ namespace RevitDBExplorer.UIComponents.List
 
         protected override void OnPreviewMouseMove(MouseEventArgs e)
         {
-            var item = Mouse.DirectlyOver as FrameworkElement;           
+            base.OnPreviewMouseMove(e);
 
             if (e.LeftButton == MouseButtonState.Pressed)
             {
                 var movedDistance = (_initialMousePosition - e.GetPosition(this)).Length;
+                if (movedDistance < 7) return;
 
+                string textValue = "";
+                var item = Mouse.DirectlyOver as FrameworkElement;
 
-                if ((movedDistance > 13) && (item?.DataContext is SnoopableMember snoopableMember))
+                if (item?.DataContext is SnoopableMember snoopableMember)
                 {
                     var isNameColumn = item.GetParent(x => string.Equals(x.Tag, "NameColumn")) != null;
-
-                    string textValue = "";
                     if (isNameColumn)
                     {
                         textValue = snoopableMember.Name;
@@ -140,23 +142,34 @@ namespace RevitDBExplorer.UIComponents.List
                             textValue = presenter.Label;
                         }
                     }
-
-                    var bracketIndex =  textValue.IndexOf('(');
-                    if (bracketIndex > 0)
-                    {
-                        textValue = textValue.Substring(0, bracketIndex).Trim();
-                    }
-
-                    DataObject data = new DataObject();                 
-                    data.SetData("Object", snoopableMember);
-                    data.SetData(DataFormats.StringFormat, textValue ?? "");                  
-                    DragDrop.DoDragDrop(this, data, DragDropEffects.Copy | DragDropEffects.Move);
-                    e.Handled = false;
                 }
-            }
+                else
+                {
+                    if (e.OriginalSource is TextBlock textBlock)
+                    {
+                        textValue = textBlock.Text;
+                    }
+                    if (e.OriginalSource is Run run)
+                    {
+                        textValue = run.Text;
+                    }
+                }
 
-            base.OnPreviewMouseMove(e);
-        }  
-        
+                if (string.IsNullOrWhiteSpace(textValue)) return;
+
+                var bracketIndex =  textValue.IndexOf('(');
+                if (bracketIndex > 0)
+                {
+                    textValue = textValue.Substring(0, bracketIndex).Trim();
+                }
+
+                if (string.IsNullOrWhiteSpace(textValue)) return;  
+
+                DataObject data = new DataObject();
+                data.SetData(DataFormats.StringFormat, textValue);                  
+                DragDrop.DoDragDrop(this, data, DragDropEffects.Copy | DragDropEffects.Move);
+                e.Handled = false;
+            }
+        }          
     }
 }
