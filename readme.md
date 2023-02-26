@@ -30,7 +30,7 @@ Download and install [RevitDBExplorer.msi](https://github.com/NeVeSpl/RevitDBExp
 
 ### query Revit database with RDQ (Revit database querying)
 
-RDQ is able to interpret words separated by `,` as element ids, Revit classes, categories, parameters and many more. RDQ builds from them FilteredElementCollector and uses it to query Revit database. [Learn more about RQL (Revit query language) used by RDQ.](documentation/revit-database-querying.md)
+RDQ is able to interpret words separated by `,` as element ids, Revit classes, categories, parameters and many more. RDQ builds from them FilteredElementCollector and uses it to query Revit database. [Learn more about RQL (Revit query language) used by RDQ.](documentation/revit-database-querying.md#revit-database-querying)
 
 ![possibility-to-query-Revit-database-from-UI](documentation/examples/rdq-revit-database-query-with-rql-revit-query-language.v2.gif)
 
@@ -40,7 +40,7 @@ RDQ is able to interpret words separated by `,` as element ids, Revit classes, c
 
 #### ad hoc SELECT query
 
-[coming soon]
+![possibility-to-query-Revit-database-from-UI](documentation/examples/revit-databse-scripting-select-query.gif)
 
 #### ad hoc UPDATE command
 
