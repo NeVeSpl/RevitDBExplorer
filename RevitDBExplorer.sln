@@ -8,6 +8,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B9B32B13-0D22-42BB-9B5D-ED8AE3C3D95B}"
 	ProjectSection(SolutionItems) = preProject
 		readme.md = readme.md
+		documentation\revit-database-querying.md = documentation\revit-database-querying.md
 		RevitDBExplorer.addin = RevitDBExplorer.addin
 	EndProjectSection
 EndProject
