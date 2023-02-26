@@ -27,13 +27,24 @@ namespace RevitDBExplorer.UIComponents.Tree
             }
         }
 
+        private Point _initialMousePosition;
+        protected override void OnPreviewMouseDown(MouseButtonEventArgs e)
+        {
+            _initialMousePosition = e.GetPosition(this);
+            base.OnPreviewMouseDown(e);
+        }
 
         protected override void OnPreviewMouseMove(MouseEventArgs e)
         {
+            base.OnPreviewMouseMove(e);
             var item = Mouse.DirectlyOver as FrameworkElement;
 
             if (e.LeftButton == MouseButtonState.Pressed)
             {
+                var movedDistance = (_initialMousePosition - e.GetPosition(this)).Length;
+                if (movedDistance < 7) return;
+
+
                 if (item?.DataContext is TreeItem treeItem)
                 {
                     string text = "???";
@@ -54,9 +65,7 @@ namespace RevitDBExplorer.UIComponents.Tree
                     DragDrop.DoDragDrop(this, data, DragDropEffects.Copy | DragDropEffects.Move);
                     //e.Handled = true;
                 }
-            }
-
-            base.OnPreviewMouseMove(e);
+            }            
         }
     }
 }

@@ -5,7 +5,7 @@
 Yet another [RevitLookup](https://github.com/jeremytammik/RevitLookup) clone. RevitLookup is mature and was an indispensable tool to work with Revit API for many years. But now, there is a better tool for the job. Let me introduce you to RDBE and its capabilities. RDBE not only allows us to explore in a more efficient way thanks to querying, but also to modify Revit database through ad hoc scripts written in C#. 
 
 - [query Revit database](#query-revit-database-with-rdq-revit-database-querying)
-- [script Revit database](#script-revit-database-with-rds-revit-databse-scripting)
+- [script Revit database](#script-revit-database-with-rds-revit-database-scripting)
   - [ad hoc SELECT query](#ad-hoc-select-query)
   - [ad hoc UPDATE command](#ad-hoc-update-command)
 - [filterable tree of elements and list of properties and methods](#filterable-tree-of-elements-and-list-of-properties-and-methods)
@@ -34,7 +34,7 @@ RDQ is able to interpret words separated by `,` as element ids, Revit classes, c
 
 ![possibility-to-query-Revit-database-from-UI](documentation/examples/rdq-revit-database-query-with-rql-revit-query-language.v2.gif)
 
-### script Revit database with RDS (Revit databse scripting)
+### script Revit database with RDS (Revit database scripting)
 
 [comming soon]
 
