@@ -36,7 +36,20 @@ RDQ is able to interpret words separated by `,` as element ids, Revit classes, c
 
 ### script Revit database with RDS (Revit database scripting)
 
-[comming soon]
+RDS is intended to run C# code that is too small or ephemeral to make macro/dynamo/addon for it. RDS scripts are divided into two categories : 
+- SELECT query, where result of the query is dispayed in the RDBE UI 
+- UPDATE command, where as a result of the command execution, the model is changed
+
+category | SELECT query | UPDATE command
+---|--------------|---------------
+returns | something   | `void`
+can change model | **no**, it is read-only | **yes**, it runs inside transaction
+
+RDS aims to facilitate writing scripts by code generation in some areas: 
+- it can generate a SELECT query from any RDQ query
+- it can generate an UPDATE command for any parameter 
+
+Input parameters are available for both types of scripts. Besides a few predefined variables, any object (or group of objects) displayed in the Tree, can be used as input for the script.
 
 #### ad hoc SELECT query
 
@@ -44,7 +57,7 @@ RDQ is able to interpret words separated by `,` as element ids, Revit classes, c
 
 #### ad hoc UPDATE command
 
-Example shows how to add prefix to `Mark` parameter for many selected elements as inputs for the script.
+An example shows how to add prefix to `Mark` parameter for many selected elements as inputs for the script. 
 
 ![possibility-to-query-Revit-database-from-UI](documentation/examples/revit-database-scripting-update-command.gif)
 
