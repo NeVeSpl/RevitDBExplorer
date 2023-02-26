@@ -1,10 +1,10 @@
 # Revit database explorer (RDBE)
 
-The fastest, modern, asynchronous Revit database exploration tool for Revit 2021+.
+**The fastest, modern, asynchronous Revit database exploration tool for Revit 2021+.**
 
-Yet another [RevitLookup](https://github.com/jeremytammik/RevitLookup) clone. RevitLookup is mature and was an indispensable tool to work with Revit API for many years. But now, there is a better tool for the job. Let me introduce you to RDBE and its capabilities. It not only allows us to explore in a more efficient way thanks to querying, but to modify Revit database through ad hoc scripts written in C#.
+Yet another [RevitLookup](https://github.com/jeremytammik/RevitLookup) clone. RevitLookup is mature and was an indispensable tool to work with Revit API for many years. But now, there is a better tool for the job. Let me introduce you to RDBE and its capabilities. RDBE not only allows us to explore in a more efficient way thanks to querying, but also to modify Revit database through ad hoc scripts written in C#. 
 
-- [query Revit database](#query-revit-database-with-rql-revit-query-language)
+- [query Revit database](#query-revit-database-with-rdq-revit-database-querying)
 - [script Revit database](#script-revit-database-with-rds-revit-databse-scripting)
   - [ad hoc SELECT query](#ad-hoc-select-query)
   - [ad hoc UPDATE command](#ad-hoc-update-command)
@@ -24,66 +24,15 @@ Yet another [RevitLookup](https://github.com/jeremytammik/RevitLookup) clone. Re
 
 ## Installation
 
-- Download and install [RevitDBExplorer.msi](https://github.com/NeVeSpl/RevitDBExplorer/releases/latest/download/RevitDBExplorer.msi). Setup will install RDBE for Revit 2021, 2022, 2023, 2024.
+Download and install [RevitDBExplorer.msi](https://github.com/NeVeSpl/RevitDBExplorer/releases/latest/download/RevitDBExplorer.msi). Setup will install RDBE for Revit 2021, 2022, 2023, 2024.
 
 ## Features
 
-### query Revit database with RQL (Revit query language)
+### query Revit database with RDQ (Revit database querying)
 
-RDQ (Revit database query) is able to interpret words separated by `,` as element ids, Revit classes, categories, parameters and many more. RDQ builds from them FilteredElementCollector and uses it to query Revit database. The table with a description of RQL is below the example.
+RDQ is able to interpret words separated by `,` as element ids, Revit classes, categories, parameters and many more. RDQ builds from them FilteredElementCollector and uses it to query Revit database. [Learn more about RQL (Revit query language) used by RDQ.](documentation/revit-database-querying.md)
 
 ![possibility-to-query-Revit-database-from-UI](documentation/examples/rdq-revit-database-query-with-rql-revit-query-language.v2.gif)
-
-#### RQL - Revit query language
- 
-input/keywords | interpretation | translates to in Revit Api
-----------|------------| ----
-`,`, `;` | seperates phrases/commands
-`:` | [classifier](#classifiers)
-`active`, <br/>`active view` | select elements from active view | new VisibleInViewFilter()
-`type`, <br/>`element type`, <br/>`not element`  | select only element types | .WhereElementIsElementType()
-`element`, <br/>`not element type`, <br/>`not type` | select only elements | .WhereElementIsNotElementType()
-e.g. `123456` - number | select elements with given id  | new ElementIdSetFilter(new [] {new ElementId(123456)})
-e.g. `Wall` - revit class | select elements of given class | .OfClass(typeof(Wall)) or <br/>new ElementMulticlassFilter()
-e.g. `OST_Windows` - revit category | select elements of given category | .OfCategory(BuiltInCategory.OST_Windows) or <br/>new ElementMulticategoryFilter()
-e.g. `Level 13` - level name | select elements from given level | new ElementLevelFilter()
-e.g. `Room 44` - room name | select elements from given room | new ElementIntersectsSolidFilter()
-e.g. `Approved Connections` - filter name | select elements that pass rule-based filter | ParameterFilterElement.GetElementFilter()
-`param = value` | a phrase that uses [any of the operators](#operators) is recognised as a search for a parameter (value)| new ElementParameterFilter()
-`foo` - any not recognized text | wildcard search for a given text in parameters:<br/> Name,<br/> Mark,<br/> Type Name,<br/> Family and Type | ParameterFilterRuleFactory.CreateContainsRule(),  <br/>BuiltInParameter.ALL_MODEL_TYPE_NAME, <br/>BuiltInParameter.ALL_MODEL_MARK, <br/>BuiltInParameter.ELEM_FAMILY_AND_TYPE_PARAM, <br/>BuiltInParameter.DATUM_TEXT
-`s:column`|select elements matching a structural type|new ElementStructuralTypeFilter()
-
-Queries are case-insensitive. Matching for categories/classes/parameters is done in a fuzzy way, you do not have to be very precise with names, but this may lead to some false positive results. 
-
-A value you are searching for is not parsed/interpreted (yet), which means that it uses internal Revit storage units/form, not Revit UI units. For parameters that have StorageType.String, you can do a wildcard search by using `%` or  `*` at the beginning and/or end of searching text e.g. `Mark = *foo%`
-
-<a name="classifiers"></a>
-
-classifier | meaning
------------|-------
-`i:[text]`,`id:[text]`, `ids:[text]` | interpret `[text]` as an ElementId
-`c:[text]`, `cat:[text]`, `category:[text]` | interpret `[text]` as a BuiltInCategory
-`t:[text]`, `type:[text]`, `class:[text]`, `typeof:[text]` | interpret `[text]` as an element type/class
-`n:[text]`, `name:[text]` | 
-`s:[text]`, `stru:[text]`,  `structual:[text]`| interpret `[text]` as a structural type
-`l:[text]`, `lvl:[text]`,  `level:[text]`| interpret `[text]` as a level 
-`r:[text]`, `room:[text]`| interpret `[text]` as a room
-`f:[text]`, `filter:[text]`, | interpret `[text]` as a rule-based filter
-
-<a name="operators"></a>
-
-operator | meaning | example
--|-|-
-`!=`, `<>` | NotEquals | `Length != 0`
-`>=` | GreaterOrEqual | `Length >= 0`
-`<=` | LessOrEqual | `Length <= 0`
-`??` | HasNoValue, parameter exists but has no value | `Length ??`
-`!!` | HasValue, paramater exists and has value | `Length !!`
-**`?!`** | **Exists, element has given parameter**| `Length ?!`
-`=` | Equals | `Length = 0`
-`>` | Greater | `Length > 0`
-`<` | Less | `Length < 0`
-
 
 ### script Revit database with RDS (Revit databse scripting)
 
