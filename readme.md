@@ -40,11 +40,13 @@ RDQ is able to interpret words separated by `,` as element ids, Revit classes, c
 
 #### ad hoc SELECT query
 
-![possibility-to-query-Revit-database-from-UI](documentation/examples/revit-databse-scripting-select-query.gif)
+![revit-database-scripting-select-query](documentation/examples/revit-database-scripting-select-query.gif)
 
 #### ad hoc UPDATE command
 
-[coming soon]
+Example shows how to add prefix to `Mark` parameter for many selected elements as inputs for the script.
+
+![possibility-to-query-Revit-database-from-UI](documentation/examples/revit-database-scripting-update-command.gif)
 
 ### filterable tree of elements and list of properties and methods
 
