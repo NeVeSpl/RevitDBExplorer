@@ -1,14 +1,13 @@
 # Revit database explorer (RDBE)
 
-The fastest, modern, asynchronous Revit database exploration tool for Revit 2021+ 
+The fastest, modern, asynchronous Revit database exploration tool for Revit 2021+.
 
-
-
-## Origin
-
-Yet another [RevitLookup](https://github.com/jeremytammik/RevitLookup) clone. RevitLookup is a mature and indispensable tool to work with Revit. But its code had many authors and architectural changes(reflection, modeless) through time which led to quite significant technical debt and lack of consistency. For worse, its UI is still based on WinForms ... When I was adding support for [modeless windows #93](https://github.com/jeremytammik/RevitLookup/pull/93) to RevitLookup , I knew that at some point in time I will rewrite it whole. So here we are, let me introduce you to RDBE, a completely rewritten RevitLookup with WPF UI and a few small improvements:
+Yet another [RevitLookup](https://github.com/jeremytammik/RevitLookup) clone. RevitLookup is mature and was an indispensable tool to work with Revit API for many years. But now, there is a better tool for the job. Let me introduce you to RDBE and its capabilities. It not only allows us to explore in a more efficient way thanks to querying, but to modify Revit database through ad hoc scripts written in C#.
 
 - [query Revit database](#query-revit-database-with-rql-revit-query-language)
+- [script Revit database](#script-revit-database-with-rds-revit-databse-scripting)
+  - [ad hoc SELECT query](#ad-hoc-select-query)
+  - [ad hoc UPDATE command](#ad-hoc-update-command)
 - [filterable tree of elements and list of properties and methods](#filterable-tree-of-elements-and-list-of-properties-and-methods)
 - [easy access to Revit API documentation](#easy-access-to-revit-api-documentation)
 - [edit parameter value](#edit-parameter-value)
@@ -84,6 +83,19 @@ operator | meaning | example
 `=` | Equals | `Length = 0`
 `>` | Greater | `Length > 0`
 `<` | Less | `Length < 0`
+
+
+### script Revit database with RDS (Revit databse scripting)
+
+[comming soon]
+
+#### ad hoc SELECT query
+
+[coming soon]
+
+#### ad hoc UPDATE command
+
+[coming soon]
 
 ### filterable tree of elements and list of properties and methods
 
