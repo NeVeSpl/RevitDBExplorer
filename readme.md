@@ -26,6 +26,10 @@ Yet another [RevitLookup](https://github.com/jeremytammik/RevitLookup) clone. Re
 
 Download and install [RevitDBExplorer.msi](https://github.com/NeVeSpl/RevitDBExplorer/releases/latest/download/RevitDBExplorer.msi). Setup will install RDBE for Revit 2021, 2022, 2023, 2024.
 
+## YouTube tutorials
+
+[How to select elements that pass Rule-based Filter defined in Revit?](https://www.youtube.com/watch?v=9Uup4Qe8csI)
+
 ## Features
 
 ### query Revit database with RDQ (Revit database querying)
