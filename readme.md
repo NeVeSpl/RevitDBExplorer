@@ -17,7 +17,6 @@ Yet another [RevitLookup](https://github.com/jeremytammik/RevitLookup) clone. Re
 - [dark and light UI themes](#dark-and-light-ui-themes)
 - [more advanced tree view](#more-advanced-tree-view)
 - [snoop Revit events](#snoop-revit-events-with-rem-revit-event-monitor)
-- [snoop external applications](#snoop-external-applications-aka-add-ons-loaded-into-revit)
 - [snoop updaters](#snoop-updaters)
 - [more data exposed](#more-data-exposed-from-revit-database)
 
