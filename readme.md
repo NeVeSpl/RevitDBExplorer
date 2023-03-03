@@ -124,12 +124,6 @@ A new take on [EventsMonitor from  RevitSdkSamples
 
 ![snooping-events](documentation/examples/snooping-events.gif)
 
-### snoop external applications (aka add-ons) loaded into Revit
-
-RDBE allows to look deeper into UIApplication.LoadedApplications
-
-![snooping-loaded-external-applications](documentation/examples/snooping-loaded-external-applications.gif)
-
 ### snoop updaters
 
 RDBE allows to look deeper into UpdaterRegistry.GetRegisteredUpdaterInfos(). What is special about this feature is that, with a bit of luck, it is able to get UpdaterId, as a first publicly available tool.
