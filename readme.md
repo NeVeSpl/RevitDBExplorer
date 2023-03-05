@@ -28,6 +28,7 @@ Download and install [RevitDBExplorer.msi](https://github.com/NeVeSpl/RevitDBExp
 ## YouTube tutorials
 
 [How to select elements that pass Rule-based Filter defined in Revit?](https://www.youtube.com/watch?v=9Uup4Qe8csI)
+[How to find an element using its IfcGuid in Revit?](https://www.youtube.com/watch?v=oT6bxfKc2lg)
 
 ## Features
 
