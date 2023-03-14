@@ -61,7 +61,7 @@ namespace RevitDBExplorer.UIComponents.List
             var item = menu.PlacementTarget as GroupItem;
             var content = item.Content as CollectionViewGroup;
 
-            Clipboard.SetDataObject(content?.Name);               
+            Clipboard.SetDataObject(content?.Name);
         }
 
         private void ListViewItem_MenuItemOpenCHM_Click(object sender, RoutedEventArgs e)
@@ -73,10 +73,11 @@ namespace RevitDBExplorer.UIComponents.List
             if (item.DataContext is SnoopableMember snoopableMember)
             {
                 string helpFileName = AppSettings.Default.RevitAPICHMFilePath;
+                helpFileName = helpFileName.Replace("\"", "");
                 if (System.IO.File.Exists(helpFileName))
                 {
                     string postfix = "";
-                    switch(snoopableMember.MemberKind)
+                    switch (snoopableMember.MemberKind)
                     {
                         case Domain.DataModel.Streams.Base.MemberKind.Property:
                             postfix = " property";
@@ -87,11 +88,15 @@ namespace RevitDBExplorer.UIComponents.List
                             postfix = " method";
                             break;
                     }
-                    System.Windows.Forms.Help.ShowHelp(null, helpFileName, System.Windows.Forms.HelpNavigator.KeywordIndex, $"{snoopableMember.DeclaringType.BareName}.{snoopableMember.Name}{postfix}");
+
+                    System.Windows.Forms.Help.ShowHelp(null, helpFileName,
+                        System.Windows.Forms.HelpNavigator.KeywordIndex,
+                        $"{snoopableMember.DeclaringType.BareName}.{snoopableMember.Name}{postfix}");
                 }
                 else
                 {
-                    MessageBox.Show($".chm file does not exist at the given location: {helpFileName}. Please set the correct location in the configuration.");
+                    MessageBox.Show(
+                        $".chm file does not exist at the given location: {helpFileName}. Please set the correct location in the configuration.");
                 }
             }
         }
@@ -104,12 +109,13 @@ namespace RevitDBExplorer.UIComponents.List
                 if (source?.DataContext is SnoopableMember snoopableMember)
                 {
                     listVM.ListItem_Click_Command.Execute(snoopableMember);
-                    e.Handled= true;
+                    e.Handled = true;
                 }
             }
         }
 
         private Point _initialMousePosition;
+
         protected override void OnPreviewMouseDown(MouseButtonEventArgs e)
         {
             _initialMousePosition = e.GetPosition(this);
@@ -149,6 +155,7 @@ namespace RevitDBExplorer.UIComponents.List
                     {
                         textValue = textBlock.Text;
                     }
+
                     if (e.OriginalSource is Run run)
                     {
                         textValue = run.Text;
@@ -157,19 +164,19 @@ namespace RevitDBExplorer.UIComponents.List
 
                 if (string.IsNullOrWhiteSpace(textValue)) return;
 
-                var bracketIndex =  textValue.IndexOf('(');
+                var bracketIndex = textValue.IndexOf('(');
                 if (bracketIndex > 0)
                 {
                     textValue = textValue.Substring(0, bracketIndex).Trim();
                 }
 
-                if (string.IsNullOrWhiteSpace(textValue)) return;  
+                if (string.IsNullOrWhiteSpace(textValue)) return;
 
                 DataObject data = new DataObject();
-                data.SetData(DataFormats.StringFormat, textValue);                  
+                data.SetData(DataFormats.StringFormat, textValue);
                 DragDrop.DoDragDrop(this, data, DragDropEffects.Copy | DragDropEffects.Move);
                 e.Handled = false;
             }
-        }          
+        }
     }
 }
