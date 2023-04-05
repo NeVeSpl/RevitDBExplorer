@@ -157,6 +157,17 @@ namespace RevitDBExplorer
                 grd.BeginEdit(e);
             }
         }
+
+        private void BrowseOnClick(object sender, RoutedEventArgs e)
+        {
+            // open dialog and select file 
+            var dialog = new Microsoft.Win32.OpenFileDialog();
+            dialog.Filter = "CHM files (*.chm)|*.chm";
+            if (dialog.ShowDialog() == true)
+            {
+                RevitAPICHMFilePath = dialog.FileName;
+            }
+        }
     }
 
     public record Theme(string Id, string Title);
