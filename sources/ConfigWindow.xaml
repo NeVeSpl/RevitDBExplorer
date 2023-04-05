@@ -51,6 +51,7 @@
                         <RowDefinition Height="27"/>
                         <RowDefinition Height="27"/>
                         <RowDefinition Height="27"/>
+                        <RowDefinition Height="27"/>
                     </Grid.RowDefinitions>
                     <Grid.Resources>
                         <Style x:Key="DefaultStyle" TargetType="{x:Type FrameworkElement}">
@@ -80,6 +81,8 @@
                         <TextBox Text="{Binding RevitAPICHMFilePath}" Grid.Row="0" Grid.Column="0"/>
                         <Button Margin="5,0,5,0" Content="Browse" Click="BrowseOnClick" VerticalAlignment="Center" Width="80" Height="20" Grid.Column="1"></Button>
                     </Grid>
+
+                    <CheckBox Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" Content="Add RDBE command to Revit Modify tab" IsChecked="{Binding AddRDBECmdToModifyTab}"/>
                 </Grid>
             </TabItem>
 

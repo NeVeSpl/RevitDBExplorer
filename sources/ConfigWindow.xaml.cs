@@ -27,6 +27,7 @@ namespace RevitDBExplorer
         private bool _featureFlag;
         private string _revitAPICHMFilePath;
         private ObservableCollection<FavoriteQueryDTO> favoriteQueries;
+        private bool addRDBECmdToModifyTab;
 
         public bool IsEventMonitorEnabled
         {
@@ -88,6 +89,19 @@ namespace RevitDBExplorer
                 OnPropertyChanged();
             }
         }
+        public bool AddRDBECmdToModifyTab
+        {
+            get
+            {
+                return addRDBECmdToModifyTab;
+            }
+            set
+            {
+                addRDBECmdToModifyTab = value;
+                OnPropertyChanged();
+            }
+        }
+
         public ObservableCollection<FavoriteQueryDTO> FavoriteQueries
         {
             get
@@ -110,6 +124,7 @@ namespace RevitDBExplorer
             SelectedTheme = _themes.Where(x => x.Id == AppSettings.Default.Theme).FirstOrDefault() ?? _themes.First();
             FeatureFlag = AppSettings.Default.FeatureFlag;
             RevitAPICHMFilePath = AppSettings.Default.RevitAPICHMFilePath;
+            AddRDBECmdToModifyTab = AppSettings.Default.AddRDBECmdToModifyTab;
             this.DataContext = this;
             FavoriteQueries = new ObservableCollection<FavoriteQueryDTO>(FavoritesManager.FavoriteQueries);
             DeleteQueryCommand = new RelayCommand(DeleteQuery);
@@ -126,6 +141,7 @@ namespace RevitDBExplorer
             AppSettings.Default.Theme = SelectedTheme.Id;
             AppSettings.Default.FeatureFlag = FeatureFlag;
             AppSettings.Default.RevitAPICHMFilePath = RevitAPICHMFilePath;
+            AppSettings.Default.AddRDBECmdToModifyTab = AddRDBECmdToModifyTab;
             FavoritesManager.FavoriteQueries = FavoriteQueries.ToList();
             FavoritesManager.Save();
             Close();

@@ -23,5 +23,8 @@
     <Setting Name="RevitAPICHMFilePath" Type="System.String" Scope="User">
       <Value Profile="(Default)">D:\Autodesk\Revit 2023 SDK\RevitAPI.chm</Value>
     </Setting>
+    <Setting Name="AddRDBECmdToModifyTab" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
