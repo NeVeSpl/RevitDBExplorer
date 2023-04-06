@@ -23,6 +23,8 @@ namespace RevitDBExplorer.UIComponents.Tree
         private GroupBy groupBy = GroupBy.TypeName;
         private string filterPhrase = string.Empty;
         private bool isExpanded = true;
+        private bool treeNotForEvents;
+
         public event Action<TreeItem> SelectedItemChanged;
         public event Action<IEnumerable<object>> InputForRDSHasChanged;
         public event Action<string> ScriptForRDSHasChanged;
@@ -67,6 +69,18 @@ namespace RevitDBExplorer.UIComponents.Tree
                 OnPropertyChanged();
             }
         }
+        public bool TreeNotForEvents
+        {
+            get
+            {
+                return treeNotForEvents;
+            }
+            set
+            {
+                treeNotForEvents = value;
+                OnPropertyChanged();
+            }
+        }
 
 
         public TreeVM()
@@ -86,6 +100,7 @@ namespace RevitDBExplorer.UIComponents.Tree
         }
         public void PopulateTreeView(SourceOfObjects sourceOfObjects)
         {
+            TreeNotForEvents = true;
             FilterPhrase = "";
             this.sourceOfObjects = sourceOfObjects;
 
@@ -123,6 +138,7 @@ namespace RevitDBExplorer.UIComponents.Tree
         }
         public void PopulateWithEvents(IList<SnoopableObject> snoopableObjects)
         {
+            TreeNotForEvents = false;
             var snoopableTreeObjects = snoopableObjects.Select(x => new SnoopableObjectTreeItem(x, TreeItemsCommands) { IsExpanded = true }).ToList();
             TreeItems = new(snoopableTreeObjects);
         }
