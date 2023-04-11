@@ -133,12 +133,12 @@ namespace RevitDBExplorer.Domain.DataModel
 
         private bool isFrozen = false;
         private IList<SnoopableObject> frozenSnooopResult;
-        public void Freeze()
+        public void Freeze(int candies)
         {
             if (CanBeSnooped)
             {
                 frozenSnooopResult = Snoop(null).ToList();
-                frozenSnooopResult.ForEach(x => x.Freeze());
+                frozenSnooopResult.ForEach(x => x.Freeze(candies));
             }
             isFrozen = true;
         }
