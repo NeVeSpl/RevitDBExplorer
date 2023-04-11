@@ -2,11 +2,13 @@
 using Autodesk.Revit.UI;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RevitDBExplorer.Domain.RevitDatabaseQuery;
+using RevitTestLibrary;
 using RevitTestLibrary.MSTest;
 
 namespace RevitDBExplorer.Tests
 {
     [TestClass]
+    [RunOn(RevitVer.Revit2023)]
     public class QueryParserTests
     {
         [RevitTestMethod]

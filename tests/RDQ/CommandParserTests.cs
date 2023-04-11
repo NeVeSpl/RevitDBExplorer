@@ -6,15 +6,15 @@ using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.Structure;
 using Autodesk.Revit.UI;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using RevitDBExplorer.Domain.RevitDatabaseQuery;
-using RevitDBExplorer.Domain.RevitDatabaseQuery.FuzzySearch;
 using RevitDBExplorer.Domain.RevitDatabaseQuery.Parser;
 using RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands;
+using RevitTestLibrary;
 using RevitTestLibrary.MSTest;
 
 namespace RevitDBExplorer.Tests.RDQ
 {
     [TestClass]
+    [RunOn(RevitVer.Revit2023)]
     public class CommandParserTests
     {
         [RevitTestMethod]
