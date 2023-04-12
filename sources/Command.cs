@@ -12,7 +12,7 @@ namespace RevitDBExplorer
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
             Application.UIApplication = commandData.Application;
-            var source = SelectorFactory.Snoop(Selector.CurrentSelection);
+            var source = SelectorFactory.Create(Selector.CurrentSelection);
             source.ReadFromTheSource(commandData.Application);
             var window = new MainWindow(source);
             Application.DefaultFontFamily = window.FontFamily;

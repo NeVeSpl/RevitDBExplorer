@@ -32,7 +32,7 @@ namespace RevitDBExplorer.Domain.Selectors
 
     internal static class SelectorFactory
     {
-        public static SourceOfObjects Snoop(Selector selector)
+        public static SourceOfObjects Create(Selector selector)
         {
             var snooper = CreateSelector(selector);
             var sourceOfObjects = new SourceOfObjects(snooper);

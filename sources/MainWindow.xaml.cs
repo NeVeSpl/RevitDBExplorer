@@ -180,7 +180,7 @@ namespace RevitDBExplorer
             var revit_ver = typeof(Autodesk.Revit.DB.Element).Assembly.GetName().Version;
             Title += $" 20{revit_ver.Major} - {ver.ToGitHubTag()}";
 
-            isRevitBusyDispatcher = new DispatcherTimer(TimeSpan.FromMilliseconds(500), DispatcherPriority.Background, (x, y) => IsRevitBusy = (DateTime.Now - Application.LastTimeWhen).TotalSeconds > 0.5, Dispatcher.CurrentDispatcher);
+            isRevitBusyDispatcher = new DispatcherTimer(TimeSpan.FromMilliseconds(500), DispatcherPriority.Background, (x, y) => IsRevitBusy = Application.IsRevitBussy(), Dispatcher.CurrentDispatcher);
 
             CheckIfNewVersionIsAvailable(ver).Forget();
 
@@ -189,7 +189,7 @@ namespace RevitDBExplorer
             Tree.InputForRDSHasChanged += (IEnumerable<object> objects) => rdscriptingVM.SetInput(objects);
             Tree.ScriptForRDSHasChanged += OpenScriptingWithCommand;
             OpenScriptingWithQueryCommand = new RelayCommand(OpenScriptingWithQuery);
-            SaveQueryAsFavoriteCommand = new RelayCommand(SaveQueryAsFavorite);
+            SaveQueryAsFavoriteCommand = new RelayCommand(SaveQueryAsFavorite, x => !string.IsNullOrEmpty(DatabaseQuery) );
         }  
         public MainWindow(SourceOfObjects sourceOfObjects) : this()
         {
@@ -225,7 +225,7 @@ namespace RevitDBExplorer
             
             var sourceOfObjects = await ExternalExecutor.ExecuteInRevitContextAsync(x =>
             {
-                var source = SelectorFactory.Snoop(selector);
+                var source = SelectorFactory.Create(selector);
                 source.ReadFromTheSource(x);
                 return source;
             });

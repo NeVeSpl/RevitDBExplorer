@@ -12,8 +12,7 @@ using RevitDBExplorer.Properties;
 using AdW = Autodesk.Windows;
 
 namespace RevitDBExplorer
-{
-    
+{    
     public class Application : IExternalApplication
     {
         public static IntPtr RevitWindowHandle;
@@ -60,10 +59,15 @@ namespace RevitDBExplorer
             return Result.Succeeded;
         }
 
-        public static DateTime LastTimeWhen;        
+
+        private static DateTime LastTimeWhenInCharge; 
         private void Application_Idling(object sender, Autodesk.Revit.UI.Events.IdlingEventArgs e)
         {
-            LastTimeWhen = DateTime.Now;            
+            LastTimeWhenInCharge = DateTime.Now;            
         }        
+        public static bool IsRevitBussy()
+        {
+            return (DateTime.Now - Application.LastTimeWhenInCharge).TotalSeconds > 0.5;
+        }
     }
 }

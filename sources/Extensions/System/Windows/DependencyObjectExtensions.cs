@@ -1,6 +1,6 @@
-﻿// (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
+﻿using System.Windows.Media;
 
-using System.Windows.Media;
+// (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
 namespace System.Windows
 {
