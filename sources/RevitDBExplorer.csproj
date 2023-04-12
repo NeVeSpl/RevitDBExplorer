@@ -310,6 +310,7 @@
     <Compile Include="Domain\DataModel\MemberTemplates\Accessors\BoundingBox_BoundingBoxIntersectsFilter.cs" />
     <Compile Include="Domain\DataModel\MemberTemplates\BoundingBox_Templates.cs" />
     <Compile Include="Domain\DataModel\MemberTemplates\View_Templates.cs" />
+    <Compile Include="Domain\DataModel\ValueContainers\EvaluatedParameterHandler.cs" />
     <Compile Include="Domain\DataModel\ValueContainers\FailureDefinitionIdHandler.cs" />
     <Compile Include="Domain\DataModel\ValueContainers\SchedulableFieldHandler.cs" />
     <Compile Include="Domain\DataModel\ValueContainers\WorksetIdHandler.cs" />
