@@ -29,7 +29,9 @@ namespace RevitDBExplorer.Domain
 #if R2023b
             application.SelectionChanged += GenericEventHandler;
 #endif
-
+#if R2024b 
+            application.ThemeChanged += GenericEventHandler;
+#endif
             application.TransferredProjectStandards += GenericEventHandler;
             application.TransferringProjectStandards += GenericEventHandler;
             application.ViewActivated += GenericEventHandler;
