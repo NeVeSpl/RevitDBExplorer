@@ -25,7 +25,7 @@ namespace RevitDBExplorer.UIComponents.Tree
         private bool isExpanded = true;
         private bool treeNotForEvents;
 
-        public event Action<TreeItem> SelectedItemChanged;
+        public event Action<SelectedItemChangedEventArgs> SelectedItemChanged;
         public event Action<IEnumerable<object>> InputForRDSHasChanged;
         public event Action<string> ScriptForRDSHasChanged;
 
@@ -163,8 +163,9 @@ namespace RevitDBExplorer.UIComponents.Tree
 
         public void RaiseSelectedItemChanged(TreeItem item)
         {
+            var oldOne = SelectedItem;
             SelectedItem = item;
-            SelectedItemChanged?.Invoke(item);
+            SelectedItemChanged?.Invoke(new SelectedItemChangedEventArgs(oldOne, item));
         }
 
 
@@ -246,4 +247,6 @@ namespace RevitDBExplorer.UIComponents.Tree
             return treeViewItem.GetAllSnoopableObjects().Where(x => x.Object != null).Select(x => x.Object).ToArray();
         }
     }
+
+    internal record class SelectedItemChangedEventArgs(TreeItem OldOne, TreeItem NewOne);
 }

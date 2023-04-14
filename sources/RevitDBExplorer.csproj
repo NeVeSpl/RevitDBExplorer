@@ -1,128 +1,115 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\packages\Microsoft.CodeAnalysis.Analyzers.3.0.0\build\Microsoft.CodeAnalysis.Analyzers.props" Condition="Exists('..\packages\Microsoft.CodeAnalysis.Analyzers.3.0.0\build\Microsoft.CodeAnalysis.Analyzers.props')" />
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{BB69E885-0617-4556-A983-FD783C6669BA}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <RootNamespace>RevitDBExplorer</RootNamespace>
-    <AssemblyName>RevitDBExplorer</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
+    <TargetFramework>net48</TargetFramework>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <WarningLevel>4</WarningLevel>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <Deterministic>true</Deterministic>
     <LangVersion>10.0</LangVersion>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
+    <RevitYear>2024</RevitYear>
+    <AssemblyTitle>Revit database explorer</AssemblyTitle>
+    <Company>https://github.com/NeVeSpl/RevitDBExplorer</Company>
+    <Product>Revit database explorer</Product>
+    <Copyright>(c) Revit Database Explorer</Copyright>
+    <AssemblyVersion>1.5.1.0</AssemblyVersion>
+    <FileVersion>1.5.1.0</FileVersion>
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+	<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+
+    <UseWPF>true</UseWPF>
+	<Configurations>Debug;R2023;R2022;R2021;Debug2024;R2024;</Configurations>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>TRACE;DEBUG;R2021b, R2022b, R2023b, R2023e, R2024e</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+    <RevitYear>2023</RevitYear>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject />
+    <StartupObject />    
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'R2023|AnyCPU'">
-    <OutputPath>bin\R2023\</OutputPath>
     <DefineConstants>TRACE;R2021b, R2022b, R2023b, R2023e, R2024e</DefineConstants>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <LangVersion>10.0</LangVersion>
-    <ErrorReport>prompt</ErrorReport>
+    <RevitYear>2023</RevitYear>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'R2022|AnyCPU'">
-    <OutputPath>bin\R2022\</OutputPath>
     <DefineConstants>TRACE;R2021b, R2022b, R2022e, R2023e, R2024e</DefineConstants>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <LangVersion>10.0</LangVersion>
-    <ErrorReport>prompt</ErrorReport>
+    <RevitYear>2022</RevitYear>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'R2021|AnyCPU'">
-    <OutputPath>bin\R2021\</OutputPath>
     <DefineConstants>TRACE;R2021b, R2021e, R2022e, R2023e, R2024e</DefineConstants>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <LangVersion>10.0</LangVersion>
-    <ErrorReport>prompt</ErrorReport>
+    <RevitYear>2021</RevitYear>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug2024|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\Debug2024\</OutputPath>
     <DefineConstants>TRACE;DEBUG;R2021b, R2022b, R2023b, R2024b, R2024e</DefineConstants>
     <DebugType>full</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <LangVersion>10.0</LangVersion>
-    <ErrorReport>prompt</ErrorReport>
+    <RevitYear>2024</RevitYear>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'R2024|AnyCPU'">
-    <OutputPath>bin\R2024\</OutputPath>
     <DefineConstants>TRACE;R2021b, R2022b, R2023b, R2024b, R2024e</DefineConstants>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <LangVersion>10.0</LangVersion>
-    <ErrorReport>prompt</ErrorReport>
+    <RevitYear>2024</RevitYear>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CircularBuffer, Version=1.3.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\CircularBuffer.1.3.0\lib\net461\CircularBuffer.dll</HintPath>
-    </Reference>
-    <Reference Include="DocXml, Version=3.5.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\LoxSmoke.DocXml.3.5.0\lib\netstandard2.0\DocXml.dll</HintPath>
-    </Reference>
-    <Reference Include="Humanizer, Version=2.2.0.0, Culture=neutral, PublicKeyToken=979442b78dfc278e, processorArchitecture=MSIL">
-      <HintPath>..\packages\Humanizer.Core.2.2.0\lib\netstandard1.0\Humanizer.dll</HintPath>
-    </Reference>
-    <Reference Include="ICSharpCode.AvalonEdit, Version=6.0.1.278, Culture=neutral, PublicKeyToken=9cc39be672370310, processorArchitecture=MSIL">
-      <HintPath>..\packages\AvalonEdit.6.0.1\lib\net45\ICSharpCode.AvalonEdit.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.6.0.0\lib\net461\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.CodeAnalysis, Version=3.6.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.CodeAnalysis.Common.3.6.0\lib\netstandard2.0\Microsoft.CodeAnalysis.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.CodeAnalysis.AnalyzerUtilities, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.CodeAnalysis.AnalyzerUtilities.3.0.0\lib\netstandard2.0\Microsoft.CodeAnalysis.AnalyzerUtilities.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.CodeAnalysis.CSharp, Version=3.6.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.CodeAnalysis.CSharp.3.6.0\lib\netstandard2.0\Microsoft.CodeAnalysis.CSharp.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.CodeAnalysis.CSharp.Features, Version=3.6.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.CodeAnalysis.CSharp.Features.3.6.0\lib\netstandard2.0\Microsoft.CodeAnalysis.CSharp.Features.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.CodeAnalysis.CSharp.Scripting, Version=3.6.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.CodeAnalysis.CSharp.Scripting.3.6.0\lib\netstandard2.0\Microsoft.CodeAnalysis.CSharp.Scripting.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.CodeAnalysis.CSharp.Workspaces, Version=3.6.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.CodeAnalysis.CSharp.Workspaces.3.6.0\lib\netstandard2.0\Microsoft.CodeAnalysis.CSharp.Workspaces.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.CodeAnalysis.Features, Version=3.6.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.CodeAnalysis.Features.3.6.0\lib\netstandard2.0\Microsoft.CodeAnalysis.Features.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.CodeAnalysis.Scripting, Version=3.6.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.CodeAnalysis.Scripting.Common.3.6.0\lib\netstandard2.0\Microsoft.CodeAnalysis.Scripting.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.CodeAnalysis.Workspaces, Version=3.6.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.CodeAnalysis.Workspaces.Common.3.6.0\lib\netstandard2.0\Microsoft.CodeAnalysis.Workspaces.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.DiaSymReader, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.DiaSymReader.1.3.0\lib\net20\Microsoft.DiaSymReader.dll</HintPath>
-    </Reference>
+    <PackageReference Include="AvalonEdit" Version="6.0.1" />
+    <PackageReference Include="CircularBuffer" Version="1.3.0" />
+    <PackageReference Include="Humanizer.Core" Version="2.2.0" />
+    <PackageReference Include="LoxSmoke.DocXml" Version="3.5.0" />
+    <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="6.0.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.0.0">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.CodeAnalysis.AnalyzerUtilities" Version="3.0.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="3.6.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.6.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Features" Version="3.6.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="3.6.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="3.6.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Features" Version="3.6.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Scripting" Version="3.6.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Scripting.Common" Version="3.6.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.Common" Version="3.6.0" />
+    <PackageReference Include="Microsoft.CSharp" Version="4.3.0" />
+    <PackageReference Include="Microsoft.DiaSymReader" Version="1.3.0" />
+    <PackageReference Include="RevitDBExplorer.Augmentations" Version="0.0.7.$(RevitYear)" />
+    <PackageReference Include="RoslynPad.Editor.Windows" Version="1.2.0" />
+    <PackageReference Include="RoslynPad.Roslyn" Version="3.6.0" />
+    <PackageReference Include="RoslynPad.Roslyn.Windows" Version="3.6.0" />
+    <PackageReference Include="SimMetrics.Net" Version="1.0.5" />
+    <PackageReference Include="System.Buffers" Version="4.5.1" />
+    <PackageReference Include="System.Collections.Immutable" Version="1.5.0" />
+    <PackageReference Include="System.Composition" Version="1.0.31" />
+    <PackageReference Include="System.Composition.AttributedModel" Version="1.0.31" />
+    <PackageReference Include="System.Composition.Convention" Version="1.0.31" />
+    <PackageReference Include="System.Composition.Hosting" Version="1.0.31" />
+    <PackageReference Include="System.Composition.Runtime" Version="1.0.31" />
+    <PackageReference Include="System.Composition.TypedParts" Version="1.0.31" />
+    <PackageReference Include="System.Memory" Version="4.5.5" />
+    <PackageReference Include="System.Net.Http.Json" Version="6.0.0" />
+    <PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />
+    <PackageReference Include="System.Reactive" Version="4.3.1" />
+    <PackageReference Include="System.Reactive.Linq" Version="4.3.1" />
+    <PackageReference Include="System.Reflection.Metadata" Version="1.6.0" />
+    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.0.0" />
+    <PackageReference Include="System.Text.Encoding.CodePages" Version="4.5.1" />
+    <PackageReference Include="System.Text.Encodings.Web" Version="6.0.0" />
+    <PackageReference Include="System.Text.Json" Version="6.0.0" />
+    <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
+    <PackageReference Include="System.ValueTuple" Version="4.5.0" />
+    <PackageReference Include="TrieNet" Version="1.0.3.26316" />
+  </ItemGroup>
+  <ItemGroup>
     <Reference Include="Microsoft.Expression.Interactions">
       <HintPath>..\binaries\revit\2023\Microsoft.Expression.Interactions.dll</HintPath>
       <Private>False</Private>
@@ -131,608 +118,31 @@
       <HintPath>..\binaries\revit\2023\RevitAddInUtility.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="RevitAPI" Condition="'$(Configuration)'=='Debug'">
-      <HintPath>..\binaries\revit\2023\RevitAPI.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="RevitAPI" Condition="'$(Configuration)'=='Debug2024'">
-      <HintPath>..\binaries\revit\2024\RevitAPI.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="RevitAPI" Condition="'$(Configuration)'=='R2024'">
-      <HintPath>..\binaries\revit\2024\RevitAPI.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="RevitAPI" Condition="'$(Configuration)'=='R2023'">
-      <HintPath>..\binaries\revit\2023\RevitAPI.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="RevitAPI" Condition="'$(Configuration)'=='R2022'">
-      <HintPath>..\binaries\revit\2022\RevitAPI.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="RevitAPI" Condition="'$(Configuration)'=='R2021'">
-      <HintPath>..\binaries\revit\2021\RevitAPI.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="RevitAPIUI" Condition="'$(Configuration)'=='Debug'">
-      <HintPath>..\binaries\revit\2023\RevitAPIUI.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="RevitAPIUI" Condition="'$(Configuration)'=='Debug2024'">
-      <HintPath>..\binaries\revit\2024\RevitAPIUI.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="RevitAPIUI" Condition="'$(Configuration)'=='R2024'">
-      <HintPath>..\binaries\revit\2024\RevitAPIUI.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="RevitAPIUI" Condition="'$(Configuration)'=='R2023'">
-      <HintPath>..\binaries\revit\2023\RevitAPIUI.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="RevitAPIUI" Condition="'$(Configuration)'=='R2022'">
-      <HintPath>..\binaries\revit\2022\RevitAPIUI.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="RevitAPIUI" Condition="'$(Configuration)'=='R2021'">
-      <HintPath>..\binaries\revit\2021\RevitAPIUI.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="AdWindows" Condition="'$(Configuration)'=='Debug'">
-      <HintPath>..\binaries\revit\2023\AdWindows.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="AdWindows" Condition="'$(Configuration)'=='Debug2024'">
-      <HintPath>..\binaries\revit\2024\AdWindows.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="AdWindows" Condition="'$(Configuration)'=='R2024'">
-      <HintPath>..\binaries\revit\2024\AdWindows.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="AdWindows" Condition="'$(Configuration)'=='R2023'">
-      <HintPath>..\binaries\revit\2023\AdWindows.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="AdWindows" Condition="'$(Configuration)'=='R2022'">
-      <HintPath>..\binaries\revit\2022\AdWindows.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="AdWindows" Condition="'$(Configuration)'=='R2021'">
-      <HintPath>..\binaries\revit\2021\AdWindows.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="RoslynPad.Editor.Windows, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\RoslynPad.Editor.Windows.1.2.0\lib\net48\RoslynPad.Editor.Windows.dll</HintPath>
-    </Reference>
-    <Reference Include="RoslynPad.Roslyn, Version=3.6.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\RoslynPad.Roslyn.3.6.0\lib\netstandard2.0\RoslynPad.Roslyn.dll</HintPath>
-    </Reference>
-    <Reference Include="RoslynPad.Roslyn.Windows, Version=3.6.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\RoslynPad.Roslyn.Windows.3.6.0\lib\net48\RoslynPad.Roslyn.Windows.dll</HintPath>
-    </Reference>
-    <Reference Include="SimMetrics.Net, Version=1.0.5.0, Culture=neutral, PublicKeyToken=c58dc06d59f3391b, processorArchitecture=MSIL">
-      <HintPath>..\packages\SimMetrics.Net.1.0.5\lib\net45\SimMetrics.Net.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Collections.Immutable, Version=1.2.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Collections.Immutable.1.5.0\lib\netstandard2.0\System.Collections.Immutable.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Composition.AttributedModel, Version=1.0.31.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Composition.AttributedModel.1.0.31\lib\portable-net45+win8+wp8+wpa81\System.Composition.AttributedModel.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Composition.Convention, Version=1.0.31.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Composition.Convention.1.0.31\lib\portable-net45+win8+wp8+wpa81\System.Composition.Convention.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Composition.Hosting, Version=1.0.31.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Composition.Hosting.1.0.31\lib\portable-net45+win8+wp8+wpa81\System.Composition.Hosting.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Composition.Runtime, Version=1.0.31.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Composition.Runtime.1.0.31\lib\portable-net45+win8+wp8+wpa81\System.Composition.Runtime.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Composition.TypedParts, Version=1.0.31.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Composition.TypedParts.1.0.31\lib\portable-net45+win8+wp8+wpa81\System.Composition.TypedParts.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Data" />
-    <Reference Include="System.Memory, Version=4.0.1.2, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Memory.4.5.5\lib\net461\System.Memory.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Net.Http.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Net.Http.Json.6.0.0\lib\net461\System.Net.Http.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Numerics" />
-    <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Reactive, Version=4.3.0.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Reactive.4.3.1\lib\net46\System.Reactive.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Reactive.Linq, Version=3.0.3000.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Reactive.Linq.4.3.1\lib\net46\System.Reactive.Linq.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Reflection.Metadata, Version=1.4.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Reflection.Metadata.1.6.0\lib\netstandard2.0\System.Reflection.Metadata.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.6.0.0\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Text.Encoding.CodePages, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Text.Encoding.CodePages.4.5.1\lib\net461\System.Text.Encoding.CodePages.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Text.Encodings.Web, Version=6.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Text.Encodings.Web.6.0.0\lib\net461\System.Text.Encodings.Web.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Text.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Text.Json.6.0.0\lib\net461\System.Text.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Threading.Tasks.Extensions.4.5.4\lib\net461\System.Threading.Tasks.Extensions.dll</HintPath>
-    </Reference>
-    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net47\System.ValueTuple.dll</HintPath>
-    </Reference>
+	  <Reference Include="RevitAPI">
+		  <HintPath>..\binaries\revit\$(RevitYear)\RevitAPI.dll</HintPath>
+		  <Private>False</Private>
+	  </Reference>
+	 
+	  <Reference Include="RevitAPIUI">
+		  <HintPath>..\binaries\revit\$(RevitYear)\RevitAPIUI.dll</HintPath>
+		  <Private>False</Private>
+	  </Reference>
+	  <Reference Include="AdWindows">
+		  <HintPath>..\binaries\revit\$(RevitYear)\AdWindows.dll</HintPath>
+		  <Private>False</Private>
+	  </Reference>
     <Reference Include="System.Windows" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity">
       <HintPath>..\binaries\revit\2023\System.Windows.Interactivity.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="System.Xml" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xaml">
-      <RequiredTargetFramework>4.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="TrieNet, Version=1.0.3.26316, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\TrieNet.1.0.3.26316\lib\net461\TrieNet.dll</HintPath>
-    </Reference>
+    <Reference Include="System.Xaml" />
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="ConfigWindow.xaml.cs">
-      <DependentUpon>ConfigWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Domain\AddInManifestWizard.cs" />
-    <Compile Include="Domain\DataModel\MemberAccessors\Element\Element_BoundingBox.cs" />
-    <Compile Include="Domain\DataModel\MemberAccessors\ExternalService\ExternalService_GetServer.cs" />
-    <Compile Include="Domain\DataModel\MemberAccessors\GenericFactory.cs" />
-    <Compile Include="Domain\DataModel\MemberAccessors\MemberAccessorByRefCompiled.cs" />
-    <Compile Include="Domain\DataModel\MemberAccessors\RevitLinkType\RevitLinkType_Load.cs" />
-    <Compile Include="Domain\DataModel\MemberAccessors\SpatialFieldManager\SpatialFieldManager_GetResultSchema.cs" />
-    <Compile Include="Domain\DataModel\MemberTemplates\Accessors\BoundingBox_BoundingBoxIntersectsFilter.cs" />
-    <Compile Include="Domain\DataModel\MemberTemplates\BoundingBox_Templates.cs" />
-    <Compile Include="Domain\DataModel\MemberTemplates\View_Templates.cs" />
-    <Compile Include="Domain\DataModel\ValueContainers\EvaluatedParameterHandler.cs" />
-    <Compile Include="Domain\DataModel\ValueContainers\FailureDefinitionIdHandler.cs" />
-    <Compile Include="Domain\DataModel\ValueContainers\SchedulableFieldHandler.cs" />
-    <Compile Include="Domain\DataModel\ValueContainers\WorksetIdHandler.cs" />
-    <Compile Include="Domain\RevitDatabaseQuery\Autocompletion\AutocompleteItemProvider.cs" />
-    <Compile Include="Domain\RevitDatabaseQuery\Autocompletion\FavoritesManager.cs" />
-    <Compile Include="Domain\RevitDatabaseQuery\CmdType.cs" />
-    <Compile Include="Domain\RevitDatabaseQuery\Filters\WorksetFilter.cs" />
-    <Compile Include="Domain\RevitDatabaseQuery\FuzzySearch\DataBucket.cs" />
-    <Compile Include="Domain\RevitDatabaseQuery\Filters\OwnerViewFilter.cs" />
-    <Compile Include="Domain\RevitDatabaseQuery\Parser\Commands\CategoryCmdDefinition.cs" />
-    <Compile Include="Domain\RevitDatabaseQuery\Parser\Commands\ClassCmdDefinition.cs" />
-    <Compile Include="Domain\RevitDatabaseQuery\Parser\Commands\UniqueIdCmdDefinition.cs" />
-    <Compile Include="Domain\RevitDatabaseQuery\Parser\Commands\NameCmdDefinition.cs" />
-    <Compile Include="Domain\RevitDatabaseQuery\Parser\Commands\OwnerViewFilterCmdDefinition.cs" />
-    <Compile Include="Domain\RevitDatabaseQuery\Parser\Commands\SelectionCmdDefinition.cs" />
-    <Compile Include="Domain\RevitDatabaseQuery\Parser\Commands\VisibleInViewCmdDefinition.cs" />
-    <Compile Include="Domain\RevitDatabaseQuery\Parser\Commands\NotElementTypeCmdDefinition.cs" />
-    <Compile Include="Domain\RevitDatabaseQuery\Parser\Commands\ElementTypeCmdDefinition.cs" />
-    <Compile Include="Domain\RevitDatabaseQuery\Parser\Commands\LevelCmdDefinition.cs" />
-    <Compile Include="Domain\RevitDatabaseQuery\Parser\Commands\ParameterCmdDefinition.cs" />
-    <Compile Include="Domain\RevitDatabaseQuery\Parser\Commands\StructuralTypeCmdDefinition.cs" />
-    <Compile Include="Domain\RevitDatabaseQuery\Parser\Commands\RuleBasedFilterCmdDefinition.cs" />
-    <Compile Include="Domain\RevitDatabaseQuery\Parser\Commands\RoomCmdDefinition.cs" />
-    <Compile Include="Domain\RevitDatabaseQuery\Parser\Commands\WorksetCmdDefinition.cs" />
-    <Compile Include="Domain\RevitDatabaseQuery\Parser\ICommand.cs" />
-    <Compile Include="Domain\RevitDatabaseQuery\Parser\CommandParser.cs" />
-    <Compile Include="Domain\RevitDatabaseQuery\Parser\Commands\ElementIdCmdDefinition.cs" />
-    <Compile Include="Domain\RevitDatabaseQuery\Parser\ICommandDefinition.cs" />
-    <Compile Include="Domain\RevitDatabaseQuery\SeedProviders\Internals\Provider.cs" />
-    <Compile Include="Domain\RevitDatabaseQuery\SeedProviders\UniqueIdProvider.cs" />
-    <Compile Include="Domain\RevitDatabaseQuery\SeedProviders\SelectionProvider.cs" />
-    <Compile Include="Domain\RevitDatabaseScripting\CodeGenerator.cs" />
-    <Compile Include="Domain\RevitDatabaseScripting\RevitDatabaseScriptingService.cs" />
-    <Compile Include="Domain\RevitDatabaseScripting\SymbolFinder.cs" />
-    <Compile Include="Domain\Selectors\SnoopExternalServices.cs" />
-    <Compile Include="Domain\SourceOfObjects.cs" />
-    <Compile Include="Domain\DataModel\ValueContainers\Base\Traits.cs" />
-    <Compile Include="Domain\DataModel\MemberAccessors\DialogBoxShowingEventArgs\DialogBoxShowingEventArgs_OverrideResult.cs" />
-    <Compile Include="Domain\DataModel\MemberAccessors\Element\Element_GetMaterialVolume.cs" />
-    <Compile Include="Domain\DataModel\MemberAccessors\Element\Element_GetMaterialArea.cs" />
-    <Compile Include="Domain\DataModel\MemberAccessors\FailureHandlingOptions\FailureHandlingOptions.cs" />
-    <Compile Include="Domain\DataModel\ValueContainers\GeometryElementHandler.cs" />
-    <Compile Include="Domain\DataModel\ValueContainers\TypeHandler.cs" />
-    <Compile Include="Domain\DataModel\ValueContainers\ValueTypeHandler.cs" />
-    <Compile Include="Domain\DataModel\ViewModels\Base\ValueEditorVM.cs" />
-    <Compile Include="Domain\DataModel\ViewModels\Base\IValueEditor.cs" />
-    <Compile Include="Domain\DataModel\ViewModels\Base\IValueViewModel.cs" />
-    <Compile Include="Domain\DataModel\MemberTemplates\Accessors\HostObjectUtils_GetSideFaces.cs" />
-    <Compile Include="Domain\DataModel\MemberAccessors\MemberAccessorByIteration.cs" />
-    <Compile Include="Domain\DataModel\MemberAccessors\Parameter\Parameter_Set.cs" />
-    <Compile Include="Domain\DataModel\MemberAccessors\Parameter\Parameter_SetValueString.cs" />
-    <Compile Include="Domain\DataModel\MemberAccessors\RebarBarType\RebarBarType_GetHookOffsetLength.cs" />
-    <Compile Include="Domain\DataModel\MemberAccessors\RebarBarType\RebarBarType_GetHookTangentLength.cs" />
-    <Compile Include="Domain\DataModel\MemberAccessors\RebarBarType\RebarBarType_GetHookLength.cs" />
-    <Compile Include="Domain\DataModel\MemberAccessors\RebarBarType\RebarBarType_GetAutoCalcHookLengths.cs" />
-    <Compile Include="Domain\DataModel\MemberAccessors\RebarBarType\RebarBarType_GetHookPermission.cs" />
-    <Compile Include="Domain\DataModel\MemberAccessors\Rebar\Rebar_GetOverridableHookParameters.cs" />
-    <Compile Include="Domain\DataModel\MemberTemplates\Accessors\Schema_EraseSchemaAndAllEntities .cs" />
-    <Compile Include="Domain\DataModel\MemberAccessors\View\View_Duplicate.cs" />
-    <Compile Include="Domain\DataModel\Streams\Base\MemberDescriptor.cs" />
-    <Compile Include="Domain\DataModel\MemberTemplates\Document_Templates.cs" />
-    <Compile Include="Domain\DataModel\MemberTemplates\Element_Templates.cs" />
-    <Compile Include="Domain\DataModel\MemberTemplates\HostObject_Templates.cs" />
-    <Compile Include="Domain\DataModel\MemberTemplates\IExternalApplication_Templates.cs" />
-    <Compile Include="Domain\DataModel\MemberTemplates\Family_Templates.cs" />
-    <Compile Include="Domain\DataModel\MemberTemplates\UpdaterInfo_Templates.cs" />
-    <Compile Include="Domain\DataModel\MemberTemplates\WorksharingUtils_Templates.cs" />
-    <Compile Include="Domain\DataModel\Streams\Base\MemberKind.cs" />
-    <Compile Include="Domain\DataModel\Streams\MemberStreamerForTemplates.cs" />
-    <Compile Include="Domain\DataModel\Streams\MemberStreamer.cs" />
-    <Compile Include="Domain\DataModel\ValueContainers\Base\ITypeHandler.cs" />
-    <Compile Include="Domain\DataModel\ValueContainers\Base\TypeHandler.cs" />
-    <Compile Include="Domain\DataModel\ValueContainers\DocumentChangedEventArgsHandler.cs" />
-    <Compile Include="Domain\DataModel\ValueContainers\FailuresProcessingEventArgsHandler.cs" />
-    <Compile Include="Domain\DataModel\ValueContainers\IExternalApplicationHandler.cs" />
-    <Compile Include="Domain\DataModel\ValueContainers\RevitApiEventArgsHandler.cs" />
-    <Compile Include="Domain\DataModel\ValueContainers\StructuralSectionHandler.cs" />
-    <Compile Include="Domain\DataModel\ValueContainers\UpdaterInfoHandler.cs" />
-    <Compile Include="Domain\DataModel\ValueContainers\TransformHandler.cs" />
-    <Compile Include="Domain\DataModel\ViewModels\Base\IValuePresenter.cs" />
-    <Compile Include="Domain\DataModel\ViewModels\Base\ValuePresenterVM.cs" />
-    <Compile Include="Domain\EventMonitor.cs" />
-    <Compile Include="Domain\Presentation\DrawInRevitWithAVFCommand.cs" />
-    <Compile Include="Domain\Presentation\DrawInRevitCommand.cs" />
-    <Compile Include="Domain\Presentation\IsolateInRevitCommand.cs" />
-    <Compile Include="Domain\Presentation\SelectInRevitCommand.cs" />
-    <Compile Include="Domain\Presentation\ShowInRevitCommand.cs" />
-    <Compile Include="Domain\Presentation\SnoopInNewWindow.cs" />
-    <Compile Include="Domain\QuoteGenerator.cs" />
-    <Compile Include="Domain\DataModel\SnoopableContext.cs" />
-    <Compile Include="Domain\DataModel\ValueContainers\IListElementIdHandler.cs" />
-    <Compile Include="Domain\DataModel\Streams\Base\DeclaringType.cs" />
-    <Compile Include="Domain\DataModel\MemberAccessors\MemberAccessorFactory.cs" />
-    <Compile Include="Domain\DataModel\MemberAccessors\Element\Element_Id.cs" />
-    <Compile Include="Domain\DataModel\MemberAccessors\HostObject\HostObject_FindInserts.cs" />
-    <Compile Include="Domain\DataModel\MemberTemplates\Accessors\JoinGeometryUtils_IsCuttingElementInJoin.cs" />
-    <Compile Include="Domain\DataModel\MemberTemplates\JoinGeometryUtils_Templates.cs" />
-    <Compile Include="Domain\DataModel\MemberTemplates\Base\SnoopableMemberTemplate.cs" />
-    <Compile Include="Domain\DataModel\MemberAccessors\AssetProperties\AssetProperties_Item.cs" />
-    <Compile Include="Domain\DataModel\MemberAccessors\Curve\Curve_GetEndPoint.cs" />
-    <Compile Include="Domain\DataModel\MemberAccessors\Document\Document_Close.cs" />
-    <Compile Include="Domain\DataModel\MemberAccessors\Document\Document_PlanTopology.cs" />
-    <Compile Include="Domain\DataModel\MemberAccessors\Element\Element_GetDependentElements.cs" />
-    <Compile Include="Domain\DataModel\MemberAccessors\Element\Element_GetEntity.cs" />
-    <Compile Include="Domain\DataModel\MemberAccessors\Element\Element_GetPhaseStatus.cs" />
-    <Compile Include="Domain\DataModel\MemberAccessors\Entity\Entity_Get.cs" />
-    <Compile Include="Domain\DataModel\MemberAccessors\ForgeTypeId\ForgeTypeId_Clear.cs" />
-    <Compile Include="Domain\DataModel\MemberAccessors\IMemberAccessor.cs" />
-    <Compile Include="Domain\DataModel\MemberAccessors\MemberAccessorByFunc.cs" />
-    <Compile Include="Domain\DataModel\MemberAccessors\MemberAccessorByType.cs" />
-    <Compile Include="Domain\DataModel\MemberAccessors\MemberAccessorForConstValue.cs" />
-    <Compile Include="Domain\DataModel\MemberAccessors\PrintManager\PrintManager_SubmitPrint.cs" />
-    <Compile Include="Domain\DataModel\MemberAccessors\Rebar\Rebar_IsBarHidden.cs" />
-    <Compile Include="Domain\DataModel\MemberAccessors\Rebar\Rebar_GetTransformedCenterlineCurves.cs" />
-    <Compile Include="Domain\DataModel\MemberAccessors\Rebar\Rebar_GetCenterlineCurves.cs" />
-    <Compile Include="Domain\DataModel\MemberTemplates\Accessors\Schema_GetAllElements.cs" />
-    <Compile Include="Domain\DataModel\MemberAccessors\View\View_GetTemplateParameterIds.cs" />
-    <Compile Include="Domain\DataModel\MemberAccessors\View\View_GetNonControlledTemplateParameterIds.cs" />
-    <Compile Include="Domain\DataModel\MemberAccessors\View\View_GetFilterVisibility.cs" />
-    <Compile Include="Domain\DataModel\MemberAccessors\View\View_GetFilterOverrides.cs" />
-    <Compile Include="Domain\DataModel\SnoopableMember.cs" />
-    <Compile Include="Domain\DataModel\MemberTemplates\ForgeTypeId_Templates.cs" />
-    <Compile Include="Domain\DataModel\MemberTemplates\PartUtils_Templates.cs" />
-    <Compile Include="Domain\DataModel\MemberTemplates\Schema_Templates.cs" />
-    <Compile Include="Domain\DataModel\Streams\MemberStreamerForSystemType.cs" />
-    <Compile Include="Domain\DataModel\ValueContainers\Base\IValueContainer.cs" />
-    <Compile Include="Domain\DataModel\ValueContainers\Base\ValueContainer.cs" />
-    <Compile Include="Domain\DataModel\ValueContainers\Base\ValueContainerFactory.cs" />
-    <Compile Include="Domain\DataModel\ValueContainers\BindingMapHandler.cs" />
-    <Compile Include="Domain\DataModel\ValueContainers\BoolHandler.cs" />
-    <Compile Include="Domain\DataModel\ValueContainers\BoundingBoxXYZHandler.cs" />
-    <Compile Include="Domain\DataModel\ValueContainers\CategoryNameMapHandler.cs" />
-    <Compile Include="Domain\DataModel\ValueContainers\CategoryHandler.cs" />
-    <Compile Include="Domain\DataModel\ValueContainers\ColorHandler.cs" />
-    <Compile Include="Domain\DataModel\ValueContainers\DoubleNullableHandler.cs" />
-    <Compile Include="Domain\DataModel\ValueContainers\DoubleHandler.cs" />
-    <Compile Include="Domain\DataModel\ValueContainers\ElementIdHandler.cs" />
-    <Compile Include="Domain\DataModel\ValueContainers\ElementHandler.cs" />
-    <Compile Include="Domain\DataModel\ValueContainers\ForgeTypeIdHandler.cs" />
-    <Compile Include="Domain\DataModel\ValueContainers\IEnumerableHandler.cs" />
-    <Compile Include="Domain\DataModel\ValueContainers\EnumHandler.cs" />
-    <Compile Include="Domain\DataModel\ValueContainers\FamilyParameterHandler.cs" />
-    <Compile Include="Domain\DataModel\MemberAccessors\Element\Element_Geometry.cs" />
-    <Compile Include="Domain\DataModel\ValueContainers\GuidHandler.cs" />
-    <Compile Include="Domain\DataModel\ValueContainers\IntHandler.cs" />
-    <Compile Include="Domain\DataModel\ValueContainers\ObjectHandler.cs" />
-    <Compile Include="Domain\DataModel\ValueContainers\ParameterHandler.cs" />
-    <Compile Include="Domain\DataModel\ValueContainers\ScheduleFieldHandler.cs" />
-    <Compile Include="Domain\DataModel\ValueContainers\UVHandler.cs" />
-    <Compile Include="Domain\Guard.cs" />
-    <Compile Include="Domain\RevitDatabaseQuery\Filters\RuleFilter.cs" />
-    <Compile Include="Domain\RevitDatabaseQuery\Filters\RoomFilter.cs" />
-    <Compile Include="Domain\RevitDatabaseQuery\Filters\LevelFilter.cs" />
-    <Compile Include="Domain\RevitDatabaseQuery\Filters\StructuralTypeFilter.cs" />
-    <Compile Include="Domain\RevitDatabaseQuery\Filters\VisibleInViewFilter.cs" />
-    <Compile Include="Domain\RevitDatabaseQuery\Filters\CategoryFilter.cs" />
-    <Compile Include="Domain\RevitDatabaseQuery\Filters\ClassFilter.cs" />
-    <Compile Include="Domain\RevitDatabaseQuery\Filters\ElementIdFilter.cs" />
-    <Compile Include="Domain\RevitDatabaseQuery\Filters\ElementTypeFilter.cs" />
-    <Compile Include="Domain\RevitDatabaseQuery\Filters\ParameterFilter.cs" />
-    <Compile Include="Domain\RevitDatabaseQuery\Parser\ICommandArgument.cs" />
-    <Compile Include="Domain\RevitDatabaseQuery\Filters\Internals\QueryItem.cs" />
-    <Compile Include="Domain\RevitDatabaseQuery\Filters\Internals\Filter.cs" />
-    <Compile Include="Domain\RevitDatabaseQuery\Filters\Internals\Group.cs" />
-    <Compile Include="Domain\RevitDatabaseQuery\Parser\Operators.cs" />
-    <Compile Include="Domain\RevitDatabaseQuery\Parser\Commands\ParameterArgument.cs" />
-    <Compile Include="Domain\RevitDatabaseQuery\QueryParser.cs" />
-    <Compile Include="Domain\RevitDatabaseQuery\RevitDatabaseQueryService.cs" />
-    <Compile Include="Domain\RevitDatabaseView\Cell.cs" />
-    <Compile Include="Domain\RevitDatabaseView\Column.cs" />
-    <Compile Include="Domain\RevitDatabaseView\Row.cs" />
-    <Compile Include="Domain\RevitDatabaseView\View.cs" />
-    <Compile Include="Domain\RevitDocumentationReader.cs" />
-    <Compile Include="Domain\Selectors\Base\ISelector.cs" />
-    <Compile Include="Domain\Selectors\SnoopActiveDocument.cs" />
-    <Compile Include="Domain\Selectors\SnoopActiveView.cs" />
-    <Compile Include="Domain\Selectors\SnoopApplication.cs" />
-    <Compile Include="Domain\Selectors\SnoopCategories.cs" />
-    <Compile Include="Domain\Selectors\SnoopCurrentSelection.cs" />
-    <Compile Include="Domain\Selectors\SnoopDatabase.cs" />
-    <Compile Include="Domain\Selectors\SnoopDependentElements.cs" />
-    <Compile Include="Domain\Selectors\SnoopForge.cs" />
-    <Compile Include="Domain\Selectors\SnoopLinkedElement.cs" />
-    <Compile Include="Domain\Selectors\SnoopLoadedApplications.cs" />
-    <Compile Include="Domain\Selectors\SnoopSchemas.cs" />
-    <Compile Include="Domain\Selectors\SnoopUpdaters.cs" />
-    <Compile Include="Domain\UpdaterInfoWizard.cs" />
-    <Compile Include="Domain\VersionChecker.cs" />
-    <Compile Include="Extensions\Autodesk.Revit.DB\BoundingBoxXYZExtensions.cs" />
-    <Compile Include="Extensions\Autodesk.Revit.DB\DocumentExtensions.cs" />
-    <Compile Include="Extensions\Autodesk.Revit.DB\ElementIdExtensions.cs" />
-    <Compile Include="Extensions\Autodesk.Revit.DB\GeometryObjectExtensions.cs" />
-    <Compile Include="Extensions\Autodesk.Revit.UI\RibbonPanelExtensions.cs" />
-    <Compile Include="Extensions\System\Collections.Generic\IDictionaryExtensions.cs" />
-    <Compile Include="Extensions\System\Collections.Generic\IEnumerableExtensions.cs" />
-    <Compile Include="Extensions\System\Collections.Generic\IListExtensions.cs" />
-    <Compile Include="Extensions\System\ExceptionExtensions.cs" />
-    <Compile Include="Extensions\System\IntPtrExtensions.cs" />
-    <Compile Include="Extensions\System\Linq.Expressions\LambdaExpressionExtensions.cs" />
-    <Compile Include="Extensions\System\Reflection\MethodInfoExtensions.cs" />
-    <Compile Include="Extensions\System\Reflection\PropertyInfoExtensions.cs" />
-    <Compile Include="Extensions\System\Runtime.CompilerServices\IsExternalInit .cs" />
-    <Compile Include="Extensions\System\StringExtensions.cs" />
-    <Compile Include="Extensions\System\Threading.Tasks\TaskExtensions.cs" />
-    <Compile Include="Extensions\System\DoubleExtensions.cs" />
-    <Compile Include="Extensions\System\VersionExtensions.cs" />
-    <Compile Include="Extensions\System\Windows.Threading\DispatcherTimerExtensions.cs" />
-    <Compile Include="Extensions\System\Windows\DependencyObjectExtensions.cs" />
-    <Compile Include="Properties\AppSettings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <DependentUpon>AppSettings.settings</DependentUpon>
-    </Compile>
-    <Compile Include="UIComponents\BusyIndicator\BusyIndicator.xaml.cs">
-      <DependentUpon>BusyIndicator.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UIComponents\CommandAndControl\CommandAndControlView.xaml.cs">
-      <DependentUpon>CommandAndControlView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UIComponents\CommandAndControl\CommandAndControlVM.cs" />
-    <Compile Include="UIComponents\List\ListView.xaml.cs">
-      <DependentUpon>ListView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UIComponents\List\ListVM.cs" />
-    <Compile Include="Domain\DataModel\ViewModels\ExecuteEditorVM.cs" />
-    <Compile Include="Domain\DataModel\ViewModels\DoubleEditorVM.cs" />
-    <Compile Include="Domain\DataModel\ViewModels\IntegerEditorVM.cs" />
-    <Compile Include="Domain\DataModel\ViewModels\StringEditorVM.cs" />
-    <Compile Include="Domain\DataModel\ViewModels\ErrorPresenterVM.cs" />
-    <Compile Include="Domain\DataModel\ViewModels\DefaultPresenterVM.cs" />
-    <Compile Include="UIComponents\QueryVisualization\QueryVisualizationVM.cs" />
-    <Compile Include="UIComponents\QueryVisualization\CommandVM.cs" />
-    <Compile Include="UIComponents\Scripting\RDScriptingView.xaml.cs">
-      <DependentUpon>RDScriptingView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UIComponents\Scripting\RDScriptingVM.cs" />
-    <Compile Include="UIComponents\Tree\Items\GroupTreeItem.cs" />
-    <Compile Include="UIComponents\Tree\Items\SnoopableObjectTreeItem.cs" />
-    <Compile Include="UIComponents\Tree\Items\TreeItemsCommands.cs" />
-    <Compile Include="UIComponents\Tree\TreeView.xaml.cs">
-      <DependentUpon>TreeView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UIComponents\Tree\Items\TreeItem.cs" />
-    <Compile Include="UIComponents\QueryVisualization\QueryVisualizationView.xaml.cs">
-      <DependentUpon>QueryVisualizationView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UIComponents\Tree\TreeVM.cs" />
-    <Compile Include="WPF\AttachedProperties\DataGridAP.cs" />
-    <Compile Include="WPF\AttachedProperties\TextBlockAP.cs" />
-    <Compile Include="WPF\BaseCommand.cs" />
-    <Compile Include="WPF\BindingProxy.cs" />
-    <Compile Include="Domain\RevitDatabaseQuery\Autocompletion\Internals\AutocompleteItem.cs" />
-    <Compile Include="Domain\RevitDatabaseQuery\Autocompletion\Internals\AutocompleteItemGroups.cs" />
-    <Compile Include="Domain\RevitDatabaseQuery\Autocompletion\Internals\IAutocompleteItem.cs" />
-    <Compile Include="WPF\Controls\TextBoxWithPlaceholder.xaml.cs">
-      <DependentUpon>TextBoxWithPlaceholder.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="WPF\Converters\ColorToBrushConverter.cs" />
-    <Compile Include="WPF\Converters\EnumToVisibilityConverter.cs" />
-    <Compile Include="WPF\Converters\SnoopableMemberToToolTipConverter.cs" />
-    <Compile Include="WPF\Converters\ToResourceWithKeyConverter.cs" />
-    <Compile Include="WPF\Converters\StringIsNotNullOrEmptyToBoolConverter.cs" />
-    <Compile Include="WPF\Converters\StringIsNullOrEmptyToBoolConverter.cs" />
-    <Compile Include="WPF\Converters\MultiBindingOrConverter.cs" />
-    <Compile Include="WPF\Converters\PercentageOfValueConverter.cs" />
-    <Compile Include="Domain\DataModel\ValueContainers\ParameterMapHandler.cs" />
-    <Compile Include="Domain\DataModel\ValueContainers\ParameterSetHandler.cs" />
-    <Compile Include="Domain\DataModel\ValueContainers\StringHandler.cs" />
-    <Compile Include="Domain\DataModel\ValueContainers\XYZHandler.cs" />
-    <Compile Include="Domain\ExternalExecutor.cs" />
-    <Compile Include="Domain\Labeler.cs" />
-    <Compile Include="Domain\Selectors\SelectorFactory.cs" />
-    <Compile Include="Extensions\System\ObjectExtensions.cs" />
-    <Compile Include="Extensions\System\TypeExtensions.cs" />
-    <Compile Include="WPF\BaseViewModel.cs" />
-    <Compile Include="WPF\Converters\StringToVisibilityConverter.cs" />
-    <Compile Include="WPF\Converters\BoolToVisibilityConverter.cs" />
-    <Compile Include="WPF\DataTemplateSelectorForPropertyType.cs" />
-    <Compile Include="WPF\MarkupExtensions\SettingBindingExtension.cs" />
-    <Compile Include="WPF\RelayCommand.cs" />
-    <Compile Include="WPF\ThemeResourceDictionary.cs" />
-    <None Include="app.config" />
-    <Compile Include="Domain\Selectors\SnoopPick.cs" />
-    <None Include="packages.config" />
-    <None Include="Properties\AppSettings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>AppSettings.Designer.cs</LastGenOutput>
-    </None>
-    <Page Include="ConfigWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="MainWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Compile Include="Application.cs" />
-    <Compile Include="Command.cs" />
-    <Compile Include="Domain\DataModel\MemberAccessors\MemberAccessorByRef.cs" />
-    <Compile Include="Domain\DataModel\SnoopableObject.cs" />
-    <Compile Include="MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Page Include="Resources\Templates\All.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Resources\Templates\GridViewColumnHeader.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Resources\Templates\ListBoxItem.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Resources\Templates\ListViewItem.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Resources\Templates\ScrollBar.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Resources\Templates\ScrollViewer.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Resources\Templates\TextBox.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Resources\Templates\Button.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Resources\Templates\Window.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Resources\Themes\DarkR2024.Colors.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Resources\Themes\Default.Colors.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Resources\Themes\Dark.Colors.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Resources\VectorGraphic.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UIComponents\BusyIndicator\BusyIndicator.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UIComponents\CommandAndControl\CommandAndControlView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UIComponents\List\DataTemplates.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UIComponents\List\ListView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UIComponents\List\ValueEditors\IntegerEditorVM.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="UIComponents\List\ValueEditors\DoubleEditorVM.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="UIComponents\List\ValuePresenters\ErrorPresenterVM.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="UIComponents\List\ValuePresenters\ValueContainers\ColorContainer.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="UIComponents\List\ValueEditors\StringEditorVM.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="UIComponents\List\ValueEditors\ExecuteEditorVM.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="UIComponents\List\ValuePresenters\DefaultPresenterVM.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="UIComponents\QueryVisualization\QueryVisualizationView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UIComponents\Scripting\RDScriptingView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UIComponents\Tree\TreeView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="WPF\Controls\TextBoxWithPlaceholder.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Properties\AssemblyInfo.cs">
-      <SubType>Code</SubType>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="..\documentation\images\RDBE.ico">
@@ -754,18 +164,110 @@
     </Resource>
   </ItemGroup>
   <ItemGroup>
-    <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.3.0.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.Analyzers.dll" />
-    <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.3.0.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.Analyzers.dll" />
+    <Compile Remove="obj\Debug2024\.NETFramework,Version=v4.8.AssemblyAttributes.cs" />
+    <Compile Remove="obj\Debug2024\ConfigWindow.g.cs" />
+    <Compile Remove="obj\Debug2024\ConfigWindow.g.i.cs" />
+    <Compile Remove="obj\Debug2024\GeneratedInternalTypeHelper.g.cs" />
+    <Compile Remove="obj\Debug2024\GeneratedInternalTypeHelper.g.i.cs" />
+    <Compile Remove="obj\Debug2024\MainWindow.g.cs" />
+    <Compile Remove="obj\Debug2024\MainWindow.g.i.cs" />
+    <Compile Remove="obj\R2021\.NETFramework,Version=v4.8.AssemblyAttributes.cs" />
+    <Compile Remove="obj\R2021\ConfigWindow.g.cs" />
+    <Compile Remove="obj\R2021\ConfigWindow.g.i.cs" />
+    <Compile Remove="obj\R2021\GeneratedInternalTypeHelper.g.cs" />
+    <Compile Remove="obj\R2021\GeneratedInternalTypeHelper.g.i.cs" />
+    <Compile Remove="obj\R2021\MainWindow.g.cs" />
+    <Compile Remove="obj\R2021\MainWindow.g.i.cs" />
+    <Compile Remove="obj\R2022\.NETFramework,Version=v4.8.AssemblyAttributes.cs" />
+    <Compile Remove="obj\R2022\ConfigWindow.g.cs" />
+    <Compile Remove="obj\R2022\ConfigWindow.g.i.cs" />
+    <Compile Remove="obj\R2022\GeneratedInternalTypeHelper.g.cs" />
+    <Compile Remove="obj\R2022\GeneratedInternalTypeHelper.g.i.cs" />
+    <Compile Remove="obj\R2022\MainWindow.g.cs" />
+    <Compile Remove="obj\R2022\MainWindow.g.i.cs" />
+    <Compile Remove="obj\R2023\.NETFramework,Version=v4.8.AssemblyAttributes.cs" />
+    <Compile Remove="obj\R2023\ConfigWindow.g.cs" />
+    <Compile Remove="obj\R2023\ConfigWindow.g.i.cs" />
+    <Compile Remove="obj\R2023\GeneratedInternalTypeHelper.g.cs" />
+    <Compile Remove="obj\R2023\GeneratedInternalTypeHelper.g.i.cs" />
+    <Compile Remove="obj\R2023\MainWindow.g.cs" />
+    <Compile Remove="obj\R2023\MainWindow.g.i.cs" />
+    <Compile Remove="obj\R2024\.NETFramework,Version=v4.8.AssemblyAttributes.cs" />
+    <Compile Remove="obj\R2024\ConfigWindow.g.cs" />
+    <Compile Remove="obj\R2024\ConfigWindow.g.i.cs" />
+    <Compile Remove="obj\R2024\GeneratedInternalTypeHelper.g.cs" />
+    <Compile Remove="obj\R2024\GeneratedInternalTypeHelper.g.i.cs" />
+    <Compile Remove="obj\R2024\MainWindow.g.cs" />
+    <Compile Remove="obj\R2024\MainWindow.g.i.cs" />
+    <Compile Remove="obj\Debug2024\UIComponents\BusyIndicator\BusyIndicator.g.cs" />
+    <Compile Remove="obj\Debug2024\UIComponents\BusyIndicator\BusyIndicator.g.i.cs" />
+    <Compile Remove="obj\Debug2024\UIComponents\CommandAndControl\CommandAndControlView.g.cs" />
+    <Compile Remove="obj\Debug2024\UIComponents\CommandAndControl\CommandAndControlView.g.i.cs" />
+    <Compile Remove="obj\Debug2024\UIComponents\List\ListView.g.cs" />
+    <Compile Remove="obj\Debug2024\UIComponents\List\ListView.g.i.cs" />
+    <Compile Remove="obj\Debug2024\UIComponents\QueryVisualization\QueryVisualizationView.g.cs" />
+    <Compile Remove="obj\Debug2024\UIComponents\QueryVisualization\QueryVisualizationView.g.i.cs" />
+    <Compile Remove="obj\Debug2024\UIComponents\Scripting\RDScriptingView.g.cs" />
+    <Compile Remove="obj\Debug2024\UIComponents\Scripting\RDScriptingView.g.i.cs" />
+    <Compile Remove="obj\Debug2024\UIComponents\Tree\TreeView.g.cs" />
+    <Compile Remove="obj\Debug2024\UIComponents\Tree\TreeView.g.i.cs" />
+    <Compile Remove="obj\Debug2024\WPF\Controls\TextBoxWithPlaceholder.g.cs" />
+    <Compile Remove="obj\Debug2024\WPF\Controls\TextBoxWithPlaceholder.g.i.cs" />
+    <Compile Remove="obj\R2021\UIComponents\BusyIndicator\BusyIndicator.g.cs" />
+    <Compile Remove="obj\R2021\UIComponents\BusyIndicator\BusyIndicator.g.i.cs" />
+    <Compile Remove="obj\R2021\UIComponents\CommandAndControl\CommandAndControlView.g.cs" />
+    <Compile Remove="obj\R2021\UIComponents\CommandAndControl\CommandAndControlView.g.i.cs" />
+    <Compile Remove="obj\R2021\UIComponents\List\ListView.g.cs" />
+    <Compile Remove="obj\R2021\UIComponents\List\ListView.g.i.cs" />
+    <Compile Remove="obj\R2021\UIComponents\QueryVisualization\QueryVisualizationView.g.cs" />
+    <Compile Remove="obj\R2021\UIComponents\QueryVisualization\QueryVisualizationView.g.i.cs" />
+    <Compile Remove="obj\R2021\UIComponents\Scripting\RDScriptingView.g.cs" />
+    <Compile Remove="obj\R2021\UIComponents\Scripting\RDScriptingView.g.i.cs" />
+    <Compile Remove="obj\R2021\UIComponents\Tree\TreeView.g.cs" />
+    <Compile Remove="obj\R2021\UIComponents\Tree\TreeView.g.i.cs" />
+    <Compile Remove="obj\R2021\WPF\Controls\TextBoxWithPlaceholder.g.cs" />
+    <Compile Remove="obj\R2021\WPF\Controls\TextBoxWithPlaceholder.g.i.cs" />
+    <Compile Remove="obj\R2022\UIComponents\BusyIndicator\BusyIndicator.g.cs" />
+    <Compile Remove="obj\R2022\UIComponents\BusyIndicator\BusyIndicator.g.i.cs" />
+    <Compile Remove="obj\R2022\UIComponents\CommandAndControl\CommandAndControlView.g.cs" />
+    <Compile Remove="obj\R2022\UIComponents\CommandAndControl\CommandAndControlView.g.i.cs" />
+    <Compile Remove="obj\R2022\UIComponents\List\ListView.g.cs" />
+    <Compile Remove="obj\R2022\UIComponents\List\ListView.g.i.cs" />
+    <Compile Remove="obj\R2022\UIComponents\QueryVisualization\QueryVisualizationView.g.cs" />
+    <Compile Remove="obj\R2022\UIComponents\QueryVisualization\QueryVisualizationView.g.i.cs" />
+    <Compile Remove="obj\R2022\UIComponents\Scripting\RDScriptingView.g.cs" />
+    <Compile Remove="obj\R2022\UIComponents\Scripting\RDScriptingView.g.i.cs" />
+    <Compile Remove="obj\R2022\UIComponents\Tree\TreeView.g.cs" />
+    <Compile Remove="obj\R2022\UIComponents\Tree\TreeView.g.i.cs" />
+    <Compile Remove="obj\R2022\WPF\Controls\TextBoxWithPlaceholder.g.cs" />
+    <Compile Remove="obj\R2022\WPF\Controls\TextBoxWithPlaceholder.g.i.cs" />
+    <Compile Remove="obj\R2023\UIComponents\BusyIndicator\BusyIndicator.g.cs" />
+    <Compile Remove="obj\R2023\UIComponents\BusyIndicator\BusyIndicator.g.i.cs" />
+    <Compile Remove="obj\R2023\UIComponents\CommandAndControl\CommandAndControlView.g.cs" />
+    <Compile Remove="obj\R2023\UIComponents\CommandAndControl\CommandAndControlView.g.i.cs" />
+    <Compile Remove="obj\R2023\UIComponents\List\ListView.g.cs" />
+    <Compile Remove="obj\R2023\UIComponents\List\ListView.g.i.cs" />
+    <Compile Remove="obj\R2023\UIComponents\QueryVisualization\QueryVisualizationView.g.cs" />
+    <Compile Remove="obj\R2023\UIComponents\QueryVisualization\QueryVisualizationView.g.i.cs" />
+    <Compile Remove="obj\R2023\UIComponents\Scripting\RDScriptingView.g.cs" />
+    <Compile Remove="obj\R2023\UIComponents\Scripting\RDScriptingView.g.i.cs" />
+    <Compile Remove="obj\R2023\UIComponents\Tree\TreeView.g.cs" />
+    <Compile Remove="obj\R2023\UIComponents\Tree\TreeView.g.i.cs" />
+    <Compile Remove="obj\R2023\WPF\Controls\TextBoxWithPlaceholder.g.cs" />
+    <Compile Remove="obj\R2023\WPF\Controls\TextBoxWithPlaceholder.g.i.cs" />
+    <Compile Remove="obj\R2024\UIComponents\BusyIndicator\BusyIndicator.g.cs" />
+    <Compile Remove="obj\R2024\UIComponents\BusyIndicator\BusyIndicator.g.i.cs" />
+    <Compile Remove="obj\R2024\UIComponents\CommandAndControl\CommandAndControlView.g.cs" />
+    <Compile Remove="obj\R2024\UIComponents\CommandAndControl\CommandAndControlView.g.i.cs" />
+    <Compile Remove="obj\R2024\UIComponents\List\ListView.g.cs" />
+    <Compile Remove="obj\R2024\UIComponents\List\ListView.g.i.cs" />
+    <Compile Remove="obj\R2024\UIComponents\QueryVisualization\QueryVisualizationView.g.cs" />
+    <Compile Remove="obj\R2024\UIComponents\QueryVisualization\QueryVisualizationView.g.i.cs" />
+    <Compile Remove="obj\R2024\UIComponents\Scripting\RDScriptingView.g.cs" />
+    <Compile Remove="obj\R2024\UIComponents\Scripting\RDScriptingView.g.i.cs" />
+    <Compile Remove="obj\R2024\UIComponents\Tree\TreeView.g.cs" />
+    <Compile Remove="obj\R2024\UIComponents\Tree\TreeView.g.i.cs" />
+    <Compile Remove="obj\R2024\WPF\Controls\TextBoxWithPlaceholder.g.cs" />
+    <Compile Remove="obj\R2024\WPF\Controls\TextBoxWithPlaceholder.g.i.cs" />
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="..\packages\System.Text.Json.6.0.0\build\System.Text.Json.targets" Condition="Exists('..\packages\System.Text.Json.6.0.0\build\System.Text.Json.targets')" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\System.Text.Json.6.0.0\build\System.Text.Json.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\System.Text.Json.6.0.0\build\System.Text.Json.targets'))" />
-    <Error Condition="!Exists('..\packages\Microsoft.CodeAnalysis.Analyzers.3.0.0\build\Microsoft.CodeAnalysis.Analyzers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeAnalysis.Analyzers.3.0.0\build\Microsoft.CodeAnalysis.Analyzers.props'))" />
-    <Error Condition="!Exists('..\packages\Microsoft.CodeAnalysis.Analyzers.3.0.0\build\Microsoft.CodeAnalysis.Analyzers.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeAnalysis.Analyzers.3.0.0\build\Microsoft.CodeAnalysis.Analyzers.targets'))" />
-  </Target>
-  <Import Project="..\packages\Microsoft.CodeAnalysis.Analyzers.3.0.0\build\Microsoft.CodeAnalysis.Analyzers.targets" Condition="Exists('..\packages\Microsoft.CodeAnalysis.Analyzers.3.0.0\build\Microsoft.CodeAnalysis.Analyzers.targets')" />
 </Project>

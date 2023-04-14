@@ -65,6 +65,7 @@ namespace SetupBuilder
             "Microsoft.DiaSymReader.dll",
             "RevitDBExplorer.dll",
             "RevitDBExplorer.dll.config",
+            "RevitDBExplorer.Augmentations.dll",
             "RoslynPad.Editor.Windows.dll",
             "RoslynPad.Roslyn.dll",
             "RoslynPad.Roslyn.Windows.dll",

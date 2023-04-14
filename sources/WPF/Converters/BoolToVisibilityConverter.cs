@@ -8,7 +8,7 @@ namespace RevitDBExplorer.WPF.Converters
     internal class BoolToVisibilityConverter : IValueConverter
     {
         public Visibility WhenFalse { get; set;  } = Visibility.Hidden;
-
+        public Visibility WhenTrue{ get; set; } = Visibility.Visible;
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
@@ -16,7 +16,7 @@ namespace RevitDBExplorer.WPF.Converters
 
             if (boolValue)
             {
-                return Visibility.Visible;
+                return WhenTrue;
             }
 
             return WhenFalse;

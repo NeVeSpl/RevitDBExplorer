@@ -9,6 +9,8 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Threading;
+using Autodesk.Revit.UI;
+using RevitDBExplorer.Augmentations;
 using RevitDBExplorer.Domain;
 using RevitDBExplorer.Domain.DataModel;
 using RevitDBExplorer.Domain.RevitDatabaseQuery;
@@ -49,6 +51,7 @@ namespace RevitDBExplorer
         private bool isWiderThan800px;
         private readonly DispatcherTimer isRevitBusyDispatcher;
         private readonly IAutocompleteItemProvider databaseQueryAutocompleteItemProvider = new AutocompleteItemProvider();
+        private readonly IBoundingBoxVisualizer boundingBoxVisualizer;
 
 
         public ListVM List => listVM;
@@ -166,6 +169,18 @@ namespace RevitDBExplorer
                 return databaseQueryAutocompleteItemProvider;
             }
         }
+        public bool IsBoundingBoxVisualizerEnabled
+        {
+            get
+            {
+                return boundingBoxVisualizer.IsEnabled;
+            }
+            set
+            {
+                boundingBoxVisualizer.IsEnabled = value;
+                OnPropertyChanged();
+            }
+        }
         public RelayCommand OpenScriptingWithQueryCommand { get; }
         public RelayCommand SaveQueryAsFavoriteCommand { get; }
 
@@ -190,6 +205,7 @@ namespace RevitDBExplorer
             Tree.ScriptForRDSHasChanged += OpenScriptingWithCommand;
             OpenScriptingWithQueryCommand = new RelayCommand(OpenScriptingWithQuery);
             SaveQueryAsFavoriteCommand = new RelayCommand(SaveQueryAsFavorite, x => !string.IsNullOrEmpty(DatabaseQuery) );
+            boundingBoxVisualizer = BoundingBoxVisualizerFactory.GetInstance();
         }  
         public MainWindow(SourceOfObjects sourceOfObjects) : this()
         {
@@ -246,18 +262,20 @@ namespace RevitDBExplorer
             var snoopableObjects = EventMonitor.GetEvents().ToList();
             Tree.PopulateWithEvents(snoopableObjects);            
         }
-        private async void Tree_SelectedItemChanged(TreeItem treeViewItemVM)
+        private async void Tree_SelectedItemChanged(SelectedItemChangedEventArgs eventArgs)
         {
             List.ClearItems();
 
-            if (treeViewItemVM is SnoopableObjectTreeItem snoopableObjectVM)
+            if (eventArgs.NewOne is SnoopableObjectTreeItem snoopableObjectVM)
             {
                 RightView = RightView.List;
                 var snoopableMembers = await ExternalExecutor.ExecuteInRevitContextAsync(x => snoopableObjectVM.Object.GetMembers(x).ToList());            
                 List.PopulateListView(snoopableMembers);
+                boundingBoxVisualizer.Show(snoopableObjectVM.Object.Object as Autodesk.Revit.DB.Element);
                 return;
             }
-            if (treeViewItemVM is GroupTreeItem groupTreeItemVM)
+            boundingBoxVisualizer.HideAll();
+            if (eventArgs.NewOne is GroupTreeItem groupTreeItemVM)
             {
                 //if (AppSettings.Default.FeatureFlag)
                 //{
@@ -350,6 +368,7 @@ namespace RevitDBExplorer
         }
         private void Window_Closed(object sender, EventArgs e)
         {
+            boundingBoxVisualizer.Dispose();
             Application.RevitWindowHandle.BringWindowToFront();
         }
         private void Window_KeyDown(object sender, KeyEventArgs e)

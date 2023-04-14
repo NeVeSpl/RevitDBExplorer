@@ -2,6 +2,7 @@
 using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
+using RevitDBExplorer.Augmentations;
 using RevitDBExplorer.Domain.Selectors;
 
 namespace RevitDBExplorer
@@ -11,6 +12,8 @@ namespace RevitDBExplorer
     {
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
+            BoundingBoxVisualizerFactory.Init(commandData.Application);
+
             Application.UIApplication = commandData.Application;
             var source = SelectorFactory.Create(Selector.CurrentSelection);
             source.ReadFromTheSource(commandData.Application);

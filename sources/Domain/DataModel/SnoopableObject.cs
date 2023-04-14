@@ -110,7 +110,7 @@ namespace RevitDBExplorer.Domain.DataModel
         private bool isFrozen = false;
         IList<SnoopableMember> frozenMembers;
         private static readonly Type[] doNotFreeze = new Type[] { typeof(Document) , typeof(View), typeof(Element), typeof(Transform) };
-        public void Freeze(int candies = 4)
+        public void Freeze(int candies = 3)
         {
             if (--candies < 0) return;
 
