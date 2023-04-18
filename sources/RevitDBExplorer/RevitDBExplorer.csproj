@@ -10,9 +10,9 @@
     <Company>https://github.com/NeVeSpl/RevitDBExplorer</Company>
     <Product>Revit database explorer</Product>
     <Copyright>(c) Revit Database Explorer</Copyright>
-    <AssemblyVersion>1.5.1.0</AssemblyVersion>
-    <FileVersion>1.5.1.0</FileVersion>
-    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <AssemblyVersion></AssemblyVersion>
+   
+    <OutputPath>..\bin\$(Configuration)\</OutputPath>
 	<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 
     <UseWPF>true</UseWPF>
@@ -24,7 +24,8 @@
     <RevitYear>2023</RevitYear>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject />    
+    <StartupObject />
+    <Version>1.5.1.0</Version>    
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'R2023|AnyCPU'">
     <DefineConstants>TRACE;R2021b, R2022b, R2023b, R2023e, R2024e</DefineConstants>
@@ -111,30 +112,30 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Expression.Interactions">
-      <HintPath>..\binaries\revit\2023\Microsoft.Expression.Interactions.dll</HintPath>
+      <HintPath>..\..\binaries\revit\2023\Microsoft.Expression.Interactions.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="RevitAddInUtility">
-      <HintPath>..\binaries\revit\2023\RevitAddInUtility.dll</HintPath>
+      <HintPath>..\..\binaries\revit\2023\RevitAddInUtility.dll</HintPath>
       <Private>False</Private>
     </Reference>
 	  <Reference Include="RevitAPI">
-		  <HintPath>..\binaries\revit\$(RevitYear)\RevitAPI.dll</HintPath>
+		  <HintPath>..\..\binaries\revit\$(RevitYear)\RevitAPI.dll</HintPath>
 		  <Private>False</Private>
 	  </Reference>
 	 
 	  <Reference Include="RevitAPIUI">
-		  <HintPath>..\binaries\revit\$(RevitYear)\RevitAPIUI.dll</HintPath>
+		  <HintPath>..\..\binaries\revit\$(RevitYear)\RevitAPIUI.dll</HintPath>
 		  <Private>False</Private>
 	  </Reference>
 	  <Reference Include="AdWindows">
-		  <HintPath>..\binaries\revit\$(RevitYear)\AdWindows.dll</HintPath>
+		  <HintPath>..\..\binaries\revit\$(RevitYear)\AdWindows.dll</HintPath>
 		  <Private>False</Private>
 	  </Reference>
     <Reference Include="System.Windows" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity">
-      <HintPath>..\binaries\revit\2023\System.Windows.Interactivity.dll</HintPath>
+      <HintPath>..\..\binaries\revit\2023\System.Windows.Interactivity.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System.Data.DataSetExtensions" />
@@ -145,21 +146,21 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="..\documentation\images\RDBE.ico">
+    <Resource Include="..\..\documentation\images\RDBE.ico">
       <Link>Resources\RDBE.ico</Link>
     </Resource>
-    <Resource Include="..\documentation\images\RDBE.Icon.32.png">
+    <Resource Include="..\..\documentation\images\RDBE.Icon.32.png">
       <Link>Resources\RDBE.Icon.32.png</Link>
     </Resource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\RevitDBExplorer.addin">
+    <None Include="..\..\RevitDBExplorer.addin">
       <Link>RevitDBExplorer.addin</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="..\documentation\images\RDBE.Icon.16.png">
+    <Resource Include="..\..\documentation\images\RDBE.Icon.16.png">
       <Link>Resources\RDBE.Icon.16.png</Link>
     </Resource>
   </ItemGroup>

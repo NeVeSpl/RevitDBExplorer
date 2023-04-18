@@ -119,7 +119,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\sources\RevitDBExplorer.csproj">
+    <ProjectReference Include="..\sources\RevitDBExplorer\RevitDBExplorer.csproj">
       <Project>{bb69e885-0617-4556-a983-fd783c6669ba}</Project>
       <Name>RevitDBExplorer</Name>
     </ProjectReference>
