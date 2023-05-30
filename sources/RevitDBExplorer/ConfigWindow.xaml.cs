@@ -142,6 +142,7 @@ namespace RevitDBExplorer
             AppSettings.Default.FeatureFlag = FeatureFlag;
             AppSettings.Default.RevitAPICHMFilePath = RevitAPICHMFilePath;
             AppSettings.Default.AddRDBECmdToModifyTab = AddRDBECmdToModifyTab;
+            AppSettings.Default.Save();
             FavoritesManager.FavoriteQueries = FavoriteQueries.ToList();
             FavoritesManager.Save();
             ApplicationModifyTab.Update(AppSettings.Default.AddRDBECmdToModifyTab);
