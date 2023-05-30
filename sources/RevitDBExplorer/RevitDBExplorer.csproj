@@ -271,4 +271,17 @@
     <Compile Remove="obj\R2024\WPF\Controls\TextBoxWithPlaceholder.g.cs" />
     <Compile Remove="obj\R2024\WPF\Controls\TextBoxWithPlaceholder.g.i.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Properties\AppSettings.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>AppSettings.settings</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="Properties\AppSettings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>AppSettings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
 </Project>
