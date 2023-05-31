@@ -1,7 +1,4 @@
-﻿using System;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using Autodesk.Revit.UI;
+﻿using Autodesk.Revit.UI;
 using Autodesk.Windows;
 using RevitDBExplorer.Domain;
 using RevitDBExplorer.Domain.DataModel.MemberAccessors;
@@ -9,10 +6,13 @@ using RevitDBExplorer.Domain.DataModel.Streams;
 using RevitDBExplorer.Domain.DataModel.ValueContainers.Base;
 using RevitDBExplorer.Domain.RevitDatabaseQuery;
 using RevitDBExplorer.Properties;
+using System;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using AdW = Autodesk.Windows;
 
 namespace RevitDBExplorer
-{    
+{
     public class Application : IExternalApplication
     {
         public static IntPtr RevitWindowHandle;
@@ -30,17 +30,6 @@ namespace RevitDBExplorer
             pushButtonData.LargeImage = new BitmapImage(new Uri("pack://application:,,,/RevitDBExplorer;component/Resources/RDBE.Icon.32.png", UriKind.RelativeOrAbsolute));
             panel.AddItem(pushButtonData);
 
-            if (AppSettings.Default.AddRDBECmdToModifyTab)
-            {
-                var tab = ComponentManager.Ribbon.FindTab("Modify");
-                if (tab != null)
-                {
-                    var adwPanel = new AdW.RibbonPanel();
-                    adwPanel.CopyFrom(panel.GetRibbonPanel());
-                    tab.Panels.Add(adwPanel);
-                }
-            }
-
             ExternalExecutor.CreateExternalEvent();
             MemberAccessorFactory.Init();
             ValueContainerFactory.Init();
@@ -48,6 +37,8 @@ namespace RevitDBExplorer
             RevitDocumentationReader.Init();
             RevitDatabaseQueryService.Init();
             EventMonitor.Register(application);
+
+            ApplicationModifyTab.Init(panel.GetRibbonPanel(), AppSettings.Default.AddRDBECmdToModifyTab);
 
             application.Idling += Application_Idling;
 
@@ -60,11 +51,11 @@ namespace RevitDBExplorer
         }
 
 
-        private static DateTime LastTimeWhenInCharge; 
+        private static DateTime LastTimeWhenInCharge;
         private void Application_Idling(object sender, Autodesk.Revit.UI.Events.IdlingEventArgs e)
         {
-            LastTimeWhenInCharge = DateTime.Now;            
-        }        
+            LastTimeWhenInCharge = DateTime.Now;
+        }
         public static bool IsRevitBussy()
         {
             return (DateTime.Now - Application.LastTimeWhenInCharge).TotalSeconds > 0.5;

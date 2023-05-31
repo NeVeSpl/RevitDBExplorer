@@ -24,7 +24,7 @@
       <Value Profile="(Default)">D:\Autodesk\Revit 2023 SDK\RevitAPI.chm</Value>
     </Setting>
     <Setting Name="AddRDBECmdToModifyTab" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">True</Value>
+      <Value Profile="(Default)">False</Value>
     </Setting>
   </Settings>
 </SettingsFile>

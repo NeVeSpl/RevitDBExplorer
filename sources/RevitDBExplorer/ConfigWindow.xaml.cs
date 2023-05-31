@@ -1,4 +1,7 @@
-﻿using System;
+﻿using RevitDBExplorer.Domain.RevitDatabaseQuery.Autocompletion;
+using RevitDBExplorer.Properties;
+using RevitDBExplorer.WPF;
+using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -6,9 +9,6 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
-using RevitDBExplorer.Domain.RevitDatabaseQuery.Autocompletion;
-using RevitDBExplorer.Properties;
-using RevitDBExplorer.WPF;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
@@ -17,11 +17,11 @@ namespace RevitDBExplorer
     internal partial class ConfigWindow : Window, INotifyPropertyChanged
     {
         private bool _isEventMonitorEnabled;
-        private ObservableCollection<Theme> _themes = new() 
-        { 
+        private ObservableCollection<Theme> _themes = new()
+        {
             new Theme("Default", "Light - default"),
             new Theme("Dark", "Dark - be ready"),
-            new Theme("DarkR2024", "Dark - R2024") 
+            new Theme("DarkR2024", "Dark - R2024")
         };
         private Theme _selectedTheme;
         private bool _featureFlag;
@@ -133,7 +133,7 @@ namespace RevitDBExplorer
         private void DeleteQuery(object obj)
         {
             FavoriteQueries.Remove(obj as FavoriteQueryDTO);
-        }        
+        }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
@@ -142,8 +142,10 @@ namespace RevitDBExplorer
             AppSettings.Default.FeatureFlag = FeatureFlag;
             AppSettings.Default.RevitAPICHMFilePath = RevitAPICHMFilePath;
             AppSettings.Default.AddRDBECmdToModifyTab = AddRDBECmdToModifyTab;
+            AppSettings.Default.Save();
             FavoritesManager.FavoriteQueries = FavoriteQueries.ToList();
             FavoritesManager.Save();
+            ApplicationModifyTab.Update(AppSettings.Default.AddRDBECmdToModifyTab);
             Close();
         }
 

@@ -15,3 +15,5 @@ sources/RevitDBExplorer/obj/
 sources/RevitDBScripting/bin/
 sources/RevitDBScripting/obj/
 sources/RevitDBExplorer/RevitDBExplorer.csproj.user
+bin
+obj
