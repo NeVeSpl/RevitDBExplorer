@@ -16,7 +16,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SetupBuilder", "setup\Setup
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RevitDBExplorer.Tests", "tests\RevitDBExplorer.Tests.csproj", "{DC6DE964-9472-47AF-B744-6D4E39EA2209}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RevitDBScripting", "sources\RevitDBScripting\RevitDBScripting.csproj", "{0A08A6F2-5B74-457A-93AB-B6BF834D9D34}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RevitDBScripting", "sources\RevitDBScripting\RevitDBScripting.csproj", "{0A08A6F2-5B74-457A-93AB-B6BF834D9D34}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

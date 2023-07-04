@@ -1,7 +1,22 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>net48</TargetFramework>
+	 <LangVersion>10.0</LangVersion>
+    <RevitYear>2024</RevitYear>
+	<Company>https://github.com/NeVeSpl/RevitDBExplorer</Company>
+	 <Copyright>(c) Revit Database Explorer</Copyright>
+	 <UseWPF>true</UseWPF> 
+	 <Configurations>Debug;R2023;R2022;R2021;Debug2024;R2024;</Configurations>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="RoslynPad.Editor.Windows" Version="1.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="UIComponents\" />
+  </ItemGroup>
+
 
 </Project>

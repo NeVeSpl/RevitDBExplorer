@@ -19,6 +19,13 @@ namespace RevitDBExplorer
         public static UIApplication UIApplication;
         public static FontFamily DefaultFontFamily;
 
+
+        public Application()
+        {
+            
+        }
+
+
         public Result OnStartup(UIControlledApplication application)
         {
             RevitWindowHandle = application.MainWindowHandle;

@@ -50,8 +50,7 @@ namespace SetupBuilder
             "CircularBuffer.dll",
             "DocXml.dll",
             "Humanizer.dll",
-            "ICSharpCode.AvalonEdit.dll",
-            
+            "ICSharpCode.AvalonEdit.dll",            
             "Microsoft.Bcl.AsyncInterfaces.dll",
             "Microsoft.CodeAnalysis.AnalyzerUtilities.dll",
             "Microsoft.CodeAnalysis.CSharp.dll",
@@ -66,6 +65,7 @@ namespace SetupBuilder
             "RevitDBExplorer.dll",
             "RevitDBExplorer.dll.config",
             "RevitDBExplorer.Augmentations.dll",
+            "RevitDBScripting.dll",
             "RoslynPad.Editor.Windows.dll",
             "RoslynPad.Roslyn.dll",
             "RoslynPad.Roslyn.Windows.dll",
