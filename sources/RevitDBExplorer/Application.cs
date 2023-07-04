@@ -37,17 +37,6 @@ namespace RevitDBExplorer
             pushButtonData.LargeImage = new BitmapImage(new Uri("pack://application:,,,/RevitDBExplorer;component/Resources/RDBE.Icon.32.png", UriKind.RelativeOrAbsolute));
             panel.AddItem(pushButtonData);
 
-            if (AppSettings.Default.AddRDBECmdToModifyTab)
-            {
-                var tab = ComponentManager.Ribbon.FindTab("Modify");
-                if (tab != null)
-                {
-                    var adwPanel = new AdW.RibbonPanel();
-                    adwPanel.CopyFrom(panel.GetRibbonPanel());
-                    tab.Panels.Add(adwPanel);
-                }
-            }
-
             ExternalExecutor.CreateExternalEvent();
             MemberAccessorFactory.Init();
             ValueContainerFactory.Init();
@@ -55,6 +44,8 @@ namespace RevitDBExplorer
             RevitDocumentationReader.Init();
             RevitDatabaseQueryService.Init();
             EventMonitor.Register(application);
+
+            ApplicationModifyTab.Init(panel.GetRibbonPanel(), AppSettings.Default.AddRDBECmdToModifyTab);
 
             application.Idling += Application_Idling;
 
