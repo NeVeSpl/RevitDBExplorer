@@ -15,11 +15,9 @@ using RevitDBExplorer.WPF;
 namespace RevitDBExplorer.UIComponents.Scripting
 {
     internal class RDScriptingVM : BaseViewModel
-    {
-        private IScriptRunner scriptRunner;
+    {       
         private bool isPanelOpen = false;
-        private GridLength height;
-        private IRoslynCodeEditor roslynCodeEditor;
+        private GridLength height;      
         private IEnumerable<Inline> output;
         private FlowDocument outputDocument;
         private IEnumerable<Inline> input;
@@ -53,19 +51,7 @@ namespace RevitDBExplorer.UIComponents.Scripting
    
 
         public RelayCommand CloseCommand { get; }
-        public RelayCommand RunCommand { get; }
-        public IRoslynCodeEditor RoslynCodeEditor
-        {
-            get
-            {
-                return roslynCodeEditor;
-            }
-            set
-            {
-                roslynCodeEditor = value;
-                OnPropertyChanged();
-            }
-        }
+        public RelayCommand RunCommand { get; }       
         public IEnumerable<Inline> Output
         {
             get
@@ -120,16 +106,15 @@ namespace RevitDBExplorer.UIComponents.Scripting
         }
 
 
-        public RDScriptingVM(IScriptRunner scriptRunner)
+        public RDScriptingVM()
         {
             CloseCommand = new RelayCommand(Close);
-            RunCommand = new RelayCommand(Run);
-            this.scriptRunner = scriptRunner;
+            RunCommand = new RelayCommand(Run);          
         }
 
 
         public void Open()
-        {
+        {           
             IsOpen = true;
             Height = new GridLength(Math.Max(Height.Value, 198));
             SelectedTabIndex = 1;
@@ -142,62 +127,13 @@ namespace RevitDBExplorer.UIComponents.Scripting
         }
         private async void Run(object parameter)
         {            
-            var code = RoslynCodeEditor.GetText();
-            var lambdaToBe = await roslynCodeEditor.GetTypeOfLambda();
+          
 
-            var result = await RevitDatabaseScriptingService.Compile(code, lambdaToBe);
-            result.SetInputObjects(inputs);
-
-            var originalConsoleOut = Console.Out;
-            var writer = new StringWriter();
-            try
-            {
-                Console.SetOut(writer);
-
-                if (result.SelectQuery != null)
-                {                    
-                    await scriptRunner.TryExecuteQuery(new SourceOfObjects(result.SelectQuery) { Title = "User query" }); 
-                    writer.WriteLine($"{DateTimeOffset.Now.ToString("hh:mm:ss")} : query completed");
-                }
-                if (result.UpdateQuery != null)
-                {
-                    await ExternalExecutorExt.ExecuteInRevitContextInsideTransactionAsync(x => result.UpdateQuery.Execute(x), null, "RDS update command");
-                    writer.WriteLine($"{DateTimeOffset.Now.ToString("HH:mm:ss")} : query completed");
-                }
-            }
-            finally
-            {
-                Console.SetOut(originalConsoleOut);
-            }
-
-            var output = new List<Inline>();
-            var outputDocument = new FlowDocument() { PagePadding = new Thickness(0), FontFamily= Application.DefaultFontFamily };
-            foreach (var diagnostic in result.Diagnostics)
-            {
-                output.Add(new Run() { Text = diagnostic, Foreground = Brushes.Red } );
-                output.Add(new LineBreak());
-                SelectedTabIndex = 2;
-            }
-
-            var consoleLines = writer.ToString().Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
-
-            foreach (var line in consoleLines)
-            {
-                output.Add(new Run() { Text = line });
-                output.Add(new LineBreak());
-            }
-
-            var paragraph = new Paragraph() { FontSize = 12, };
-            paragraph.Inlines.AddRange(output);
-            outputDocument.Blocks.Add(paragraph);
-
-            Output = output;
-            OutputDocument = outputDocument;
         }
 
         public void SetScript(string scriptText)
         {
-            RoslynCodeEditor.SetText(scriptText);
+            
         }
         public void SetInput(IEnumerable<object> inputs)
         {
@@ -222,10 +158,5 @@ namespace RevitDBExplorer.UIComponents.Scripting
             };
             Input = input;
         }
-    }
-
-    internal interface IScriptRunner
-    {
-        Task TryExecuteQuery(SourceOfObjects source);
-    }
+    }  
 }

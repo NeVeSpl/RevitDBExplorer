@@ -8,8 +8,9 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Interop;
 using System.Windows.Threading;
-using Autodesk.Revit.UI;
+using System.Xml.Linq;
 using RevitDBExplorer.Augmentations;
 using RevitDBExplorer.Domain;
 using RevitDBExplorer.Domain.DataModel;
@@ -34,7 +35,7 @@ namespace RevitDBExplorer
 {
     internal enum RightView { None, List, CommandAndControl }
 
-    internal partial class MainWindow : Window, INotifyPropertyChanged, IScriptRunner
+    internal partial class MainWindow : Window, INotifyPropertyChanged
     {
         private readonly TreeVM treeVM = new();
         private readonly ListVM listVM = new();
@@ -189,7 +190,7 @@ namespace RevitDBExplorer
             Dispatcher.UnhandledException += Dispatcher_UnhandledException;
             InitializeComponent();
             this.DataContext = this;
-            rdscriptingVM = new RDScriptingVM(this);
+            rdscriptingVM = new RDScriptingVM();
 
             var ver = GetType().Assembly.GetName().Version;
             var revit_ver = typeof(Autodesk.Revit.DB.Element).Assembly.GetName().Version;
@@ -201,14 +202,18 @@ namespace RevitDBExplorer
 
             List.MemberSnooped += List_MemberSnooped;          
             Tree.SelectedItemChanged += Tree_SelectedItemChanged;
-            Tree.InputForRDSHasChanged += (IEnumerable<object> objects) => rdscriptingVM.SetInput(objects);
-            Tree.ScriptForRDSHasChanged += OpenScriptingWithCommand;
-            OpenScriptingWithQueryCommand = new RelayCommand(OpenScriptingWithQuery);
+            Tree.InputForRDSHasChanged += RDSSetInput;
+            Tree.ScriptForRDSHasChanged += RDSOpenWithCommand;
+            OpenScriptingWithQueryCommand = new RelayCommand(RDSOpenWithQuery);
             SaveQueryAsFavoriteCommand = new RelayCommand(SaveQueryAsFavorite, x => !string.IsNullOrEmpty(DatabaseQuery) );
             boundingBoxVisualizer = BoundingBoxVisualizerFactory.GetInstance();
         }  
-        public MainWindow(SourceOfObjects sourceOfObjects) : this()
+        public MainWindow(SourceOfObjects sourceOfObjects, IntPtr? parentWindowHandle = null) : this()
         {
+            if (parentWindowHandle.HasValue)
+            {
+                new WindowInteropHelper(this).Owner = parentWindowHandle.Value;
+            }
             Tree.PopulateTreeView(sourceOfObjects);
         }
 
@@ -314,21 +319,7 @@ namespace RevitDBExplorer
             QueryVisualization.Update(rdqResult.Commands).Forget();
             Tree.PopulateTreeView(rdqResult.SourceOfObjects);            
         }    
-        async Task IScriptRunner.TryExecuteQuery(SourceOfObjects source)
-        {
-            Tree.ClearItems();
-            List.ClearItems();
-            ResetDatabaseQuery();
-
-            var sourceOfObjects = await ExternalExecutor.ExecuteInRevitContextAsync(x =>
-            {                
-                source.ReadFromTheSource(x);
-                return source;
-            });
-
-            Tree.PopulateTreeView(sourceOfObjects);
-        }
-     
+         
         private void ResetDatabaseQuery()
         {
             databaseQuery = "";
@@ -337,17 +328,23 @@ namespace RevitDBExplorer
             queryVisualizationVM.Update(Enumerable.Empty<RDQCommand>()).Forget();
         }
 
-
-        private void OpenScriptingWithQuery(object parameter)
+        private void RDSSetInput(IEnumerable<object> objects)
         {
-            var text = CodeGenerator.GenerateQueryFor(DatabaseQueryToolTip);
-            Scripting.Open();
-            Scripting.SetScript(text);
+            Application.RDSController.Open();
+            Application.RDSController.SetInput(objects);
+        }
+        private void RDSOpenWithQuery(object parameter)
+        {
+            var scriptText = CodeGenerator.GenerateQueryFor(DatabaseQueryToolTip);
+            //Scripting.Open();           
+            Application.RDSController.Open();
+            Application.RDSController.SetText(scriptText);
         }        
-        private void OpenScriptingWithCommand(string scriptText)
+        private void RDSOpenWithCommand(string scriptText)
         {
-            Scripting.Open();
-            Scripting.SetScript(scriptText);
+            //Scripting.Open();           
+            Application.RDSController.Open();
+            Application.RDSController.SetText(scriptText);
         }
         private void SaveQueryAsFavorite(object parameter)
         {
@@ -415,6 +412,11 @@ namespace RevitDBExplorer
         {
             Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
             e.Handled = true;
+        }
+
+        private void RDS_Click(object sender, RoutedEventArgs e)
+        {
+            Application.RDSController.Open();
         }
 
         #region INotifyPropertyChanged

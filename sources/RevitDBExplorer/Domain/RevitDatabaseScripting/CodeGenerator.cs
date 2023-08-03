@@ -1,7 +1,7 @@
-﻿// (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
-
-using System;
+﻿using System;
 using Autodesk.Revit.DB;
+
+// (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
 namespace RevitDBExplorer.Domain.RevitDatabaseScripting
 {

@@ -19,3 +19,5 @@ sources/RevitDBScripting/RevitDBScripting.csproj.user
 bin
 obj
 
+publish_nuget.bat
+nugets/

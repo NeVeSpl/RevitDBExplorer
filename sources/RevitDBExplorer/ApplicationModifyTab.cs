@@ -6,6 +6,8 @@ namespace RevitDBExplorer
     public static class ApplicationModifyTab
     {
         private static Autodesk.Windows.RibbonPanel ribbonPanel;
+
+
         public static void Init(Autodesk.Windows.RibbonPanel ribbonPanel, bool visible = false)
         {
             ApplicationModifyTab.ribbonPanel = ribbonPanel.Clone();
