@@ -330,20 +330,20 @@ namespace RevitDBExplorer
 
         private void RDSSetInput(IEnumerable<object> objects)
         {
-            Application.RDSController.Open();
+            OpenRDS();
             Application.RDSController.SetInput(objects);
         }
         private void RDSOpenWithQuery(object parameter)
         {
             var scriptText = CodeGenerator.GenerateQueryFor(DatabaseQueryToolTip);
             //Scripting.Open();           
-            Application.RDSController.Open();
+            OpenRDS();
             Application.RDSController.SetText(scriptText);
         }        
         private void RDSOpenWithCommand(string scriptText)
         {
             //Scripting.Open();           
-            Application.RDSController.Open();
+            OpenRDS();
             Application.RDSController.SetText(scriptText);
         }
         private void SaveQueryAsFavorite(object parameter)
@@ -416,7 +416,12 @@ namespace RevitDBExplorer
 
         private void RDS_Click(object sender, RoutedEventArgs e)
         {
-            Application.RDSController.Open();
+            OpenRDS();
+        }
+
+        private void OpenRDS()
+        {
+            Application.RDSController.Open(this.Left, this.Top + this.ActualHeight);
         }
 
         #region INotifyPropertyChanged

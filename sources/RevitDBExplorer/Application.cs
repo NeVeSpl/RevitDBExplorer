@@ -78,7 +78,7 @@ namespace RevitDBExplorer
                 var window = new MainWindow(source, RevitWindowHandle);
                 window.Show();
             }
-            if (context.Type == ScriptType.Command)
+            if (context.Type != ScriptType.Query)
             {
                 await ExternalExecutorExt.ExecuteInRevitContextInsideTransactionAsync(x => context.Execute(x), null, "RDS update command");
             }            
