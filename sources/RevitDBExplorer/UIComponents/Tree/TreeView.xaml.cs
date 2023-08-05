@@ -60,7 +60,7 @@ namespace RevitDBExplorer.UIComponents.Tree
 
 
                     DataObject data = new DataObject();
-                    data.SetData("Inputs", TreeVM.GetObjectsForTransfer(treeItem) ?? Enumerable.Empty<object>());
+                    data.SetData("RDS_Inputs", TreeVM.GetObjectsForTransfer(treeItem) ?? Enumerable.Empty<object>());
                     data.SetData(DataFormats.StringFormat, text ?? "");
                     DragDrop.DoDragDrop(this, data, DragDropEffects.Copy | DragDropEffects.Move);
                     //e.Handled = true;

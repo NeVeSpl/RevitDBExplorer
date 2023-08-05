@@ -417,6 +417,7 @@ namespace RevitDBExplorer
         private void RDS_Click(object sender, RoutedEventArgs e)
         {
             OpenRDS();
+            //Application.RDSController.SetText("Console.WriteLine($\"Hello world from: {document.Title}\");");
         }
 
         private void OpenRDS()

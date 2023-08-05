@@ -41,11 +41,11 @@
         </ResourceDictionary>
     </Window.Resources>
 
-    <Window.ContextMenu>
+    <!--<Window.ContextMenu>
         <ContextMenu>            
             <MenuItem Header="Configuration" Click="Window_MenuItem_ConfigurationClick" />
         </ContextMenu>
-    </Window.ContextMenu>
+    </Window.ContextMenu>-->
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="1*" MinHeight="200"/>

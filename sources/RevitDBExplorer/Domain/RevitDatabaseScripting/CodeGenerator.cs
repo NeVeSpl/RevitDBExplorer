@@ -69,9 +69,9 @@ namespace RevitDBExplorer.Domain.RevitDatabaseScripting
         public static string GenerateUpdateCommandForType(System.Type type)
         {
             return
-@$"void Update(IEnumerable<{type.GetCSharpName()}> objects)
+@$"void Update(IEnumerable<{type.GetCSharpName()}> inputs)
 {{
-    foreach (var item in objects)
+    foreach (var item in inputs)
     {{
         item.
     }}
