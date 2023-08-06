@@ -3,8 +3,8 @@
 - [Revit query language](#revit-query-language-rql)
     - [classifiers](#classifiers)
     - [operators](#operators)
-    - [search for decimal paramater value (StorageType.Double)](#search-for-decimal-paramater-value-storagetypedouble)
-    - [wildcard search for string paramater value (StorageType.String)](#wildcard-search-for-string-paramater-value-storagetypestring)
+    - [search for decimal parameter value (StorageType.Double)](#search-for-decimal-parameter-value-storagetypedouble)
+    - [wildcard search for string parameter value (StorageType.String)](#wildcard-search-for-string-parameter-value-storagetypestring)
 - [Code generation](#code-generation)
 - [Examples](#examples)
     - [find all elements that have given shared parameter](#find-all-elements-that-have-given-shared-parameter)
@@ -17,7 +17,7 @@
 - queries are case-insensitive
 - matching is done in a fuzzy way, you do not have to be very precise with names, but this may lead to some false positive results
 - by using a [classifier](#classifiers) you can narrow search space and get better results
-- autocompletion is only available when used with classifier
+- autocompletion is only available when used with a classifier
  
 input/keywords | interpretation | translates to in Revit API
 ----------|------------| ----
@@ -42,11 +42,11 @@ e.g. `workset name`|select elements from a given workset |new ElementWorksetFilt
 
 
 
-#### Search for decimal paramater value (StorageType.Double)
+#### Search for decimal parameter value (StorageType.Double)
 
-A decimal value you are searching for is parsed/interpreted in Revit 2022+, which means that RDQ uses Revit UI units for given document. If that is not feasible, as fallback, internal Revit storage units/form is used. In Revit 2021, RDQ always uses internal units in queries.
+A decimal value you are searching for is parsed/interpreted in Revit 2022+, which means that RDQ uses Revit UI units for a given document. If that is not feasible, as a fallback, internal Revit storage units/form is used. In Revit 2021, RDQ always uses internal units in queries.
 
-#### Wildcard search for string paramater value (StorageType.String)
+#### Wildcard search for string parameter value (StorageType.String)
 
 For parameters that have StorageType.String, you can do a wildcard search by using `%` or  `*` at the beginning and/or end of searching text e.g. `Mark = *foo%`
 
@@ -75,7 +75,7 @@ operator | meaning | example
 `>=` | GreaterOrEqual | `Length >= 0`
 `<=` | LessOrEqual | `Length <= 0`
 `??` | HasNoValue, parameter exists but has no value | `Length ??`
-`!!` | HasValue, paramater exists and has value | `Length !!`
+`!!` | HasValue, parameter exists and has value | `Length !!`
 **`?!`** | **Exists, element has given parameter**| `Length ?!`
 `=` | Equals | `Length = 0`
 `>` | Greater | `Length > 0`

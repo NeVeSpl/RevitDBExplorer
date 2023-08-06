@@ -1,6 +1,6 @@
 ## Revit database scripting (RDS)
 
-- [Types of scripts](#revit-query-language-rql)
+- [Types of scripts](#types-of-scripts)
     - [SELECT query](#select-query)
     - [UPDATE command](#update-command)
     - [SCRIPT](#script)
@@ -12,12 +12,12 @@
 ### Types of scripts
 
  RDS scripts are divided into three categories: 
-- SELECT query, where result of the query is dispayed in the RDBE UI 
+- SELECT query, where the result of the query is displayed in the RDBE UI 
 - UPDATE command, where as a result of the command execution, the model is changed
-- SCRIPT, it behaves the same as UPDATE commands, but the code does not have to be put inside function
+- SCRIPT, behaves the same as UPDATE commands, but the code does not have to be put inside a function
 
- |   | SELECT query | UPDATE command | SCRIPT
----|--------------|---------------
+&nbsp; | SELECT query | UPDATE command | SCRIPT
+---|--------------|---------------|---------------
 format of code  | C# function | C# function  | C# script
 returns | something   | `void` | n/a
 can change model | **no**, it is read-only | **yes**, it runs inside transaction | **yes**, it runs inside transaction

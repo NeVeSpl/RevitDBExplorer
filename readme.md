@@ -48,7 +48,7 @@ RDS is intended to compile and run C# code that is too small or ephemeral to mak
 
 #### ad hoc UPDATE command
 
-An example shows how to add prefix to `Mark` parameter for many selected elements as inputs for the script. 
+An example shows how to add a prefix to `Mark` parameter for many selected elements as inputs for the script. 
 
 ![possibility-to-query-Revit-database-from-UI](documentation/examples/revit-database-scripting-update-command.gif)
 
@@ -59,7 +59,7 @@ An example shows how to add prefix to `Mark` parameter for many selected element
 
 ### easy access to Revit API documentation
 
- Tooltips work out-of-box, RevitApi.chm file is part of [Revit SDK](https://www.autodesk.com/developer-network/platform-technologies/revit) and path to it needs to be set manually.
+ Tooltips work out-of-box, RevitApi.chm file is part of [Revit SDK](https://www.autodesk.com/developer-network/platform-technologies/revit) and the path to it needs to be set manually.
 
 ![tooltips-with-Revit-documentations](documentation/examples/easy-access-to-revit-api-documentation.gif)
 
@@ -100,19 +100,19 @@ Not only you have faster access to a geometry of an element, but you can also se
 
 ### more advanced tree view
 
-With grouping on many levels, and possibility to switch between grouping by Type or Category on the first level.
+With grouping on many levels, and a possibility to switch between grouping by Type or Category on the first level.
 
 ![more-advanced-tree-view](documentation/examples/more-advanced-tree-view.gif)
 
 ### snoop Revit events with REM (Revit Event Monitor)
 
 A new take on [EventsMonitor from  RevitSdkSamples
-](https://github.com/jeremytammik/RevitSdkSamples/tree/master/SDK/Samples/Events/EventsMonitor/CS). RDBE stores the latest 30 events that occurred during Revit session and allows to snoop them. UIControlledApplication.Idling event and ControlledApplication.ProgressChanged event are not stored because they are too noisy - they happen too often. In order to use this feature, you need to enable event monitor, which by default is disabled.
+](https://github.com/jeremytammik/RevitSdkSamples/tree/master/SDK/Samples/Events/EventsMonitor/CS). RDBE stores the latest 30 events that occurred during Revit session and allows to snoop them. UIControlledApplication.Idling event and ControlledApplication.ProgressChanged events are not stored because they are too noisy - they happen too often. In order to use this feature, you need to enable event monitor, which by default is disabled.
 
 ![snooping-events](documentation/examples/snooping-events.gif)
 
 ### snoop updaters
 
-RDBE allows to look deeper into UpdaterRegistry.GetRegisteredUpdaterInfos(). What is special about this feature is that, with a bit of luck, it is able to get UpdaterId, as a first publicly available tool.
+RDBE allows to look deeper into UpdaterRegistry.GetRegisteredUpdaterInfos(). What is special about this feature is that, with a bit of luck, it is able to get UpdaterId, as the first publicly available tool.
 
 ![snooping-updaters](documentation/examples/snooping-updaters.gif)
