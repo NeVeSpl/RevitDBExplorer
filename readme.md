@@ -2,7 +2,7 @@
 
 **The fastest, most advanced, asynchronous Revit database exploration tool for Revit 2021+.**
 
-Yet another [RevitLookup](https://github.com/jeremytammik/RevitLookup) like tool. RevitLookup was an indispensable tool to work with Revit API for many years. But now, there is a better tool for the job. Let me introduce you to RDBE and its capabilities. RDBE not only allows us to explore in a more efficient way thanks to querying, but also to modify Revit database through ad hoc scripts written in C#. 
+Yet another [RevitLookup](https://github.com/jeremytammik/RevitLookup) like tool. RevitLookup was an indispensable tool to work with Revit API for many years. But now, there is a better tool for the job. Let me introduce you to RDBE and its capabilities. RDBE not only allows us to explore database in a more efficient way thanks to querying, but also to modify Revit database through ad hoc scripts written in C#. 
 
 - [query Revit database](#query-revit-database-with-rdq-revit-database-querying)
 - [script Revit database](#script-revit-database-with-rds-revit-database-scripting)
@@ -40,20 +40,7 @@ RDQ is able to interpret words separated by `,` as element ids, Revit classes, c
 
 ### script Revit database with RDS (Revit database scripting)
 
-RDS is intended to run C# code that is too small or ephemeral to make macro/dynamo/addon for it. RDS scripts are divided into two categories : 
-- SELECT query, where result of the query is dispayed in the RDBE UI 
-- UPDATE command, where as a result of the command execution, the model is changed
-
-category | SELECT query | UPDATE command
----|--------------|---------------
-returns | something   | `void`
-can change model | **no**, it is read-only | **yes**, it runs inside transaction
-
-RDS aims to facilitate writing scripts by code generation in some areas: 
-- it can generate a SELECT query from any RDQ query
-- it can generate an UPDATE command for any parameter 
-
-Input parameters are available for both types of scripts. Besides a few predefined variables, any object (or group of objects) displayed in the Tree, can be used as input for the script.
+RDS is intended to compile and run C# code that is too small or ephemeral to make macro/dynamo/addon for it. RDS offers the quickest way to run C# code generated with generative AI chats (such as ChatGPT). [Learn more about Revit database scripting (RDS).](documentation/revit-database-scripting.md) 
 
 #### ad hoc SELECT query
 
