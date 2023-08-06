@@ -67,7 +67,7 @@
                 <RowDefinition Height="20"/>
             </Grid.RowDefinitions>
 
-            <UniformGrid Grid.ColumnSpan="3" Columns="13" Margin="0 0 0 2" >
+            <UniformGrid Grid.ColumnSpan="3" Columns="12" Margin="0 0 0 2" >
                 <UniformGrid.Resources>
                     <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
                         <Setter Property="Background" Value="Transparent"/>
@@ -123,17 +123,25 @@
                         <TextBlock>Application</TextBlock>
                     </StackPanel>
                 </Button>
-                <Button Click="SelectorButton_Click" Tag="PickFace" ToolTip="Snoop by selecting face in Revit">
+                <!--<Button Click="SelectorButton_Click" Tag="PickFace" ToolTip="Snoop by selecting face in Revit">
                     <StackPanel>
                         <Path Style="{StaticResource IconPickFace}" />
                         <TextBlock Margin="0 2 0 0">Face</TextBlock>
                     </StackPanel>
-                </Button>
-                <Button Click="SelectorButton_Click" Tag="PickEdge" ToolTip="Snoop by selecting edge in Revit">
+                </Button>-->
+                <Button Click="ButtonWithSubMenu_Click" ToolTip="Snoop by picking given object type in Revit">
                     <StackPanel>
                         <Path Style="{StaticResource IconPickEdge}"  />
-                        <TextBlock Margin="0 2 0 0">Edge</TextBlock>
+                        <TextBlock Margin="0 2 0 0">Pick</TextBlock>
                     </StackPanel>
+                    <Button.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Snoop face" Click="SelectorButton_Click" Tag="PickFace" ToolTip="Snoop by selecting face in Revit"/>
+                            <MenuItem Header="Snoop edge" Icon="" Click="SelectorButton_Click" Tag="PickEdge" ToolTip="Snoop by selecting edge in Revit"/>
+                            <!--<MenuItem Header="Snoop point on element" Icon="" Click="SelectorButton_Click" Tag="PickPoint" ToolTip="Snoop by selecting point in Revit"/>
+                            <MenuItem Header="Snoop subelement" Icon="" Click="SelectorButton_Click" Tag="PickSubelement" ToolTip="Snoop by selecting subelement in Revit"/>-->
+                        </ContextMenu>
+                    </Button.ContextMenu>
                 </Button>
                 <Button Click="SelectorButton_Click" Tag="LinkedElement" ToolTip="Snoop by selecting linked element in Revit">
                     <StackPanel>
