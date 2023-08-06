@@ -14,7 +14,6 @@ using RevitDBExplorer.Domain.RevitDatabaseQuery;
 using RevitDBExplorer.Properties;
 using RevitDBScripting;
 
-
 namespace RevitDBExplorer
 {
     public class Application : IExternalApplication, IScriptRunner
@@ -75,7 +74,7 @@ namespace RevitDBExplorer
                     return source;
                 });
 
-                var window = new MainWindow(source, RevitWindowHandle);
+                var window = new MainWindow(sourceOfObjects, RevitWindowHandle);
                 window.Show();
             }
             if (context.Type != ScriptType.Query)

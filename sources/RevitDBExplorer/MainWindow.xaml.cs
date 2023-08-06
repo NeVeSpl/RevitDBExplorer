@@ -335,14 +335,12 @@ namespace RevitDBExplorer
         }
         private void RDSOpenWithQuery(object parameter)
         {
-            var scriptText = CodeGenerator.GenerateQueryFor(DatabaseQueryToolTip);
-            //Scripting.Open();           
+            var scriptText = CodeGenerator.GenerateQueryFor(DatabaseQueryToolTip);                 
             OpenRDS();
             Application.RDSController.SetText(scriptText);
         }        
         private void RDSOpenWithCommand(string scriptText)
-        {
-            //Scripting.Open();           
+        {               
             OpenRDS();
             Application.RDSController.SetText(scriptText);
         }
@@ -366,7 +364,11 @@ namespace RevitDBExplorer
         private void Window_Closed(object sender, EventArgs e)
         {
             boundingBoxVisualizer.Dispose();
-            Application.RevitWindowHandle.BringWindowToFront();
+            //Application.RevitWindowHandle.BringWindowToFront();
+        }
+        private void Window_Closing(object sender, EventArgs e)
+        {
+            new WindowInteropHelper(this).Owner = IntPtr.Zero;
         }
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
@@ -416,10 +418,8 @@ namespace RevitDBExplorer
 
         private void RDS_Click(object sender, RoutedEventArgs e)
         {
-            OpenRDS();
-            //Application.RDSController.SetText("Console.WriteLine($\"Hello world from: {document.Title}\");");
+            OpenRDS();         
         }
-
         private void OpenRDS()
         {
             Application.RDSController.Open(this.Left, this.Top + this.ActualHeight);

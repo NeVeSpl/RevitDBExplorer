@@ -21,6 +21,7 @@
         MinWidth="599" Width="{ext:SettingBinding MainWindowWidth}" 
         Icon="/RevitDBExplorer;component/Resources/RDBE.ico" 
         Closed="Window_Closed"
+        Closing="Window_Closing"
         KeyDown="Window_KeyDown" 
         SizeChanged="Window_SizeChanged"      
         Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"
