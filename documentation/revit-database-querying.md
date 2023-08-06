@@ -1,11 +1,28 @@
-## Revit database querying
+## Revit database querying (RDQ)
 
-### RQL - Revit query language
+- [Revit query language](#revit-query-language-rql)
+    - [classifiers](#classifiers)
+    - [operators](#operators)
+    - [search for decimal paramater value (StorageType.Double)](search-for-decimal-paramater-value-storagetypedouble)
+    - [wildcard search for string paramater value (StorageType.String)](wildcard-search-for-string-paramater-value-storagetype-string)
+- [Code generation](#code-generation)
+- [Examples](#examples)
+    - [find all elements that have given shared parameter](#find-all-elements-that-have-given-shared-parameter)
+    - [find an element using its IfcGuid](#find-an-element-using-its-ifcguid)
+
+
+
+### Revit query language (RQL)
+
+- queries are case-insensitive
+- matching is done in a fuzzy way, you do not have to be very precise with names, but this may lead to some false positive results
+- by using a [classifier](#classifiers) you can narrow search space and get better results
+- autocompletion is only available when used with classifier
  
 input/keywords | interpretation | translates to in Revit API
 ----------|------------| ----
 `,`, `;` | seperates phrases/commands
-`:` | [classifier](#classifiers) symbol
+`:` | symbol of [classifier](#classifiers) 
 `visible`, <br/>`visible in view`, </br> `visible in active view` | select elements from the active view | new VisibleInViewFilter()
 `selection` | select elements from the current selection in Revit | Selection.GetElementIds()
 `type`, <br/>`element type`, <br/>`not element`  | select only element types | .WhereElementIsElementType()
@@ -23,14 +40,13 @@ e.g. `workset name`|select elements from a given workset |new ElementWorksetFilt
 `foo` - any not recognized text | wildcard search for a given text in parameters:<br/> Name,<br/> Mark,<br/> Type Name,<br/> Family and Type | ParameterFilterRuleFactory.CreateContainsRule(),  <br/>BuiltInParameter.ALL_MODEL_TYPE_NAME, <br/>BuiltInParameter.ALL_MODEL_MARK, <br/>BuiltInParameter.ELEM_FAMILY_AND_TYPE_PARAM, <br/>BuiltInParameter.DATUM_TEXT
 
 
-- Queries are case-insensitive. 
-- Matching is done in a fuzzy way, you do not have to be very precise with names, but this may lead to some false positive results. 
-- By using a classifier you can narrow search space and get better results.
-- Autocompletion is only available  when used with classifier.
 
-#### Parameter command
+
+#### Search for decimal paramater value (StorageType.Double)
 
 A decimal value you are searching for is parsed/interpreted in Revit 2022+, which means that RDQ uses Revit UI units for given document. If that is not feasible, as fallback, internal Revit storage units/form is used. In Revit 2021, RDQ always uses internal units in queries.
+
+#### Wildcard search for string paramater value (StorageType.String)
 
 For parameters that have StorageType.String, you can do a wildcard search by using `%` or  `*` at the beginning and/or end of searching text e.g. `Mark = *foo%`
 
@@ -64,3 +80,20 @@ operator | meaning | example
 `=` | Equals | `Length = 0`
 `>` | Greater | `Length > 0`
 `<` | Less | `Length < 0`
+
+### Code generation
+
+For (almost) every RQL query you have access to the generated corresponding C# code that you can use in your app.
+
+### Examples
+
+#### Find all elements that have given shared parameter
+
+```
+YourSharedParamName?!
+```
+#### Find an element using its IfcGuid
+
+```
+IFC_GUID = 0$ySXavSvEv9X0_Nhxg76d
+```

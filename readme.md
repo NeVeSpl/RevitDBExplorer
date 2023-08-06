@@ -18,7 +18,7 @@ Yet another [RevitLookup](https://github.com/jeremytammik/RevitLookup) like tool
 - [more advanced tree view](#more-advanced-tree-view)
 - [snoop Revit events](#snoop-revit-events-with-rem-revit-event-monitor)
 - [snoop updaters](#snoop-updaters)
-- [more data exposed](#more-data-exposed-from-revit-database)
+
 
 
 ## Installation
@@ -34,7 +34,7 @@ Download and install [RevitDBExplorer.msi](https://github.com/NeVeSpl/RevitDBExp
 
 ### query Revit database with RDQ (Revit database querying)
 
-RDQ is able to interpret words separated by `,` as element ids, Revit classes, categories, parameters and many more. RDQ builds from them FilteredElementCollector and uses it to query Revit database. [Learn more about RQL (Revit query language) used by RDQ.](documentation/revit-database-querying.md#revit-database-querying)
+RDQ is able to interpret words separated by `,` as element ids, Revit classes, categories, parameters and many more. RDQ builds from them FilteredElementCollector and uses it to query Revit database. [Learn more about Revit database querying (RDQ).](documentation/revit-database-querying.md)
 
 ![possibility-to-query-Revit-database-from-UI](documentation/examples/rdq-revit-database-query-with-rql-revit-query-language.v2.gif)
 
@@ -129,110 +129,3 @@ A new take on [EventsMonitor from  RevitSdkSamples
 RDBE allows to look deeper into UpdaterRegistry.GetRegisteredUpdaterInfos(). What is special about this feature is that, with a bit of luck, it is able to get UpdaterId, as a first publicly available tool.
 
 ![snooping-updaters](documentation/examples/snooping-updaters.gif)
-
-### more data exposed from Revit database
-
-In comparison to RevitLookup, RDBE in addition gives access to:
-
-- BasicFileInfo
-    - Extract
-- Category
-    - IsBuiltInCategory
-    - GetBuiltInCategory
-    - GetBuiltInCategoryTypeId
-- Curve
-    - GetEndParameter
-- Document
-    - GetTypeOfStorage
-    - GetChangedElements
-    - GetDefaultElementTypeId
-    - GetDocumentVersion
-    - GetWorksetId
-    - EditFamily
-- Element
-    - **GetMaterialIds**
-    - GetMaterialArea
-    - GetMaterialVolume    
-- FormatOptions
-    - GetValidSymbols
-    - CanHaveSymbol
-- **HostObject**
-    - **FindInserts**
-- **HostObjectUtils**
-    - **GetTopFaces**
-    - **GetBottomFaces**
-    - **GetSideFaces**
-- **JoinGeometryUtils**
-    - **GetJoinedElements**
-    - **IsCuttingElementInJoin** 
-- LabelUtils
-    - GetLabelForBuiltInParameter
-    - GetLabelForGroup
-    - GetLabelForUnit
-    - GetLabelForSpec
-    - GetLabelForSymbol
-    - GetLabelForDiscipline
-- ParameterUtils
-    - IsBuiltInParameter
-    - GetBuiltInParameter
-    - IsBuiltInGroup
-    - GetBuiltInParameterGroup
-- Rebar
-    - DoesBarExistAtPosition 
-    - **GetCenterlineCurves** 
-    - GetCouplerId 
-    - GetEndTreatmentTypeId 
-    - **GetFullGeometryForView**
-    - GetHookOrientation
-    - GetHookRotationAngle
-    - GetHookTypeId
-    - **GetMovedBarTransform**
-    - **GetOverridableHookParameters**
-    - **GetTransformedCenterlineCurves**
-    - IsBarHidden
-- RebarBarType
-    - GetAutoCalcHookLengths,
-    - GetHookLength, 
-    - GetHookOffsetLength, 
-    - GetHookPermission
-    - GetHookTangentLength
-- RebarShapeDrivenAccessor
-    - **GetBarPositionTransform**
-- ScheduleDefinition
-    - GetFilter
-    - GetSortGroupField
-- SpatialFieldManager
-    - GetSpatialFieldManager
-    - GetResultSchema
-- SpecUtils
-    - IsValidDataType
-    - IsSpec
-- StructuralSectionUtils
-    - GetStructuralSection
-- TableView
-    - GetAvailableParameters
-- UnitFormatUtils
-    - Format
-- UnitUtils
-    - IsMeasurableSpec
-    - IsSymbol
-    - IsUnit
-    - GetDiscipline
-    - GetTypeCatalogStringForSpec
-    - GetTypeCatalogStringForUnit
-    - GetValidUnits
-- Wall
-    - IsWallCrossSectionValid
-- WorksharingUtils
-    - GetCheckoutStatus
-    - GetModelUpdatesStatus
-    - GetWorksharingTooltipInfo
-- View
-    - CanViewBeDuplicated
-    - **GetElementOverrides**
-    - IsInTemporaryViewMode
-    - SupportsWorksharingDisplayMode    
-- ViewCropRegionShapeManage
-    - GetSplitRegionMaximum
-    - GetSplitRegionMinimum
-
