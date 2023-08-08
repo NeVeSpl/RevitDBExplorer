@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Windows.Data;
 using RevitDBExplorer.Domain.DataModel;
-using RevitDBExplorer.Domain.DataModel.ViewModels;
+using RevitDBExplorer.Domain.DataModel.ValueViewModels;
 
 namespace RevitDBExplorer.WPF.Converters
 {
@@ -14,7 +14,7 @@ namespace RevitDBExplorer.WPF.Converters
 
             if (snoopableMember == null) return null;
 
-            if (snoopableMember.ValueViewModel is DefaultPresenterVM presenter)
+            if (snoopableMember.ValueViewModel is DefaultPresenter presenter)
             {
                 if (!string.IsNullOrEmpty(presenter.ValueContainer?.ToolTip))
                 {
@@ -23,7 +23,7 @@ namespace RevitDBExplorer.WPF.Converters
                 return presenter.Label; 
             }
 
-            if (snoopableMember.ValueViewModel is ErrorPresenterVM errorPresenter)
+            if (snoopableMember.ValueViewModel is ErrorPresenter errorPresenter)
             {
                 return errorPresenter.Label;
             }

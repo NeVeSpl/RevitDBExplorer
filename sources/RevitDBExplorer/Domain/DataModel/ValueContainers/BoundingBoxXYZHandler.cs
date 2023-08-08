@@ -14,9 +14,9 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers
         {
             return $"Min({box.Min.X:0.##}, {box.Min.Y:0.##}, {box.Min.Z:0.##}), Max({box.Max.X:0.##}, {box.Max.Y:0.##}, {box.Max.Z:0.##})";
         }
-        protected override IEnumerable<SnoopableObject> Snooop(Document document, BoundingBoxXYZ box)
+        protected override IEnumerable<SnoopableObject> Snooop(SnoopableContext context, BoundingBoxXYZ box)
         {
-            yield return new SnoopableObject(document, box);
+            yield return new SnoopableObject(context.Document, box);
         }
 
         public string GetToolTip(SnoopableContext context, BoundingBoxXYZ value)

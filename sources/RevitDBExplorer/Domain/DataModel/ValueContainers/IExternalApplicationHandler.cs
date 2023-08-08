@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using RevitDBExplorer.Domain.DataModel.ValueContainers.Base;
 

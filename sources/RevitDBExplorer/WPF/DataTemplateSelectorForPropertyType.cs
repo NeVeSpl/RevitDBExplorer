@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using RevitDBExplorer.Domain.DataModel;
-using RevitDBExplorer.Domain.DataModel.ViewModels;
+using RevitDBExplorer.Domain.DataModel.ValueViewModels;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
@@ -17,7 +17,7 @@ namespace RevitDBExplorer.WPF
 
                 if (snoopableMember.ValueViewModel != null)
                 {
-                    if (snoopableMember.ValueViewModel is DefaultPresenterVM { ValueContainer: not null } presenter)
+                    if (snoopableMember.ValueViewModel is DefaultPresenter { ValueContainer: not null } presenter)
                     {
                         var type = presenter.ValueContainer.TypeHandlerType;
                         if (type != typeof(object))

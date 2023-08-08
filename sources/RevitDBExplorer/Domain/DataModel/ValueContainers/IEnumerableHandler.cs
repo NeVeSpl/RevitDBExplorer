@@ -54,7 +54,7 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers
         private static readonly string[] propertyThatContainsSize = new[] { "Count", "Size", "Length" };
 
 
-        protected override IEnumerable<SnoopableObject> Snooop(Document document, IEnumerable enumerable)
+        protected override IEnumerable<SnoopableObject> Snooop(SnoopableContext context, IEnumerable enumerable)
         {
             int index = -1;
             foreach (var item in enumerable)
@@ -62,11 +62,11 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers
                 index++;
                 if (item is ElementId id)
                 {                   
-                    yield return new SnoopableObject(document, id);                    
+                    yield return new SnoopableObject(context.Document, id);                    
                 }
                 else
                 {
-                    yield return new SnoopableObject(document, item) { Index = index };
+                    yield return new SnoopableObject(context.Document, item) { Index = index };
                 }
             }
         }

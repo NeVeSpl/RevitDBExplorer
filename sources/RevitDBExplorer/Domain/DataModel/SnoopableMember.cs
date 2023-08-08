@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Autodesk.Revit.UI;
-using RevitDBExplorer.Domain.DataModel.MemberAccessors;
 using RevitDBExplorer.Domain.DataModel.Streams.Base;
-using RevitDBExplorer.Domain.DataModel.ValueContainers.Base;
-using RevitDBExplorer.Domain.DataModel.ViewModels;
-using RevitDBExplorer.Domain.DataModel.ViewModels.Base;
+using RevitDBExplorer.Domain.DataModel.ValueViewModels;
+using RevitDBExplorer.Domain.DataModel.ValueViewModels.Base;
 using RevitDBExplorer.WPF;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
@@ -17,14 +14,13 @@ namespace RevitDBExplorer.Domain.DataModel
     internal class SnoopableMember : BaseViewModel, IAmSourceOfEverything
     {
         private readonly SnoopableObject parent;
-        private readonly MemberDescriptor memberDescriptor;      
-        private IValueContainer state;
-        private IValueViewModel valueVM;
-
+        private readonly MemberDescriptor memberDescriptor;
+        private IValueViewModel memberValue;       
+        
 
         public DeclaringType DeclaringType => memberDescriptor.DeclaringType;
-        public string DeclaringTypeName => DeclaringType.Name;
-        public int DeclaringTypeLevel => DeclaringType.InheritanceLevel;
+        public string DeclaringTypeName => memberDescriptor.DeclaringType.Name;
+        public int DeclaringTypeLevel => memberDescriptor.DeclaringType.InheritanceLevel;
         public MemberKind MemberKind => memberDescriptor.Kind;
         public string Name => memberDescriptor.Name;               
         public bool HasAccessor => memberDescriptor.MemberAccessor is not null;
@@ -33,10 +29,10 @@ namespace RevitDBExplorer.Domain.DataModel
 
         public event Action SnoopableObjectChanged;
         public string AccessorName { get; private set; }
-        public IValueViewModel ValueViewModel { get; private set; } = new DefaultPresenterVM();
+        public IValueViewModel ValueViewModel { get; private set; } = EmptyPresenter.Instance;
 
         public bool CanBeSnooped { get; private set; }        
-        public bool CanBeWritten { get; private set; } = false;
+        
                
 
         public SnoopableMember(SnoopableObject parent, MemberDescriptor memberDescriptor)
@@ -56,33 +52,24 @@ namespace RevitDBExplorer.Domain.DataModel
         {
             try
             {
-                valueVM ??= memberDescriptor.MemberAccessor.CreatePresenter(context, @object);
-                ValueViewModel = valueVM;
-
-                if (ValueViewModel is ValueEditorVM { WriteCommand: null } editor )
+                memberValue ??= memberDescriptor.MemberAccessor.CreatePresenter(context, @object);
+                if (memberValue is ICanRead canRead)
                 {
-                    editor.WriteCommand = new RelayCommand(x => Write(), x => CanBeWritten);
+                    canRead.Read(context, @object);
                 }
-
-                var result = memberDescriptor.MemberAccessor.Read(context, @object, valueVM);
-                if (ValueViewModel is DefaultPresenterVM pres)
+                if (memberValue is ICanWrite canWrite)
                 {
-                    pres.ValueContainer = result.State;
-                    pres.Label = result.Label;
+                    canWrite.Setup(RaiseSnoopableObjectChanged);
                 }
-                state = result.State;
-              
-                AccessorName = result.AccessorName;
-                CanBeSnooped = result.CanBeSnooped;
-                
-                if (memberDescriptor.MemberAccessor is IMemberAccessorWithWrite writer)
+                if (memberValue is ICanSnoop canSnoop)
                 {
-                    CanBeWritten = writer.CanBeWritten(parent.Context, parent.Object);
+                    CanBeSnooped = canSnoop.CanBeSnooped;
                 }
+                ValueViewModel = memberValue;
             }
             catch (Exception valueAccessException)
             {
-                ValueViewModel = new ErrorPresenterVM(Labeler.GetLabelForException(valueAccessException));              
+                ValueViewModel = new ErrorPresenter(Labeler.GetLabelForException(valueAccessException));              
             }
             OnPropertyChanged(nameof(ValueViewModel));                
             OnPropertyChanged(nameof(AccessorName));
@@ -106,28 +93,17 @@ namespace RevitDBExplorer.Domain.DataModel
         public IEnumerable<SnoopableObject> Snoop(UIApplication app)
         {
             if (isFrozen) return frozenSnooopResult;
-            if (memberDescriptor.MemberAccessor is IMemberAccessorWithSnoop snooper)
+            if (memberValue is ICanSnoop snooper)
             {
-                return snooper.Snoop(parent.Context, parent.Object, state);
+                return snooper.Snoop(parent.Context, parent.Object);
             }
             return Enumerable.Empty<SnoopableObject>();
         }
 
 
-        public void Write()
+        private void RaiseSnoopableObjectChanged()
         {
-            Write(parent.Context, parent.Object);
-        }
-        private void Write(SnoopableContext context, object @object)
-        {
-            if (memberDescriptor.MemberAccessor is IMemberAccessorWithWrite writer)
-            {
-                ExternalExecutorExt.ExecuteInRevitContextInsideTransactionAsync((x) =>
-                {                    
-                    writer.Write(context, @object, valueVM);
-                }, context.Document, $"{memberDescriptor.MemberAccessor.GetType().Name}").Forget();
-                SnoopableObjectChanged?.Invoke();
-            }            
+            SnoopableObjectChanged?.Invoke();
         }
 
 

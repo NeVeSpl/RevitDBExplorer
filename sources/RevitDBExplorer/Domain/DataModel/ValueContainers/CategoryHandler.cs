@@ -13,9 +13,9 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers
         {
             return $"{category.Name} ({category.Id})";
         }
-        protected override IEnumerable<SnoopableObject> Snooop(Document document, Category category)
+        protected override IEnumerable<SnoopableObject> Snooop(SnoopableContext context, Category category)
         {
-            yield return new SnoopableObject(document, category);
+            yield return new SnoopableObject(context.Document, category);
         }
     }
 }

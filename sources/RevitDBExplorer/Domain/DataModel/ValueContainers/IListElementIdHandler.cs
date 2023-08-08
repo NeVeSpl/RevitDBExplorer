@@ -17,12 +17,12 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers
         {
             return Labeler.GetLabelForCollection("ElementId", list.Count);
         }
-        protected override IEnumerable<SnoopableObject> Snooop(Document document, IList<ElementId> ids)
+        protected override IEnumerable<SnoopableObject> Snooop(SnoopableContext context, IList<ElementId> ids)
         {
             if (ids.Any())
             {
                 //var elements = new FilteredElementCollector(document).WherePasses(new ElementIdSetFilter(ids)).ToElements();
-                return ids.Select(x => new SnoopableObject(document, x));
+                return ids.Select(x => new SnoopableObject(context.Document, x));
             }
             return Enumerable.Empty<SnoopableObject>();
         }

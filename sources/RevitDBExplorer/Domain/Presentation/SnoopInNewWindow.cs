@@ -30,8 +30,7 @@ namespace RevitDBExplorer.Domain.Presentation
             {
                 if (treeViewItem.Object != null)
                 {
-                    var window = new MainWindow(new(new[] { new SnoopableObject(treeViewItem.Object.Context.Document, treeViewItem.Object.Object) }));
-                    new WindowInteropHelper(window).Owner = Application.RevitWindowHandle;
+                    var window = new MainWindow(new(new[] { new SnoopableObject(treeViewItem.Object.Context.Document, treeViewItem.Object.Object) }), Application.RevitWindowHandle);                   
                     window.Show();
                 }
             }

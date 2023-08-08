@@ -13,11 +13,11 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers
         {
             return $"Parameters : {parameterSet.Size}";
         }
-        protected override IEnumerable<SnoopableObject> Snooop(Document document, ParameterSet parameterSet)
+        protected override IEnumerable<SnoopableObject> Snooop(SnoopableContext context, ParameterSet parameterSet)
         {          
             foreach (Parameter param in parameterSet)
             {
-                yield return new SnoopableObject(document, param);
+                yield return new SnoopableObject(context.Document, param);
             }
         }
     }

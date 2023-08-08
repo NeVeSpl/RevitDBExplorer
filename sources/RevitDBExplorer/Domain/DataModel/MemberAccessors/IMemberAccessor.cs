@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using RevitDBExplorer.Domain.DataModel.ValueContainers.Base;
-using RevitDBExplorer.Domain.DataModel.ViewModels;
-using RevitDBExplorer.Domain.DataModel.ViewModels.Base;
+using RevitDBExplorer.Domain.DataModel.ValueViewModels;
+using RevitDBExplorer.Domain.DataModel.ValueViewModels.Base;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
@@ -11,18 +10,16 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
     internal interface IMemberAccessor
     { 
-        IValueViewModel CreatePresenter(SnoopableContext context, object @object);          
-        ReadResult Read(SnoopableContext context, object @object, IValueViewModel presenter);   
+        IValueViewModel CreatePresenter(SnoopableContext context, object @object);  
     }
     internal interface IMemberAccessorWithSnoop
     {
+        ReadResult Read(SnoopableContext context, object @object);
         IEnumerable<SnoopableObject> Snoop(SnoopableContext context, object @object, IValueContainer state);
-    }
-    
+    }    
     internal interface IMemberAccessorWithWrite
     {
-        bool CanBeWritten(SnoopableContext context, object @object);
-        void Write(SnoopableContext context, object @object, IValueViewModel presenter);    
+        bool CanBeWritten(SnoopableContext context, object @object);      
     }
 
 
@@ -30,10 +27,10 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
     {
         IValueViewModel IMemberAccessor.CreatePresenter(SnoopableContext context, object @object)
         {            
-            return new DefaultPresenterVM();
+            return new DefaultPresenter(this);
         }
 
-        ReadResult IMemberAccessor.Read(SnoopableContext context, object @object, IValueViewModel presenter)
+        ReadResult IMemberAccessorWithSnoop.Read(SnoopableContext context, object @object)
         {
             Guard.IsAssignableToType<TSnoopedObjectType>(@object);      
             var typedObject = (TSnoopedObjectType) @object;          
@@ -58,16 +55,8 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
             var typedObject = (TSnoopedObjectType)@object;
             return CreateEditor(context, typedObject);
         }
-        public virtual IValueEditor CreateEditor(SnoopableContext context, TSnoopedObjectType typedObject) => new ExecuteEditorVM();
-
-        ReadResult IMemberAccessor.Read(SnoopableContext context, object @object, IValueViewModel presenter)
-        {
-            Guard.IsAssignableToType<TSnoopedObjectType>(@object);
-            var typedObject = (TSnoopedObjectType)@object;
-            Read(context, typedObject, presenter as IValueEditor);
-            return new ReadResult("", this.GetType().GetCSharpName(), false);
-        }
-        public abstract void Read(SnoopableContext context, TSnoopedObjectType typedObject, IValueEditor valueEditor);
+        public abstract IValueEditor CreateEditor(SnoopableContext context, TSnoopedObjectType typedObject);
+            
 
         bool IMemberAccessorWithWrite.CanBeWritten(SnoopableContext context, object @object)
         {
@@ -76,14 +65,6 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
             return CanBeWritten(context, typedObject);
         }
         public abstract bool CanBeWritten(SnoopableContext context, TSnoopedObjectType typedObject);
-
-        void IMemberAccessorWithWrite.Write(SnoopableContext context, object @object, IValueViewModel presenter)
-        {
-            Guard.IsAssignableToType<TSnoopedObjectType>(@object);
-            var typedObject = (TSnoopedObjectType)@object;
-            Write(context, typedObject, presenter as IValueEditor);
-        }
-        public abstract void Write(SnoopableContext context, TSnoopedObjectType typedObject, IValueEditor valueEditor); 
     }
 
 

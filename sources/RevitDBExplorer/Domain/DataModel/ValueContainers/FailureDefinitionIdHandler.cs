@@ -18,10 +18,10 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers
         {
             return $"FailureDefinitionId ({value.Guid})";
         }
-        protected override IEnumerable<SnoopableObject> Snooop(Document document, FailureDefinitionId value)
+        protected override IEnumerable<SnoopableObject> Snooop(SnoopableContext context, FailureDefinitionId value)
         {
             var failure = ControlledApplication.GetFailureDefinitionRegistry().FindFailureDefinition(value);
-            yield return new SnoopableObject(document, failure);
+            yield return new SnoopableObject(context.Document, failure);
         }
     }
 }

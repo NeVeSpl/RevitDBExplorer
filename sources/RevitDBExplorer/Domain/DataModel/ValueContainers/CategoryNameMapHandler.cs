@@ -13,11 +13,11 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers
         {
             return $"Categories : {categoryNameMap.Size}";
         }
-        protected override IEnumerable<SnoopableObject> Snooop(Document document, CategoryNameMap categoryNameMap)
+        protected override IEnumerable<SnoopableObject> Snooop(SnoopableContext context, CategoryNameMap categoryNameMap)
         {
             foreach (Category cat in categoryNameMap)
             {
-                yield return new SnoopableObject(document, cat);
+                yield return new SnoopableObject(context.Document, cat);
             }
         }
     }

@@ -1,12 +1,13 @@
-﻿using RevitDBExplorer.WPF;
+﻿using RevitDBExplorer.Domain.DataModel.ValueViewModels.Base;
+using RevitDBExplorer.WPF;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
-namespace RevitDBExplorer.Domain.DataModel.ViewModels.Base
+namespace RevitDBExplorer.Domain.DataModel.ValueViewModels
 {
-    internal class ValuePresenterVM : BaseViewModel, IValuePresenter
+    internal class ErrorPresenter : BaseViewModel, IValuePresenter
     {
-        protected string label;
+        private string label;
 
         public string Label
         {
@@ -19,6 +20,12 @@ namespace RevitDBExplorer.Domain.DataModel.ViewModels.Base
                 label = value;
                 OnPropertyChanged();
             }
+        }
+
+
+        public ErrorPresenter(string error)
+        {
+            label = error;
         }
     }
 }

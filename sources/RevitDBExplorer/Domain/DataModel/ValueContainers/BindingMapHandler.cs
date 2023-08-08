@@ -10,7 +10,7 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers
     {   
         protected override bool CanBeSnoooped(SnoopableContext context, BindingMap map) => map is not null && !map.IsEmpty;
         protected override string ToLabel(SnoopableContext context, BindingMap map) => $"Bindings : {map.Size}";
-        protected override IEnumerable<SnoopableObject> Snooop(Document document, BindingMap map)
+        protected override IEnumerable<SnoopableObject> Snooop(SnoopableContext context, BindingMap map)
         {
             var iterator = map.ForwardIterator();
             while (iterator.MoveNext())
@@ -18,7 +18,7 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers
                 var definition = iterator.Key;
                 var binding = iterator.Current;
 
-                yield return SnoopableObject.CreateKeyValuePair(document, definition, binding);
+                yield return SnoopableObject.CreateKeyValuePair(context.Document, definition, binding);
             }
         }
     }

@@ -14,9 +14,9 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers
             return $"{enumValue?.GetType()?.Name}.{enumValue}";
         }
 
-        protected override IEnumerable<SnoopableObject> Snooop(Document document, TEnumType value)
+        protected override IEnumerable<SnoopableObject> Snooop(SnoopableContext context, TEnumType value)
         {
-            yield return new SnoopableObject(document, value?.GetType() ?? typeof(TEnumType));
+            yield return new SnoopableObject(context.Document, value?.GetType() ?? typeof(TEnumType));
         }
     }
 }

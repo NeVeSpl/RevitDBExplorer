@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Autodesk.Revit.DB;
 using RevitDBExplorer.Domain.DataModel.ValueContainers.Base;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
@@ -21,9 +20,9 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers
             }
             return $"{typeName}";
         }
-        protected override IEnumerable<SnoopableObject> Snooop(Document document, object @object)
+        protected override IEnumerable<SnoopableObject> Snooop(SnoopableContext context, object @object)
         {
-            yield return new SnoopableObject(document, @object);
+            yield return new SnoopableObject(context.Document, @object);
         }
 
 

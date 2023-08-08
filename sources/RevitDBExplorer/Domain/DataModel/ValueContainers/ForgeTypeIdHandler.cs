@@ -13,9 +13,9 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers
         {           
             return $"{id.TypeId}";
         }
-        protected override IEnumerable<SnoopableObject> Snooop(Document document, ForgeTypeId id)
+        protected override IEnumerable<SnoopableObject> Snooop(SnoopableContext context, ForgeTypeId id)
         {
-            yield return new SnoopableObject(document, id);
+            yield return new SnoopableObject(context.Document, id);
         }
     }
 }

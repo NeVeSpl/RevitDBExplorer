@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.Structure.StructuralSections;
 using RevitDBExplorer.Domain.DataModel.ValueContainers.Base;
 
@@ -19,9 +18,9 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers
             return value.ToString();
         }
 
-        protected override IEnumerable<SnoopableObject> Snooop(Document document, StructuralSection value)
+        protected override IEnumerable<SnoopableObject> Snooop(SnoopableContext context, StructuralSection value)
         {
-            yield return new SnoopableObject(document, value);
+            yield return new SnoopableObject(context.Document, value);
         }
     }
 }

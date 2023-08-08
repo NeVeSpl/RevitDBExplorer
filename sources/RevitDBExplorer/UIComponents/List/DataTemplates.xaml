@@ -3,11 +3,12 @@
     <ResourceDictionary.MergedDictionaries>
 
         <ResourceDictionary Source="ValuePresenters/ValueContainers/ColorContainer.xaml"/>
-        <ResourceDictionary Source="ValuePresenters/DefaultPresenterVM.xaml"/>
-        <ResourceDictionary Source="ValuePresenters/ErrorPresenterVM.xaml"/>
-        <ResourceDictionary Source="ValueEditors/ExecuteEditorVM.xaml"/>
-        <ResourceDictionary Source="ValueEditors/StringEditorVM.xaml"/>
-        <ResourceDictionary Source="ValueEditors/DoubleEditorVM.xaml"/>
-        <ResourceDictionary Source="ValueEditors/IntegerEditorVM.xaml"/>
+        <ResourceDictionary Source="ValuePresenters/DefaultPresenter.xaml"/>
+        <ResourceDictionary Source="ValuePresenters/EmptyPresenter.xaml"/>
+        <ResourceDictionary Source="ValuePresenters/ErrorPresenter.xaml"/>
+        <ResourceDictionary Source="ValueEditors/ExecuteEditor.xaml"/>
+        <ResourceDictionary Source="ValueEditors/StringEditor.xaml"/>
+        <ResourceDictionary Source="ValueEditors/DoubleEditor.xaml"/>
+        <ResourceDictionary Source="ValueEditors/IntegerEditor.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>

@@ -17,10 +17,10 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers
         {
             return Labeler.GetLabelForObjectWithId("WorksetId", value.IntegerValue);
         }
-        protected override IEnumerable<SnoopableObject> Snooop(Document document, WorksetId value)
+        protected override IEnumerable<SnoopableObject> Snooop(SnoopableContext context, WorksetId value)
         {
-            var workset = document.GetWorksetTable().GetWorkset(value);
-            yield return new SnoopableObject(document, workset);
+            var workset = context.Document.GetWorksetTable().GetWorkset(value);
+            yield return new SnoopableObject(context.Document, workset);
         }
     }
 }

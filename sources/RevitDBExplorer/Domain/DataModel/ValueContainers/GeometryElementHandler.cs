@@ -12,10 +12,10 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers
 
         protected override string ToLabel(SnoopableContext context, GeometryElement value) => Labeler.GetLabelForObjectWithId("GeometryElement", value.Id);
 
-        protected override IEnumerable<SnoopableObject> Snooop(Document document, GeometryElement value)
+        protected override IEnumerable<SnoopableObject> Snooop(SnoopableContext context, GeometryElement value)
         {
-            var geometryObjects = Enumarate(document, value);
-            yield return new SnoopableObject(document, value, geometryObjects);
+            var geometryObjects = Enumarate(context.Document, value);
+            yield return new SnoopableObject(context.Document, value, geometryObjects);
         }
 
 
