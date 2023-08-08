@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Windows.Data;
 using RevitDBExplorer.Domain;
 using RevitDBExplorer.Domain.DataModel;
+using RevitDBExplorer.Domain.DataModel.ValueViewModels.Base;
 using RevitDBExplorer.WPF;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
@@ -92,7 +93,9 @@ namespace RevitDBExplorer.UIComponents.List
         {
             if (item is SnoopableMember snoopableMember)
             {
-                return snoopableMember.Name.IndexOf(filterPhrase, StringComparison.OrdinalIgnoreCase) >= 0;
+                bool inName = snoopableMember.Name.IndexOf(filterPhrase, StringComparison.OrdinalIgnoreCase) >= 0;
+                bool inValue = snoopableMember.ValueViewModel is IValuePresenter valuePresenter && valuePresenter.Label.IndexOf(filterPhrase, StringComparison.OrdinalIgnoreCase) >= 0;
+                return inName || inValue;
             }
             return true;
         }

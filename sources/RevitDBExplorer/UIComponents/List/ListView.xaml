@@ -31,7 +31,7 @@
                 <ColumnDefinition Width="auto"/>
             </Grid.ColumnDefinitions>
 
-            <controls:TextBoxWithPlaceholder Margin="0 0 2 0" Text="{Binding FilterPhrase, Mode=TwoWay, Delay=200, UpdateSourceTrigger=PropertyChanged}" Placeholder="Filter list by name"/>
+            <controls:TextBoxWithPlaceholder Margin="0 0 2 0" Text="{Binding FilterPhrase, Mode=TwoWay, Delay=200, UpdateSourceTrigger=PropertyChanged}" Placeholder="Filter list by name or value"/>
 
             <Button Grid.Column="1" BorderBrush="Transparent" Margin="2 0 0 0" MinWidth="21" MinHeight="21" Padding="2 0 1 1" ToolTip="Reload data from Revit in the list" Background="Transparent"  Command="{Binding ReloadCommand}">
                 <Path Style="{StaticResource IconReload}" Width="18" />
