@@ -10,8 +10,9 @@ namespace RevitDBExplorer.Domain.DataModel.ValueViewModels
 {
     internal class ExecuteEditor : BaseViewModel, IValueEditor, ICanRead, ICanWrite
     {
-        private readonly IMemberAccessorWithWrite memberAccessor;
+        private readonly IMemberAccessor memberAccessor;
         private readonly Action exeFunc;
+        private readonly Func<bool> canBeExecutedFunc;
         private Action raiseSnoopableObjectChanged;
 
         public RelayCommand ExecuteCommand
@@ -21,16 +22,17 @@ namespace RevitDBExplorer.Domain.DataModel.ValueViewModels
         public bool CanBeWritten { get; private set; } = false;
 
 
-        public ExecuteEditor(IMemberAccessorWithWrite memberAccessor, Action exeFunc)
+        public ExecuteEditor(IMemberAccessor memberAccessor, Action exeFunc,Func<bool> canBeExecutedFunc)
         {
             this.memberAccessor = memberAccessor;
             this.exeFunc = exeFunc;
+            this.canBeExecutedFunc = canBeExecutedFunc;
             ExecuteCommand = new RelayCommand(x => Write(), x => CanBeWritten);
         }
 
         public void Read(SnoopableContext context, object @object)
         {           
-            CanBeWritten = memberAccessor.CanBeWritten(context, @object);
+            CanBeWritten = canBeExecutedFunc();
         }
 
         private void Write()

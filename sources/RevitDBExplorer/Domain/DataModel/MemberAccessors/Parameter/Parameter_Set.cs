@@ -8,7 +8,7 @@ using RevitDBExplorer.Domain.DataModel.ValueViewModels.Base;
 
 namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
-    internal class Parameter_Set : MemberAccessorTypedWithWrite<Parameter>, ICanCreateMemberAccessor
+    internal class Parameter_Set : MemberAccessor<Parameter>, ICanCreateMemberAccessor
     {
         IEnumerable<LambdaExpression> ICanCreateMemberAccessor.GetHandledMembers() 
         {
@@ -19,23 +19,18 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
         }              
 
 
-        public override IValueEditor CreateEditor(SnoopableContext context, Parameter parameter)
+        public override IValueViewModel CreatePresenter(SnoopableContext context, Parameter parameter)
         {
             switch (parameter.StorageType)
             {
                 case StorageType.Double:
-                    return new DoubleEditor(this, () => parameter.AsDouble(), x => parameter.Set(x));   
+                    return new DoubleEditor(this, () => parameter.AsDouble(), x => parameter.Set(x), () => !parameter.IsReadOnly);   
                 case StorageType.Integer:
-                    return new IntegerEditor(this, () => parameter.AsInteger(), x => parameter.Set(x));
+                    return new IntegerEditor(this, () => parameter.AsInteger(), x => parameter.Set(x), () => !parameter.IsReadOnly);
                 case StorageType.ElementId:
-                    return new IntegerEditor(this, () => parameter.AsInteger(), x => parameter.Set(ElementIdFactory.Create(x)));              
+                    return new IntegerEditor(this, () => parameter.AsInteger(), x => parameter.Set(ElementIdFactory.Create(x)), () => !parameter.IsReadOnly);              
             }
-            return new StringEditor(this, () => parameter.AsString(), x => parameter.Set(x));
+            return new StringEditor(this, () => parameter.AsString(), x => parameter.Set(x), () => !parameter.IsReadOnly);
         }
-       
-        public override bool CanBeWritten(SnoopableContext context, Parameter parameter)
-        {
-            return !parameter.IsReadOnly;
-        } 
     }
 }

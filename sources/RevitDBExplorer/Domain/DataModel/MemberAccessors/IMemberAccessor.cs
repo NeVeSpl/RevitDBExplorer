@@ -12,16 +12,23 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
     { 
         IValueViewModel CreatePresenter(SnoopableContext context, object @object);  
     }
+
     internal interface IMemberAccessorWithSnoop
     {
         ReadResult Read(SnoopableContext context, object @object);
         IEnumerable<SnoopableObject> Snoop(SnoopableContext context, object @object, IValueContainer state);
-    }    
-    internal interface IMemberAccessorWithWrite
-    {
-        bool CanBeWritten(SnoopableContext context, object @object);      
     }
 
+    internal abstract class MemberAccessor<TSnoopedObjectType> : IMemberAccessor
+    {
+        IValueViewModel IMemberAccessor.CreatePresenter(SnoopableContext context, object @object)
+        {
+            Guard.IsAssignableToType<TSnoopedObjectType>(@object);
+            var typedObject = (TSnoopedObjectType)@object;
+            return CreatePresenter(context, typedObject);
+        }
+        public virtual IValueViewModel CreatePresenter(SnoopableContext context, TSnoopedObjectType typedObject) => null;
+    }
 
     internal abstract class MemberAccessorTyped<TSnoopedObjectType> : IMemberAccessor, IMemberAccessorWithSnoop
     {
@@ -45,26 +52,6 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
             return Snoop(context, typedObject, state) ?? Enumerable.Empty<SnoopableObject>();
         }
         public virtual IEnumerable<SnoopableObject> Snoop(SnoopableContext context, TSnoopedObjectType typedObject, IValueContainer state) => null;
-    }
-
-    internal abstract class MemberAccessorTypedWithWrite<TSnoopedObjectType> : IMemberAccessor,  IMemberAccessorWithWrite
-    {
-        IValueViewModel IMemberAccessor.CreatePresenter(SnoopableContext context, object @object)
-        {
-            Guard.IsAssignableToType<TSnoopedObjectType>(@object);
-            var typedObject = (TSnoopedObjectType)@object;
-            return CreateEditor(context, typedObject);
-        }
-        public abstract IValueEditor CreateEditor(SnoopableContext context, TSnoopedObjectType typedObject);
-            
-
-        bool IMemberAccessorWithWrite.CanBeWritten(SnoopableContext context, object @object)
-        {
-            Guard.IsAssignableToType<TSnoopedObjectType>(@object);
-            var typedObject = (TSnoopedObjectType)@object;
-            return CanBeWritten(context, typedObject);
-        }
-        public abstract bool CanBeWritten(SnoopableContext context, TSnoopedObjectType typedObject);
     }
 
 

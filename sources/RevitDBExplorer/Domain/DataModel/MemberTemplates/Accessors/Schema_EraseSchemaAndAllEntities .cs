@@ -8,13 +8,11 @@ using RevitDBExplorer.Domain.DataModel.ValueViewModels.Base;
 
 namespace RevitDBExplorer.Domain.DataModel.MemberTemplates.Accessors
 {
-    internal class Schema_EraseSchemaAndAllEntities : MemberAccessorTypedWithWrite<Schema>
+    internal class Schema_EraseSchemaAndAllEntities : MemberAccessor<Schema>
     {
-
-
-        public override IValueEditor CreateEditor(SnoopableContext context, Schema schema)
+        public override IValueViewModel CreatePresenter(SnoopableContext context, Schema schema)
         {
-            return new ExecuteEditor(this, () => Execute(context, schema));
+            return new ExecuteEditor(this, () => Execute(context, schema), () => CanBeWritten(context, schema));
         }
 
         private void Execute(SnoopableContext context, Schema schema)
@@ -28,7 +26,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberTemplates.Accessors
         }
 
 
-        public override bool CanBeWritten(SnoopableContext context, Schema schema)
+        private bool CanBeWritten(SnoopableContext context, Schema schema)
         {
             var result = schema.WriteAccessGranted() && schema.ReadAccessGranted();
             return result;

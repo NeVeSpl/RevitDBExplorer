@@ -8,19 +8,15 @@ using RevitDBExplorer.Domain.DataModel.ValueViewModels.Base;
 
 namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
-    internal class Parameter_SetValueString : MemberAccessorTypedWithWrite<Parameter>, ICanCreateMemberAccessor
+    internal class Parameter_SetValueString : MemberAccessor<Parameter>, ICanCreateMemberAccessor
     {
         IEnumerable<LambdaExpression> ICanCreateMemberAccessor.GetHandledMembers() { yield return (Parameter x) => x.SetValueString("foo"); }
 
 
 
-        public override IValueEditor CreateEditor(SnoopableContext context, Parameter typedObject)
+        public override IValueViewModel CreatePresenter(SnoopableContext context, Parameter typedObject)
         {
-            return new StringEditor(this, () => typedObject.AsValueString(), x => typedObject.SetValueString(x));
-        }
-        public override bool CanBeWritten(SnoopableContext context, Parameter parameter)
-        {
-            return !parameter.IsReadOnly;
-        }         
+            return new StringEditor(this, () => typedObject.AsValueString(), x => typedObject.SetValueString(x), () => !typedObject.IsReadOnly);
+        }        
     }
 }
