@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:RevitDBExplorer.UIComponents.List"
              xmlns:converters="clr-namespace:RevitDBExplorer.WPF.Converters"    
              xmlns:controls="clr-namespace:RevitDBExplorer.WPF.Controls" 
+             xmlns:ap="clr-namespace:RevitDBExplorer.WPF.AttachedProperties" 
              xmlns:wpf="clr-namespace:RevitDBExplorer.WPF"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
@@ -27,7 +28,7 @@
 
         <Grid  Margin="0 0 0 3">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition/>               
+                <ColumnDefinition/>
                 <ColumnDefinition Width="auto"/>
             </Grid.ColumnDefinitions>
 
@@ -40,180 +41,184 @@
 
         <ListView Margin="0 2 0 0" Grid.Row="1"  BorderThickness="0" ItemsSource="{Binding ListItems}" SelectionMode="Single" SelectedItem="{Binding ListSelectedItem}" AlternationCount="2"  VirtualizingPanel.IsVirtualizing="True" VirtualizingPanel.IsVirtualizingWhenGrouping="False" VirtualizingPanel.CacheLengthUnit="Page" VirtualizingPanel.CacheLength="7,7"  x:Name="cSecretName">
 
-        <ListView.InputBindings>
-            <KeyBinding Key="Enter" Command="{Binding KeyDown_Enter_Command}"/>
-        </ListView.InputBindings>
+            <ListView.InputBindings>
+                <KeyBinding Key="Enter" Command="{Binding KeyDown_Enter_Command}"/>
+            </ListView.InputBindings>
 
-        <ListView.Resources>
-            <ResourceDictionary>
-                <wpf:BindingProxy x:Key="Proxy" Data="{Binding}" />
+            <ListView.Resources>
+                <ResourceDictionary>
+                    <wpf:BindingProxy x:Key="Proxy" Data="{Binding}" />
 
-                <converters:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
-                <converters:PercentageOfValueConverter x:Key="PercentageOfValueConverter"/>
-                <converters:EnumMatchToVisibilityConverter x:Key="EnumMatchToVisibilityConverter"/>
-                <converters:ToResourceWithKeyConverter x:Key="ToResourceWithKeyConverter" FrameworkElement="{Binding ElementName=cSecretName}" />
-                <wpf:DataTemplateSelectorForPropertyType x:Key="DataTemplateSelectorForPropertyType"/>
+                    <converters:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
+                    <converters:PercentageOfValueConverter x:Key="PercentageOfValueConverter"/>
+                    <converters:EnumMatchToVisibilityConverter x:Key="EnumMatchToVisibilityConverter"/>
+                    <converters:ToResourceWithKeyConverter x:Key="ToResourceWithKeyConverter" FrameworkElement="{Binding ElementName=cSecretName}" />
+                    <wpf:DataTemplateSelectorForPropertyType x:Key="DataTemplateSelectorForPropertyType"/>
 
-                <ContextMenu x:Key="ItemContextMenu">
-                    <MenuItem Header="Copy" Click="ListViewItem_MenuItemCopy_Click" />
-                    <MenuItem Header="Open RevitAPI.chm" Click="ListViewItem_MenuItemOpenCHM_Click" />
-                </ContextMenu>
-                <ContextMenu x:Key="GroupContextMenu">
-                    <MenuItem Header="Copy" Click="GroupItem_MenuItemCopy_Click" />
-                </ContextMenu>
+                    <ContextMenu x:Key="ContextMenuForNameColumn">
+                        <MenuItem Header="Copy" Command="{Binding Data.CopyNameCommand, Source={StaticResource Proxy}}" CommandParameter="{Binding}" />
+                        <MenuItem Header="Open RevitAPI.chm" Command="{Binding Data.OpenCHMCommand, Source={StaticResource Proxy}}" CommandParameter="{Binding}" />                       
+                    </ContextMenu>
+                    <ContextMenu x:Key="ContextMenuForValueColumn">
+                        <MenuItem Header="Copy" Command="{Binding Data.CopyValueCommand, Source={StaticResource Proxy}}" CommandParameter="{Binding}"/>
+                    </ContextMenu>
+                    <ContextMenu x:Key="ContextMenuForGroup">
+                        <MenuItem Header="Copy" Click="ContextMenuForGroup_Copy_Click" />
+                    </ContextMenu>
 
-                <ToolTip x:Key="ToolTipWithRevitHelp">
-                    <StackPanel Orientation="Vertical"  MaxWidth="727">
-                        <StackPanel.Resources>
-                            <SolidColorBrush x:Key="ToolTip.Key" Color="Gray"/>
-                            <SolidColorBrush x:Key="ToolTip.Value" Color="#000000"/>
-                            <SolidColorBrush x:Key="ToolTip.ReturnType" Color="#0000FF"/>
-                            <SolidColorBrush x:Key="ToolTip.Name" Color="#745320"/>
-                            <SolidColorBrush x:Key="ToolTip.Invocation" Color="#21377F"/>
-                        </StackPanel.Resources>
-                        <TextBlock Visibility="{Binding Documentation.Name, Converter={StaticResource StringToVisibilityConverter}}">
+                    <ToolTip x:Key="ToolTipWithRevitHelp">
+                        <StackPanel Orientation="Vertical"  MaxWidth="727">
+                            <StackPanel.Resources>
+                                <SolidColorBrush x:Key="ToolTip.Key" Color="Gray"/>
+                                <SolidColorBrush x:Key="ToolTip.Value" Color="#000000"/>
+                                <SolidColorBrush x:Key="ToolTip.ReturnType" Color="#0000FF"/>
+                                <SolidColorBrush x:Key="ToolTip.Name" Color="#745320"/>
+                                <SolidColorBrush x:Key="ToolTip.Invocation" Color="#21377F"/>
+                            </StackPanel.Resources>
+                            <TextBlock Visibility="{Binding Documentation.Name, Converter={StaticResource StringToVisibilityConverter}}">
                                     <Run Foreground="{DynamicResource ToolTip.ReturnType}" Text="{Binding Documentation.ReturnType, Mode=OneWay}" /> <Run Foreground="{DynamicResource ToolTip.Name}" Text="{Binding Documentation.Name, Mode=OneWay}" /><Run Foreground="{DynamicResource ToolTip.Invocation}" Text="{Binding Documentation.Invocation, Mode=OneWay}" />
                                     <LineBreak/>
-                        </TextBlock>
-                        <TextBlock TextWrapping="Wrap" Visibility="{Binding Documentation.Summary, Converter={StaticResource StringToVisibilityConverter}}" >  
+                            </TextBlock>
+                            <TextBlock TextWrapping="Wrap" Visibility="{Binding Documentation.Summary, Converter={StaticResource StringToVisibilityConverter}}" >  
                                     <Run Text="{Binding Documentation.Summary, Mode=OneWay}" Foreground="{DynamicResource ToolTip.Value}" /><LineBreak/>
-                        </TextBlock>
-                        <TextBlock TextWrapping="Wrap" Visibility="{Binding Documentation.Returns, Converter={StaticResource StringToVisibilityConverter}}" >
+                            </TextBlock>
+                            <TextBlock TextWrapping="Wrap" Visibility="{Binding Documentation.Returns, Converter={StaticResource StringToVisibilityConverter}}" >
                                     <Run Text="Returns:" Foreground="{DynamicResource ToolTip.Key}"/><LineBreak/>
                                     <Run Text="{Binding Documentation.Returns, Mode=OneWay}" Foreground="{DynamicResource ToolTip.Value}" /><LineBreak/>
-                        </TextBlock>
-                        <TextBlock TextWrapping="Wrap" Visibility="{Binding Documentation.Remarks, Converter={StaticResource StringToVisibilityConverter}}">
+                            </TextBlock>
+                            <TextBlock TextWrapping="Wrap" Visibility="{Binding Documentation.Remarks, Converter={StaticResource StringToVisibilityConverter}}">
                                     <Run Text="Remarks:" Foreground="{DynamicResource ToolTip.Key}"/><LineBreak/>
                                     <Run Text="{Binding Documentation.Remarks, Mode=OneWay}"  Foreground="{DynamicResource ToolTip.Value}"/><LineBreak/>
-                        </TextBlock>
-                        <TextBlock TextWrapping="Wrap" Visibility="{Binding AccessorName, Converter={StaticResource StringToVisibilityConverter}}">
+                            </TextBlock>
+                            <TextBlock TextWrapping="Wrap" Visibility="{Binding AccessorName, Converter={StaticResource StringToVisibilityConverter}}">
                                     <Run Text="Accessor:" Foreground="{DynamicResource ToolTip.Key}"/><LineBreak/>
                                     <Run Text="{Binding AccessorName, Mode=OneWay}" Foreground="{DynamicResource ToolTip.Value}" />
-                        </TextBlock>
+                            </TextBlock>
 
-                    </StackPanel>
-                </ToolTip>
+                        </StackPanel>
+                    </ToolTip>
 
-                <Style TargetType="{x:Type ListViewItem}" BasedOn="{StaticResource {x:Type ListViewItem}}" >
-                  
-                    <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
-                    <Setter Property="HorizontalAlignment" Value="Stretch"/>
-                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                    <Style TargetType="{x:Type ListViewItem}" BasedOn="{StaticResource {x:Type ListViewItem}}" >
 
-                    <Style.Triggers>
-                        <Trigger Property="IsMouseOver" Value="true" >
-                            <Setter Property="Background" Value="Transparent" />
-                            <Setter Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
-                        </Trigger>
-                        <Trigger Property="IsSelected" Value="true" >
-                            <Setter Property="Background" Value="Transparent" />
-                            <Setter Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
-                        </Trigger>
+                        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="true" >
+                                <Setter Property="Background" Value="Transparent" />
+                                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="true" >
+                                <Setter Property="Background" Value="Transparent" />
+                                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
+                            </Trigger>
 
 
-                        <Trigger Property="ItemsControl.AlternationIndex" Value="0">
-                            <Setter Property="Background" Value="{DynamicResource ListView.Alternation.Background_0}"/>
-                        </Trigger>
-                        <Trigger Property="ItemsControl.AlternationIndex" Value="1">
-                            <Setter Property="Background" Value="{DynamicResource ListView.Alternation.Background_1}"/>
-                        </Trigger>
-                    </Style.Triggers>
-                </Style>
-            </ResourceDictionary>
-        </ListView.Resources>
+                            <Trigger Property="ItemsControl.AlternationIndex" Value="0">
+                                <Setter Property="Background" Value="{DynamicResource ListView.Alternation.Background_0}"/>
+                            </Trigger>
+                            <Trigger Property="ItemsControl.AlternationIndex" Value="1">
+                                <Setter Property="Background" Value="{DynamicResource ListView.Alternation.Background_1}"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </ResourceDictionary>
+            </ListView.Resources>
 
-        <ListView.View>
-            <GridView AllowsColumnReorder="False">
+            <ListView.View>
+                <GridView AllowsColumnReorder="False">
 
-                <GridViewColumn Header="Name" Width="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListView}}, Path=ActualWidth, Converter={StaticResource PercentageOfValueConverter}, ConverterParameter=38}">
+                    <GridViewColumn Header="Name" Width="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListView}}, Path=ActualWidth, Converter={StaticResource PercentageOfValueConverter}, ConverterParameter=38}">
 
-                    <GridViewColumn.CellTemplate>
-                        <DataTemplate>
-                            <DataTemplate.Resources>
-                                <Style TargetType="{x:Type StackPanel}">
-                                    <Setter Property="ToolTip" Value="{StaticResource ToolTipWithRevitHelp}"/>
-                                    <Setter Property="ToolTipService.ShowDuration" Value="50000"></Setter>
-                                </Style>
-                            </DataTemplate.Resources>
-                            <StackPanel Orientation="Horizontal" ContextMenu="{StaticResource ItemContextMenu}"  Background="Transparent" Tag="NameColumn">
-                                <Path Style="{Binding MemberKind, Converter={StaticResource ToResourceWithKeyConverter}, ConverterParameter=Icon}" Margin="0 1 4 0"  />
-                                <TextBlock Text="{Binding Name, Mode=OneWay}" Foreground="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"  />
-                            </StackPanel>
-                        </DataTemplate>
-                    </GridViewColumn.CellTemplate>
-                    
-                </GridViewColumn>
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <DataTemplate.Resources>
+                                    <Style TargetType="{x:Type StackPanel}">
+                                        <Setter Property="ToolTip" Value="{StaticResource ToolTipWithRevitHelp}"/>
+                                        <Setter Property="ToolTipService.ShowDuration" Value="50000"></Setter>
+                                    </Style>
+                                </DataTemplate.Resources>
+                                <StackPanel Orientation="Horizontal" ContextMenu="{StaticResource ContextMenuForNameColumn}"  Background="Transparent" Tag="NameColumn">
+                                    <Path Style="{Binding MemberKind, Converter={StaticResource ToResourceWithKeyConverter}, ConverterParameter=Icon}" Margin="0 1 4 0"  />
+                                    <TextBlock Text="{Binding Name, Mode=OneWay}" Foreground="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"  />
+                                </StackPanel>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
 
-                <GridViewColumn Header="Value" Width="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListView}}, Path=ActualWidth, Converter={StaticResource PercentageOfValueConverter}, ConverterParameter=62}"  >
-                    <GridViewColumn.CellTemplate>
-                        <DataTemplate>
-                            <ContentControl
-                                MouseUp="ListViewItem_MouseUp"
+                    </GridViewColumn>
+
+                    <GridViewColumn Header="Value" Width="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListView}}, Path=ActualWidth, Converter={StaticResource PercentageOfValueConverter}, ConverterParameter=62}"  >
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <ContentControl
+                               
+                                    ap:ClickOnUp.Command="{Binding Data.ListItem_Click_Command, Source={StaticResource Proxy}}"
                                 Content="{Binding}"
-                                ContextMenu="{StaticResource ItemContextMenu}"
+                                ContextMenu="{StaticResource ContextMenuForValueColumn}"
                                 ContentTemplateSelector="{StaticResource DataTemplateSelectorForPropertyType}" 
                                 x:Name="cTextBlock"
                                 HorizontalContentAlignment="Stretch"
                                 HorizontalAlignment="Stretch"
                                 Tag="ValueColumn"
                                 >
-                                <!--<ContentControl.InputBindings>
+                                    <!--<ContentControl.InputBindings>
                                     <MouseBinding MouseAction="LeftClick"  Command="{Binding Data.ListItem_Click_Command, Source={StaticResource Proxy}}" CommandParameter="{Binding}"  />
                                 </ContentControl.InputBindings>-->
-                            </ContentControl>
+                                </ContentControl>
 
-                            <DataTemplate.Triggers>
-                                <DataTrigger Binding="{Binding CanBeSnooped}" Value="False">
-                                    <Setter TargetName="cTextBlock" Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
-                                </DataTrigger>
-                                <DataTrigger Binding="{Binding CanBeSnooped}" Value="True">
-                                    <Setter TargetName="cTextBlock" Property="Foreground" Value="{DynamicResource Member.Link}"/>
-                                    <Setter TargetName="cTextBlock" Property="Cursor" Value="Hand"/>
-                                    <Setter TargetName="cTextBlock" Property="FontWeight" Value="Bold"/>
-                                </DataTrigger>
-                                 
-                            </DataTemplate.Triggers>
-                        </DataTemplate>
-                    </GridViewColumn.CellTemplate>
-                </GridViewColumn>
+                                <DataTemplate.Triggers>
+                                    <DataTrigger Binding="{Binding CanBeSnooped}" Value="False">
+                                        <Setter TargetName="cTextBlock" Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding CanBeSnooped}" Value="True">
+                                        <Setter TargetName="cTextBlock" Property="Foreground" Value="{DynamicResource Member.Link}"/>
+                                        <Setter TargetName="cTextBlock" Property="Cursor" Value="Hand"/>
+                                        <Setter TargetName="cTextBlock" Property="FontWeight" Value="Bold"/>
+                                    </DataTrigger>
 
-            </GridView>
-        </ListView.View>
+                                </DataTemplate.Triggers>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
 
-        <ListView.GroupStyle>
-            <GroupStyle>
-                <GroupStyle.HeaderTemplate>
-                    <DataTemplate>
-                        <TextBlock FontWeight="Bold" FontSize="14" Margin="5 0 0 0" Text="{Binding Name, Mode=OneWay}" Foreground="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" ToolTipService.ShowDuration="50000">
-                            <TextBlock.ToolTip>
-                                <ToolTip>
-                                    <StackPanel Orientation="Vertical"  MaxWidth="727">
-                                        <TextBlock Visibility="{Binding Items[0].DeclaringType.Documentation.Name, Converter={StaticResource StringToVisibilityConverter}}">
+                </GridView>
+            </ListView.View>
+
+            <ListView.GroupStyle>
+                <GroupStyle>
+                    <GroupStyle.HeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock FontWeight="Bold" FontSize="14" Margin="5 0 0 0" Text="{Binding Name, Mode=OneWay}" Foreground="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" ToolTipService.ShowDuration="50000">
+                                <TextBlock.ToolTip>
+                                    <ToolTip>
+                                        <StackPanel Orientation="Vertical"  MaxWidth="727">
+                                            <TextBlock Visibility="{Binding Items[0].DeclaringType.Documentation.Name, Converter={StaticResource StringToVisibilityConverter}}">
                                             <Run Foreground="{DynamicResource ToolTip.Name}" Text="{Binding Items[0].DeclaringType.Documentation.Name, Mode=OneWay}" />
                                             <LineBreak/>
-                                        </TextBlock>
-                                        <TextBlock TextWrapping="Wrap" Visibility="{Binding Items[0].DeclaringType.Documentation.Summary, Converter={StaticResource StringToVisibilityConverter}}" >  
+                                            </TextBlock>
+                                            <TextBlock TextWrapping="Wrap" Visibility="{Binding Items[0].DeclaringType.Documentation.Summary, Converter={StaticResource StringToVisibilityConverter}}" >  
                                             <Run Text="{Binding Items[0].DeclaringType.Documentation.Summary, Mode=OneWay}" Foreground="{DynamicResource ToolTip.Value}" /><LineBreak/>
-                                        </TextBlock>
+                                            </TextBlock>
 
-                                        <TextBlock TextWrapping="Wrap" Visibility="{Binding Items[0].DeclaringType.Documentation.Remarks, Converter={StaticResource StringToVisibilityConverter}}">
+                                            <TextBlock TextWrapping="Wrap" Visibility="{Binding Items[0].DeclaringType.Documentation.Remarks, Converter={StaticResource StringToVisibilityConverter}}">
                                             <Run Text="Remarks:" Foreground="{DynamicResource ToolTip.Key}"/><LineBreak/>
                                             <Run Text="{Binding Items[0].DeclaringType.Documentation.Remarks, Mode=OneWay}"  Foreground="{DynamicResource ToolTip.Value}"/><LineBreak/>
-                                        </TextBlock>
-                                    </StackPanel>
-                                </ToolTip>
-                            </TextBlock.ToolTip>
+                                            </TextBlock>
+                                        </StackPanel>
+                                    </ToolTip>
+                                </TextBlock.ToolTip>
                         </TextBlock>
-                    </DataTemplate>
-                </GroupStyle.HeaderTemplate>
-                <GroupStyle.ContainerStyle>
-                    <Style TargetType="{x:Type GroupItem}">
-                        <Setter Property="Margin" Value="2" />
-                        <Setter Property="ContextMenu" Value="{StaticResource GroupContextMenu}" />
-                    </Style>
-                </GroupStyle.ContainerStyle>
-            </GroupStyle>
-        </ListView.GroupStyle>
+                        </DataTemplate>
+                    </GroupStyle.HeaderTemplate>
+                    <GroupStyle.ContainerStyle>
+                        <Style TargetType="{x:Type GroupItem}">
+                            <Setter Property="Margin" Value="2" />
+                            <Setter Property="ContextMenu" Value="{StaticResource ContextMenuForGroup}" />
+                        </Style>
+                    </GroupStyle.ContainerStyle>
+                </GroupStyle>
+            </ListView.GroupStyle>
 
         </ListView>
     </Grid>

@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Windows;
 using System.Windows.Data;
 using RevitDBExplorer.Domain;
 using RevitDBExplorer.Domain.DataModel;
 using RevitDBExplorer.Domain.DataModel.ValueViewModels.Base;
+using RevitDBExplorer.Properties;
 using RevitDBExplorer.WPF;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
@@ -47,6 +49,9 @@ namespace RevitDBExplorer.UIComponents.List
         public RelayCommand KeyDown_Enter_Command { get; }        
         public RelayCommand ListItem_Click_Command { get; }
         public RelayCommand ReloadCommand { get; }
+        public RelayCommand CopyNameCommand { get; }
+        public RelayCommand CopyValueCommand { get; }
+        public RelayCommand OpenCHMCommand { get; }
         public string FilterPhrase
         {
             get
@@ -67,6 +72,9 @@ namespace RevitDBExplorer.UIComponents.List
             KeyDown_Enter_Command = new RelayCommand(KeyDown_Enter);            
             ListItem_Click_Command = new RelayCommand(ListItem_Click);
             ReloadCommand = new RelayCommand(Reload);
+            CopyNameCommand = new RelayCommand(CopyName);
+            CopyValueCommand = new RelayCommand(CopyValue);
+            OpenCHMCommand = new RelayCommand(OpenCHM);
         }
 
         public void ClearItems()
@@ -137,6 +145,56 @@ namespace RevitDBExplorer.UIComponents.List
             Reload(null);
         }
 
+
+        private void CopyName(object obj)
+        {
+            if (obj is SnoopableMember snoopableMember)
+            {
+                Clipboard.SetDataObject($"{snoopableMember.Name}");
+            }
+        }
+        private void CopyValue(object obj)
+        {
+            if (obj is SnoopableMember snoopableMember)
+            {
+                if (snoopableMember.ValueViewModel is IValuePresenter presenter)
+                {
+                    Clipboard.SetDataObject($"{presenter.Label}");
+                }
+            }
+        }
+        private void OpenCHM(object obj)
+        {
+            if (obj is SnoopableMember snoopableMember)
+            {
+                string helpFileName = AppSettings.Default.RevitAPICHMFilePath;
+                helpFileName = helpFileName.Replace("\"", "");
+                if (System.IO.File.Exists(helpFileName))
+                {
+                    string postfix = "";
+                    switch (snoopableMember.MemberKind)
+                    {
+                        case Domain.DataModel.Streams.Base.MemberKind.Property:
+                            postfix = " property";
+                            break;
+                        case Domain.DataModel.Streams.Base.MemberKind.Method:
+                        case Domain.DataModel.Streams.Base.MemberKind.StaticMethod:
+                        case Domain.DataModel.Streams.Base.MemberKind.AsArgument:
+                            postfix = " method";
+                            break;
+                    }
+
+                    System.Windows.Forms.Help.ShowHelp(null, helpFileName,
+                        System.Windows.Forms.HelpNavigator.KeywordIndex,
+                        $"{snoopableMember.DeclaringType.BareName}.{snoopableMember.Name}{postfix}");
+                }
+                else
+                {
+                    MessageBox.Show(
+                        $".chm file does not exist at the given location: {helpFileName}. Please set the correct location in the configuration.");
+                }
+            }
+        }
 
         private async void Reload(object parameter)
         {
