@@ -30,9 +30,9 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
         public virtual IValueViewModel CreatePresenter(SnoopableContext context, TSnoopedObjectType typedObject) => null;
     }
 
-    internal abstract class MemberAccessorTyped<TSnoopedObjectType> : IMemberAccessor, IMemberAccessorWithSnoop
+    internal abstract class MemberAccessorTyped<TSnoopedObjectType> : MemberAccessor<TSnoopedObjectType>, IMemberAccessorWithSnoop
     {
-        IValueViewModel IMemberAccessor.CreatePresenter(SnoopableContext context, object @object)
+        public override IValueViewModel CreatePresenter(SnoopableContext context, TSnoopedObjectType @object)
         {            
             return new DefaultPresenter(this);
         }

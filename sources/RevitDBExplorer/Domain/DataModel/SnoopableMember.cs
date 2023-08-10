@@ -30,10 +30,8 @@ namespace RevitDBExplorer.Domain.DataModel
         public event Action SnoopableObjectChanged;
         public string AccessorName { get; private set; }
         public IValueViewModel ValueViewModel { get; private set; } = EmptyPresenter.Instance;
-
         public bool CanBeSnooped { get; private set; }        
-        
-               
+                       
 
         public SnoopableMember(SnoopableObject parent, MemberDescriptor memberDescriptor)
         {

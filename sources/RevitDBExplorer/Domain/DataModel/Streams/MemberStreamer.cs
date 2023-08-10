@@ -66,7 +66,7 @@ namespace RevitDBExplorer.Domain.DataModel.Streams
                 yield return member;
             }
 
-            var methods = type.GetMethods(BindingFlags.Instance | BindingFlags.Public);
+            var methods = type.GetMethods(BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public);
             foreach (var method in methods)
             {                
                 if (method.IsSpecialName) continue;
@@ -91,8 +91,14 @@ namespace RevitDBExplorer.Domain.DataModel.Streams
                 }
 
                 var comments = () => RevitDocumentationReader.GetMethodComments(method);
-                var memberAccessor = MemberAccessorFactory.CreateMemberAccessor(method, null);
-                var member = new MemberDescriptor(type, MemberKind.Method, method.Name, method.DeclaringType, memberAccessor, comments);
+                IMemberAccessor memberAccessor = null;
+                MemberKind memberKind = MemberKind.StaticMethod;
+                if (method.IsStatic == false)
+                {
+                    memberAccessor = MemberAccessorFactory.CreateMemberAccessor(method, null);
+                    memberKind = MemberKind.Method;
+                }
+                var member = new MemberDescriptor(type, memberKind, method.Name, method.DeclaringType, memberAccessor, comments);
                 yield return member;
             }
         }
