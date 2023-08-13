@@ -1,5 +1,8 @@
 ﻿using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
+
+// (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
 namespace RevitDBExplorer.WPF.AttachedProperties
 {
@@ -16,8 +19,7 @@ namespace RevitDBExplorer.WPF.AttachedProperties
         {
             element.SetValue(CommandProperty, value);
         }
-
-       
+               
 
 
         private static void CommandPropertyChanged(DependencyObject element, DependencyPropertyChangedEventArgs e)
@@ -35,7 +37,14 @@ namespace RevitDBExplorer.WPF.AttachedProperties
                 if (e.Source is FrameworkElement uiElement)
                 {
                     var cmd = GetCommand(uiElement);
-                    cmd?.Execute(uiElement.DataContext);
+                    var parameter = uiElement.DataContext;
+
+                    if (e.Source is ContentControl contentControl)
+                    {
+                        parameter = contentControl.Content;
+                    }
+
+                    cmd?.Execute(parameter);
                 }
             }
         }

@@ -5,14 +5,25 @@
                     >
 
     <DataTemplate DataType="{x:Type presenters:DefaultPresenter}">
-        <TextBlock Text="{Binding ValueViewModel.Label, Mode=OneWay}" TextWrapping="NoWrap"  >
+        <TextBlock Text="{Binding ValueViewModel.Label, Mode=OneWay}" x:Name="cTextBlock" TextWrapping="NoWrap"  >
             <TextBlock.Resources>
                 <converters:SnoopableMemberToToolTipConverter x:Key="SnoopableMemberToToolTipConverter"/>
             </TextBlock.Resources>
             <TextBlock.ToolTip>
-                <TextBlock Text="{Binding ., Converter={StaticResource SnoopableMemberToToolTipConverter}}" />
+                <TextBlock Text="{Binding ValueViewModel, Converter={StaticResource SnoopableMemberToToolTipConverter}}" />
             </TextBlock.ToolTip>
         </TextBlock>
+
+        <DataTemplate.Triggers>
+            <DataTrigger Binding="{Binding ValueViewModel.CanBeSnooped}" Value="False">
+                <Setter TargetName="cTextBlock" Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding ValueViewModel.CanBeSnooped}" Value="True">
+                <Setter TargetName="cTextBlock" Property="Foreground" Value="{DynamicResource Member.Link}"/>
+                <Setter TargetName="cTextBlock" Property="Cursor" Value="Hand"/>
+                <Setter TargetName="cTextBlock" Property="FontWeight" Value="Bold"/>
+            </DataTrigger>
+        </DataTemplate.Triggers>
     </DataTemplate>
     
 </ResourceDictionary>

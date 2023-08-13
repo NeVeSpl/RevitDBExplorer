@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Globalization;
 using System.Windows.Data;
-using RevitDBExplorer.Domain.DataModel;
 using RevitDBExplorer.Domain.DataModel.ValueViewModels;
 
 namespace RevitDBExplorer.WPF.Converters
@@ -10,11 +9,7 @@ namespace RevitDBExplorer.WPF.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var snoopableMember = value as SnoopableMember;
-
-            if (snoopableMember == null) return null;
-
-            if (snoopableMember.ValueViewModel is DefaultPresenter presenter)
+            if (value is DefaultPresenter presenter)
             {
                 if (!string.IsNullOrEmpty(presenter.ValueContainer?.ToolTip))
                 {
@@ -23,7 +18,7 @@ namespace RevitDBExplorer.WPF.Converters
                 return presenter.Label; 
             }
 
-            if (snoopableMember.ValueViewModel is ErrorPresenter errorPresenter)
+            if (value is ErrorPresenter errorPresenter)
             {
                 return errorPresenter.Label;
             }

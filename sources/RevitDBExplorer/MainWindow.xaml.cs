@@ -10,10 +10,8 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Threading;
-using System.Xml.Linq;
 using RevitDBExplorer.Augmentations;
 using RevitDBExplorer.Domain;
-using RevitDBExplorer.Domain.DataModel;
 using RevitDBExplorer.Domain.RevitDatabaseQuery;
 using RevitDBExplorer.Domain.RevitDatabaseQuery.Autocompletion;
 using RevitDBExplorer.Domain.RevitDatabaseScripting;
@@ -35,10 +33,10 @@ namespace RevitDBExplorer
 {
     internal enum RightView { None, List, CommandAndControl }
 
-    internal partial class MainWindow : Window, INotifyPropertyChanged
+    internal partial class MainWindow : Window, IAmWindowOpener, INotifyPropertyChanged
     {
         private readonly TreeVM treeVM = new();
-        private readonly ListVM listVM = new();
+        private readonly ListVM listVM;
         private readonly CommandAndControlVM commandAndControlVM = new();
         private readonly QueryVisualizationVM queryVisualizationVM = new();
         private readonly RDScriptingVM rdscriptingVM;
@@ -188,6 +186,8 @@ namespace RevitDBExplorer
         public MainWindow()
         {
             Dispatcher.UnhandledException += Dispatcher_UnhandledException;
+            listVM = new ListVM(this);
+
             InitializeComponent();
             this.DataContext = this;
             rdscriptingVM = new RDScriptingVM();
@@ -199,8 +199,7 @@ namespace RevitDBExplorer
             isRevitBusyDispatcher = new DispatcherTimer(TimeSpan.FromMilliseconds(500), DispatcherPriority.Background, (x, y) => IsRevitBusy = Application.IsRevitBussy(), Dispatcher.CurrentDispatcher);
 
             CheckIfNewVersionIsAvailable(ver).Forget();
-
-            List.MemberSnooped += List_MemberSnooped;          
+           
             Tree.SelectedItemChanged += Tree_SelectedItemChanged;
             Tree.InputForRDSHasChanged += RDSSetInput;
             Tree.ScriptForRDSHasChanged += RDSOpenWithCommand;
@@ -291,14 +290,8 @@ namespace RevitDBExplorer
             }
             RightView = RightView.None;
         }
-        private async void List_MemberSnooped(SnoopableMember member)
-        {            
-            var sourceOfObjects = await ExternalExecutor.ExecuteInRevitContextAsync(x =>
-            {
-                var source = member.Snoop();
-                source.ReadFromTheSource(x);
-                return source;
-            });
+        void IAmWindowOpener.Open(SourceOfObjects sourceOfObjects)
+        {  
             var window = new MainWindow(sourceOfObjects);
             window.Owner = this;
             window.Show();                      

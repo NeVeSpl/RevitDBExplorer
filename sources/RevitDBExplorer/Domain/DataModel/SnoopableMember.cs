@@ -19,14 +19,10 @@ namespace RevitDBExplorer.Domain.DataModel
         
 
         public DeclaringType DeclaringType => memberDescriptor.DeclaringType;
-        public string DeclaringTypeName => memberDescriptor.DeclaringType.Name;
-        public int DeclaringTypeLevel => memberDescriptor.DeclaringType.InheritanceLevel;
         public MemberKind MemberKind => memberDescriptor.Kind;
         public string Name => memberDescriptor.Name;               
-        public bool HasAccessor => memberDescriptor.MemberAccessor is not null;
+        private bool HasAccessor => memberDescriptor.MemberAccessor is not null;
         public DocXml Documentation => memberDescriptor.Documentation;
-
-
         public event Action SnoopableObjectChanged;
         public string AccessorName { get; private set; }
         public IValueViewModel ValueViewModel { get; private set; } = EmptyPresenter.Instance;
