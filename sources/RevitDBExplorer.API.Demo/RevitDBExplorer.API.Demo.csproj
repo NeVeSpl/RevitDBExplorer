@@ -79,7 +79,7 @@
 	 
 	 
 	<ItemGroup>
-	  <ProjectReference Include="..\RevitDBExplorer.API\RevitDBExplorer.API.csproj" />
+	  <PackageReference Include="RevitDBExplorer.API" Version="1.6.0" />
 	</ItemGroup>
 	 
  
