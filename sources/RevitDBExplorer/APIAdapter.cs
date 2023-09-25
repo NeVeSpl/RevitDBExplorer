@@ -1,6 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Autodesk.Revit.DB;
 using RevitDBExplorer.API;
+using RevitDBExplorer.Domain;
+using RevitDBExplorer.Domain.DataModel;
 
 namespace RevitDBExplorer
 {
@@ -8,7 +11,12 @@ namespace RevitDBExplorer
     {
         public void Snoop(object document, IEnumerable<object> elements)
         {
-            throw new NotImplementedException();
+            var revitDocument = document as Document;
+            var snoopableObjects = elements.Select(x => new SnoopableObject(revitDocument, x)).ToArray();
+            var sourceOfObjects = new SourceOfObjects(snoopableObjects) { Title = "API.Snoop()" };            
+
+            var window = new MainWindow(sourceOfObjects, Application.RevitWindowHandle);
+            window.Show();
         }
     }
 }

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
+using RevitDBExplorer.Augmentations;
 using RevitDBExplorer.Domain;
 using RevitDBExplorer.Domain.DataModel;
 using RevitDBExplorer.Domain.DataModel.MemberAccessors;
@@ -32,6 +33,7 @@ namespace RevitDBExplorer
         public Result OnStartup(UIControlledApplication application)
         {
             RevitWindowHandle = application.MainWindowHandle;
+            UIApplication = application.GetUIApplication();
             RDSController = new RDSController(application.MainWindowHandle, this);
 
             var panel = application.CreateRibbonPanel("Explorer");
@@ -47,6 +49,7 @@ namespace RevitDBExplorer
             MemberStreamerForTemplates.Init();
             RevitDocumentationReader.Init();
             RevitDatabaseQueryService.Init();
+            BoundingBoxVisualizerFactory.Init(UIApplication);
             EventMonitor.Register(application);
 
             ApplicationModifyTab.Init(panel.GetRibbonPanel(), AppSettings.Default.AddRDBECmdToModifyTab);

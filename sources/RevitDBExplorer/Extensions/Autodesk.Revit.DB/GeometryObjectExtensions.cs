@@ -4,7 +4,7 @@
 
 namespace Autodesk.Revit.DB
 {
-    internal  static class GeometryObjectExtensions
+    internal static class GeometryObjectExtensions
     {
         public static Reference GetReference(this GeometryObject geometryObject)
         {
