@@ -14,7 +14,7 @@
 		<OutputPath>..\bin\$(Configuration)\</OutputPath>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<UseWPF>true</UseWPF>
-		<Configurations>Debug;R2023;R2022;R2021;Debug2024;R2024;</Configurations>
+		<Configurations>Debug;Debug2024;R2023;R2022;R2021;R2024;</Configurations>
 	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
 		<DebugType>full</DebugType>
@@ -127,6 +127,9 @@
 	</ItemGroup>	
 	<ItemGroup>
 		<Compile Remove="obj\*.*" />
+	</ItemGroup>	
+	<ItemGroup>
+	  <ProjectReference Include="..\RevitDBExplorer.API\RevitDBExplorer.API.csproj" />
 	</ItemGroup>	
 
 	<ItemGroup>

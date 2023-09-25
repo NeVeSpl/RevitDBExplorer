@@ -1,0 +1,86 @@
+<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+	<PropertyGroup>
+		 
+		<TargetFramework>net48</TargetFramework>
+		<ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+		<LangVersion>10.0</LangVersion>
+		<RevitYear>2024</RevitYear>
+		 
+		<OutputPath>..\bin\$(Configuration)\</OutputPath>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<UseWPF>true</UseWPF>
+		<Configurations>Debug;Debug2024;R2023;R2022;R2021;;R2024;</Configurations>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+		<DebugType>full</DebugType>
+		<DefineConstants>TRACE;DEBUG;R2021b, R2022b, R2023b, R2023e, R2024e</DefineConstants>
+		<RevitYear>2023</RevitYear>
+	</PropertyGroup>
+	<PropertyGroup>
+		<StartupObject />
+		<Version>1.6.0.0</Version>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'R2023|AnyCPU'">
+		<DefineConstants>TRACE;R2021b, R2022b, R2023b, R2023e, R2024e</DefineConstants>
+		<Optimize>true</Optimize>
+		<DebugType>pdbonly</DebugType>
+		<RevitYear>2023</RevitYear>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'R2022|AnyCPU'">
+		<DefineConstants>TRACE;R2021b, R2022b, R2022e, R2023e, R2024e</DefineConstants>
+		<Optimize>true</Optimize>
+		<DebugType>pdbonly</DebugType>
+		<RevitYear>2022</RevitYear>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'R2021|AnyCPU'">
+		<DefineConstants>TRACE;R2021b, R2021e, R2022e, R2023e, R2024e</DefineConstants>
+		<Optimize>true</Optimize>
+		<DebugType>pdbonly</DebugType>
+		<RevitYear>2021</RevitYear>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug2024|AnyCPU'">
+		<DebugSymbols>true</DebugSymbols>
+		<DefineConstants>TRACE;DEBUG;R2021b, R2022b, R2023b, R2024b, R2024e</DefineConstants>
+		<DebugType>full</DebugType>
+		<RevitYear>2024</RevitYear>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'R2024|AnyCPU'">
+		<DefineConstants>TRACE;R2021b, R2022b, R2023b, R2024b, R2024e</DefineConstants>
+		<Optimize>true</Optimize>
+		<DebugType>pdbonly</DebugType>
+		<RevitYear>2024</RevitYear>
+	</PropertyGroup>
+
+	 
+	<ItemGroup>
+		<Reference Include="RevitAPI">
+			<HintPath>..\..\binaries\revit\$(RevitYear)\RevitAPI.dll</HintPath>
+			<Private>False</Private>
+		</Reference>
+		<Reference Include="RevitAPIUI">
+			<HintPath>..\..\binaries\revit\$(RevitYear)\RevitAPIUI.dll</HintPath>
+			<Private>False</Private>
+		</Reference>
+		<Reference Include="System.Windows" />
+		<Reference Include="System.Windows.Forms" />		 
+		<Reference Include="System.Data.DataSetExtensions" />
+		<Reference Include="System.Net.Http" />
+		<Reference Include="System.Xaml" />
+		<Reference Include="WindowsBase" />
+		<Reference Include="PresentationCore" />
+		<Reference Include="PresentationFramework" />
+	</ItemGroup>
+	 
+	 
+	<ItemGroup>
+		<Compile Remove="obj\*.*" />
+	</ItemGroup>
+	 
+	 
+	<ItemGroup>
+	  <ProjectReference Include="..\RevitDBExplorer.API\RevitDBExplorer.API.csproj" />
+	</ItemGroup>
+	 
+ 
+</Project>

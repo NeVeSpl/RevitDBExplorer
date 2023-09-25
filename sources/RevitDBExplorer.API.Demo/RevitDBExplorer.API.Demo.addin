@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RevitAddIns>
+	<AddIn Type="Command">
+		<Name>RevitDBExplorer.API.Demo</Name>
+		<FullClassName>RevitDBExplorer.API.Demo.RunDemoCommand</FullClassName>
+		<Text>RevitDBExplorer.API.Demo</Text>
+		<VisibilityMode>AlwaysVisible</VisibilityMode>
+		<Assembly>G:\RevitDBExplorer\sources\bin\Debug2024\RevitDBExplorer.API.Demo.dll</Assembly>
+		<AddInId>5A7D59F1-A956-47A3-ADC8-DCEE14434E35</AddInId>
+		<VendorId>RDBE</VendorId>
+		<VendorDescription>https://github.com/NeVeSpl/RevitDBExplorer</VendorDescription>
+	</AddIn>
+</RevitAddIns>

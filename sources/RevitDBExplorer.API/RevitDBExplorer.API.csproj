@@ -1,0 +1,46 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+	<PropertyGroup>
+		<ProjectGuid>{6B3CE0AE-D058-4F2C-B0A2-48491776B0B2}</ProjectGuid>
+		<TargetFramework>net48</TargetFramework>
+		<ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+		<LangVersion>10.0</LangVersion>		
+		<AssemblyTitle>Revit database explorer API</AssemblyTitle>
+		<Company>https://github.com/NeVeSpl/RevitDBExplorer</Company>
+		<Product>Revit database explorer</Product>
+		<Copyright>(c) Revit Database Explorer</Copyright>
+		<AssemblyVersion></AssemblyVersion>
+		<OutputPath>..\bin\$(Configuration)\</OutputPath>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<UseWPF>true</UseWPF>
+		<Configurations>Debug;Release;</Configurations>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+		<DebugType>full</DebugType>
+		<DefineConstants>TRACE;DEBUG;</DefineConstants>
+	
+	</PropertyGroup>
+	<PropertyGroup>
+		<StartupObject />
+		<Version>1.6.0.0</Version>
+	</PropertyGroup>
+	
+
+	<ItemGroup>		
+		<Reference Include="System.Windows" />
+		<Reference Include="System.Windows.Forms" />		
+		<Reference Include="System.Data.DataSetExtensions" />
+		<Reference Include="System.Net.Http" />
+		<Reference Include="System.Xaml" />
+		<Reference Include="WindowsBase" />
+		<Reference Include="PresentationCore" />
+		<Reference Include="PresentationFramework" />
+	</ItemGroup>
+	
+	<ItemGroup>
+		<Compile Remove="obj\*.*" />
+	</ItemGroup>
+
+
+	
+</Project>
