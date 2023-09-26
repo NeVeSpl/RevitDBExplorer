@@ -3,7 +3,7 @@
 		<TargetFramework>net48</TargetFramework>
 		<LangVersion>10.0</LangVersion>				
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-		<Version>1.6.0</Version>
+		<Version>1.7.0</Version>
 		<Authors>NeVeSpl</Authors>
 		<Company>NeVeSpl</Company>
 		<Copyright>(c) Revit Database Explorer</Copyright>
