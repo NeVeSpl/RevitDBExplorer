@@ -5,7 +5,7 @@ using System.Windows.Controls;
 using Autodesk.Revit.DB;
 using RevitDBExplorer.Domain;
 using RevitDBExplorer.Domain.RevitDatabaseView;
-using RevitDBExplorer.UIComponents.Tree.Items;
+using RevitDBExplorer.UIComponents.Trees.Base.Items;
 using RevitDBExplorer.WPF;
 using Binding = System.Windows.Data.Binding;
 

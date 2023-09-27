@@ -2,15 +2,15 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using RevitDBExplorer.UIComponents.Tree.Items;
+using RevitDBExplorer.UIComponents.Trees.Base.Items;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
-namespace RevitDBExplorer.UIComponents.Tree
+namespace RevitDBExplorer.UIComponents.Trees.Base
 {
-    public partial class TreeView : UserControl
+    public partial class BaseTreeView : UserControl
     {
-        public TreeView()
+        public BaseTreeView()
         {
             InitializeComponent();
         }
@@ -18,7 +18,7 @@ namespace RevitDBExplorer.UIComponents.Tree
 
         private void TreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            if (this.DataContext is TreeVM treeView) 
+            if (this.DataContext is BaseTreeViewModel treeView)
             {
                 if (e.NewValue is TreeItem treeViewItemVM)
                 {
@@ -27,13 +27,13 @@ namespace RevitDBExplorer.UIComponents.Tree
             }
         }
 
+
         private Point _initialMousePosition;
         protected override void OnPreviewMouseDown(MouseButtonEventArgs e)
         {
             _initialMousePosition = e.GetPosition(this);
             base.OnPreviewMouseDown(e);
         }
-
         protected override void OnPreviewMouseMove(MouseEventArgs e)
         {
             base.OnPreviewMouseMove(e);
@@ -60,12 +60,12 @@ namespace RevitDBExplorer.UIComponents.Tree
 
 
                     DataObject data = new DataObject();
-                    data.SetData("RDS_Inputs", TreeVM.GetObjectsForTransfer(treeItem) ?? Enumerable.Empty<object>());
+                    data.SetData("RDS_Inputs", BaseTreeViewModel.GetObjectsForTransfer(treeItem) ?? Enumerable.Empty<object>());
                     data.SetData(DataFormats.StringFormat, text ?? "");
                     DragDrop.DoDragDrop(this, data, DragDropEffects.Copy | DragDropEffects.Move);
                     //e.Handled = true;
                 }
-            }            
+            }
         }
     }
 }

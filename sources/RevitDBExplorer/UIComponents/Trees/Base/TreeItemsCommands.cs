@@ -3,7 +3,7 @@ using RevitDBExplorer.WPF;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
-namespace RevitDBExplorer.UIComponents.Tree.Items
+namespace RevitDBExplorer.UIComponents.Trees.Base
 {
     internal class TreeItemsCommands
     {
@@ -13,13 +13,11 @@ namespace RevitDBExplorer.UIComponents.Tree.Items
         public IsolateInRevitCommand IsolateInRevit { get; } = IsolateInRevitCommand.Instance;
         public DrawInRevitCommand DrawInRevit { get; } = DrawInRevitCommand.Instance;
         public DrawInRevitWithAVFCommand DrawInRevitAVF { get; } = DrawInRevitWithAVFCommand.Instance;
-        public RelayCommand UseAsInpputForRDSCommand { get; }
         public RelayCommand GenerateUpdateQueryRDSCommand { get; }
 
 
-        public TreeItemsCommands(RelayCommand useAsInpputForRDSCommand, RelayCommand generateUpdateQueryRDSCommand)
+        public TreeItemsCommands(RelayCommand generateUpdateQueryRDSCommand)
         {
-            UseAsInpputForRDSCommand = useAsInpputForRDSCommand;
             GenerateUpdateQueryRDSCommand = generateUpdateQueryRDSCommand;
         }
     }

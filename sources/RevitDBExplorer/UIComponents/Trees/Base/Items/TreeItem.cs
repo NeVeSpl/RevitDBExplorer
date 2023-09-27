@@ -8,13 +8,13 @@ using RevitDBExplorer.WPF;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
-namespace RevitDBExplorer.UIComponents.Tree.Items
+namespace RevitDBExplorer.UIComponents.Trees.Base.Items
 {
     internal abstract class TreeItem : BaseViewModel
     {
         private bool isSelected = false;
         private bool isExpanded = false;
-        private bool isEnabled  = true;
+        private bool isEnabled = true;
         private ObservableCollection<TreeItem> items = null;
 
         public bool IsSelected
@@ -80,7 +80,7 @@ namespace RevitDBExplorer.UIComponents.Tree.Items
             {
                 IsExpanded = true;
             }
-            if ((IsExpanded) && (Items != null))
+            if (IsExpanded && Items != null)
             {
                 var allChildren = Items.Sum(x => x.Items?.Count) ?? 0;
                 foreach (var item in Items)
@@ -91,7 +91,7 @@ namespace RevitDBExplorer.UIComponents.Tree.Items
         }
         public void Collapse()
         {
-            if(IsExpanded == true)
+            if (IsExpanded == true)
             {
                 IsExpanded = false;
                 if (Items != null)
@@ -111,7 +111,7 @@ namespace RevitDBExplorer.UIComponents.Tree.Items
             {
                 candidate = Items?.FirstOrDefault();
             }
-           
+
             if (candidate != null)
             {
                 candidate.SelectFirstDeepestVisibleItem();

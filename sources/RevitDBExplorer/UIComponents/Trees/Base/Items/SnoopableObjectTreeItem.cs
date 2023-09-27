@@ -4,11 +4,11 @@ using RevitDBExplorer.Domain.DataModel;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
-namespace RevitDBExplorer.UIComponents.Tree.Items
+namespace RevitDBExplorer.UIComponents.Trees.Base.Items
 {
     internal class SnoopableObjectTreeItem : TreeItem
     {
-        public SnoopableObject Object { get; }     
+        public SnoopableObject Object { get; }
         public string Prefix
         {
             get
@@ -21,9 +21,9 @@ namespace RevitDBExplorer.UIComponents.Tree.Items
                 {
                     return Object.NamePrefix;
                 }
-                return  "";
+                return "";
             }
-        } 
+        }
 
 
         public SnoopableObjectTreeItem(SnoopableObject @object, TreeItemsCommands commands) : base(commands)

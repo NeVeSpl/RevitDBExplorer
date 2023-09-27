@@ -7,7 +7,8 @@
         xmlns:componentQueryVisualization="clr-namespace:RevitDBExplorer.UIComponents.QueryVisualization"
         xmlns:componentBusyIndicator="clr-namespace:RevitDBExplorer.UIComponents.BusyIndicator"
         xmlns:componentList="clr-namespace:RevitDBExplorer.UIComponents.List"
-        xmlns:componentTree="clr-namespace:RevitDBExplorer.UIComponents.Tree"    
+        xmlns:componentExplorerTree="clr-namespace:RevitDBExplorer.UIComponents.Trees.Explorer"    
+        xmlns:componentUtilityTree="clr-namespace:RevitDBExplorer.UIComponents.Trees.Utility" 
         xmlns:componentCAndC="clr-namespace:RevitDBExplorer.UIComponents.CommandAndControl"    
         xmlns:componentScripting="clr-namespace:RevitDBExplorer.UIComponents.Scripting"    
         xmlns:converters="clr-namespace:RevitDBExplorer.WPF.Converters"       
@@ -238,8 +239,12 @@
                 <componentQueryVisualization:QueryVisualizationView  Grid.Row="1" Grid.ColumnSpan="2" Margin="0 1 0 0" DataContext="{Binding QueryVisualization}"/>
             </Grid>
 
-
-            <componentTree:TreeView Grid.Row="2" Grid.Column="0"  DataContext="{Binding Tree}" Margin="0 0 2 0" SizeChanged="Window_SizeChanged" />
+            <DockPanel Grid.Row="2" Grid.Column="0" Margin="0 0 2 0" SizeChanged="Window_SizeChanged">
+                <Grid DockPanel.Dock="Bottom" Background="AntiqueWhite" Height="auto">
+                    <componentUtilityTree:UtilityTreeView DataContext="{Binding UtilityTree}" />
+                </Grid>
+                <componentExplorerTree:ExplorerTreeView DataContext="{Binding ExplorerTree}"  />
+            </DockPanel>
 
             <GridSplitter Grid.Row="2" Grid.Column="1"  Background="{DynamicResource GridSplitter.Background}"  Width="2" Margin="0 25 2 5" HorizontalAlignment="Left" VerticalAlignment="Stretch" />
 

@@ -1,0 +1,68 @@
+﻿<UserControl x:Class="RevitDBExplorer.UIComponents.Trees.Explorer.ExplorerTreeView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:RevitDBExplorer.UIComponents.Trees.Explorer"
+             xmlns:componentBaseTree="clr-namespace:RevitDBExplorer.UIComponents.Trees.Base"  
+             xmlns:converters="clr-namespace:RevitDBExplorer.WPF.Converters"    
+             xmlns:controls="clr-namespace:RevitDBExplorer.WPF.Controls" 
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.Resources>
+            <ResourceDictionary>
+                <ResourceDictionary.MergedDictionaries>
+                    <ResourceDictionary Source="../../../Resources/Templates/All.xaml"/>
+                    <ResourceDictionary Source="../../../Resources/VectorGraphic.xaml"/>
+
+                </ResourceDictionary.MergedDictionaries>
+
+                <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverterCollapsed" WhenFalse="Collapsed"/>
+
+               
+
+                <Style x:Key="ToolButton" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                    <Setter Property="Padding" Value="2 0 1 1"/>
+                    <Setter Property="Margin" Value="4 0 0 0"/>
+                    <Setter Property="MinWidth" Value="21"/>
+                    <Setter Property="MinHeight" Value="21"/>
+                    <Setter Property="Width" Value="23"/>
+                    <Setter Property="Height" Value="21"/>
+                    <Setter Property="Background" Value="Transparent"/>
+                    <Setter Property="Padding" Value="2 0 1 1"/>
+                    <Setter Property="BorderBrush" Value="Transparent"/>
+                </Style>
+            </ResourceDictionary>
+        </Grid.Resources>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <Grid  Margin="0 0 0 3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="auto"/>
+            </Grid.ColumnDefinitions>
+
+            <controls:TextBoxWithPlaceholder Text="{Binding FilterPhrase, Mode=TwoWay, Delay=500, UpdateSourceTrigger=PropertyChanged}" Placeholder="Filter tree by item name"/>
+
+            <Button Grid.Column="1" Style="{StaticResource ToolButton}"  ToolTip="Reload data from Revit in the tree" Command="{Binding ReloadCommand}" Visibility="{Binding TreeNotForEvents, Converter={StaticResource BoolToVisibilityConverterCollapsed}}" >
+                <Path Style="{StaticResource IconReload}"  />
+            </Button>
+
+            <Button Grid.Column="2" Style="{StaticResource ToolButton}"  ToolTip="Collapse/Expand tree" Command="{Binding CollapseCommand}" Visibility="{Binding TreeNotForEvents, Converter={StaticResource BoolToVisibilityConverterCollapsed}}" >
+                <Path Style="{StaticResource IconCollapse}" Margin="2 2 1 1"  />
+            </Button>
+
+            <Button Grid.Column="3" Style="{StaticResource ToolButton}"  ToolTip="Switch between grouping by TypeName and Category" Command="{Binding SwitchViewCommand}" Visibility="{Binding TreeNotForEvents, Converter={StaticResource BoolToVisibilityConverterCollapsed}}">
+                <Path Style="{StaticResource IconSwitch}"  />
+            </Button>
+        </Grid>
+
+        <componentBaseTree:BaseTreeView Margin="0 2 0 0" Grid.Row="1"/>
+    </Grid>
+</UserControl>
