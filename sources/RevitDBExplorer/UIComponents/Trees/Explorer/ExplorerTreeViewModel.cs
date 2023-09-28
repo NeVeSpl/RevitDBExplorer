@@ -142,7 +142,7 @@ namespace RevitDBExplorer.UIComponents.Trees.Explorer
         }
         private void Collapse(object parameter)
         {
-            var first = FirstItem;
+            var first = TreeItems.FirstOrDefault();
             if (first == null) return;
 
             if (isExpanded)

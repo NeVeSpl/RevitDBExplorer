@@ -37,6 +37,12 @@
                 <converters:ToResourceWithKeyConverter x:Key="ToResourceWithKeyConverter" FrameworkElement="{Binding ElementName=cTreeSecretName}" />
                 <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" WhenFalse="Collapsed"/>
 
+                <HierarchicalDataTemplate DataType="{x:Type local:UtilityGroupTreeItem}" ItemsSource="{Binding Items}">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Compare" />
+                    </StackPanel>
+                </HierarchicalDataTemplate>
+
                 <HierarchicalDataTemplate DataType="{x:Type local:GroupTreeItem}" ItemsSource="{Binding Items}">
                     <StackPanel Orientation="Horizontal">
                         <StackPanel.ContextMenu>

@@ -44,14 +44,7 @@ namespace RevitDBExplorer.UIComponents.Trees.Base
                 OnPropertyChanged();
             }
         }
-        public TreeItem FirstItem
-        {
-            get
-            {
-                return treeItems.FirstOrDefault();
-            }
-        }
-
+       
 
         public BaseTreeViewModel()
         {           
