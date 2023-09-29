@@ -23,7 +23,7 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
 
-        <Path Grid.Column="1" Style="{StaticResource BusyIndicator}" RenderTransformOrigin="0.5,0.5" VerticalAlignment="Center" Margin="0 3 0 0">
+        <Path Grid.Column="1" Style="{StaticResource BusyIndicator}" RenderTransformOrigin="0.5,0.5" VerticalAlignment="Center" Margin="0 5 0 1">
             <Path.RenderTransform>
                 <RotateTransform x:Name="MyAnimatedTransform" Angle="0" />
             </Path.RenderTransform>
@@ -37,7 +37,7 @@
                 </EventTrigger>
             </Path.Triggers>
         </Path>
-        <TextBlock Grid.Column="2" Text="Revit is busy!" FontSize="14" FontWeight="Bold" Margin="7 1 0 0" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5" Foreground="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+        <TextBlock Grid.Column="2" Text="Revit is busy!" FontSize="14" FontWeight="Bold" Margin="7 2 0 0" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5" Foreground="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
 
     </Grid>
 </UserControl>

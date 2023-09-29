@@ -240,7 +240,7 @@
             </Grid>
 
             <DockPanel Grid.Row="2" Grid.Column="0" Margin="0 0 2 0" SizeChanged="Window_SizeChanged">
-                <Border DockPanel.Dock="Bottom" BorderThickness="0 1 0 0" BorderBrush="{DynamicResource GridSplitter.Background}" Height="auto">
+                <Border DockPanel.Dock="Bottom" BorderThickness="0 1 0 0" BorderBrush="{DynamicResource GridSplitter.Background}" Height="auto" MaxHeight="444">
                     <Grid  Height="auto" Margin="0 1 0 1">
                         <componentUtilityTree:UtilityTreeView DataContext="{Binding UtilityTree}" />
                     </Grid>

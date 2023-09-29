@@ -20,6 +20,7 @@
 		<DebugType>full</DebugType>
 		<DefineConstants>TRACE;DEBUG;R2021b, R2022b, R2023b, R2023e, R2024e</DefineConstants>
 		<RevitYear>2023</RevitYear>
+		<XamlDebuggingInformation>True</XamlDebuggingInformation>
 	</PropertyGroup>
 	<PropertyGroup>
 		<StartupObject />
@@ -48,6 +49,7 @@
 		<DefineConstants>TRACE;DEBUG;R2021b, R2022b, R2023b, R2024b, R2024e</DefineConstants>
 		<DebugType>full</DebugType>
 		<RevitYear>2024</RevitYear>
+		<XamlDebuggingInformation>True</XamlDebuggingInformation>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'R2024|AnyCPU'">
 		<DefineConstants>TRACE;R2021b, R2022b, R2023b, R2024b, R2024e</DefineConstants>

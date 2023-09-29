@@ -30,10 +30,33 @@ namespace RevitDBExplorer.UIComponents.List
         
 
         private Point? _initialMousePosition  = null;
-
+        private string _textToTransfer = null;
         protected override void OnPreviewMouseDown(MouseButtonEventArgs e)
         {           
             _initialMousePosition = e.GetPosition(this);
+            _textToTransfer = null;
+            if (e.LeftButton == MouseButtonState.Pressed)
+            {
+                object dataContext;
+                if (Mouse.DirectlyOver is FrameworkContentElement frameworkContentElement)
+                {
+                    dataContext = frameworkContentElement.DataContext;
+                }
+                if (Mouse.DirectlyOver is FrameworkElement frameworkElement)
+                {
+                    dataContext = frameworkElement.DataContext;
+                }
+
+                if (Mouse.DirectlyOver is TextBlock textBlock)
+                {
+                    _textToTransfer = textBlock.Text;
+                }
+                if (Mouse.DirectlyOver is Run run)
+                {
+                    _textToTransfer = run.Text;
+                }
+            }
+
             base.OnPreviewMouseDown(e);
         }
 
@@ -46,36 +69,7 @@ namespace RevitDBExplorer.UIComponents.List
                 var movedDistance = (_initialMousePosition.Value - e.GetPosition(this)).Length;
                 if (movedDistance < 7) return;
 
-                string textValue = "";
-                var item = Mouse.DirectlyOver as FrameworkElement;
-
-                if (item?.DataContext is SnoopableMember snoopableMember)
-                {
-                    var isNameColumn = item.GetParent(x => string.Equals(x.Tag, "NameColumn")) != null;
-                    if (isNameColumn)
-                    {
-                        textValue = snoopableMember.Name;
-                    }
-                    else
-                    {
-                        if (snoopableMember.ValueViewModel is IValuePresenter presenter)
-                        {
-                            textValue = presenter.Label;
-                        }
-                    }
-                }
-                else
-                {
-                    if (e.OriginalSource is TextBlock textBlock)
-                    {
-                        textValue = textBlock.Text;
-                    }
-
-                    if (e.OriginalSource is Run run)
-                    {
-                        textValue = run.Text;
-                    }
-                }
+                string textValue = _textToTransfer;
 
                 if (string.IsNullOrWhiteSpace(textValue)) return;
 

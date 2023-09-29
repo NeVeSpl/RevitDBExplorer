@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using RevitDBExplorer.Domain.DataModel;
+﻿using RevitDBExplorer.Domain.DataModel;
 using RevitDBExplorer.UIComponents.Trees.Base;
 using RevitDBExplorer.UIComponents.Trees.Base.Items;
 
@@ -13,17 +8,19 @@ namespace RevitDBExplorer.UIComponents.Trees.Utility
 {
     internal class UtilityTreeViewModel : BaseTreeViewModel
     {
-
+        private static UtilityGroupTreeItem rootItem;
 
         public UtilityTreeViewModel()
         {
-            TreeItems.Add(new UtilityGroupTreeItem(TreeItemsCommands) {IsExpanded = true });
+            rootItem ??= new UtilityGroupTreeItem(TreeItemsCommands) { IsExpanded = true };
+            TreeItems.Add(rootItem);
         }
 
-        internal void AddObject(SnoopableObject input)
+        internal void AddObject(SnoopableObject inputObject)
         {
-            var copy = new SnoopableObjectTreeItem(input, TreeItemsCommands);
-            TreeItems.First().Items.Add(copy);
+            var objectCopy = new SnoopableObject(inputObject.Context.Document, inputObject.Object);
+            var vmCopy = new SnoopableObjectTreeItem(objectCopy, TreeItemsCommands);
+            rootItem.Items.Add(vmCopy);
         }
     }
 }
