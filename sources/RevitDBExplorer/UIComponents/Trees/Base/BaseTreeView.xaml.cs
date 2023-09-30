@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Documents;
 using System.Windows.Input;
 using RevitDBExplorer.UIComponents.Trees.Base.Items;
 
@@ -11,6 +10,10 @@ namespace RevitDBExplorer.UIComponents.Trees.Base
 {
     public partial class BaseTreeView : UserControl
     {
+        public bool AllowDragOf_RDC_Input { get; set; } = true;
+        public bool AllowDragOf_RDC_Move { get; set; } = false;
+
+
         public BaseTreeView()
         {
             InitializeComponent();
@@ -48,6 +51,7 @@ namespace RevitDBExplorer.UIComponents.Trees.Base
             }
             base.OnPreviewMouseDown(e);
         }
+       
         protected override void OnPreviewMouseMove(MouseEventArgs e)
         {
             base.OnPreviewMouseMove(e);          
@@ -76,10 +80,17 @@ namespace RevitDBExplorer.UIComponents.Trees.Base
                     data.SetData(DataFormats.StringFormat, text ?? "");
                     if (_clickedElementDataContext is SnoopableObjectTreeItem snoopableObjectTreeItem2)
                     {
-                        data.SetData("RDC_Input", snoopableObjectTreeItem2.Object);
+                        if (AllowDragOf_RDC_Input)
+                        {
+                            data.SetData("RDC_Input", snoopableObjectTreeItem2.Object);
+                        }
+                        if (AllowDragOf_RDC_Move)
+                        {
+                            data.SetData("RDC_Move", snoopableObjectTreeItem2);
+                        }
                     }
 
-                    DragDrop.DoDragDrop(this, data, DragDropEffects.Copy | DragDropEffects.Move);
+                    var effect = DragDrop.DoDragDrop(this, data, DragDropEffects.Copy | DragDropEffects.Move);
                     //e.Handled = true;
                 }
             }

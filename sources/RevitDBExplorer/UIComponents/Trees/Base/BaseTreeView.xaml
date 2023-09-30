@@ -88,7 +88,7 @@
                 </HierarchicalDataTemplate>
 
                 <HierarchicalDataTemplate DataType="{x:Type local:SnoopableObjectTreeItem}" ItemsSource="{Binding Items}">
-                    <StackPanel Orientation="Horizontal">
+                    <StackPanel Orientation="Horizontal" IsHitTestVisible="True" Background="Transparent">
                         <StackPanel.ContextMenu>
                             <ContextMenu>
                                 <MenuItem Header="Select in Revit" Command="{Binding Commands.SelectInRevit}" CommandParameter="{Binding}"/>
@@ -109,7 +109,7 @@
                         </StackPanel.ContextMenu>
 
                         <Path Style="{Binding Object.NamePrefixIcon, Converter={StaticResource ToResourceWithKeyConverter}, ConverterParameter=Icon}" Margin="0 1 4 0" Fill="{Binding ElementName=cTextBlock, Path=Foreground}"  />
-                        <TextBlock x:Name="cTextBlock">             
+                        <TextBlock x:Name="cTextBlock" IsHitTestVisible="False">             
                      <Run Text="{Binding Prefix, Mode=OneWay}">
                          <Run.Style>
                              <Style TargetType="{x:Type Run}">

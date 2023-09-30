@@ -1,4 +1,5 @@
-﻿using System.Windows.Media;
+﻿using System.Windows.Input;
+using System.Windows.Media;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
@@ -64,5 +65,18 @@ namespace System.Windows
             }
             return null;
         }
-    }
+
+        public static object GetDataContext(this DependencyObject dependencyObject)
+        {
+            if (dependencyObject is FrameworkContentElement frameworkContentElement)
+            {
+                return frameworkContentElement.DataContext;
+            }
+            if (dependencyObject is FrameworkElement frameworkElement)
+            {
+                return frameworkElement.DataContext;
+            }
+            return null;
+        }
+     }
 }

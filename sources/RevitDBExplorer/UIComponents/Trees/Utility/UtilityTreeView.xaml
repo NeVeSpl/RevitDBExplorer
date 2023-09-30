@@ -7,7 +7,33 @@
              xmlns:componentBaseTree="clr-namespace:RevitDBExplorer.UIComponents.Trees.Base" 
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../../../Resources/Templates/All.xaml"/>
+                <ResourceDictionary Source="../../../Resources/VectorGraphic.xaml"/>
+
+            </ResourceDictionary.MergedDictionaries>
+
+
+            <Style x:Key="ToolButton" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                <Setter Property="Padding" Value="2 0 1 1"/>
+                <Setter Property="Margin" Value="4 0 0 0"/>
+                <Setter Property="MinWidth" Value="21"/>
+                <Setter Property="MinHeight" Value="21"/>
+                <Setter Property="Width" Value="23"/>
+                <Setter Property="Height" Value="21"/>
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="Padding" Value="2 0 1 1"/>
+                <Setter Property="BorderBrush" Value="Transparent"/>
+            </Style>
+        </ResourceDictionary>
+    </UserControl.Resources>
     <Grid AllowDrop="True" DragOver="Grid_DragOver" Drop="Grid_Drop"   >
-        <componentBaseTree:BaseTreeView   />
+        <componentBaseTree:BaseTreeView AllowDragOf_RDC_Input="False" AllowDragOf_RDC_Move="True"  />
+
+        <Button Style="{StaticResource ToolButton}"  ToolTip="Remove" Command="{Binding RemoveCommand}" HorizontalAlignment="Right" VerticalAlignment="Top" >
+            <Path Style="{StaticResource IconClean}" Margin="2 2 1 1"  IsHitTestVisible="False"/>
+        </Button>
     </Grid>
 </UserControl>
