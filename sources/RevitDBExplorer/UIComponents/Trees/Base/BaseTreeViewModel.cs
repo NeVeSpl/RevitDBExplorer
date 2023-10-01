@@ -56,7 +56,7 @@ namespace RevitDBExplorer.UIComponents.Trees.Base
         {
             var oldOne = SelectedItem;
             SelectedItem = item;
-            SelectedItemChanged?.Invoke(new SelectedItemChangedEventArgs(oldOne, item));
+            SelectedItemChanged?.Invoke(new SelectedItemChangedEventArgs(this, oldOne, item));
         }
         
 
@@ -102,5 +102,5 @@ namespace RevitDBExplorer.UIComponents.Trees.Base
         }
     }
 
-    internal record class SelectedItemChangedEventArgs(TreeItem OldOne, TreeItem NewOne);
+    internal record class SelectedItemChangedEventArgs(BaseTreeViewModel Sender, TreeItem OldOne, TreeItem NewOne);
 }

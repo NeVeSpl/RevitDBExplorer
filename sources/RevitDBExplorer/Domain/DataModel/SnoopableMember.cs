@@ -108,7 +108,7 @@ namespace RevitDBExplorer.Domain.DataModel
             if (CanBeSnooped)
             {
                 frozenSnooopResult = Snoop(null).ToList();
-                frozenSnooopResult.ForEach(x => x.Freeze(candies));
+                frozenSnooopResult.ForEach(x => x.Freeze(candies + 1));
             }
             isFrozen = true;
         }

@@ -200,16 +200,23 @@ namespace RevitDBExplorer
             var revit_ver = typeof(Autodesk.Revit.DB.Element).Assembly.GetName().Version;
             Title += $" 20{revit_ver.Major} - {ver.ToGitHubTag()}";
 
-            isRevitBusyDispatcher = new DispatcherTimer(TimeSpan.FromMilliseconds(500), DispatcherPriority.Background, (x, y) => IsRevitBusy = Application.IsRevitBussy(), Dispatcher.CurrentDispatcher);
-
+            isRevitBusyDispatcher = new DispatcherTimer(TimeSpan.FromMilliseconds(500), DispatcherPriority.Background, IsRevitBusyDispatcher_Tick, Dispatcher.CurrentDispatcher);           
             CheckIfNewVersionIsAvailable(ver).Forget();
 
             ExplorerTree.SelectedItemChanged += Tree_SelectedItemChanged;
             ExplorerTree.ScriptForRDSHasChanged += RDSOpenWithCommand;
+            UtilityTree.SelectedItemChanged += Tree_SelectedItemChanged;
+            UtilityTree.ScriptForRDSHasChanged += RDSOpenWithCommand;
             OpenScriptingWithQueryCommand = new RelayCommand(RDSOpenWithQuery);
             SaveQueryAsFavoriteCommand = new RelayCommand(SaveQueryAsFavorite, x => !string.IsNullOrEmpty(DatabaseQuery) );
             boundingBoxVisualizer = BoundingBoxVisualizerFactory.GetInstance();
-        }  
+        }
+
+
+        private void IsRevitBusyDispatcher_Tick(object sender, EventArgs e)
+        {
+            IsRevitBusy = Application.IsRevitBussy();
+        }
         public MainWindow(SourceOfObjects sourceOfObjects, IntPtr? parentWindowHandle = null) : this()
         {
             if (parentWindowHandle.HasValue)
@@ -219,7 +226,7 @@ namespace RevitDBExplorer
             ExplorerTree.PopulateTreeView(sourceOfObjects);
         }
 
-
+        
         private void Dispatcher_UnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
             e.Exception.ShowErrorMsg("MainWindow::UnhandledException");
@@ -273,12 +280,22 @@ namespace RevitDBExplorer
         {
             List.ClearItems();
 
-            if (eventArgs.NewOne is SnoopableObjectTreeItem snoopableObjectVM)
+            if (eventArgs.Sender == ExplorerTree)
             {
-                RightView = RightView.List;
-                var snoopableMembers = await ExternalExecutor.ExecuteInRevitContextAsync(x => snoopableObjectVM.Object.GetMembers(x).ToList());            
-                List.PopulateListView(snoopableMembers);
-                boundingBoxVisualizer.Show(snoopableObjectVM.Object.Object as Autodesk.Revit.DB.Element);
+                if (UtilityTree.SelectedItem != null)
+                    UtilityTree.SelectedItem.IsSelected = false;
+            }
+            if (eventArgs.Sender == UtilityTree)
+            {
+                if (ExplorerTree.SelectedItem != null)
+                    ExplorerTree.SelectedItem.IsSelected = false;
+            }
+
+            if (eventArgs.NewOne is SnoopableObjectTreeItem snoopableObjectTreeItem)
+            {
+                RightView = RightView.List;               
+                await List.PopulateListView(snoopableObjectTreeItem);
+                boundingBoxVisualizer.Show(snoopableObjectTreeItem.Object.Object as Autodesk.Revit.DB.Element);
                 return;
             }
             boundingBoxVisualizer.HideAll();
@@ -291,10 +308,18 @@ namespace RevitDBExplorer
                 //    return;
                 //}
             }
+            if (eventArgs.NewOne is UtilityGroupTreeItem utilityGroupTreeItem)
+            {
+                RightView = RightView.List;
+                await List.PopulateListView(utilityGroupTreeItem);
+                return;
+            }
             RightView = RightView.None;
         }
         void IAmWindowOpener.Open(SourceOfObjects sourceOfObjects)
-        {  
+        {
+            if (UtilityTree.SelectedItem != null)
+                UtilityTree.SelectedItem.IsSelected = false;
             var window = new MainWindow(sourceOfObjects);
             window.Owner = this;
             window.Show();                      
@@ -357,6 +382,12 @@ namespace RevitDBExplorer
         {
             boundingBoxVisualizer.Dispose();
             //Application.RevitWindowHandle.BringWindowToFront();
+            Dispatcher.UnhandledException -= Dispatcher_UnhandledException;           
+            isRevitBusyDispatcher.Tick -= IsRevitBusyDispatcher_Tick;
+            ExplorerTree.SelectedItemChanged -= Tree_SelectedItemChanged;
+            ExplorerTree.ScriptForRDSHasChanged -= RDSOpenWithCommand;
+            UtilityTree.SelectedItemChanged -= Tree_SelectedItemChanged;
+            UtilityTree.ScriptForRDSHasChanged -= RDSOpenWithCommand;
         }
         private void Window_Closing(object sender, EventArgs e)
         {

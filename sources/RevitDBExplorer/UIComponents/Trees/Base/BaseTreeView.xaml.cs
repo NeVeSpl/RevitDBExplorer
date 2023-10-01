@@ -17,8 +17,9 @@ namespace RevitDBExplorer.UIComponents.Trees.Base
         public BaseTreeView()
         {
             InitializeComponent();
+            cTreeView.SelectedItemChanged += TreeView_SelectedItemChanged;
+            
         }
-
 
         private void TreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {

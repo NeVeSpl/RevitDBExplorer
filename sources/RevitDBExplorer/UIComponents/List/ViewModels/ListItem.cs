@@ -27,37 +27,38 @@ namespace RevitDBExplorer.UIComponents.List.ViewModels
     }
     internal class ListItemForSM : ListItem, IListItem
     {
-        private readonly SnoopableMember snoopableMember;
+        private readonly SnoopableMember leftMember;
            
 
-        public override string Name => snoopableMember.Name;
-        public string Icon => $"Icon{snoopableMember.MemberKind}";
-        public DeclaringType DeclaringType => snoopableMember.DeclaringType;
-        public RevitDBExplorer.Domain.DocXml Documentation => snoopableMember.Documentation;
+        public override string Name => leftMember.Name;
+        public string Icon => $"Icon{leftMember.MemberKind}";
+        public DeclaringType DeclaringType => leftMember.DeclaringType;
+        public RevitDBExplorer.Domain.DocXml Documentation => leftMember.Documentation;
         public SnoopableMember this[int i]
         {
-            get { return snoopableMember; }            
+            get { return leftMember; }            
         }
 
 
-        public ListItemForSM(SnoopableMember x)
+        public ListItemForSM(SnoopableMember left, SnoopableMember right, Action askForReload)
         {
-            this.snoopableMember = x;
-            SortingKey = $"{x.DeclaringType.InheritanceLevel:000}_{(int)x.MemberKind}_{x.Name}";
-            GroupingKey = x.DeclaringType.Name;
+            leftMember = left;
+            leftMember.SnoopableObjectChanged += () => askForReload();
+            SortingKey = $"{left.DeclaringType.InheritanceLevel:000}_{(int)left.MemberKind}_{left.Name}";
+            GroupingKey = left.DeclaringType.Name;
         }
 
 
 
         public override bool Filter(string filterPhrase)
         {
-            bool inName = snoopableMember.Name.IndexOf(filterPhrase, StringComparison.OrdinalIgnoreCase) >= 0;
-            bool inValue = snoopableMember.ValueViewModel is IValuePresenter valuePresenter && valuePresenter.Label.IndexOf(filterPhrase, StringComparison.OrdinalIgnoreCase) >= 0;
+            bool inName = leftMember.Name.IndexOf(filterPhrase, StringComparison.OrdinalIgnoreCase) >= 0;
+            bool inValue = leftMember.ValueViewModel is IValuePresenter valuePresenter && valuePresenter.Label.IndexOf(filterPhrase, StringComparison.OrdinalIgnoreCase) >= 0;
             return inName || inValue;
         }
         public override void Read()
         {
-            snoopableMember.Read();            
+            leftMember.Read();            
         }
     }
 

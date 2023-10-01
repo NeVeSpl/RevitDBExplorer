@@ -32,9 +32,9 @@
             </ResourceDictionary>
         </Grid.Resources>
 
-        <TreeView ItemsSource="{Binding TreeItems}" BorderThickness="0"  SelectedItemChanged="TreeView_SelectedItemChanged" VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Standard" ScrollViewer.HorizontalScrollBarVisibility="Disabled"  x:Name="cTreeSecretName">
+        <TreeView ItemsSource="{Binding TreeItems}" BorderThickness="0" VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Standard" ScrollViewer.HorizontalScrollBarVisibility="Disabled"  x:Name="cTreeView">
             <TreeView.Resources>
-                <converters:ToResourceWithKeyConverter x:Key="ToResourceWithKeyConverter" FrameworkElement="{Binding ElementName=cTreeSecretName}" />
+                <converters:ToResourceWithKeyConverter x:Key="ToResourceWithKeyConverter" FrameworkElement="{Binding ElementName=cTreeView}" />
                 <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" WhenFalse="Collapsed"/>
 
                 <HierarchicalDataTemplate DataType="{x:Type local:UtilityGroupTreeItem}" ItemsSource="{Binding Items}">

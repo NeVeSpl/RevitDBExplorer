@@ -18,9 +18,10 @@ namespace RevitDBExplorer.Domain.DataModel
         private readonly List<SnoopableObject> items;   
 
         public SnoopableContext Context { get; }
-        public object Object { get; }     
-        public string Name { get; init; }
+        public object Object { get; }
         public string NamePrefix { get; init; }
+        public string Name { get; init; }
+        public string NamePostfix { get; private set; }
         public Icon NamePrefixIcon { get; init; }
         public string TypeName { get; }       
         public IEnumerable<SnoopableObject> Items => items;
@@ -110,26 +111,28 @@ namespace RevitDBExplorer.Domain.DataModel
         private bool isFrozen = false;
         IList<SnoopableMember> frozenMembers;
         private static readonly Type[] doNotFreeze = new Type[] { typeof(Document) , typeof(View), typeof(Element), typeof(Transform) };
-        public void Freeze(int candies = 3)
+        public void Freeze(int candies = 0)
         {
-            if (--candies < 0) return;
+            if (candies > 1) return;
 
-            var objectType = Object.GetType();
-            foreach (var forbiden in doNotFreeze)
+            if (candies != 0)
             {
-                if (forbiden.IsAssignableFrom(objectType))
+                var objectType = Object.GetType();
+                foreach (var forbiden in doNotFreeze)
                 {
-                    return;
+                    if (forbiden.IsAssignableFrom(objectType))
+                    {
+                        return;
+                    }
                 }
             }
+
             try
             {
                 frozenMembers = GetMembers(null).ToList();
-                foreach (SnoopableMember member in frozenMembers)
-                {
-                    member.Freeze(candies);
-                }
+                frozenMembers.ForEach(x => x.Freeze(candies));               
                 isFrozen = true;
+                NamePostfix = DateTime.Now.ToString("HH:mm:ss");
             }
             catch (Exception ex)
             {

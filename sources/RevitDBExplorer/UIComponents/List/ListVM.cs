@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -10,6 +11,7 @@ using RevitDBExplorer.Domain.DataModel;
 using RevitDBExplorer.Domain.DataModel.ValueViewModels.Base;
 using RevitDBExplorer.UIComponents.List.ViewModels;
 using RevitDBExplorer.UIComponents.List.WPF;
+using RevitDBExplorer.UIComponents.Trees.Base.Items;
 using RevitDBExplorer.WPF;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
@@ -18,6 +20,8 @@ namespace RevitDBExplorer.UIComponents.List
 {
     internal class ListVM : BaseViewModel
     {
+        private readonly ObservableCollection<DynamicGridViewColumn> columnsFor1;
+        private readonly ObservableCollection<DynamicGridViewColumn> columnsFor2;
         private readonly IAmWindowOpener windowOpener;
         private ObservableCollection<ListItem> listItems = new();
         private ObservableCollection<DynamicGridViewColumn> columns = new();
@@ -110,35 +114,59 @@ namespace RevitDBExplorer.UIComponents.List
         public ListVM(IAmWindowOpener windowOpener)
         {
             this.windowOpener = windowOpener;
-            Columns = new ObservableCollection<DynamicGridViewColumn>()
+            columnsFor1 = new ObservableCollection<DynamicGridViewColumn>()
             {
                 new DynamicGridViewColumn("Name", 38) { Binding ="."},
                 new DynamicGridViewColumn("Value", 62){ Binding ="[0]" },
+            };
+            columnsFor2 = new ObservableCollection<DynamicGridViewColumn>()
+            {
+                new DynamicGridViewColumn("Name", 33) { Binding ="."},
+                new DynamicGridViewColumn("left Value", 33){ Binding ="[0]" },
+                new DynamicGridViewColumn("right Value", 33){ Binding ="[1]" },
             };
             KeyDown_Enter_Command = new RelayCommand(KeyDown_Enter);
             ListItem_Click_Command = new RelayCommand(ListItem_Click);
             ReloadCommand = new RelayCommand(Reload);
             CopyNameCommand = new RelayCommand(CopyName);
             CopyValueCommand = new RelayCommand(CopyValue);
-            OpenCHMCommand = new RelayCommand(OpenCHM);
-            
+            OpenCHMCommand = new RelayCommand(OpenCHM);            
         }
 
 
         public void ClearItems()
         {
-            PopulateListView(System.Array.Empty<SnoopableMember>());
+            ListItems = new();
         }
-        public void PopulateListView(IList<SnoopableMember> members)
+        public async Task PopulateListView(SnoopableObjectTreeItem snoopableObjectTreeItem)
         {
-            members.ForEach(x => x.SnoopableObjectChanged += ItemValueHasChanged);         
-            ListItems = new(members.Select(x => new ListItemForSM(x)));
-
+            Columns = columnsFor1;
+            var members = await ExternalExecutor.ExecuteInRevitContextAsync(x => snoopableObjectTreeItem.Object.GetMembers(x).ToList()); 
+            ListItems = new(members.Select(x => new ListItemForSM(x, null, Reload)));
+            SetupListView();
+        }
+        public async Task PopulateListView(UtilityGroupTreeItem utilityGroupTreeItem)
+        {
+            if (utilityGroupTreeItem.Items?.Count < 2)
+            {
+                return;
+            }
+            Columns = columnsFor2;
+            var leftItem = utilityGroupTreeItem.Items[0] as SnoopableObjectTreeItem;
+            var rightItem = utilityGroupTreeItem.Items[1] as SnoopableObjectTreeItem;
+            var leftMembers = await ExternalExecutor.ExecuteInRevitContextAsync(x => leftItem.Object.GetMembers(x).ToList());
+            var rightMembers = await ExternalExecutor.ExecuteInRevitContextAsync(x => rightItem.Object.GetMembers(x).ToList());
+            var members = leftMembers.Zip(rightMembers, (x,y) => new ListItemForSM(x, y, Reload));
+            ListItems = new(members);
+            SetupListView();
+        }
+        private void SetupListView()
+        {
             var lcv = (ListCollectionView)CollectionViewSource.GetDefaultView(ListItems);
 
-            if (members.Count < 666)
+            if (ListItems.Count < 666)
             {
-                lcv.GroupDescriptions.Add(new PropertyGroupDescription(nameof(ListItem.GroupingKey)));               
+                lcv.GroupDescriptions.Add(new PropertyGroupDescription(nameof(ListItem.GroupingKey)));
                 lcv.SortDescriptions.Add(new SortDescription(nameof(ListItem.SortingKey), ListSortDirection.Ascending));
             }
             lcv.Filter = ListViewFilter;
@@ -191,11 +219,7 @@ namespace RevitDBExplorer.UIComponents.List
                 }
             }
         }
-        private void ItemValueHasChanged()
-        {
-            Reload(null);
-        }
-
+       
 
         private void CopyName(object obj)
         {
@@ -221,12 +245,16 @@ namespace RevitDBExplorer.UIComponents.List
                 }
             }
         }
-       
 
+
+        private void Reload()
+        {
+            Reload(null);
+        }
         private async void Reload(object parameter)
         {
             await ExternalExecutor.ExecuteInRevitContextAsync(uiApp => ReloadItems());
-        }
+        }       
     }
 
     internal interface IAmWindowOpener
