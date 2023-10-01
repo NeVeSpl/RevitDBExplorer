@@ -253,6 +253,7 @@
             <Grid Grid.Row="2" Grid.Column="2"  Margin="-2 0 0 0">
                 <componentList:ListView DataContext="{Binding List}" Visibility="{Binding DataContext.RightView, Converter={StaticResource EnumMatchToVisibilityConverter}, ConverterParameter=List, RelativeSource={RelativeSource AncestorType=Grid}}"/>
                 <componentCAndC:CommandAndControlView DataContext="{Binding CommandAndControl}" Margin="2 2 0 0" Visibility="{Binding DataContext.RightView, Converter={StaticResource EnumMatchToVisibilityConverter}, ConverterParameter=CommandAndControl, RelativeSource={RelativeSource AncestorType=Grid}}"/>
+                <componentList:CompareAndPinToolInfo Visibility="{Binding DataContext.RightView, Converter={StaticResource EnumMatchToVisibilityConverter}, ConverterParameter=CompareAndPinToolInfo, RelativeSource={RelativeSource AncestorType=Grid}}"/>
             </Grid>
 
             <componentBusyIndicator:BusyIndicator Grid.Row="2" Grid.Column="0" Grid.RowSpan="2" HorizontalAlignment="Left" Panel.ZIndex="1" VerticalAlignment="Bottom" Width="150" Height="26" Margin="0 0 0 0" Visibility="{Binding IsRevitBusy, Converter={StaticResource BoolToVisibilityConverter}}" />

@@ -1,0 +1,57 @@
+﻿<UserControl x:Class="RevitDBExplorer.UIComponents.List.CompareAndPinToolInfo"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:RevitDBExplorer.UIComponents.List"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.Resources>
+            <ResourceDictionary>
+                <ResourceDictionary.MergedDictionaries>
+                    <ResourceDictionary Source="../../Resources/Templates/All.xaml"/>
+                    <ResourceDictionary Source="../../Resources/VectorGraphic.xaml"/>
+                    <ResourceDictionary Source="DataTemplates.xaml"/>
+                </ResourceDictionary.MergedDictionaries>
+            </ResourceDictionary>
+        </Grid.Resources>
+
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+     
+        <FlowDocumentScrollViewer>
+
+            <FlowDocument Foreground="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" FontFamily="Arial">
+                <Paragraph>
+                    <Bold>Compare &amp; Pin tool</Bold>                   
+                </Paragraph>
+
+                <List>
+                    <ListItem>
+                        <Paragraph>to add an object to comparison, drag and drop object from the tree</Paragraph>
+                    </ListItem>
+                    <ListItem>
+                        <Paragraph>comparison will take place only if two first objects from the list have
+                            <Run FontWeight="Bold">the same type</Run></Paragraph>
+                    </ListItem>
+                    <ListItem>
+                        <Paragraph>to remove a single object from the list, drag and drop object on the Remove button</Paragraph>
+                    </ListItem>
+                    <ListItem>
+                        <Paragraph>order of objects on the list can be changed (surprise) by drag and drop</Paragraph>
+                    </ListItem>
+                    <ListItem>
+                        <Paragraph>the list is shared between all instances of RDBE, this allows to compare objects from different Revit documents</Paragraph>
+                    </ListItem>
+                    <ListItem>
+                        <Paragraph>you can store as many objects on the list as you want, and get easy access to them between different sessions of RDBE</Paragraph>
+                    </ListItem>
+                </List>
+
+            </FlowDocument>
+        </FlowDocumentScrollViewer>
+        
+    </Grid>
+</UserControl>

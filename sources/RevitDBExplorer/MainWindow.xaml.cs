@@ -33,7 +33,7 @@ using RDQCommand = RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Command;
 
 namespace RevitDBExplorer
 {
-    internal enum RightView { None, List, CommandAndControl }
+    internal enum RightView { None, List, CommandAndControl, CompareAndPinToolInfo }
 
     internal partial class MainWindow : Window, IAmWindowOpener, INotifyPropertyChanged
     {
@@ -309,10 +309,17 @@ namespace RevitDBExplorer
                 //}
             }
             if (eventArgs.NewOne is UtilityGroupTreeItem utilityGroupTreeItem)
-            {
-                RightView = RightView.List;
-                await List.PopulateListView(utilityGroupTreeItem);
-                return;
+            {                
+                var wasSuccessful = await List.PopulateListView(utilityGroupTreeItem);
+                if (wasSuccessful)
+                {
+                    RightView = RightView.List;
+                }
+                else
+                {
+                    RightView = RightView.CompareAndPinToolInfo;
+                }
+                return;                   
             }
             RightView = RightView.None;
         }

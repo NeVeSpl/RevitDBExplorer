@@ -28,7 +28,7 @@ namespace RevitDBExplorer.UIComponents.List.ViewModels
     internal class ListItemForSM : ListItem, IListItem
     {
         private readonly SnoopableMember leftMember;
-           
+        private readonly SnoopableMember rightMember;
 
         public override string Name => leftMember.Name;
         public string Icon => $"Icon{leftMember.MemberKind}";
@@ -36,13 +36,17 @@ namespace RevitDBExplorer.UIComponents.List.ViewModels
         public RevitDBExplorer.Domain.DocXml Documentation => leftMember.Documentation;
         public SnoopableMember this[int i]
         {
-            get { return leftMember; }            
+            get 
+            {
+                return i switch { 0 => leftMember, _ => rightMember };
+            }            
         }
 
 
         public ListItemForSM(SnoopableMember left, SnoopableMember right, Action askForReload)
         {
             leftMember = left;
+            rightMember = right;
             leftMember.SnoopableObjectChanged += () => askForReload();
             SortingKey = $"{left.DeclaringType.InheritanceLevel:000}_{(int)left.MemberKind}_{left.Name}";
             GroupingKey = left.DeclaringType.Name;

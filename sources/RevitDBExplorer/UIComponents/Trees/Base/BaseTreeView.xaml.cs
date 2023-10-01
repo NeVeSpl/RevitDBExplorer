@@ -25,9 +25,13 @@ namespace RevitDBExplorer.UIComponents.Trees.Base
         {
             if (this.DataContext is BaseTreeViewModel treeView)
             {
-                if (e.NewValue is TreeItem treeViewItemVM)
+                if ((e.NewValue is TreeItem treeViewItemVM))
                 {
                     treeView.RaiseSelectedItemChanged(treeViewItemVM);
+                }
+                if ((e.NewValue is null))
+                {
+                    treeView.RaiseSelectedItemChanged(null);
                 }
             }
         }

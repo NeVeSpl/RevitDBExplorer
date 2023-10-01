@@ -145,20 +145,27 @@ namespace RevitDBExplorer.UIComponents.List
             ListItems = new(members.Select(x => new ListItemForSM(x, null, Reload)));
             SetupListView();
         }
-        public async Task PopulateListView(UtilityGroupTreeItem utilityGroupTreeItem)
+        public async Task<bool> PopulateListView(UtilityGroupTreeItem utilityGroupTreeItem)
         {
             if (utilityGroupTreeItem.Items?.Count < 2)
             {
-                return;
+                return false;
             }
             Columns = columnsFor2;
             var leftItem = utilityGroupTreeItem.Items[0] as SnoopableObjectTreeItem;
             var rightItem = utilityGroupTreeItem.Items[1] as SnoopableObjectTreeItem;
+
+            if (leftItem.Object?.Object?.GetType() != rightItem.Object?.Object?.GetType())
+            {
+                return false;
+            }
+
             var leftMembers = await ExternalExecutor.ExecuteInRevitContextAsync(x => leftItem.Object.GetMembers(x).ToList());
             var rightMembers = await ExternalExecutor.ExecuteInRevitContextAsync(x => rightItem.Object.GetMembers(x).ToList());
             var members = leftMembers.Zip(rightMembers, (x,y) => new ListItemForSM(x, y, Reload));
             ListItems = new(members);
             SetupListView();
+            return true;
         }
         private void SetupListView()
         {
