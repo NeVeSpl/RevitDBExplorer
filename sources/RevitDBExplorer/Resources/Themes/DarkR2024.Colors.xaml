@@ -99,5 +99,7 @@
     <SolidColorBrush x:Key="Query.Foreground" Color="black"/>
 
     <SolidColorBrush x:Key="Query.BorderBrush" Color="{StaticResource Primary}"/>
-   
+
+    <SolidColorBrush x:Key="List.Highlighted" Color="#FF476C"/>
+
 </ResourceDictionary>                    

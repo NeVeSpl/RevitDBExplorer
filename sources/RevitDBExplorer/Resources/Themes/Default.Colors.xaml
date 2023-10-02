@@ -81,4 +81,6 @@
 
     <SolidColorBrush x:Key="Query.BorderBrush" Color="#ABADB3"/>
 
+    <SolidColorBrush x:Key="List.Highlighted" Color="#FFABBC"/>
+
 </ResourceDictionary>                    

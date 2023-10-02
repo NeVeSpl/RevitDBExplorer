@@ -73,16 +73,29 @@
                     </StackPanel>
                 </ToolTip>
 
+                <Style TargetType="{x:Type StackPanel}" x:Key="sStackPanel" >
+                    <Setter Property="Background" Value="Transparent" />
+
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsHighlighted}" Value="true" >
+                            <Setter Property="Background" Value="{DynamicResource List.Highlighted}" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+
 
                 <DataTemplate DataType="{x:Type localVM:ListItemForSM}">                   
                     <StackPanel Orientation="Horizontal" 
                                 ContextMenu="{StaticResource ContextMenuForNameColumn}" 
-                                Background="Transparent" 
+                                Style="{StaticResource sStackPanel}"
                                 ToolTipService.ShowDuration="50000" 
                                 ToolTip="{StaticResource ToolTipWithRevitHelp}">
                         <Path Style="{Binding Icon, Converter={StaticResource ToResourceWithKeyConverter}}" Margin="0 1 4 0"  />
-                        <TextBlock Text="{Binding Name, Mode=OneWay}" Foreground="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"  />
+                        <TextBlock Text="{Binding Name, Mode=OneWay}" Foreground="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"  />   
                     </StackPanel>
+                    <DataTemplate.Resources>
+                        
+                    </DataTemplate.Resources>
                 </DataTemplate>
 
                 

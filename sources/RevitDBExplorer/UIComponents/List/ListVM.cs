@@ -121,9 +121,9 @@ namespace RevitDBExplorer.UIComponents.List
             };
             columnsFor2 = new ObservableCollection<DynamicGridViewColumn>()
             {
-                new DynamicGridViewColumn("Name", 33) { Binding ="."},
-                new DynamicGridViewColumn("left Value", 33){ Binding ="[0]" },
-                new DynamicGridViewColumn("right Value", 33){ Binding ="[1]" },
+                new DynamicGridViewColumn("Name", 30) { Binding ="."},
+                new DynamicGridViewColumn("left Value", 40){ Binding ="[0]" },
+                new DynamicGridViewColumn("right Value", 40){ Binding ="[1]" },
             };
             KeyDown_Enter_Command = new RelayCommand(KeyDown_Enter);
             ListItem_Click_Command = new RelayCommand(ListItem_Click);
@@ -160,9 +160,46 @@ namespace RevitDBExplorer.UIComponents.List
                 return false;
             }
 
-            var leftMembers = await ExternalExecutor.ExecuteInRevitContextAsync(x => leftItem.Object.GetMembers(x).ToList());
-            var rightMembers = await ExternalExecutor.ExecuteInRevitContextAsync(x => rightItem.Object.GetMembers(x).ToList());
-            var members = leftMembers.Zip(rightMembers, (x,y) => new ListItemForSM(x, y, Reload));
+            var leftMembers = await ExternalExecutor.ExecuteInRevitContextAsync(x => leftItem.Object.GetMembers(x).OrderBy(x => x).ToList());
+            var rightMembers = await ExternalExecutor.ExecuteInRevitContextAsync(x => rightItem.Object.GetMembers(x).OrderBy(x => x).ToList());
+
+            var members = new List<ListItemForSM>();
+            int i = 0;
+            int j = 0;
+            while (i < leftMembers.Count && j < rightMembers.Count)
+            {
+                var left = leftMembers[i];
+                var right = rightMembers[j];
+
+                if (left.Equals(right))
+                {
+                    members.Add(new ListItemForSM(left, right, Reload, true));
+                    ++i;
+                    ++j;
+                    continue;
+                }
+                if (left.CompareTo(right) < 0)
+                {
+                    members.Add(new ListItemForSM(left, null, Reload, true));
+                    ++i;                  
+                    continue;
+                }
+               
+                members.Add(new ListItemForSM(null, right, Reload, true));               
+                ++j;                              
+            }
+
+            while (i < leftMembers.Count)
+            {
+                members.Add(new ListItemForSM(leftMembers[i], null, Reload, true));
+                ++i;
+            }
+            while (j < rightMembers.Count)
+            {
+                members.Add(new ListItemForSM(null, rightMembers[j], Reload, true));
+                ++j;
+            }
+
             ListItems = new(members);
             SetupListView();
             return true;

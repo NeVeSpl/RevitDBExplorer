@@ -7,7 +7,7 @@ using RevitDBExplorer.Domain.DataModel.MemberAccessors;
 namespace RevitDBExplorer.Domain.DataModel.Streams.Base
 {
 
-    internal class MemberDescriptor
+    internal class MemberDescriptor: IComparable<MemberDescriptor>, IEquatable<MemberDescriptor>
     {
         private readonly Lazy<DocXml> documentation;
 
@@ -48,5 +48,51 @@ namespace RevitDBExplorer.Domain.DataModel.Streams.Base
             yield return new MemberDescriptor() { DeclaringType = DeclaringType.Separator, Name="", Kind = MemberKind.None };
             yield return new MemberDescriptor() { DeclaringType = DeclaringType.NotExposed, Name = "", Kind = MemberKind.None };
         }
+
+        public int CompareTo(MemberDescriptor other)
+        {
+            if (this.DeclaringType.InheritanceLevel != other.DeclaringType.InheritanceLevel)
+            {
+                return this.DeclaringType.InheritanceLevel.CompareTo(other.DeclaringType.InheritanceLevel);
+            }
+            if (this.DeclaringType.Name != other.DeclaringType.Name)
+            {
+                return this.DeclaringType.Name.CompareTo(other.DeclaringType.Name);
+            }
+            if (this.Kind != other.Kind)
+            {
+                return this.Kind.CompareTo(other.Kind);
+            }
+            if (this.Name != other.Name)
+            {
+                return this.Name.CompareTo(other.Name);
+            }
+            return 0;
+        }
+        public bool Equals(MemberDescriptor other)
+        {
+            if (this.DeclaringType.InheritanceLevel != other.DeclaringType.InheritanceLevel)
+            {
+                return false;
+            }
+            if (this.DeclaringType.Name != other.DeclaringType.Name)
+            {
+                return false;
+            }
+            if (this.Kind != other.Kind)
+            {
+                return false;
+            }
+            if (this.Name != other.Name)
+            {
+                return false;
+            }
+            return true;
+        }
+        public string ComputeKey()
+        {
+            var key = $"{DeclaringType.InheritanceLevel:000}_{DeclaringType.Name}_{(int)Kind}_{Name}";
+            return key;
+        }       
     }
 }

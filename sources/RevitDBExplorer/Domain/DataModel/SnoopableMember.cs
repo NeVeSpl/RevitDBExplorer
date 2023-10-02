@@ -11,7 +11,7 @@ using RevitDBExplorer.WPF;
 
 namespace RevitDBExplorer.Domain.DataModel
 {
-    internal class SnoopableMember : BaseViewModel, IAmSourceOfEverything
+    internal class SnoopableMember : BaseViewModel, IAmSourceOfEverything, IComparable<SnoopableMember>, IEquatable<SnoopableMember>
     {
         private readonly SnoopableObject parent;
         private readonly MemberDescriptor memberDescriptor;
@@ -23,6 +23,7 @@ namespace RevitDBExplorer.Domain.DataModel
         public string Name => memberDescriptor.Name;               
         private bool HasAccessor => memberDescriptor.MemberAccessor is not null;
         public DocXml Documentation => memberDescriptor.Documentation;
+        //public string Key { get; }
         public event Action SnoopableObjectChanged;
         public string AccessorName { get; private set; }
         public IValueViewModel ValueViewModel { get; private set; } = EmptyPresenter.Instance;
@@ -32,7 +33,8 @@ namespace RevitDBExplorer.Domain.DataModel
         public SnoopableMember(SnoopableObject parent, MemberDescriptor memberDescriptor)
         {
             this.parent = parent;
-            this.memberDescriptor = memberDescriptor;            
+            this.memberDescriptor = memberDescriptor;
+            //this.Key = memberDescriptor.ComputeKey();
         }   
 
         
@@ -111,6 +113,15 @@ namespace RevitDBExplorer.Domain.DataModel
                 frozenSnooopResult.ForEach(x => x.Freeze(candies + 1));
             }
             isFrozen = true;
+        }
+
+        public int CompareTo(SnoopableMember other)
+        {
+            return this.memberDescriptor.CompareTo(other.memberDescriptor);
+        }
+        public bool Equals(SnoopableMember other)
+        {
+            return this.memberDescriptor.Equals(other.memberDescriptor);
         }
     }
 }
