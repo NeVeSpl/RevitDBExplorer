@@ -16,6 +16,7 @@ namespace RevitDBExplorer.UIComponents.Trees.Utility
 
         public UtilityTreeViewModel()
         {
+            AllowToFrezeeItem = true;
             rootItem ??= new UtilityGroupTreeItem(TreeItemsCommands) { IsExpanded = true };
             TreeItems.Add(rootItem);
             RemoveCommand = new RelayCommand(RemoveItems);

@@ -13,6 +13,7 @@ namespace RevitDBExplorer.UIComponents.Trees.Base
         public IsolateInRevitCommand IsolateInRevit { get; } = IsolateInRevitCommand.Instance;
         public DrawInRevitCommand DrawInRevit { get; } = DrawInRevitCommand.Instance;
         public DrawInRevitWithAVFCommand DrawInRevitAVF { get; } = DrawInRevitWithAVFCommand.Instance;
+        public FreezeCommand Freeze { get; } = FreezeCommand.Instance;
         public RelayCommand GenerateUpdateQueryRDSCommand { get; }
 
 

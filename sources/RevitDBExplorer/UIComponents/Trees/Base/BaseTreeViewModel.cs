@@ -15,7 +15,8 @@ namespace RevitDBExplorer.UIComponents.Trees.Base
     {
         protected readonly TreeItemsCommands TreeItemsCommands;
         private ObservableCollection<TreeItem> treeItems = new();
-        private TreeItem selectedItem;      
+        private TreeItem selectedItem;
+        private bool allowToFrezeeItem;
 
         public event Action<SelectedItemChangedEventArgs> SelectedItemChanged;
         public event Action<string> ScriptForRDSHasChanged;
@@ -44,7 +45,19 @@ namespace RevitDBExplorer.UIComponents.Trees.Base
                 OnPropertyChanged();
             }
         }
-       
+        public bool AllowToFrezeeItem
+        {
+            get
+            {
+                return allowToFrezeeItem;
+            }
+            set
+            {
+                allowToFrezeeItem = value;
+                OnPropertyChanged();
+            }
+        }
+
 
         public BaseTreeViewModel()
         {           
@@ -55,7 +68,7 @@ namespace RevitDBExplorer.UIComponents.Trees.Base
         public void RaiseSelectedItemChanged(TreeItem item)
         {
             var oldOne = SelectedItem;
-            SelectedItem = item;
+            SelectedItem = item;            
             SelectedItemChanged?.Invoke(new SelectedItemChangedEventArgs(this, oldOne, item));
         }
         

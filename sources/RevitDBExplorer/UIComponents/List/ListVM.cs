@@ -27,7 +27,7 @@ namespace RevitDBExplorer.UIComponents.List
         private ObservableCollection<DynamicGridViewColumn> columns = new();
         private ListItem listSelectedItem = null;
         private string filterPhrase = "";
-        private bool isMemberViewVisible;
+        private bool isMemberViewVisible = true;
         
       
         public ObservableCollection<ListItem> ListItems

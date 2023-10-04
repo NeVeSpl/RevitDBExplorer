@@ -26,6 +26,18 @@ namespace RevitDBExplorer.Domain.DataModel
         public string TypeName { get; }       
         public IEnumerable<SnoopableObject> Items => items;
         public int Index { get; init; } = -1;
+        public bool IsFrozen
+        {
+            get
+            {
+                return isFrozen;
+            }
+            set
+            {
+                isFrozen = value;
+                OnPropertyChanged();
+            }
+        }
 
 
         public SnoopableObject(Document document, object @object) : this(document, @object, null)
@@ -113,11 +125,16 @@ namespace RevitDBExplorer.Domain.DataModel
         private static readonly Type[] doNotFreeze = new Type[] { typeof(Document) , typeof(View), typeof(Element), typeof(Transform) };
         public void Freeze(int candies = 0)
         {
-            if (candies > 1) return;
+            if (candies > 2) return;
+
+            if (Object == null)
+            {
+                return;
+            }
 
             if (candies != 0)
             {
-                var objectType = Object.GetType();
+                var objectType = Object?.GetType();
                 foreach (var forbiden in doNotFreeze)
                 {
                     if (forbiden.IsAssignableFrom(objectType))
@@ -132,7 +149,8 @@ namespace RevitDBExplorer.Domain.DataModel
                 frozenMembers = GetMembers(null).ToList();
                 frozenMembers.ForEach(x => x.Freeze(candies));               
                 isFrozen = true;
-                NamePostfix = DateTime.Now.ToString("HH:mm:ss");
+                NamePostfix = "*"+DateTime.Now.ToString("HH:mm:ss");
+                OnPropertyChanged(nameof(NamePostfix));   
             }
             catch (Exception ex)
             {

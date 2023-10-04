@@ -124,9 +124,38 @@
                 <ColumnDefinition Width="auto"/>
             </Grid.ColumnDefinitions>
 
-            <UniformGrid Rows="1" Margin="0 0 4 0" Visibility="Collapsed">
-                <ToggleButton Content="Members" IsChecked="{Binding IsMemberViewVisible}" />
-                <ToggleButton Content="Properties" IsChecked="{Binding IsProperyViewVisible}"/>
+            <UniformGrid Rows="1" Margin="0 0 4 0" Visibility="Visible">
+                <UniformGrid.Resources>
+                    <Style TargetType="{x:Type ToggleButton}">
+                        <Setter Property="MinWidth" Value="21"/>
+                        <Setter Property="MinHeight" Value="21"/>
+                        <Setter Property="Background" Value="{DynamicResource Button.Static.Background}"/>
+                        <Setter Property="BorderBrush" Value="{DynamicResource Button.Static.Border}"/>
+                        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+                        <Setter Property="BorderThickness" Value="0"/>
+                        <Setter Property="Padding" Value="1"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type ToggleButton}">
+                                    <Border   BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" x:Name="border" >
+                                        <ContentPresenter Margin="{TemplateBinding Padding}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsChecked" Value="true">
+                                            <Setter Property="Background" TargetName="border" Value="{DynamicResource Button.MouseOver.Background}"/>
+                                        </Trigger>
+                                        <Trigger Property="IsMouseOver" Value="true">
+                                            <Setter Property="Background" TargetName="border" Value="{DynamicResource Button.MouseOver.Background}"/>                                            
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </UniformGrid.Resources>
+                
+                <ToggleButton Content="M" IsChecked="{Binding IsMemberViewVisible}" />
+                <ToggleButton Content="P" IsChecked="{Binding IsProperyViewVisible}"/>
             </UniformGrid>
 
             <controls:TextBoxWithPlaceholder Grid.Column="1" Margin="0 0 2 0" Text="{Binding FilterPhrase, Mode=TwoWay, Delay=200, UpdateSourceTrigger=PropertyChanged}" Placeholder="Filter list by name or value"/>

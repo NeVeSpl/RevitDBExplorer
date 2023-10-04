@@ -280,15 +280,18 @@ namespace RevitDBExplorer
         {
             List.ClearItems();
 
-            if (eventArgs.Sender == ExplorerTree)
+            if (eventArgs.NewOne != null)
             {
-                if (UtilityTree.SelectedItem != null)
-                    UtilityTree.SelectedItem.IsSelected = false;
-            }
-            if (eventArgs.Sender == UtilityTree)
-            {
-                if (ExplorerTree.SelectedItem != null)
-                    ExplorerTree.SelectedItem.IsSelected = false;
+                if (eventArgs.Sender == ExplorerTree)
+                {
+                    if (UtilityTree.SelectedItem != null)
+                        UtilityTree.SelectedItem.IsSelected = false;
+                }
+                if (eventArgs.Sender == UtilityTree)
+                {
+                    if (ExplorerTree.SelectedItem != null)
+                        ExplorerTree.SelectedItem.IsSelected = false;
+                }
             }
 
             if (eventArgs.NewOne is SnoopableObjectTreeItem snoopableObjectTreeItem)

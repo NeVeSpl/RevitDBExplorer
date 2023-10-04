@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:RevitDBExplorer.UIComponents.Trees.Base.Items"
              xmlns:converters="clr-namespace:RevitDBExplorer.WPF.Converters"    
+             xmlns:wpf="clr-namespace:RevitDBExplorer.WPF"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
@@ -29,6 +30,7 @@
                     </Style.Resources>
                 </Style>
 
+                <wpf:BindingProxy x:Key="Proxy" Data="{Binding}" />
             </ResourceDictionary>
         </Grid.Resources>
 
@@ -97,12 +99,14 @@
                                 <MenuItem Header="Draw in Revit (using model lines)" Command="{Binding Commands.DrawInRevit}" CommandParameter="{Binding}"/>
                                 <MenuItem Header="Draw in Revit (AVF)" Command="{Binding Commands.DrawInRevitAVF}" CommandParameter="{Binding}"/>
                                 <Separator />
-                                
+
                                 <MenuItem Header="Generate C# code for a UPDATE command (RDS) " Command="{Binding Commands.GenerateUpdateQueryRDSCommand}" CommandParameter="{Binding}">
                                     <MenuItem.Icon>
                                         <Path Style="{StaticResource IconQuery}" Width="11" />
                                     </MenuItem.Icon>
                                 </MenuItem>
+
+                                <MenuItem Header="Freeze" ToolTip="" Command="{Binding Commands.Freeze}" CommandParameter="{Binding}" Visibility="{Binding Data.AllowToFrezeeItem, Source={StaticResource Proxy}, Converter={StaticResource BoolToVisibilityConverter}}"/>
                                 <Separator />
                                 <MenuItem Header="Snoop in a new window" Command="{Binding Commands.SnoopInNewWindow}" CommandParameter="{Binding}" />
                             </ContextMenu>
@@ -110,21 +114,22 @@
 
                         <Path Style="{Binding Object.NamePrefixIcon, Converter={StaticResource ToResourceWithKeyConverter}, ConverterParameter=Icon}" Margin="0 1 4 0" Fill="{Binding ElementName=cTextBlock, Path=Foreground}"  />
                         <TextBlock x:Name="cTextBlock" IsHitTestVisible="False">             
-                     <Run Text="{Binding Prefix, Mode=OneWay}">
-                         <Run.Style>
-                             <Style TargetType="{x:Type Run}">
-                                <Style.Triggers>
-                                    <MultiDataTrigger >
-                                        <MultiDataTrigger.Conditions>
-                                            <Condition Binding="{Binding Path=IsSelected}" Value="False" />                                                
-                                        </MultiDataTrigger.Conditions>                                               
-                                        <Setter Property="Foreground" Value="{DynamicResource TreeView.Object.Prefix}"/>
-                                    </MultiDataTrigger>                                        
-                                </Style.Triggers>
-                             </Style>
-                         </Run.Style>
-                      </Run>
-                    <Run Text="{Binding Object.Name, Mode=OneWay}" />
+                             <Run Text="{Binding Prefix, Mode=OneWay}">
+                                 <Run.Style>
+                                     <Style TargetType="{x:Type Run}">
+                                        <Style.Triggers>
+                                            <MultiDataTrigger >
+                                                <MultiDataTrigger.Conditions>
+                                                    <Condition Binding="{Binding Path=IsSelected}" Value="False" />                                                
+                                                </MultiDataTrigger.Conditions>                                               
+                                                <Setter Property="Foreground" Value="{DynamicResource TreeView.Object.Prefix}"/>
+                                            </MultiDataTrigger>                                        
+                                        </Style.Triggers>
+                                     </Style>
+                                 </Run.Style>
+                              </Run>
+                             <Run Text="{Binding Object.Name, Mode=OneWay}" />
+                             <Run Text="{Binding Object.NamePostfix, Mode=OneWay}"/>
                         </TextBlock>
                         <StackPanel Visibility="{Binding IsSelected, Converter={StaticResource BoolToVisibilityConverter}}" Margin="3 0 0 0">
                             <Button Style="{StaticResource TreeToolButton}"  ToolTip="Select in Revit" Command="{Binding Commands.SelectInRevit}" CommandParameter="{Binding .}" Visibility="{Binding RelativeSource={RelativeSource Mode=Self}, Path=IsEnabled, Converter={StaticResource BoolToVisibilityConverter}}">

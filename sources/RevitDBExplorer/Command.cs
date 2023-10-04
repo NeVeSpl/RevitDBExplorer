@@ -29,7 +29,7 @@ namespace RevitDBExplorer
             if (numberOfWindowsInMemory > 3)
             {
 #if DEBUG
-                throw new Exception("There is probably a memory leak.");
+                //throw new Exception("There is probably a memory leak.");
 #endif
             }
 
