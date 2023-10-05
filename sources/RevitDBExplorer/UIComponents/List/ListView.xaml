@@ -124,7 +124,7 @@
                 <ColumnDefinition Width="auto"/>
             </Grid.ColumnDefinitions>
 
-            <UniformGrid Rows="1" Margin="0 0 4 0" Visibility="Visible">
+            <UniformGrid Rows="1" Margin="0 0 4 0" Visibility="Collapsed">
                 <UniformGrid.Resources>
                     <Style TargetType="{x:Type ToggleButton}">
                         <Setter Property="MinWidth" Value="21"/>
