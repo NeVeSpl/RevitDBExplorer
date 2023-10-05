@@ -106,19 +106,19 @@
                         <TextBlock Margin="0 2 0 0">Database</TextBlock>
                     </StackPanel>
                 </Button>
-                <Button Click="SelectorButton_Click" Tag="ActiveView" ToolTip="Snoop active view">
+                <Button Click="SelectorButton_Click" Tag="ActiveView" ToolTip="Snoop active view, &#x0a;&#x0a;source: commandData.Application.ActiveUIDocument.Document.ActiveView">
                     <StackPanel>
                         <Path Style="{StaticResource IconActiveView}" />
                         <TextBlock Margin="0 4 0 0">View</TextBlock>
                     </StackPanel>
                 </Button>
-                <Button Click="SelectorButton_Click" Tag="ActiveDocument" ToolTip="Snoop active document">
+                <Button Click="SelectorButton_Click" Tag="ActiveDocument" ToolTip="Snoop active document, &#x0a;&#x0a;source: commandData.Application.ActiveUIDocument.Document">
                     <StackPanel>
                         <Path Style="{StaticResource IconActiveDocument}" />
                         <TextBlock>Document</TextBlock>
                     </StackPanel>
                 </Button>
-                <Button Click="SelectorButton_Click" Tag="Application" ToolTip="Snoop application">
+                <Button Click="SelectorButton_Click" Tag="Application" ToolTip="Snoop application, &#x0a;&#x0a;source: commandData.Application.Application">
                     <StackPanel>
                         <Path Style="{StaticResource IconApplication}" />
                         <TextBlock>Application</TextBlock>

@@ -289,8 +289,8 @@ namespace RevitDBExplorer
                 }
                 if (eventArgs.Sender == UtilityTree)
                 {
-                    if (ExplorerTree.SelectedItem != null)
-                        ExplorerTree.SelectedItem.IsSelected = false;
+                    //if (ExplorerTree.SelectedItem != null)
+                        //ExplorerTree.SelectedItem.IsSelected = false;
                 }
             }
 
