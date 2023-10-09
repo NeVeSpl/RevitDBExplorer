@@ -100,7 +100,7 @@
                                 <MenuItem Header="Draw in Revit (AVF)" Command="{Binding Commands.DrawInRevitAVF}" CommandParameter="{Binding}"/>
                                 <Separator />
 
-                                <MenuItem Header="Generate C# code for a UPDATE command (RDS) " Command="{Binding Commands.GenerateUpdateQueryRDSCommand}" CommandParameter="{Binding}">
+                                <MenuItem Header="Generate C# code for an UPDATE command (RDS) " Command="{Binding Commands.GenerateUpdateQueryRDSCommand}" CommandParameter="{Binding}">
                                     <MenuItem.Icon>
                                         <Path Style="{StaticResource IconQuery}" Width="11" />
                                     </MenuItem.Icon>

@@ -132,9 +132,25 @@ namespace RevitDBExplorer.UIComponents.List.ViewModels
     {
         private readonly SnoopableParameter snoopableParameter;
 
-        public ListItemForSP(SnoopableParameter x)
+        public override string Name => snoopableParameter.Name;
+        public SnoopableParameter this[int i]
+        {
+            get
+            {
+                return i switch {  _ => snoopableParameter };
+            }
+        }
+
+
+        public ListItemForSP(SnoopableParameter x, SnoopableParameter y, Action askForReload)
         {
             this.snoopableParameter = x;
+        }
+
+
+        public override void Read()
+        {
+            snoopableParameter.Read();
         }
     }
 }

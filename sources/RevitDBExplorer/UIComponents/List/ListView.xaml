@@ -26,6 +26,7 @@
                 <converters:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
                 <converters:PercentageOfValueConverter x:Key="PercentageOfValueConverter"/>
                 <converters:EnumMatchToVisibilityConverter x:Key="EnumMatchToVisibilityConverter"/>
+                <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" WhenFalse="Collapsed"/>
                 <converters:ToResourceWithKeyConverter x:Key="ToResourceWithKeyConverter" FrameworkElement="{Binding ElementName=cGrid}" />
                 <localWPF:DataTemplateSelectorForPropertyType x:Key="DataTemplateSelectorForPropertyType"/>
                 <localWPF:DynamicGridViewConverter x:Key="DynamicGridViewConverter" FrameworkElement="{Binding ElementName=cGrid}"/>
@@ -98,7 +99,12 @@
                     </DataTemplate.Resources>
                 </DataTemplate>
 
-                
+                <DataTemplate DataType="{x:Type localVM:ListItemForSP}">
+                    <StackPanel Orientation="Horizontal" >
+                        <TextBlock Text="{Binding Name, Mode=OneWay}" Foreground="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"  />
+                    </StackPanel>
+                </DataTemplate>
+
                 <DataTemplate DataType="{x:Type dm:SnoopableMember}" >
                     <Border Background="Transparent">
                         <ContentPresenter
@@ -109,6 +115,13 @@
                             />
                     </Border>
                 </DataTemplate>
+
+                <DataTemplate DataType="{x:Type dm:SnoopableParameter}" >
+                    <Border Background="Transparent">
+                        <TextBlock Text="{Binding Value, Mode=OneWay}"/>
+                    </Border>
+                </DataTemplate>
+
             </ResourceDictionary>
         </Grid.Resources>
 
@@ -124,7 +137,7 @@
                 <ColumnDefinition Width="auto"/>
             </Grid.ColumnDefinitions>
 
-            <UniformGrid Rows="1" Margin="0 0 4 0" Visibility="Collapsed">
+            <UniformGrid Rows="1" Margin="0 0 4 0" Visibility="{Binding HasParameters, Converter={StaticResource BoolToVisibilityConverter}}">
                 <UniformGrid.Resources>
                     <Style TargetType="{x:Type ToggleButton}">
                         <Setter Property="MinWidth" Value="21"/>
@@ -155,7 +168,7 @@
                 </UniformGrid.Resources>
                 
                 <ToggleButton Content="M" IsChecked="{Binding IsMemberViewVisible}" />
-                <ToggleButton Content="P" IsChecked="{Binding IsProperyViewVisible}"/>
+                <ToggleButton Content="P" IsChecked="{Binding IsParameterViewVisible}"/>
             </UniformGrid>
 
             <controls:TextBoxWithPlaceholder Grid.Column="1" Margin="0 0 2 0" Text="{Binding FilterPhrase, Mode=TwoWay, Delay=200, UpdateSourceTrigger=PropertyChanged}" Placeholder="Filter list by name or value"/>

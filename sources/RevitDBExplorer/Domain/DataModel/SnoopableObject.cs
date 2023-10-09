@@ -38,6 +38,7 @@ namespace RevitDBExplorer.Domain.DataModel
                 OnPropertyChanged();
             }
         }
+        public bool HasParameters => Object is Element;
 
 
         public SnoopableObject(Document document, object @object) : this(document, @object, null)
@@ -109,7 +110,6 @@ namespace RevitDBExplorer.Domain.DataModel
                 yield return member;                
             }
         }
-
         private static IEnumerable<SnoopableMember> CreateMembers(SnoopableObject snoopableObject)
         {
             foreach (var descriptor in MemberStreamer.StreamDescriptors(snoopableObject.Context, snoopableObject.Object))
@@ -117,6 +117,21 @@ namespace RevitDBExplorer.Domain.DataModel
                 var member = new SnoopableMember(snoopableObject, descriptor);
                 yield return member;
             }
+        }
+
+
+        public IEnumerable<SnoopableParameter> GetParameters(UIApplication app)
+        {
+            if (Object is Element element)
+            {
+                var parameters = element.Parameters;
+                foreach (var parameter in parameters)
+                {
+                    var snoopableParameter = new SnoopableParameter(parameter as Parameter);
+                    snoopableParameter.Read();
+                    yield return snoopableParameter;
+                }
+            }          
         }
 
 

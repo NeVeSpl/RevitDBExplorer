@@ -26,10 +26,12 @@ namespace RevitDBExplorer.UIComponents.List
         private ObservableCollection<ListItem> listItems = new();
         private ObservableCollection<DynamicGridViewColumn> columns = new();
         private ListItem listSelectedItem = null;
+        private TreeItem treeSelectedItem = null;
         private string filterPhrase = "";
         private bool isMemberViewVisible = true;
-        
-      
+        private bool hasParameters;
+
+
         public ObservableCollection<ListItem> ListItems
         {
             get
@@ -95,10 +97,11 @@ namespace RevitDBExplorer.UIComponents.List
             {
                 isMemberViewVisible = value;
                 OnPropertyChanged();
-                OnPropertyChanged(nameof(IsProperyViewVisible));
+                OnPropertyChanged(nameof(IsParameterViewVisible));
+                PopulateListView();
             }
         }
-        public bool IsProperyViewVisible
+        public bool IsParameterViewVisible
         {
             get
             {
@@ -107,6 +110,18 @@ namespace RevitDBExplorer.UIComponents.List
             set
             {
                 IsMemberViewVisible = !value;
+            }
+        }
+        public bool HasParameters
+        {
+            get
+            {
+                return hasParameters;
+            }
+            set
+            {
+                hasParameters = value;
+                OnPropertyChanged();
             }
         }
 
@@ -140,13 +155,32 @@ namespace RevitDBExplorer.UIComponents.List
         }
         public async Task PopulateListView(SnoopableObjectTreeItem snoopableObjectTreeItem)
         {
-            Columns = columnsFor1;
-            var members = await ExternalExecutor.ExecuteInRevitContextAsync(x => snoopableObjectTreeItem.Object.GetMembers(x).ToList()); 
-            ListItems = new(members.Select(x => new ListItemForSM(x, null, Reload)));
-            SetupListView();
+            treeSelectedItem = snoopableObjectTreeItem;   
+            await PopulateListView();
+        }
+        private async Task PopulateListView()
+        {
+            HasParameters = false;
+            if (treeSelectedItem is SnoopableObjectTreeItem snoopableObjectTreeItem)
+            {
+                HasParameters = snoopableObjectTreeItem.Object.HasParameters;
+                Columns = columnsFor1;
+                if (IsMemberViewVisible)
+                {
+                    var members = await ExternalExecutor.ExecuteInRevitContextAsync(x => snoopableObjectTreeItem.Object.GetMembers(x).ToList());
+                    ListItems = new(members.Select(x => new ListItemForSM(x, null, Reload)));
+                    SetupListView();
+                }
+                else
+                {
+                    var parameters = await ExternalExecutor.ExecuteInRevitContextAsync(x => snoopableObjectTreeItem.Object.GetParameters(x).ToList());
+                    ListItems = new(parameters.Select(x => new ListItemForSP(x, null, Reload)));
+                }
+            }
         }
         public async Task<bool> PopulateListView(UtilityGroupTreeItem utilityGroupTreeItem)
         {
+            HasParameters = false;
             if (utilityGroupTreeItem.Items?.Count < 2)
             {
                 return false;
