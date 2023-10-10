@@ -51,5 +51,23 @@ namespace RevitDBExplorer.UIComponents.Trees.Utility
 
             rootItem.Items.Move(oldIndex, newIndex);
         }
+
+
+        public void RemoveSelection()
+        {
+            RemoveSelection(rootItem);
+
+            void RemoveSelection(TreeItem item)
+            {
+                item.IsSelected = false;
+
+                if (item.Items == null) return;
+
+                foreach (var child in item.Items)
+                {
+                    RemoveSelection(child);
+                }
+            }
+        }
     }
 }

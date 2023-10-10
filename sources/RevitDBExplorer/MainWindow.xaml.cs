@@ -278,19 +278,21 @@ namespace RevitDBExplorer
         }
         private async void Tree_SelectedItemChanged(SelectedItemChangedEventArgs eventArgs)
         {
-            List.ClearItems();
+            if ((!IsActive && IsLoaded) || ignoreEvents)
+                return;           
 
             if (eventArgs.NewOne != null)
             {
+                List.ClearItems();
+
                 if (eventArgs.Sender == ExplorerTree)
                 {
-                    if (UtilityTree.SelectedItem != null)
-                        UtilityTree.SelectedItem.IsSelected = false;
+                    UtilityTree.RemoveSelection();
                 }
                 if (eventArgs.Sender == UtilityTree)
                 {
-                    //if (ExplorerTree.SelectedItem != null)
-                        //ExplorerTree.SelectedItem.IsSelected = false;
+                    if (ExplorerTree.SelectedItem != null)
+                        ExplorerTree.SelectedItem.IsSelected = false;
                 }
             }
 
@@ -326,13 +328,14 @@ namespace RevitDBExplorer
             }
             RightView = RightView.None;
         }
+        bool ignoreEvents = false;
         void IAmWindowOpener.Open(SourceOfObjects sourceOfObjects)
         {
-            if (UtilityTree.SelectedItem != null)
-                UtilityTree.SelectedItem.IsSelected = false;
+            ignoreEvents = true;
             var window = new MainWindow(sourceOfObjects);
             window.Owner = this;
-            window.Show();                      
+            window.Show();     
+            ignoreEvents = false;
         }
         private async void TryQueryDatabase(string query)
         {
