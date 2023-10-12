@@ -11,7 +11,7 @@ using RevitDBExplorer.WPF;
 
 namespace RevitDBExplorer.Domain.DataModel
 {
-    internal abstract class SnoopableItem : BaseViewModel, IAmSourceOfEverything
+    internal abstract class SnoopableItem : BaseViewModel, IAmSourceOfEverything, IComparable<SnoopableItem>, IEquatable<SnoopableItem>
     {
         private readonly SnoopableObject parent;
         private readonly IAccessor accessor;
@@ -19,6 +19,7 @@ namespace RevitDBExplorer.Domain.DataModel
 
         public event Action ParentObjectChanged;
         public string AccessorName { get; private set; }
+        public virtual string Name { get;}
         public IValueViewModel ValueViewModel { get; private set; } = EmptyPresenter.Instance;
         public bool CanBeSnooped
         {
@@ -101,5 +102,9 @@ namespace RevitDBExplorer.Domain.DataModel
             }
             isFrozen = true;
         }
+
+
+        public abstract int CompareTo(SnoopableItem other);
+        public abstract bool Equals(SnoopableItem other);
     }
 }

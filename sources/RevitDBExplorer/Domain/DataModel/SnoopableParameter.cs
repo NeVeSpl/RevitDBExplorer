@@ -10,7 +10,7 @@ namespace RevitDBExplorer.Domain.DataModel
         private readonly Parameter parameter;
     
 
-        public string Name => parameter.Definition.Name;
+        public override string Name => parameter.Definition.Name;
         
 
         public SnoopableParameter(SnoopableObject parent, Parameter parameter) : base(parent, new ParameterAccessor(parameter))
@@ -23,6 +23,25 @@ namespace RevitDBExplorer.Domain.DataModel
         public override SourceOfObjects Snoop()
         {
             return new SourceOfObjects(this);
+        }
+
+
+
+        public override int CompareTo(SnoopableItem other)
+        {
+            if (other is SnoopableParameter snoopableParameter)
+            {
+                return parameter.Id.Compare(snoopableParameter.parameter.Id);
+            }
+            return -1;
+        }
+        public override bool Equals(SnoopableItem other)
+        {
+            if (other is SnoopableParameter snoopableParameter)
+            {
+                return parameter.Id.Equals(snoopableParameter.parameter.Id);
+            }
+            return false;
         }
     }
 }

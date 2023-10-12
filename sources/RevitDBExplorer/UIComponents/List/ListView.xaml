@@ -85,7 +85,7 @@
                 </Style>
 
 
-                <DataTemplate DataType="{x:Type localVM:ListItemForSM}">                   
+                <DataTemplate DataType="{x:Type localVM:ListItemForMember}">                   
                     <StackPanel Orientation="Horizontal" 
                                 ContextMenu="{StaticResource ContextMenuForNameColumn}" 
                                 Style="{StaticResource sStackPanel}"
@@ -99,8 +99,10 @@
                     </DataTemplate.Resources>
                 </DataTemplate>
 
-                <DataTemplate DataType="{x:Type localVM:ListItemForSP}">
-                    <StackPanel Orientation="Horizontal" >
+                <DataTemplate DataType="{x:Type localVM:ListItemForParameter}">
+                    <StackPanel Orientation="Horizontal"
+                                 Style="{StaticResource sStackPanel}"
+                                >
                         <TextBlock Text="{Binding Name, Mode=OneWay}" Foreground="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"  />
                     </StackPanel>
                 </DataTemplate>

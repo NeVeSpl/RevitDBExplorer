@@ -8,19 +8,29 @@ using RevitDBExplorer.WPF;
 
 namespace RevitDBExplorer.UIComponents.List.ViewModels
 {
-
     internal interface IListItem
     {
-       
+        string SortingKey { get;  }
+        string GroupingKey { get;  }
+        public string Name { get; }
+        public bool IsHighlighted { get; }
+
+
+        bool Filter(string filterPhrase);
+        void Read();
     }
 
-    internal class ListItem : BaseViewModel
+    internal class ListItem<T> : BaseViewModel, IListItem where T : SnoopableItem
     {
+        private readonly T leftItem;
+        private readonly T rightItem;
+        private readonly bool doCompare;
         private bool isHighlighted;
 
+        protected T SnoopableItem => leftItem ?? rightItem;
         public string SortingKey { get; init; }
         public string GroupingKey { get; init; }
-        public virtual string Name { get; }
+        public string Name => SnoopableItem.Name;
         public bool IsHighlighted
         {
             get
@@ -33,51 +43,30 @@ namespace RevitDBExplorer.UIComponents.List.ViewModels
                 OnPropertyChanged();
             }
         }
-
-
-        public virtual bool Filter(string filterPhrase) => true;
-        public virtual void Read() 
+        public T this[int i]
         {
-        }
-    }
-    internal class ListItemForSM : ListItem, IListItem
-    {
-        private readonly SnoopableMember leftMember;
-        private readonly SnoopableMember rightMember;
-        private readonly bool doCompare;
-
-        private SnoopableMember Member => leftMember ?? rightMember;
-        public override string Name => Member.Name;
-        public string Icon => $"Icon{Member.MemberKind}";
-        public DeclaringType DeclaringType => Member.DeclaringType;
-        public RevitDBExplorer.Domain.DocXml Documentation => Member.Documentation;
-        public SnoopableMember this[int i]
-        {
-            get 
+            get
             {
-                return i switch { 0 => leftMember, _ => rightMember };
-            }            
-        }
-
-
-        public ListItemForSM(SnoopableMember left, SnoopableMember right, Action askForReload, bool doCompare = false)
-        {
-            leftMember = left;
-            rightMember = right;
-            this.doCompare = doCompare;
-            if (leftMember != null)
-            {
-                leftMember.ParentObjectChanged += () => askForReload();
+                return i switch { 0 => leftItem, _ => rightItem };
             }
-            if (rightMember != null)
+        }
+
+
+        public ListItem(T left, T right, Action askForReload, bool doCompare)
+        {
+            leftItem = left;
+            rightItem = right;
+            this.doCompare = doCompare;
+            if (leftItem != null)
             {
-                rightMember.ParentObjectChanged += () => askForReload();
+                leftItem.ParentObjectChanged += () => askForReload();
+            }
+            if (rightItem != null)
+            {
+                rightItem.ParentObjectChanged += () => askForReload();
             }
 
             Compare();
-            
-            SortingKey = $"{Member.DeclaringType.InheritanceLevel:000}_{(int)Member.MemberKind}_{Member.Name}";
-            GroupingKey = Member.DeclaringType.Name;
         }
 
 
@@ -85,7 +74,7 @@ namespace RevitDBExplorer.UIComponents.List.ViewModels
         {
             if (doCompare)
             {
-                if ((leftMember?.ValueViewModel is IValuePresenter leftVP) && (rightMember?.ValueViewModel is IValuePresenter rightVp))
+                if ((leftItem?.ValueViewModel is IValuePresenter leftVP) && (rightItem?.ValueViewModel is IValuePresenter rightVp))
                 {
                     IsHighlighted = !leftVP.Label.Equals(rightVp.Label);
                 }
@@ -93,7 +82,7 @@ namespace RevitDBExplorer.UIComponents.List.ViewModels
                 {
                     IsHighlighted = true;
                 }
-                if ((leftMember?.ValueViewModel is IValueEditor) && (rightMember?.ValueViewModel is IValueEditor))
+                if ((leftItem?.ValueViewModel is IValueEditor) && (rightItem?.ValueViewModel is IValueEditor))
                 {
                     IsHighlighted = false;
                 }
@@ -101,56 +90,63 @@ namespace RevitDBExplorer.UIComponents.List.ViewModels
         }
 
 
-
-        public override bool Filter(string filterPhrase)
+        public bool Filter(string filterPhrase)
         {
             bool left = false;
             bool right = false;
-            if (leftMember != null)
+            if (leftItem != null)
             {
-                bool inName = leftMember.Name.IndexOf(filterPhrase, StringComparison.OrdinalIgnoreCase) >= 0;
-                bool inValue = leftMember.ValueViewModel is IValuePresenter valuePresenter && valuePresenter.Label.IndexOf(filterPhrase, StringComparison.OrdinalIgnoreCase) >= 0;
+                bool inName = leftItem.Name.IndexOf(filterPhrase, StringComparison.OrdinalIgnoreCase) >= 0;
+                bool inValue = leftItem.ValueViewModel is IValuePresenter valuePresenter && valuePresenter.Label.IndexOf(filterPhrase, StringComparison.OrdinalIgnoreCase) >= 0;
                 left = inName || inValue;
             }
-            if (rightMember != null)
+            if (rightItem != null)
             {
-                bool inName = rightMember.Name.IndexOf(filterPhrase, StringComparison.OrdinalIgnoreCase) >= 0;
-                bool inValue = rightMember.ValueViewModel is IValuePresenter valuePresenter && valuePresenter.Label.IndexOf(filterPhrase, StringComparison.OrdinalIgnoreCase) >= 0;
+                bool inName = rightItem.Name.IndexOf(filterPhrase, StringComparison.OrdinalIgnoreCase) >= 0;
+                bool inValue = rightItem.ValueViewModel is IValuePresenter valuePresenter && valuePresenter.Label.IndexOf(filterPhrase, StringComparison.OrdinalIgnoreCase) >= 0;
                 right = inName || inValue;
             }
             return left || right;
         }
-        public override void Read()
+        public void Read()
         {
-            leftMember?.Read();
-            rightMember?.Read();
+            leftItem?.Read();
+            rightItem?.Read();
             Compare();
         }
     }
 
-    internal class ListItemForSP : ListItem, IListItem
+    internal static class ListItemFactory
     {
-        private readonly SnoopableParameter snoopableParameter;
-
-        public override string Name => snoopableParameter.Name;
-        public SnoopableParameter this[int i]
+        public static IListItem Create(SnoopableItem left, SnoopableItem right, Action askForReload, bool doCompare = false)
         {
-            get
+            if (left is SnoopableMember)
             {
-                return i switch {  _ => snoopableParameter };
+                return new ListItemForMember(left as SnoopableMember, right as SnoopableMember, askForReload, doCompare);
             }
+            return new ListItemForParameter(left as SnoopableParameter, right as SnoopableParameter, askForReload, doCompare);
         }
+    }
 
+    internal sealed class ListItemForMember : ListItem<SnoopableMember>
+    {        
+        public string Icon => $"Icon{SnoopableItem.MemberKind}";
+        public DeclaringType DeclaringType => SnoopableItem.DeclaringType;
+        public RevitDBExplorer.Domain.DocXml Documentation => SnoopableItem.Documentation;
+        
 
-        public ListItemForSP(SnoopableParameter x, SnoopableParameter y, Action askForReload)
-        {
-            this.snoopableParameter = x;
+        public ListItemForMember(SnoopableMember left, SnoopableMember right, Action askForReload, bool doCompare) : base(left, right, askForReload, doCompare) 
+        { 
+            SortingKey = $"{SnoopableItem.DeclaringType.InheritanceLevel:000}_{(int)SnoopableItem.MemberKind}_{SnoopableItem.Name}";
+            GroupingKey = SnoopableItem.DeclaringType.Name;
         }
+    }
 
-
-        public override void Read()
+    internal sealed class ListItemForParameter : ListItem<SnoopableParameter>
+    {
+        public ListItemForParameter(SnoopableParameter left, SnoopableParameter right, Action askForReload, bool doCompare) : base(left, right, askForReload, doCompare)
         {
-            snoopableParameter.Read();
+            
         }
     }
 }

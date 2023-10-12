@@ -5,14 +5,14 @@ using RevitDBExplorer.Domain.DataModel.Streams.Base;
 
 namespace RevitDBExplorer.Domain.DataModel
 {
-    internal sealed class SnoopableMember : SnoopableItem, IComparable<SnoopableMember>, IEquatable<SnoopableMember>
+    internal sealed class SnoopableMember : SnoopableItem
     {        
         private readonly MemberDescriptor memberDescriptor;
         
 
         public DeclaringType DeclaringType => memberDescriptor.DeclaringType;
         public MemberKind MemberKind => memberDescriptor.Kind;
-        public string Name => memberDescriptor.Name; 
+        public override string Name => memberDescriptor.Name; 
         public DocXml Documentation => memberDescriptor.Documentation;  
 
 
@@ -38,13 +38,22 @@ namespace RevitDBExplorer.Domain.DataModel
       
 
 
-        public int CompareTo(SnoopableMember other)
+        public override int CompareTo(SnoopableItem other)
         {
-            return memberDescriptor.CompareTo(other.memberDescriptor);
+            if (other is SnoopableMember snoopableMember)
+            {
+                return memberDescriptor.CompareTo(snoopableMember.memberDescriptor);
+            }
+            return 1;
+           
         }
-        public bool Equals(SnoopableMember other)
+        public override bool Equals(SnoopableItem other)
         {
-            return memberDescriptor.Equals(other.memberDescriptor);
+            if (other is SnoopableMember snoopableMember)
+            {
+                return memberDescriptor.Equals(snoopableMember.memberDescriptor);
+            }
+            return false;
         }
     }
 }

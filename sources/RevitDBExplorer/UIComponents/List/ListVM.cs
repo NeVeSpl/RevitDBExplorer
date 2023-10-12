@@ -23,16 +23,16 @@ namespace RevitDBExplorer.UIComponents.List
         private readonly ObservableCollection<DynamicGridViewColumn> columnsFor1;
         private readonly ObservableCollection<DynamicGridViewColumn> columnsFor2;
         private readonly IAmWindowOpener windowOpener;
-        private ObservableCollection<ListItem> listItems = new();
+        private ObservableCollection<IListItem> listItems = new();
         private ObservableCollection<DynamicGridViewColumn> columns = new();
-        private ListItem listSelectedItem = null;
+        private IListItem listSelectedItem = null;
         private TreeItem treeSelectedItem = null;
         private string filterPhrase = "";
         private bool isMemberViewVisible = true;
         private bool hasParameters;
 
 
-        public ObservableCollection<ListItem> ListItems
+        public ObservableCollection<IListItem> ListItems
         {
             get
             {
@@ -56,7 +56,7 @@ namespace RevitDBExplorer.UIComponents.List
                 OnPropertyChanged();
             }
         }
-        public ListItem ListSelectedItem
+        public IListItem ListSelectedItem
         {
             get
             {
@@ -98,6 +98,7 @@ namespace RevitDBExplorer.UIComponents.List
                 isMemberViewVisible = value;
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(IsParameterViewVisible));
+
                 PopulateListView();
             }
         }
@@ -153,34 +154,52 @@ namespace RevitDBExplorer.UIComponents.List
         {
             ListItems = new();
         }
+       
+
         public async Task PopulateListView(SnoopableObjectTreeItem snoopableObjectTreeItem)
         {
             treeSelectedItem = snoopableObjectTreeItem;   
             await PopulateListView();
         }
-        private async Task PopulateListView()
+        public async Task<bool> PopulateListView(UtilityGroupTreeItem utilityGroupTreeItem)
+        {
+            treeSelectedItem = utilityGroupTreeItem;
+            return await PopulateListView();
+        }
+        private async Task<bool> PopulateListView()
         {
             HasParameters = false;
             if (treeSelectedItem is SnoopableObjectTreeItem snoopableObjectTreeItem)
             {
                 HasParameters = snoopableObjectTreeItem.Object.HasParameters;
                 Columns = columnsFor1;
-                if (IsMemberViewVisible)
-                {
-                    var members = await ExternalExecutor.ExecuteInRevitContextAsync(x => snoopableObjectTreeItem.Object.GetMembers(x).ToList());
-                    ListItems = new(members.Select(x => new ListItemForSM(x, null, Reload)));
-                    SetupListView();
-                }
-                else
-                {
-                    var parameters = await ExternalExecutor.ExecuteInRevitContextAsync(x => snoopableObjectTreeItem.Object.GetParameters(x).ToList());
-                    ListItems = new(parameters.Select(x => new ListItemForSP(x, null, Reload)));
-                }
+
+                var items = await GetSnoopableItemsFromRevit(snoopableObjectTreeItem.Object);
+                ListItems = new(items.Select(x => ListItemFactory.Create(x, null, Reload)));  
+                SetupListView();
+
+                return true;
             }
+            if (treeSelectedItem is UtilityGroupTreeItem utilityGroupTreeItem)
+            {
+                return await PopulateListViewForComparison(utilityGroupTreeItem);
+            }
+            return false;
         }
-        public async Task<bool> PopulateListView(UtilityGroupTreeItem utilityGroupTreeItem)
+        private async Task<IList<SnoopableItem>> GetSnoopableItemsFromRevit(SnoopableObject snoopableObject)
         {
-            HasParameters = false;
+            if (IsMemberViewVisible)
+            {
+                var members = await ExternalExecutor.ExecuteInRevitContextAsync(x => snoopableObject.GetMembers(x).OrderBy(x => x).OfType<SnoopableItem>().ToList());
+                return members;
+            }
+            var parameters = await ExternalExecutor.ExecuteInRevitContextAsync(x => snoopableObject.GetParameters(x).OrderBy(x => x).OfType<SnoopableItem>().ToList());
+            return parameters;
+        }
+
+
+        private async Task<bool> PopulateListViewForComparison(UtilityGroupTreeItem utilityGroupTreeItem)
+        {           
             if (utilityGroupTreeItem.Items?.Count < 2)
             {
                 return false;
@@ -194,49 +213,53 @@ namespace RevitDBExplorer.UIComponents.List
                 return false;
             }
 
-            var leftMembers = await ExternalExecutor.ExecuteInRevitContextAsync(x => leftItem.Object.GetMembers(x).OrderBy(x => x).ToList());
-            var rightMembers = await ExternalExecutor.ExecuteInRevitContextAsync(x => rightItem.Object.GetMembers(x).OrderBy(x => x).ToList());
+            HasParameters = leftItem.Object.HasParameters;
 
-            var members = new List<ListItemForSM>();
+            var leftItems = await GetSnoopableItemsFromRevit(leftItem.Object);
+            var rightItems = await GetSnoopableItemsFromRevit(rightItem.Object);
+            var mergedItems = MergeTwoLists(leftItems, rightItems).Select(x => ListItemFactory.Create(x.first, x.second, Reload, true));
+
+            ListItems = new(mergedItems);
+            SetupListView();
+            return true;
+        }
+        private IEnumerable<(SnoopableItem first, SnoopableItem second)> MergeTwoLists(IList<SnoopableItem> leftItems, IList<SnoopableItem> rightItems)
+        {
             int i = 0;
             int j = 0;
-            while (i < leftMembers.Count && j < rightMembers.Count)
+            while (i < leftItems.Count && j < rightItems.Count)
             {
-                var left = leftMembers[i];
-                var right = rightMembers[j];
+                var left = leftItems[i];
+                var right = rightItems[j];
 
                 if (left.Equals(right))
                 {
-                    members.Add(new ListItemForSM(left, right, Reload, true));
+                    yield return (left, right);
                     ++i;
                     ++j;
                     continue;
                 }
                 if (left.CompareTo(right) < 0)
                 {
-                    members.Add(new ListItemForSM(left, null, Reload, true));
-                    ++i;                  
+                    yield return (left, null);
+                    ++i;
                     continue;
                 }
-               
-                members.Add(new ListItemForSM(null, right, Reload, true));               
-                ++j;                              
-            }
 
-            while (i < leftMembers.Count)
-            {
-                members.Add(new ListItemForSM(leftMembers[i], null, Reload, true));
-                ++i;
-            }
-            while (j < rightMembers.Count)
-            {
-                members.Add(new ListItemForSM(null, rightMembers[j], Reload, true));
+                yield return (null, right);
                 ++j;
             }
 
-            ListItems = new(members);
-            SetupListView();
-            return true;
+            while (i < leftItems.Count)
+            {
+                yield return (leftItems[i], null);
+                ++i;
+            }
+            while (j < rightItems.Count)
+            {
+                yield return (null, rightItems[j]);
+                ++j;
+            }
         }
         private void SetupListView()
         {
@@ -244,14 +267,14 @@ namespace RevitDBExplorer.UIComponents.List
 
             if (ListItems.Count < 666)
             {
-                lcv.GroupDescriptions.Add(new PropertyGroupDescription(nameof(ListItem.GroupingKey)));
-                lcv.SortDescriptions.Add(new SortDescription(nameof(ListItem.SortingKey), ListSortDirection.Ascending));
+                lcv.GroupDescriptions.Add(new PropertyGroupDescription(nameof(IListItem.GroupingKey)));
+                lcv.SortDescriptions.Add(new SortDescription(nameof(IListItem.SortingKey), ListSortDirection.Ascending));
             }
             lcv.Filter = ListViewFilter;
         }
         private bool ListViewFilter(object item)
         {
-            if (item is ListItem listItem)
+            if (item is IListItem listItem)
             {
                 return listItem.Filter(FilterPhrase);
             }
@@ -275,9 +298,9 @@ namespace RevitDBExplorer.UIComponents.List
 
         private void KeyDown_Enter(object obj)
         {
-            if (ListSelectedItem is ListItemForSM listItemForSM)
+            if (ListSelectedItem is ListItemForMember ListItemForMember)
             {
-                ListItem_Click(listItemForSM[0]);
+                ListItem_Click(ListItemForMember[0]);
             }
         }
         private async void ListItem_Click(object obj)
@@ -301,14 +324,14 @@ namespace RevitDBExplorer.UIComponents.List
 
         private void CopyName(object obj)
         {
-            if (obj is ListItem listItem)
+            if (obj is IListItem listItem)
             {
                 Clipboard.SetDataObject($"{listItem.Name}");
             }
         }
         private void OpenCHM(object obj)
         {
-            if (obj is ListItemForSM listItem)
+            if (obj is ListItemForMember listItem)
             {
                 CHMService.OpenCHM(listItem[0]);
             }
