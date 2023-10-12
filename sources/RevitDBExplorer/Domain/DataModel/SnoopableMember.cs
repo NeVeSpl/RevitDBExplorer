@@ -1,79 +1,28 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Autodesk.Revit.UI;
 using RevitDBExplorer.Domain.DataModel.Streams.Base;
-using RevitDBExplorer.Domain.DataModel.ValueViewModels;
-using RevitDBExplorer.Domain.DataModel.ValueViewModels.Base;
-using RevitDBExplorer.WPF;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
 namespace RevitDBExplorer.Domain.DataModel
 {
-    internal class SnoopableMember : BaseViewModel, IAmSourceOfEverything, IComparable<SnoopableMember>, IEquatable<SnoopableMember>
-    {
-        private readonly SnoopableObject parent;
+    internal sealed class SnoopableMember : SnoopableItem, IComparable<SnoopableMember>, IEquatable<SnoopableMember>
+    {        
         private readonly MemberDescriptor memberDescriptor;
-        private IValueViewModel memberValue;       
         
 
         public DeclaringType DeclaringType => memberDescriptor.DeclaringType;
         public MemberKind MemberKind => memberDescriptor.Kind;
-        public string Name => memberDescriptor.Name;               
-        private bool HasAccessor => memberDescriptor.MemberAccessor is not null;
-        public DocXml Documentation => memberDescriptor.Documentation;
-        //public string Key { get; }
-        public event Action SnoopableObjectChanged;
-        public string AccessorName { get; private set; }
-        public IValueViewModel ValueViewModel { get; private set; } = EmptyPresenter.Instance;
-        public bool CanBeSnooped { get; private set; }        
-                       
+        public string Name => memberDescriptor.Name; 
+        public DocXml Documentation => memberDescriptor.Documentation;  
 
-        public SnoopableMember(SnoopableObject parent, MemberDescriptor memberDescriptor)
-        {
-            this.parent = parent;
-            this.memberDescriptor = memberDescriptor;
-            //this.Key = memberDescriptor.ComputeKey();
-        }   
 
-        
-        public void Read()
-        {
-            if (isFrozen) return;
-            if (!HasAccessor) return;
-            Read(parent.Context, parent.Object);            
-        }
-        private void Read(SnoopableContext context, object @object)
-        {
-            try
-            {
-                memberValue ??= memberDescriptor.MemberAccessor.CreatePresenter(context, @object);
-                if (memberValue is ICanRead canRead)
-                {
-                    canRead.Read(context, @object);
-                }
-                if (memberValue is ICanWrite canWrite)
-                {
-                    canWrite.Setup(RaiseSnoopableObjectChanged);
-                }
-                if (memberValue is ICanSnoop canSnoop)
-                {
-                    CanBeSnooped = canSnoop.CanBeSnooped;
-                }
-                ValueViewModel = memberValue;
-            }
-            catch (Exception valueAccessException)
-            {
-                ValueViewModel = new ErrorPresenter(Labeler.GetLabelForException(valueAccessException));              
-            }
-            OnPropertyChanged(nameof(ValueViewModel));                
-            OnPropertyChanged(nameof(AccessorName));
-            OnPropertyChanged(nameof(CanBeSnooped));
+        public SnoopableMember(SnoopableObject parent, MemberDescriptor memberDescriptor) : base(parent, memberDescriptor.MemberAccessor)
+        {            
+            this.memberDescriptor = memberDescriptor;            
         }
 
 
-        public SourceOfObjects Snoop()
+        public override SourceOfObjects Snoop()
         {
             var title = Name;
             if (!string.IsNullOrEmpty(Documentation.Name))
@@ -86,42 +35,16 @@ namespace RevitDBExplorer.Domain.DataModel
             }
             return new SourceOfObjects(this) { Title = title };
         }
-        public IEnumerable<SnoopableObject> Snoop(UIApplication app)
-        {
-            if (isFrozen) return frozenSnooopResult;
-            if (memberValue is ICanSnoop snooper)
-            {
-                return snooper.Snoop(parent.Context, parent.Object);
-            }
-            return Enumerable.Empty<SnoopableObject>();
-        }
+      
 
-
-        private void RaiseSnoopableObjectChanged()
-        {
-            SnoopableObjectChanged?.Invoke();
-        }
-
-
-        private bool isFrozen = false;
-        private IList<SnoopableObject> frozenSnooopResult;
-        public void Freeze(int candies)
-        {
-            if (CanBeSnooped)
-            {
-                frozenSnooopResult = Snoop(null).ToList();
-                frozenSnooopResult.ForEach(x => x.Freeze(candies + 1));
-            }
-            isFrozen = true;
-        }
 
         public int CompareTo(SnoopableMember other)
         {
-            return this.memberDescriptor.CompareTo(other.memberDescriptor);
+            return memberDescriptor.CompareTo(other.memberDescriptor);
         }
         public bool Equals(SnoopableMember other)
         {
-            return this.memberDescriptor.Equals(other.memberDescriptor);
+            return memberDescriptor.Equals(other.memberDescriptor);
         }
     }
 }

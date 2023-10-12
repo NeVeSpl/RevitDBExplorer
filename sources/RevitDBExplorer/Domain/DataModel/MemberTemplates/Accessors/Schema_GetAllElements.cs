@@ -2,6 +2,7 @@
 using System.Linq;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.ExtensibleStorage;
+using RevitDBExplorer.Domain.DataModel.Accessors;
 using RevitDBExplorer.Domain.DataModel.MemberAccessors;
 using RevitDBExplorer.Domain.DataModel.ValueContainers.Base;
 

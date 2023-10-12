@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Autodesk.Revit.DB;
+using RevitDBExplorer.Domain.DataModel.Accessors;
 using RevitDBExplorer.Domain.DataModel.MemberAccessors;
 using RevitDBExplorer.Domain.DataModel.Streams.Base;
 
@@ -91,7 +92,7 @@ namespace RevitDBExplorer.Domain.DataModel.Streams
                 }
 
                 var comments = () => RevitDocumentationReader.GetMethodComments(method);
-                IMemberAccessor memberAccessor = null;
+                IAccessor memberAccessor = null;
                 MemberKind memberKind = MemberKind.StaticMethod;
                 if (method.IsStatic == false)
                 {

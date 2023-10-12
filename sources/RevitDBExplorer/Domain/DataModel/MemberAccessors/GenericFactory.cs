@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using RevitDBExplorer.Domain.DataModel.Accessors;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
@@ -15,8 +16,8 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
     internal interface IGenericFactory2
     {
         Func<object, object> CreateCompiledLambda(MethodInfo getMethod);
-        IMemberAccessor CreateMemberAccessorByRefCompiled(MethodInfo getMethod);
-        IMemberAccessor CreateMemberAccessorByIteration(MethodInfo getMethod);
+        IAccessor CreateMemberAccessorByRefCompiled(MethodInfo getMethod);
+        IAccessor CreateMemberAccessorByIteration(MethodInfo getMethod);
     }
 
     internal static class GenericFactory
@@ -97,7 +98,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
             return (object input) => { return lambda((TSnoopedObjectType)input); };
         }
 
-        public IMemberAccessor CreateMemberAccessorByRefCompiled(MethodInfo getMethod)
+        public IAccessor CreateMemberAccessorByRefCompiled(MethodInfo getMethod)
         {           
             var func = CreateLambda(getMethod);
             var accessor = new MemberAccessorByRefCompiled<TSnoopedObjectType, TReturnType>(func);
@@ -105,7 +106,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
             return accessor;
         }
 
-        public IMemberAccessor CreateMemberAccessorByIteration(MethodInfo getMethod)
+        public IAccessor CreateMemberAccessorByIteration(MethodInfo getMethod)
         {
             var accessor = new MemberAccessorByIteration<TSnoopedObjectType, TReturnType>(getMethod);
 

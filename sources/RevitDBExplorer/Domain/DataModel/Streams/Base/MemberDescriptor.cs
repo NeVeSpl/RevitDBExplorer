@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using RevitDBExplorer.Domain.DataModel.MemberAccessors;
+using RevitDBExplorer.Domain.DataModel.Accessors;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
@@ -15,12 +15,12 @@ namespace RevitDBExplorer.Domain.DataModel.Streams.Base
         public MemberKind Kind { get; init; }
         public string Name { get; init; }
         public DeclaringType DeclaringType { get; init; }
-        public IMemberAccessor MemberAccessor { get; }
+        public IAccessor MemberAccessor { get; }
         public Func<DocXml> DocumentationFactoryMethod { get; }
         public DocXml Documentation => documentation?.Value ?? DocXml.Empty;
 
 
-        public MemberDescriptor(Type forType, MemberKind memberKind, string name, Type declaringType, IMemberAccessor memberAccessor, Func<DocXml> documentationFactoryMethod)
+        public MemberDescriptor(Type forType, MemberKind memberKind, string name, Type declaringType, IAccessor memberAccessor, Func<DocXml> documentationFactoryMethod)
         {
             ForType = forType;
             Kind = memberKind;

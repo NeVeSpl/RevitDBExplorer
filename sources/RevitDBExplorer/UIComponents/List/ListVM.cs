@@ -282,13 +282,13 @@ namespace RevitDBExplorer.UIComponents.List
         }
         private async void ListItem_Click(object obj)
         {
-            if (obj is SnoopableMember snoopableMember)
+            if (obj is SnoopableItem snoopableItem)
             {
-                if (snoopableMember?.CanBeSnooped == true)
+                if (snoopableItem?.CanBeSnooped == true)
                 {
                     var sourceOfObjects = await ExternalExecutor.ExecuteInRevitContextAsync(x =>
                     {
-                        var source = snoopableMember.Snoop();
+                        var source = snoopableItem.Snoop();
                         source.ReadFromTheSource(x);
                         return source;
                     });
@@ -315,9 +315,9 @@ namespace RevitDBExplorer.UIComponents.List
         }
         private void CopyValue(object obj)
         {
-            if (obj is SnoopableMember snoopableMember)
+            if (obj is SnoopableItem snoopableItem)
             {
-                if (snoopableMember.ValueViewModel is IValuePresenter presenter)
+                if (snoopableItem.ValueViewModel is IValuePresenter presenter)
                 {
                     Clipboard.SetDataObject($"{presenter.Label}");
                 }

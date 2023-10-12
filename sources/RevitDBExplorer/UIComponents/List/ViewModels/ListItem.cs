@@ -67,11 +67,11 @@ namespace RevitDBExplorer.UIComponents.List.ViewModels
             this.doCompare = doCompare;
             if (leftMember != null)
             {
-                leftMember.SnoopableObjectChanged += () => askForReload();
+                leftMember.ParentObjectChanged += () => askForReload();
             }
             if (rightMember != null)
             {
-                rightMember.SnoopableObjectChanged += () => askForReload();
+                rightMember.ParentObjectChanged += () => askForReload();
             }
 
             Compare();

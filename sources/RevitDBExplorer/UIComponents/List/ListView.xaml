@@ -118,7 +118,12 @@
 
                 <DataTemplate DataType="{x:Type dm:SnoopableParameter}" >
                     <Border Background="Transparent">
-                        <TextBlock Text="{Binding Value, Mode=OneWay}"/>
+                        <ContentPresenter
+                            ap:ClickOnUp.Command="{Binding Data.ListItem_Click_Command, Source={StaticResource Proxy}}"
+                            ContextMenu="{StaticResource ContextMenuForValueColumn}"
+                            ContentTemplateSelector="{StaticResource DataTemplateSelectorForPropertyType}"                         
+                            HorizontalAlignment="Stretch"                 
+                            />
                     </Border>
                 </DataTemplate>
 

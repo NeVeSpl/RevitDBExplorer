@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using RevitDBExplorer.Domain.DataModel.Accessors;
 using RevitDBExplorer.Domain.DataModel.ValueContainers.Base;
 using RevitDBExplorer.Domain.DataModel.ValueViewModels;
 using RevitDBExplorer.Domain.DataModel.ValueViewModels.Base;
@@ -8,20 +9,10 @@ using RevitDBExplorer.Domain.DataModel.ValueViewModels.Base;
 
 namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
-    internal interface IMemberAccessor
-    { 
-        IValueViewModel CreatePresenter(SnoopableContext context, object @object);  
-    }
 
-    internal interface IMemberAccessorWithSnoop
+    internal abstract class MemberAccessor<TSnoopedObjectType> : IAccessor
     {
-        ReadResult Read(SnoopableContext context, object @object);
-        IEnumerable<SnoopableObject> Snoop(SnoopableContext context, object @object, IValueContainer state);
-    }
-
-    internal abstract class MemberAccessor<TSnoopedObjectType> : IMemberAccessor
-    {
-        IValueViewModel IMemberAccessor.CreatePresenter(SnoopableContext context, object @object)
+        IValueViewModel IAccessor.CreatePresenter(SnoopableContext context, object @object)
         {
             Guard.IsAssignableToType<TSnoopedObjectType>(@object);
             var typedObject = (TSnoopedObjectType)@object;
@@ -30,14 +21,14 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
         public virtual IValueViewModel CreatePresenter(SnoopableContext context, TSnoopedObjectType typedObject) => null;
     }
 
-    internal abstract class MemberAccessorTyped<TSnoopedObjectType> : MemberAccessor<TSnoopedObjectType>, IMemberAccessorWithSnoop
+    internal abstract class MemberAccessorTyped<TSnoopedObjectType> : MemberAccessor<TSnoopedObjectType>, IAccessorWithSnoop
     {
         public override IValueViewModel CreatePresenter(SnoopableContext context, TSnoopedObjectType @object)
         {            
             return new DefaultPresenter(this);
         }
 
-        ReadResult IMemberAccessorWithSnoop.Read(SnoopableContext context, object @object)
+        ReadResult IAccessorWithSnoop.Read(SnoopableContext context, object @object)
         {
             Guard.IsAssignableToType<TSnoopedObjectType>(@object);      
             var typedObject = (TSnoopedObjectType) @object;          
@@ -45,30 +36,12 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
         }
         public abstract ReadResult Read(SnoopableContext context, TSnoopedObjectType typedObject);
 
-        IEnumerable<SnoopableObject> IMemberAccessorWithSnoop.Snoop(SnoopableContext context, object @object, IValueContainer state)
+        IEnumerable<SnoopableObject> IAccessorWithSnoop.Snoop(SnoopableContext context, object @object, IValueContainer state)
         {
             Guard.IsAssignableToType<TSnoopedObjectType>(@object);
             var typedObject = (TSnoopedObjectType) @object;            
             return Snoop(context, typedObject, state) ?? Enumerable.Empty<SnoopableObject>();
         }
         public virtual IEnumerable<SnoopableObject> Snoop(SnoopableContext context, TSnoopedObjectType typedObject, IValueContainer state) => null;
-    }
-
-
-    internal readonly ref struct ReadResult
-    {
-        public string Label { get; init; }
-        public string AccessorName { get; init; }
-        public bool CanBeSnooped { get; init; }
-        public IValueContainer State { get; init; }
-
-
-        public ReadResult(string value, string accessorName, bool canBeSnooped, IValueContainer state = null)
-        {
-            Label = value;
-            AccessorName = accessorName;
-            CanBeSnooped = canBeSnooped; 
-            State = state;
-        }
     }
 }

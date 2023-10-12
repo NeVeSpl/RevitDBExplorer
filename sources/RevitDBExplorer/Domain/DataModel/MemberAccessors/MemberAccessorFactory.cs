@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using RevitDBExplorer.Domain.DataModel.Accessors;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
@@ -10,7 +11,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
     internal static class MemberAccessorFactory
     {        
-        private static readonly Dictionary<string, Func<IMemberAccessor>> forTypeMembers = new();
+        private static readonly Dictionary<string, Func<IAccessor>> forTypeMembers = new();
 
 
         public static void Init()
@@ -25,7 +26,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
                 foreach (var handledMember in accessor.GetHandledMembers())
                 {
                     var memberId = handledMember.GetUniqueId();
-                    forTypeMembers[memberId] = accessor.GetType().CompileFactoryMethod<IMemberAccessor>();
+                    forTypeMembers[memberId] = accessor.GetType().CompileFactoryMethod<IAccessor>();
                 }
             }
         }
@@ -39,11 +40,11 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
        
 
         
-        public static IMemberAccessor CreateMemberAccessor(MethodInfo getMethod, MethodInfo setMethod)
+        public static IAccessor CreateMemberAccessor(MethodInfo getMethod, MethodInfo setMethod)
         {
             if (getMethod.ReturnType == typeof(void) && getMethod.Name != "GetOverridableHookParameters") return null;
 
-            if (forTypeMembers.TryGetValue(getMethod.GetUniqueId(), out Func<IMemberAccessor> factory))
+            if (forTypeMembers.TryGetValue(getMethod.GetUniqueId(), out Func<IAccessor> factory))
             {
                 return factory();
             }

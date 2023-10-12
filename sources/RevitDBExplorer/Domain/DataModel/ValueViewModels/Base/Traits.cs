@@ -1,5 +1,4 @@
 ﻿using System;
-using RevitDBExplorer.Domain.DataModel.ValueContainers.Base;
 using System.Collections.Generic;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md

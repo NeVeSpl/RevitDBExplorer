@@ -12,9 +12,9 @@ namespace RevitDBExplorer.UIComponents.List.WPF
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
             var element = container as FrameworkElement;
-            var snoopableMember = item as SnoopableMember;
+            var snoopableItem = item as SnoopableItem;
 
-            if (snoopableMember?.ValueViewModel is DefaultPresenter { ValueContainer: not null } presenter)
+            if (snoopableItem?.ValueViewModel is DefaultPresenter { ValueContainer: not null } presenter)
             {
                 var type = presenter.ValueContainer.TypeHandlerType;
                 if (type != typeof(object))
@@ -27,9 +27,9 @@ namespace RevitDBExplorer.UIComponents.List.WPF
                     }
                 }
             }
-            if (snoopableMember?.ValueViewModel is not null)
+            if (snoopableItem?.ValueViewModel is not null)
             {
-                var key = new DataTemplateKey(snoopableMember.ValueViewModel.GetType());
+                var key = new DataTemplateKey(snoopableItem.ValueViewModel.GetType());
                 var dataTemplate = (DataTemplate)element.TryFindResource(key);
                 return dataTemplate;
             }    

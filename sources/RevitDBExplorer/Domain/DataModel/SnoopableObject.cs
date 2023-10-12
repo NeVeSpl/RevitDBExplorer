@@ -127,7 +127,7 @@ namespace RevitDBExplorer.Domain.DataModel
                 var parameters = element.Parameters;
                 foreach (var parameter in parameters)
                 {
-                    var snoopableParameter = new SnoopableParameter(parameter as Parameter);
+                    var snoopableParameter = new SnoopableParameter(this, parameter as Parameter);
                     snoopableParameter.Read();
                     yield return snoopableParameter;
                 }
@@ -164,7 +164,7 @@ namespace RevitDBExplorer.Domain.DataModel
                 frozenMembers = GetMembers(null).ToList();
                 frozenMembers.ForEach(x => x.Freeze(candies));               
                 isFrozen = true;
-                NamePostfix = "*"+DateTime.Now.ToString("HH:mm:ss");
+                NamePostfix = "*" + DateTime.Now.ToString("HH:mm:ss");
                 OnPropertyChanged(nameof(NamePostfix));   
             }
             catch (Exception ex)

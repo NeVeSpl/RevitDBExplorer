@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq.Expressions;
 using Autodesk.Revit.DB;
+using RevitDBExplorer.Domain.DataModel.Accessors;
 using RevitDBExplorer.Domain.DataModel.MemberAccessors;
 using RevitDBExplorer.Domain.DataModel.Streams.Base;
 
@@ -38,7 +39,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberTemplates.Base
             var memberAccessor = new MemberAccessorByFunc<TSnoopedObjectType, TReturnType>(compiledGetter);  
             return Create(methodCallExpression.Method.DeclaringType, methodCallExpression.Method.Name, memberAccessor, canBeUsed, kind, () => RevitDocumentationReader.GetMethodComments(methodCallExpression.Method));
         } 
-        public static ISnoopableMemberTemplate Create(Type declaringType, string memberName, IMemberAccessor memberAccessor, Func<TSnoopedObjectType, bool> canBeUsed = null, MemberKind kind = MemberKind.StaticMethod, Func<DocXml> documentationFactoryMethod = null) 
+        public static ISnoopableMemberTemplate Create(Type declaringType, string memberName, IAccessor memberAccessor, Func<TSnoopedObjectType, bool> canBeUsed = null, MemberKind kind = MemberKind.StaticMethod, Func<DocXml> documentationFactoryMethod = null) 
         {
             return new SnoopableMemberTemplate<TSnoopedObjectType>()
             {

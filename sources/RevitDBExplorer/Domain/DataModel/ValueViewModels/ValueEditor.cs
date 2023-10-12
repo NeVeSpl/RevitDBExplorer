@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using RevitDBExplorer.Domain.DataModel.MemberAccessors;
+using RevitDBExplorer.Domain.DataModel.Accessors;
 using RevitDBExplorer.Domain.DataModel.ValueViewModels.Base;
 using RevitDBExplorer.WPF;
 
@@ -10,7 +10,7 @@ namespace RevitDBExplorer.Domain.DataModel.ValueViewModels
 {
     internal abstract class ValueEditor<T> : BaseViewModel, IValueEditor, ICanRead, ICanWrite
     {
-        private readonly IMemberAccessor memberAccessor;
+        private readonly IAccessor accessor;
         private readonly Func<T> readFunc;
         private readonly Action<T> writeFunc;
         private readonly Func<bool> canBeWrittenFunc;
@@ -37,9 +37,9 @@ namespace RevitDBExplorer.Domain.DataModel.ValueViewModels
         public bool CanBeWritten { get; private set; } = false;
 
 
-        public ValueEditor(IMemberAccessor memberAccessor, Func<T> readFunc, Action<T> writeFunc, Func<bool> canBeWrittenFunc)
+        public ValueEditor(IAccessor accessor, Func<T> readFunc, Action<T> writeFunc, Func<bool> canBeWrittenFunc)
         {
-            this.memberAccessor = memberAccessor;
+            this.accessor = accessor;
             this.readFunc = readFunc;
             this.writeFunc = writeFunc;
             this.canBeWrittenFunc = canBeWrittenFunc;
@@ -59,7 +59,7 @@ namespace RevitDBExplorer.Domain.DataModel.ValueViewModels
             ExternalExecutorExt.ExecuteInRevitContextInsideTransactionAsync((x) =>
             {
                 writeFunc(value);
-            }, context.Document, $"{memberAccessor.GetType().Name}").Forget();
+            }, context.Document, $"{accessor.GetType().Name}").Forget();
             raiseSnoopableObjectChanged?.Invoke();            
         }
 
@@ -71,7 +71,7 @@ namespace RevitDBExplorer.Domain.DataModel.ValueViewModels
 
     internal class DoubleEditor : ValueEditor<double>
     { 
-        public DoubleEditor(IMemberAccessor memberAccessorWithWrite, Func<double> readFunc, Action<double> writeFunc, Func<bool> canBeWrittenFunc) : base(memberAccessorWithWrite, readFunc, writeFunc, canBeWrittenFunc)
+        public DoubleEditor(IAccessor memberAccessorWithWrite, Func<double> readFunc, Action<double> writeFunc, Func<bool> canBeWrittenFunc) : base(memberAccessorWithWrite, readFunc, writeFunc, canBeWrittenFunc)
         {
             
         }
@@ -79,7 +79,7 @@ namespace RevitDBExplorer.Domain.DataModel.ValueViewModels
 
     internal class IntegerEditor : ValueEditor<int>
     {
-        public IntegerEditor(IMemberAccessor memberAccessorWithWrite, Func<int> readFunc, Action<int> writeFunc, Func<bool> canBeWrittenFunc) : base(memberAccessorWithWrite, readFunc, writeFunc, canBeWrittenFunc)
+        public IntegerEditor(IAccessor memberAccessorWithWrite, Func<int> readFunc, Action<int> writeFunc, Func<bool> canBeWrittenFunc) : base(memberAccessorWithWrite, readFunc, writeFunc, canBeWrittenFunc)
         {
            
         }       
@@ -87,7 +87,7 @@ namespace RevitDBExplorer.Domain.DataModel.ValueViewModels
 
     internal class StringEditor : ValueEditor<string>
     {       
-        public StringEditor(IMemberAccessor memberAccessorWithWrite, Func<string> readFunc, Action<string> writeFunc, Func<bool> canBeWrittenFunc) : base(memberAccessorWithWrite, readFunc, writeFunc, canBeWrittenFunc)
+        public StringEditor(IAccessor memberAccessorWithWrite, Func<string> readFunc, Action<string> writeFunc, Func<bool> canBeWrittenFunc) : base(memberAccessorWithWrite, readFunc, writeFunc, canBeWrittenFunc)
         {
         
         }     

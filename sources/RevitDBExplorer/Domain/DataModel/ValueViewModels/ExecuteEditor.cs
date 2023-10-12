@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using RevitDBExplorer.Domain.DataModel.MemberAccessors;
+using RevitDBExplorer.Domain.DataModel.Accessors;
 using RevitDBExplorer.Domain.DataModel.ValueViewModels.Base;
 using RevitDBExplorer.WPF;
 
@@ -10,7 +10,7 @@ namespace RevitDBExplorer.Domain.DataModel.ValueViewModels
 {
     internal class ExecuteEditor : BaseViewModel, IValueEditor, ICanRead, ICanWrite
     {
-        private readonly IMemberAccessor memberAccessor;
+        private readonly IAccessor accessor;
         private readonly Action exeFunc;
         private readonly Func<bool> canBeExecutedFunc;
         private Action raiseSnoopableObjectChanged;
@@ -22,9 +22,9 @@ namespace RevitDBExplorer.Domain.DataModel.ValueViewModels
         public bool CanBeWritten { get; private set; } = false;
 
 
-        public ExecuteEditor(IMemberAccessor memberAccessor, Action exeFunc,Func<bool> canBeExecutedFunc)
+        public ExecuteEditor(IAccessor accessor, Action exeFunc, Func<bool> canBeExecutedFunc)
         {
-            this.memberAccessor = memberAccessor;
+            this.accessor = accessor;
             this.exeFunc = exeFunc;
             this.canBeExecutedFunc = canBeExecutedFunc;
             ExecuteCommand = new RelayCommand(x => Write(), x => CanBeWritten);
@@ -40,7 +40,7 @@ namespace RevitDBExplorer.Domain.DataModel.ValueViewModels
             ExternalExecutorExt.ExecuteInRevitContextInsideTransactionAsync((x) =>
             {
                 exeFunc();
-            }, null, $"{memberAccessor.GetType().Name}").Forget();
+            }, null, $"{accessor.GetType().Name}").Forget();
             raiseSnoopableObjectChanged?.Invoke();
         }
 
