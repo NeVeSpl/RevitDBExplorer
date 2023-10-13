@@ -51,6 +51,7 @@ namespace RevitDBExplorer
         public bool isNewVerAvailable;
         private string newVersionLink;
         private bool isWiderThan800px;
+        private string mouseStatus;
         private readonly DispatcherTimer isRevitBusyDispatcher;
         private readonly IAutocompleteItemProvider databaseQueryAutocompleteItemProvider = new AutocompleteItemProvider();
         private readonly IBoundingBoxVisualizer boundingBoxVisualizer;
@@ -165,6 +166,18 @@ namespace RevitDBExplorer
                 OnPropertyChanged();
             }
         }
+        public string MouseStatus
+        {
+            get
+            {
+                return mouseStatus;
+            }
+            set
+            {
+                mouseStatus = value;
+                OnPropertyChanged();
+            }
+        }
         public IAutocompleteItemProvider DatabaseQueryAutocompleteItemProvider
         {
             get
@@ -186,6 +199,7 @@ namespace RevitDBExplorer
         }
         public RelayCommand OpenScriptingWithQueryCommand { get; }
         public RelayCommand SaveQueryAsFavoriteCommand { get; }
+
 
         public MainWindow()
         {
@@ -216,6 +230,7 @@ namespace RevitDBExplorer
         private void IsRevitBusyDispatcher_Tick(object sender, EventArgs e)
         {
             IsRevitBusy = Application.IsRevitBussy();
+            MouseStatus = Application.GetMouseStatus();            
         }
         public MainWindow(SourceOfObjects sourceOfObjects, IntPtr? parentWindowHandle = null) : this()
         {
@@ -223,7 +238,7 @@ namespace RevitDBExplorer
             {
                 new WindowInteropHelper(this).Owner = parentWindowHandle.Value;
             }
-            ExplorerTree.PopulateTreeView(sourceOfObjects);
+            ExplorerTree.PopulateTreeView(sourceOfObjects);  
         }
 
         
@@ -420,8 +435,7 @@ namespace RevitDBExplorer
         }
    
 
-        private DispatcherTimer window_SizeChanged_Debouncer;        
-
+        private DispatcherTimer window_SizeChanged_Debouncer;  
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             IsWiderThan800px = this.Width > 848;

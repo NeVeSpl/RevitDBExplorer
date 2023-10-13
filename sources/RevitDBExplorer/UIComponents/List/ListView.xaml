@@ -173,9 +173,9 @@
                         </Setter>
                     </Style>
                 </UniformGrid.Resources>
-                
-                <ToggleButton Content="M" IsChecked="{Binding IsMemberViewVisible}" />
-                <ToggleButton Content="P" IsChecked="{Binding IsParameterViewVisible}"/>
+
+                <ToggleButton Content="M" IsChecked="{Binding IsMemberViewVisible}" ToolTip="show members of a given element" />
+                <ToggleButton Content="P" IsChecked="{Binding IsParameterViewVisible}" ToolTip="show parameters of a given element"/>
             </UniformGrid>
 
             <controls:TextBoxWithPlaceholder Grid.Column="1" Margin="0 0 2 0" Text="{Binding FilterPhrase, Mode=TwoWay, Delay=200, UpdateSourceTrigger=PropertyChanged}" Placeholder="Filter list by name or value"/>

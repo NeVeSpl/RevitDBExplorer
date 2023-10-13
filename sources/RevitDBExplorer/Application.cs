@@ -22,7 +22,8 @@ namespace RevitDBExplorer
         public static IntPtr RevitWindowHandle;
         public static UIApplication UIApplication;      
         public static RDSController RDSController;
-
+        private static UIView UIView;
+        private static View View;
 
         public Application()
         {
@@ -55,12 +56,18 @@ namespace RevitDBExplorer
             ApplicationModifyTab.Init(panel.GetRibbonPanel(), AppSettings.Default.AddRDBECmdToModifyTab);
 
             application.Idling += Application_Idling;
+            UIApplication.ViewActivated += UIApplication_ViewActivated;
 
             return Result.Succeeded;
         }
 
+        
+
         public Result OnShutdown(UIControlledApplication application)
         {
+            application.Idling -= Application_Idling;
+            UIApplication.ViewActivated -= UIApplication_ViewActivated;
+
             return Result.Succeeded;
         }
 
@@ -86,6 +93,63 @@ namespace RevitDBExplorer
             }            
         }
 
+
+        private void UIApplication_ViewActivated(object sender, Autodesk.Revit.UI.Events.ViewActivatedEventArgs e)
+        {
+            if (e.CurrentActiveView != null)
+            {
+                var uiViews = UIApplication.ActiveUIDocument.GetOpenUIViews();
+                UIView = uiViews.FirstOrDefault(x => x.ViewId  == e.CurrentActiveView.Id);
+                View = e.CurrentActiveView;
+            }
+            else
+            {
+                UIView = null;
+                View = null;
+            }
+        }
+        public static string GetMouseStatus()
+        {
+            var uiView = Application.UIView;
+            var view = Application.View;
+            if ((uiView != null) && (view != null))
+            {
+                // source : https://thebuildingcoder.typepad.com/blog/2012/10/uiview-windows-coordinates-referenceintersector-and-my-own-tooltip.html
+
+                var rect = uiView.GetWindowRectangle();
+                var p = System.Windows.Forms.Cursor.Position;
+
+                double dx = (double)(p.X - rect.Left) / (rect.Right - rect.Left);
+                double dy = (double)(p.Y - rect.Bottom) / (rect.Top - rect.Bottom);
+
+                var corners = uiView.GetZoomCorners();
+                var a = corners[0];
+                var b = corners[1];
+                var v = b - a;               
+
+                var vr = dx * new XYZ(v.X * view.RightDirection.X, v.Y * view.RightDirection.Y, v.Z * view.RightDirection.Z);
+                var vu = dy * new XYZ(v.X * view.UpDirection.X, v.Y * view.UpDirection.Y, v.Z * view.UpDirection.Z);
+                var vv = 1.0 * new XYZ(a.X * view.ViewDirection.X, a.Y * view.ViewDirection.Y, a.Z * view.ViewDirection.Z);
+
+                var q = a + vr + vu - vv;
+
+                if ((Math.Abs(view.RightDirection.X) < 0.999) && (Math.Abs(view.RightDirection.Y) < 0.999) && (Math.Abs(view.RightDirection.Z) < 0.999))
+                {
+                    return "(?,,)";
+                }
+                if ((Math.Abs(view.UpDirection.X) < 0.999) && (Math.Abs(view.UpDirection.Y) < 0.999) && (Math.Abs(view.UpDirection.Z) < 0.999))
+                {
+                    return "(,?,)";
+                }
+                if ((Math.Abs(view.ViewDirection.X) < 0.999) && (Math.Abs(view.ViewDirection.Y) < 0.999) && (Math.Abs(view.ViewDirection.Z) < 0.999))
+                {
+                    return "(,,?)";
+                }
+
+                return $"({q.X:f3}, {q.Y:f3}, {q.Z:f3})";
+            }
+            return "";
+        }
 
         private static DateTime LastTimeWhenInCharge; 
         private void Application_Idling(object sender, Autodesk.Revit.UI.Events.IdlingEventArgs e)

@@ -37,7 +37,7 @@
             </ResourceDictionary.MergedDictionaries>           
             
             <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
-            <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverterCollapsed" WhenFalse="Collapsed"/>
+            <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverterCollapsed" WhenFalse="Collapsed"/>            
             <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverterCollapsedInverted" WhenFalse="Visible" WhenTrue="Collapsed"/>
             <converters:EnumMatchToVisibilityConverter x:Key="EnumMatchToVisibilityConverter"/>
         </ResourceDictionary>
@@ -321,12 +321,13 @@
                 </Button>
             </Grid>
             <Grid  Background="{DynamicResource StatusBar.Background}" Margin="0 0 -2 0"  Grid.ColumnSpan="2" Grid.Column="1"  Grid.Row="3">
-                <TextBlock  Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding IsNewVerAvailable, Converter={StaticResource BoolToVisibilityConverterCollapsed}}">    
+                <TextBlock  HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding IsNewVerAvailable, Converter={StaticResource BoolToVisibilityConverterCollapsed}}">    
                     <Run Foreground="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}">a new version is available :</Run>
                     <Hyperlink NavigateUri="{Binding NewVersionLink}" RequestNavigate="Hyperlink_RequestNavigate" Foreground="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" TextDecorations="None"  >
                         <Run Text="{Binding NewVersionLink}" />
                     </Hyperlink>
                 </TextBlock>
+                <TextBlock Text="{Binding MouseStatus}" ToolTip="mouse cursor position in the Revit Model Coordinates (imperial), &#x0a;&#x0a; it does not work when a direction of a Revit view is not aligned with any directions of a Revit model" HorizontalAlignment="Left" Margin="13 0 0 0" VerticalAlignment="Center" Visibility="{Binding IsNewVerAvailable, Converter={StaticResource BoolToVisibilityConverterCollapsedInverted}}"/>
             </Grid>
         </Grid>
 
