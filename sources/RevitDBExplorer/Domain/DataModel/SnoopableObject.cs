@@ -76,16 +76,13 @@ namespace RevitDBExplorer.Domain.DataModel
                 }
             }
             if (@object is Parameter parameter)
-            {
-                NamePrefixIcon = Icon.Empty;
-                if (parameter.Id.Value() > -1)
+            {               
+                NamePrefixIcon = parameter.GetOrgin() switch
                 {
-                    NamePrefixIcon = Icon.ProjectParameter;
-                }
-                if (parameter.IsShared)
-                {
-                    NamePrefixIcon = Icon.SharedParameter;
-                }
+                    ParameterOrgin.Project => Icon.ProjectParameter, 
+                    ParameterOrgin.Shared => Icon.SharedParameter,
+                    _ => Icon.Empty 
+                };               
             }
         }
 

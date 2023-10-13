@@ -11,11 +11,13 @@ namespace RevitDBExplorer.Domain.DataModel
     
 
         public override string Name => parameter.Definition.Name;
+        public ParameterOrgin Orgin { get; }
         
 
         public SnoopableParameter(SnoopableObject parent, Parameter parameter) : base(parent, new ParameterAccessor(parameter))
         {
-            this.parameter = parameter;            
+            this.parameter = parameter;
+            this.Orgin = parameter.GetOrgin();
         }       
 
 

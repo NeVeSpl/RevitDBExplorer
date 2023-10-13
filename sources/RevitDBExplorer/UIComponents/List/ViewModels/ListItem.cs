@@ -146,7 +146,10 @@ namespace RevitDBExplorer.UIComponents.List.ViewModels
     {
         public ListItemForParameter(SnoopableParameter left, SnoopableParameter right, Action askForReload, bool doCompare) : base(left, right, askForReload, doCompare)
         {
-            
+            SortingKey = $"{(int)SnoopableItem.Orgin}_{SnoopableItem.Name}";
+            GroupingKey = SnoopableItem.Orgin.ToString();
         }
+
+
     }
 }

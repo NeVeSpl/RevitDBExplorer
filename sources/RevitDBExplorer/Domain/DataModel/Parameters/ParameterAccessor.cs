@@ -49,6 +49,8 @@ namespace RevitDBExplorer.Domain.DataModel.Parameters
                     var doubleValue = parameter.AsDouble();
                     (value as ValueContainer<double>).SetValueTyped(context, doubleValue);
                     break;
+                case StorageType.None:
+                    break;
             }
             return new ReadResult(value.ValueAsString, "[ByParam] " + value.TypeName, value.CanBeSnooped, value);
 
@@ -63,6 +65,7 @@ namespace RevitDBExplorer.Domain.DataModel.Parameters
         {
             switch (storageType)
             {
+                case StorageType.None:
                 case StorageType.String:
                     return new ValueContainer<string>();
                 case StorageType.Integer:
@@ -71,6 +74,7 @@ namespace RevitDBExplorer.Domain.DataModel.Parameters
                     return new ValueContainer<double>();
                 case StorageType.ElementId:
                     return new ValueContainer<ElementId>();
+               
             }
             throw new NotImplementedException();
         }
