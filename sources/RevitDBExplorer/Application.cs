@@ -112,41 +112,48 @@ namespace RevitDBExplorer
         {
             var uiView = Application.UIView;
             var view = Application.View;
-            if ((uiView != null) && (view != null))
+            if ((uiView != null) && (view != null) && (view.IsValidObject) && (uiView.IsValidObject))
             {
                 // source : https://thebuildingcoder.typepad.com/blog/2012/10/uiview-windows-coordinates-referenceintersector-and-my-own-tooltip.html
 
-                var rect = uiView.GetWindowRectangle();
-                var p = System.Windows.Forms.Cursor.Position;
-
-                double dx = (double)(p.X - rect.Left) / (rect.Right - rect.Left);
-                double dy = (double)(p.Y - rect.Bottom) / (rect.Top - rect.Bottom);
-
-                var corners = uiView.GetZoomCorners();
-                var a = corners[0];
-                var b = corners[1];
-                var v = b - a;               
-
-                var vr = dx * new XYZ(v.X * view.RightDirection.X, v.Y * view.RightDirection.Y, v.Z * view.RightDirection.Z);
-                var vu = dy * new XYZ(v.X * view.UpDirection.X, v.Y * view.UpDirection.Y, v.Z * view.UpDirection.Z);
-                var vv = 1.0 * new XYZ(a.X * view.ViewDirection.X, a.Y * view.ViewDirection.Y, a.Z * view.ViewDirection.Z);
-
-                var q = a + vr + vu - vv;
-
-                if ((Math.Abs(view.RightDirection.X) < 0.999) && (Math.Abs(view.RightDirection.Y) < 0.999) && (Math.Abs(view.RightDirection.Z) < 0.999))
+                try
                 {
-                    return "(?,,)";
-                }
-                if ((Math.Abs(view.UpDirection.X) < 0.999) && (Math.Abs(view.UpDirection.Y) < 0.999) && (Math.Abs(view.UpDirection.Z) < 0.999))
-                {
-                    return "(,?,)";
-                }
-                if ((Math.Abs(view.ViewDirection.X) < 0.999) && (Math.Abs(view.ViewDirection.Y) < 0.999) && (Math.Abs(view.ViewDirection.Z) < 0.999))
-                {
-                    return "(,,?)";
-                }
+                    var rect = uiView.GetWindowRectangle();
+                    var p = System.Windows.Forms.Cursor.Position;
 
-                return $"({q.X:f3}, {q.Y:f3}, {q.Z:f3})";
+                    double dx = (double)(p.X - rect.Left) / (rect.Right - rect.Left);
+                    double dy = (double)(p.Y - rect.Bottom) / (rect.Top - rect.Bottom);
+
+                    var corners = uiView.GetZoomCorners();
+                    var a = corners[0];
+                    var b = corners[1];
+                    var v = b - a;
+
+                    var vr = dx * new XYZ(v.X * view.RightDirection.X, v.Y * view.RightDirection.Y, v.Z * view.RightDirection.Z);
+                    var vu = dy * new XYZ(v.X * view.UpDirection.X, v.Y * view.UpDirection.Y, v.Z * view.UpDirection.Z);
+                    var vv = 1.0 * new XYZ(a.X * view.ViewDirection.X, a.Y * view.ViewDirection.Y, a.Z * view.ViewDirection.Z);
+
+                    var q = a + vr + vu - vv;
+
+                    if ((Math.Abs(view.RightDirection.X) < 0.999) && (Math.Abs(view.RightDirection.Y) < 0.999) && (Math.Abs(view.RightDirection.Z) < 0.999))
+                    {
+                        return "(?,,)";
+                    }
+                    if ((Math.Abs(view.UpDirection.X) < 0.999) && (Math.Abs(view.UpDirection.Y) < 0.999) && (Math.Abs(view.UpDirection.Z) < 0.999))
+                    {
+                        return "(,?,)";
+                    }
+                    if ((Math.Abs(view.ViewDirection.X) < 0.999) && (Math.Abs(view.ViewDirection.Y) < 0.999) && (Math.Abs(view.ViewDirection.Z) < 0.999))
+                    {
+                        return "(,,?)";
+                    }
+
+                    return $"({q.X:f3}, {q.Y:f3}, {q.Z:f3})";
+                }
+                catch
+                {
+
+                }
             }
             return "";
         }
