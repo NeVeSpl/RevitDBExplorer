@@ -1,6 +1,5 @@
 ﻿using System;
 using RevitDBExplorer.Domain.DataModel;
-using RevitDBExplorer.Domain.DataModel.Streams.Base;
 using RevitDBExplorer.Domain.DataModel.ValueViewModels.Base;
 using RevitDBExplorer.WPF;
 
@@ -114,42 +113,5 @@ namespace RevitDBExplorer.UIComponents.List.ViewModels
             rightItem?.Read();
             Compare();
         }
-    }
-
-    internal static class ListItemFactory
-    {
-        public static IListItem Create(SnoopableItem left, SnoopableItem right, Action askForReload, bool doCompare = false)
-        {
-            if (left is SnoopableMember)
-            {
-                return new ListItemForMember(left as SnoopableMember, right as SnoopableMember, askForReload, doCompare);
-            }
-            return new ListItemForParameter(left as SnoopableParameter, right as SnoopableParameter, askForReload, doCompare);
-        }
-    }
-
-    internal sealed class ListItemForMember : ListItem<SnoopableMember>
-    {        
-        public string Icon => $"Icon{SnoopableItem.MemberKind}";
-        public DeclaringType DeclaringType => SnoopableItem.DeclaringType;
-        public RevitDBExplorer.Domain.DocXml Documentation => SnoopableItem.Documentation;
-        
-
-        public ListItemForMember(SnoopableMember left, SnoopableMember right, Action askForReload, bool doCompare) : base(left, right, askForReload, doCompare) 
-        { 
-            SortingKey = $"{SnoopableItem.DeclaringType.InheritanceLevel:000}_{(int)SnoopableItem.MemberKind}_{SnoopableItem.Name}";
-            GroupingKey = SnoopableItem.DeclaringType.Name;
-        }
-    }
-
-    internal sealed class ListItemForParameter : ListItem<SnoopableParameter>
-    {
-        public ListItemForParameter(SnoopableParameter left, SnoopableParameter right, Action askForReload, bool doCompare) : base(left, right, askForReload, doCompare)
-        {
-            SortingKey = $"{(int)SnoopableItem.Orgin}_{SnoopableItem.Name}";
-            GroupingKey = SnoopableItem.Orgin.ToString();
-        }
-
-
     }
 }

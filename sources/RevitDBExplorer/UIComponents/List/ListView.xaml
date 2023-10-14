@@ -43,6 +43,11 @@
                     <MenuItem Header="Copy" Click="ContextMenuForGroup_Copy_Click" />
                 </ContextMenu>
 
+                <ContextMenu x:Key="ContextMenuForParameterNameColumn">
+                    <MenuItem Header="Copy" Command="{Binding Data.CopyNameCommand, Source={StaticResource Proxy}}" CommandParameter="{Binding}" />
+                    <MenuItem Header="Snoop Parameter in a new window" Command="{Binding Data.SnoopParamInNewWindowCommand, Source={StaticResource Proxy}}" CommandParameter="{Binding}" />
+                </ContextMenu>
+
                 <ToolTip x:Key="ToolTipWithRevitHelp">
                     <StackPanel Orientation="Vertical"  MaxWidth="727">
                         <StackPanel.Resources>
@@ -101,6 +106,7 @@
 
                 <DataTemplate DataType="{x:Type localVM:ListItemForParameter}">
                     <StackPanel Orientation="Horizontal"
+                                ContextMenu="{StaticResource ContextMenuForParameterNameColumn}" 
                                  Style="{StaticResource sStackPanel}"
                                 >
                         <TextBlock Text="{Binding Name, Mode=OneWay}" Foreground="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"  />
@@ -120,12 +126,24 @@
 
                 <DataTemplate DataType="{x:Type dm:SnoopableParameter}" >
                     <Border Background="Transparent">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="18"/>
+                            </Grid.ColumnDefinitions>
                         <ContentPresenter
                             ap:ClickOnUp.Command="{Binding Data.ListItem_Click_Command, Source={StaticResource Proxy}}"
                             ContextMenu="{StaticResource ContextMenuForValueColumn}"
                             ContentTemplateSelector="{StaticResource DataTemplateSelectorForPropertyType}"                         
                             HorizontalAlignment="Stretch"                 
                             />
+                            <Button Grid.Column="1" Width="15" Height="15" Padding="1" Background="Transparent" BorderBrush="Transparent" 
+                                    Command="{Binding Data.SearchForParameterValueCommand, Source={StaticResource Proxy}}" CommandParameter="{Binding .}"
+                                    ToolTip="RDQ: Search Revit database for elements that have given parameter value"
+                                    >
+                                <Path Style="{StaticResource IconSearch}" Height="14" />
+                            </Button>
+                        </Grid>
                     </Border>
                 </DataTemplate>
 

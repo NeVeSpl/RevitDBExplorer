@@ -13,7 +13,7 @@ namespace RevitDBExplorer.Domain.DataModel
 {
     internal abstract class SnoopableItem : BaseViewModel, IAmSourceOfEverything, IComparable<SnoopableItem>, IEquatable<SnoopableItem>
     {
-        private readonly SnoopableObject parent;
+        protected readonly SnoopableObject parent;
         private readonly IAccessor accessor;
         private readonly IValueViewModel itemValueViewModel;
 

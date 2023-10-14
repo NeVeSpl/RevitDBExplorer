@@ -31,6 +31,11 @@ namespace RevitDBExplorer.Domain.DataModel.Parameters
 
         public ReadResult Read(SnoopableContext context, object @object)
         {
+            if (!parameter.HasValue)
+            {
+                return new ReadResult("<has no value>", "[ByParam]", false);
+            }
+
             switch (parameter.StorageType)
             {
                 case StorageType.String:

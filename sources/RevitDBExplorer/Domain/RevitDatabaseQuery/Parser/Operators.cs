@@ -124,7 +124,11 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser
                 var units = Application.UIApplication?.ActiveUIDocument?.Document?.GetUnits();
                 if (units != null)
                 {
-                    bool isRevitDouble = UnitFormatUtils.TryParse(units, dataTypeSpecId, text, out doubleArg);
+                    bool isRevitDouble = UnitFormatUtils.TryParse(units, dataTypeSpecId, text, out double revitDoubleArg);
+                    if (isRevitDouble)
+                    {
+                        doubleArg = revitDoubleArg;
+                    }
                 }
             }
 #endif

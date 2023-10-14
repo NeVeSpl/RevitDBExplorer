@@ -23,6 +23,7 @@ namespace RevitDBExplorer.UIComponents.List
         private readonly ObservableCollection<DynamicGridViewColumn> columnsFor1;
         private readonly ObservableCollection<DynamicGridViewColumn> columnsFor2;
         private readonly IAmWindowOpener windowOpener;
+        private readonly IAmQueryExecutor queryExecutor;
         private ObservableCollection<IListItem> listItems = new();
         private ObservableCollection<DynamicGridViewColumn> columns = new();
         private IListItem listSelectedItem = null;
@@ -74,6 +75,8 @@ namespace RevitDBExplorer.UIComponents.List
         public RelayCommand CopyNameCommand { get; }
         public RelayCommand CopyValueCommand { get; }
         public RelayCommand OpenCHMCommand { get; }
+        public RelayCommand SnoopParamInNewWindowCommand { get; }
+        public RelayCommand SearchForParameterValueCommand { get; }
         public string FilterPhrase
         {
             get
@@ -123,13 +126,20 @@ namespace RevitDBExplorer.UIComponents.List
             {
                 hasParameters = value;
                 OnPropertyChanged();
+                if (hasParameters == false)
+                {
+                    isMemberViewVisible = true;
+                    OnPropertyChanged(nameof(IsMemberViewVisible));
+                    OnPropertyChanged(nameof(IsParameterViewVisible));
+                }
             }
         }
 
 
-        public ListVM(IAmWindowOpener windowOpener)
+        public ListVM(IAmWindowOpener windowOpener, IAmQueryExecutor queryExecutor)
         {
             this.windowOpener = windowOpener;
+            this.queryExecutor = queryExecutor;
             columnsFor1 = new ObservableCollection<DynamicGridViewColumn>()
             {
                 new DynamicGridViewColumn("Name", 38) { Binding ="."},
@@ -138,15 +148,17 @@ namespace RevitDBExplorer.UIComponents.List
             columnsFor2 = new ObservableCollection<DynamicGridViewColumn>()
             {
                 new DynamicGridViewColumn("Name", 30) { Binding ="."},
-                new DynamicGridViewColumn("left Value", 40){ Binding ="[0]" },
-                new DynamicGridViewColumn("right Value", 40){ Binding ="[1]" },
+                new DynamicGridViewColumn("left Value", 35){ Binding ="[0]" },
+                new DynamicGridViewColumn("right Value", 35){ Binding ="[1]" },
             };
             KeyDown_Enter_Command = new RelayCommand(KeyDown_Enter);
             ListItem_Click_Command = new RelayCommand(ListItem_Click);
             ReloadCommand = new RelayCommand(Reload);
             CopyNameCommand = new RelayCommand(CopyName);
             CopyValueCommand = new RelayCommand(CopyValue);
-            OpenCHMCommand = new RelayCommand(OpenCHM);            
+            OpenCHMCommand = new RelayCommand(OpenCHM);
+            SnoopParamInNewWindowCommand = new RelayCommand(SnoopParamInNewWindow);
+            SearchForParameterValueCommand = new RelayCommand(SearchForParameterValue);
         }
 
 
@@ -168,7 +180,7 @@ namespace RevitDBExplorer.UIComponents.List
         }
         private async Task<bool> PopulateListView()
         {
-            HasParameters = false;
+            //HasParameters = false;
             if (treeSelectedItem is SnoopableObjectTreeItem snoopableObjectTreeItem)
             {
                 HasParameters = snoopableObjectTreeItem.Object.HasParameters;
@@ -336,6 +348,20 @@ namespace RevitDBExplorer.UIComponents.List
                 CHMService.OpenCHM(listItem[0]);
             }
         }
+        private void SnoopParamInNewWindow(object obj)
+        {
+            if (obj is ListItemForParameter listItem)
+            {
+                windowOpener?.Open(new SourceOfObjects(new[] { listItem.CreateSnoopParameter() }));
+            }
+        }
+        private void SearchForParameterValue(object obj)
+        {
+            if (obj is SnoopableParameter snoopableParameter)
+            {
+                queryExecutor.Query(snoopableParameter.GenerateQueryForForParameterValue());
+            }
+        }
         private void CopyValue(object obj)
         {
             if (obj is SnoopableItem snoopableItem)
@@ -348,11 +374,8 @@ namespace RevitDBExplorer.UIComponents.List
         }
 
 
-        private void Reload()
-        {
-            Reload(null);
-        }
-        private async void Reload(object parameter)
+       
+        private async void Reload()
         {
             await ExternalExecutor.ExecuteInRevitContextAsync(uiApp => ReloadItems());
         }       
@@ -361,5 +384,9 @@ namespace RevitDBExplorer.UIComponents.List
     internal interface IAmWindowOpener
     {
         void Open(SourceOfObjects sourceOfObjects);
+    }
+    internal interface IAmQueryExecutor
+    {
+        void Query(string query);
     }
 }

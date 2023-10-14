@@ -5,11 +5,16 @@ namespace RevitDBExplorer.WPF
 {
     internal class RelayCommand : ICommand
     {
-        private readonly Action<object> execute;
+        private readonly object execute;       
         private readonly Func<object, bool> canExecute;
 
       
         public RelayCommand(Action<object> execute, Func<object, bool> canExecute = null)
+        {
+            this.execute = execute;
+            this.canExecute = canExecute;
+        }
+        public RelayCommand(Action execute, Func<object, bool> canExecute = null)
         {
             this.execute = execute;
             this.canExecute = canExecute;
@@ -30,7 +35,14 @@ namespace RevitDBExplorer.WPF
         }
         public void Execute(object parameter)
         {
-            execute(parameter);
+            if (execute is Action<object> actionWithObject)
+            {
+                actionWithObject(parameter);
+            }
+            if (execute is Action action)
+            {
+                action();
+            }
         }
 
         #endregion

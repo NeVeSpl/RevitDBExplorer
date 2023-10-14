@@ -35,7 +35,7 @@ namespace RevitDBExplorer
 {
     internal enum RightView { None, List, CommandAndControl, CompareAndPinToolInfo }
 
-    internal partial class MainWindow : Window, IAmWindowOpener, INotifyPropertyChanged
+    internal partial class MainWindow : Window, IAmWindowOpener, IAmQueryExecutor, INotifyPropertyChanged
     {
         private readonly ExplorerTreeViewModel explorerTreeViewModel = new();
         private readonly UtilityTreeViewModel utilityTreeViewModel = new();
@@ -204,7 +204,7 @@ namespace RevitDBExplorer
         public MainWindow()
         {
             Dispatcher.UnhandledException += Dispatcher_UnhandledException;
-            listVM = new ListVM(this);
+            listVM = new ListVM(this, this);
 
             InitializeComponent();
             this.DataContext = this;
@@ -368,7 +368,12 @@ namespace RevitDBExplorer
             QueryVisualization.Update(rdqResult.Commands).Forget();
             ExplorerTree.PopulateTreeView(rdqResult.SourceOfObjects);            
         }    
-         
+        void IAmQueryExecutor.Query(string query) 
+        {
+            DatabaseQuery = query;
+        }
+
+
         private void ResetDatabaseQuery()
         {
             databaseQuery = "";

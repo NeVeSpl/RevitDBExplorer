@@ -3,8 +3,6 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
-using RevitDBExplorer.Domain.DataModel;
-using RevitDBExplorer.Domain.DataModel.ValueViewModels.Base;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 

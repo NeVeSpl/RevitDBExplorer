@@ -200,5 +200,8 @@
     <Style x:Key="IconClean" TargetType="Path" BasedOn="{StaticResource IconSelector}">
         <Setter Property="Data" Value="{StaticResource vBroom}"/>
     </Style>
+    <Style x:Key="IconSearch" TargetType="Path" BasedOn="{StaticResource IconSelector}">
+        <Setter Property="Data" Value="{StaticResource vMagnify}"/>
+    </Style>
 </ResourceDictionary>
                     

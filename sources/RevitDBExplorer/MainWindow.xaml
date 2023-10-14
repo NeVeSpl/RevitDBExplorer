@@ -327,7 +327,7 @@
                         <Run Text="{Binding NewVersionLink}" />
                     </Hyperlink>
                 </TextBlock>
-                <TextBlock Text="{Binding MouseStatus}" ToolTip="mouse cursor position in the Revit Model Coordinates (imperial), &#x0a;&#x0a; it does not work when a direction of a Revit view is not aligned with any directions of a Revit model" HorizontalAlignment="Left" Margin="13 0 0 0" VerticalAlignment="Center" Visibility="{Binding IsNewVerAvailable, Converter={StaticResource BoolToVisibilityConverterCollapsedInverted}}"/>
+                <TextBlock Text="{Binding MouseStatus}" Foreground="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" ToolTip="Mouse cursor position in the Revit Model Coordinates (imperial), &#x0a;&#x0a; it does not work when a direction of a Revit view is not aligned with any of directions of a Revit model" HorizontalAlignment="Left" Margin="13 0 0 0" VerticalAlignment="Center" Visibility="{Binding IsNewVerAvailable, Converter={StaticResource BoolToVisibilityConverterCollapsedInverted}}"/>
             </Grid>
         </Grid>
 
