@@ -58,12 +58,17 @@ namespace RevitDBExplorer.Domain.DataModel
                        
 
                         var units = Application.UIApplication?.ActiveUIDocument?.Document?.GetUnits();
+#if R2022b
                         if (units != null)
                         {
+                            
                             var formatted = UnitFormatUtils.Format(units, parameter.Definition.GetDataType(), vcd.Value, false, new FormatValueOptions { AppendUnitSymbol = true });
                             value = $"= {formatted}";
+
                         }
+
                         else
+#endif
                         {
                             value = $"= {vcd.Value}";
                         }

@@ -8,6 +8,7 @@
         <ResourceDictionary Source="ScrollBar.xaml"/>
         <ResourceDictionary Source="ScrollViewer.xaml"/>
         <ResourceDictionary Source="TextBox.xaml"/>
+        <ResourceDictionary Source="ToggleButton.xaml"/>
         <ResourceDictionary Source="Window.xaml"/>
     </ResourceDictionary.MergedDictionaries>    
 </ResourceDictionary>                    
