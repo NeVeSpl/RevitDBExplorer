@@ -4,6 +4,7 @@
 
 Yet another [RevitLookup](https://github.com/jeremytammik/RevitLookup) like tool. RevitLookup was an indispensable tool to work with Revit API for many years. But now, there is a better tool for the job. Let me introduce you to Revit database explorer and its capabilities. It not only allows us to explore database in a more efficient way thanks to querying, but also to modify Revit database through ad hoc scripts written in C#. 
 
+- [compare objects and parameters](#compare-object-members-and-element-parameters-values)
 - [query Revit database](#query-revit-database-with-rdq-revit-database-querying)
 - [script Revit database](#script-revit-database-with-rds-revit-database-scripting)
   - [ad hoc SELECT query](#ad-hoc-select-query)
@@ -29,6 +30,10 @@ Download and install [RevitDBExplorer.msi](https://github.com/NeVeSpl/RevitDBExp
 - [How to find an element using its IfcGuid in Revit?](https://www.youtube.com/watch?v=oT6bxfKc2lg)
 
 ## Features
+
+### compare object members and element parameters values
+
+![compare objects and parameters](documentation/examples/compare-objects-and-parameters.gif)
 
 ### query Revit database with RDQ (Revit database querying)
 

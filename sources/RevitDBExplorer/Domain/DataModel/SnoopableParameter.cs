@@ -1,6 +1,5 @@
 ﻿using System;
 using Autodesk.Revit.DB;
-using Autodesk.Revit.DB.Architecture;
 using RevitDBExplorer.Domain.DataModel.Parameters;
 using RevitDBExplorer.Domain.DataModel.ValueContainers.Base;
 using RevitDBExplorer.Domain.DataModel.ValueViewModels;
