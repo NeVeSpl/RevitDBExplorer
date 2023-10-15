@@ -93,7 +93,8 @@ Revit database explorer allows you to snoop all schemas that are loaded into Rev
 
 ### easier work with Element.Geometry
 
-Not only you have faster access to a geometry of an element, but you can also select an instance of GeometryObject in Revit if it has a valid reference.  
+- you can select an instance of GeometryObject in Revit if it has a valid reference
+- on the status bar you will find mouse cursor position expressed in the Revit model coordinates
 
 ![easier-work-with-geometry](documentation/examples/easier-work-with-element-geometry.gif)
 
