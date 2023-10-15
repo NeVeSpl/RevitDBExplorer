@@ -86,7 +86,7 @@ ForgeTypeId label corresponds to static properties defined on:
 
 ### better support for Revit Extensible Storage
 
-Revit database explorer allows you to snoop all schemas that are loaded into Revit memory, and you can easily get all elements that have an entity of a given schema. You get access to Extensible Storage data exactly like through RevitApi, by invoking: Element.GetEntity(). In contrast to Revit Lookup, you will only see entities that you can read and really exist in a given element. (Revit Lookup shows an exception when cannot access an entity even when an entity does not exist in a given element....)
+Revit database explorer allows you to snoop all schemas that are loaded into Revit memory, and you can easily get all elements that have an entity of a given schema. You get access to Extensible Storage data exactly like through RevitAPI, by invoking: Element.GetEntity(). 
 
 ![better-support-for-revit-extensible-storage](documentation/examples/better-support-for-revit-extensible-storage.gif)
 
