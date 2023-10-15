@@ -191,7 +191,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Filters
             
             if (storageType == (StorageType.Double))
             {
-                double epsilon = 1e-6;
+                double epsilon = 1e-5;
                 rule = @operator.Type switch
                 {
                     OperatorType.Equals => ParameterFilterRuleFactory.CreateEqualsRule(parameter, argument.Double, epsilon),

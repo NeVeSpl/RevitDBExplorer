@@ -60,8 +60,18 @@ namespace RevitDBExplorer.Domain.DataModel
 #if R2022b
                         if (units != null)
                         {
-                            
-                            var formatted = UnitFormatUtils.Format(units, parameter.Definition.GetDataType(), vcd.Value, false, new FormatValueOptions { AppendUnitSymbol = true });
+                            var options = new FormatValueOptions { AppendUnitSymbol = true };
+                            var dataType = parameter.Definition.GetDataType();
+                            var copy = new FormatOptions(units.GetFormatOptions(dataType));
+                            if (Units.IsModifiableSpec(dataType))
+                            {
+                                if (copy.Accuracy > 0.000001)
+                                {
+                                    copy.Accuracy = 0.000001;
+                                }
+                                options.SetFormatOptions(copy);
+                            }
+                            var formatted = UnitFormatUtils.Format(units, dataType, vcd.Value, false, options);
                             value = $"= {formatted}";
 
                         }
