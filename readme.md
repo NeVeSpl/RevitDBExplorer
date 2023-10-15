@@ -57,7 +57,7 @@ An example shows how to add a prefix to `Mark` parameter for many selected eleme
 
 ### easy access to Revit API documentation
 
- Tooltips work out-of-box, RevitApi.chm file is part of [Revit SDK](https://www.autodesk.com/developer-network/platform-technologies/revit) and the path to it needs to be set manually.
+ Tooltips work out-of-box, RevitApi.chm file is part of [Revit .NET SDK](https://www.autodesk.com/developer-network/platform-technologies/revit) and the path to it needs to be set manually.
 
 ![tooltips-with-Revit-documentations](documentation/examples/easy-access-to-revit-api-documentation.gif)
 
@@ -68,12 +68,18 @@ An example shows how to add a prefix to `Mark` parameter for many selected eleme
 ### extensive support for ForgeTypeId
 
 We all love (or hate) the ForgeTypeId, Revit database explorer exposes all data related to a given ForgeTypeId scattered through many utils. You can also snoop all ForgeTypeIds returned from: 
-- ParameterUtils.GetAllBuiltInGroups
-- ParameterUtils.GetAllBuiltInParameters
-- UnitUtils.GetAllMeasurableSpecs
-- UnitUtils.GetAllDisciplines
-- SpecUtils.GetAllSpecs
-- UnitUtils.GetAllUnits
+- [ParameterUtils.GetAllBuiltInGroups](https://www.revitapidocs.com/2024/884d14d3-02e5-5631-adb3-79c612d04b5a.htm)
+- [ParameterUtils.GetAllBuiltInParameters](https://www.revitapidocs.com/2024/bbcac12c-c02a-3747-55d0-95bc3f6d2bb2.htm)
+- [UnitUtils.GetAllMeasurableSpecs](https://www.revitapidocs.com/2024/3acc20f9-40cd-d2d0-cb84-6b47d2140a14.htm)
+- [UnitUtils.GetAllUnits](https://www.revitapidocs.com/2024/4f31ee9d-8e33-a12a-14b3-cc565dd77d45.htm)
+- [UnitUtils.GetAllDisciplines](https://www.revitapidocs.com/2024/5b80ebe4-b085-5851-b412-0ad1dd5025bf.htm)
+- [SpecUtils.GetAllSpecs](https://www.revitapidocs.com/2024/a93168f7-b52d-e97a-7935-50ddcec7fb54.htm)
+
+ForgeTypeId label corresponds to static properties defined on:
+- [SpecTypeId](https://www.revitapidocs.com/2024/87de2c69-a5e8-40e3-3d7a-9b18f1fda03a.htm)
+- [UnitTypeId](https://www.revitapidocs.com/2024/4245c082-629c-9ab0-7d43-fbb771db7991.htm)
+- [GroupTypeId](https://www.revitapidocs.com/2024/cf6883b8-349d-bdc3-3099-b9e7d380ba84.htm)
+- [ParameterTypeId](https://www.revitapidocs.com/2024/92077203-21e1-a197-ccdc-fae0a8caa770.htm)
 
 ![extensive-support-for-ForgeTypeId](documentation/examples/extensive-support-for-ForgeTypeId.gif)
 
