@@ -48,7 +48,7 @@ namespace RevitDBExplorer
         private string databaseQueryToolTip = string.Empty;
         private bool isPopupOpen;        
         private bool isRevitBusy;
-        public bool isNewVerAvailable;
+        private bool isNewVerAvailable;
         private string newVersionLink;
         private bool isWiderThan800px;
         private string mouseStatus;
