@@ -96,7 +96,7 @@ namespace RevitDBExplorer.UIComponents.Trees.Base.Items
         }
 
 
-        internal static readonly HashSet<string> NamesToGroupByCategory = new HashSet<string>() { nameof(FamilyInstance), nameof(Element), nameof(FamilySymbol), nameof(IndependentTag), nameof(Family) };
+        private static readonly HashSet<string> NamesToGroupByCategory = new HashSet<string>() { nameof(FamilyInstance), nameof(Element), nameof(FamilySymbol), nameof(IndependentTag), nameof(Family) };
 
 
         protected GroupTreeItem(string name, IEnumerable<SnoopableObject> items, Predicate<object> itemFilter, GroupBy groupedBy, GroupTreeItem parent) : base(parent.Commands)

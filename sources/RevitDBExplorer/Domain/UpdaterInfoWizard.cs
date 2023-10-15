@@ -40,8 +40,8 @@ namespace RevitDBExplorer.Domain
 
                             var addinName = addinId.GetAddInName();
                             var addinGuid = addinId.GetGUID();
-
-                            nameToGuidMap.Add($"{addinName}.{updaterName}", updaterId);
+                          
+                            nameToGuidMap[$"{addinName}.{updaterName}"] = updaterId;
                         }
                         catch
                         {

@@ -12,7 +12,7 @@
 ### Types of scripts
 
  RDS scripts are divided into three categories: 
-- SELECT query, where the result of the query is displayed in the RDBE UI 
+- SELECT query, where the result of the query is displayed in the Revit database explorer UI 
 - UPDATE command, where as a result of the command execution, the model is changed
 - SCRIPT, behaves the same as UPDATE commands, but the code does not have to be put inside a function
 

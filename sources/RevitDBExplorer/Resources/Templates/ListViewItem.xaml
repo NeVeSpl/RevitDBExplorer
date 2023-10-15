@@ -18,7 +18,7 @@
     <SolidColorBrush x:Key="Item.SelectedInactive.Border" Color="#FFDADADA"/>
     <Style TargetType="{x:Type ListViewItem}" >
         <Setter Property="SnapsToDevicePixels" Value="True"/>
-        <Setter Property="Padding" Value="4,1"/>
+        <Setter Property="Padding" Value="4, 2"/>
         <Setter Property="HorizontalContentAlignment" Value="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
         <Setter Property="VerticalContentAlignment" Value="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
         <Setter Property="Background" Value="Transparent"/>
@@ -53,6 +53,12 @@
                         </GridViewRowPresenter>
                     </Border>
                     <ControlTemplate.Triggers>
+                        <Trigger Property="ItemsControl.AlternationIndex" Value="0">                          
+                            <Setter Property="BorderBrush" Value="{DynamicResource ListView.Alternation.Background_0}"/>
+                        </Trigger>
+                        <Trigger Property="ItemsControl.AlternationIndex" Value="1">                            
+                            <Setter Property="BorderBrush" Value="{DynamicResource ListView.Alternation.Background_1}"/>
+                        </Trigger>
                         <MultiTrigger>
                             <MultiTrigger.Conditions>
                                 <Condition Property="IsMouseOver" Value="True"/>

@@ -197,6 +197,7 @@
                         <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
                         <Setter Property="HorizontalAlignment" Value="Stretch"/>
                         <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                        <Setter Property="Margin" Value="0"/>
 
                         <Style.Triggers>
                             <Trigger Property="IsMouseOver" Value="true" >

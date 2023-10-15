@@ -265,7 +265,7 @@ namespace RevitDBExplorer
             var selector = (Selector)Enum.Parse(typeof(Selector), tag);
             if (selector == Selector.PickEdge || selector ==  Selector.PickFace)
             {
-                //this.WindowState = WindowState.Minimized;
+                this.WindowState = WindowState.Minimized;
             }
             
             var sourceOfObjects = await ExternalExecutor.ExecuteInRevitContextAsync(x =>
@@ -277,7 +277,7 @@ namespace RevitDBExplorer
 
             if (selector == Selector.PickEdge || selector == Selector.PickFace)
             {
-                //this.WindowState = WindowState.Normal;
+                this.WindowState = WindowState.Normal;
             }
 
             ExplorerTree.PopulateTreeView(sourceOfObjects);            

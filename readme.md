@@ -15,7 +15,7 @@ Yet another [RevitLookup](https://github.com/jeremytammik/RevitLookup) like tool
 - [easier work with Element.Geometry](#easier-work-with-elementgeometry)
 - [dark and light UI themes](#dark-and-light-ui-themes)
 - [snoop Revit events](#snoop-revit-events-with-rem-revit-event-monitor)
-- [snoop updaters](#snoop-updaters)
+
 
 
 
@@ -103,8 +103,3 @@ A new take on [EventsMonitor from  RevitSdkSamples
 
 ![snooping-events](documentation/examples/snooping-events.gif)
 
-### snoop updaters
-
-Revit database explorer allows to look deeper into UpdaterRegistry.GetRegisteredUpdaterInfos(). What is special about this feature is that, with a bit of luck, it is able to get UpdaterId, as the first publicly available tool.
-
-![snooping-updaters](documentation/examples/snooping-updaters.gif)
