@@ -12,6 +12,8 @@ namespace RevitDBExplorer.Domain.Selectors
     internal class SnoopForge : ISelector
     {
         private readonly Selector selector;
+        public string Title { get; private set; } = "TODO";
+
 
         public SnoopForge(Selector selector)
         {

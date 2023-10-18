@@ -11,6 +11,9 @@ namespace RevitDBExplorer.Domain.Selectors
 {
     internal class SnoopSchemas : ISelector
     {
+        public string Title { get; } = "Schema.ListSchemas()";
+
+
         public IEnumerable<SnoopableObject> Snoop(UIApplication app)
         {
             return Schema.ListSchemas().Select(x => new SnoopableObject(app?.ActiveUIDocument?.Document, x));

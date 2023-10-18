@@ -9,6 +9,9 @@ namespace RevitDBExplorer.Domain.Selectors
 {
     internal class SnoopLoadedApplications : ISelector
     {
+        public string Title { get; } = "UIApplication.LoadedApplications";
+
+
         public IEnumerable<SnoopableObject> Snoop(UIApplication app)
         {
             AddInManifestWizard.WingardiumLeviosa(app);

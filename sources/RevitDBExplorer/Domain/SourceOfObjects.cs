@@ -11,17 +11,16 @@ namespace RevitDBExplorer.Domain
     {
         IEnumerable<SnoopableObject> Snoop(UIApplication app);
     }
-
-    internal interface IAmCommand
+    internal interface IAmSourceOfEverythingWithTitle : IAmSourceOfEverything
     {
-        void Execute(UIApplication app);
+        string Title { get; }
     }
 
     internal sealed class SourceOfObjects
     {        
-        private readonly IAmSourceOfEverything source;   
+        private readonly IAmSourceOfEverything source;        
 
-        public string Title { get; init; }
+        public string Title { get; set; }
         public IList<SnoopableObject> Objects { get; private set; } = new SnoopableObject[0];
 
 
@@ -41,9 +40,15 @@ namespace RevitDBExplorer.Domain
 
         public void ReadFromTheSource(UIApplication uiApplication)
         {
-            if (source == null) return;
+            if (source is null) return;
+            
             var result = source.Snoop(uiApplication) ?? Enumerable.Empty<SnoopableObject>();
             Objects = result.ToArray();
+
+            if (source is IAmSourceOfEverythingWithTitle sourceWithTitle) 
+            {
+                //Title = sourceWithTitle.Title;
+            }            
         }
     }
 }

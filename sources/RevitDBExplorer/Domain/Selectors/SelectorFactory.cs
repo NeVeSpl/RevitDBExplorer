@@ -52,7 +52,7 @@ namespace RevitDBExplorer.Domain.Selectors
                 Selector.PickPoint => new SnoopPick(ObjectType.PointOnElement),
                 Selector.PickSubelement => new SnoopPick(ObjectType.Subelement),
                 Selector.LinkedElement => new SnoopLinkedElement(),
-                Selector.DependentElements => new SnoopDependentElements(),
+                //Selector.DependentElements => new SnoopDependentElements(),
                 Selector.Application => new SnoopApplication(),
                 Selector.ActiveDocument => new SnoopActiveDocument(),
                 Selector.ActiveView => new SnoopActiveView(),

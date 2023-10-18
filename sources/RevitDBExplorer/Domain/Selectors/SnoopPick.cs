@@ -12,6 +12,8 @@ namespace RevitDBExplorer.Domain.Selectors
     internal class SnoopPick : ISelector
     {
         private readonly ObjectType objectType;
+        public string Title { get; private set; } = "TODO";
+
 
         public SnoopPick(ObjectType objectType)
         {

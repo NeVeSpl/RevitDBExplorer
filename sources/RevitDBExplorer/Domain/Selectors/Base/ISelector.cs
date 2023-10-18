@@ -2,7 +2,7 @@
 
 namespace RevitDBExplorer.Domain.Selectors.Base
 {
-    internal interface ISelector: IAmSourceOfEverything
+    internal interface ISelector: IAmSourceOfEverythingWithTitle
     {
         
     }

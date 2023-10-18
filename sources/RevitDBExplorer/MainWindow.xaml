@@ -11,6 +11,7 @@
         xmlns:componentUtilityTree="clr-namespace:RevitDBExplorer.UIComponents.Trees.Utility" 
         xmlns:componentCAndC="clr-namespace:RevitDBExplorer.UIComponents.CommandAndControl"    
         xmlns:componentScripting="clr-namespace:RevitDBExplorer.UIComponents.Scripting"    
+        xmlns:componentBreadcrumbs="clr-namespace:RevitDBExplorer.UIComponents.Breadcrumbs"    
         xmlns:converters="clr-namespace:RevitDBExplorer.WPF.Converters"       
         xmlns:controls="clr-namespace:RevitDBExplorer.WPF.Controls" 
         xmlns:ext="clr-namespace:RevitDBExplorer.WPF.MarkupExtensions"    
@@ -286,12 +287,11 @@
                     <ColumnDefinition Width="auto"/>                   
                 </Grid.ColumnDefinitions>
 
-                <StackPanel Orientation="Horizontal" Grid.Column="0">
-                    
-                </StackPanel>
+                <Grid Grid.Column="0" ClipToBounds="False">
+                    <componentBreadcrumbs:BreadcrumbsView DataContext="{Binding Breadcrumbs}" Margin="7 0 0 0"/>
+                </Grid>
 
-                <StackPanel Orientation="Horizontal" Grid.Column="1">
-
+                <StackPanel Orientation="Horizontal" Grid.Column="1" Background="{DynamicResource StatusBar.Background}">
                     <TextBlock Text="{Binding MouseStatus}" Margin="0 0 2 0" Foreground="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" ToolTip="Mouse cursor position in the Revit Model Coordinates (imperial), &#x0a;&#x0a; it does not work when a direction of a Revit view is not aligned with any of directions of a Revit model" HorizontalAlignment="Left"  VerticalAlignment="Center" Visibility="{Binding IsNewVerAvailable, Converter={StaticResource BoolToVisibilityConverterCollapsedInverted}}"/>
 
                     <ToggleButton Grid.Column="1"  Style="{StaticResource ToolTooggle}" IsChecked="{Binding IsBoundingBoxVisualizerEnabled}" ToolTip="Show BoundingBox for the selected element in the Tree">
@@ -324,6 +324,5 @@
         <GridSplitter Grid.Row="1"  Background="{DynamicResource GridSplitter.Background}" Height="3" HorizontalAlignment="Stretch" Visibility="{Binding Scripting.IsOpen, Converter={StaticResource BoolToVisibilityConverterCollapsed}}"/>
 
         <componentScripting:RDScriptingView DataContext="{Binding Scripting}"   Grid.Row="2"   Visibility="{Binding IsOpen, Converter={StaticResource BoolToVisibilityConverterCollapsed}}"/>
-
     </Grid>
 </Window>

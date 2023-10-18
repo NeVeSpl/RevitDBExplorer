@@ -126,9 +126,13 @@
 			<Link>RevitDBExplorer.addin</Link>
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
+		<None Include="Domain\Selectors\SnoopDependentElements.cs" />
 	</ItemGroup>	
 	<ItemGroup>
 		<Compile Remove="obj\*.*" />
+	</ItemGroup>	
+	<ItemGroup>
+	  <Compile Remove="Domain\Selectors\SnoopDependentElements.cs" />
 	</ItemGroup>	
 	<ItemGroup>
 	  <ProjectReference Include="..\RevitDBExplorer.API\RevitDBExplorer.API.csproj" />

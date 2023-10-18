@@ -17,6 +17,7 @@ using RevitDBExplorer.Domain.RevitDatabaseQuery.Autocompletion;
 using RevitDBExplorer.Domain.RevitDatabaseScripting;
 using RevitDBExplorer.Domain.Selectors;
 using RevitDBExplorer.Properties;
+using RevitDBExplorer.UIComponents.Breadcrumbs;
 using RevitDBExplorer.UIComponents.CommandAndControl;
 using RevitDBExplorer.UIComponents.List;
 using RevitDBExplorer.UIComponents.QueryVisualization;
@@ -43,6 +44,7 @@ namespace RevitDBExplorer
         private readonly CommandAndControlVM commandAndControlVM = new();
         private readonly QueryVisualizationVM queryVisualizationVM = new();
         private readonly RDScriptingVM rdscriptingVM;
+        private readonly BreadcrumbsVM breadcrumbs;
         private RightView rightView;          
         private string databaseQuery = string.Empty;
         private string databaseQueryToolTip = string.Empty;
@@ -63,6 +65,7 @@ namespace RevitDBExplorer
         public CommandAndControlVM CommandAndControl => commandAndControlVM;
         public QueryVisualizationVM QueryVisualization => queryVisualizationVM;
         public RDScriptingVM Scripting => rdscriptingVM;
+        public BreadcrumbsVM Breadcrumbs => breadcrumbs;
         public RightView RightView
         {
             get
@@ -209,6 +212,7 @@ namespace RevitDBExplorer
             InitializeComponent();
             this.DataContext = this;
             rdscriptingVM = new RDScriptingVM();
+            breadcrumbs = new BreadcrumbsVM();
 
             var ver = GetType().Assembly.GetName().Version;
             var revit_ver = typeof(Autodesk.Revit.DB.Element).Assembly.GetName().Version;
@@ -238,7 +242,7 @@ namespace RevitDBExplorer
             {
                 new WindowInteropHelper(this).Owner = parentWindowHandle.Value;
             }
-            ExplorerTree.PopulateTreeView(sourceOfObjects);  
+            PopulateExplorerTree(sourceOfObjects);  
         }
 
         
@@ -250,7 +254,7 @@ namespace RevitDBExplorer
         private async Task CheckIfNewVersionIsAvailable(Version ver)
         {
             (IsNewVerAvailable, var link) = await VersionChecker.Check(ver);
-            if (IsNewVerAvailable) 
+            if (IsNewVerAvailable)
             {
                 NewVersionLink = link;
             }
@@ -280,7 +284,7 @@ namespace RevitDBExplorer
                 this.WindowState = WindowState.Normal;
             }
 
-            ExplorerTree.PopulateTreeView(sourceOfObjects);            
+            PopulateExplorerTree(sourceOfObjects);            
         }
         private void SnoopEvents_Click(object sender, RoutedEventArgs e)
         {
@@ -371,6 +375,14 @@ namespace RevitDBExplorer
         void IAmQueryExecutor.Query(string query) 
         {
             DatabaseQuery = query;
+        }
+
+
+        private void PopulateExplorerTree(SourceOfObjects sourceOfObjects)
+        {
+
+            ExplorerTree.PopulateTreeView(sourceOfObjects);
+            Breadcrumbs.Set(sourceOfObjects.Title);
         }
 
 

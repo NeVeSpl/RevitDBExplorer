@@ -11,6 +11,9 @@ namespace RevitDBExplorer.Domain.Selectors
 {
     internal class SnoopCategories : ISelector
     {
+        public string Title { get; } = "ParameterFilterUtilities.GetAllFilterableCategories()";
+
+
         public IEnumerable<SnoopableObject> Snoop(UIApplication app)
         {
             var document = app?.ActiveUIDocument?.Document;

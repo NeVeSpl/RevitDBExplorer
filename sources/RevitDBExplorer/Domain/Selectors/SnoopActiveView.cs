@@ -9,6 +9,9 @@ namespace RevitDBExplorer.Domain.Selectors
 {
     internal class SnoopActiveView : ISelector
     {
+        public string Title { get; } = "ActiveView";
+
+
         public IEnumerable<SnoopableObject> Snoop(UIApplication app)
         {
             var view = app?.ActiveUIDocument?.Document?.ActiveView;
