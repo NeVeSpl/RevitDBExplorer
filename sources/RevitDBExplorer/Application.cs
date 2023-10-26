@@ -50,7 +50,7 @@ namespace RevitDBExplorer
             MemberStreamerForTemplates.Init();
             RevitDocumentationReader.Init();
             RevitDatabaseQueryService.Init();
-            BoundingBoxVisualizerFactory.Init(UIApplication);
+            RevitDatabaseVisualizationFactory.Init(UIApplication);
             EventMonitor.Register(application);
 
             ApplicationModifyTab.Init(panel.GetRibbonPanel(), AppSettings.Default.AddRDBECmdToModifyTab);

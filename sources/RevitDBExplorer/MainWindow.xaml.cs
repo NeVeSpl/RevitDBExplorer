@@ -56,7 +56,7 @@ namespace RevitDBExplorer
         private string mouseStatus;
         private readonly DispatcherTimer isRevitBusyDispatcher;
         private readonly IAutocompleteItemProvider databaseQueryAutocompleteItemProvider = new AutocompleteItemProvider();
-        private readonly IBoundingBoxVisualizer boundingBoxVisualizer;
+        private readonly IRDV3DController boundingBoxVisualizer;
 
 
         public ExplorerTreeViewModel ExplorerTree => explorerTreeViewModel;
@@ -227,7 +227,7 @@ namespace RevitDBExplorer
             UtilityTree.ScriptForRDSHasChanged += RDSOpenWithCommand;
             OpenScriptingWithQueryCommand = new RelayCommand(RDSOpenWithQuery);
             SaveQueryAsFavoriteCommand = new RelayCommand(SaveQueryAsFavorite, x => !string.IsNullOrEmpty(DatabaseQuery) );
-            boundingBoxVisualizer = BoundingBoxVisualizerFactory.GetInstance();
+            boundingBoxVisualizer = RevitDatabaseVisualizationFactory.GetRDV3DController();
         }
 
 
@@ -319,10 +319,11 @@ namespace RevitDBExplorer
             {
                 RightView = RightView.List;               
                 await List.PopulateListView(snoopableObjectTreeItem);
-                boundingBoxVisualizer.Show(snoopableObjectTreeItem.Object.Object as Autodesk.Revit.DB.Element);
+                boundingBoxVisualizer.AddElement(snoopableObjectTreeItem.Object.Object as Autodesk.Revit.DB.Element);
+                boundingBoxVisualizer.AddXYZ(snoopableObjectTreeItem.Object.Object as Autodesk.Revit.DB.XYZ);
                 return;
             }
-            boundingBoxVisualizer.HideAll();
+            boundingBoxVisualizer.RemoveAll();
             if (eventArgs.NewOne is GroupTreeItem groupTreeItemVM)
             {
                 //if (AppSettings.Default.FeatureFlag)
