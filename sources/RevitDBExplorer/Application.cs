@@ -112,7 +112,7 @@ namespace RevitDBExplorer
         {
             var uiView = Application.UIView;
             var view = Application.View;
-            if ((uiView != null) && (view != null) && (view.IsValidObject) && (uiView.IsValidObject))
+            if ((uiView != null) && (view != null) && (view.IsValidObject) && (uiView.IsValidObject) && (view.DetailLevel != ViewDetailLevel.Undefined))
             {
                 // source : https://thebuildingcoder.typepad.com/blog/2012/10/uiview-windows-coordinates-referenceintersector-and-my-own-tooltip.html
 
@@ -148,7 +148,18 @@ namespace RevitDBExplorer
                         return "(,,?)";
                     }
 
-                    return $"({q.X:f3}, {q.Y:f3}, {q.Z:f3})";
+                    if (view.ViewDirection.IsParallelTo(XYZ.BasisX))
+                    {
+                        return $"(-,--, {q.Y:f3}, {q.Z:f3})";
+                    }
+                    if (view.ViewDirection.IsParallelTo(XYZ.BasisY))
+                    {
+                        return $"({q.X:f3}, -,--, {q.Z:f3})";
+                    }
+                    if (view.ViewDirection.IsParallelTo(XYZ.BasisZ))
+                    {
+                        return $"({q.X:f3}, {q.Y:f3}, -,--)";
+                    }
                 }
                 catch
                 {

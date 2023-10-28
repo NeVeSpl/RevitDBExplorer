@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using Autodesk.Revit.DB;
 using RevitDBExplorer.Domain;
-using RevitDBExplorer.Domain.RevitDatabaseView;
 using RevitDBExplorer.UIComponents.Trees.Base.Items;
 using RevitDBExplorer.WPF;
 using Binding = System.Windows.Data.Binding;
@@ -17,8 +16,7 @@ namespace RevitDBExplorer.UIComponents.CommandAndControl
     {
         private GroupTreeItem selectedGroup;
         private int itemsCount;
-        private ObservableCollection<DataGridColumn> columns;
-        private ObservableCollection<Row> rows;
+     
 
         public int ItemsCount
         {
@@ -32,30 +30,7 @@ namespace RevitDBExplorer.UIComponents.CommandAndControl
                 OnPropertyChanged();
             }
         }
-        public ObservableCollection<DataGridColumn> Columns
-        {
-            get
-            {
-                return columns;
-            }
-            set
-            {
-                columns = value;
-                OnPropertyChanged();
-            }
-        }     
-        public ObservableCollection<Row> Rows
-        {
-            get
-            {
-                return rows;
-            }
-            set
-            {
-                rows = value;
-                OnPropertyChanged();
-            }
-        }
+      
 
 
         public CommandAndControlVM()
@@ -70,13 +45,7 @@ namespace RevitDBExplorer.UIComponents.CommandAndControl
             ItemsCount = selectedGroup.GetAllSnoopableObjects().Select(x => x.Object).OfType<Element>().Count();
             var elements = selectedGroup.GetAllSnoopableObjects().Select(x => x.Object).OfType<Element>().Take(100).ToArray();
            
-            var view =  await ExternalExecutor.ExecuteInRevitContextAsync(x => RevitDBExplorer.Domain.RevitDatabaseView.View.Create(x?.ActiveUIDocument?.Document, elements));
-
-            var idColumns = new DataGridTextColumn[] { new DataGridTextColumn() { Header = "Name", Binding= new Binding("Name")}};
-            var parameterColumns = view.Columns.Select((x, idx) => new DataGridTextColumn() { Header = x.Name, Binding = new Binding($"[{x.Id.Value()}].Value")});
             
-            Columns = new ObservableCollection<DataGridColumn>(idColumns.Union(parameterColumns));
-            Rows = new ObservableCollection<Row>(view.Rows);  
         }
     }
 }

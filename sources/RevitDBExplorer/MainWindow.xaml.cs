@@ -26,6 +26,7 @@ using RevitDBExplorer.UIComponents.Trees.Base;
 using RevitDBExplorer.UIComponents.Trees.Base.Items;
 using RevitDBExplorer.UIComponents.Trees.Explorer;
 using RevitDBExplorer.UIComponents.Trees.Utility;
+using RevitDBExplorer.Utils;
 using RevitDBExplorer.WPF;
 using RevitDBExplorer.WPF.Controls;
 using RDQCommand = RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Command;
@@ -210,24 +211,28 @@ namespace RevitDBExplorer
             listVM = new ListVM(this, this);
 
             InitializeComponent();
+            InitializeAsync().Forget();
+
             this.DataContext = this;
             rdscriptingVM = new RDScriptingVM();
             breadcrumbs = new BreadcrumbsVM();
 
-            var ver = GetType().Assembly.GetName().Version;
-            var revit_ver = typeof(Autodesk.Revit.DB.Element).Assembly.GetName().Version;
-            Title += $" 20{revit_ver.Major} - {ver.ToGitHubTag()}";
+            Title = WindowTitleGenerator.Get();
 
-            isRevitBusyDispatcher = new DispatcherTimer(TimeSpan.FromMilliseconds(500), DispatcherPriority.Background, IsRevitBusyDispatcher_Tick, Dispatcher.CurrentDispatcher);           
-            CheckIfNewVersionIsAvailable(ver).Forget();
+            isRevitBusyDispatcher = new DispatcherTimer(TimeSpan.FromMilliseconds(500), DispatcherPriority.Background, IsRevitBusyDispatcher_Tick, Dispatcher.CurrentDispatcher); 
 
             ExplorerTree.SelectedItemChanged += Tree_SelectedItemChanged;
-            ExplorerTree.ScriptForRDSHasChanged += RDSOpenWithCommand;
+            ExplorerTree.ScriptWasGenerated += RDSOpenWithCommand;
             UtilityTree.SelectedItemChanged += Tree_SelectedItemChanged;
-            UtilityTree.ScriptForRDSHasChanged += RDSOpenWithCommand;
+            UtilityTree.ScriptWasGenerated += RDSOpenWithCommand;
+
             OpenScriptingWithQueryCommand = new RelayCommand(RDSOpenWithQuery);
             SaveQueryAsFavoriteCommand = new RelayCommand(SaveQueryAsFavorite, x => !string.IsNullOrEmpty(DatabaseQuery) );
             rdvController = RevitDatabaseVisualizationFactory.CreateController();
+        }
+        private async Task InitializeAsync()
+        {
+            (IsNewVerAvailable, NewVersionLink) = await VersionChecker.CheckIfNewVersionIsAvailable();
         }
 
 
@@ -251,14 +256,7 @@ namespace RevitDBExplorer
             e.Exception.ShowErrorMsg("MainWindow::UnhandledException");
             e.Handled = true;
         }
-        private async Task CheckIfNewVersionIsAvailable(Version ver)
-        {
-            (IsNewVerAvailable, var link) = await VersionChecker.Check(ver);
-            if (IsNewVerAvailable)
-            {
-                NewVersionLink = link;
-            }
-        }
+       
         private async void SelectorButton_Click(object sender, RoutedEventArgs e)
         {
             ExplorerTree.ClearItems();            
@@ -430,9 +428,9 @@ namespace RevitDBExplorer
             Dispatcher.UnhandledException -= Dispatcher_UnhandledException;           
             isRevitBusyDispatcher.Tick -= IsRevitBusyDispatcher_Tick;
             ExplorerTree.SelectedItemChanged -= Tree_SelectedItemChanged;
-            ExplorerTree.ScriptForRDSHasChanged -= RDSOpenWithCommand;
+            ExplorerTree.ScriptWasGenerated -= RDSOpenWithCommand;
             UtilityTree.SelectedItemChanged -= Tree_SelectedItemChanged;
-            UtilityTree.ScriptForRDSHasChanged -= RDSOpenWithCommand;
+            UtilityTree.ScriptWasGenerated -= RDSOpenWithCommand;
         }
         private void Window_Closing(object sender, EventArgs e)
         {

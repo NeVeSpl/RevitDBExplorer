@@ -19,7 +19,7 @@ namespace RevitDBExplorer.UIComponents.Trees.Base
         private bool allowToFrezeeItem;
 
         public event Action<SelectedItemChangedEventArgs> SelectedItemChanged;
-        public event Action<string> ScriptForRDSHasChanged;
+        public event Action<string> ScriptWasGenerated;
 
         public ObservableCollection<TreeItem> TreeItems
         {
@@ -105,7 +105,7 @@ namespace RevitDBExplorer.UIComponents.Trees.Base
                 }
             }
 
-            ScriptForRDSHasChanged?.Invoke(text);
+            ScriptWasGenerated?.Invoke(text);
         }
 
 

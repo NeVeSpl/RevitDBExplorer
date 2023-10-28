@@ -40,7 +40,7 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers
         {            
             var bb = element.get_BoundingBox(null);
 
-            if ((bb != null) && (bb.IsSet))
+            if (bb != null && (bb.Max != null) && (bb.Min != null))
             {
                 yield return new BoundingBox(bb.Min, bb.Max);
             }            
