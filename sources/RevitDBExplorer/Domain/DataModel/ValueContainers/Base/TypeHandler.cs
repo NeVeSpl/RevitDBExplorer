@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Autodesk.Revit.DB;
+using RevitDBExplorer.Augmentations.RevitDatabaseVisualization.DrawingVisuals;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
@@ -13,6 +14,7 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers.Base
 
         public Type Type => type;
 
+        Type ITypeHandler<T>.Type { get; }
 
         public string GetTypeHandlerName(T value)
         {
@@ -64,5 +66,27 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers.Base
             return label;
         }
         protected abstract string ToLabel(SnoopableContext context, T value);
+
+
+
+        IEnumerable<DrawingVisual> IHaveVisualization.GetVisualization(SnoopableContext context, object value)
+        {
+            T typedValue = value.CastValue<T>(type);
+            return (this as IHaveVisualization<T>).GetVisualization(context, typedValue);
+        }
+        IEnumerable<DrawingVisual> IHaveVisualization<T>.GetVisualization(SnoopableContext context, T value)
+        {            
+            if (value is not null) 
+            {
+                if ((value is Element element) && (!element.IsValidObject))
+                {
+                    return Enumerable.Empty<DrawingVisual>();
+                }
+
+                return GetVisualization(context, value) ?? Enumerable.Empty<DrawingVisual>();
+            }
+            return Enumerable.Empty<DrawingVisual>();
+        }
+        protected virtual IEnumerable<DrawingVisual> GetVisualization(SnoopableContext context, T value) => null;
     }
 }

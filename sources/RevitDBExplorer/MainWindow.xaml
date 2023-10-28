@@ -40,6 +40,8 @@
             <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
             <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverterCollapsed" WhenFalse="Collapsed"/>            
             <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverterCollapsedInverted" WhenFalse="Visible" WhenTrue="Collapsed"/>
+            <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverterHidden" WhenFalse="Hidden"/>
+            <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverterHiddenInverted" WhenFalse="Visible" WhenTrue="Hidden"/>
             <converters:EnumMatchToVisibilityConverter x:Key="EnumMatchToVisibilityConverter"/>
         </ResourceDictionary>
     </Window.Resources>
@@ -287,21 +289,26 @@
                     <ColumnDefinition Width="auto"/>                   
                 </Grid.ColumnDefinitions>
 
-                <Grid Grid.Column="0" ClipToBounds="False">
+                <Grid Grid.Column="0" ClipToBounds="False" Visibility="Collapsed">
                     <componentBreadcrumbs:BreadcrumbsView DataContext="{Binding Breadcrumbs}" Margin="7 0 0 0"/>
                 </Grid>
 
                 <StackPanel Orientation="Horizontal" Grid.Column="1" Background="{DynamicResource StatusBar.Background}">
                     <TextBlock Text="{Binding MouseStatus}" Margin="0 0 2 0" Foreground="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" ToolTip="Mouse cursor position in the Revit Model Coordinates (imperial), &#x0a;&#x0a; it does not work when a direction of a Revit view is not aligned with any of directions of a Revit model" HorizontalAlignment="Left"  VerticalAlignment="Center" Visibility="{Binding IsNewVerAvailable, Converter={StaticResource BoolToVisibilityConverterCollapsedInverted}}"/>
 
-                    <ToggleButton Grid.Column="1"  Style="{StaticResource ToolTooggle}" IsChecked="{Binding IsBoundingBoxVisualizerEnabled}" ToolTip="Show BoundingBox for the selected element in the Tree">
-                        <StackPanel>
-                            <TextBlock Text="BB: on"  Visibility="{Binding IsBoundingBoxVisualizerEnabled, Converter={StaticResource BoolToVisibilityConverterCollapsed}}" />
-                            <TextBlock Text="BB: off" Visibility="{Binding IsBoundingBoxVisualizerEnabled, Converter={StaticResource BoolToVisibilityConverterCollapsedInverted}}"/>
-                        </StackPanel>
+                    <ToggleButton Style="{StaticResource ToolTooggle}" IsChecked="{Binding IsBoundingBoxVisualizerEnabled}" Padding="0" Background="red"  ToolTip="Show visualization for the selected object in the Tree">
+                        <Grid Background="#FEFCF7" Height="19" Width="38" >
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                <TextBlock Text="V" Foreground="#1434CB"  FontWeight="Heavy" FontFamily="Arial" FontSize="15"/>
+                                <Grid>
+                                    <TextBlock Text=":on "  Visibility="{Binding IsBoundingBoxVisualizerEnabled, Converter={StaticResource BoolToVisibilityConverterHidden}}" Foreground="Black" VerticalAlignment="Bottom"/>
+                                    <TextBlock Text=":off " Visibility="{Binding IsBoundingBoxVisualizerEnabled, Converter={StaticResource BoolToVisibilityConverterHiddenInverted}}" Foreground="Black" VerticalAlignment="Bottom"/>
+                                </Grid>
+                            </StackPanel>
+                        </Grid>
                     </ToggleButton>
 
-                    <Button Grid.Column="2" Style="{StaticResource ToolButton}"  ToolTip="Open Revit Database Scripting" Click="RDS_Click" Background="#FFF200" >
+                    <Button Grid.Column="2" Style="{StaticResource ToolButton}" ToolTip="Open Revit Database Scripting" Click="RDS_Click" Background="#FFF200" >
                         <TextBlock Text="S" Foreground="#ED1A24"  FontWeight="Heavy" FontFamily="Arial" FontSize="15"/>
                     </Button>
 

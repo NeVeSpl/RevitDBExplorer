@@ -5,7 +5,9 @@ using System.Linq;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.Structure.StructuralSections;
 using Autodesk.Revit.UI;
+using RevitDBExplorer.Augmentations.RevitDatabaseVisualization.DrawingVisuals;
 using RevitDBExplorer.Domain.DataModel.Streams;
+using RevitDBExplorer.Domain.DataModel.ValueContainers.Base;
 using RevitDBExplorer.WPF;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
@@ -129,6 +131,17 @@ namespace RevitDBExplorer.Domain.DataModel
                     yield return snoopableParameter;
                 }
             }          
+        }
+
+
+        public IEnumerable<DrawingVisual> GetVisualization()
+        {
+            if (Object is not null)
+            {
+                var typeHandler = ValueContainerFactory.SelectTypeHandler(Object.GetType());  
+                return typeHandler.GetVisualization(this.Context, Object);                
+            }
+            return Enumerable.Empty<DrawingVisual>();
         }
 
 

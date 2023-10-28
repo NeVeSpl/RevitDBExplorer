@@ -4,11 +4,11 @@
 
 namespace RevitDBExplorer.Domain.DataModel.ValueContainers.Base
 {
-    internal interface ITypeHandler : IToLabel, ICanBeSnooped, ISnoop
+    internal interface ITypeHandler : IToLabel, ICanBeSnooped, ISnoop, IHaveVisualization
     {
         Type Type { get; }
     }
-    internal interface ITypeHandler<in T> : IToLabel<T>, ICanBeSnooped<T>, ISnoop<T>
+    internal interface ITypeHandler<in T> : IToLabel<T>, ICanBeSnooped<T>, ISnoop<T>, IHaveVisualization<T>
     {
         Type Type { get; }
         string GetTypeHandlerName(T value);

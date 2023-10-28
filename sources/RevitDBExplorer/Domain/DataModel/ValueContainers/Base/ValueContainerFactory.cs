@@ -35,6 +35,7 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers.Base
             new LocationHandler(),  
 
             //
+            new RebarHandler(),
             new GeometryElementHandler(),
             new TransformHandler(),
             new ParameterHandler(),

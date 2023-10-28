@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using RevitDBExplorer.Augmentations.RevitDatabaseVisualization.DrawingVisuals;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
@@ -35,5 +36,14 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers.Base
     internal interface IHaveToolTip<in T>
     {
         string GetToolTip(SnoopableContext context, T value);
+    }
+
+    internal interface IHaveVisualization
+    {
+        IEnumerable<DrawingVisual> GetVisualization(SnoopableContext context, object value);
+    }
+    internal interface IHaveVisualization<in T>
+    {
+        IEnumerable<DrawingVisual> GetVisualization(SnoopableContext context, T value);
     }
 }

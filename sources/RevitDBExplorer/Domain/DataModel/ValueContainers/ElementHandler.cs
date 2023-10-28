@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Autodesk.Revit.DB;
+using RevitDBExplorer.Augmentations.RevitDatabaseVisualization.DrawingVisuals;
 using RevitDBExplorer.Domain.DataModel.ValueContainers.Base;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
@@ -27,10 +28,22 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers
             }
             return $"{elementName} ({element.Id})";
         }
+
         protected override IEnumerable<SnoopableObject> Snooop(SnoopableContext context, Element element)
         {
             var freshElement = context.Document?.GetElement(element.Id) ?? element;
             yield return new SnoopableObject(context.Document, freshElement);
+        }
+
+
+        protected override IEnumerable<DrawingVisual> GetVisualization(SnoopableContext context, Element element)
+        {            
+            var bb = element.get_BoundingBox(null);
+
+            if ((bb != null) && (bb.IsSet))
+            {
+                yield return new BoundingBox(bb.Min, bb.Max);
+            }            
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using RevitDBExplorer.Augmentations.RevitDatabaseVisualization.DrawingVisuals;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
@@ -17,5 +18,6 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers.Base
         bool CanBeSnooped { get; }
         string ToolTip { get;  }
         IEnumerable<SnoopableObject> Snoop();
+        IEnumerable<DrawingVisual> GetVisualization();
     } 
 }

@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using Autodesk.Revit.DB;
+using RevitDBExplorer.Augmentations.RevitDatabaseVisualization.DrawingVisuals;
 using RevitDBExplorer.Domain.DataModel.ValueContainers.Base;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
@@ -14,12 +16,17 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers
             return $"({xyz.X}, {xyz.Y}, {xyz.Z})";
         }
 
-        public string GetToolTip(SnoopableContext context, XYZ value)
+        public string GetToolTip(SnoopableContext context, XYZ xyz)
         {
             var units = context.Document?.GetUnits();
             if (units == null) return null;
 
-            return $"{ToLabel(context, value)}\n({value.X.ToLengthDisplayString(units)}, {value.Y.ToLengthDisplayString(units)},{value.Z.ToLengthDisplayString(units)})"; ;
+            return $"{ToLabel(context, xyz)}\n({xyz.X.ToLengthDisplayString(units)}, {xyz.Y.ToLengthDisplayString(units)},{xyz.Z.ToLengthDisplayString(units)})"; ;
+        }
+
+        protected override IEnumerable<DrawingVisual> GetVisualization(SnoopableContext context, XYZ xyz)
+        {
+            yield return new CoordinateSystem(xyz);
         }
     }
 }

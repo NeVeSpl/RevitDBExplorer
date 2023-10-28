@@ -55,7 +55,7 @@ namespace RevitDBExplorer.Domain
             }
             return $"[{typeName}: ?]";
         }
-        public static string GetLabelForObjectWithId(string typeName, int? id)
+        public static string GetLabelForObjectWithId(string typeName, long? id)
         {
             if (id.HasValue)
             {
