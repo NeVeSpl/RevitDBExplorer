@@ -16,6 +16,7 @@
         xmlns:controls="clr-namespace:RevitDBExplorer.WPF.Controls" 
         xmlns:ext="clr-namespace:RevitDBExplorer.WPF.MarkupExtensions"    
         xmlns:wpf="clr-namespace:RevitDBExplorer.WPF"
+        xmlns:ap="clr-namespace:RevitDBExplorer.WPF.AttachedProperties"
         mc:Ignorable="d"
         WindowStartupLocation="CenterOwner"
         Title="Revit database explorer and editor"
@@ -133,7 +134,7 @@
                         <TextBlock Margin="0 2 0 0">Face</TextBlock>
                     </StackPanel>
                 </Button>-->
-                <Button Click="ButtonWithSubMenu_Click" ToolTip="Snoop by picking given object type in Revit">
+                <Button ap:ButtonAP.OpenSubMenuOnClick="True" ToolTip="Snoop by picking given object type in Revit">
                     <StackPanel>
                         <Path Style="{StaticResource IconPickEdge}"  />
                         <TextBlock Margin="0 2 0 0">Pick</TextBlock>
@@ -165,7 +166,7 @@
                         <TextBlock Margin="0 0 0 0">Categories</TextBlock>
                     </StackPanel>
                 </Button>
-                <Button Click="ButtonWithSubMenu_Click"  ToolTip="Snoop Forge types">
+                <Button ap:ButtonAP.OpenSubMenuOnClick="True" ToolTip="Snoop Forge types">
                     <StackPanel>
                         <Path Style="{StaticResource IconForge}" />
                         <TextBlock Margin="0 6 0 0">Forge</TextBlock>
@@ -186,8 +187,8 @@
                         <Path Style="{StaticResource IconEvent}" SnapsToDevicePixels="True" />
                         <TextBlock Margin="0 0 0 0">Events</TextBlock>
                     </StackPanel>
-                </Button>               
-                <Button Click="ButtonWithSubMenu_Click" Margin="2 0 0 0" ToolTip="Snoop addins">
+                </Button>
+                <Button ap:ButtonAP.OpenSubMenuOnClick="True"  Margin="2 0 0 0" ToolTip="Snoop addins">
                     <StackPanel>
                         <Path Style="{StaticResource IconAddin}" />
                         <TextBlock Margin="0 2 0 0">Addins</TextBlock>
@@ -320,7 +321,7 @@
                 <Grid Grid.ColumnSpan="2" Background="{DynamicResource StatusBar.Background}" HorizontalAlignment="Center">
                     <TextBlock  HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding IsNewVerAvailable, Converter={StaticResource BoolToVisibilityConverterCollapsed}}">    
                         <Run Foreground="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}">a new version is available :</Run>
-                        <Hyperlink NavigateUri="{Binding NewVersionLink}" RequestNavigate="Hyperlink_RequestNavigate" Foreground="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" TextDecorations="None"  >
+                        <Hyperlink NavigateUri="{Binding NewVersionLink}" ap:HyperlinkAP.OpenOnClick="True" Foreground="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" TextDecorations="None"  >
                             <Run Text="{Binding NewVersionLink}" />
                         </Hyperlink>
                     </TextBlock>                    

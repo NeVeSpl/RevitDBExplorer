@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
@@ -205,6 +203,14 @@ namespace RevitDBExplorer
         public RelayCommand SaveQueryAsFavoriteCommand { get; }
 
 
+        public MainWindow(SourceOfObjects sourceOfObjects, IntPtr? parentWindowHandle = null) : this()
+        {
+            if (parentWindowHandle.HasValue)
+            {
+                new WindowInteropHelper(this).Owner = parentWindowHandle.Value;
+            }
+            PopulateExplorerTree(sourceOfObjects);  
+        }
         public MainWindow()
         {
             Dispatcher.UnhandledException += Dispatcher_UnhandledException;
@@ -241,16 +247,6 @@ namespace RevitDBExplorer
             IsRevitBusy = Application.IsRevitBussy();
             MouseStatus = Application.GetMouseStatus();            
         }
-        public MainWindow(SourceOfObjects sourceOfObjects, IntPtr? parentWindowHandle = null) : this()
-        {
-            if (parentWindowHandle.HasValue)
-            {
-                new WindowInteropHelper(this).Owner = parentWindowHandle.Value;
-            }
-            PopulateExplorerTree(sourceOfObjects);  
-        }
-
-        
         private void Dispatcher_UnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
             e.Exception.ShowErrorMsg("MainWindow::UnhandledException");
@@ -378,18 +374,15 @@ namespace RevitDBExplorer
 
         private void PopulateExplorerTree(SourceOfObjects sourceOfObjects)
         {
-
             ExplorerTree.PopulateTreeView(sourceOfObjects);
             Breadcrumbs.Set(sourceOfObjects.Title);
         }
-
-
         private void ResetDatabaseQuery()
         {
             databaseQuery = "";
             OnPropertyChanged(nameof(DatabaseQuery));
             DatabaseQueryToolTip = "";
-            queryVisualizationVM.Update(Enumerable.Empty<RDQCommand>()).Forget();
+            QueryVisualization.Update(Enumerable.Empty<RDQCommand>()).Forget();
         }
 
      
@@ -409,18 +402,7 @@ namespace RevitDBExplorer
             FavoritesManager.Add(DatabaseQuery);
         }
 
-
-        private void ButtonWithSubMenu_Click(object sender, RoutedEventArgs e)
-        {
-            var contextMenu = ContextMenuService.GetContextMenu(sender as DependencyObject);
-            if (contextMenu == null)
-            {
-                return;
-            }
-            contextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.Bottom;
-            contextMenu.PlacementTarget = sender as UIElement;
-            contextMenu.IsOpen = true;
-        }
+               
         private void Window_Closed(object sender, EventArgs e)
         {
             rdvController.Dispose();
@@ -430,7 +412,7 @@ namespace RevitDBExplorer
             ExplorerTree.SelectedItemChanged -= Tree_SelectedItemChanged;
             ExplorerTree.ScriptWasGenerated -= RDSOpenWithCommand;
             UtilityTree.SelectedItemChanged -= Tree_SelectedItemChanged;
-            UtilityTree.ScriptWasGenerated -= RDSOpenWithCommand;
+            UtilityTree.ScriptWasGenerated -= RDSOpenWithCommand;            
         }
         private void Window_Closing(object sender, EventArgs e)
         {
@@ -474,12 +456,7 @@ namespace RevitDBExplorer
                     skinDict.UpdateSource();                
             }
         }
-
-        private void Hyperlink_RequestNavigate(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)
-        {
-            Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
-            e.Handled = true;
-        }
+                
 
         private void RDS_Click(object sender, RoutedEventArgs e)
         {
