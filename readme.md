@@ -4,9 +4,9 @@
 
 Yet another [RevitLookup](https://github.com/jeremytammik/RevitLookup) like tool. RevitLookup was an indispensable tool to work with Revit API for many years. But now, there is a better tool for the job. Let me introduce you to Revit database explorer and its capabilities. It not only allows us to **explore** database but also to:
 - **edit**, any parameter value
-- **query**,
+- **query**, with intuitive syntax that is translated into a FilteredElementCollector
 - **script**, by running ad hoc scripts written in C#
-- **visualize**,
+- **visualize**, geometrical features of elements
 
 List of features:
 
