@@ -16,10 +16,8 @@ using RevitDBExplorer.Domain.RevitDatabaseScripting;
 using RevitDBExplorer.Domain.Selectors;
 using RevitDBExplorer.Properties;
 using RevitDBExplorer.UIComponents.Breadcrumbs;
-using RevitDBExplorer.UIComponents.CommandAndControl;
 using RevitDBExplorer.UIComponents.List;
 using RevitDBExplorer.UIComponents.QueryVisualization;
-using RevitDBExplorer.UIComponents.Scripting;
 using RevitDBExplorer.UIComponents.Trees.Base;
 using RevitDBExplorer.UIComponents.Trees.Base.Items;
 using RevitDBExplorer.UIComponents.Trees.Explorer;
@@ -39,10 +37,8 @@ namespace RevitDBExplorer
     {
         private readonly ExplorerTreeViewModel explorerTreeViewModel = new();
         private readonly UtilityTreeViewModel utilityTreeViewModel = new();
-        private readonly ListVM listVM;
-        private readonly CommandAndControlVM commandAndControlVM = new();
-        private readonly QueryVisualizationVM queryVisualizationVM = new();
-        private readonly RDScriptingVM rdscriptingVM;
+        private readonly ListVM listVM;    
+        private readonly QueryVisualizationVM queryVisualizationVM = new();      
         private readonly BreadcrumbsVM breadcrumbs;
         private RightView rightView;          
         private string databaseQuery = string.Empty;
@@ -60,10 +56,8 @@ namespace RevitDBExplorer
 
         public ExplorerTreeViewModel ExplorerTree => explorerTreeViewModel;
         public UtilityTreeViewModel UtilityTree => utilityTreeViewModel;
-        public ListVM List => listVM;        
-        public CommandAndControlVM CommandAndControl => commandAndControlVM;
-        public QueryVisualizationVM QueryVisualization => queryVisualizationVM;
-        public RDScriptingVM Scripting => rdscriptingVM;
+        public ListVM List => listVM;
+        public QueryVisualizationVM QueryVisualization => queryVisualizationVM;       
         public BreadcrumbsVM Breadcrumbs => breadcrumbs;
         public RightView RightView
         {
@@ -196,6 +190,7 @@ namespace RevitDBExplorer
             set
             {
                 rdvController.IsEnabled = value;
+                UpdateRDV();
                 OnPropertyChanged();
             }
         }
@@ -215,24 +210,23 @@ namespace RevitDBExplorer
         {
             Dispatcher.UnhandledException += Dispatcher_UnhandledException;
             listVM = new ListVM(this, this);
+            breadcrumbs = new BreadcrumbsVM();
 
             InitializeComponent();
             InitializeAsync().Forget();
 
-            this.DataContext = this;
-            rdscriptingVM = new RDScriptingVM();
-            breadcrumbs = new BreadcrumbsVM();
+            this.DataContext = this; 
 
             Title = WindowTitleGenerator.Get();
 
             isRevitBusyDispatcher = new DispatcherTimer(TimeSpan.FromMilliseconds(500), DispatcherPriority.Background, IsRevitBusyDispatcher_Tick, Dispatcher.CurrentDispatcher); 
 
             ExplorerTree.SelectedItemChanged += Tree_SelectedItemChanged;
-            ExplorerTree.ScriptWasGenerated += RDSOpenWithCommand;
+            ExplorerTree.ScriptWasGenerated += OpenRDSWithGivenScript;
             UtilityTree.SelectedItemChanged += Tree_SelectedItemChanged;
-            UtilityTree.ScriptWasGenerated += RDSOpenWithCommand;
+            UtilityTree.ScriptWasGenerated += OpenRDSWithGivenScript;
 
-            OpenScriptingWithQueryCommand = new RelayCommand(RDSOpenWithQuery);
+            OpenScriptingWithQueryCommand = new RelayCommand(GenerateScriptForQueryAndOpenRDS);
             SaveQueryAsFavoriteCommand = new RelayCommand(SaveQueryAsFavorite, x => !string.IsNullOrEmpty(DatabaseQuery) );
             rdvController = RevitDatabaseVisualizationFactory.CreateController();
         }
@@ -311,9 +305,9 @@ namespace RevitDBExplorer
 
             if (eventArgs.NewOne is SnoopableObjectTreeItem snoopableObjectTreeItem)
             {
-                RightView = RightView.List;               
-                await List.PopulateListView(snoopableObjectTreeItem);               
-                rdvController.AddDrawingVisuals(snoopableObjectTreeItem.Object.GetVisualization());
+                RightView = RightView.List;
+                UpdateRDV();
+                await List.PopulateListView(snoopableObjectTreeItem);                
                 return;
             }
             rdvController.RemoveAll();
@@ -384,23 +378,45 @@ namespace RevitDBExplorer
             DatabaseQueryToolTip = "";
             QueryVisualization.Update(Enumerable.Empty<RDQCommand>()).Forget();
         }
-
-     
-        private void RDSOpenWithQuery(object parameter)
+        private void SaveQueryAsFavorite()
         {
-            var scriptText = CodeGenerator.GenerateQueryFor(DatabaseQueryToolTip);                 
-            OpenRDS();
-            Application.RDSController.SetText(scriptText);
+            FavoritesManager.Add(DatabaseQuery);
+        }
+
+
+        private void UpdateRDV()
+        {
+            rdvController.RemoveAll();
+            if (rdvController.IsEnabled)
+            {
+                var snoopableObjectTreeItem = ExplorerTree.SelectedItem as SnoopableObjectTreeItem;
+                snoopableObjectTreeItem ??= UtilityTree.SelectedItem as SnoopableObjectTreeItem;
+                if (snoopableObjectTreeItem != null)
+                {
+                    rdvController.AddDrawingVisuals(snoopableObjectTreeItem.Object.GetVisualization());                  
+                }
+            }
+        }
+
+
+        private void GenerateScriptForQueryAndOpenRDS()
+        {
+            var scriptText = CodeGenerator.GenerateQueryFor(DatabaseQueryToolTip);
+            OpenRDSWithGivenScript(scriptText);
         }        
-        private void RDSOpenWithCommand(string scriptText)
+        private void OpenRDSWithGivenScript(string scriptText)
         {               
             OpenRDS();
             Application.RDSController.SetText(scriptText);
         }
-        private void SaveQueryAsFavorite(object parameter)
+        private void RDSButton_Click(object sender, RoutedEventArgs e)
         {
-            FavoritesManager.Add(DatabaseQuery);
+            OpenRDS();
         }
+        private void OpenRDS()
+        {
+            Application.RDSController.Open(this.Left, this.Top + this.ActualHeight);
+        }        
 
                
         private void Window_Closed(object sender, EventArgs e)
@@ -410,9 +426,9 @@ namespace RevitDBExplorer
             Dispatcher.UnhandledException -= Dispatcher_UnhandledException;           
             isRevitBusyDispatcher.Tick -= IsRevitBusyDispatcher_Tick;
             ExplorerTree.SelectedItemChanged -= Tree_SelectedItemChanged;
-            ExplorerTree.ScriptWasGenerated -= RDSOpenWithCommand;
+            ExplorerTree.ScriptWasGenerated -= OpenRDSWithGivenScript;
             UtilityTree.SelectedItemChanged -= Tree_SelectedItemChanged;
-            UtilityTree.ScriptWasGenerated -= RDSOpenWithCommand;            
+            UtilityTree.ScriptWasGenerated -= OpenRDSWithGivenScript;            
         }
         private void Window_Closing(object sender, EventArgs e)
         {
@@ -436,7 +452,7 @@ namespace RevitDBExplorer
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             IsWiderThan800px = this.Width > 848;
-            window_SizeChanged_Debouncer = window_SizeChanged_Debouncer.Debounce(TimeSpan.FromSeconds(1), SaveUserSettings);               
+            window_SizeChanged_Debouncer = window_SizeChanged_Debouncer.Debounce(TimeSpan.FromSeconds(4), SaveUserSettings);               
         }
         private void SaveUserSettings()
         {
@@ -445,27 +461,14 @@ namespace RevitDBExplorer
             AppSettings.Default.FirstColumnWidth = cFirstColumnDefinition.Width.Value;
             AppSettings.Default.Save();
         }
-        private void Window_MenuItem_ConfigurationClick(object sender, RoutedEventArgs e)
+        private void ConfigurationButton_Click(object sender, RoutedEventArgs e)
         {
             var window = new ConfigWindow();
             window.Owner = this;
             window.ShowDialog();
-            foreach (ResourceDictionary dict in Resources.MergedDictionaries)
-            {
-                if (dict is ThemeResourceDictionary skinDict)
-                    skinDict.UpdateSource();                
-            }
+            ThemeResourceDictionary.Update(Resources);
         }
                 
-
-        private void RDS_Click(object sender, RoutedEventArgs e)
-        {
-            OpenRDS();         
-        }
-        private void OpenRDS()
-        {
-            Application.RDSController.Open(this.Left, this.Top + this.ActualHeight);
-        }
 
         #region INotifyPropertyChanged
 

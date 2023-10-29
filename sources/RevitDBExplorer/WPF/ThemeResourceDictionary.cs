@@ -29,5 +29,15 @@ namespace RevitDBExplorer.WPF
             var path = new Uri($"pack://application:,,,/RevitDBExplorer;component/Resources/Themes/{themeName}.{dictionaryName}.xaml", UriKind.RelativeOrAbsolute);
             base.Source = path;
         }
+
+
+        public static void Update(ResourceDictionary resources)
+        {
+            foreach (ResourceDictionary dict in resources.MergedDictionaries)
+            {
+                if (dict is ThemeResourceDictionary skinDict)
+                    skinDict.UpdateSource();
+            }
+        }
     }
 }
