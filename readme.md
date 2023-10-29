@@ -2,7 +2,13 @@
 
 **The fastest, most advanced, asynchronous Revit database exploration tool for Revit 2021+.**
 
-Yet another [RevitLookup](https://github.com/jeremytammik/RevitLookup) like tool. RevitLookup was an indispensable tool to work with Revit API for many years. But now, there is a better tool for the job. Let me introduce you to Revit database explorer and its capabilities. It not only allows us to explore database in a more efficient way thanks to querying, but also to modify Revit database through ad hoc scripts written in C#. 
+Yet another [RevitLookup](https://github.com/jeremytammik/RevitLookup) like tool. RevitLookup was an indispensable tool to work with Revit API for many years. But now, there is a better tool for the job. Let me introduce you to Revit database explorer and its capabilities. It not only allows us to **explore** database but also to:
+- **edit**, any parameter value
+- **query**,
+- **script**, by running ad hoc scripts written in C#
+- **visualize**,
+
+List of features:
 
 - [compare objects and parameters](#compare-object-members-and-element-parameters-values)
 - [query Revit database](#query-revit-database-with-rdq-revit-database-querying)
