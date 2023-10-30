@@ -91,5 +91,9 @@ namespace RevitDBExplorer.UIComponents.QueryVisualization
                 semaphore.Release();
             }
         }
+        public async Task Reset()
+        {
+            await Update(Enumerable.Empty<RDQCommand>());
+        }
     }
 }

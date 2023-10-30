@@ -11,12 +11,12 @@ using System.Windows.Threading;
 using RevitDBExplorer.Augmentations;
 using RevitDBExplorer.Domain;
 using RevitDBExplorer.Domain.RevitDatabaseQuery;
-using RevitDBExplorer.Domain.RevitDatabaseQuery.Autocompletion;
 using RevitDBExplorer.Domain.RevitDatabaseScripting;
 using RevitDBExplorer.Domain.Selectors;
 using RevitDBExplorer.Properties;
 using RevitDBExplorer.UIComponents.Breadcrumbs;
 using RevitDBExplorer.UIComponents.List;
+using RevitDBExplorer.UIComponents.QueryEditor;
 using RevitDBExplorer.UIComponents.QueryVisualization;
 using RevitDBExplorer.UIComponents.Trees.Base;
 using RevitDBExplorer.UIComponents.Trees.Base.Items;
@@ -24,8 +24,6 @@ using RevitDBExplorer.UIComponents.Trees.Explorer;
 using RevitDBExplorer.UIComponents.Trees.Utility;
 using RevitDBExplorer.Utils;
 using RevitDBExplorer.WPF;
-using RevitDBExplorer.WPF.Controls;
-using RDQCommand = RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Command;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
@@ -33,32 +31,31 @@ namespace RevitDBExplorer
 {
     internal enum RightView { None, List, CommandAndControl, CompareAndPinToolInfo }
 
-    internal partial class MainWindow : Window, IAmWindowOpener, IAmQueryExecutor, INotifyPropertyChanged
+    internal partial class MainWindow : Window, IAmWindowOpener, INotifyPropertyChanged
     {
-        private readonly ExplorerTreeViewModel explorerTreeViewModel = new();
-        private readonly UtilityTreeViewModel utilityTreeViewModel = new();
-        private readonly ListVM listVM;    
-        private readonly QueryVisualizationVM queryVisualizationVM = new();      
-        private readonly BreadcrumbsVM breadcrumbs;
-        private RightView rightView;          
-        private string databaseQuery = string.Empty;
-        private string databaseQueryToolTip = string.Empty;
-        private bool isPopupOpen;        
+        private readonly QueryEditorViewModel queryEditorVM;
+        private readonly QueryVisualizationVM queryVisualizationVM = new();
+        private readonly ExplorerTreeViewModel explorerTreeVM = new();
+        private readonly UtilityTreeViewModel utilityTreeVM = new();
+        private readonly ListVM listVM; 
+        private readonly BreadcrumbsVM breadcrumbsVM;
+        private readonly DispatcherTimer isRevitBusyDispatcher;
+        private readonly IRDV3DController rdvController;
+        private RightView rightView;  
         private bool isRevitBusy;
         private bool isNewVerAvailable;
         private string newVersionLink;
         private bool isWiderThan800px;
         private string mouseStatus;
-        private readonly DispatcherTimer isRevitBusyDispatcher;
-        private readonly IAutocompleteItemProvider databaseQueryAutocompleteItemProvider = new AutocompleteItemProvider();
-        private readonly IRDV3DController rdvController;
+        private string rdqGeneratedCSharpSyntax;
 
 
-        public ExplorerTreeViewModel ExplorerTree => explorerTreeViewModel;
-        public UtilityTreeViewModel UtilityTree => utilityTreeViewModel;
+        public QueryEditorViewModel QueryEditor => queryEditorVM;
+        public ExplorerTreeViewModel ExplorerTree => explorerTreeVM;
+        public UtilityTreeViewModel UtilityTree => utilityTreeVM;
         public ListVM List => listVM;
         public QueryVisualizationVM QueryVisualization => queryVisualizationVM;       
-        public BreadcrumbsVM Breadcrumbs => breadcrumbs;
+        public BreadcrumbsVM Breadcrumbs => breadcrumbsVM;
         public RightView RightView
         {
             get
@@ -71,46 +68,6 @@ namespace RevitDBExplorer
                 OnPropertyChanged();
             }
         }                      
-        public string DatabaseQuery
-        {
-            get
-            {
-                return databaseQuery;
-            }
-            set
-            {
-                databaseQuery = value;
-                if (IsPopupOpen == false)
-                {
-                    TryQueryDatabase(value);
-                }
-                OnPropertyChanged();
-            }
-        }
-        public string DatabaseQueryToolTip
-        {
-            get
-            {
-                return databaseQueryToolTip;
-            }
-            set
-            {
-                databaseQueryToolTip = value;               
-                OnPropertyChanged();
-            }
-        }
-        public bool IsPopupOpen
-        {
-            get
-            {
-                return isPopupOpen;
-            }
-            set
-            {
-                isPopupOpen = value;
-                OnPropertyChanged();
-            }
-        }        
         public bool IsRevitBusy
         {
             get
@@ -173,15 +130,8 @@ namespace RevitDBExplorer
                 mouseStatus = value;
                 OnPropertyChanged();
             }
-        }
-        public IAutocompleteItemProvider DatabaseQueryAutocompleteItemProvider
-        {
-            get
-            {
-                return databaseQueryAutocompleteItemProvider;
-            }
-        }
-        public bool IsBoundingBoxVisualizerEnabled
+        }      
+        public bool IsRDVEnabled
         {
             get
             {
@@ -194,9 +144,7 @@ namespace RevitDBExplorer
                 OnPropertyChanged();
             }
         }
-        public RelayCommand OpenScriptingWithQueryCommand { get; }
-        public RelayCommand SaveQueryAsFavoriteCommand { get; }
-
+        
 
         public MainWindow(SourceOfObjects sourceOfObjects, IntPtr? parentWindowHandle = null) : this()
         {
@@ -209,25 +157,22 @@ namespace RevitDBExplorer
         public MainWindow()
         {
             Dispatcher.UnhandledException += Dispatcher_UnhandledException;
-            listVM = new ListVM(this, this);
-            breadcrumbs = new BreadcrumbsVM();
+            queryEditorVM = new QueryEditorViewModel(TryQueryDatabase, GenerateScriptForQueryAndOpenRDS);
+            listVM = new ListVM(this, queryEditorVM);
+            breadcrumbsVM = new BreadcrumbsVM();
 
             InitializeComponent();
             InitializeAsync().Forget();
-
             this.DataContext = this; 
 
             Title = WindowTitleGenerator.Get();
-
             isRevitBusyDispatcher = new DispatcherTimer(TimeSpan.FromMilliseconds(500), DispatcherPriority.Background, IsRevitBusyDispatcher_Tick, Dispatcher.CurrentDispatcher); 
 
             ExplorerTree.SelectedItemChanged += Tree_SelectedItemChanged;
             ExplorerTree.ScriptWasGenerated += OpenRDSWithGivenScript;
             UtilityTree.SelectedItemChanged += Tree_SelectedItemChanged;
             UtilityTree.ScriptWasGenerated += OpenRDSWithGivenScript;
-
-            OpenScriptingWithQueryCommand = new RelayCommand(GenerateScriptForQueryAndOpenRDS);
-            SaveQueryAsFavoriteCommand = new RelayCommand(SaveQueryAsFavorite, x => !string.IsNullOrEmpty(DatabaseQuery) );
+            
             rdvController = RevitDatabaseVisualizationFactory.CreateController();
         }
         private async Task InitializeAsync()
@@ -356,15 +301,11 @@ namespace RevitDBExplorer
                 return result;
             });
 
-            DatabaseQueryToolTip = rdqResult.GeneratedCSharpSyntax;
+            rdqGeneratedCSharpSyntax = rdqResult.GeneratedCSharpSyntax;
             QueryVisualization.Update(rdqResult.Commands).Forget();
             ExplorerTree.PopulateTreeView(rdqResult.SourceOfObjects);            
         }    
-        void IAmQueryExecutor.Query(string query) 
-        {
-            DatabaseQuery = query;
-        }
-
+        
 
         private void PopulateExplorerTree(SourceOfObjects sourceOfObjects)
         {
@@ -373,16 +314,11 @@ namespace RevitDBExplorer
         }
         private void ResetDatabaseQuery()
         {
-            databaseQuery = "";
-            OnPropertyChanged(nameof(DatabaseQuery));
-            DatabaseQueryToolTip = "";
-            QueryVisualization.Update(Enumerable.Empty<RDQCommand>()).Forget();
+            QueryEditor.ResetDatabaseQuery();
+            rdqGeneratedCSharpSyntax = "";
+            QueryVisualization.Reset().Forget();
         }
-        private void SaveQueryAsFavorite()
-        {
-            FavoritesManager.Add(DatabaseQuery);
-        }
-
+        
 
         private void UpdateRDV()
         {
@@ -401,9 +337,9 @@ namespace RevitDBExplorer
 
         private void GenerateScriptForQueryAndOpenRDS()
         {
-            var scriptText = CodeGenerator.GenerateQueryFor(DatabaseQueryToolTip);
+            var scriptText = CodeGenerator.GenerateQueryFor(rdqGeneratedCSharpSyntax);
             OpenRDSWithGivenScript(scriptText);
-        }        
+        }
         private void OpenRDSWithGivenScript(string scriptText)
         {               
             OpenRDS();

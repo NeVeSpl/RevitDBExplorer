@@ -4,6 +4,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        xmlns:componentQueryEditor="clr-namespace:RevitDBExplorer.UIComponents.QueryEditor"
         xmlns:componentQueryVisualization="clr-namespace:RevitDBExplorer.UIComponents.QueryVisualization"
         xmlns:componentBusyIndicator="clr-namespace:RevitDBExplorer.UIComponents.BusyIndicator"
         xmlns:componentList="clr-namespace:RevitDBExplorer.UIComponents.List"
@@ -12,8 +13,7 @@
         xmlns:componentCAndC="clr-namespace:RevitDBExplorer.UIComponents.CommandAndControl"    
         xmlns:componentScripting="clr-namespace:RevitDBExplorer.UIComponents.Scripting"    
         xmlns:componentBreadcrumbs="clr-namespace:RevitDBExplorer.UIComponents.Breadcrumbs"    
-        xmlns:converters="clr-namespace:RevitDBExplorer.WPF.Converters"       
-        xmlns:controls="clr-namespace:RevitDBExplorer.WPF.Controls" 
+        xmlns:converters="clr-namespace:RevitDBExplorer.WPF.Converters" 
         xmlns:ext="clr-namespace:RevitDBExplorer.WPF.MarkupExtensions"    
         xmlns:wpf="clr-namespace:RevitDBExplorer.WPF"
         xmlns:ap="clr-namespace:RevitDBExplorer.WPF.AttachedProperties"
@@ -47,11 +47,6 @@
         </ResourceDictionary>
     </Window.Resources>
 
-    <!--<Window.ContextMenu>
-        <ContextMenu>            
-            <MenuItem Header="Configuration" Click="Window_MenuItem_ConfigurationClick" />
-        </ContextMenu>
-    </Window.ContextMenu>-->
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="1*" MinHeight="200"/>
@@ -207,40 +202,11 @@
                 <Grid.RowDefinitions>
                     <RowDefinition/>
                     <RowDefinition/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition Width="auto"/>
-                    <ColumnDefinition Width="auto"/>
-                </Grid.ColumnDefinitions>
+                </Grid.RowDefinitions>                
 
-                <controls:TextBoxWithPlaceholder Text="{Binding DatabaseQuery, Mode=TwoWay, Delay=1000, UpdateSourceTrigger=PropertyChanged}" 
-                                                 AutocompleteItemProvider="{Binding DatabaseQueryAutocompleteItemProvider}"
-                                                 IsPopupOpen="{Binding IsPopupOpen}"
-                                                 Placeholder="Query Revit database with RDQ">
-                                                 <!--ToolTip="{Binding DatabaseQueryToolTip}"
-                                                 ToolTipService.ShowDuration="50000"-->
-                                                 
-                    <!--<controls:TextBoxWithPlaceholder.ContextMenu>
-                        <ContextMenu>
-                            <MenuItem Command="ApplicationCommands.Copy" />
-                            <MenuItem Command="ApplicationCommands.Cut" />
-                            <MenuItem Command="ApplicationCommands.Paste" />
-                            <Separator/>
-                            <MenuItem Header ="Copy generated C# syntax" Tag="Default" Click="TextBox_MenuItem_CopyFilteredElementCollector"/>
-                        </ContextMenu>
-                    </controls:TextBoxWithPlaceholder.ContextMenu>-->
-                </controls:TextBoxWithPlaceholder>
-
-                <Button Grid.Column="1" BorderBrush="Transparent" Margin="2 0 0 0" MinWidth="21" MinHeight="21" Padding="2 0 1 1" ToolTip="Save query as favorite" Background="Transparent"  Command="{Binding SaveQueryAsFavoriteCommand}">
-                    <Path Style="{StaticResource IconFavorite}"  Width="18"/>
-                </Button>
-
-                <Button Grid.Column="2" BorderBrush="Transparent" Margin="2 0 0 0" MinWidth="21" MinHeight="21" Padding="2 0 1 1" ToolTip="Generate C# code for this SELECT query (RDS)" Background="Transparent"  Command="{Binding OpenScriptingWithQueryCommand}">
-                    <Path Style="{StaticResource IconQuery}" Width="12" />
-                </Button>
-
-                <componentQueryVisualization:QueryVisualizationView  Grid.Row="1" Grid.ColumnSpan="2" Margin="0 1 0 0" DataContext="{Binding QueryVisualization}"/>
+                <componentQueryEditor:QueryEditorView DataContext="{Binding QueryEditor}" />
+             
+                <componentQueryVisualization:QueryVisualizationView  Grid.Row="1" Margin="0 1 0 0" DataContext="{Binding QueryVisualization}"/>
             </Grid>
 
             <DockPanel Grid.Row="2" Grid.Column="0" Margin="0 0 2 0" SizeChanged="Window_SizeChanged">
@@ -297,13 +263,13 @@
                 <StackPanel Orientation="Horizontal" Grid.Column="1" Background="{DynamicResource StatusBar.Background}">
                     <TextBlock Text="{Binding MouseStatus}" Margin="0 0 2 0" Foreground="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" ToolTip="Mouse cursor position in the Revit Model Coordinates (imperial), &#x0a;&#x0a; it does not work when a direction of a Revit view is not aligned with any of directions of a Revit model" HorizontalAlignment="Left"  VerticalAlignment="Center" Visibility="{Binding IsNewVerAvailable, Converter={StaticResource BoolToVisibilityConverterCollapsedInverted}}"/>
 
-                    <ToggleButton Style="{StaticResource ToolTooggle}" IsChecked="{Binding IsBoundingBoxVisualizerEnabled}" Padding="0" Background="red"  ToolTip="Show visualization for the selected object in the Tree">
+                    <ToggleButton Style="{StaticResource ToolTooggle}" IsChecked="{Binding IsRDVEnabled}" Padding="0" Background="red"  ToolTip="Show visualization for the selected object in the Tree">
                         <Grid Background="#FEFCF7" Height="19" Width="38" >
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
                                 <TextBlock Text="V" Foreground="#1434CB"  FontWeight="Heavy" FontFamily="Arial" FontSize="15"/>
                                 <Grid>
-                                    <TextBlock Text=":on "  Visibility="{Binding IsBoundingBoxVisualizerEnabled, Converter={StaticResource BoolToVisibilityConverterHidden}}" Foreground="Black" VerticalAlignment="Bottom"/>
-                                    <TextBlock Text=":off " Visibility="{Binding IsBoundingBoxVisualizerEnabled, Converter={StaticResource BoolToVisibilityConverterHiddenInverted}}" Foreground="Black" VerticalAlignment="Bottom"/>
+                                    <TextBlock Text=":on "  Visibility="{Binding IsRDVEnabled, Converter={StaticResource BoolToVisibilityConverterHidden}}" Foreground="Black" VerticalAlignment="Bottom"/>
+                                    <TextBlock Text=":off " Visibility="{Binding IsRDVEnabled, Converter={StaticResource BoolToVisibilityConverterHiddenInverted}}" Foreground="Black" VerticalAlignment="Bottom"/>
                                 </Grid>
                             </StackPanel>
                         </Grid>
