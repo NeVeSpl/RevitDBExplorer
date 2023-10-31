@@ -1,14 +1,14 @@
 ﻿using Autodesk.Windows;
 using RevitDBExplorer.Domain;
 
-namespace RevitDBExplorer
+namespace RevitDBExplorer.Utils
 {
     public static class ApplicationModifyTab
     {
-        private static Autodesk.Windows.RibbonPanel ribbonPanel;
+        private static RibbonPanel ribbonPanel;
 
 
-        public static void Init(Autodesk.Windows.RibbonPanel ribbonPanel, bool visible = false)
+        public static void Init(RibbonPanel ribbonPanel, bool visible = false)
         {
             ApplicationModifyTab.ribbonPanel = ribbonPanel.Clone();
             UpdateInternal(visible);
@@ -21,7 +21,7 @@ namespace RevitDBExplorer
 
         private static void UpdateInternal(bool visible)
         {
-            if (ApplicationModifyTab.ribbonPanel is null) return;
+            if (ribbonPanel is null) return;
 
             var tab = ComponentManager.Ribbon.FindTab("Modify");
             if (tab is null) return;

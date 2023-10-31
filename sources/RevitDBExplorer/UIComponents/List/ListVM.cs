@@ -11,6 +11,7 @@ using RevitDBExplorer.Domain.DataModel;
 using RevitDBExplorer.Domain.DataModel.ValueViewModels.Base;
 using RevitDBExplorer.UIComponents.List.ViewModels;
 using RevitDBExplorer.UIComponents.List.WPF;
+using RevitDBExplorer.UIComponents.Trees.Base;
 using RevitDBExplorer.UIComponents.Trees.Base.Items;
 using RevitDBExplorer.WPF;
 
@@ -64,11 +65,17 @@ namespace RevitDBExplorer.UIComponents.List
                 return listSelectedItem;
             }
             set
-            {
-                listSelectedItem = value;
+            {                
+                if (listSelectedItem != value)
+                {
+                    var oldOne = listSelectedItem;
+                    listSelectedItem = value;
+                    SelectedItemChanged?.Invoke(new ListSelectedItemChangedEventArgs(oldOne, listSelectedItem));
+                }
                 OnPropertyChanged();
             }
         }
+        public event Action<ListSelectedItemChangedEventArgs> SelectedItemChanged;
         public RelayCommand KeyDown_Enter_Command { get; }
         public RelayCommand ListItem_Click_Command { get; }
         public RelayCommand ReloadCommand { get; }
@@ -381,6 +388,7 @@ namespace RevitDBExplorer.UIComponents.List
         }       
     }
 
+    internal record class ListSelectedItemChangedEventArgs(IListItem OldOne, IListItem NewOne);
     internal interface IAmWindowOpener
     {
         void Open(SourceOfObjects sourceOfObjects);

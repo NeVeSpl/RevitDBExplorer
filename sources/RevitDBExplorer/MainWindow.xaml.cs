@@ -10,12 +10,14 @@ using System.Windows.Interop;
 using System.Windows.Threading;
 using RevitDBExplorer.Augmentations;
 using RevitDBExplorer.Domain;
+using RevitDBExplorer.Domain.DataModel.ValueViewModels;
 using RevitDBExplorer.Domain.RevitDatabaseQuery;
 using RevitDBExplorer.Domain.RevitDatabaseScripting;
 using RevitDBExplorer.Domain.Selectors;
 using RevitDBExplorer.Properties;
 using RevitDBExplorer.UIComponents.Breadcrumbs;
 using RevitDBExplorer.UIComponents.List;
+using RevitDBExplorer.UIComponents.List.ViewModels;
 using RevitDBExplorer.UIComponents.QueryEditor;
 using RevitDBExplorer.UIComponents.QueryVisualization;
 using RevitDBExplorer.UIComponents.Trees.Base;
@@ -47,7 +49,7 @@ namespace RevitDBExplorer
         private string newVersionLink;
         private bool isWiderThan800px;
         private string mouseStatus;
-        private string rdqGeneratedCSharpSyntax;
+        private string rdqGeneratedCSharpSyntax = "";
 
 
         public QueryEditorViewModel QueryEditor => queryEditorVM;
@@ -172,9 +174,13 @@ namespace RevitDBExplorer
             ExplorerTree.ScriptWasGenerated += OpenRDSWithGivenScript;
             UtilityTree.SelectedItemChanged += Tree_SelectedItemChanged;
             UtilityTree.ScriptWasGenerated += OpenRDSWithGivenScript;
+            List.SelectedItemChanged += List_SelectedItemChanged;
             
             rdvController = RevitDatabaseVisualizationFactory.CreateController();
         }
+
+       
+
         private async Task InitializeAsync()
         {
             (IsNewVerAvailable, NewVersionLink) = await VersionChecker.CheckIfNewVersionIsAvailable();
@@ -280,6 +286,21 @@ namespace RevitDBExplorer
             }
             RightView = RightView.None;
         }
+        private void List_SelectedItemChanged(ListSelectedItemChangedEventArgs args)
+        {
+            if (args.NewOne is ListItemForMember listItemForMember)
+            {
+                var leftOne = listItemForMember[0];
+                var righttOne = listItemForMember[1];
+
+                if (leftOne?.ValueViewModel is DefaultPresenter { ValueContainer: { } } presenter)  
+                {
+                    var v = presenter.ValueContainer.GetVisualization();
+                    
+                    //return Enumerable.Empty<DrawingVisual>();
+                }
+            }
+        }
         bool ignoreEvents = false;
         void IAmWindowOpener.Open(SourceOfObjects sourceOfObjects)
         {
@@ -364,7 +385,8 @@ namespace RevitDBExplorer
             ExplorerTree.SelectedItemChanged -= Tree_SelectedItemChanged;
             ExplorerTree.ScriptWasGenerated -= OpenRDSWithGivenScript;
             UtilityTree.SelectedItemChanged -= Tree_SelectedItemChanged;
-            UtilityTree.ScriptWasGenerated -= OpenRDSWithGivenScript;            
+            UtilityTree.ScriptWasGenerated -= OpenRDSWithGivenScript;        
+            List.SelectedItemChanged -= List_SelectedItemChanged;
         }
         private void Window_Closing(object sender, EventArgs e)
         {

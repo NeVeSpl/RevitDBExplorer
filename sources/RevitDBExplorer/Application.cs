@@ -13,17 +13,19 @@ using RevitDBExplorer.Domain.DataModel.Streams;
 using RevitDBExplorer.Domain.DataModel.ValueContainers.Base;
 using RevitDBExplorer.Domain.RevitDatabaseQuery;
 using RevitDBExplorer.Properties;
+using RevitDBExplorer.Utils;
 using RevitDBScripting;
 
 namespace RevitDBExplorer
 {
     public class Application : IExternalApplication, IScriptRunner
     {
+        private static UIView UIView;
+        private static View View;
         public static IntPtr RevitWindowHandle;
         public static UIApplication UIApplication;      
         public static RDSController RDSController;
-        private static UIView UIView;
-        private static View View;
+        
 
         public Application()
         {
@@ -59,10 +61,7 @@ namespace RevitDBExplorer
             UIApplication.ViewActivated += UIApplication_ViewActivated;
 
             return Result.Succeeded;
-        }
-
-        
-
+        }              
         public Result OnShutdown(UIControlledApplication application)
         {
             application.Idling -= Application_Idling;
@@ -168,6 +167,7 @@ namespace RevitDBExplorer
             }
             return "";
         }
+
 
         private static DateTime LastTimeWhenInCharge; 
         private void Application_Idling(object sender, Autodesk.Revit.UI.Events.IdlingEventArgs e)

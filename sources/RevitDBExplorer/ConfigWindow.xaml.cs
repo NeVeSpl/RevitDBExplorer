@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Controls;
 using RevitDBExplorer.Domain.RevitDatabaseQuery.Autocompletion;
 using RevitDBExplorer.Properties;
+using RevitDBExplorer.Utils;
 using RevitDBExplorer.WPF;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
