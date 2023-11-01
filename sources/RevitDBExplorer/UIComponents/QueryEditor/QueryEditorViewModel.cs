@@ -1,6 +1,5 @@
 ﻿using System;
 using RevitDBExplorer.Domain.RevitDatabaseQuery.Autocompletion;
-using RevitDBExplorer.Domain.RevitDatabaseScripting;
 using RevitDBExplorer.UIComponents.List;
 using RevitDBExplorer.WPF;
 using RevitDBExplorer.WPF.Controls;

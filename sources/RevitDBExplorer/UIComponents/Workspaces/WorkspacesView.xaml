@@ -1,0 +1,111 @@
+﻿<UserControl x:Class="RevitDBExplorer.UIComponents.Workspaces.WorkspacesView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:ext="clr-namespace:RevitDBExplorer.WPF.MarkupExtensions"  
+             xmlns:wpf="clr-namespace:RevitDBExplorer.WPF"
+             xmlns:converters="clr-namespace:RevitDBExplorer.WPF.Converters" 
+             xmlns:componentList="clr-namespace:RevitDBExplorer.UIComponents.List"
+             xmlns:componentExplorerTree="clr-namespace:RevitDBExplorer.UIComponents.Trees.Explorer"    
+             xmlns:componentUtilityTree="clr-namespace:RevitDBExplorer.UIComponents.Trees.Utility" 
+             xmlns:componentCAndC="clr-namespace:RevitDBExplorer.UIComponents.CommandAndControl"    
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../../Resources/Templates/All.xaml"/>
+                <ResourceDictionary Source="../../Resources/VectorGraphic.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+            <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverterCollapsed" WhenFalse="Collapsed"/>
+            <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverterCollapsedInverted" WhenFalse="Visible" WhenTrue="Collapsed"/>
+            <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverterHidden" WhenFalse="Hidden"/>
+            <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverterHiddenInverted" WhenFalse="Visible" WhenTrue="Hidden"/>
+            <converters:EnumMatchToVisibilityConverter x:Key="EnumMatchToVisibilityConverter"/>
+
+            <Style TargetType="{x:Type TabItem}">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type TabItem}">
+                            
+                            <Grid>
+                                 <Border 
+                                      Name="Border"
+                                      Margin="0,0,0,0" 
+                                      Background="{DynamicResource StatusBar.Background}"
+                                      BorderBrush="Transparent" 
+                                      BorderThickness="0,0,0,0" 
+                                      CornerRadius="0"  
+                                 >
+                                     <ContentPresenter
+                                         x:Name="ContentSite"
+                                         VerticalAlignment="Center"
+                                         HorizontalAlignment="Center"
+                                         ContentSource="Header"
+                                         Margin="12,4,12,0"
+                                         RecognizesAccessKey="True"
+                                         TextBlock.Foreground="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
+                                 </Border>
+                            </Grid>
+                            
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter Property="Panel.ZIndex" Value="1" />
+                                    <Setter TargetName="Border" Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
+                                    <!--<Setter TargetName="ContentSite" Property="TextBlock.Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />-->
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                            
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid >
+        <TabControl ItemsSource="{Binding Workspaces}" SelectedIndex="{Binding SelectedIndex}" TabStripPlacement="Bottom" BorderThickness="0" Padding="0" Margin="0" Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}" >
+            <TabControl.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Title}" VerticalAlignment="Bottom"/>
+                </DataTemplate>
+            </TabControl.ItemTemplate>
+
+
+            <TabControl.ContentTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="{Binding FirstColumnWidth, Mode=TwoWay}" MinWidth="100" />
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="*" MinWidth="100"/>
+                        </Grid.ColumnDefinitions>
+
+                        <DockPanel Grid.Column="0" Margin="0 0 2 0" >
+                            <!--SizeChanged="Window_SizeChanged"-->
+                            <Border DockPanel.Dock="Bottom" BorderThickness="0 1 0 0" BorderBrush="{DynamicResource GridSplitter.Background}" Height="auto" MaxHeight="444">
+                                <Grid  Height="auto" Margin="0 1 0 1">
+                                    <componentUtilityTree:UtilityTreeView DataContext="{Binding UtilityTree}" />
+                                </Grid>
+                            </Border>
+                            <componentExplorerTree:ExplorerTreeView DataContext="{Binding ExplorerTree}"  />
+                        </DockPanel>
+
+                        <GridSplitter  Grid.Column="1"  Background="{DynamicResource GridSplitter.Background}"  Width="2" Margin="0 25 2 5" HorizontalAlignment="Left" VerticalAlignment="Stretch" />
+
+                        <Grid Grid.Column="2" Margin="-2 0 0 0">
+                            <componentList:ListView DataContext="{Binding List}" Visibility="{Binding DataContext.RightView, Converter={StaticResource EnumMatchToVisibilityConverter}, ConverterParameter=List, RelativeSource={RelativeSource AncestorType=Grid}}"/>
+
+                            <componentList:CompareAndPinToolInfo Visibility="{Binding DataContext.RightView, Converter={StaticResource EnumMatchToVisibilityConverter}, ConverterParameter=CompareAndPinToolInfo, RelativeSource={RelativeSource AncestorType=Grid}}"/>
+                        </Grid>
+
+                    </Grid>
+                </DataTemplate>
+            </TabControl.ContentTemplate>
+
+        </TabControl>
+    </Grid>
+</UserControl>

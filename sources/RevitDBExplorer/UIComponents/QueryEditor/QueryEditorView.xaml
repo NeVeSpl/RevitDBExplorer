@@ -12,14 +12,12 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="../../Resources/Templates/All.xaml"/>
-                <wpf:ThemeResourceDictionary Name="Colors"/>
                 <ResourceDictionary Source="../../Resources/VectorGraphic.xaml"/>
-            </ResourceDictionary.MergedDictionaries>
-          
+            </ResourceDictionary.MergedDictionaries>          
         </ResourceDictionary>
     </UserControl.Resources>
     
-    <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Margin="0 3 0 3" >
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>           
         </Grid.RowDefinitions>

@@ -7,23 +7,17 @@ namespace RevitDBExplorer.UIComponents.Scripting
 {
     public partial class RDScriptingView : UserControl
     {
-        private RDScriptingVM scriptingVM;
+       
        
 
         public RDScriptingView()
         {
             InitializeComponent();
-            this.DataContextChanged += RDScriptingView_DataContextChanged;
+         
         }
 
 
-        private void RDScriptingView_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
-        {
-            if (this.DataContext is RDScriptingVM vm)
-            {                
-                scriptingVM = vm;
-            }
-        }
+       
 
 
      

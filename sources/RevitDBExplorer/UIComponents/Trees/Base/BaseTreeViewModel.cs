@@ -18,7 +18,7 @@ namespace RevitDBExplorer.UIComponents.Trees.Base
         private TreeItem selectedItem;
         private bool allowToFrezeeItem;
 
-        public event Action<SelectedItemChangedEventArgs> SelectedItemChanged;
+        public event Action<TreeSelectedItemChangedEventArgs> SelectedItemChanged;
         public event Action<string> ScriptWasGenerated;
 
         public ObservableCollection<TreeItem> TreeItems
@@ -69,7 +69,7 @@ namespace RevitDBExplorer.UIComponents.Trees.Base
         {
             var oldOne = SelectedItem;
             SelectedItem = item;            
-            SelectedItemChanged?.Invoke(new SelectedItemChangedEventArgs(this, oldOne, item));
+            SelectedItemChanged?.Invoke(new TreeSelectedItemChangedEventArgs(this, oldOne, item));
         }
         
 
@@ -115,5 +115,5 @@ namespace RevitDBExplorer.UIComponents.Trees.Base
         }
     }
 
-    internal record class SelectedItemChangedEventArgs(BaseTreeViewModel Sender, TreeItem OldOne, TreeItem NewOne);
+    internal record class TreeSelectedItemChangedEventArgs(BaseTreeViewModel Sender, TreeItem OldOne, TreeItem NewOne);
 }

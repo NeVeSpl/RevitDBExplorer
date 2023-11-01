@@ -6,13 +6,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
         xmlns:componentQueryEditor="clr-namespace:RevitDBExplorer.UIComponents.QueryEditor"
         xmlns:componentQueryVisualization="clr-namespace:RevitDBExplorer.UIComponents.QueryVisualization"
-        xmlns:componentBusyIndicator="clr-namespace:RevitDBExplorer.UIComponents.BusyIndicator"
-        xmlns:componentList="clr-namespace:RevitDBExplorer.UIComponents.List"
-        xmlns:componentExplorerTree="clr-namespace:RevitDBExplorer.UIComponents.Trees.Explorer"    
-        xmlns:componentUtilityTree="clr-namespace:RevitDBExplorer.UIComponents.Trees.Utility" 
-        xmlns:componentCAndC="clr-namespace:RevitDBExplorer.UIComponents.CommandAndControl"    
-        xmlns:componentScripting="clr-namespace:RevitDBExplorer.UIComponents.Scripting"    
+        xmlns:componentBusyIndicator="clr-namespace:RevitDBExplorer.UIComponents.BusyIndicator" 
         xmlns:componentBreadcrumbs="clr-namespace:RevitDBExplorer.UIComponents.Breadcrumbs"    
+        xmlns:componentWorkspaces="clr-namespace:RevitDBExplorer.UIComponents.Workspaces"    
         xmlns:converters="clr-namespace:RevitDBExplorer.WPF.Converters" 
         xmlns:ext="clr-namespace:RevitDBExplorer.WPF.MarkupExtensions"    
         xmlns:wpf="clr-namespace:RevitDBExplorer.WPF"
@@ -54,12 +50,7 @@
             <RowDefinition Height="0" />
         </Grid.RowDefinitions>
 
-        <Grid Margin="2 2 2 0" >
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="{ext:SettingBinding FirstColumnWidth}" MinWidth="100" x:Name="cFirstColumnDefinition" />
-                <ColumnDefinition Width="auto" />
-                <ColumnDefinition Width="*" MinWidth="100"/>
-            </Grid.ColumnDefinitions>
+        <Grid Margin="2 2 2 0" >           
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>                
@@ -67,7 +58,7 @@
                 <RowDefinition Height="21"/>
             </Grid.RowDefinitions>
 
-            <UniformGrid Grid.ColumnSpan="3" Columns="12" Margin="0 0 0 2" >
+            <UniformGrid Columns="12" Margin="0 0 0 2" >
                 <UniformGrid.Resources>
                     <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
                         <Setter Property="Background" Value="Transparent"/>
@@ -198,39 +189,26 @@
                 </Button>
             </UniformGrid>
 
-            <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Margin="0 3 0 3" >
+            <Grid Grid.Row="1" Margin="0 3 0 3">
                 <Grid.RowDefinitions>
                     <RowDefinition/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>                
 
-                <componentQueryEditor:QueryEditorView DataContext="{Binding QueryEditor}" />
+                <componentQueryEditor:QueryEditorView DataContext="{Binding QueryEditor}"/>
              
-                <componentQueryVisualization:QueryVisualizationView  Grid.Row="1" Margin="0 1 0 0" DataContext="{Binding QueryVisualization}"/>
+                <componentQueryVisualization:QueryVisualizationView Grid.Row="1" Margin="0 1 0 0" DataContext="{Binding QueryVisualization}" />
             </Grid>
 
-            <DockPanel Grid.Row="2" Grid.Column="0" Margin="0 0 2 0" SizeChanged="Window_SizeChanged">
-                <Border DockPanel.Dock="Bottom" BorderThickness="0 1 0 0" BorderBrush="{DynamicResource GridSplitter.Background}" Height="auto" MaxHeight="444">
-                    <Grid  Height="auto" Margin="0 1 0 1">
-                        <componentUtilityTree:UtilityTreeView DataContext="{Binding UtilityTree}" />
-                    </Grid>
-                </Border>
-                <componentExplorerTree:ExplorerTreeView DataContext="{Binding ExplorerTree}"  />
-            </DockPanel>
+            <Border Background="{DynamicResource StatusBar.Background}" Margin="-2 0 0 0" Grid.ColumnSpan="3" Grid.Row="3"/>
 
-            <GridSplitter Grid.Row="2" Grid.Column="1"  Background="{DynamicResource GridSplitter.Background}"  Width="2" Margin="0 25 2 5" HorizontalAlignment="Left" VerticalAlignment="Stretch" />
+            <componentWorkspaces:WorkspacesView Grid.Row="2" DataContext="{Binding Workspaces}" Margin="0 0 0 -21"   />
 
-            <Grid Grid.Row="2" Grid.Column="2"  Margin="-2 0 0 0">
-                <componentList:ListView DataContext="{Binding List}" Visibility="{Binding DataContext.RightView, Converter={StaticResource EnumMatchToVisibilityConverter}, ConverterParameter=List, RelativeSource={RelativeSource AncestorType=Grid}}"/>
-               
-                <componentList:CompareAndPinToolInfo Visibility="{Binding DataContext.RightView, Converter={StaticResource EnumMatchToVisibilityConverter}, ConverterParameter=CompareAndPinToolInfo, RelativeSource={RelativeSource AncestorType=Grid}}"/>
-            </Grid>
-
-            <componentBusyIndicator:BusyIndicator Grid.Row="2" Grid.Column="0" Grid.RowSpan="2" HorizontalAlignment="Left" Panel.ZIndex="1" VerticalAlignment="Bottom"  Height="21" Padding="0 0 4 0"  Margin="0 0 0 0" 
+            <componentBusyIndicator:BusyIndicator Grid.Row="2" Grid.Column="0" Grid.RowSpan="2" HorizontalAlignment="Left" Panel.ZIndex="2" VerticalAlignment="Bottom"  Height="21" Padding="0 0 4 0"  Margin="0 0 0 0" 
                                                   Background="{DynamicResource StatusBar.Background}"
                                                   Visibility="{Binding IsRevitBusy, Converter={StaticResource BoolToVisibilityConverter}}" />
 
-            <Grid Background="{DynamicResource StatusBar.Background}" Margin="-2 0 0 0" Grid.ColumnSpan="3" Grid.Row="3">
+            <Grid  Margin="-2 0 0 0" Grid.ColumnSpan="3" Grid.Row="3">
                 <Grid.Resources>
                     <Style x:Key="ToolButton" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
                         <Setter Property="Padding" Value="1"/>
@@ -294,9 +272,6 @@
                 </Grid>
             </Grid>
         </Grid>
-
-        <GridSplitter Grid.Row="1"  Background="{DynamicResource GridSplitter.Background}" Height="3" HorizontalAlignment="Stretch" Visibility="Collapsed"/>
-
-        <componentScripting:RDScriptingView     Grid.Row="2"   Visibility="Collapsed"/>
+        
     </Grid>
 </Window>
