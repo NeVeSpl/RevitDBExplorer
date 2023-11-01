@@ -14,8 +14,6 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers.Base
 
         public Type Type => type;
 
-        Type ITypeHandler<T>.Type { get; }
-
         public string GetTypeHandlerName(T value)
         {
             var containerTypeName = Type.GetCSharpName();
