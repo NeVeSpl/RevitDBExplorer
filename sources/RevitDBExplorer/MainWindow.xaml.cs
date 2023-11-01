@@ -22,7 +22,6 @@ using RevitDBExplorer.UIComponents.List;
 using RevitDBExplorer.UIComponents.List.ViewModels;
 using RevitDBExplorer.UIComponents.QueryEditor;
 using RevitDBExplorer.UIComponents.QueryVisualization;
-using RevitDBExplorer.UIComponents.Trees.Base;
 using RevitDBExplorer.UIComponents.Trees.Base.Items;
 using RevitDBExplorer.UIComponents.Workspaces;
 using RevitDBExplorer.Utils;
@@ -214,24 +213,12 @@ namespace RevitDBExplorer
         private void Workspaces_SelectedItemChanged(SelectedItemChangedEventArgs obj)
         {
             UpdateRDV();
-        }
-        private async void Tree_SelectedItemChanged(TreeSelectedItemChangedEventArgs eventArgs)
-        {
-            if ((!IsActive && IsLoaded) || ignoreEvents)
-                return;           
-
-           
-
-           
         }       
-        bool ignoreEvents = false;
         void IAmWindowOpener.Open(SourceOfObjects sourceOfObjects)
         {
-            ignoreEvents = true;
             var window = new MainWindow(sourceOfObjects);
             window.Owner = this;
-            window.Show();     
-            ignoreEvents = false;
+            window.Show(); 
         }
         private async void TryQueryDatabase(string query)
         {

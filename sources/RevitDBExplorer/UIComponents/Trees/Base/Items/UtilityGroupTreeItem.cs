@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using RevitDBExplorer.Domain.DataModel;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
@@ -10,9 +9,9 @@ namespace RevitDBExplorer.UIComponents.Trees.Base.Items
 {
     internal class UtilityGroupTreeItem : TreeItem
     {
-        public UtilityGroupTreeItem(TreeItemsCommands commands) : base(commands)
+        public UtilityGroupTreeItem(TreeItemsCommands commands, IEnumerable<SnoopableObject> snoopableObjects) : base(commands)
         {
-            Items = new System.Collections.ObjectModel.ObservableCollection<TreeItem>();
+            Items = new ObservableCollection<TreeItem>(snoopableObjects.Select(x => new SnoopableObjectTreeItem(x, commands)));
         }
     }
 }
