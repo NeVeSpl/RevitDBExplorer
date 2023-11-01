@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using RevitDBExplorer.Domain;
 using RevitDBExplorer.Domain.DataModel;
@@ -74,6 +75,10 @@ namespace RevitDBExplorer.UIComponents.Workspaces
         public IEnumerable<object> GetSelectedItems()
         {
             return Workspaces.First().GetSelectedItems();
+        }
+        public void Unbind()
+        {
+            Workspaces.First().Unbind();
         }
 
 
@@ -175,7 +180,7 @@ namespace RevitDBExplorer.UIComponents.Workspaces
             List.SelectedItemChanged += List_SelectedItemChanged;
             ExplorerTree.ScriptWasGenerated += OpenRDSWithGivenScript;
             UtilityTree.ScriptWasGenerated += OpenRDSWithGivenScript;
-            Title = "Workspace";
+            Title = "";
         }
 
 
@@ -187,7 +192,7 @@ namespace RevitDBExplorer.UIComponents.Workspaces
 
                 if (eventArgs.Sender == ExplorerTree)
                 {
-                    UtilityTree.RemoveSelection();
+                    UtilityTree?.RemoveSelection();
                 }
                 if (eventArgs.Sender == UtilityTree)
                 {
@@ -201,7 +206,7 @@ namespace RevitDBExplorer.UIComponents.Workspaces
             if (eventArgs.NewOne is SnoopableObjectTreeItem snoopableObjectTreeItem)
             {
                 chosenView = RightView.List;
-                await List.PopulateListView(snoopableObjectTreeItem);               
+                List.PopulateListView(snoopableObjectTreeItem).Forget();               
             }
 
             if (eventArgs.NewOne is UtilityGroupTreeItem utilityGroupTreeItem)
@@ -260,10 +265,18 @@ namespace RevitDBExplorer.UIComponents.Workspaces
             {
                 yield return ExplorerTree.SelectedItem;
             }
-            if (UtilityTree.SelectedItem != null)
+            if (UtilityTree?.SelectedItem != null)
             {
                 yield return UtilityTree.SelectedItem;
             }
+        }
+        public void Unbind()
+        {
+            ExplorerTree.SelectedItemChanged -= Tree_SelectedItemChanged;
+            UtilityTree.SelectedItemChanged -= Tree_SelectedItemChanged;
+            List.SelectedItemChanged -= List_SelectedItemChanged;
+            ExplorerTree.ScriptWasGenerated -= OpenRDSWithGivenScript;
+            UtilityTree.ScriptWasGenerated -= OpenRDSWithGivenScript;
         }
     }
 }

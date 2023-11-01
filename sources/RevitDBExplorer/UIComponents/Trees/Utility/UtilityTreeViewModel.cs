@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.ObjectModel;
 using System.Windows;
 using RevitDBExplorer.Domain.DataModel;

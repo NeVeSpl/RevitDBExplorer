@@ -17,7 +17,6 @@ using RevitDBExplorer.Domain.RevitDatabaseQuery;
 using RevitDBExplorer.Domain.RevitDatabaseScripting;
 using RevitDBExplorer.Domain.Selectors;
 using RevitDBExplorer.Properties;
-using RevitDBExplorer.UIComponents.Breadcrumbs;
 using RevitDBExplorer.UIComponents.List;
 using RevitDBExplorer.UIComponents.List.ViewModels;
 using RevitDBExplorer.UIComponents.QueryEditor;
@@ -36,7 +35,6 @@ namespace RevitDBExplorer
         private readonly QueryEditorViewModel queryEditorVM;
         private readonly QueryVisualizationVM queryVisualizationVM;
         private readonly WorkspacesViewModel workspacesVM;        
-        private readonly BreadcrumbsVM breadcrumbsVM;
         private readonly DispatcherTimer isRevitBusyDispatcher;
         private readonly IRDV3DController rdvController;        
         private bool isRevitBusy;
@@ -49,8 +47,7 @@ namespace RevitDBExplorer
 
         public QueryEditorViewModel QueryEditor => queryEditorVM;
         public QueryVisualizationVM QueryVisualization => queryVisualizationVM;
-        public WorkspacesViewModel Workspaces => workspacesVM;           
-        public BreadcrumbsVM Breadcrumbs => breadcrumbsVM;                         
+        public WorkspacesViewModel Workspaces => workspacesVM;                                  
         public bool IsRevitBusy
         {
             get
@@ -144,7 +141,6 @@ namespace RevitDBExplorer
             queryEditorVM = new QueryEditorViewModel(TryQueryDatabase, GenerateScriptForQueryAndOpenRDS);
             queryVisualizationVM = new QueryVisualizationVM();
             workspacesVM = new WorkspacesViewModel(this, queryEditorVM, OpenRDSWithGivenScript);            
-            breadcrumbsVM = new BreadcrumbsVM();
             
             rdvController = RevitDatabaseVisualizationFactory.CreateController();
 
@@ -216,6 +212,7 @@ namespace RevitDBExplorer
         }       
         void IAmWindowOpener.Open(SourceOfObjects sourceOfObjects)
         {
+            SaveUserSettings();
             var window = new MainWindow(sourceOfObjects);
             window.Owner = this;
             window.Show(); 
@@ -300,6 +297,7 @@ namespace RevitDBExplorer
             Dispatcher.UnhandledException -= Dispatcher_UnhandledException;           
             isRevitBusyDispatcher.Tick -= IsRevitBusyDispatcher_Tick;
             Workspaces.SelectedItemChanged -= Workspaces_SelectedItemChanged;
+            Workspaces.Unbind();
         }
         private void Window_Closing(object sender, EventArgs e)
         {

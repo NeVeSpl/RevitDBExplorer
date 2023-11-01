@@ -6,8 +6,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
         xmlns:componentQueryEditor="clr-namespace:RevitDBExplorer.UIComponents.QueryEditor"
         xmlns:componentQueryVisualization="clr-namespace:RevitDBExplorer.UIComponents.QueryVisualization"
-        xmlns:componentBusyIndicator="clr-namespace:RevitDBExplorer.UIComponents.BusyIndicator" 
-        xmlns:componentBreadcrumbs="clr-namespace:RevitDBExplorer.UIComponents.Breadcrumbs"    
+        xmlns:componentBusyIndicator="clr-namespace:RevitDBExplorer.UIComponents.BusyIndicator"    
         xmlns:componentWorkspaces="clr-namespace:RevitDBExplorer.UIComponents.Workspaces"    
         xmlns:converters="clr-namespace:RevitDBExplorer.WPF.Converters" 
         xmlns:ext="clr-namespace:RevitDBExplorer.WPF.MarkupExtensions"    
@@ -235,7 +234,7 @@
                 </Grid.ColumnDefinitions>
 
                 <Grid Grid.Column="0" ClipToBounds="False" Visibility="Collapsed">
-                    <componentBreadcrumbs:BreadcrumbsView DataContext="{Binding Breadcrumbs}" Margin="7 0 0 0"/>
+                    
                 </Grid>
 
                 <StackPanel Orientation="Horizontal" Grid.Column="1" Background="{DynamicResource StatusBar.Background}">
