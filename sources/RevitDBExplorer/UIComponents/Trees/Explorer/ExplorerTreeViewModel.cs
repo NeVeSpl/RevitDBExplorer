@@ -103,10 +103,10 @@ namespace RevitDBExplorer.UIComponents.Trees.Explorer
                 TreeItems = new(new[] { groupTreeVM });
             }
         }
-        public void PopulateWithEvents(IList<SnoopableObject> snoopableObjects)
+        public void PopulateWithEvents(SourceOfObjects sourceOfObjects)
         {
             TreeNotForEvents = false;
-            var snoopableTreeObjects = snoopableObjects.Select(x => new SnoopableObjectTreeItem(x, TreeItemsCommands) { IsExpanded = true }).ToList();
+            var snoopableTreeObjects = sourceOfObjects.Objects.Select(x => new SnoopableObjectTreeItem(x, TreeItemsCommands) { IsExpanded = true }).ToList();
             TreeItems = new(snoopableTreeObjects);
         }
         private bool TreeViewFilter(object item)

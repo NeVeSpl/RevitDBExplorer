@@ -1,5 +1,4 @@
-﻿using System.Windows.Interop;
-using RevitDBExplorer.Domain.DataModel;
+﻿using RevitDBExplorer.Domain.DataModel;
 using RevitDBExplorer.UIComponents.Trees.Base.Items;
 using RevitDBExplorer.WPF;
 
@@ -30,7 +29,8 @@ namespace RevitDBExplorer.Domain.Presentation
             {
                 if (treeViewItem.Object != null)
                 {
-                    var window = new MainWindow(new(new[] { new SnoopableObject(treeViewItem.Object.Context.Document, treeViewItem.Object.Object) }), Application.RevitWindowHandle);                   
+                    var snoopableObject = new SnoopableObject(treeViewItem.Object.Context.Document, treeViewItem.Object.Object);
+                    var window = new MainWindow(new(new[] { snoopableObject }) { Info = new InfoAboutSource(snoopableObject.Name) }, Application.RevitWindowHandle);                   
                     window.Show();
                 }
             }

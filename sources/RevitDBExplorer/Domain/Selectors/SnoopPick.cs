@@ -12,7 +12,7 @@ namespace RevitDBExplorer.Domain.Selectors
     internal class SnoopPick : ISelector
     {
         private readonly ObjectType objectType;
-        public string Title { get; private set; } = "TODO";
+        public InfoAboutSource Info { get; private set; } = new("Snoop pick: ");
 
 
         public SnoopPick(ObjectType objectType)
@@ -38,7 +38,11 @@ namespace RevitDBExplorer.Domain.Selectors
                 yield break;
             }
             var geoObject = uiDocument.Document.GetElement(reference).GetGeometryObjectFromReference(reference);
-            yield return new SnoopableObject(uiDocument.Document, geoObject);
+
+            var snoopableObject = new SnoopableObject(uiDocument.Document, geoObject);
+            Info.ShortTitle = "Snoop pick: " + snoopableObject.Name;
+
+            yield return snoopableObject;
         }
     }
 }

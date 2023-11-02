@@ -13,7 +13,7 @@ namespace RevitDBExplorer
         {
             var revitDocument = document as Document;
             var snoopableObjects = elements.Select(x => new SnoopableObject(revitDocument, x)).ToArray();
-            var sourceOfObjects = new SourceOfObjects(snoopableObjects) { Title = "API.Snoop()" };            
+            var sourceOfObjects = new SourceOfObjects(snoopableObjects) { Info = new InfoAboutSource("API.Snoop()") };            
 
             var window = new MainWindow(sourceOfObjects, Application.RevitWindowHandle);
             window.Show();

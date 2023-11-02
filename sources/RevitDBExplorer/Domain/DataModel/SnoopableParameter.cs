@@ -26,12 +26,16 @@ namespace RevitDBExplorer.Domain.DataModel
        
         public override SourceOfObjects Snoop()
         {
-            return new SourceOfObjects(this);
+            var title = $"{parent.Name}->{this.Name}";
+            return new SourceOfObjects(this) { Info = new InfoAboutSource(title) };
         }
 
-        public SnoopableObject SnoopParameter()
+        public SourceOfObjects SnoopParameter()
         {
-            return new SnoopableObject(parent.Context.Document, parameter);
+            var snoopableObject = new SnoopableObject(parent.Context.Document, parameter);
+            var title = $"{parent.Name}: {snoopableObject.Name}";            
+            var source = new SourceOfObjects(new[] { snoopableObject }) { Info = new InfoAboutSource(title) };
+            return source;
         }
         public string GenerateQueryForForParameterValue()
         {

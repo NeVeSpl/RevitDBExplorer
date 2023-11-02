@@ -11,7 +11,7 @@ namespace RevitDBExplorer.Domain.Selectors
 {
     internal class SnoopCurrentSelection : ISelector
     {
-        public string Title { get; private set; } = "TODO";
+        public InfoAboutSource Info { get; private set; } = new("<s>");
 
 
         public IEnumerable<SnoopableObject> Snoop(UIApplication app)
@@ -27,12 +27,12 @@ namespace RevitDBExplorer.Domain.Selectors
             if (selectedIds.Any())
             {
                 collector = new FilteredElementCollector(document).WherePasses(new ElementIdSetFilter(selectedIds));
-                Title = "SnoopCurrentSelection";
+                Info.ShortTitle = "selected elements";
             }
             else
             {
-                collector = new FilteredElementCollector(document, document.ActiveView.Id);  
-                Title = "document.ActiveView";
+                collector = new FilteredElementCollector(document, document.ActiveView.Id);
+                Info.ShortTitle = "visible elements in a view";
             }
 
             if (collector.GetElementCount() == 0 && selectedIds.Count > 0)

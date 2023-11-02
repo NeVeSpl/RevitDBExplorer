@@ -1,29 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics.Tracing;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Documents;
 using System.Windows.Input;
-using Autodesk.Revit.DB;
 using RevitDBExplorer.Domain;
-using RevitDBExplorer.Domain.DataModel;
 using RevitDBExplorer.Properties;
 using RevitDBExplorer.UIComponents.List;
 using RevitDBExplorer.UIComponents.List.ViewModels;
 using RevitDBExplorer.UIComponents.Trees.Base;
 using RevitDBExplorer.UIComponents.Trees.Base.Items;
-using RevitDBExplorer.UIComponents.Trees.Explorer;
-using RevitDBExplorer.UIComponents.Trees.Utility;
 using RevitDBExplorer.WPF;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
 namespace RevitDBExplorer.UIComponents.Workspaces
 {
-    internal enum RightView { None, List, CommandAndControl, CompareAndPinToolInfo }
-
     internal class WorkspacesViewModel : BaseViewModel
     {
         private readonly Action<string> openRDSWithGivenScript;
@@ -31,8 +24,9 @@ namespace RevitDBExplorer.UIComponents.Workspaces
         private readonly IAmQueryExecutor queryExecutor;
         private readonly ObservableCollection<WorkspaceViewModel> workspaces = new ObservableCollection<WorkspaceViewModel>();
         private WorkspaceViewModel selectedWorkspace;
+        private double firstColumnWidth;
 
-        public event Action<SelectedItemChangedEventArgs> SelectedItemChanged;
+        public event Action<SelectedItemChangedEventArgs> SelectedItemsChanged;
         public ObservableCollection<WorkspaceViewModel> Workspaces => workspaces;
         public WorkspaceViewModel SelectedWorkspace
         {
@@ -43,53 +37,52 @@ namespace RevitDBExplorer.UIComponents.Workspaces
             set
             {
                 selectedWorkspace = value;
+                SelectedItemsChanged?.Invoke(new SelectedItemChangedEventArgs(null, null));
                 OnPropertyChanged();
             }
         }
+
 
         public WorkspacesViewModel(IAmWindowOpener windowOpener, IAmQueryExecutor queryExecutor, Action<string> openRDSWithGivenScript)
         {
             this.windowOpener = windowOpener;
             this.queryExecutor = queryExecutor;
-            this.openRDSWithGivenScript = openRDSWithGivenScript;   
-            Workspaces.Add(CreateNewWorkspace());            
+            this.openRDSWithGivenScript = openRDSWithGivenScript;
+            firstColumnWidth = AppSettings.Default.FirstColumnWidth;                       
         }
 
 
         public void Reset()
         {  
             AnnihilateAllWorkspacesAfterThatOne(null);
-            SelectedWorkspace = null;
+            SetSelectedWorkspace(null);
+            OnPropertyChanged();
         }
-        public void PopulateExplorerTree(SourceOfObjects sourceOfObjects)
+        public void OpenWorkspace(SourceOfObjects sourceOfObjects, bool workspaceForEvents = false)
         {
             var workspace = GetFirstAvailableWorkspace();
-            workspace.PopulateExplorerTree(sourceOfObjects);
+            workspace.PopulateExplorerTree(sourceOfObjects, workspaceForEvents);
             workspace.IsActive = true;
-            workspace.Title = sourceOfObjects.Title ?? "??";
-            SelectedWorkspace = workspace;
+            SetSelectedWorkspace(workspace);
 
-        }
-        public void PopulateExplorerTreeWithEvents(IList<SnoopableObject> snoopableObjects)
-        {
-            var workspace = GetFirstAvailableWorkspace();
-            workspace.PopulateExplorerTreeWithEvents(snoopableObjects);
-            workspace.IsActive = true;
-            SelectedWorkspace = workspace;
         }
         public double GetFirstColumnWidth()
         {
-            return Workspaces.First().FirstColumnWidth.Value;
+            if (SelectedWorkspace != null)
+            {
+                return SelectedWorkspace.FirstColumnWidth.Value;
+            }
+            return firstColumnWidth;
         }
         public IEnumerable<object> GetSelectedItems()
         {
-            if ((SelectedWorkspace != null) && (SelectedWorkspace.IsActive))
+            if (SelectedWorkspace != null)
             {
                 return SelectedWorkspace.GetSelectedItems();
             }
             return Enumerable.Empty<object>();
         }
-        public void UnbindEvents()
+        public void CleanUpAtTheEnd()
         {
             foreach (var workspace in Workspaces)
             {
@@ -98,6 +91,11 @@ namespace RevitDBExplorer.UIComponents.Workspaces
         }
 
 
+        private void SetSelectedWorkspace(WorkspaceViewModel workspaceViewModel)
+        {
+            selectedWorkspace = workspaceViewModel;
+            OnPropertyChanged(nameof(SelectedWorkspace));
+        }
         private WorkspaceViewModel GetFirstAvailableWorkspace()
         {
             var workspace = Workspaces.Where(x => x.IsActive == false).FirstOrDefault();
@@ -106,6 +104,7 @@ namespace RevitDBExplorer.UIComponents.Workspaces
                 workspace = CreateNewWorkspace();
                 Workspaces.Add(workspace);
             }
+            workspace.FirstColumnWidth = new GridLength(GetFirstColumnWidth());
             return workspace;
         }
         private WorkspaceViewModel CreateNewWorkspace()
@@ -124,7 +123,7 @@ namespace RevitDBExplorer.UIComponents.Workspaces
                 if (killThemAll)
                 {
                     workspace.IsActive = false;
-                    workspace.ClearItems();
+                    workspace.Reset();
                 }
                 if (workspace == target)
                 {
@@ -135,210 +134,27 @@ namespace RevitDBExplorer.UIComponents.Workspaces
         private void OpenLink(WorkspaceViewModel sender, SourceOfObjects sourceOfObjects)
         {
             bool openNewWindow = Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift);
-            if (true) //(openNewWindow)
+            openNewWindow |= AppSettings.Default.OpenLinksInNewWindow;
+            if (openNewWindow)
             {
                 windowOpener.Open(sourceOfObjects);
             }
             else
             {
                 AnnihilateAllWorkspacesAfterThatOne(sender);
-                PopulateExplorerTree(sourceOfObjects);
+                OpenWorkspace(sourceOfObjects);
             }
         }
 
         private void Workspace_TreeSelectedItemChanged(TreeSelectedItemChangedEventArgs eventArgs)
         {
-            SelectedItemChanged?.Invoke(new SelectedItemChangedEventArgs(eventArgs.NewOne, null));
+            SelectedItemsChanged?.Invoke(new SelectedItemChangedEventArgs(eventArgs.NewOne, null));
         }
         private void Workspace_ListSelectedItemChanged(ListSelectedItemChangedEventArgs eventArgs)
         {
-            SelectedItemChanged?.Invoke(new SelectedItemChangedEventArgs(null, eventArgs.NewOne));
+            SelectedItemsChanged?.Invoke(new SelectedItemChangedEventArgs(null, eventArgs.NewOne));
         }
     }
 
     internal record class SelectedItemChangedEventArgs(TreeItem treeItem, IListItem listItem);
-
-
-    internal class WorkspaceViewModel : BaseViewModel, IAmWindowOpener
-    {
-        private readonly Action<string> openRDSWithGivenScript;
-        private readonly Action<WorkspaceViewModel, SourceOfObjects> openLink;
-        private readonly ExplorerTreeViewModel explorerTreeVM = new();
-        private readonly UtilityTreeViewModel utilityTreeVM = new();
-        private readonly ListVM listVM;
-        private RightView rightView;
-        private bool isActive;        
-        private string title;
-        private GridLength firstColumnWidth;
-        
-
-        public event Action<TreeSelectedItemChangedEventArgs> TreeSelectedItemChanged;
-        public event Action<ListSelectedItemChangedEventArgs> ListSelectedItemChanged;
-        public ExplorerTreeViewModel ExplorerTree => explorerTreeVM;
-        public UtilityTreeViewModel UtilityTree => utilityTreeVM;
-        public ListVM List => listVM;
-        public RightView RightView
-        {
-            get
-            {
-                return rightView;
-            }
-            set
-            {
-                rightView = value;
-                OnPropertyChanged();
-            }
-        }
-        public bool IsActive
-        {
-            get
-            {
-                return isActive;
-            }
-            set
-            {
-                isActive = value;
-                OnPropertyChanged();
-            }
-        }
-        public string Title
-        {
-            get
-            {
-                return title;
-            }
-            set
-            {
-                title = value;
-                OnPropertyChanged();
-            }
-        }
-        public GridLength FirstColumnWidth
-        {
-            get
-            {
-                return firstColumnWidth;
-            }
-            set
-            {
-                firstColumnWidth = value;
-                OnPropertyChanged();
-            }
-        }
-        
-
-        public WorkspaceViewModel(Action<WorkspaceViewModel, SourceOfObjects> openLink, IAmQueryExecutor queryExecutor, Action<string> openRDSWithGivenScript)
-        {
-            FirstColumnWidth = new GridLength(AppSettings.Default.FirstColumnWidth);
-            this.openLink = openLink;
-            this.openRDSWithGivenScript = openRDSWithGivenScript;
-            listVM = new ListVM(this, queryExecutor);
-            ExplorerTree.SelectedItemChanged += Tree_SelectedItemChanged;
-            UtilityTree.SelectedItemChanged += Tree_SelectedItemChanged;
-            List.SelectedItemChanged += List_SelectedItemChanged;
-            ExplorerTree.ScriptWasGenerated += OpenRDSWithGivenScript;
-            UtilityTree.ScriptWasGenerated += OpenRDSWithGivenScript;            
-        }
-
-
-        private async void Tree_SelectedItemChanged(TreeSelectedItemChangedEventArgs eventArgs)
-        {
-            if (eventArgs.NewOne != null)
-            {
-                List.ClearItems();
-
-                if (eventArgs.Sender == ExplorerTree)
-                {
-                    UtilityTree?.RemoveSelection();
-                }
-                if (eventArgs.Sender == UtilityTree)
-                {
-                    if (ExplorerTree.SelectedItem != null)
-                        ExplorerTree.SelectedItem.IsSelected = false;
-                }
-            }
-
-            var chosenView = RightView.None;
-
-            if (eventArgs.NewOne is SnoopableObjectTreeItem snoopableObjectTreeItem)
-            {
-                chosenView = RightView.List;
-                List.PopulateListView(snoopableObjectTreeItem).Forget();               
-            }
-
-            if (eventArgs.NewOne is UtilityGroupTreeItem utilityGroupTreeItem)
-            {
-                var wasSuccessful = await List.PopulateListView(utilityGroupTreeItem);
-                if (wasSuccessful)
-                {
-                    chosenView = RightView.List;
-                }
-                else
-                {
-                    chosenView = RightView.CompareAndPinToolInfo;
-                }                
-            }
-
-            RightView = chosenView;
-
-            if (IsActive)
-            {
-                TreeSelectedItemChanged?.Invoke(eventArgs);
-            }
-        }
-        private void List_SelectedItemChanged(ListSelectedItemChangedEventArgs eventArgs)
-        {
-            if (IsActive)
-            {
-                ListSelectedItemChanged?.Invoke(eventArgs);
-            }
-        }        
-        private void OpenRDSWithGivenScript(string scriptText)
-        {
-            openRDSWithGivenScript(scriptText);
-        }
-
-
-        public void ClearItems()
-        {
-            ExplorerTree.ClearItems();
-            List.ClearItems();
-        }
-        public void PopulateExplorerTree(SourceOfObjects sourceOfObjects)
-        {
-            ExplorerTree.PopulateTreeView(sourceOfObjects);
-        }
-        public void PopulateExplorerTreeWithEvents(IList<SnoopableObject> snoopableObjects)
-        {
-            ExplorerTree.PopulateWithEvents(snoopableObjects);
-        }
-        public IEnumerable<object> GetSelectedItems()
-        {
-            if (List.ListSelectedItem != null)
-            {
-                yield return List.ListSelectedItem;
-            }
-            if (ExplorerTree.SelectedItem != null)
-            {
-                yield return ExplorerTree.SelectedItem;
-            }
-            if (UtilityTree?.SelectedItem != null)
-            {
-                yield return UtilityTree.SelectedItem;
-            }
-        }
-        public void UnbindEvents()
-        {
-            ExplorerTree.SelectedItemChanged -= Tree_SelectedItemChanged;
-            UtilityTree.SelectedItemChanged -= Tree_SelectedItemChanged;
-            List.SelectedItemChanged -= List_SelectedItemChanged;
-            ExplorerTree.ScriptWasGenerated -= OpenRDSWithGivenScript;
-            UtilityTree.ScriptWasGenerated -= OpenRDSWithGivenScript;
-        }
-
-        void IAmWindowOpener.Open(SourceOfObjects sourceOfObjects)
-        {
-            openLink(this, sourceOfObjects);
-        }
-    }
 }

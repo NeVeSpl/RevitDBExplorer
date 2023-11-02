@@ -66,7 +66,7 @@ namespace RevitDBExplorer
                 OnPropertyChanged();
             }
         }
-        public bool FeatureFlag
+        public bool OpenLinksInNewWindow
         {
             get
             {
@@ -123,12 +123,12 @@ namespace RevitDBExplorer
             InitializeComponent();
             IsEventMonitorEnabled = AppSettings.Default.IsEventMonitorEnabled;
             SelectedTheme = _themes.Where(x => x.Id == AppSettings.Default.Theme).FirstOrDefault() ?? _themes.First();
-            FeatureFlag = AppSettings.Default.FeatureFlag;
+            OpenLinksInNewWindow = AppSettings.Default.OpenLinksInNewWindow;
             RevitAPICHMFilePath = AppSettings.Default.RevitAPICHMFilePath;
-            AddRDBECmdToModifyTab = AppSettings.Default.AddRDBECmdToModifyTab;
-            this.DataContext = this;
+            AddRDBECmdToModifyTab = AppSettings.Default.AddRDBECmdToModifyTab;            
             FavoriteQueries = new ObservableCollection<FavoriteQueryDTO>(FavoritesManager.FavoriteQueries);
             DeleteQueryCommand = new RelayCommand(DeleteQuery);
+            this.DataContext = this;
         }
 
         private void DeleteQuery(object obj)
@@ -140,7 +140,7 @@ namespace RevitDBExplorer
         {
             AppSettings.Default.IsEventMonitorEnabled = IsEventMonitorEnabled;
             AppSettings.Default.Theme = SelectedTheme.Id;
-            AppSettings.Default.FeatureFlag = FeatureFlag;
+            AppSettings.Default.OpenLinksInNewWindow = OpenLinksInNewWindow;
             AppSettings.Default.RevitAPICHMFilePath = RevitAPICHMFilePath;
             AppSettings.Default.AddRDBECmdToModifyTab = AddRDBECmdToModifyTab;
             AppSettings.Default.Save();

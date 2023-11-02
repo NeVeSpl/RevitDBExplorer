@@ -9,21 +9,37 @@ using RevitDBExplorer.Domain.Selectors.Base;
 
 namespace RevitDBExplorer.Domain.Selectors
 {
+#pragma warning disable CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
     internal class SnoopForge : ISelector
     {
         private readonly Selector selector;
-        public string Title { get; private set; } = "TODO";
+        public InfoAboutSource Info { get; private set; } = new("TODO");
 
 
         public SnoopForge(Selector selector)
         {
             this.selector = selector;
+
+            var title = selector switch
+            {
+#if R2022b
+                Selector.ForgeParameterUtilsGetAllBuiltInGroups => "ParameterUtils.GetAllBuiltInGroups()",
+                Selector.ForgeParameterUtilsGetAllBuiltInParameters => "ParameterUtils.GetAllBuiltInParameters()",
+                Selector.ForgeUnitUtilsGetAllMeasurableSpecs => "UnitUtils.GetAllMeasurableSpecs()",
+                Selector.ForgeUnitUtilsGetAllDisciplines => "UnitUtils.GetAllDisciplines()",
+                Selector.ForgeSpecUtilsGetAllSpecs => "SpecUtils.GetAllSpecs()",
+#endif
+                Selector.ForgeUnitUtilsGetAllUnits => "UnitUtils.GetAllUnits()",
+
+            };
+
+            Info = new InfoAboutSource(title);
         }
 
 
         public IEnumerable<SnoopableObject> Snoop(UIApplication app)
         {
-#pragma warning disable CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
+
             IList<ForgeTypeId> ids = selector switch
             {
 #if R2022b
@@ -36,8 +52,9 @@ namespace RevitDBExplorer.Domain.Selectors
                 Selector.ForgeUnitUtilsGetAllUnits => UnitUtils.GetAllUnits(),
 
             };
-#pragma warning restore CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
+
             return ids.Select(x => new SnoopableObject(app?.ActiveUIDocument?.Document, x));
         }
     }
+#pragma warning restore CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
 }

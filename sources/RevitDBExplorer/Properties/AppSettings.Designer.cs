@@ -12,7 +12,7 @@ namespace RevitDBExplorer.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.5.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.7.0.0")]
     internal sealed partial class AppSettings : global::System.Configuration.ApplicationSettingsBase {
         
         private static AppSettings defaultInstance = ((AppSettings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new AppSettings())));
@@ -85,18 +85,6 @@ namespace RevitDBExplorer.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool FeatureFlag {
-            get {
-                return ((bool)(this["FeatureFlag"]));
-            }
-            set {
-                this["FeatureFlag"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("D:\\Autodesk\\Revit 2023 SDK\\RevitAPI.chm")]
         public string RevitAPICHMFilePath {
             get {
@@ -116,6 +104,18 @@ namespace RevitDBExplorer.Properties {
             }
             set {
                 this["AddRDBECmdToModifyTab"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool OpenLinksInNewWindow {
+            get {
+                return ((bool)(this["OpenLinksInNewWindow"]));
+            }
+            set {
+                this["OpenLinksInNewWindow"] = value;
             }
         }
     }

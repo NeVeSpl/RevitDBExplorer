@@ -1,5 +1,4 @@
-﻿using System;
-using RevitDBExplorer.Domain.DataModel.Streams.Base;
+﻿using RevitDBExplorer.Domain.DataModel.Streams.Base;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
@@ -24,16 +23,16 @@ namespace RevitDBExplorer.Domain.DataModel
 
         public override SourceOfObjects Snoop()
         {
-            var title = Name;
+            var fullTitle = Name;
             if (!string.IsNullOrEmpty(Documentation.Name))
             {
-                title = $"{Documentation.ReturnType} {Documentation.Name}{Documentation.Invocation}";
+                fullTitle = $"{Documentation.ReturnType} {Documentation.Name}{Documentation.Invocation}";
             }
-            if (MemberKind == MemberKind.Property)
-            {
-                title = null;
-            }
-            return new SourceOfObjects(this) { Title = title };
+
+            var title = $"{parent.Name}.{this.Name}";
+
+
+            return new SourceOfObjects(this) { Info = new InfoAboutSource(title, fullTitle) };
         }
       
 

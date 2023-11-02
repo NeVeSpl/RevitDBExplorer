@@ -359,7 +359,8 @@ namespace RevitDBExplorer.UIComponents.List
         {
             if (obj is ListItemForParameter listItem)
             {
-                windowOpener?.Open(new SourceOfObjects(new[] { listItem.CreateSnoopParameter() }));
+                var source = listItem.CreateSnoopParameter();               
+                windowOpener?.Open(source);
             }
         }
         private void SearchForParameterValue(object obj)

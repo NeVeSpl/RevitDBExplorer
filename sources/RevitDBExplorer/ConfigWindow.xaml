@@ -67,13 +67,10 @@
 
                     <ComboBox Grid.Row="0" Grid.Column="1" ItemsSource="{Binding Themes}" SelectedItem="{Binding SelectedTheme}" DisplayMemberPath="Title"/>
 
-                    <CheckBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Content="Is (REM) Revit event monitor enabled" IsChecked="{Binding IsEventMonitorEnabled}"  />
+                    <CheckBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Content="Is (REM) Revit event monitor enabled" IsChecked="{Binding IsEventMonitorEnabled}"  />                   
 
-                    <CheckBox Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" Content="(FeatureFlag) Show features that are under development and may not work correctly (or at all)" IsChecked="{Binding FeatureFlag}"  />
-
-                    <TextBlock Text="RevitAPI.chm file location" Grid.Row="3" Grid.Column="0" />
-                   
-                    <Grid Grid.Row="3" Grid.Column="1">
+                    <TextBlock Text="RevitAPI.chm file location" Grid.Row="2" Grid.Column="0" />                   
+                    <Grid Grid.Row="2" Grid.Column="1">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition/>
                             <ColumnDefinition Width="100"/>
@@ -82,7 +79,9 @@
                         <Button Margin="5,0,5,0" Content="Browse" Click="BrowseOnClick" VerticalAlignment="Center" Width="80" Height="20" Grid.Column="1"></Button>
                     </Grid>
 
-                    <CheckBox Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" Content="Add RDBE command to Revit Modify tab" IsChecked="{Binding AddRDBECmdToModifyTab}"/>
+                    <CheckBox Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" Content="Add Revit Database Explorer command to Revit Modify tab" IsChecked="{Binding AddRDBECmdToModifyTab}"/>
+
+                    <CheckBox Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" Content="Open links in a new window" IsChecked="{Binding OpenLinksInNewWindow}"  />
                 </Grid>
             </TabItem>
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using RevitDBExplorer.Domain;
 using RevitDBExplorer.Domain.DataModel;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
@@ -14,11 +15,9 @@ namespace RevitDBExplorer.UIComponents.List.ViewModels
         }
 
 
-        public SnoopableObject CreateSnoopParameter()
+        public SourceOfObjects CreateSnoopParameter()
         {
             return SnoopableItem.SnoopParameter();
         }
-
-       
     }
 }

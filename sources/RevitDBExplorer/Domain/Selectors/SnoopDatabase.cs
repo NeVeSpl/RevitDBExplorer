@@ -11,7 +11,7 @@ namespace RevitDBExplorer.Domain.Selectors
 {
     internal class SnoopDatabase : ISelector
     {
-        public string Title { get; } = "FilteredElementCollector";
+        public InfoAboutSource Info { get; } = new("all elements from DB");
 
 
         public IEnumerable<SnoopableObject> Snoop(UIApplication app)

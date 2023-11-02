@@ -11,7 +11,7 @@ namespace RevitDBExplorer.Domain.Selectors
 {
     internal class SnoopExternalServices : ISelector
     {
-        public string Title { get; } = "ExternalServiceRegistry.GetServices()";
+        public InfoAboutSource Info { get; } = new("ExternalServiceRegistry.GetServices()");
 
 
         public IEnumerable<SnoopableObject> Snoop(UIApplication app)

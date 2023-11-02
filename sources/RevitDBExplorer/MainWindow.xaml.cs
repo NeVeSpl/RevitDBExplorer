@@ -132,7 +132,7 @@ namespace RevitDBExplorer
             {
                 new WindowInteropHelper(this).Owner = parentWindowHandle.Value;
             }
-            Workspaces.PopulateExplorerTree(sourceOfObjects);  
+            Workspaces.OpenWorkspace(sourceOfObjects);  
         }
         public MainWindow()
         {
@@ -151,7 +151,7 @@ namespace RevitDBExplorer
             Title = WindowTitleGenerator.Get();
             isRevitBusyDispatcher = new DispatcherTimer(TimeSpan.FromMilliseconds(500), DispatcherPriority.Background, IsRevitBusyDispatcher_Tick, Dispatcher.CurrentDispatcher);
 
-            workspacesVM.SelectedItemChanged += Workspaces_SelectedItemChanged;
+            workspacesVM.SelectedItemsChanged += Workspaces_SelectedItemChanged;
         }
                 
 
@@ -196,7 +196,7 @@ namespace RevitDBExplorer
                 this.WindowState = WindowState.Normal;
             }
 
-            Workspaces.PopulateExplorerTree(sourceOfObjects);            
+            Workspaces.OpenWorkspace(sourceOfObjects);            
         }
         private void SnoopEvents_Click(object sender, RoutedEventArgs e)
         {
@@ -204,7 +204,8 @@ namespace RevitDBExplorer
             ResetDatabaseQuery();
 
             var snoopableObjects = EventMonitor.GetEvents().ToList();
-            Workspaces.PopulateExplorerTreeWithEvents(snoopableObjects);            
+            var source = new SourceOfObjects(snoopableObjects) { Info = new InfoAboutSource("Event Monitor") };
+            Workspaces.OpenWorkspace(source, true);            
         }
         private void Workspaces_SelectedItemChanged(SelectedItemChangedEventArgs obj)
         {
@@ -230,7 +231,7 @@ namespace RevitDBExplorer
 
             rdqGeneratedCSharpSyntax = rdqResult.GeneratedCSharpSyntax;
             QueryVisualization.Update(rdqResult.Commands).Forget();
-            Workspaces.PopulateExplorerTree(rdqResult.SourceOfObjects);            
+            Workspaces.OpenWorkspace(rdqResult.SourceOfObjects);            
         }    
         
        
@@ -296,8 +297,8 @@ namespace RevitDBExplorer
             //Application.RevitWindowHandle.BringWindowToFront();
             Dispatcher.UnhandledException -= Dispatcher_UnhandledException;           
             isRevitBusyDispatcher.Tick -= IsRevitBusyDispatcher_Tick;
-            Workspaces.SelectedItemChanged -= Workspaces_SelectedItemChanged;
-            Workspaces.UnbindEvents();
+            Workspaces.SelectedItemsChanged -= Workspaces_SelectedItemChanged;
+            Workspaces.CleanUpAtTheEnd();
         }
         private void Window_Closing(object sender, EventArgs e)
         {

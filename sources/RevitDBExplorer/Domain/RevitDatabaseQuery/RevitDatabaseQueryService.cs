@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Autodesk.Revit.DB;
@@ -25,7 +26,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
 
         public static Result ParseAndExecute(Document document, string query)
         {
-            if (document is null) return new Result(null, new List<ICommand>(), new SourceOfObjects() { Title = "Query" });
+            if (document is null) return new Result(null, new List<ICommand>(), new SourceOfObjects() { Info = new InfoAboutSource("Query") });
 
             CommandParser.LoadDocumentSpecificData(document);
             var commands = QueryParser.Parse(query);
@@ -81,7 +82,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery
                 queryExecutor = new QueryPipeExecutor(pipe, providers);
             }           
 
-            return new Result(providerSyntax + collectorSyntax, commands, new SourceOfObjects(queryExecutor) { Title ="Query" });
+            return new Result(providerSyntax + collectorSyntax, commands, new SourceOfObjects(queryExecutor) { Info = new InfoAboutSource("Query") });
         }
 
         public record Result(string GeneratedCSharpSyntax, IList<ICommand> Commands, SourceOfObjects SourceOfObjects);

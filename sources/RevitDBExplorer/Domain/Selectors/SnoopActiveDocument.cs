@@ -9,7 +9,7 @@ namespace RevitDBExplorer.Domain.Selectors
 {
     internal class SnoopActiveDocument : ISelector
     {
-        public string Title { get; } = "Document";
+        public InfoAboutSource Info { get; } = new("Document");
 
 
         public IEnumerable<SnoopableObject> Snoop(UIApplication app)

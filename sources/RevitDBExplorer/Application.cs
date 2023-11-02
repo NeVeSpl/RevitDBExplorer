@@ -75,7 +75,7 @@ namespace RevitDBExplorer
         {
             if (context.Type == ScriptType.Query)
             {
-                var source = new SourceOfObjects(new QueryExecutionContext(context)) { Title = "User query" };
+                var source = new SourceOfObjects(new QueryExecutionContext(context)) { Info = new InfoAboutSource("Script") };
 
                 var sourceOfObjects = await ExternalExecutor.ExecuteInRevitContextAsync(x =>
                 {

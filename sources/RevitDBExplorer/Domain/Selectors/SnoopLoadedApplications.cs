@@ -9,7 +9,7 @@ namespace RevitDBExplorer.Domain.Selectors
 {
     internal class SnoopLoadedApplications : ISelector
     {
-        public string Title { get; } = "UIApplication.LoadedApplications";
+        public InfoAboutSource Info { get; } = new("UIApplication.LoadedApplications");
 
 
         public IEnumerable<SnoopableObject> Snoop(UIApplication app)

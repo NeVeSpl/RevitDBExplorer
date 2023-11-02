@@ -11,7 +11,7 @@ namespace RevitDBExplorer.Domain.Selectors
 {
     internal class SnoopUpdaters : ISelector
     {
-        public string Title { get; } = "UpdaterRegistry.GetRegisteredUpdaterInfos()";
+        public InfoAboutSource Info { get; } = new("UpdaterRegistry.GetRegisteredUpdaterInfos()");
 
 
         public IEnumerable<SnoopableObject> Snoop(UIApplication app)

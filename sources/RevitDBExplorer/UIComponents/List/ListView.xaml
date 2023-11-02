@@ -45,7 +45,7 @@
 
                 <ContextMenu x:Key="ContextMenuForParameterNameColumn">
                     <MenuItem Header="Copy" Command="{Binding Data.CopyNameCommand, Source={StaticResource Proxy}}" CommandParameter="{Binding}" />
-                    <MenuItem Header="Snoop Parameter in a new window" Command="{Binding Data.SnoopParamInNewWindowCommand, Source={StaticResource Proxy}}" CommandParameter="{Binding}" />
+                    <MenuItem Header="Snoop parameter" Command="{Binding Data.SnoopParamInNewWindowCommand, Source={StaticResource Proxy}}" CommandParameter="{Binding}" />
                 </ContextMenu>
 
                 <ToolTip x:Key="ToolTipWithRevitHelp">

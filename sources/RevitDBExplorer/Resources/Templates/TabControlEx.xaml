@@ -26,10 +26,10 @@
                             <Grid x:Name="PART_ItemsHolder" Margin="{TemplateBinding Padding}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
                         </Border>
 
-                        <DockPanel Margin="0" LastChildFill="False" Grid.Row="1" Background="{DynamicResource StatusBar.Background}">
-                            <TabPanel x:Name="HeaderPanel" Margin="0,0,0,2" VerticalAlignment="Bottom" Panel.ZIndex="1" DockPanel.Dock="Left"
+                        <StackPanel Margin="0"  Grid.Row="1" Background="{DynamicResource StatusBar.Background}" Orientation="Horizontal" >
+                            <TabPanel x:Name="HeaderPanel" Margin="0,0,0,2" VerticalAlignment="Bottom" Panel.ZIndex="1" 
                                   IsItemsHost="True" KeyboardNavigation.TabIndex="1" />
-                        </DockPanel>
+                        </StackPanel>
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>
