@@ -83,4 +83,6 @@
 
     <SolidColorBrush x:Key="List.Highlighted" Color="#FFABBC"/>
 
+    <SolidColorBrush x:Key="TabItem.Selected" Color="white"/>
+
 </ResourceDictionary>                    

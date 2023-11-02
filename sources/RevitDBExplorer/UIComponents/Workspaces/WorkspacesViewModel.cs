@@ -4,6 +4,9 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Documents;
+using System.Windows.Input;
+using Autodesk.Revit.DB;
 using RevitDBExplorer.Domain;
 using RevitDBExplorer.Domain.DataModel;
 using RevitDBExplorer.Properties;
@@ -27,19 +30,19 @@ namespace RevitDBExplorer.UIComponents.Workspaces
         private readonly IAmWindowOpener windowOpener;
         private readonly IAmQueryExecutor queryExecutor;
         private readonly ObservableCollection<WorkspaceViewModel> workspaces = new ObservableCollection<WorkspaceViewModel>();
-        private int selectedIndex;
+        private WorkspaceViewModel selectedWorkspace;
 
         public event Action<SelectedItemChangedEventArgs> SelectedItemChanged;
         public ObservableCollection<WorkspaceViewModel> Workspaces => workspaces;
-        public int SelectedIndex
+        public WorkspaceViewModel SelectedWorkspace
         {
             get
             {
-                return selectedIndex;
+                return selectedWorkspace;
             }
             set
             {
-                selectedIndex = value;
+                selectedWorkspace = value;
                 OnPropertyChanged();
             }
         }
@@ -48,25 +51,31 @@ namespace RevitDBExplorer.UIComponents.Workspaces
         {
             this.windowOpener = windowOpener;
             this.queryExecutor = queryExecutor;
-            this.openRDSWithGivenScript = openRDSWithGivenScript;
-            var workspace = CreateNewWorkspace();
-            workspace.IsActive = true;
-            Workspaces.Add(workspace);
-            SelectedIndex = 0;
+            this.openRDSWithGivenScript = openRDSWithGivenScript;   
+            Workspaces.Add(CreateNewWorkspace());            
         }
 
 
         public void Reset()
-        {
-            Workspaces.First().ClearItems();
+        {  
+            AnnihilateAllWorkspacesAfterThatOne(null);
+            SelectedWorkspace = null;
         }
         public void PopulateExplorerTree(SourceOfObjects sourceOfObjects)
         {
-            Workspaces.First().PopulateExplorerTree(sourceOfObjects);
+            var workspace = GetFirstAvailableWorkspace();
+            workspace.PopulateExplorerTree(sourceOfObjects);
+            workspace.IsActive = true;
+            workspace.Title = sourceOfObjects.Title ?? "??";
+            SelectedWorkspace = workspace;
+
         }
         public void PopulateExplorerTreeWithEvents(IList<SnoopableObject> snoopableObjects)
         {
-            Workspaces.First().PopulateExplorerTreeWithEvents(snoopableObjects);
+            var workspace = GetFirstAvailableWorkspace();
+            workspace.PopulateExplorerTreeWithEvents(snoopableObjects);
+            workspace.IsActive = true;
+            SelectedWorkspace = workspace;
         }
         public double GetFirstColumnWidth()
         {
@@ -74,20 +83,67 @@ namespace RevitDBExplorer.UIComponents.Workspaces
         }
         public IEnumerable<object> GetSelectedItems()
         {
-            return Workspaces.First().GetSelectedItems();
+            if ((SelectedWorkspace != null) && (SelectedWorkspace.IsActive))
+            {
+                return SelectedWorkspace.GetSelectedItems();
+            }
+            return Enumerable.Empty<object>();
         }
-        public void Unbind()
+        public void UnbindEvents()
         {
-            Workspaces.First().Unbind();
+            foreach (var workspace in Workspaces)
+            {
+                workspace.UnbindEvents();
+            }
         }
 
 
+        private WorkspaceViewModel GetFirstAvailableWorkspace()
+        {
+            var workspace = Workspaces.Where(x => x.IsActive == false).FirstOrDefault();
+            if (workspace == null)
+            {
+                workspace = CreateNewWorkspace();
+                Workspaces.Add(workspace);
+            }
+            return workspace;
+        }
         private WorkspaceViewModel CreateNewWorkspace()
         {
-            var workspace = new WorkspaceViewModel(windowOpener, queryExecutor, openRDSWithGivenScript);
+            var workspace = new WorkspaceViewModel(OpenLink, queryExecutor, openRDSWithGivenScript);
+            workspace.IsActive = false;
             workspace.ListSelectedItemChanged += Workspace_ListSelectedItemChanged;
             workspace.TreeSelectedItemChanged += Workspace_TreeSelectedItemChanged;  
             return workspace;
+        }
+        private void AnnihilateAllWorkspacesAfterThatOne(WorkspaceViewModel target)
+        {
+            bool killThemAll = target == null ? true : false;
+            foreach (var workspace in Workspaces) 
+            {
+                if (killThemAll)
+                {
+                    workspace.IsActive = false;
+                    workspace.ClearItems();
+                }
+                if (workspace == target)
+                {
+                    killThemAll = true;
+                }
+            }
+        }
+        private void OpenLink(WorkspaceViewModel sender, SourceOfObjects sourceOfObjects)
+        {
+            bool openNewWindow = Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift);
+            if (true) //(openNewWindow)
+            {
+                windowOpener.Open(sourceOfObjects);
+            }
+            else
+            {
+                AnnihilateAllWorkspacesAfterThatOne(sender);
+                PopulateExplorerTree(sourceOfObjects);
+            }
         }
 
         private void Workspace_TreeSelectedItemChanged(TreeSelectedItemChangedEventArgs eventArgs)
@@ -103,14 +159,15 @@ namespace RevitDBExplorer.UIComponents.Workspaces
     internal record class SelectedItemChangedEventArgs(TreeItem treeItem, IListItem listItem);
 
 
-    internal class WorkspaceViewModel : BaseViewModel
+    internal class WorkspaceViewModel : BaseViewModel, IAmWindowOpener
     {
         private readonly Action<string> openRDSWithGivenScript;
+        private readonly Action<WorkspaceViewModel, SourceOfObjects> openLink;
         private readonly ExplorerTreeViewModel explorerTreeVM = new();
         private readonly UtilityTreeViewModel utilityTreeVM = new();
         private readonly ListVM listVM;
         private RightView rightView;
-        private bool isActive;
+        private bool isActive;        
         private string title;
         private GridLength firstColumnWidth;
         
@@ -170,17 +227,17 @@ namespace RevitDBExplorer.UIComponents.Workspaces
         }
         
 
-        public WorkspaceViewModel(IAmWindowOpener windowOpener, IAmQueryExecutor queryExecutor, Action<string> openRDSWithGivenScript)
+        public WorkspaceViewModel(Action<WorkspaceViewModel, SourceOfObjects> openLink, IAmQueryExecutor queryExecutor, Action<string> openRDSWithGivenScript)
         {
             FirstColumnWidth = new GridLength(AppSettings.Default.FirstColumnWidth);
+            this.openLink = openLink;
             this.openRDSWithGivenScript = openRDSWithGivenScript;
-            listVM = new ListVM(windowOpener, queryExecutor);
+            listVM = new ListVM(this, queryExecutor);
             ExplorerTree.SelectedItemChanged += Tree_SelectedItemChanged;
             UtilityTree.SelectedItemChanged += Tree_SelectedItemChanged;
             List.SelectedItemChanged += List_SelectedItemChanged;
             ExplorerTree.ScriptWasGenerated += OpenRDSWithGivenScript;
-            UtilityTree.ScriptWasGenerated += OpenRDSWithGivenScript;
-            Title = "";
+            UtilityTree.ScriptWasGenerated += OpenRDSWithGivenScript;            
         }
 
 
@@ -270,13 +327,18 @@ namespace RevitDBExplorer.UIComponents.Workspaces
                 yield return UtilityTree.SelectedItem;
             }
         }
-        public void Unbind()
+        public void UnbindEvents()
         {
             ExplorerTree.SelectedItemChanged -= Tree_SelectedItemChanged;
             UtilityTree.SelectedItemChanged -= Tree_SelectedItemChanged;
             List.SelectedItemChanged -= List_SelectedItemChanged;
             ExplorerTree.ScriptWasGenerated -= OpenRDSWithGivenScript;
             UtilityTree.ScriptWasGenerated -= OpenRDSWithGivenScript;
+        }
+
+        void IAmWindowOpener.Open(SourceOfObjects sourceOfObjects)
+        {
+            openLink(this, sourceOfObjects);
         }
     }
 }

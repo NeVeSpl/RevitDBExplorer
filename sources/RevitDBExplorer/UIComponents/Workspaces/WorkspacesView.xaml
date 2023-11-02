@@ -10,6 +10,7 @@
              xmlns:componentExplorerTree="clr-namespace:RevitDBExplorer.UIComponents.Trees.Explorer"    
              xmlns:componentUtilityTree="clr-namespace:RevitDBExplorer.UIComponents.Trees.Utility" 
              xmlns:componentCAndC="clr-namespace:RevitDBExplorer.UIComponents.CommandAndControl"    
+             xmlns:controls="clr-namespace:RevitDBExplorer.WPF.Controls"    
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
@@ -29,15 +30,15 @@
             <Style TargetType="{x:Type TabItem}">
                 <Setter Property="Template">
                     <Setter.Value>
-                        <ControlTemplate TargetType="{x:Type TabItem}">
-                            
-                            <Grid>
-                                 <Border 
-                                      Name="Border"
-                                      Margin="0,0,0,0" 
+                        <ControlTemplate TargetType="{x:Type TabItem}">                            
+                            <Grid >
+                                 <Border
+                                      Height="21"
+                                      Name="border"
+                                      Margin="0,0,0,-2" 
                                       Background="{DynamicResource StatusBar.Background}"
                                       BorderBrush="Transparent" 
-                                      BorderThickness="0,0,0,0" 
+                                      BorderThickness="1,1,1,1" 
                                       CornerRadius="0"  
                                  >
                                      <ContentPresenter
@@ -45,7 +46,7 @@
                                          VerticalAlignment="Center"
                                          HorizontalAlignment="Center"
                                          ContentSource="Header"
-                                         Margin="12,4,12,0"
+                                         Margin="12,2,12,0"
                                          RecognizesAccessKey="True"
                                          TextBlock.Foreground="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
                                  </Border>
@@ -54,9 +55,17 @@
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsSelected" Value="True">
                                     <Setter Property="Panel.ZIndex" Value="1" />
-                                    <Setter TargetName="Border" Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
+                                    <Setter TargetName="border" Property="BorderBrush" Value="Transparent" />
+                                    <Setter TargetName="border" Property="Background" Value="{DynamicResource TabItem.Selected}" />
                                     <!--<Setter TargetName="ContentSite" Property="TextBlock.Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />-->
                                 </Trigger>
+                                <Trigger Property="IsMouseOver" Value="true">
+                                    <!--<Setter TargetName="border" Property="Background"  Value="{DynamicResource Button.MouseOver.Background}"/>-->
+                                    <Setter TargetName="border" Property="BorderBrush"  Value="{DynamicResource Button.MouseOver.Border}"/>
+                                </Trigger>
+                                <DataTrigger Binding="{Binding IsActive}" Value="false">
+                                    <Setter TargetName="ContentSite" Property="Visibility"  Value="Collapsed"/>
+                                </DataTrigger>
                             </ControlTemplate.Triggers>
                             
                         </ControlTemplate>
@@ -67,15 +76,15 @@
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid >
-        <TabControl ItemsSource="{Binding Workspaces}" SelectedIndex="{Binding SelectedIndex}" TabStripPlacement="Bottom" BorderThickness="0" Padding="0" Margin="0" Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}" >
-            <TabControl.ItemTemplate>
+        <controls:TabControlEx ItemsSource="{Binding Workspaces}" SelectedItem="{Binding SelectedWorkspace}" TabStripPlacement="Bottom" BorderThickness="0" Padding="0" Margin="0" Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}" >
+            <controls:TabControlEx.ItemTemplate>
                 <DataTemplate>
                     <TextBlock Text="{Binding Title}" VerticalAlignment="Bottom"/>
                 </DataTemplate>
-            </TabControl.ItemTemplate>
+            </controls:TabControlEx.ItemTemplate>
 
 
-            <TabControl.ContentTemplate>
+            <controls:TabControlEx.ContentTemplate>
                 <DataTemplate>
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -104,8 +113,8 @@
 
                     </Grid>
                 </DataTemplate>
-            </TabControl.ContentTemplate>
+            </controls:TabControlEx.ContentTemplate>
 
-        </TabControl>
+        </controls:TabControlEx>
     </Grid>
 </UserControl>

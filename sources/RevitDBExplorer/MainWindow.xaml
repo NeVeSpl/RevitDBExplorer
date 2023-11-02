@@ -112,13 +112,7 @@
                         <Path Style="{StaticResource IconApplication}" />
                         <TextBlock>Application</TextBlock>
                     </StackPanel>
-                </Button>
-                <!--<Button Click="SelectorButton_Click" Tag="PickFace" ToolTip="Snoop by selecting face in Revit">
-                    <StackPanel>
-                        <Path Style="{StaticResource IconPickFace}" />
-                        <TextBlock Margin="0 2 0 0">Face</TextBlock>
-                    </StackPanel>
-                </Button>-->
+                </Button>             
                 <Button ap:ButtonAP.OpenSubMenuOnClick="True" ToolTip="Snoop by picking given object type in Revit">
                     <StackPanel>
                         <Path Style="{StaticResource IconPickEdge}"  />
@@ -158,12 +152,12 @@
                     </StackPanel>
                     <Button.ContextMenu>
                         <ContextMenu>
-                            <MenuItem Header="ParameterUtils.GetAllBuiltInGroups()" Click="SelectorButton_Click" Tag="ForgeParameterUtilsGetAllBuiltInGroups"/>
-                            <MenuItem Header="ParameterUtils.GetAllBuiltInParameters()" Click="SelectorButton_Click" Tag="ForgeParameterUtilsGetAllBuiltInParameters"/>
-                            <MenuItem Header="UnitUtils.GetAllMeasurableSpecs()" Click="SelectorButton_Click" Tag="ForgeUnitUtilsGetAllMeasurableSpecs"/>
-                            <MenuItem Header="UnitUtils.GetAllUnits()" Click="SelectorButton_Click" Tag="ForgeUnitUtilsGetAllUnits"/>
-                            <MenuItem Header="UnitUtils.GetAllDisciplines()" Click="SelectorButton_Click" Tag="ForgeUnitUtilsGetAllDisciplines"/>
-                            <MenuItem Header="SpecUtils.GetAllSpecs()" Click="SelectorButton_Click" Tag="ForgeSpecUtilsGetAllSpecs"/>
+                            <MenuItem Header="Snoop Groups" InputGestureText="ParameterUtils.GetAllBuiltInGroups()" Click="SelectorButton_Click" Tag="ForgeParameterUtilsGetAllBuiltInGroups"/>
+                            <MenuItem Header="Snoop Parameters" InputGestureText="ParameterUtils.GetAllBuiltInParameters()" Click="SelectorButton_Click" Tag="ForgeParameterUtilsGetAllBuiltInParameters"/>
+                            <MenuItem Header="Snoop measurable Specs" InputGestureText="UnitUtils.GetAllMeasurableSpecs()" Click="SelectorButton_Click" Tag="ForgeUnitUtilsGetAllMeasurableSpecs"/>
+                            <MenuItem Header="Snoop Units" InputGestureText="UnitUtils.GetAllUnits()" Click="SelectorButton_Click" Tag="ForgeUnitUtilsGetAllUnits"/>
+                            <MenuItem Header="Snoop Disciplines" InputGestureText="UnitUtils.GetAllDisciplines()" Click="SelectorButton_Click" Tag="ForgeUnitUtilsGetAllDisciplines"/>
+                            <MenuItem Header="Snoop Specs" InputGestureText="SpecUtils.GetAllSpecs()"  Click="SelectorButton_Click" Tag="ForgeSpecUtilsGetAllSpecs"/>
                         </ContextMenu>
                     </Button.ContextMenu>
                 </Button>
@@ -180,9 +174,9 @@
                     </StackPanel>
                     <Button.ContextMenu>
                         <ContextMenu>
-                            <MenuItem Header="Snoop loaded external applications" Click="SelectorButton_Click" Tag="LoadedApplications" ToolTip="UIApplication.LoadedApplications"/>
-                            <MenuItem Header="Snoop updaters applicable to the given document" Icon="" Click="SelectorButton_Click" Tag="Updaters" ToolTip="UpdaterRegistry.GetRegisteredUpdaterInfos()"/>
-                            <MenuItem Header="Snoop external services" Icon="" Click="SelectorButton_Click" Tag="ExternalServices" ToolTip="ExternalServiceRegistry.GetServices()"/>
+                            <MenuItem Header="Snoop loaded external applications" InputGestureText="UIApplication.LoadedApplications" Click="SelectorButton_Click" Tag="LoadedApplications" />
+                            <MenuItem Header="Snoop updaters" InputGestureText="UpdaterRegistry.GetRegisteredUpdaterInfos()" Click="SelectorButton_Click" Tag="Updaters" />
+                            <MenuItem Header="Snoop external services" InputGestureText="ExternalServiceRegistry.GetServices()" Click="SelectorButton_Click" Tag="ExternalServices" ToolTip=""/>
                         </ContextMenu>
                     </Button.ContextMenu>
                 </Button>

@@ -102,4 +102,6 @@
 
     <SolidColorBrush x:Key="List.Highlighted" Color="{StaticResource Error}"/>
 
+    <SolidColorBrush x:Key="TabItem.Selected" Color="{StaticResource PrimaryLight}"/>
+
 </ResourceDictionary>                    

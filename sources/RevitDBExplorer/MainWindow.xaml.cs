@@ -211,11 +211,11 @@ namespace RevitDBExplorer
             UpdateRDV();
         }       
         void IAmWindowOpener.Open(SourceOfObjects sourceOfObjects)
-        {
+        {           
             SaveUserSettings();
             var window = new MainWindow(sourceOfObjects);
             window.Owner = this;
-            window.Show(); 
+            window.Show();           
         }
         private async void TryQueryDatabase(string query)
         {
@@ -297,7 +297,7 @@ namespace RevitDBExplorer
             Dispatcher.UnhandledException -= Dispatcher_UnhandledException;           
             isRevitBusyDispatcher.Tick -= IsRevitBusyDispatcher_Tick;
             Workspaces.SelectedItemChanged -= Workspaces_SelectedItemChanged;
-            Workspaces.Unbind();
+            Workspaces.UnbindEvents();
         }
         private void Window_Closing(object sender, EventArgs e)
         {
