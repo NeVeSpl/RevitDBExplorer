@@ -98,7 +98,7 @@
                         <Path Height="20" Style="{StaticResource IconActiveView}" />
                         <TextBlock >View</TextBlock>
                     </StackPanel>
-                </Button>
+                </Button>-->
                 <Button Click="SelectorButton_Click" Tag="Db" ToolTip="Snoop Database - all elements returned from FilteredElementCollector" >
                     <StackPanel>
                         <Path Height="20" Style="{StaticResource IconDb}"  />
