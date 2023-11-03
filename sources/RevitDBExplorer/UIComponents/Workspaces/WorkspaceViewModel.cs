@@ -70,6 +70,18 @@ namespace RevitDBExplorer.UIComponents.Workspaces
                 OnPropertyChanged();
             }
         }
+        public string ToolTip
+        {
+            get
+            {
+                return title;
+            }
+            set
+            {
+                title = value;
+                OnPropertyChanged();
+            }
+        }
         public GridLength FirstColumnWidth
         {
             get
@@ -170,10 +182,11 @@ namespace RevitDBExplorer.UIComponents.Workspaces
             {
                 ExplorerTree.PopulateTreeView(sourceOfObjects);
             }
-            Title = sourceOfObjects.Title ?? "<???>";
+            Title = "<???>";
             if (sourceOfObjects.Info is not null)
             {
-                Title = sourceOfObjects.Info.ShortTitle;
+                Title = sourceOfObjects.Info.ShortTitle.Truncate(40);
+                ToolTip = sourceOfObjects.Info.ShortTitle;
             }
         }
         public IEnumerable<object> GetSelectedItems()

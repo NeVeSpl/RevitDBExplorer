@@ -11,7 +11,7 @@ namespace RevitDBExplorer.Domain.Selectors
 {
     internal class SnoopLinkedElement : ISelector
     {
-        public InfoAboutSource Info { get; private set; } = new("TODO");
+        public InfoAboutSource Info { get; private set; } = new("<>");
 
 
         public IEnumerable<SnoopableObject> Snoop(UIApplication app)

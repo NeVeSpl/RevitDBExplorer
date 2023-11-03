@@ -30,6 +30,7 @@ namespace RevitDBExplorer.Domain.Selectors
         Updaters,
         LoadedApplications,
         ExternalServices,
+        VisibleInView,
     }
 
     internal static class SelectorFactory
@@ -57,7 +58,7 @@ namespace RevitDBExplorer.Domain.Selectors
                 Selector.ActiveDocument => new SnoopActiveDocument(),
                 Selector.ActiveView => new SnoopActiveView(),
                 Selector.Schemas => new SnoopSchemas(),
-                Selector.FilterableCategories => new SnoopCategories(),               
+                Selector.FilterableCategories => new SnoopCategories(),
                 Selector.ForgeParameterUtilsGetAllBuiltInGroups => new SnoopForge(selector),
                 Selector.ForgeParameterUtilsGetAllBuiltInParameters => new SnoopForge(selector),
                 Selector.ForgeUnitUtilsGetAllMeasurableSpecs => new SnoopForge(selector),
@@ -67,8 +68,9 @@ namespace RevitDBExplorer.Domain.Selectors
                 Selector.Updaters => new SnoopUpdaters(),
                 Selector.LoadedApplications => new SnoopLoadedApplications(),
                 Selector.ExternalServices => new SnoopExternalServices(),
+                Selector.VisibleInView => new VisibleInView(),
                 _ => throw new NotImplementedException()
-            };
+            }; ;
             return result;
         }
     }

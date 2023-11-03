@@ -48,7 +48,7 @@
     <StreamGeometry x:Key="vStarFace">M12,2.5L8.42,8.06L2,9.74L6.2,14.88L5.82,21.5L12,19.09L18.18,21.5L17.8,14.88L22,9.74L15.58,8.06L12,2.5M9.38,10.5C10,10.5 10.5,11 10.5,11.63A1.12,1.12 0 0,1 9.38,12.75C8.75,12.75 8.25,12.25 8.25,11.63C8.25,11 8.75,10.5 9.38,10.5M14.63,10.5C15.25,10.5 15.75,11 15.75,11.63A1.12,1.12 0 0,1 14.63,12.75C14,12.75 13.5,12.25 13.5,11.63C13.5,11 14,10.5 14.63,10.5M9,15H15C14.5,16.21 13.31,17 12,17C10.69,17 9.5,16.21 9,15Z</StreamGeometry>
     <StreamGeometry x:Key="vDeleteForever">M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19M8.46,11.88L9.87,10.47L12,12.59L14.12,10.47L15.53,11.88L13.41,14L15.53,16.12L14.12,17.53L12,15.41L9.88,17.53L8.47,16.12L10.59,14L8.46,11.88M15.5,4L14.5,3H9.5L8.5,4H5V6H19V4H15.5Z</StreamGeometry>
     <StreamGeometry x:Key="vBroom">M19.36,2.72L20.78,4.14L15.06,9.85C16.13,11.39 16.28,13.24 15.38,14.44L9.06,8.12C10.26,7.22 12.11,7.37 13.65,8.44L19.36,2.72M5.93,17.57C3.92,15.56 2.69,13.16 2.35,10.92L7.23,8.83L14.67,16.27L12.58,21.15C10.34,20.81 7.94,19.58 5.93,17.57Z</StreamGeometry>
-
+    
 
 
     <Style x:Key="IconMemberKind" TargetType="Path" >
@@ -110,6 +110,17 @@
         <Setter Property="Stretch" Value="Uniform"/>
         <Setter Property="Width" Value="20"/>
         <Setter Property="Data" Value="{StaticResource vCogOutline}"/>
+    </Style>
+
+    <Style x:Key="IconMore" TargetType="Path" >
+        <Setter Property="Fill" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+        <Setter Property="Stretch" Value="Uniform"/>
+        <Setter Property="SnapsToDevicePixels" Value="true"/>
+        <Setter Property="Data" Value="M8 9H16L12 16"/>
+        <Setter Property="HorizontalAlignment" Value="Right"/>
+        <Setter Property="VerticalAlignment" Value="Bottom"/>
+        <Setter Property="Margin" Value="0 0 0 -3"/>
+        <Setter Property="Height" Value="5"/>
     </Style>
 
 
@@ -202,6 +213,9 @@
     </Style>
     <Style x:Key="IconSearch" TargetType="Path" BasedOn="{StaticResource IconSelector}">
         <Setter Property="Data" Value="{StaticResource vMagnify}"/>
+    </Style>
+    <Style x:Key="IconPoint" TargetType="Path" BasedOn="{StaticResource IconSelector}">
+        <Setter Property="Data" Value="{StaticResource vArrowSelectorTool}"/>
     </Style>
 </ResourceDictionary>
                     

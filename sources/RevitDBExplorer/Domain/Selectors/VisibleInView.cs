@@ -9,10 +9,9 @@ using RevitDBExplorer.Domain.Selectors.Base;
 
 namespace RevitDBExplorer.Domain.Selectors
 {
-    internal class SnoopDatabase : ISelector
+    class VisibleInView : ISelector
     {
-        public InfoAboutSource Info { get; } = new("all elements from Database");
-
+        public InfoAboutSource Info { get; private set; } = new("visible elements in View");
 
         public IEnumerable<SnoopableObject> Snoop(UIApplication app)
         {
@@ -20,12 +19,9 @@ namespace RevitDBExplorer.Domain.Selectors
 
             if (document == null) return null;
 
-            var elementTypes = new FilteredElementCollector(document).WhereElementIsElementType();
-            var elementInstances = new FilteredElementCollector(document).WhereElementIsNotElementType();
-            var elementsCollector = elementTypes.UnionWith(elementInstances);
-            var elements = elementsCollector.ToElements();
+            var collector = new FilteredElementCollector(document, document.ActiveView.Id);
 
-            return elements.Select(x => new SnoopableObject(document, x));
+            return collector.Select(x => new SnoopableObject(document, x));
         }
     }
 }

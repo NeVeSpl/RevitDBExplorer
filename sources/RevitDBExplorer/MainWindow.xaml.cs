@@ -322,7 +322,7 @@ namespace RevitDBExplorer
         private DispatcherTimer window_SizeChanged_Debouncer;  
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            IsWiderThan800px = this.Width > 848;
+            IsWiderThan800px = this.Width > 800;
             window_SizeChanged_Debouncer = window_SizeChanged_Debouncer.Debounce(TimeSpan.FromSeconds(4), SaveUserSettings);               
         }
         private void SaveUserSettings()

@@ -81,7 +81,7 @@
 
                     <CheckBox Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" Content="Add Revit Database Explorer command to Revit Modify tab" IsChecked="{Binding AddRDBECmdToModifyTab}"/>
 
-                    <CheckBox Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" Content="Open links in a new window" IsChecked="{Binding OpenLinksInNewWindow}"  />
+                    <CheckBox Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" Content="Open links in a new window (You can always open link in a new window with Shift + Left Mouse Button)" IsChecked="{Binding OpenLinksInNewWindow}"  />
                 </Grid>
             </TabItem>
 

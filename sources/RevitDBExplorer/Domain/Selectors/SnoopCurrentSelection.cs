@@ -33,6 +33,12 @@ namespace RevitDBExplorer.Domain.Selectors
             {
                 collector = new FilteredElementCollector(document, document.ActiveView.Id);
                 Info.ShortTitle = "visible elements in a view";
+                //var uiViews = app.ActiveUIDocument.GetOpenUIViews();
+                //var uiView = uiViews.FirstOrDefault(x => x.ViewId == document.ActiveView.Id);
+                //var zoomCorners= uiView.GetZoomCorners();
+                //var outline = new Outline(zoomCorners[0], zoomCorners[1]);
+                //collector = new FilteredElementCollector(document).WherePasses(new BoundingBoxIsInsideFilter(outline));
+                //Info.ShortTitle = "visible elements on the screen";
             }
 
             if (collector.GetElementCount() == 0 && selectedIds.Count > 0)

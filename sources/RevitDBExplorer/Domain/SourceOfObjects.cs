@@ -20,8 +20,7 @@ namespace RevitDBExplorer.Domain
     {        
         private readonly IAmSourceOfEverything source;
         private InfoAboutSource info;
-
-        public string Title { get; init; }
+                
         public InfoAboutSource Info { get => info; init => info = value; }
         public IList<SnoopableObject> Objects { get; private set; } = new SnoopableObject[0];
 
