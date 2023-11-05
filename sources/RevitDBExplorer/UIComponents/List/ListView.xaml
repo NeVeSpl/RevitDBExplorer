@@ -34,7 +34,7 @@
 
                 <ContextMenu x:Key="ContextMenuForNameColumn">
                     <MenuItem Header="Copy" Command="{Binding Data.CopyNameCommand, Source={StaticResource Proxy}}" CommandParameter="{Binding}" />
-                    <MenuItem Header="Open RevitAPI.chm" Command="{Binding Data.OpenCHMCommand, Source={StaticResource Proxy}}" CommandParameter="{Binding}" />
+                    <MenuItem Header="Open RevitAPI.chm" InputGestureText="F1" Command="{Binding Data.OpenCHMCommand, Source={StaticResource Proxy}}" CommandParameter="{Binding}" />
                 </ContextMenu>
                 <ContextMenu x:Key="ContextMenuForValueColumn">
                     <MenuItem Header="Copy" Command="{Binding Data.CopyValueCommand, Source={StaticResource Proxy}}" CommandParameter="{Binding}"/>

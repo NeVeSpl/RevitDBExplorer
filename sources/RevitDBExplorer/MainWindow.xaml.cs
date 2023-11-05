@@ -36,7 +36,8 @@ namespace RevitDBExplorer
         private readonly QueryVisualizationVM queryVisualizationVM;
         private readonly WorkspacesViewModel workspacesVM;        
         private readonly DispatcherTimer isRevitBusyDispatcher;
-        private readonly IRDV3DController rdvController;        
+        private readonly IRDV3DController rdvController;
+        private readonly GlobalKeyboardHook globalKeyboardHook;
         private bool isRevitBusy;
         private bool isNewVerAvailable;
         private string newVersionLink;
@@ -152,8 +153,12 @@ namespace RevitDBExplorer
             isRevitBusyDispatcher = new DispatcherTimer(TimeSpan.FromMilliseconds(500), DispatcherPriority.Background, IsRevitBusyDispatcher_Tick, Dispatcher.CurrentDispatcher);
 
             workspacesVM.SelectedItemsChanged += Workspaces_SelectedItemChanged;
+
+            globalKeyboardHook = new GlobalKeyboardHook();
+            globalKeyboardHook.KeyDown += GlobalKeyboardHook_KeyDown;
         }
-                
+
+        
 
         private async Task InitializeAsync()
         {
@@ -293,6 +298,7 @@ namespace RevitDBExplorer
                
         private void Window_Closed(object sender, EventArgs e)
         {
+            globalKeyboardHook.unhook();
             rdvController.Dispose();
             //Application.RevitWindowHandle.BringWindowToFront();
             Dispatcher.UnhandledException -= Dispatcher_UnhandledException;           
@@ -317,7 +323,34 @@ namespace RevitDBExplorer
                 //Application.RevitWindowHandle.PostKeyMessage(vkey);
             }
         }
-   
+        private void GlobalKeyboardHook_KeyDown(object sender, System.Windows.Forms.KeyEventArgs e)
+        {
+            if (e.KeyValue == (int)System.Windows.Forms.Keys.F1)
+            {
+                if (IsActive)
+                {
+                    e.Handled = true;
+                    var selectedItems = Workspaces.GetSelectedItems();
+                    var listItemForMember = selectedItems.OfType<ListItemForMember>().FirstOrDefault();
+                    var snoopableObjectTreeItem = selectedItems.OfType<SnoopableObjectTreeItem>().FirstOrDefault();
+                    if (listItemForMember != null)
+                    {
+                        CHMService.OpenCHM(listItemForMember[0]);
+                        return;
+                    }
+                    if (snoopableObjectTreeItem != null)
+                    {
+                        var key = snoopableObjectTreeItem.Object.TypeName;
+                        CHMService.OpenCHM(key);
+                        return;
+                    }
+                    
+                    CHMService.OpenCHM();
+                }
+            }
+        }
+
+
 
         private DispatcherTimer window_SizeChanged_Debouncer;  
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -350,6 +383,9 @@ namespace RevitDBExplorer
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        #endregion        
+
+        #endregion
+
+       
     }
 }

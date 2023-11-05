@@ -9,10 +9,9 @@ namespace RevitDBExplorer.Domain
     internal class CHMService
     {
         public static void OpenCHM(SnoopableMember snoopableMember)
-        {            
-            string helpFileName = AppSettings.Default.RevitAPICHMFilePath;
-            helpFileName = helpFileName.Replace("\"", "");
-            if (System.IO.File.Exists(helpFileName))
+        {
+            var helpFileName = GetCHMFilePath();
+            if (helpFileName != null)
             {
                 string postfix = "";
                 switch (snoopableMember.MemberKind)
@@ -30,11 +29,44 @@ namespace RevitDBExplorer.Domain
                 System.Windows.Forms.Help.ShowHelp(null, helpFileName,
                     System.Windows.Forms.HelpNavigator.KeywordIndex,
                     $"{snoopableMember.DeclaringType.BareName}.{snoopableMember.Name}{postfix}");
+            }         
+        }
+
+        public static void OpenCHM()
+        {
+            var helpFileName = GetCHMFilePath();
+            if (helpFileName != null)
+            {
+                System.Windows.Forms.Help.ShowHelp(null, helpFileName,
+                    System.Windows.Forms.HelpNavigator.Index,
+                    null
+                    );
+            }
+        }
+        public static void OpenCHM(string keyword)
+        {
+            var helpFileName = GetCHMFilePath();
+            if (helpFileName != null)
+            {
+                System.Windows.Forms.Help.ShowHelp(null, helpFileName,
+                   System.Windows.Forms.HelpNavigator.KeywordIndex,
+                   keyword);
+            }
+        }
+
+        private static string GetCHMFilePath()
+        {
+            string helpFileName = AppSettings.Default.RevitAPICHMFilePath;
+            helpFileName = helpFileName.Replace("\"", "");
+            if (System.IO.File.Exists(helpFileName))
+            {
+                return helpFileName;
             }
             else
             {
                 MessageBox.Show($".chm file does not exist at the given location: {helpFileName}. Please set the correct location in the configuration.");
-            }            
+            }
+            return null;
         }
     }
 }
