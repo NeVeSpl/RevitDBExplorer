@@ -42,7 +42,7 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers
 
             if (bb != null && (bb.Max != null) && (bb.Min != null))
             {
-                yield return new BoundingBox(bb.Min, bb.Max);
+                yield return new BoundingBoxDrawingVisual(bb.Min, bb.Max);
             }            
         }
     }

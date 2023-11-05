@@ -107,7 +107,7 @@ namespace RevitDBExplorer
                 View = null;
             }
         }
-        public static string GetMouseStatus()
+        public static (string, double) GetMouseStatus()
         {
             var uiView = Application.UIView;
             var view = Application.View;
@@ -127,6 +127,7 @@ namespace RevitDBExplorer
                     var a = corners[0];
                     var b = corners[1];
                     var v = b - a;
+                    var l = v.GetLength();
 
                     var vr = dx * new XYZ(v.X * view.RightDirection.X, v.Y * view.RightDirection.Y, v.Z * view.RightDirection.Z);
                     var vu = dy * new XYZ(v.X * view.UpDirection.X, v.Y * view.UpDirection.Y, v.Z * view.UpDirection.Z);
@@ -136,28 +137,28 @@ namespace RevitDBExplorer
 
                     if ((Math.Abs(view.RightDirection.X) < 0.999) && (Math.Abs(view.RightDirection.Y) < 0.999) && (Math.Abs(view.RightDirection.Z) < 0.999))
                     {
-                        return "(?,,)";
+                        return ("(?,,)", l);
                     }
                     if ((Math.Abs(view.UpDirection.X) < 0.999) && (Math.Abs(view.UpDirection.Y) < 0.999) && (Math.Abs(view.UpDirection.Z) < 0.999))
                     {
-                        return "(,?,)";
+                        return ("(,?,)", l);
                     }
                     if ((Math.Abs(view.ViewDirection.X) < 0.999) && (Math.Abs(view.ViewDirection.Y) < 0.999) && (Math.Abs(view.ViewDirection.Z) < 0.999))
                     {
-                        return "(,,?)";
+                        return ("(,,?)", l);
                     }
 
                     if (view.ViewDirection.IsParallelTo(XYZ.BasisX))
                     {
-                        return $"(-,--, {q.Y:f3}, {q.Z:f3})";
+                        return ($"(-,--, {q.Y:f3}, {q.Z:f3})", l);
                     }
                     if (view.ViewDirection.IsParallelTo(XYZ.BasisY))
                     {
-                        return $"({q.X:f3}, -,--, {q.Z:f3})";
+                        return ($"({q.X:f3}, -,--, {q.Z:f3})", l);
                     }
                     if (view.ViewDirection.IsParallelTo(XYZ.BasisZ))
                     {
-                        return $"({q.X:f3}, {q.Y:f3}, -,--)";
+                        return ($"({q.X:f3}, {q.Y:f3}, -,--)", l);
                     }
                 }
                 catch
@@ -165,7 +166,7 @@ namespace RevitDBExplorer
 
                 }
             }
-            return "";
+            return ("", 0);
         }
 
 

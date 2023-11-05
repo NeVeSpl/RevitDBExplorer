@@ -26,7 +26,7 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers
 
         protected override IEnumerable<DrawingVisual> GetVisualization(SnoopableContext context, XYZ xyz)
         {
-            yield return new CoordinateSystem(xyz);
+            yield return new CoordinateSystemDrawingVisual(xyz);
         }
     }
 }

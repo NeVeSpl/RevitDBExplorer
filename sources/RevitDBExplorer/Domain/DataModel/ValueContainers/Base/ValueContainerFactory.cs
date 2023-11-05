@@ -35,6 +35,7 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers.Base
             new EdgeHandler(),
             new FaceHandler(),
             new SolidHandler(),
+            new PointHandler(),
             new BoundingBoxXYZHandler(),
             new LocationHandler(),  
 

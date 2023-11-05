@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Autodesk.Revit.DB;
+using RevitDBExplorer.Augmentations.RevitDatabaseVisualization.DrawingVisuals;
 using RevitDBExplorer.Domain.DataModel.ValueContainers.Base;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
@@ -28,6 +29,20 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers
 @$"{ToLabel(context, value)}
 Min({value.Min.X.ToLengthDisplayString(units)}, {value.Min.Y.ToLengthDisplayString(units)}, {value.Min.Z.ToLengthDisplayString(units)}), Max({value.Max.X.ToLengthDisplayString(units)}, {value.Max.Y.ToLengthDisplayString(units)}, {value.Max.Z.ToLengthDisplayString(units)})
 WDH({(value.Max.X - value.Min.X).ToLengthDisplayString(units)}, {(value.Max.Y - value.Min.Y).ToLengthDisplayString(units)}, {(value.Max.Z - value.Min.Z).ToLengthDisplayString(units)})";
+        }
+
+
+        protected override IEnumerable<DrawingVisual> GetVisualization(SnoopableContext context, BoundingBoxXYZ box)
+        {
+            var bb = box;
+
+            if (bb != null && (bb.Max != null) && (bb.Min != null))
+            {
+                var min = box.Transform.OfPoint(bb.Min);
+                var max = box.Transform.OfPoint(bb.Max);
+
+                yield return new BoundingBoxDrawingVisual(min, max);
+            }
         }
     }
 }

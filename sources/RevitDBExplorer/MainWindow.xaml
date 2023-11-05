@@ -87,7 +87,7 @@
                     </Style>
                 </UniformGrid.Resources>
 
-                <Button Click="SelectorButton_Click" Tag="CurrentSelection" Margin="0 0 2 0" ToolTip="Snoop already selected elements in Revit; if none selected, ">
+                <Button Click="SelectorButton_Click" Tag="CurrentSelection" Margin="0 0 2 0" ToolTip="Snoop already selected elements in Revit; if none selected, snoop all visible elements from an active view">
                     <StackPanel>
                         <Path Height="20" Style="{StaticResource IconSelection}"  />
                         <TextBlock >Selection/Visible</TextBlock>

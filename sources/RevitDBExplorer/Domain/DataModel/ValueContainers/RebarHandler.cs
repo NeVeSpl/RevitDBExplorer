@@ -39,14 +39,14 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers
                 var rebarShapeDrivenAccessor = rebar.GetShapeDrivenAccessor();
                 var normal = rebarShapeDrivenAccessor.Normal;
 
-                yield return new Arrow(center, normal, ArrowColor);
+                yield return new ArrowDrawingVisual(center, normal, ArrowColor);
 
                 var curves = rebar.GetCenterlineCurves(false, true, true, MultiplanarOption.IncludeOnlyPlanarCurves, 0);
                 var startPoint = curves.First().GetEndPoint(0);
                 var endPoint = curves.Last().GetEndPoint(1);
 
-                yield return new Cube(startPoint, StartColor);
-                yield return new Cube(endPoint, EndColor);
+                yield return new CubeDrawingVisual(startPoint, StartColor);
+                yield return new CubeDrawingVisual(endPoint, EndColor);
             }
         }
     }

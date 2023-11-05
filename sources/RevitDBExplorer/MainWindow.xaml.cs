@@ -164,7 +164,7 @@ namespace RevitDBExplorer
         private void IsRevitBusyDispatcher_Tick(object sender, EventArgs e)
         {
             IsRevitBusy = Application.IsRevitBussy();
-            MouseStatus = Application.GetMouseStatus();            
+            (MouseStatus, rdvController.ScaleFactor) = Application.GetMouseStatus();                  
         }
         private void Dispatcher_UnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
