@@ -352,7 +352,7 @@ namespace RevitDBExplorer.UIComponents.List
         {
             if (obj is ListItemForMember listItem)
             {
-                CHMService.OpenCHM(listItem[0]);
+                CHMService.OpenCHM(listItem[0] ?? listItem[1]);
             }
         }
         private void SnoopParamInNewWindow(object obj)

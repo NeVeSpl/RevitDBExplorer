@@ -26,6 +26,7 @@ namespace RevitDBExplorer.UIComponents.Workspaces
         private RightView rightView;
         private bool isActive;        
         private string title;
+        private string tooltip;
         private GridLength firstColumnWidth;
         
 
@@ -74,11 +75,11 @@ namespace RevitDBExplorer.UIComponents.Workspaces
         {
             get
             {
-                return title;
+                return tooltip;
             }
             set
             {
-                title = value;
+                tooltip = value;
                 OnPropertyChanged();
             }
         }

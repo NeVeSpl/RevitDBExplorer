@@ -3,7 +3,7 @@ using RevitDBExplorer.Domain;
 
 namespace RevitDBExplorer.Utils
 {
-    public static class ApplicationModifyTab
+    internal static class ApplicationModifyTab
     {
         private static RibbonPanel ribbonPanel;
 

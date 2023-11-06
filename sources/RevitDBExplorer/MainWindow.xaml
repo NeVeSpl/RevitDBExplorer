@@ -289,7 +289,7 @@
                         <TextBlock Text="S" Foreground="#ED1A24"  FontWeight="Heavy" FontFamily="Arial" FontSize="15"/>
                     </Button>
 
-                    <Button Grid.Column="3" Style="{StaticResource ToolButton}"  ToolTip="RDBE Configuration" Click="ConfigurationButton_Click" >
+                    <Button Grid.Column="3" Style="{StaticResource ToolButton}"  ToolTip="Revit database explorer configuration" Click="ConfigurationButton_Click" >
                         <Path Style="{StaticResource IconConfig}" Opacity="0.91"  />
                     </Button>
                 </StackPanel>

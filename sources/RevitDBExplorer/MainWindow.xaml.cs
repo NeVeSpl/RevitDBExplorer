@@ -159,7 +159,6 @@ namespace RevitDBExplorer
         }
 
         
-
         private async Task InitializeAsync()
         {
             (IsNewVerAvailable, NewVersionLink) = await VersionChecker.CheckIfNewVersionIsAvailable();
@@ -335,7 +334,7 @@ namespace RevitDBExplorer
                     var snoopableObjectTreeItem = selectedItems.OfType<SnoopableObjectTreeItem>().FirstOrDefault();
                     if (listItemForMember != null)
                     {
-                        CHMService.OpenCHM(listItemForMember[0]);
+                        CHMService.OpenCHM(listItemForMember[0] ?? listItemForMember[1]);
                         return;
                     }
                     if (snoopableObjectTreeItem != null)
@@ -349,7 +348,6 @@ namespace RevitDBExplorer
                 }
             }
         }
-
 
 
         private DispatcherTimer window_SizeChanged_Debouncer;  
@@ -383,9 +381,6 @@ namespace RevitDBExplorer
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-
         #endregion
-
-       
     }
 }
