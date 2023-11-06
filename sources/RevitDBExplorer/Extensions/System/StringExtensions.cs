@@ -1,4 +1,6 @@
-﻿// (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
+﻿using System.Collections.Generic;
+
+// (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
 namespace System
 {
@@ -73,6 +75,16 @@ namespace System
         {
             if (value == null) return null;
             return value.Length <= maxChars ? value : value.Substring(0, maxChars) + "...";
+        }
+
+        public static string ReplaceMany(this string input, IEnumerable<(string, string)> replacements)
+        {
+            string result = input;
+            foreach(var replacement in replacements)
+            {
+                result = result.Replace(replacement.Item1, replacement.Item2);
+            }
+            return result;
         }
     }
 }

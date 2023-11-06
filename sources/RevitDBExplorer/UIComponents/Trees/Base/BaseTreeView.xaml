@@ -50,12 +50,6 @@
                         <StackPanel.ContextMenu>
                             <ContextMenu>
                                 <MenuItem Header="Select in Revit" Command="{Binding Commands.SelectInRevit}" CommandParameter="{Binding}"/>
-                                <Separator />
-                                <MenuItem Header="Generate C# code for UPDATE command (RDS)" Command="{Binding Commands.GenerateUpdateQueryRDSCommand}" CommandParameter="{Binding}">
-                                    <MenuItem.Icon>
-                                        <Path Style="{StaticResource IconQuery}" Width="11" />
-                                    </MenuItem.Icon>
-                                </MenuItem>
                             </ContextMenu>
                         </StackPanel.ContextMenu>
                         <StackPanel.Resources>
@@ -99,15 +93,8 @@
                                 <MenuItem Header="Draw in Revit (using model lines)" Command="{Binding Commands.DrawInRevit}" CommandParameter="{Binding}"/>
                                 <MenuItem Header="Draw in Revit (AVF)" Command="{Binding Commands.DrawInRevitAVF}" CommandParameter="{Binding}"/>
                                 <Separator />
-
-                                <MenuItem Header="Generate C# code for an UPDATE command (RDS) " Command="{Binding Commands.GenerateUpdateQueryRDSCommand}" CommandParameter="{Binding}">
-                                    <MenuItem.Icon>
-                                        <Path Style="{StaticResource IconQuery}" Width="11" />
-                                    </MenuItem.Icon>
-                                </MenuItem>
-
                                 <MenuItem Header="Freeze" ToolTip="" Command="{Binding Commands.Freeze}" CommandParameter="{Binding}" Visibility="{Binding Data.AllowToFrezeeItem, Source={StaticResource Proxy}, Converter={StaticResource BoolToVisibilityConverter}}"/>
-                                <Separator />
+                                
                                 <MenuItem Header="Snoop in a new window" Command="{Binding Commands.SnoopInNewWindow}" CommandParameter="{Binding}" />
                             </ContextMenu>
                         </StackPanel.ContextMenu>

@@ -16,7 +16,7 @@ namespace RevitDBExplorer.UIComponents.Workspaces
 {
     internal enum RightView { None, List, CommandAndControl, CompareAndPinToolInfo }
 
-    internal class WorkspaceViewModel : BaseViewModel, IAmWindowOpener
+    internal class WorkspaceViewModel : BaseViewModel, IAmWindowOpener, IAmScriptOpener
     {
         private readonly Action<string> openRDSWithGivenScript;
         private readonly Action<WorkspaceViewModel, SourceOfObjects> openLink;
@@ -101,12 +101,10 @@ namespace RevitDBExplorer.UIComponents.Workspaces
         {
             this.openLink = openLink;
             this.openRDSWithGivenScript = openRDSWithGivenScript;
-            listVM = new ListVM(this, queryExecutor);
+            listVM = new ListVM(this, queryExecutor, this);
             ExplorerTree.SelectedItemChanged += Tree_SelectedItemChanged;
             UtilityTree.SelectedItemChanged += Tree_SelectedItemChanged;
-            List.SelectedItemChanged += List_SelectedItemChanged;
-            ExplorerTree.ScriptWasGenerated += OpenRDSWithGivenScript;
-            UtilityTree.ScriptWasGenerated += OpenRDSWithGivenScript;            
+            List.SelectedItemChanged += List_SelectedItemChanged;               
         }
 
 
@@ -162,11 +160,7 @@ namespace RevitDBExplorer.UIComponents.Workspaces
                 ListSelectedItemChanged?.Invoke(eventArgs);
             }
         }        
-        private void OpenRDSWithGivenScript(string scriptText)
-        {
-            openRDSWithGivenScript(scriptText);
-        }
-
+      
 
         public void Reset()
         {
@@ -209,14 +203,16 @@ namespace RevitDBExplorer.UIComponents.Workspaces
         {
             ExplorerTree.SelectedItemChanged -= Tree_SelectedItemChanged;
             UtilityTree.SelectedItemChanged -= Tree_SelectedItemChanged;
-            List.SelectedItemChanged -= List_SelectedItemChanged;
-            ExplorerTree.ScriptWasGenerated -= OpenRDSWithGivenScript;
-            UtilityTree.ScriptWasGenerated -= OpenRDSWithGivenScript;
+            List.SelectedItemChanged -= List_SelectedItemChanged;            
         }
 
         void IAmWindowOpener.Open(SourceOfObjects sourceOfObjects)
         {
             openLink(this, sourceOfObjects);
+        }
+        void IAmScriptOpener.Open(string scriptText)
+        {
+            openRDSWithGivenScript(scriptText);
         }
     }
 }

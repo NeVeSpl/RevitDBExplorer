@@ -3,6 +3,7 @@ using Autodesk.Revit.DB;
 using RevitDBExplorer.Domain.DataModel.Parameters;
 using RevitDBExplorer.Domain.DataModel.ValueContainers.Base;
 using RevitDBExplorer.Domain.DataModel.ValueViewModels;
+using RevitDBExplorer.Domain.RevitDatabaseScripting;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
@@ -12,18 +13,19 @@ namespace RevitDBExplorer.Domain.DataModel
     {
         private readonly Parameter parameter;
 
-                
+
         public override string Name => parameter.Definition.Name;
         public ParameterOrgin Orgin { get; }
-        
+        public override bool CanGenerateCode => true;
+
 
         public SnoopableParameter(SnoopableObject parent, Parameter parameter) : base(parent, new ParameterAccessor(parameter))
         {
             this.parameter = parameter;
             this.Orgin = parameter.GetOrgin();
-        }       
+        }
 
-       
+
         public override SourceOfObjects Snoop()
         {
             var title = $"{parent.Name}->{this.Name}";
@@ -33,7 +35,7 @@ namespace RevitDBExplorer.Domain.DataModel
         public SourceOfObjects SnoopParameter()
         {
             var snoopableObject = new SnoopableObject(parent.Context.Document, parameter);
-            var title = $"{parent.Name}: {snoopableObject.Name}";            
+            var title = $"{parent.Name}: {snoopableObject.Name}";
             var source = new SourceOfObjects(new[] { snoopableObject }) { Info = new InfoAboutSource(title) };
             return source;
         }
@@ -58,7 +60,7 @@ namespace RevitDBExplorer.Domain.DataModel
                         break;
                     case StorageType.Double:
                         var vcd = presenter.ValueContainer as ValueContainer<double>;
-                       
+
 
                         var units = Application.UIApplication?.ActiveUIDocument?.Document?.GetUnits();
 #if R2022b
@@ -100,8 +102,7 @@ namespace RevitDBExplorer.Domain.DataModel
             return $"p: {name} {value}";
         }
 
-
-        #region IComparable & IEquatable
+        
         public override int CompareTo(SnoopableItem other)
         {
             if (other is SnoopableParameter snoopableParameter)
@@ -118,6 +119,22 @@ namespace RevitDBExplorer.Domain.DataModel
             }
             return false;
         }
-        #endregion
+       
+
+        public override string GenerateScript()
+        {
+            if (parameter.IsShared)
+            {
+                return new ParameterShared_UpdateTemplate().Evaluate(parameter.GUID);
+            }
+            if (parameter.Definition is InternalDefinition internalDef)
+            {
+                if (internalDef.BuiltInParameter != BuiltInParameter.INVALID)
+                {
+                    return new ParameterBuiltIn_UpdateTemplate().Evaluate(internalDef.BuiltInParameter);                    
+                }
+            }
+            return new ParameterProject_UpdateTemplate().Evaluate(parameter.Definition.Name);
+        }
     }
 }

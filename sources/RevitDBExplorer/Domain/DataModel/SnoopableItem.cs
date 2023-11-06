@@ -32,6 +32,7 @@ namespace RevitDBExplorer.Domain.DataModel
                 return false;
             }
         }
+        public virtual bool CanGenerateCode { get; }
 
 
         public SnoopableItem(SnoopableObject parent, IAccessor accessor)
@@ -48,7 +49,7 @@ namespace RevitDBExplorer.Domain.DataModel
             if (!HasAccessor()) return;
             Read(parent.Context, parent.Object);
         }
-        private bool HasAccessor() => accessor is not null;
+        protected bool HasAccessor() => accessor is not null;
         private void Read(SnoopableContext context, object @object)
         {
             try
@@ -106,5 +107,8 @@ namespace RevitDBExplorer.Domain.DataModel
 
         public abstract int CompareTo(SnoopableItem other);
         public abstract bool Equals(SnoopableItem other);
+
+
+        public abstract string GenerateScript();
     }
 }

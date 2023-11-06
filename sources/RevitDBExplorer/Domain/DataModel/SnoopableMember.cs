@@ -1,4 +1,5 @@
 ﻿using RevitDBExplorer.Domain.DataModel.Streams.Base;
+using RevitDBExplorer.Domain.RevitDatabaseScripting;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
@@ -12,7 +13,8 @@ namespace RevitDBExplorer.Domain.DataModel
         public DeclaringType DeclaringType => memberDescriptor.DeclaringType;
         public MemberKind MemberKind => memberDescriptor.Kind;
         public override string Name => memberDescriptor.Name; 
-        public DocXml Documentation => memberDescriptor.Documentation;  
+        public DocXml Documentation => memberDescriptor.Documentation;
+        public override bool CanGenerateCode => memberDescriptor.Kind != MemberKind.None;
 
 
         public SnoopableMember(SnoopableObject parent, MemberDescriptor memberDescriptor) : base(parent, memberDescriptor.MemberAccessor)
@@ -36,7 +38,6 @@ namespace RevitDBExplorer.Domain.DataModel
         }
       
 
-
         public override int CompareTo(SnoopableItem other)
         {
             if (other is SnoopableMember snoopableMember)
@@ -53,6 +54,15 @@ namespace RevitDBExplorer.Domain.DataModel
                 return memberDescriptor.Equals(snoopableMember.memberDescriptor);
             }
             return false;
+        }
+
+        public override string GenerateScript()
+        {            
+            if (HasAccessor())
+            {
+                return new MemberInvocation_SelectTemplate().Evaluate(parent.Object.GetType(), Name);
+            }
+            return new MemberInvocation_UpdateTemplate().Evaluate(parent.Object.GetType(), Name);                        
         }
     }
 }

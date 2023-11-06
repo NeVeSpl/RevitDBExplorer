@@ -90,6 +90,15 @@
                 </Style>
 
 
+                <Style TargetType="{x:Type Button}" x:Key="MiniButton">
+                    <Setter Property="Width" Value="15"/>
+                    <Setter Property="Height" Value="15"/>
+                    <Setter Property="Padding" Value="1"/>
+                    <Setter Property="Background" Value="Transparent"/>
+                    <Setter Property="BorderBrush" Value="Transparent"/>
+                </Style>
+                
+
                 <DataTemplate DataType="{x:Type localVM:ListItemForMember}">                   
                     <StackPanel Orientation="Horizontal" 
                                 ContextMenu="{StaticResource ContextMenuForNameColumn}" 
@@ -115,12 +124,25 @@
 
                 <DataTemplate DataType="{x:Type dm:SnoopableMember}" >
                     <Border Background="Transparent">
-                        <ContentPresenter
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="18"/>
+                            </Grid.ColumnDefinitions>
+                            
+                            <ContentPresenter
                             ap:ClickOnUp.Command="{Binding Data.ListItem_Click_Command, Source={StaticResource Proxy}}"
                             ContextMenu="{StaticResource ContextMenuForValueColumn}"
                             ContentTemplateSelector="{StaticResource DataTemplateSelectorForPropertyType}"                         
                             HorizontalAlignment="Stretch"                 
                             />
+                            <Button Grid.Column="1" Style="{StaticResource MiniButton}" Padding="0" Visibility="{Binding CanGenerateCode, Converter={StaticResource BoolToVisibilityConverter}}"       
+                                Command="{Binding Data.GenerateCSharpCodeCommand, Source={StaticResource Proxy}}" CommandParameter="{Binding .}"
+                                ToolTip="RDS: Generate C# code for a given member">
+                                <Path Style="{StaticResource IconQuery}" Height="13"  />
+                            </Button>
+                        
+                        </Grid>
                     </Border>
                 </DataTemplate>
 
@@ -130,18 +152,24 @@
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition/>
                                 <ColumnDefinition Width="18"/>
+                                <ColumnDefinition Width="18"/>
                             </Grid.ColumnDefinitions>
-                        <ContentPresenter
-                            ap:ClickOnUp.Command="{Binding Data.ListItem_Click_Command, Source={StaticResource Proxy}}"
-                            ContextMenu="{StaticResource ContextMenuForValueColumn}"
-                            ContentTemplateSelector="{StaticResource DataTemplateSelectorForPropertyType}"                         
-                            HorizontalAlignment="Stretch"                 
-                            />
-                            <Button Grid.Column="1" Width="15" Height="15" Padding="1" Background="Transparent" BorderBrush="Transparent" 
+                           
+                            <ContentPresenter
+                                ap:ClickOnUp.Command="{Binding Data.ListItem_Click_Command, Source={StaticResource Proxy}}"
+                                ContextMenu="{StaticResource ContextMenuForValueColumn}"
+                                ContentTemplateSelector="{StaticResource DataTemplateSelectorForPropertyType}"                         
+                                HorizontalAlignment="Stretch"                 
+                                />
+                            <Button Grid.Column="1" Style="{StaticResource MiniButton}"                                    
                                     Command="{Binding Data.SearchForParameterValueCommand, Source={StaticResource Proxy}}" CommandParameter="{Binding .}"
-                                    ToolTip="RDQ: Search Revit database for elements that have given parameter value"
-                                    >
+                                    ToolTip="RDQ: Search Revit database for elements that have a given parameter value" >
                                 <Path Style="{StaticResource IconSearch}" Height="14" />
+                            </Button>
+                            <Button Grid.Column="2" Style="{StaticResource MiniButton}" Padding="0" Visibility="{Binding CanGenerateCode, Converter={StaticResource BoolToVisibilityConverter}}"       
+                                    Command="{Binding Data.GenerateCSharpCodeCommand, Source={StaticResource Proxy}}" CommandParameter="{Binding .}"
+                                    ToolTip="RDS: Generate C# code for a given member">
+                                <Path Style="{StaticResource IconQuery}" Height="13"  />
                             </Button>
                         </Grid>
                     </Border>

@@ -277,7 +277,7 @@ namespace RevitDBExplorer
 
         private void GenerateScriptForQueryAndOpenRDS()
         {
-            var scriptText = CodeGenerator.GenerateQueryFor(rdqGeneratedCSharpSyntax);
+            var scriptText = new Query_SelectTemplate().Evaluate(rdqGeneratedCSharpSyntax);
             OpenRDSWithGivenScript(scriptText);
         }
         private void OpenRDSWithGivenScript(string scriptText)

@@ -25,6 +25,7 @@ namespace RevitDBExplorer.UIComponents.List
         private readonly ObservableCollection<DynamicGridViewColumn> columnsFor2;
         private readonly IAmWindowOpener windowOpener;
         private readonly IAmQueryExecutor queryExecutor;
+        private readonly IAmScriptOpener scriptOpener;
         private ObservableCollection<IListItem> listItems = new();
         private ObservableCollection<DynamicGridViewColumn> columns = new();
         private IListItem listSelectedItem = null;
@@ -84,6 +85,7 @@ namespace RevitDBExplorer.UIComponents.List
         public RelayCommand OpenCHMCommand { get; }
         public RelayCommand SnoopParamInNewWindowCommand { get; }
         public RelayCommand SearchForParameterValueCommand { get; }
+        public RelayCommand GenerateCSharpCodeCommand { get; }
         public string FilterPhrase
         {
             get
@@ -143,10 +145,11 @@ namespace RevitDBExplorer.UIComponents.List
         }
 
 
-        public ListVM(IAmWindowOpener windowOpener, IAmQueryExecutor queryExecutor)
+        public ListVM(IAmWindowOpener windowOpener, IAmQueryExecutor queryExecutor, IAmScriptOpener scriptOpener)
         {
             this.windowOpener = windowOpener;
             this.queryExecutor = queryExecutor;
+            this.scriptOpener = scriptOpener;
             columnsFor1 = new ObservableCollection<DynamicGridViewColumn>()
             {
                 new DynamicGridViewColumn("Name", 38) { Binding ="."},
@@ -166,6 +169,7 @@ namespace RevitDBExplorer.UIComponents.List
             OpenCHMCommand = new RelayCommand(OpenCHM);
             SnoopParamInNewWindowCommand = new RelayCommand(SnoopParamInNewWindow);
             SearchForParameterValueCommand = new RelayCommand(SearchForParameterValue);
+            GenerateCSharpCodeCommand = new RelayCommand(GenerateCSharpCode);
         }
 
 
@@ -370,6 +374,13 @@ namespace RevitDBExplorer.UIComponents.List
                 queryExecutor.Query(snoopableParameter.GenerateQueryForForParameterValue());
             }
         }
+        private void GenerateCSharpCode(object obj)
+        {
+            if (obj is SnoopableItem snoopableItem)
+            {
+                scriptOpener.Open(snoopableItem.GenerateScript());
+            }
+        }
         private void CopyValue(object obj)
         {
             if (obj is SnoopableItem snoopableItem)
@@ -397,5 +408,9 @@ namespace RevitDBExplorer.UIComponents.List
     internal interface IAmQueryExecutor
     {
         void Query(string query);
+    }
+    internal interface IAmScriptOpener
+    {
+        void Open(string script);
     }
 }

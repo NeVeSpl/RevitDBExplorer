@@ -19,7 +19,7 @@ namespace RevitDBExplorer.UIComponents.Trees.Base
         private bool allowToFrezeeItem;
 
         public event Action<TreeSelectedItemChangedEventArgs> SelectedItemChanged;
-        public event Action<string> ScriptWasGenerated;
+     
 
         public ObservableCollection<TreeItem> TreeItems
         {
@@ -61,7 +61,7 @@ namespace RevitDBExplorer.UIComponents.Trees.Base
 
         public BaseTreeViewModel()
         {           
-            TreeItemsCommands = new TreeItemsCommands(new RelayCommand(GenerateUpdateQueryRDS));
+            TreeItemsCommands = new TreeItemsCommands();
         }
         
 
@@ -73,40 +73,7 @@ namespace RevitDBExplorer.UIComponents.Trees.Base
         }
         
 
-        private void GenerateUpdateQueryRDS(object parameter)
-        {
-            string text = "";
-
-            if (parameter is SnoopableObjectTreeItem snoopableObjectTreeItem)
-            {
-                if (snoopableObjectTreeItem.Object.Object is Parameter revitParameter)
-                {
-                    text = CodeGenerator.GenerateUpdateCommandForParameter(revitParameter);
-                }
-                else
-                {
-                    text = CodeGenerator.GenerateUpdateCommandForType(snoopableObjectTreeItem.Object.Object?.GetType());
-                }
-            }
-            if (parameter is GroupTreeItem groupTreeItem)
-            {
-                text = CodeGenerator.GenerateUpdateCommandForType(typeof(object));
-
-                var pointer = groupTreeItem;
-                while (pointer != null)
-                {
-                    if (pointer is TypeGroupTreeItem typeGroupTreeItem)
-                    {
-                        text = CodeGenerator.GenerateUpdateCommandForType(typeGroupTreeItem.GetAllSnoopableObjects().FirstOrDefault()?.Object?.GetType());
-                        break;
-                    }
-
-                    pointer = pointer.Parent;
-                }
-            }
-
-            ScriptWasGenerated?.Invoke(text);
-        }
+       
 
 
         public static IEnumerable<object> GetObjectsForTransfer(TreeItem treeViewItem)

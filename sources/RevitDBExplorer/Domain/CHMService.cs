@@ -38,7 +38,7 @@ namespace RevitDBExplorer.Domain
             if (helpFileName != null)
             {
                 System.Windows.Forms.Help.ShowHelp(null, helpFileName,
-                    System.Windows.Forms.HelpNavigator.Index,
+                    System.Windows.Forms.HelpNavigator.KeywordIndex,
                     null
                     );
             }
