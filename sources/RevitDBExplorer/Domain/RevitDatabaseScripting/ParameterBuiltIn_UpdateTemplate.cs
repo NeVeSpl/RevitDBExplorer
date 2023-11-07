@@ -9,12 +9,13 @@ namespace RevitDBExplorer.Domain.RevitDatabaseScripting
 {
     internal class ParameterBuiltIn_UpdateTemplate
     {
-        public string Evaluate(BuiltInParameter parameter)
+        public string Evaluate(BuiltInParameter parameter, string paramValue)
         {
             var template = GetTemplate();
             var result = template.ReplaceMany(new[]
             {
                 ("HOST_AREA_COMPUTED", parameter.ToString()),
+                ("313.931", paramValue)
             });
 
             return result;
@@ -35,7 +36,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseScripting
                 var param = element.get_Parameter(BuiltInParameter.HOST_AREA_COMPUTED);
                 if (param?.IsReadOnly == false)
                 {
-                    param.Set(0);
+                    param.Set(313.931);
                 }
             }
         }

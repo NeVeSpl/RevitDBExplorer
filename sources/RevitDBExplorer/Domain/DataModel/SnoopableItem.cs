@@ -5,6 +5,7 @@ using Autodesk.Revit.UI;
 using RevitDBExplorer.Domain.DataModel.Accessors;
 using RevitDBExplorer.Domain.DataModel.ValueViewModels;
 using RevitDBExplorer.Domain.DataModel.ValueViewModels.Base;
+using RevitDBExplorer.Domain.RevitDatabaseScripting;
 using RevitDBExplorer.WPF;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
@@ -19,7 +20,7 @@ namespace RevitDBExplorer.Domain.DataModel
 
         public event Action ParentObjectChanged;
         public string AccessorName { get; private set; }
-        public virtual string Name { get;}
+        public virtual string Name { get; }
         public IValueViewModel ValueViewModel { get; private set; } = EmptyPresenter.Instance;
         public bool CanBeSnooped
         {
@@ -53,7 +54,7 @@ namespace RevitDBExplorer.Domain.DataModel
         private void Read(SnoopableContext context, object @object)
         {
             try
-            {                
+            {
                 if (itemValueViewModel is ICanRead canRead)
                 {
                     canRead.Read(context, @object);
@@ -71,7 +72,7 @@ namespace RevitDBExplorer.Domain.DataModel
             OnPropertyChanged(nameof(ValueViewModel));
             OnPropertyChanged(nameof(AccessorName));
             OnPropertyChanged(nameof(CanBeSnooped));
-        }        
+        }
         private void RaiseParentObjectChanged()
         {
             ParentObjectChanged?.Invoke();
@@ -89,7 +90,7 @@ namespace RevitDBExplorer.Domain.DataModel
             }
             return Enumerable.Empty<SnoopableObject>();
         }
-                
+
 
 
         private bool isFrozen = false;
@@ -109,6 +110,15 @@ namespace RevitDBExplorer.Domain.DataModel
         public abstract bool Equals(SnoopableItem other);
 
 
-        public abstract string GenerateScript();
+        public string GenerateScript()
+        {
+            if (accessor is IAccessorWithCodeGeneration accessorWithCodeGeneration)
+            {
+                return accessorWithCodeGeneration.GenerateInvocationForScript();
+            }
+            var invocation = accessor.DefaultInvocation ?? Name;
+
+            return new MemberInvocation_SelectTemplate().Evaluate(parent.Object.GetType(), invocation);
+        }
     }
 }

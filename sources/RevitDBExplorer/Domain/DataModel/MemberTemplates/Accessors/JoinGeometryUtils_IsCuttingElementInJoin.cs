@@ -9,7 +9,7 @@ using RevitDBExplorer.Domain.DataModel.ValueContainers.Base;
 
 namespace RevitDBExplorer.Domain.DataModel.MemberTemplates.Accessors
 {
-    internal class JoinGeometryUtils_IsCuttingElementInJoin : MemberAccessorTyped<Element>
+    internal class JoinGeometryUtils_IsCuttingElementInJoin : MemberAccessorTypedWithReadAndSnoop<Element>
     {
         public override ReadResult Read(SnoopableContext context, Element element)
         {            

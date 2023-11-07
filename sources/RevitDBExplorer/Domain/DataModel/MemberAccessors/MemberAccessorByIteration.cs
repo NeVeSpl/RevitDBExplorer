@@ -10,7 +10,7 @@ using RevitDBExplorer.Domain.DataModel.ValueContainers.Base;
 
 namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
-    internal sealed class MemberAccessorByIteration<TSnoopedObjectType, TReturnType> : MemberAccessorTyped<TSnoopedObjectType>
+    internal sealed class MemberAccessorByIteration<TSnoopedObjectType, TReturnType> : MemberAccessorTypedWithReadAndSnoop<TSnoopedObjectType>
     {
         private readonly string getMethodReturnTypeName;
         private readonly ParameterInfo getMethodParameter;

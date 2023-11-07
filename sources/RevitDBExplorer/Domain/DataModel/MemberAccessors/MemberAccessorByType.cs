@@ -9,7 +9,7 @@ using RevitDBExplorer.Domain.DataModel.ValueContainers.Base;
 
 namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
-    internal abstract class MemberAccessorByType<TSnoopedObjectType> : MemberAccessorTyped<TSnoopedObjectType> where TSnoopedObjectType : class
+    internal abstract class MemberAccessorByType<TSnoopedObjectType> : MemberAccessorTypedWithReadAndSnoop<TSnoopedObjectType> where TSnoopedObjectType : class
     {
         public sealed override ReadResult Read(SnoopableContext context, TSnoopedObjectType @object)
         {           

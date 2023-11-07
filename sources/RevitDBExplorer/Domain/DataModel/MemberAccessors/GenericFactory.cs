@@ -101,7 +101,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
         public IAccessor CreateMemberAccessorByRefCompiled(MethodInfo getMethod)
         {           
             var func = CreateLambda(getMethod);
-            var accessor = new MemberAccessorByRefCompiled<TSnoopedObjectType, TReturnType>(func);
+            var accessor = new MemberAccessorByRefCompiled<TSnoopedObjectType, TReturnType>(getMethod, func);
 
             return accessor;
         }

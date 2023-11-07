@@ -5,7 +5,7 @@ using RevitDBExplorer.Domain.DataModel.ValueContainers.Base;
 
 namespace RevitDBExplorer.Domain.DataModel.Accessors
 {
-    internal interface IAccessorWithSnoop
+    internal interface IAccessorWithReadAndSnoop : IAccessor
     {
         ReadResult Read(SnoopableContext context, object @object);
         IEnumerable<SnoopableObject> Snoop(SnoopableContext context, object @object, IValueContainer state);

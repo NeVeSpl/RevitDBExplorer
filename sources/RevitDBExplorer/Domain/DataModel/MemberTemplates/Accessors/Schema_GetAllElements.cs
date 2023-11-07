@@ -10,7 +10,7 @@ using RevitDBExplorer.Domain.DataModel.ValueContainers.Base;
 
 namespace RevitDBExplorer.Domain.DataModel.MemberTemplates.Accessors
 {
-    internal class Schema_GetAllElements : MemberAccessorTyped<Schema>
+    internal class Schema_GetAllElements : MemberAccessorTypedWithReadAndSnoop<Schema>
     {
         public override ReadResult Read(SnoopableContext context, Schema schema)
         {

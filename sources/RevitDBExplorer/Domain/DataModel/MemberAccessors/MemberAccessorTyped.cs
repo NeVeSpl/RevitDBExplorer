@@ -9,9 +9,11 @@ using RevitDBExplorer.Domain.DataModel.ValueViewModels.Base;
 
 namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
-
-    internal abstract class MemberAccessor<TSnoopedObjectType> : IAccessor
+    internal abstract class MemberAccessorTyped<TSnoopedObjectType> : IAccessor
     {
+        public string UniqueId { get; set; }
+        public string DefaultInvocation { get; set; }
+
         IValueViewModel IAccessor.CreatePresenter(SnoopableContext context, object @object)
         {
             Guard.IsAssignableToType<TSnoopedObjectType>(@object);
@@ -21,14 +23,15 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
         public virtual IValueViewModel CreatePresenter(SnoopableContext context, TSnoopedObjectType typedObject) => null;
     }
 
-    internal abstract class MemberAccessorTyped<TSnoopedObjectType> : MemberAccessor<TSnoopedObjectType>, IAccessorWithSnoop
+
+    internal abstract class MemberAccessorTypedWithReadAndSnoop<TSnoopedObjectType> : MemberAccessorTyped<TSnoopedObjectType>, IAccessorWithReadAndSnoop
     {
         public override IValueViewModel CreatePresenter(SnoopableContext context, TSnoopedObjectType @object)
         {            
             return new DefaultPresenter(this);
         }
 
-        ReadResult IAccessorWithSnoop.Read(SnoopableContext context, object @object)
+        ReadResult IAccessorWithReadAndSnoop.Read(SnoopableContext context, object @object)
         {
             Guard.IsAssignableToType<TSnoopedObjectType>(@object);      
             var typedObject = (TSnoopedObjectType) @object;          
@@ -36,7 +39,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
         }
         public abstract ReadResult Read(SnoopableContext context, TSnoopedObjectType typedObject);
 
-        IEnumerable<SnoopableObject> IAccessorWithSnoop.Snoop(SnoopableContext context, object @object, IValueContainer state)
+        IEnumerable<SnoopableObject> IAccessorWithReadAndSnoop.Snoop(SnoopableContext context, object @object, IValueContainer state)
         {
             Guard.IsAssignableToType<TSnoopedObjectType>(@object);
             var typedObject = (TSnoopedObjectType) @object;            

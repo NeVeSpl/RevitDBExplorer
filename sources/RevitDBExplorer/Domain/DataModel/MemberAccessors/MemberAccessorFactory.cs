@@ -37,12 +37,28 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
             var instances = types.Select(x => Activator.CreateInstance(x) as T);
             return instances;
         }
-       
 
-        
+
+
         public static IAccessor CreateMemberAccessor(MethodInfo getMethod, MethodInfo setMethod)
         {
-            if (getMethod.ReturnType == typeof(void) && getMethod.Name != "GetOverridableHookParameters") return null;
+            var memberAccessor = CreateMemberAccessor(getMethod);
+            memberAccessor.UniqueId = getMethod.GetUniqueId();
+            memberAccessor.DefaultInvocation = getMethod.GenerateInvocation();
+            return memberAccessor;
+        }
+
+        private static IAccessor CreateMemberAccessor(MethodInfo getMethod)
+        {
+            if (getMethod.IsStatic)
+            {
+                return new MemberAccessorForStatic(getMethod);
+            }
+
+            if (getMethod.ReturnType == typeof(void) && getMethod.Name != "GetOverridableHookParameters")
+            {
+                return new MemberAccessorForNotExposed(getMethod);
+            }            
 
             if (forTypeMembers.TryGetValue(getMethod.GetUniqueId(), out Func<IAccessor> factory))
             {
@@ -69,10 +85,10 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
             }
             if (@params.All(x => MemberAccessorByRef.HandledParameterTypes.Contains(x.ParameterType)))
             {
-                return new MemberAccessorByRef(getMethod, setMethod);
+                return new MemberAccessorByRef(getMethod);
             }
             
-            return null;
+            return new MemberAccessorForNotExposed(getMethod);
         }
     }
 

@@ -9,12 +9,13 @@ namespace RevitDBExplorer.Domain.RevitDatabaseScripting
 {
     internal class ParameterShared_UpdateTemplate
     {
-        public string Evaluate(Guid guid)
+        public string Evaluate(Guid guid, string paramValue)
         {
             var template = GetTemplate();
             var result = template.ReplaceMany(new[]
             {
                 ("11111111-2222-3333-4444-555555666666", guid.ToString()),
+                ("313.931", paramValue)
             });
 
             return result;
@@ -36,7 +37,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseScripting
                 var param = element.get_Parameter(paramElement.GuidValue);
                 if (param?.IsReadOnly == false)
                 {
-                    param.Set(0);
+                    param.Set(313.931);
                 }
             }
         }

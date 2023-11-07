@@ -1,18 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using RevitDBExplorer.Domain.DataModel.Accessors;
 using RevitDBExplorer.Domain.DataModel.ValueContainers.Base;
+using RevitDBExplorer.Domain.RevitDatabaseScripting;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
 namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
-    internal sealed class MemberAccessorByRefCompiled<TSnoopedObjectType, TReturnType> : MemberAccessorTyped<TSnoopedObjectType>
+    internal sealed class MemberAccessorByRefCompiled<TSnoopedObjectType, TReturnType> : MemberAccessorTypedWithReadAndSnoop<TSnoopedObjectType>, IAccessorWithCodeGeneration
     {
+        private readonly MethodInfo getMethod;
         private readonly Func<TSnoopedObjectType, TReturnType> func;
 
-        public MemberAccessorByRefCompiled(Func<TSnoopedObjectType, TReturnType> func)
+        public MemberAccessorByRefCompiled(MethodInfo getMethod, Func<TSnoopedObjectType, TReturnType> func)
         {
+            this.getMethod = getMethod;
             this.func = func;
         }
 
@@ -27,6 +31,12 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
         public override IEnumerable<SnoopableObject> Snoop(SnoopableContext context, TSnoopedObjectType typedObject, IValueContainer state)
         {
             return state.Snoop();
+        }
+
+
+        public string GenerateInvocationForScript()
+        {
+            return new MemberInvocation_Template().Evaluate(getMethod, null);
         }
     }
 }

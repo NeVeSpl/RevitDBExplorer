@@ -11,7 +11,7 @@ namespace RevitDBExplorer.Domain.DataModel.ValueViewModels
 {
     internal class DefaultPresenter : BaseViewModel, IValuePresenter, ICanRead, ICanSnoop
     {
-        private readonly IAccessorWithSnoop accessor;
+        private readonly IAccessorWithReadAndSnoop accessor;
         private IValueContainer valueContainer;
         private string label;
 
@@ -43,7 +43,7 @@ namespace RevitDBExplorer.Domain.DataModel.ValueViewModels
         public bool CanBeSnooped { get; private set; }
 
 
-        public DefaultPresenter(IAccessorWithSnoop accessor)
+        public DefaultPresenter(IAccessorWithReadAndSnoop accessor)
         {
             this.accessor = accessor;
         }
@@ -58,7 +58,7 @@ namespace RevitDBExplorer.Domain.DataModel.ValueViewModels
 
         public IEnumerable<SnoopableObject> Snoop(SnoopableContext context, object @object)
         {
-            if (accessor is IAccessorWithSnoop snooper)
+            if (accessor is IAccessorWithReadAndSnoop snooper)
             {
                 return snooper.Snoop(context, @object, valueContainer);
             }

@@ -3,7 +3,6 @@ using Autodesk.Revit.DB;
 using RevitDBExplorer.Domain.DataModel.Parameters;
 using RevitDBExplorer.Domain.DataModel.ValueContainers.Base;
 using RevitDBExplorer.Domain.DataModel.ValueViewModels;
-using RevitDBExplorer.Domain.RevitDatabaseScripting;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
@@ -118,23 +117,6 @@ namespace RevitDBExplorer.Domain.DataModel
                 return parameter.Id.Equals(snoopableParameter.parameter.Id);
             }
             return false;
-        }
-       
-
-        public override string GenerateScript()
-        {
-            if (parameter.IsShared)
-            {
-                return new ParameterShared_UpdateTemplate().Evaluate(parameter.GUID);
-            }
-            if (parameter.Definition is InternalDefinition internalDef)
-            {
-                if (internalDef.BuiltInParameter != BuiltInParameter.INVALID)
-                {
-                    return new ParameterBuiltIn_UpdateTemplate().Evaluate(internalDef.BuiltInParameter);                    
-                }
-            }
-            return new ParameterProject_UpdateTemplate().Evaluate(parameter.Definition.Name);
         }
     }
 }

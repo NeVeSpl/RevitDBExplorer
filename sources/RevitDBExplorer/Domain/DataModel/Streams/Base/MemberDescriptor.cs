@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using RevitDBExplorer.Domain.DataModel.Accessors;
+using RevitDBExplorer.Domain.DataModel.MemberAccessors;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
@@ -34,7 +35,7 @@ namespace RevitDBExplorer.Domain.DataModel.Streams.Base
 
             if (declaringType != null)
             {
-                bool withoutMemberAccessor = memberAccessor == null;
+                bool withoutMemberAccessor = memberAccessor == null || memberAccessor is MemberAccessorForNotExposed || memberAccessor is MemberAccessorForStatic;
                 DeclaringType = DeclaringType.Create(declaringType, forType, withoutMemberAccessor);
             }            
         }

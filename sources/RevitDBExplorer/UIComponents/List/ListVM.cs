@@ -33,7 +33,7 @@ namespace RevitDBExplorer.UIComponents.List
         private string filterPhrase = "";
         private bool isMemberViewVisible = true;
         private bool hasParameters;
-
+        private bool isComparisonActive;
 
         public ObservableCollection<IListItem> ListItems
         {
@@ -143,6 +143,18 @@ namespace RevitDBExplorer.UIComponents.List
                 }
             }
         }
+        public bool IsComparisonActive
+        {
+            get
+            {
+                return isComparisonActive;
+            }
+            set
+            {
+                isComparisonActive = value;
+                OnPropertyChanged();
+            }
+        }
 
 
         public ListVM(IAmWindowOpener windowOpener, IAmQueryExecutor queryExecutor, IAmScriptOpener scriptOpener)
@@ -196,6 +208,7 @@ namespace RevitDBExplorer.UIComponents.List
             {
                 HasParameters = snoopableObjectTreeItem.Object.HasParameters;
                 Columns = columnsFor1;
+                IsComparisonActive = false;
 
                 var items = await GetSnoopableItemsFromRevit(snoopableObjectTreeItem.Object);
                 ListItems = new(items.Select(x => ListItemFactory.Create(x, null, Reload)));  
@@ -228,6 +241,7 @@ namespace RevitDBExplorer.UIComponents.List
                 return false;
             }
             Columns = columnsFor2;
+            IsComparisonActive = true;
             var leftItem = utilityGroupTreeItem.Items[0] as SnoopableObjectTreeItem;
             var rightItem = utilityGroupTreeItem.Items[1] as SnoopableObjectTreeItem;
 

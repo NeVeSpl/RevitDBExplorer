@@ -8,7 +8,7 @@ using RevitDBExplorer.Domain.DataModel.ValueContainers.Base;
 
 namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
-    internal class MemberAccessorByFunc<TSnoopedObjectType, TReturnType> : MemberAccessorTyped<TSnoopedObjectType>
+    internal class MemberAccessorByFunc<TSnoopedObjectType, TReturnType> : MemberAccessorTypedWithReadAndSnoop<TSnoopedObjectType>
     {     
         private readonly Func<Document, TSnoopedObjectType, TReturnType> get;
         private readonly Func<Document, TSnoopedObjectType, IEnumerable<SnoopableObject>> snoop;

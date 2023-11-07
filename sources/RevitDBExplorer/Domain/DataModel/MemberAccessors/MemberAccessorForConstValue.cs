@@ -7,7 +7,7 @@ using RevitDBExplorer.Domain.DataModel.ValueContainers.Base;
 
 namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
-    internal sealed class MemberAccessorForConstValue : MemberAccessorTyped<object>
+    internal sealed class MemberAccessorForConstValue : MemberAccessorTypedWithReadAndSnoop<object>
     {
         private readonly IValueContainer value;     
 

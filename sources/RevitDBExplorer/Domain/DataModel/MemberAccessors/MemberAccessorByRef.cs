@@ -4,21 +4,20 @@ using System.Reflection;
 using Autodesk.Revit.DB;
 using RevitDBExplorer.Domain.DataModel.Accessors;
 using RevitDBExplorer.Domain.DataModel.ValueContainers.Base;
+using RevitDBExplorer.Domain.RevitDatabaseScripting;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
 namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
-    internal sealed class MemberAccessorByRef : MemberAccessorTyped<object>
+    internal sealed class MemberAccessorByRef : MemberAccessorTypedWithReadAndSnoop<object>, IAccessorWithCodeGeneration
     {
-        private readonly MethodInfo getMethod;
-        private readonly MethodInfo setMethod;      
+        private readonly MethodInfo getMethod;          
 
 
-        public MemberAccessorByRef(MethodInfo getMethod, MethodInfo setMethod)
+        public MemberAccessorByRef(MethodInfo getMethod)
         { 
-            this.getMethod = getMethod;
-            this.setMethod = setMethod;            
+            this.getMethod = getMethod;                    
         }
 
 
@@ -80,6 +79,12 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
                 }
             }
             return args;
-        }        
+        }
+
+
+        public string GenerateInvocationForScript()
+        {
+            return new MemberInvocation_Template().Evaluate(getMethod, null);
+        }
     }
 }

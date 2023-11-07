@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Autodesk.Revit.DB;
 using NSourceGenerators;
 using RevitDBExplorer.Domain.RevitDatabaseScripting.Dummies;
 
@@ -9,13 +10,13 @@ namespace RevitDBExplorer.Domain.RevitDatabaseScripting
 {
     internal class MemberInvocation_UpdateTemplate
     {
-        public string Evaluate(System.Type type, string m)
+        public string Evaluate(System.Type type, string invocation)
         {
             var template = GetTemplate();
             var result = template.ReplaceMany(new[]
             { 
                 ("TypePlaceholder", type.GetCSharpName()),
-                ("MethodPlaceholder()", m)
+                ("MethodPlaceholder()", invocation)
             });
             
             return result;
@@ -29,7 +30,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseScripting
 
 
         [CodeToString(nameof(MemberInvocation_UpdateTemplate))]
-        void Update(IEnumerable<TypePlaceholder> inputs)
+        void Update(Document document, IEnumerable<TypePlaceholder> inputs)
         {
             foreach (var item in inputs)
             {

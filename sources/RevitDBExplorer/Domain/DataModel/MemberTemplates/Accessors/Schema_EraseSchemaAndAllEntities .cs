@@ -8,7 +8,7 @@ using RevitDBExplorer.Domain.DataModel.ValueViewModels.Base;
 
 namespace RevitDBExplorer.Domain.DataModel.MemberTemplates.Accessors
 {
-    internal class Schema_EraseSchemaAndAllEntities : MemberAccessor<Schema>
+    internal class Schema_EraseSchemaAndAllEntities : MemberAccessorTyped<Schema>
     {
         public override IValueViewModel CreatePresenter(SnoopableContext context, Schema schema)
         {

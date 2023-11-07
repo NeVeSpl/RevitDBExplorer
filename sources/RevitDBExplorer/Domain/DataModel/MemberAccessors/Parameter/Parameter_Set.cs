@@ -8,7 +8,7 @@ using RevitDBExplorer.Domain.DataModel.ValueViewModels.Base;
 
 namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
-    internal class Parameter_Set : MemberAccessor<Parameter>, ICanCreateMemberAccessor
+    internal class Parameter_Set : MemberAccessorTyped<Parameter>, ICanCreateMemberAccessor
     {
         IEnumerable<LambdaExpression> ICanCreateMemberAccessor.GetHandledMembers() 
         {

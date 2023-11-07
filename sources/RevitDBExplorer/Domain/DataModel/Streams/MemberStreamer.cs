@@ -93,12 +93,9 @@ namespace RevitDBExplorer.Domain.DataModel.Streams
 
                 var comments = () => RevitDocumentationReader.GetMethodComments(method);
                 IAccessor memberAccessor = null;
-                MemberKind memberKind = MemberKind.StaticMethod;
-                if (method.IsStatic == false)
-                {
-                    memberAccessor = MemberAccessorFactory.CreateMemberAccessor(method, null);
-                    memberKind = MemberKind.Method;
-                }
+                MemberKind memberKind = method.IsStatic == true ? MemberKind.StaticMethod : MemberKind.Method;               
+                memberAccessor = MemberAccessorFactory.CreateMemberAccessor(method, null);
+                    
                 var member = new MemberDescriptor(type, memberKind, method.Name, method.DeclaringType, memberAccessor, comments);
                 yield return member;
             }

@@ -10,12 +10,13 @@ namespace RevitDBExplorer.Domain.RevitDatabaseScripting
 {
     internal class ParameterProject_UpdateTemplate
     {
-        public string Evaluate(string name)
+        public string Evaluate(string name, string paramValue)
         {
             var template = GetTemplate();
             var result = template.ReplaceMany(new[]
             {
                 ("_p_angle", name),
+                ("313.931", paramValue)
             });
 
             return result;
@@ -36,7 +37,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseScripting
                 var param = element.GetParameters("_p_angle").FirstOrDefault();
                 if (param?.IsReadOnly == false)
                 {
-                    param.Set(0);
+                    param.Set(313.931);
                 }
             }
         }

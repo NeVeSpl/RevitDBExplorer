@@ -27,6 +27,7 @@
                 <converters:PercentageOfValueConverter x:Key="PercentageOfValueConverter"/>
                 <converters:EnumMatchToVisibilityConverter x:Key="EnumMatchToVisibilityConverter"/>
                 <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" WhenFalse="Collapsed"/>
+                <converters:BoolToVisibilityConverter x:Key="InverseBoolToVisibilityConverter" WhenTrue="Collapsed" WhenFalse="Visible"/>
                 <converters:ToResourceWithKeyConverter x:Key="ToResourceWithKeyConverter" FrameworkElement="{Binding ElementName=cGrid}" />
                 <localWPF:DataTemplateSelectorForPropertyType x:Key="DataTemplateSelectorForPropertyType"/>
                 <localWPF:DynamicGridViewConverter x:Key="DynamicGridViewConverter" FrameworkElement="{Binding ElementName=cGrid}"/>
@@ -94,6 +95,7 @@
                     <Setter Property="Width" Value="15"/>
                     <Setter Property="Height" Value="15"/>
                     <Setter Property="Padding" Value="1"/>
+                    <Setter Property="Margin" Value="2 0 1 0"/>
                     <Setter Property="Background" Value="Transparent"/>
                     <Setter Property="BorderBrush" Value="Transparent"/>
                 </Style>
@@ -127,7 +129,7 @@
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition/>
-                                <ColumnDefinition Width="18"/>
+                                <ColumnDefinition Width="auto"/>
                             </Grid.ColumnDefinitions>
                             
                             <ContentPresenter
@@ -136,12 +138,13 @@
                             ContentTemplateSelector="{StaticResource DataTemplateSelectorForPropertyType}"                         
                             HorizontalAlignment="Stretch"                 
                             />
-                            <Button Grid.Column="1" Style="{StaticResource MiniButton}" Padding="0" Visibility="{Binding CanGenerateCode, Converter={StaticResource BoolToVisibilityConverter}}"       
-                                Command="{Binding Data.GenerateCSharpCodeCommand, Source={StaticResource Proxy}}" CommandParameter="{Binding .}"
-                                ToolTip="RDS: Generate C# code for a given member">
-                                <Path Style="{StaticResource IconQuery}" Height="13"  />
-                            </Button>
-                        
+                            <Grid Grid.Column="1" Visibility="{Binding Data.IsComparisonActive, Source={StaticResource Proxy}, Converter={StaticResource InverseBoolToVisibilityConverter}}">
+                                <Button Style="{StaticResource MiniButton}" Padding="0 0 0 0" Visibility="{Binding CanGenerateCode, Converter={StaticResource BoolToVisibilityConverter}}"       
+                                    Command="{Binding Data.GenerateCSharpCodeCommand, Source={StaticResource Proxy}}" CommandParameter="{Binding .}"
+                                    ToolTip="RDS: Generate C# code for a given member">
+                                    <Path Style="{StaticResource IconQuery}" Width="10"  />
+                                </Button>
+                            </Grid>
                         </Grid>
                     </Border>
                 </DataTemplate>
@@ -151,8 +154,8 @@
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition/>
-                                <ColumnDefinition Width="18"/>
-                                <ColumnDefinition Width="18"/>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="auto"/>
                             </Grid.ColumnDefinitions>
                            
                             <ContentPresenter
@@ -166,11 +169,13 @@
                                     ToolTip="RDQ: Search Revit database for elements that have a given parameter value" >
                                 <Path Style="{StaticResource IconSearch}" Height="14" />
                             </Button>
-                            <Button Grid.Column="2" Style="{StaticResource MiniButton}" Padding="0" Visibility="{Binding CanGenerateCode, Converter={StaticResource BoolToVisibilityConverter}}"       
+                            <Grid Grid.Column="2" Visibility="{Binding Data.IsComparisonActive, Source={StaticResource Proxy}, Converter={StaticResource InverseBoolToVisibilityConverter}}">
+                                <Button  Style="{StaticResource MiniButton}" Padding="0" Visibility="{Binding CanGenerateCode, Converter={StaticResource BoolToVisibilityConverter}}"       
                                     Command="{Binding Data.GenerateCSharpCodeCommand, Source={StaticResource Proxy}}" CommandParameter="{Binding .}"
                                     ToolTip="RDS: Generate C# code for a given member">
-                                <Path Style="{StaticResource IconQuery}" Height="13"  />
-                            </Button>
+                                    <Path Style="{StaticResource IconQuery}" Width="10"  />
+                                </Button>
+                            </Grid>
                         </Grid>
                     </Border>
                 </DataTemplate>
