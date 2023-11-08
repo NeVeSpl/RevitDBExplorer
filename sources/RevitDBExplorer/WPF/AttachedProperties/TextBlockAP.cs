@@ -23,10 +23,13 @@ namespace RevitDBExplorer.WPF.AttachedProperties
         {
             var textBlock = element as TextBlock;
 
-            if (textBlock != null)
+            if ((textBlock != null))
             {
                 textBlock.Inlines.Clear();
-                textBlock.Inlines.AddRange(e.NewValue as IEnumerable<Inline>);
+                if ((e.NewValue is IEnumerable<Inline> inlines))
+                {
+                    textBlock.Inlines.AddRange(inlines);
+                }
             }
         }
     }

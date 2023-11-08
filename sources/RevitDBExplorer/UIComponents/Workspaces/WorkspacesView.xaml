@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:ext="clr-namespace:RevitDBExplorer.WPF.MarkupExtensions"  
              xmlns:wpf="clr-namespace:RevitDBExplorer.WPF"
+             xmlns:ap="clr-namespace:RevitDBExplorer.WPF.AttachedProperties" 
              xmlns:converters="clr-namespace:RevitDBExplorer.WPF.Converters" 
              xmlns:componentList="clr-namespace:RevitDBExplorer.UIComponents.List"
              xmlns:componentExplorerTree="clr-namespace:RevitDBExplorer.UIComponents.Trees.Explorer"    
@@ -90,7 +91,16 @@
         <controls:TabControlEx ItemsSource="{Binding Workspaces}" SelectedItem="{Binding SelectedWorkspace}" TabStripPlacement="Bottom" BorderThickness="0" Padding="0" Margin="0" Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}" >
             <controls:TabControlEx.ItemTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding Title}" ToolTip="{Binding ToolTip}" />
+                    <TextBlock Text="{Binding Title}"  >
+                        <TextBlock.ToolTip>
+                            <StackPanel Orientation="Vertical">
+                                <TextBlock Text="{Binding InfoAboutSource.ShortTitle}" />
+                                <TextBlock Text=""/>
+                                <!--<TextBlock Text="{Binding InfoAboutSource.FullTitle}" />-->
+                                <TextBlock ap:TextBlockAP.BindableInlines="{Binding InfoAboutSource.FullTitleColored}"  />                                
+                            </StackPanel>
+                        </TextBlock.ToolTip>
+                    </TextBlock>
                 </DataTemplate>
             </controls:TabControlEx.ItemTemplate>
 

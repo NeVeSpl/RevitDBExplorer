@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Documents;
 using Autodesk.Revit.UI;
 using RevitDBExplorer.Domain.DataModel;
 
@@ -57,6 +58,7 @@ namespace RevitDBExplorer.Domain
     {
         public string ShortTitle { get; set; } = "";
         public string FullTitle { get; set; } = "";
+        public IEnumerable<Inline> FullTitleColored { get;set; }
 
 
         public InfoAboutSource()
@@ -64,10 +66,9 @@ namespace RevitDBExplorer.Domain
             
         }
 
-        public InfoAboutSource(string shortTitle, string fullTitle = null)
+        public InfoAboutSource(string shortTitle)
         {
-            ShortTitle = shortTitle;           
-            FullTitle = fullTitle;
+            ShortTitle = shortTitle;   
         }
     }
 }

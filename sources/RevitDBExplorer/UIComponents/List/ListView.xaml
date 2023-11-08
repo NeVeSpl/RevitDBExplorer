@@ -49,18 +49,22 @@
                     <MenuItem Header="Snoop parameter" Command="{Binding Data.SnoopParamInNewWindowCommand, Source={StaticResource Proxy}}" CommandParameter="{Binding}" />
                 </ContextMenu>
 
+                <ContextMenu x:Key="ContextMenuForGenerateCSharpCode">
+                    <MenuItem Header="Generate code for a single input" Command="{Binding Data.GenerateCSharpCodeForSingleInputCommand, Source={StaticResource Proxy}}" CommandParameter="{Binding}" />
+                    <MenuItem Header="Generate code for multiple inputs" Command="{Binding Data.GenerateCSharpCodeForMultipleInputsCommand, Source={StaticResource Proxy}}" CommandParameter="{Binding}" />
+                </ContextMenu>
+
                 <ToolTip x:Key="ToolTipWithRevitHelp">
                     <StackPanel Orientation="Vertical"  MaxWidth="727">
                         <StackPanel.Resources>
                             <SolidColorBrush x:Key="ToolTip.Key" Color="Gray"/>
-                            <SolidColorBrush x:Key="ToolTip.Value" Color="#000000"/>
-                            <SolidColorBrush x:Key="ToolTip.ReturnType" Color="#0000FF"/>
-                            <SolidColorBrush x:Key="ToolTip.Name" Color="#745320"/>
-                            <SolidColorBrush x:Key="ToolTip.Invocation" Color="#21377F"/>
-                        </StackPanel.Resources>                      
-                        <TextBlock Visibility="{Binding Documentation.Name, Converter={StaticResource StringToVisibilityConverter}}">
-                                    <Run Foreground="{DynamicResource ToolTip.ReturnType}" Text="{Binding Documentation.ReturnType, Mode=OneWay}" /> <Run Foreground="{DynamicResource ToolTip.Name}" Text="{Binding Documentation.Name, Mode=OneWay}" /><Run Foreground="{DynamicResource ToolTip.Invocation}" Text="{Binding Documentation.Invocation, Mode=OneWay}" />
-                                    <LineBreak/>
+                            <SolidColorBrush x:Key="ToolTip.Value" Color="#000000"/>                           
+                        </StackPanel.Resources>
+                        <TextBlock Visibility="{Binding Documentation.Name, Converter={StaticResource StringToVisibilityConverter}}"
+                                   ap:TextBlockAP.BindableInlines="{Binding Documentation.TitleCollored}"
+                                   />
+                        <TextBlock>
+                           
                         </TextBlock>
                         <TextBlock TextWrapping="Wrap" Visibility="{Binding Documentation.Summary, Converter={StaticResource StringToVisibilityConverter}}" >  
                                     <Run Text="{Binding Documentation.Summary, Mode=OneWay}" Foreground="{DynamicResource ToolTip.Value}" /><LineBreak/>
@@ -140,7 +144,8 @@
                             />
                             <Grid Grid.Column="1" Visibility="{Binding Data.IsComparisonActive, Source={StaticResource Proxy}, Converter={StaticResource InverseBoolToVisibilityConverter}}">
                                 <Button Style="{StaticResource MiniButton}" Padding="0 0 0 0" Visibility="{Binding CanGenerateCode, Converter={StaticResource BoolToVisibilityConverter}}"       
-                                    Command="{Binding Data.GenerateCSharpCodeCommand, Source={StaticResource Proxy}}" CommandParameter="{Binding .}"
+                                     ap:ButtonAP.OpenSubMenuOnClick="True"
+                                    ContextMenu="{StaticResource ContextMenuForGenerateCSharpCode}"
                                     ToolTip="RDS: Generate C# code for a given member">
                                     <Path Style="{StaticResource IconQuery}" Width="10"  />
                                 </Button>
@@ -171,7 +176,8 @@
                             </Button>
                             <Grid Grid.Column="2" Visibility="{Binding Data.IsComparisonActive, Source={StaticResource Proxy}, Converter={StaticResource InverseBoolToVisibilityConverter}}">
                                 <Button  Style="{StaticResource MiniButton}" Padding="0" Visibility="{Binding CanGenerateCode, Converter={StaticResource BoolToVisibilityConverter}}"       
-                                    Command="{Binding Data.GenerateCSharpCodeCommand, Source={StaticResource Proxy}}" CommandParameter="{Binding .}"
+                                    ap:ButtonAP.OpenSubMenuOnClick="True"
+                                    ContextMenu="{StaticResource ContextMenuForGenerateCSharpCode}"
                                     ToolTip="RDS: Generate C# code for a given member">
                                     <Path Style="{StaticResource IconQuery}" Width="10"  />
                                 </Button>

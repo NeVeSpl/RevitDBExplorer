@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Autodesk.Revit.DB;
 using NSourceGenerators;
 
@@ -9,9 +10,10 @@ namespace RevitDBExplorer.Domain.RevitDatabaseScripting
 {
     internal class ParameterShared_UpdateTemplate
     {
-        public string Evaluate(Guid guid, string paramValue)
+        public string Evaluate(Guid guid, string paramValue, TemplateInputsKind inputsKind)
         {
-            var template = GetTemplate();
+            var templateType = GetTemplateType(inputsKind);
+            var template = CodeToStringRepo.GetText(templateType.Name, true);
             var result = template.ReplaceMany(new[]
             {
                 ("11111111-2222-3333-4444-555555666666", guid.ToString()),
@@ -22,16 +24,24 @@ namespace RevitDBExplorer.Domain.RevitDatabaseScripting
         }
 
 
-        public string GetTemplate()
+        public Type GetTemplateType(TemplateInputsKind inputsKind)
         {
-            return CodeToStringRepo.GetText(nameof(ParameterShared_UpdateTemplate), true);
+            if (inputsKind == TemplateInputsKind.Single)
+            {
+                return typeof(ParameterShared_UpdateSingle_Template);
+            }
+
+            return typeof(ParameterShared_UpdateMultiple_Template);
         }
+    }
 
 
-        [CodeToString(nameof(ParameterShared_UpdateTemplate))]
+    internal class ParameterShared_UpdateMultiple_Template
+    {
+        [CodeToString(nameof(ParameterShared_UpdateMultiple_Template))]
         void Update(Document document, IEnumerable<Element> elements)
         {
-            var paramElement = SharedParameterElement.Lookup(document, new Guid("11111111-2222-3333-4444-555555666666"));           
+            var paramElement = SharedParameterElement.Lookup(document, new Guid("11111111-2222-3333-4444-555555666666"));
             foreach (var element in elements)
             {
                 var param = element.get_Parameter(paramElement.GuidValue);
@@ -40,6 +50,22 @@ namespace RevitDBExplorer.Domain.RevitDatabaseScripting
                     param.Set(313.931);
                 }
             }
+        }
+    }
+
+
+    internal class ParameterShared_UpdateSingle_Template
+    {
+        [CodeToString(nameof(ParameterShared_UpdateSingle_Template))]
+        void Update(Document document, IEnumerable<Element> elements)
+        {
+            var paramElement = SharedParameterElement.Lookup(document, new Guid("11111111-2222-3333-4444-555555666666"));
+            var element = elements.FirstOrDefault();            
+            var param = element.get_Parameter(paramElement.GuidValue);
+            if (param?.IsReadOnly == false)
+            {
+                param.Set(313.931);
+            }            
         }
     }
 }

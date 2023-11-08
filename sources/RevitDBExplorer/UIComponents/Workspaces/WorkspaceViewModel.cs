@@ -26,7 +26,7 @@ namespace RevitDBExplorer.UIComponents.Workspaces
         private RightView rightView;
         private bool isActive;        
         private string title;
-        private string tooltip;
+        private InfoAboutSource infoAboutSource;
         private GridLength firstColumnWidth;
         
 
@@ -71,15 +71,15 @@ namespace RevitDBExplorer.UIComponents.Workspaces
                 OnPropertyChanged();
             }
         }
-        public string ToolTip
+        public InfoAboutSource InfoAboutSource
         {
             get
             {
-                return tooltip;
+                return infoAboutSource;
             }
             set
             {
-                tooltip = value;
+                infoAboutSource = value;
                 OnPropertyChanged();
             }
         }
@@ -181,7 +181,7 @@ namespace RevitDBExplorer.UIComponents.Workspaces
             if (sourceOfObjects.Info is not null)
             {
                 Title = sourceOfObjects.Info.ShortTitle.Truncate(33);
-                ToolTip = sourceOfObjects.Info.ShortTitle;
+                InfoAboutSource = sourceOfObjects.Info;
             }
         }
         public IEnumerable<object> GetSelectedItems()

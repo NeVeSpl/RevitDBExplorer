@@ -70,22 +70,22 @@ namespace RevitDBExplorer.Domain.DataModel.Parameters
         }
 
 
-        public string GenerateInvocationForScript()
+        public string GenerateInvocationForScript(TemplateInputsKind inputsKind)
         {
             string paramValue = parameter.StorageType switch { StorageType.String => @"""""", StorageType.Integer => "0", StorageType.Double => "0.0", _ => "new ElementId(0)" };
 
             if (parameter.IsShared)
             {
-                return new ParameterShared_UpdateTemplate().Evaluate(parameter.GUID, paramValue);
+                return new ParameterShared_UpdateTemplate().Evaluate(parameter.GUID, paramValue, inputsKind);
             }
             if (parameter.Definition is InternalDefinition internalDef)
             {
                 if (internalDef.BuiltInParameter != BuiltInParameter.INVALID)
                 {
-                    return new ParameterBuiltIn_UpdateTemplate().Evaluate(internalDef.BuiltInParameter, paramValue);
+                    return new ParameterBuiltIn_UpdateTemplate().Evaluate(internalDef.BuiltInParameter, paramValue, inputsKind);
                 }
             }
-            return new ParameterProject_UpdateTemplate().Evaluate(parameter.Definition.Name, paramValue);
+            return new ParameterProject_UpdateTemplate().Evaluate(parameter.Definition.Name, paramValue, inputsKind);
         }
 
 

@@ -1,4 +1,6 @@
-﻿using RevitDBExplorer.Domain.DataModel.Streams.Base;
+﻿using System.Collections.Generic;
+using System.Windows.Documents;
+using RevitDBExplorer.Domain.DataModel.Streams.Base;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
@@ -25,15 +27,17 @@ namespace RevitDBExplorer.Domain.DataModel
         public override SourceOfObjects Snoop()
         {
             var fullTitle = Name;
+            IEnumerable<Inline> fullTitleColored = new[] { new Run(Name) };
             if (!string.IsNullOrEmpty(Documentation.Name))
             {
-                fullTitle = $"{Documentation.ReturnType} {Documentation.Name}{Documentation.Invocation}";
+                fullTitle = Documentation.Title;
+                fullTitleColored = Documentation.TitleCollored;
             }
 
             var title = $"{parent.Name}.{this.Name}";
 
 
-            return new SourceOfObjects(this) { Info = new InfoAboutSource(title, fullTitle) };
+            return new SourceOfObjects(this) { Info = new InfoAboutSource(title) { FullTitleColored = fullTitleColored } };
         }
       
 

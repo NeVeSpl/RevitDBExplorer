@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Autodesk.Revit.DB;
 using NSourceGenerators;
 
@@ -9,9 +10,10 @@ namespace RevitDBExplorer.Domain.RevitDatabaseScripting
 {
     internal class ParameterBuiltIn_UpdateTemplate
     {
-        public string Evaluate(BuiltInParameter parameter, string paramValue)
+        public string Evaluate(BuiltInParameter parameter, string paramValue, TemplateInputsKind inputsKind)
         {
-            var template = GetTemplate();
+            var templateType = GetTemplateType(inputsKind);
+            var template = CodeToStringRepo.GetText(templateType.Name, true);
             var result = template.ReplaceMany(new[]
             {
                 ("HOST_AREA_COMPUTED", parameter.ToString()),
@@ -22,15 +24,23 @@ namespace RevitDBExplorer.Domain.RevitDatabaseScripting
         }
 
 
-        public string GetTemplate()
+        public Type GetTemplateType(TemplateInputsKind inputsKind)
         {
-            return CodeToStringRepo.GetText(nameof(ParameterBuiltIn_UpdateTemplate), true);
+            if (inputsKind == TemplateInputsKind.Single)
+            {
+                return typeof(ParameterBuiltIn_UpdateSingle_Template);
+            }
+
+            return typeof(ParameterBuiltIn_UpdateMultiple_Template);
         }
+    }
 
 
-        [CodeToString(nameof(ParameterBuiltIn_UpdateTemplate))]
+    internal class ParameterBuiltIn_UpdateMultiple_Template
+    {
+        [CodeToString(nameof(ParameterBuiltIn_UpdateMultiple_Template))]
         void Update(Document document, IEnumerable<Element> elements)
-        {           
+        {
             foreach (var element in elements)
             {
                 var param = element.get_Parameter(BuiltInParameter.HOST_AREA_COMPUTED);
@@ -39,6 +49,21 @@ namespace RevitDBExplorer.Domain.RevitDatabaseScripting
                     param.Set(313.931);
                 }
             }
+        }
+    }
+
+
+    internal class ParameterBuiltIn_UpdateSingle_Template
+    {
+        [CodeToString(nameof(ParameterBuiltIn_UpdateSingle_Template))]
+        void Update(Document document, IEnumerable<Element> elements)
+        {
+            var element = elements.FirstOrDefault();
+            var param = element.get_Parameter(BuiltInParameter.HOST_AREA_COMPUTED);
+            if (param?.IsReadOnly == false)
+            {
+                param.Set(313.931);
+            }            
         }
     }
 }

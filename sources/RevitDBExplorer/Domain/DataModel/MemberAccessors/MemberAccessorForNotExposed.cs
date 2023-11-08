@@ -25,9 +25,9 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
         {
             return EmptyPresenter.Instance;
         }
-        public string GenerateInvocationForScript()
+        public string GenerateInvocationForScript(TemplateInputsKind inputsKind)
         {            
-            return new MemberInvocation_Template().Evaluate(getMethod, null);
+            return new MemberInvocationTemplateSelector().Evaluate(getMethod, null, inputsKind);
         }
     }
 }

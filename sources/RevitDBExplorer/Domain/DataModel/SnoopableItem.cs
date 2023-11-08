@@ -110,15 +110,15 @@ namespace RevitDBExplorer.Domain.DataModel
         public abstract bool Equals(SnoopableItem other);
 
 
-        public string GenerateScript()
+        public string GenerateScript(TemplateInputsKind inputsKind)
         {
             if (accessor is IAccessorWithCodeGeneration accessorWithCodeGeneration)
             {
-                return accessorWithCodeGeneration.GenerateInvocationForScript();
+                return accessorWithCodeGeneration.GenerateInvocationForScript(inputsKind);
             }
             var invocation = accessor.DefaultInvocation ?? Name;
 
-            return new MemberInvocation_SelectTemplate().Evaluate(parent.Object.GetType(), invocation);
+            return new MemberInvocationTemplateSelector().Evaluate(parent.Object.GetType(), invocation, TemplateCmdKind.Select, inputsKind);
         }
     }
 }

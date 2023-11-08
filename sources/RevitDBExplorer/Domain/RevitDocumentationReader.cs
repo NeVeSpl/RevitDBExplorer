@@ -1,7 +1,10 @@
 ﻿using System;
-using System.Linq;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
+using System.Windows.Documents;
+using System.Windows.Media;
 using Autodesk.Revit.DB;
 using LoxSmoke.DocXml;
 
@@ -26,7 +29,7 @@ namespace RevitDBExplorer.Domain
 
         public static DocXml GetTypeComments(Type type)
         {
-            var typeComments = docXml.GetTypeComments(type);
+            var typeComments = docXml.GetTypeComments(type);            
 
             var doc = new DocXml()
             {
@@ -51,33 +54,43 @@ namespace RevitDBExplorer.Domain
             if (parameters.Any())
             {
                 name = info.GetGetGetMethod().Name;
-                invocation = "(" + String.Join(",", parameters.Select(p => $"{p.ParameterType.GetCSharpName()} {p.Name}").ToArray()) + ")";
+                invocation = "(" + String.Join(", ", parameters.Select(p => $"{p.ParameterType.GetCSharpName()} {p.Name}").ToArray()) + ")";
             }
 
-            var doc = new DocXml()
+
+            var returnType = info.PropertyType.GetCSharpName();
+            IEnumerable<Inline> titleCollored;
+
+            if (parameters.Any())
+            {
+                titleCollored = ToInlinesMethod(returnType, name, parameters).ToArray();
+            }
+            else
+            {
+                titleCollored = ToInlinesProp(returnType, name, true, info.CanWrite).ToArray();
+            }
+
+            var doc = new DocXml(returnType, name, invocation, titleCollored)
             {
                 Summary = CleanString(memberComments?.Summary),
                 Remarks = CleanString(memberComments?.Remarks),
-                ReturnType = info.PropertyType.GetCSharpName(),
-                Name = name,
-                Invocation = invocation
             };
-
 
             return doc;
         }
         public static DocXml GetMethodComments(MethodInfo info)
         {
             var methodComments = docXml?.GetMethodComments(info);
-            var doc = new DocXml()
+            var returnType = info.ReturnType.GetCSharpName();
+            var invocation = "(" + String.Join(", ", info.GetParameters().Select(p => $"{p.ParameterType.GetCSharpName()} {p.Name}").ToArray()) + ")";
+            var titleCollored = ToInlinesMethod(returnType, info.Name, info.GetParameters()).ToArray();
+
+            var doc = new DocXml(returnType, info.Name, invocation, titleCollored)
             {
                 Summary = CleanString(methodComments?.Summary),
                 Returns = CleanString(methodComments?.Returns),
                 Remarks = CleanString(methodComments?.Remarks),
-                ReturnType = info.ReturnType.GetCSharpName(),
-                Name = info.Name,
-                Invocation = "(" + String.Join(",", info.GetParameters().Select(p => $"{p.ParameterType.GetCSharpName()} {p.Name}").ToArray()) + ")"
-            };
+            };           
             return doc;
         }
 
@@ -86,6 +99,50 @@ namespace RevitDBExplorer.Domain
             string result = input?.Trim()?.Replace(System.Environment.NewLine, "").StripTags();
             return result;
         }
+
+        private static IEnumerable<Inline> ToInlinesProp(string returnType, string name, bool hasGet, bool hasSet)
+        {
+            yield return new Run(returnType) { Foreground = returnType.IsPrimitiveTypeName() ? PropTypeBrush : TypeBrush };
+            yield return new Run(" ");
+            yield return new Run(name) { Foreground = NameBrush };
+            yield return new Run(" { ");
+            if (hasGet)
+            {
+                yield return new Run("get; ") { Foreground = PropTypeBrush };
+            }
+            if (hasSet)
+            {
+                yield return new Run("set; ") { Foreground = PropTypeBrush };
+            }
+            yield return new Run("}");
+        }
+        private static IEnumerable<Inline> ToInlinesMethod(string returnType, string name, ParameterInfo[] parameterInfos)
+        {
+            yield return new Run(returnType) { Foreground = returnType.IsPrimitiveTypeName() ? PropTypeBrush : TypeBrush };
+            yield return new Run(" ");
+            yield return new Run(name) { Foreground = NameBrush };
+            yield return new Run("(");
+            for (int i = 0; i < parameterInfos.Length; i++)
+            {
+                var p = parameterInfos[i];
+                var typeName = p.ParameterType.GetCSharpName();
+                yield return new Run(typeName) { Foreground = typeName.IsPrimitiveTypeName() ? PropTypeBrush : TypeBrush };
+                yield return new Run(" ");
+                yield return new Run(p.Name) { Foreground = VarNameBrush };
+                if (i < parameterInfos.Length - 1)
+                {
+                    yield return new Run(", ");
+                }
+            }            
+
+            yield return new Run(")");
+        }
+
+
+        private static readonly SolidColorBrush PropTypeBrush = (SolidColorBrush)new BrushConverter().ConvertFrom("#0000FF");
+        private static readonly SolidColorBrush NameBrush = (SolidColorBrush)new BrushConverter().ConvertFrom("#745320");
+        private static readonly SolidColorBrush TypeBrush = (SolidColorBrush)new BrushConverter().ConvertFrom("#3A96BC");
+        private static readonly SolidColorBrush VarNameBrush = (SolidColorBrush)new BrushConverter().ConvertFrom("#21377F");
     }
 
     public class DocXml
@@ -96,9 +153,25 @@ namespace RevitDBExplorer.Domain
         public string Summary { get; init; }
         public string Returns { get; init; }
         public string Remarks { get; init; }
-        public string ReturnType { get; init; }
         public string Name { get; init; }
-        public string Invocation { get; init; }
 
+        public string Title { get; init; }
+        public IEnumerable<Inline> TitleCollored { get; init; }
+
+
+        public DocXml()
+        {
+            
+        }
+
+        public DocXml(string returnType, string name, string invocation, IEnumerable<Inline> titleCollored)
+        {
+            if (!string.IsNullOrEmpty(name))
+            {
+                Name = name;
+                Title = $"{returnType} {name}{invocation}";
+                TitleCollored = titleCollored;
+            }
+        }
     }
 }

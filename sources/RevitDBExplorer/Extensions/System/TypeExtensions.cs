@@ -68,6 +68,11 @@ namespace System
             { typeof(void), "void" },
         };
 
+        public static bool IsPrimitiveTypeName(this string typeName)
+        {
+            return primitiveTypes.Values.Contains(typeName);
+        }
+
 
         /// <summary>
         /// source: https://stackoverflow.com/questions/2579734/get-the-type-name

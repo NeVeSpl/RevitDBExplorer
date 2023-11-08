@@ -9,6 +9,7 @@ using System.Windows.Data;
 using RevitDBExplorer.Domain;
 using RevitDBExplorer.Domain.DataModel;
 using RevitDBExplorer.Domain.DataModel.ValueViewModels.Base;
+using RevitDBExplorer.Domain.RevitDatabaseScripting;
 using RevitDBExplorer.UIComponents.List.ViewModels;
 using RevitDBExplorer.UIComponents.List.WPF;
 using RevitDBExplorer.UIComponents.Trees.Base;
@@ -85,7 +86,8 @@ namespace RevitDBExplorer.UIComponents.List
         public RelayCommand OpenCHMCommand { get; }
         public RelayCommand SnoopParamInNewWindowCommand { get; }
         public RelayCommand SearchForParameterValueCommand { get; }
-        public RelayCommand GenerateCSharpCodeCommand { get; }
+        public RelayCommand GenerateCSharpCodeForSingleInputCommand { get; }
+        public RelayCommand GenerateCSharpCodeForMultipleInputsCommand { get; }
         public string FilterPhrase
         {
             get
@@ -181,7 +183,8 @@ namespace RevitDBExplorer.UIComponents.List
             OpenCHMCommand = new RelayCommand(OpenCHM);
             SnoopParamInNewWindowCommand = new RelayCommand(SnoopParamInNewWindow);
             SearchForParameterValueCommand = new RelayCommand(SearchForParameterValue);
-            GenerateCSharpCodeCommand = new RelayCommand(GenerateCSharpCode);
+            GenerateCSharpCodeForSingleInputCommand = new RelayCommand(x => GenerateCSharpCode(x, TemplateInputsKind.Single));
+            GenerateCSharpCodeForMultipleInputsCommand = new RelayCommand(x => GenerateCSharpCode(x, TemplateInputsKind.Multiple));
         }
 
 
@@ -388,11 +391,11 @@ namespace RevitDBExplorer.UIComponents.List
                 queryExecutor.Query(snoopableParameter.GenerateQueryForForParameterValue());
             }
         }
-        private void GenerateCSharpCode(object obj)
+        private void GenerateCSharpCode(object obj, TemplateInputsKind inputsKind)
         {
             if (obj is SnoopableItem snoopableItem)
             {
-                scriptOpener.Open(snoopableItem.GenerateScript());
+                scriptOpener.Open(snoopableItem.GenerateScript(inputsKind));
             }
         }
         private void CopyValue(object obj)

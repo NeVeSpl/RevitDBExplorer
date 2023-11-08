@@ -10,9 +10,10 @@ namespace RevitDBExplorer.Domain.RevitDatabaseScripting
 {
     internal class ParameterProject_UpdateTemplate
     {
-        public string Evaluate(string name, string paramValue)
+        public string Evaluate(string name, string paramValue, TemplateInputsKind inputsKind)
         {
-            var template = GetTemplate();
+            var templateType = GetTemplateType(inputsKind);
+            var template = CodeToStringRepo.GetText(templateType.Name, true);
             var result = template.ReplaceMany(new[]
             {
                 ("_p_angle", name),
@@ -23,15 +24,22 @@ namespace RevitDBExplorer.Domain.RevitDatabaseScripting
         }
 
 
-        public string GetTemplate()
+        public Type GetTemplateType(TemplateInputsKind inputsKind)
         {
-            return CodeToStringRepo.GetText(nameof(ParameterProject_UpdateTemplate), true);
+            if (inputsKind == TemplateInputsKind.Single)
+            {
+                return typeof(ParameterProject_UpdateSingle_Template);
+            }
+
+            return typeof(ParameterProject_UpdateMultiple_Template);
         }
+    }
 
-
-        [CodeToString(nameof(ParameterProject_UpdateTemplate))]
+    internal class ParameterProject_UpdateMultiple_Template
+    {
+        [CodeToString(nameof(ParameterProject_UpdateMultiple_Template))]
         void Update(Document document, IEnumerable<Element> elements)
-        {           
+        {
             foreach (var element in elements)
             {
                 var param = element.GetParameters("_p_angle").FirstOrDefault();
@@ -40,6 +48,21 @@ namespace RevitDBExplorer.Domain.RevitDatabaseScripting
                     param.Set(313.931);
                 }
             }
+        }
+    }
+
+
+    internal class ParameterProject_UpdateSingle_Template
+    {
+        [CodeToString(nameof(ParameterProject_UpdateSingle_Template))]
+        void Update(Document document, IEnumerable<Element> elements)
+        {
+            var element = elements.FirstOrDefault();
+            var param = element.GetParameters("_p_angle").FirstOrDefault();
+            if (param?.IsReadOnly == false)
+            {
+                param.Set(313.931);
+            }            
         }
     }
 }
