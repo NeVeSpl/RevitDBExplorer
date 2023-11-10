@@ -180,7 +180,7 @@ namespace RevitDBExplorer.UIComponents.Workspaces
             Title = "<???>";
             if (sourceOfObjects.Info is not null)
             {
-                Title = sourceOfObjects.Info.ShortTitle.Truncate(33);
+                Title = sourceOfObjects.Info.ShortTitle.Truncate(27);
                 InfoAboutSource = sourceOfObjects.Info;
             }
         }

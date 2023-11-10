@@ -2,14 +2,15 @@
 
 **The fastest, most advanced, asynchronous Revit database exploration tool for Revit 2021+.**
 
-Yet another [RevitLookup](https://github.com/jeremytammik/RevitLookup) like tool. RevitLookup was an indispensable tool to work with Revit API for many years. But now, there is a better tool for the job. Let me introduce you to Revit database explorer and its capabilities. It not only allows us to **explore** database but also to:
-- **edit**, any parameter value
-- **query**, database with intuitive syntax that is translated into a FilteredElementCollector
-- **script**, by running ad hoc scripts written in C#
-- **visualize**, geometrical features of elements
+Yet another [RevitLookup](https://github.com/jeremytammik/RevitLookup) like tool. RevitLookup was an indispensable tool to work with Revit API for many years. But now, there is a better tool for the job. Let me introduce you to Revit database explorer. It not only allows us to **explore** database but also to:
+- **edit** any parameter value
+- **query** database with intuitive syntax that is translated into a FilteredElementCollector
+- **script** by running ad hoc scripts written in C#
+- **visualize** geometrical features of elements
 
 List of features:
 
+- [easier work with Element.Geometry](#easier-work-with-elementgeometry)
 - [compare objects and parameters](#compare-object-members-and-element-parameters-values)
 - [query Revit database](#query-revit-database-with-rdq-revit-database-querying)
 - [script Revit database](#script-revit-database-with-rds-revit-database-scripting)
@@ -19,7 +20,6 @@ List of features:
 - [edit parameter value](#edit-parameter-value)
 - [extensive support for ForgeTypeId](#extensive-support-for-forgetypeid)
 - [better support for Revit Extensible Storage](#better-support-for-revit-extensible-storage)
-- [easier work with Element.Geometry](#easier-work-with-elementgeometry)
 - [dark and light UI themes](#dark-and-light-ui-themes)
 - [snoop Revit events](#snoop-revit-events-with-rem-revit-event-monitor)
 
@@ -41,7 +41,7 @@ Download and install [RevitDBExplorer.msi](https://github.com/NeVeSpl/RevitDBExp
 
 ### easier work with Element.Geometry
 
-Revit database explorer provides visualization for geometrical features of various objects, also :
+Revit database explorer provides visualization for geometrical features of various objects and also :
 
 - an instance of GeometryObject can be selected in Revit if it has a valid reference
 - mouse cursor position expressed in the Revit model coordinates can be find on the status bar
