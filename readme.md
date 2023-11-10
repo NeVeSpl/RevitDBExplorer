@@ -2,14 +2,15 @@
 
 **The fastest, most advanced, asynchronous Revit database exploration tool for Revit 2021+.**
 
-Yet another [RevitLookup](https://github.com/jeremytammik/RevitLookup) like tool. RevitLookup was an indispensable tool to work with Revit API for many years. But now, there is a better tool for the job. Let me introduce you to Revit database explorer and its capabilities. It not only allows us to **explore** database but also to:
-- **edit**, any parameter value
-- **query**, database with intuitive syntax that is translated into a FilteredElementCollector
-- **script**, by running ad hoc scripts written in C#
-- **visualize**, geometrical features of elements
+Yet another [RevitLookup](https://github.com/jeremytammik/RevitLookup) like tool. RevitLookup was an indispensable tool to work with Revit API for many years. But now, there is a better tool for the job. Let me introduce you to Revit database explorer. It not only allows us to **explore** database but also to:
+- **edit** any parameter value
+- **query** database with intuitive syntax that is translated into a FilteredElementCollector
+- **script** by running ad hoc scripts written in C#
+- **visualize** geometrical features of elements
 
 List of features:
 
+- [easier work with Element.Geometry](#easier-work-with-elementgeometry)
 - [compare objects and parameters](#compare-object-members-and-element-parameters-values)
 - [query Revit database](#query-revit-database-with-rdq-revit-database-querying)
 - [script Revit database](#script-revit-database-with-rds-revit-database-scripting)
@@ -19,7 +20,6 @@ List of features:
 - [edit parameter value](#edit-parameter-value)
 - [extensive support for ForgeTypeId](#extensive-support-for-forgetypeid)
 - [better support for Revit Extensible Storage](#better-support-for-revit-extensible-storage)
-- [easier work with Element.Geometry](#easier-work-with-elementgeometry)
 - [dark and light UI themes](#dark-and-light-ui-themes)
 - [snoop Revit events](#snoop-revit-events-with-rem-revit-event-monitor)
 
@@ -37,33 +37,54 @@ Download and install [RevitDBExplorer.msi](https://github.com/NeVeSpl/RevitDBExp
 
 ## Features
 
+
+
+### easier work with Element.Geometry
+
+Revit database explorer provides visualization for geometrical features of various objects and also :
+
+- an instance of GeometryObject can be selected in Revit if it has a valid reference
+- mouse cursor position expressed in the Revit model coordinates can be find on the status bar
+
+[Learn more about Revit database visualization (RDV).](documentation/revit-database-visualization.md)
+
+![easier-work-with-geometry](documentation/examples/2.0.easier-work-with-element-geometry.gif)
+
+
+
 ### compare object members and element parameters values
 
 ![compare objects and parameters](documentation/examples/compare-objects-and-parameters.gif)
 
+
+
+
 ### query Revit database with RDQ (Revit database querying)
 
-RDQ is able to interpret words separated by `,` as element ids, Revit classes, categories, parameters and many more. RDQ builds from them FilteredElementCollector and uses it to query Revit database. 
+RDQ is capable of interpreting words separated by `,` as element ids, Revit classes, categories, parameters and many more. RDQ builds from them FilteredElementCollector and uses it to query Revit database. 
 
 [Learn more about Revit database querying (RDQ).](documentation/revit-database-querying.md)
 
 ![possibility-to-query-Revit-database-from-UI](documentation/examples/rdq-revit-database-query-with-rql-revit-query-language.v2.gif)
 
+
+
 ### script Revit database with RDS (Revit database scripting)
 
-RDS is intended to compile and run C# code that is too small or ephemeral to make macro/dynamo/addon for it. RDS offers the quickest way to run C# code generated with generative AI chats (such as ChatGPT). 
+RDS is able to compile and run C# code that is too small or ephemeral to make macro/dynamo/addon for it. RDS offers the quickest way to run C# code generated with generative AI chats (such as ChatGPT). 
 
 [Learn more about Revit database scripting (RDS).](documentation/revit-database-scripting.md) 
 
 #### ad hoc SELECT query
 
-![revit-database-scripting-select-query](documentation/examples/revit-database-scripting-select-query.gif)
+![revit-database-scripting-select-query](documentation/examples/2.0.revit-database-scripting-select-query.gif)
 
 #### ad hoc UPDATE command
 
 An example shows how to add a prefix to `Mark` parameter for many selected elements as inputs for the script. 
 
-![possibility-to-query-Revit-database-from-UI](documentation/examples/revit-database-scripting-update-command.gif)
+![revit-database-scripting-update-query](documentation/examples/2.0.revit-database-scripting-update-command.gif)
+
 
 
 ### easy access to Revit API documentation
@@ -72,9 +93,13 @@ An example shows how to add a prefix to `Mark` parameter for many selected eleme
 
 ![tooltips-with-Revit-documentations](documentation/examples/easy-access-to-revit-api-documentation.gif)
 
+
+
 ### edit parameter value
 
 ![edit-parameter-value](documentation/examples/set.parameter.value.gif)
+
+
 
 ### extensive support for ForgeTypeId
 
@@ -95,6 +120,7 @@ ForgeTypeId label corresponds to static properties defined on:
 ![extensive-support-for-ForgeTypeId](documentation/examples/extensive-support-for-ForgeTypeId.gif)
 
 
+
 ### better support for Revit Extensible Storage
 
 Revit database explorer allows you to snoop all schemas that are loaded into Revit memory, and you can easily get all elements that have an entity of a given schema. You get access to Extensible Storage data exactly like through RevitAPI, by invoking: Element.GetEntity(). 
@@ -102,17 +128,12 @@ Revit database explorer allows you to snoop all schemas that are loaded into Rev
 ![better-support-for-revit-extensible-storage](documentation/examples/better-support-for-revit-extensible-storage.gif)
 
 
-### easier work with Element.Geometry
-
-- you can select an instance of GeometryObject in Revit if it has a valid reference
-- on the status bar you will find mouse cursor position expressed in the Revit model coordinates
-
-![easier-work-with-geometry](documentation/examples/easier-work-with-element-geometry.gif)
-
 
 ### dark and light UI themes
 
 ![dark-and-light-ui-themes](documentation/examples/dark-and-light-ui-themes.gif)
+
+
 
 ### snoop Revit events with REM (Revit Event Monitor)
 
@@ -120,4 +141,3 @@ A new take on [EventsMonitor from  RevitSdkSamples
 ](https://github.com/jeremytammik/RevitSdkSamples/tree/master/SDK/Samples/Events/EventsMonitor/CS). Revit database explorer stores the latest 30 events that occurred during Revit session and allows to snoop them. UIControlledApplication.Idling event and ControlledApplication.ProgressChanged events are not stored because they are too noisy - they happen too often. In order to use this feature, you need to enable event monitor, which by default is disabled.
 
 ![snooping-events](documentation/examples/snooping-events.gif)
-

@@ -294,8 +294,8 @@
                     </Button>
                 </StackPanel>
                 
-                <Grid Grid.ColumnSpan="2" Background="{DynamicResource StatusBar.Background}" HorizontalAlignment="Center">
-                    <TextBlock  HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding IsNewVerAvailable, Converter={StaticResource BoolToVisibilityConverterCollapsed}}">    
+                <Grid Grid.ColumnSpan="2" Background="{DynamicResource StatusBar.Background}" HorizontalAlignment="Center" >
+                    <TextBlock  HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding IsNewVerAvailable, Converter={StaticResource BoolToVisibilityConverterCollapsed}}" Margin="13 0 13 0">    
                         <Run Foreground="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}">a new version is available :</Run>
                         <Hyperlink NavigateUri="{Binding NewVersionLink}" ap:HyperlinkAP.OpenOnClick="True" Foreground="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" TextDecorations="None"  >
                             <Run Text="{Binding NewVersionLink}" />
