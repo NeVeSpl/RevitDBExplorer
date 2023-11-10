@@ -61,7 +61,7 @@ Revit database explorer provides visualization for geometrical features of vario
 
 ### query Revit database with RDQ (Revit database querying)
 
-RDQ is capable of to interpret words separated by `,` as element ids, Revit classes, categories, parameters and many more. RDQ builds from them FilteredElementCollector and uses it to query Revit database. 
+RDQ is capable of interpreting words separated by `,` as element ids, Revit classes, categories, parameters and many more. RDQ builds from them FilteredElementCollector and uses it to query Revit database. 
 
 [Learn more about Revit database querying (RDQ).](documentation/revit-database-querying.md)
 
