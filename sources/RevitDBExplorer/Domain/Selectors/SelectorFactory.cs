@@ -10,6 +10,7 @@ namespace RevitDBExplorer.Domain.Selectors
     {
         Db,
         CurrentSelection,
+        ElementsOnScreen,
         PickFace,
         PickEdge,
         PickPoint,
@@ -48,6 +49,7 @@ namespace RevitDBExplorer.Domain.Selectors
             {
                 Selector.Db => new SnoopDatabase(),
                 Selector.CurrentSelection => new SnoopCurrentSelection(),
+                Selector.ElementsOnScreen => new SnoopElementsOnScreen(),
                 Selector.PickFace => new SnoopPick(ObjectType.Face),
                 Selector.PickEdge => new SnoopPick(ObjectType.Edge),
                 Selector.PickPoint => new SnoopPick(ObjectType.PointOnElement),
@@ -68,7 +70,7 @@ namespace RevitDBExplorer.Domain.Selectors
                 Selector.Updaters => new SnoopUpdaters(),
                 Selector.LoadedApplications => new SnoopLoadedApplications(),
                 Selector.ExternalServices => new SnoopExternalServices(),
-                Selector.VisibleInView => new VisibleInView(),
+                Selector.VisibleInView => new SnoopVisibleInView(),
                 _ => throw new NotImplementedException()
             }; ;
             return result;

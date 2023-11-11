@@ -57,7 +57,7 @@
                 <RowDefinition Height="21"/>
             </Grid.RowDefinitions>
 
-            <UniformGrid Columns="10" Margin="0 0 0 2" >
+            <UniformGrid Columns="11" Margin="0 0 0 2" >
                 <UniformGrid.Resources>
                     <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
                         <Setter Property="Background" Value="Transparent"/>
@@ -93,12 +93,15 @@
                         <TextBlock >Selection/Visible</TextBlock>
                     </StackPanel>
                 </Button>
-                <!--<Button Click="SelectorButton_Click" Tag="VisibleInView" ToolTip="Snoop all visible elements from an active view">
+                <Button Click="SelectorButton_Click" Tag="ElementsOnScreen" x:Name="cSelectorButtonScreen" ToolTip="Snoop all visible elements on the computer screen">
                     <StackPanel>
-                        <Path Height="20" Style="{StaticResource IconActiveView}" />
-                        <TextBlock >View</TextBlock>
+                        <Grid Height="20">
+                            <Path Height="20" Style="{StaticResource IconScreen}" />
+                            <Path Height="10" Style="{StaticResource IconMethod}" Margin="0 -4 0 0" />
+                        </Grid>
+                        <TextBlock>Screen</TextBlock>
                     </StackPanel>
-                </Button>-->
+                </Button>
                 <Button Click="SelectorButton_Click" Tag="Db" ToolTip="Snoop Database - all elements returned from FilteredElementCollector" >
                     <StackPanel>
                         <Path Height="20" Style="{StaticResource IconDb}"  />

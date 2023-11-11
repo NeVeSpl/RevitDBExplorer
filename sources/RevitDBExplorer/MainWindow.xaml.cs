@@ -44,7 +44,8 @@ namespace RevitDBExplorer
         private bool isWiderThan800px;
         private string mouseStatus;
         private string rdqGeneratedCSharpSyntax = "";
-
+        private Autodesk.Revit.DB.XYZ min;
+        private Autodesk.Revit.DB.XYZ max;
 
         public QueryEditorViewModel QueryEditor => queryEditorVM;
         public QueryVisualizationVM QueryVisualization => queryVisualizationVM;
@@ -168,7 +169,10 @@ namespace RevitDBExplorer
         private void IsRevitBusyDispatcher_Tick(object sender, EventArgs e)
         {
             IsRevitBusy = Application.IsRevitBussy();
-            (MouseStatus, rdvController.ScaleFactor) = Application.GetMouseStatus();                  
+            (MouseStatus,  min,  max, var isValid) = Application.GetMouseStatus();
+            cSelectorButtonScreen.IsEnabled = isValid;
+            var v = max - min;
+            rdvController.ScaleFactor = v.GetLength();
         }
         private void Dispatcher_UnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
@@ -269,7 +273,12 @@ namespace RevitDBExplorer
                             drawingVisuals.AddRange(presenter.ValueContainer.GetVisualization());                            
                         }
                     }
-                }
+                }                
+
+                //var line = Autodesk.Revit.DB.Line.CreateBound(min, max);
+                //var cd = new CurveDrawingVisual(line, new Autodesk.Revit.DB.Color(255, 0, 0));
+                //drawingVisuals.AddRange(new DrawingVisual[] { cd, new CoordinateSystemDrawingVisual(min), new CoordinateSystemDrawingVisual(max) });
+
                 rdvController.AddDrawingVisuals(drawingVisuals);
             }
         }

@@ -9,9 +9,9 @@ using RevitDBExplorer.Domain.Selectors.Base;
 
 namespace RevitDBExplorer.Domain.Selectors
 {
-    class VisibleInView : ISelector
+    internal class SnoopVisibleInView : ISelector
     {
-        public InfoAboutSource Info { get; private set; } = new("visible elements in View");
+        public InfoAboutSource Info { get; private set; } = new("visible elements in a view");
 
         public IEnumerable<SnoopableObject> Snoop(UIApplication app)
         {

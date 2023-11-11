@@ -107,7 +107,7 @@ namespace RevitDBExplorer
                 View = null;
             }
         }
-        public static (string, double) GetMouseStatus()
+        public static (string, XYZ, XYZ, bool) GetMouseStatus()
         {
             var uiView = Application.UIView;
             var view = Application.View;
@@ -124,41 +124,44 @@ namespace RevitDBExplorer
                     double dy = (double)(p.Y - rect.Bottom) / (rect.Top - rect.Bottom);
 
                     var corners = uiView.GetZoomCorners();
-                    var a = corners[0];
-                    var b = corners[1];
-                    var v = b - a;
+                    var min = corners[0];
+                    var max = corners[1];
+                    var v = max - min;
                     var l = v.GetLength();
 
                     var vr = dx * new XYZ(v.X * view.RightDirection.X, v.Y * view.RightDirection.Y, v.Z * view.RightDirection.Z);
                     var vu = dy * new XYZ(v.X * view.UpDirection.X, v.Y * view.UpDirection.Y, v.Z * view.UpDirection.Z);
-                    var vv = 1.0 * new XYZ(a.X * view.ViewDirection.X, a.Y * view.ViewDirection.Y, a.Z * view.ViewDirection.Z);
+                    var vv = 1.0 * new XYZ(min.X * view.ViewDirection.X, min.Y * view.ViewDirection.Y, min.Z * view.ViewDirection.Z);
 
-                    var q = a + vr + vu - vv;
+                    var q = min + vr + vu - vv;
+
+                    min -= vv;
+                    max -= vv;
 
                     if ((Math.Abs(view.RightDirection.X) < 0.999) && (Math.Abs(view.RightDirection.Y) < 0.999) && (Math.Abs(view.RightDirection.Z) < 0.999))
                     {
-                        return ("(?,,)", l);
+                        return ("(?,,)", min, max, false);
                     }
                     if ((Math.Abs(view.UpDirection.X) < 0.999) && (Math.Abs(view.UpDirection.Y) < 0.999) && (Math.Abs(view.UpDirection.Z) < 0.999))
                     {
-                        return ("(,?,)", l);
+                        return ("(,?,)", min, max, false);
                     }
                     if ((Math.Abs(view.ViewDirection.X) < 0.999) && (Math.Abs(view.ViewDirection.Y) < 0.999) && (Math.Abs(view.ViewDirection.Z) < 0.999))
                     {
-                        return ("(,,?)", l);
+                        return ("(,,?)", min, max, false);
                     }
 
                     if (view.ViewDirection.IsParallelTo(XYZ.BasisX))
                     {
-                        return ($"(-,--, {q.Y:f3}, {q.Z:f3})", l);
+                        return ($"(-,--, {q.Y:f3}, {q.Z:f3})", min, max, true);
                     }
                     if (view.ViewDirection.IsParallelTo(XYZ.BasisY))
                     {
-                        return ($"({q.X:f3}, -,--, {q.Z:f3})", l);
+                        return ($"({q.X:f3}, -,--, {q.Z:f3})", min, max, true);
                     }
                     if (view.ViewDirection.IsParallelTo(XYZ.BasisZ))
                     {
-                        return ($"({q.X:f3}, {q.Y:f3}, -,--)", l);
+                        return ($"({q.X:f3}, {q.Y:f3}, -,--)", min, max, true);
                     }
                 }
                 catch
@@ -166,7 +169,7 @@ namespace RevitDBExplorer
 
                 }
             }
-            return ("", 0);
+            return ("", XYZ.Zero, XYZ.Zero, false);
         }
 
 
