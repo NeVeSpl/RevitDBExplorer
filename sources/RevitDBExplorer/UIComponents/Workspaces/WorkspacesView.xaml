@@ -27,6 +27,8 @@
             <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverterHidden" WhenFalse="Hidden"/>
             <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverterHiddenInverted" WhenFalse="Visible" WhenTrue="Hidden"/>
             <converters:EnumMatchToVisibilityConverter x:Key="EnumMatchToVisibilityConverter"/>
+            <converters:StringTruncateConverter x:Key="StringTruncateConverter" MaxChars="27"/>
+            
 
             <Style TargetType="{x:Type TabItem}">
                 <Setter Property="Template">
@@ -91,7 +93,7 @@
         <controls:TabControlEx ItemsSource="{Binding Workspaces}" SelectedItem="{Binding SelectedWorkspace}" TabStripPlacement="Bottom" BorderThickness="0" Padding="0" Margin="0" Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}" >
             <controls:TabControlEx.ItemTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding Title}"  >
+                    <TextBlock Text="{Binding InfoAboutSource.ShortTitle, Converter={StaticResource StringTruncateConverter}}"  >
                         <TextBlock.ToolTip>
                             <StackPanel Orientation="Vertical">
                                 <TextBlock Text="{Binding InfoAboutSource.ShortTitle}" />

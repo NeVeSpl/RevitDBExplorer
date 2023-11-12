@@ -58,19 +58,7 @@ namespace RevitDBExplorer.UIComponents.Workspaces
                 isActive = value;
                 OnPropertyChanged();
             }
-        }
-        public string Title
-        {
-            get
-            {
-                return title;
-            }
-            set
-            {
-                title = value;
-                OnPropertyChanged();
-            }
-        }
+        }     
         public InfoAboutSource InfoAboutSource
         {
             get
@@ -177,10 +165,9 @@ namespace RevitDBExplorer.UIComponents.Workspaces
             {
                 ExplorerTree.PopulateTreeView(sourceOfObjects);
             }
-            Title = "<???>";
+           
             if (sourceOfObjects.Info is not null)
-            {
-                Title = sourceOfObjects.Info.ShortTitle.Truncate(27);
+            {             
                 InfoAboutSource = sourceOfObjects.Info;
             }
         }
