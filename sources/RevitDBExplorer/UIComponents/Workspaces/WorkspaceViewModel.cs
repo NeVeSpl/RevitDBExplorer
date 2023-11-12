@@ -201,5 +201,8 @@ namespace RevitDBExplorer.UIComponents.Workspaces
         {
             openRDSWithGivenScript(scriptText);
         }
+
+
+        public void RefreshTab() => OnPropertyChanged(nameof(InfoAboutSource));
     }
 }

@@ -13,7 +13,10 @@
              xmlns:componentCAndC="clr-namespace:RevitDBExplorer.UIComponents.CommandAndControl"    
              xmlns:controls="clr-namespace:RevitDBExplorer.WPF.Controls"    
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450"
+             d:DesignWidth="800"
+             SizeChanged="Grid_SizeChanged"
+             >
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -27,8 +30,8 @@
             <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverterHidden" WhenFalse="Hidden"/>
             <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverterHiddenInverted" WhenFalse="Visible" WhenTrue="Hidden"/>
             <converters:EnumMatchToVisibilityConverter x:Key="EnumMatchToVisibilityConverter"/>
-            <converters:StringTruncateConverter x:Key="StringTruncateConverter" MaxChars="27"/>
-            
+            <converters:StringTruncateConverter x:Key="StringTruncateConverter" MaxChars="{Binding TabTitleMaxLength}"/>
+
 
             <Style TargetType="{x:Type TabItem}">
                 <Setter Property="Template">

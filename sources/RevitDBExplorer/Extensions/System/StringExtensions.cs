@@ -74,7 +74,9 @@ namespace System
         public static string Truncate(this string value, int maxChars)
         {
             if (value == null) return null;
-            return value.Length <= maxChars ? value : value.Substring(0, maxChars) + "...";
+            if (maxChars <= 3) return value;
+
+            return value.Length <= maxChars ? value : value.Substring(0, maxChars - 3) + "...";
         }
 
         public static string ReplaceMany(this string input, IEnumerable<(string, string)> replacements)

@@ -10,5 +10,13 @@ namespace RevitDBExplorer.UIComponents.Workspaces
         {
             InitializeComponent();
         }
+
+        private void Grid_SizeChanged(object sender, System.Windows.SizeChangedEventArgs e)
+        {
+            if (this.DataContext is WorkspacesViewModel workspacesViewModel) 
+            {
+                workspacesViewModel.Width = e.NewSize.Width;
+            }
+        }
     }
 }

@@ -24,6 +24,8 @@ namespace RevitDBExplorer.UIComponents.Workspaces
         private readonly ObservableCollection<WorkspaceViewModel> workspaces = new ObservableCollection<WorkspaceViewModel>();
         private WorkspaceViewModel selectedWorkspace;
         private double firstColumnWidth;
+        private int tabTitleMaxLength =27;
+        private double width;
 
         public event Action<SelectedItemChangedEventArgs> SelectedItemsChanged;
         public ObservableCollection<WorkspaceViewModel> Workspaces => workspaces;
@@ -38,6 +40,30 @@ namespace RevitDBExplorer.UIComponents.Workspaces
                 selectedWorkspace = value;
                 SelectedItemsChanged?.Invoke(new SelectedItemChangedEventArgs(null, null));
                 OnPropertyChanged();
+            }
+        }
+        public int TabTitleMaxLength
+        {
+            get
+            {
+                return tabTitleMaxLength;
+            }
+            set
+            {
+                tabTitleMaxLength = value;
+                OnPropertyChanged();
+            }
+        }
+        public double Width
+        {
+            get
+            {
+                return width;
+            }
+            set
+            {
+                width = value;                
+                AdjustTabTitleLength();
             }
         }
 
@@ -94,6 +120,7 @@ namespace RevitDBExplorer.UIComponents.Workspaces
         {
             selectedWorkspace = workspaceViewModel;
             OnPropertyChanged(nameof(SelectedWorkspace));
+            AdjustTabTitleLength();
         }
         private WorkspaceViewModel GetFirstAvailableWorkspace()
         {
@@ -152,6 +179,20 @@ namespace RevitDBExplorer.UIComponents.Workspaces
         private void Workspace_ListSelectedItemChanged(ListSelectedItemChangedEventArgs eventArgs)
         {
             SelectedItemsChanged?.Invoke(new SelectedItemChangedEventArgs(null, eventArgs.NewOne));
+        }
+
+        public void AdjustTabTitleLength()
+        {
+            if (!double.IsNaN(width))
+            {
+                var activeWorkspaces = Workspaces.Count(x => x.IsActive == true);
+                var availableWidth = Math.Max(width - 222, 200);
+
+
+                int magicValue = (int)Math.Floor((availableWidth / activeWorkspaces) / 5.55) - 3;
+                TabTitleMaxLength = Math.Max(magicValue, 7);
+                Workspaces.ForEach(x => x.RefreshTab());
+            }
         }
     }
 
