@@ -12,7 +12,7 @@ namespace SetupBuilder
         static void Main(string[] args)
         {
             var fileVersionInfo = FileVersionInfo.GetVersionInfo($@"..\..\..\sources\bin\R2023\RevitDBExplorer.dll");
-            var productVersion = fileVersionInfo.ProductVersion;
+            var productVersion = fileVersionInfo.FileVersion;
 
             var project = new Project()
             {
