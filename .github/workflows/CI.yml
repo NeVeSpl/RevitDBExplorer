@@ -59,6 +59,9 @@ jobs:
       with:
         path: sources/RevitDBExplorer/obj
 
+    - name: Restore Packages for .net 7.0
+      run: msbuild /r /p:Configuration=R2025
+
     - name: Build Project for R2025     
       working-directory: sources/RevitDBExplorer/
       run: |
