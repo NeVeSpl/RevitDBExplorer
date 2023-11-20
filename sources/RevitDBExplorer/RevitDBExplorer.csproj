@@ -1,8 +1,6 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
-	<PropertyGroup>
-		<ProjectGuid>{BB69E885-0617-4556-A983-FD783C6669BA}</ProjectGuid>
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>	
 		<TargetFramework>net48</TargetFramework>
-		<ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
 		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
 		<LangVersion>11.0</LangVersion>
 		<RevitYear>2024</RevitYear>
@@ -14,7 +12,9 @@
 		<OutputPath>..\bin\$(Configuration)\</OutputPath>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<UseWPF>true</UseWPF>
-		<Configurations>Debug;Debug2024;R2023;R2022;R2021;R2024;</Configurations>
+		<Configurations>D2024;D2025;R2021;R2022;R2023;R2024;R2025;</Configurations>
+		<OutputType>Library</OutputType>
+		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
 		<DebugType>full</DebugType>
@@ -26,64 +26,118 @@
 		<StartupObject />
 		<Version>2.1.0.0</Version>
 	</PropertyGroup>
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'R2023|AnyCPU'">
-		<DefineConstants>TRACE;R2021b, R2022b, R2023b, R2023e, R2024e</DefineConstants>
-		<Optimize>true</Optimize>
-		<DebugType>pdbonly</DebugType>
-		<RevitYear>2023</RevitYear>
-	</PropertyGroup>
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'R2022|AnyCPU'">
-		<DefineConstants>TRACE;R2021b, R2022b, R2022e, R2023e, R2024e</DefineConstants>
-		<Optimize>true</Optimize>
-		<DebugType>pdbonly</DebugType>
-		<RevitYear>2022</RevitYear>
-	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'R2021|AnyCPU'">
-		<DefineConstants>TRACE;R2021b, R2021e, R2022e, R2023e, R2024e</DefineConstants>
+		<DefineConstants>TRACE;R2021b, R2021e, R2022e, R2023e, R2024e, R2025e</DefineConstants>
 		<Optimize>true</Optimize>
 		<DebugType>pdbonly</DebugType>
 		<RevitYear>2021</RevitYear>
 	</PropertyGroup>
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug2024|AnyCPU'">
-		<DebugSymbols>true</DebugSymbols>
-		<DefineConstants>TRACE;DEBUG;R2021b, R2022b, R2023b, R2024b, R2024e</DefineConstants>
-		<DebugType>full</DebugType>
-		<RevitYear>2024</RevitYear>
-		<XamlDebuggingInformation>True</XamlDebuggingInformation>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'R2022|AnyCPU'">
+		<DefineConstants>TRACE;R2021b, R2022b, R2022e, R2023e, R2024e, R2025e</DefineConstants>
+		<Optimize>true</Optimize>
+		<DebugType>pdbonly</DebugType>
+		<RevitYear>2022</RevitYear>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'R2023|AnyCPU'">
+		<DefineConstants>TRACE;R2021b, R2022b, R2023b, R2023e, R2024e, R2025e</DefineConstants>
+		<Optimize>true</Optimize>
+		<DebugType>pdbonly</DebugType>
+		<RevitYear>2023</RevitYear>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'R2024|AnyCPU'">
-		<DefineConstants>TRACE;R2021b, R2022b, R2023b, R2024b, R2024e</DefineConstants>
+		<DefineConstants>TRACE;R2021b, R2022b, R2023b, R2024b, R2024e, R2025e</DefineConstants>
 		<Optimize>true</Optimize>
 		<DebugType>pdbonly</DebugType>
 		<RevitYear>2024</RevitYear>
 	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'R2025|AnyCPU'">
+		<DefineConstants>TRACE;R2021b, R2022b, R2023b, R2024b, R2025b, R2025e</DefineConstants>
+		<Optimize>true</Optimize>
+		<DebugType>pdbonly</DebugType>
+		<RevitYear>2025</RevitYear>
+		<TargetFramework>net7.0-windows</TargetFramework>
+	</PropertyGroup>
+	
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'D2024|AnyCPU'">
+		<DebugSymbols>true</DebugSymbols>
+		<DefineConstants>TRACE;DEBUG;R2021b, R2022b, R2023b, R2024b, R2024e, R2025e</DefineConstants>
+		<DebugType>full</DebugType>
+		<RevitYear>2024</RevitYear>
+		<XamlDebuggingInformation>True</XamlDebuggingInformation>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'D2025|AnyCPU'">
+		<DebugSymbols>true</DebugSymbols>
+		<DefineConstants>TRACE;DEBUG;R2021b, R2022b, R2023b, R2024b, R2025b, R2025e</DefineConstants>
+		<DebugType>full</DebugType>
+		<RevitYear>2025</RevitYear>
+		<XamlDebuggingInformation>True</XamlDebuggingInformation>
+		<TargetFramework>net7.0-windows</TargetFramework>
+	</PropertyGroup>
+	
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="7.0.0" />
 		<PackageReference Include="CircularBuffer" Version="1.3.0" />
 		<PackageReference Include="LoxSmoke.DocXml" Version="3.5.0" />
 		<PackageReference Include="NSourceGenerators.CodeToString" Version="0.3.0" />
-		<PackageReference Include="RevitDBExplorer.Augmentations" Version="0.6.0.$(RevitYear)" />
-		<PackageReference Include="RevitDBScripting" Version="1.0.0.$(RevitYear)" />
+		<PackageReference Include="RevitDBExplorer.Augmentations" Version="0.7.0.$(RevitYear)" />
+		<PackageReference Include="RevitDBScripting" Version="1.1.0.$(RevitYear)" />
 		<PackageReference Include="SimMetrics.Net" Version="1.0.5" />
-		<PackageReference Include="System.Buffers" Version="4.5.1" />
-		<PackageReference Include="System.Memory" Version="4.5.5" />
-		<PackageReference Include="System.Net.Http.Json" Version="7.0.1" />
-		<PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />
-		<PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.0.0" />
-		<PackageReference Include="System.Text.Encodings.Web" Version="7.0.0" />
-		<PackageReference Include="System.Text.Json" Version="7.0.2" />
-		<PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
-		<PackageReference Include="System.ValueTuple" Version="4.5.0" />
-		<PackageReference Include="TrieNet" Version="1.0.3.26316" />
+		
+		
 	</ItemGroup>
-	<ItemGroup>
-		<Reference Include="Microsoft.Expression.Interactions">
-			<HintPath>..\..\binaries\revit\2023\Microsoft.Expression.Interactions.dll</HintPath>
-			<Private>False</Private>
-		</Reference>
+
+	<Choose>
+		<When Condition="$(DefineConstants.Contains('R2024e'))">
+			<ItemGroup>
+				<PackageReference Include="TrieNet">
+					<Version>1.0.3.26316</Version>
+				</PackageReference>
+				<PackageReference Include="System.Buffers" Version="4.5.1" />
+				<PackageReference Include="System.Memory" Version="4.5.5" />
+				<PackageReference Include="System.Net.Http.Json" Version="7.0.1" />
+				<PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />
+				<PackageReference Include="System.Text.Encodings.Web" Version="7.0.0" />
+				<PackageReference Include="System.Text.Json" Version="7.0.2" />
+				<PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
+				<PackageReference Include="System.ValueTuple" Version="4.5.0" />
+			</ItemGroup>
+			<ItemGroup>
+				<Reference Include="System.Data.DataSetExtensions" />
+				<Reference Include="System.Net.Http" />
+				<Reference Include="System.Windows" />
+				<Reference Include="System.Windows.Forms" />				
+				<Reference Include="System.Xaml" />
+				<Reference Include="WindowsBase" />
+				<Reference Include="PresentationCore" />
+				<Reference Include="PresentationFramework" />
+				<Reference Include="Microsoft.Expression.Interactions">
+					<HintPath>..\..\binaries\revit\2023\Microsoft.Expression.Interactions.dll</HintPath>
+					<Private>False</Private>
+				</Reference>
+				<Reference Include="System.Windows.Interactivity">
+					<HintPath>..\..\binaries\revit\2023\System.Windows.Interactivity.dll</HintPath>
+					<Private>False</Private>
+				</Reference>
+			</ItemGroup>
+		</When>
+		<When Condition="$(DefineConstants.Contains('R2025b'))">
+			<ItemGroup>
+				<PackageReference Include="TrieNet.Core">
+					<Version>1.0.4</Version>
+				</PackageReference>
+				<!--<PackageReference Include="Microsoft.Xaml.Behaviors.Wpf">
+					<Version>1.1.77</Version>
+				</PackageReference>-->
+			</ItemGroup>
+		</When>
+	</Choose>
+
+
+
+	<ItemGroup>		
 		<Reference Include="RevitAddInUtility">
-			<HintPath>..\..\binaries\revit\2023\RevitAddInUtility.dll</HintPath>
+			<HintPath>..\..\binaries\revit\$(RevitYear)\RevitAddInUtility.dll</HintPath>
 			<Private>False</Private>
 		</Reference>
 		<Reference Include="RevitAPI">
@@ -98,19 +152,8 @@
 			<HintPath>..\..\binaries\revit\$(RevitYear)\AdWindows.dll</HintPath>
 			<Private>False</Private>
 		</Reference>
-		<Reference Include="System.Windows" />
-		<Reference Include="System.Windows.Forms" />
-		<Reference Include="System.Windows.Interactivity">
-			<HintPath>..\..\binaries\revit\2023\System.Windows.Interactivity.dll</HintPath>
-			<Private>False</Private>
-		</Reference>
-		<Reference Include="System.Data.DataSetExtensions" />
-		<Reference Include="System.Net.Http" />
-		<Reference Include="System.Xaml" />
-		<Reference Include="WindowsBase" />
-		<Reference Include="PresentationCore" />
-		<Reference Include="PresentationFramework" />
 	</ItemGroup>
+	
 	<ItemGroup>
 		<Resource Include="..\..\documentation\images\RDBE.ico">
 			<Link>Resources\RDBE.ico</Link>

@@ -1,9 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<TargetFramework>net48</TargetFramework>
+		<TargetFramework>netstandard2.0</TargetFramework>
 		<LangVersion>10.0</LangVersion>				
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-		<Version>1.7.0</Version>
+		<Version>1.8.1</Version>
 		<Authors>NeVeSpl</Authors>
 		<Company>NeVeSpl</Company>
 		<Copyright>(c) Revit Database Explorer</Copyright>
@@ -12,7 +12,7 @@
 		<RepositoryUrl>https://github.com/NeVeSpl/RevitDBExplorer</RepositoryUrl>		
 		<OutputPath>..\bin\$(Configuration)\</OutputPath>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>		
-		<Configurations>Debug;Release;</Configurations>
+		<Configurations>Debug;Release;DebugNetCore;ReleaseNetCore;</Configurations>
 		<PackageOutputPath>..\..\nugets\</PackageOutputPath>		
 	</PropertyGroup>
 	
@@ -20,6 +20,8 @@
 		<DebugType>full</DebugType>
 		<DefineConstants>TRACE;DEBUG;</DefineConstants>	
 	</PropertyGroup>
+
+	
 	
 	<PropertyGroup>
 		<StartupObject />

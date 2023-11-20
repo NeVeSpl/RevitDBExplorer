@@ -53,6 +53,11 @@ jobs:
       working-directory: sources/RevitDBExplorer/
       run: |
           msbuild /p:Configuration=R2024
+	
+	- name: Build Project for R2025     
+      working-directory: sources/RevitDBExplorer/
+      run: |
+          msbuild /p:Configuration=R2025
           
     - name: Create Code Signing Certificate
       run: |

@@ -3,8 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:interactivity="http://schemas.microsoft.com/expression/2010/interactivity"
-             xmlns:interactions="http://schemas.microsoft.com/expression/2010/interactions"           
+            
              xmlns:local="clr-namespace:RevitDBExplorer.UIComponents.QueryVisualization"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
@@ -13,16 +12,7 @@
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <WrapPanel >
-                        <interactivity:Interaction.Behaviors>
-                            <interactions:FluidMoveBehavior Duration="0:0:0.5" AppliesTo="Children">
-                                <interactions:FluidMoveBehavior.EaseY>
-                                    <CubicEase EasingMode="EaseInOut"/>
-                                </interactions:FluidMoveBehavior.EaseY>
-                                <interactions:FluidMoveBehavior.EaseX>
-                                    <CubicEase EasingMode="EaseInOut"/>
-                                </interactions:FluidMoveBehavior.EaseX>
-                            </interactions:FluidMoveBehavior>
-                        </interactivity:Interaction.Behaviors>
+                       
                     </WrapPanel>
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>

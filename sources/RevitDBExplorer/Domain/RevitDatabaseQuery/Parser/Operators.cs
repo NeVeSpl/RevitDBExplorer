@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using System.Reactive;
 using Autodesk.Revit.DB;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md

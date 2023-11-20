@@ -38,14 +38,14 @@ namespace SetupBuilder
 
             project.Dirs = new Dir[]
             {
-                new Dir(@"%AppDataFolder%\Autodesk\Revit\Addins", CreateDirFor("2021"), CreateDirFor("2022"), CreateDirFor("2023"), CreateDirFor("2024"))
+                new Dir(@"%AppDataFolder%\Autodesk\Revit\Addins", CreateDirFor(2021), CreateDirFor(2022), CreateDirFor(2023), CreateDirFor(2024), CreateDirFor(2025))
             };
 
             project.RemoveDialogsBetween(NativeDialogs.WelcomeDlg, NativeDialogs.InstallDirDlg);
             Compiler.BuildMsi(project);
         }
 
-        readonly static string[] files = new string[]
+        readonly static string[] filesNet48 = new string[]
         {
             "CircularBuffer.dll",
             "DocXml.dll",
@@ -92,9 +92,46 @@ namespace SetupBuilder
             "System.ValueTuple.dll",
             "TrieNet.dll"
         };
-        static Dir CreateDirFor(string year)
+        readonly static string[] filesNet70 = new string[]
         {
-            return new Dir(year,
+            "CircularBuffer.dll",
+            "DocXml.dll",
+            "Humanizer.dll",
+            "ICSharpCode.AvalonEdit.dll",
+            "Microsoft.Bcl.AsyncInterfaces.dll",
+            "Microsoft.CodeAnalysis.AnalyzerUtilities.dll",
+            "Microsoft.CodeAnalysis.CSharp.dll",
+            "Microsoft.CodeAnalysis.CSharp.Features.dll",
+            "Microsoft.CodeAnalysis.CSharp.Scripting.dll",
+            "Microsoft.CodeAnalysis.CSharp.Workspaces.dll",
+            "Microsoft.CodeAnalysis.dll",
+            "Microsoft.CodeAnalysis.Features.dll",
+            "Microsoft.CodeAnalysis.Scripting.dll",
+            "Microsoft.CodeAnalysis.Workspaces.dll",
+            "Microsoft.DiaSymReader.dll",
+            "RevitDBExplorer.dll",
+            "RevitDBExplorer.dll.config",
+            "RevitDBExplorer.API.dll",
+            "RevitDBExplorer.Augmentations.dll",
+            "RevitDBScripting.dll",
+            "RoslynPad.Editor.Windows.dll",
+            "RoslynPad.Roslyn.dll",
+            "RoslynPad.Roslyn.Windows.dll",
+            "SimMetrics.Net.dll",
+            "System.Composition.AttributedModel.dll",
+            "System.Composition.Convention.dll",
+            "System.Composition.Hosting.dll",
+            "System.Composition.Runtime.dll",
+            "System.Composition.TypedParts.dll",
+            "System.Reactive.dll",
+            "System.Reactive.Linq.dll",       
+            "TrieNet.dll"
+        };
+
+        static Dir CreateDirFor(int year)
+        {
+            var files = year >= 2025 ? filesNet70: filesNet48;
+            return new Dir(year.ToString(),
                            new File($@"..\..\..\sources\bin\R{year}\RevitDBExplorer.addin"),
                            new Dir("RevitDBExplorer", files.Select(x => new File($@"..\..\..\sources\bin\R{year}\{x}")).ToArray())
                    );

@@ -30,10 +30,15 @@ namespace RevitDBExplorer.Domain.DataModel.MemberTemplates
                 SnoopableMemberTemplate<ForgeTypeId>.Create((doc, forgeId) => ParameterUtils.IsBuiltInParameter(forgeId)),
                 SnoopableMemberTemplate<ForgeTypeId>.Create((doc, forgeId) => ParameterUtils.GetBuiltInParameter(forgeId), x=> ParameterUtils.IsBuiltInParameter(x)),
                 SnoopableMemberTemplate<ForgeTypeId>.Create((doc, forgeId) => ParameterUtils.IsBuiltInGroup(forgeId), x => true),
-                SnoopableMemberTemplate<ForgeTypeId>.Create((doc, forgeId) => ParameterUtils.GetBuiltInParameterGroup(forgeId), x=> ParameterUtils.IsBuiltInGroup(x)),
+                
 
                 SnoopableMemberTemplate<ForgeTypeId>.Create((doc, forgeId) => UnitUtils.IsMeasurableSpec(forgeId)),
 #endif
+
+#if R2022b && R2024e
+                SnoopableMemberTemplate<ForgeTypeId>.Create((doc, forgeId) => ParameterUtils.GetBuiltInParameterGroup(forgeId), x => ParameterUtils.IsBuiltInGroup(x)),
+#endif
+
                 SnoopableMemberTemplate<ForgeTypeId>.Create((doc, forgeId) => UnitUtils.IsSymbol(forgeId)),
                 SnoopableMemberTemplate<ForgeTypeId>.Create((doc, forgeId) => UnitUtils.IsUnit(forgeId)),
 #if R2022b
