@@ -62,6 +62,8 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers.Base
             new RevitApiEventArgsHandler(),   
             new WorksetIdHandler(),
             new FailureDefinitionIdHandler(),
+            new SpatialElementBoundaryOptionsHandler(),
+            new BoundarySegmentHandler(),
             
             // generic
             new ElementHandler(),
