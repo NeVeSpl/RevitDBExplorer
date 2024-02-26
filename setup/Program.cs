@@ -11,7 +11,7 @@ namespace SetupBuilder
     {
         static void Main(string[] args)
         {
-            var fileVersionInfo = FileVersionInfo.GetVersionInfo($@"..\..\..\sources\bin\R2023\RevitDBExplorer.dll");
+            var fileVersionInfo = FileVersionInfo.GetVersionInfo($@"..\..\..\sources\bin\R2025\RevitDBExplorer.dll");
             var productVersion = fileVersionInfo.FileVersion;
 
             var project = new Project()
@@ -130,10 +130,9 @@ namespace SetupBuilder
 
         static Dir CreateDirFor(int year)
         {
-            var files = year >= 2025 ? filesNet70: filesNet48;
             return new Dir(year.ToString(),
                            new File($@"..\..\..\sources\bin\R{year}\RevitDBExplorer.addin"),
-                           new Dir("RevitDBExplorer", files.Select(x => new File($@"..\..\..\sources\bin\R{year}\{x}")).ToArray())
+                           new Dir("RevitDBExplorer", new DirFiles($@"..\..\..\sources\bin\R{year}\*.dll"))
                    );
         }
     }    
