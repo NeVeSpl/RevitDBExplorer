@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 using Autodesk.Revit.DB;
@@ -29,7 +31,17 @@ namespace RevitDBExplorer
 
         public Application()
         {
-            
+            AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
+        }
+
+        private System.Reflection.Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
+        {
+            var name = new AssemblyName(args.Name);
+            if (name.Name == "System.Runtime.CompilerServices.Unsafe")
+            {
+                return typeof(Unsafe).Assembly;
+            }
+            return null;
         }
 
 
