@@ -55,7 +55,7 @@
 		<Optimize>true</Optimize>
 		<DebugType>pdbonly</DebugType>
 		<RevitYear>2025</RevitYear>
-		<TargetFramework>net7.0-windows</TargetFramework>
+		<TargetFramework>net8.0-windows</TargetFramework>
 	</PropertyGroup>
 	
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'D2024|AnyCPU'">
@@ -71,7 +71,7 @@
 		<DebugType>full</DebugType>
 		<RevitYear>2025</RevitYear>
 		<XamlDebuggingInformation>True</XamlDebuggingInformation>
-		<TargetFramework>net7.0-windows</TargetFramework>
+		<TargetFramework>net8.0-windows</TargetFramework>
 	</PropertyGroup>
 	
 
@@ -83,8 +83,6 @@
 		<PackageReference Include="RevitDBExplorer.Augmentations" Version="0.7.0.$(RevitYear)" />
 		<PackageReference Include="RevitDBScripting" Version="1.1.0.$(RevitYear)" />
 		<PackageReference Include="SimMetrics.Net" Version="1.0.5" />
-		
-		
 	</ItemGroup>
 
 	<Choose>
