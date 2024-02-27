@@ -51,7 +51,7 @@
 		<Optimize>true</Optimize>
 		<DebugType>pdbonly</DebugType>
 		<RevitYear>2025</RevitYear>
-		<TargetFramework>net7.0-windows</TargetFramework>
+		<TargetFramework>net8.0-windows</TargetFramework>
 	</PropertyGroup>	
 	
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'D2024|AnyCPU'">
@@ -65,7 +65,7 @@
 		<DefineConstants>TRACE;DEBUG;R2021b, R2022b, R2023b, R2024b, R2025b, R2025e</DefineConstants>
 		<DebugType>full</DebugType>
 		<RevitYear>2025</RevitYear>
-		<TargetFramework>net7.0-windows</TargetFramework>
+		<TargetFramework>net8.0-windows</TargetFramework>
 	</PropertyGroup>
 	
 
