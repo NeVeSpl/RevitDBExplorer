@@ -9,14 +9,21 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RevitDBExplorer.Domain.RevitDatabaseQuery.Parser;
 using RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands;
 using RevitTestLibrary;
-using RevitTestLibrary.MSTest;
+
+[assembly: RevitPath("D:\\Autodesk\\Revit Preview\\Revit Preview Release\\Revit.exe")]
 
 namespace RevitDBExplorer.Tests.RDQ
 {
-    [TestClass]
-    [RunOn(RevitVer.Revit2023)]
+    [TestClass]    
     public class CommandParserTests
     {
+
+
+
+
+
+
+
         [RevitTestMethod]
         [DataRow("BuiltInCategory.OST_Walls")]
         [DataRow("OST_Walls")]
@@ -24,7 +31,7 @@ namespace RevitDBExplorer.Tests.RDQ
         [DataRow("c:BuiltInCategory.OST_Walls")]
         [DataRow("c:OST_Walls")]
         [DataRow("c:Walls")]
-        public void CanParseCategoryCommand(UIApplication uia, string cmd)
+        public void CanParseCategoryCommand(RevitContext revitContext, string cmd)
         {           
             var result = CommandParser.Parse(cmd).First();
             Assert.IsInstanceOfType(result, typeof(CategoryCmd));
@@ -37,7 +44,7 @@ namespace RevitDBExplorer.Tests.RDQ
         [RevitTestMethod]
         [DataRow("Wall")]       
         [DataRow("t:Wall")]     
-        public void CanParseClassCommand(UIApplication uia, string cmd)
+        public void CanParseClassCommand(RevitContext revitContext, string cmd)
         {
             var result = CommandParser.Parse(cmd).First();
             Assert.IsInstanceOfType(result, typeof(ClassCmd));
@@ -51,7 +58,7 @@ namespace RevitDBExplorer.Tests.RDQ
         [RevitTestMethod]
         [DataRow("123456")]
         [DataRow("i:123456")]
-        public void CanParseElementIdCommand(UIApplication uia, string cmd)
+        public void CanParseElementIdCommand(RevitContext revitContext, string cmd)
         {
             var result = CommandParser.Parse(cmd).First();
             Assert.IsInstanceOfType(result, typeof(ElementIdCmd));
@@ -65,7 +72,7 @@ namespace RevitDBExplorer.Tests.RDQ
         [DataRow("element type")]
         [DataRow("elementtype")]
         [DataRow("type")]
-        public void CanParseElementTypeCommand(UIApplication uia, string cmd)
+        public void CanParseElementTypeCommand(RevitContext revitContext, string cmd)
         {
             var result = CommandParser.Parse(cmd).First();
             Assert.IsInstanceOfType(result, typeof(ElementTypeCmd));
@@ -74,9 +81,9 @@ namespace RevitDBExplorer.Tests.RDQ
         [RevitTestMethod]
         [DataRow("Level 1")]
         [DataRow("l:Level 1")] 
-        public void CanParseLevelCommand(UIApplication uia, string cmd)
+        public void CanParseLevelCommand(RevitContext revitContext, string cmd)
         {
-            var document = uia.Application.NewProjectDocument(UnitSystem.Metric);
+            var document = revitContext.UIApplication.Application.NewProjectDocument(UnitSystem.Metric);
 
             
             CommandParser.LoadDocumentSpecificData(document);
@@ -93,7 +100,7 @@ namespace RevitDBExplorer.Tests.RDQ
         [RevitTestMethod]
         [DataRow("W1")]
         [DataRow("n:W1")]
-        public void CanParseNameCommand(UIApplication uia, string cmd)
+        public void CanParseNameCommand(RevitContext revitContext, string cmd)
         { 
             var result = CommandParser.Parse(cmd).First();
             Assert.IsInstanceOfType(result, typeof(ParameterCmd));
@@ -110,7 +117,7 @@ namespace RevitDBExplorer.Tests.RDQ
         [RevitTestMethod]
         [DataRow("not element type")]     
         [DataRow("not type")]
-        public void CanParseNotElementTypeCommand(UIApplication uia, string cmd)
+        public void CanParseNotElementTypeCommand(RevitContext revitContext, string cmd)
         {
             var result = CommandParser.Parse(cmd).First();
             Assert.IsInstanceOfType(result, typeof(NotElementTypeCmd));
@@ -120,7 +127,7 @@ namespace RevitDBExplorer.Tests.RDQ
         [DataRow("DOOR_NUMBER = 7")]
         [DataRow("BuiltInParameter.DOOR_NUMBER = 7")]
         [DataRow("mARK = 7")]
-        public void CanParseParameterCommand(UIApplication uia, string cmd)
+        public void CanParseParameterCommand(RevitContext revitContext, string cmd)
         {
             var result = CommandParser.Parse(cmd).First();
             Assert.IsInstanceOfType(result, typeof(ParameterCmd));
@@ -137,10 +144,10 @@ namespace RevitDBExplorer.Tests.RDQ
         [RevitTestMethod]
         [DataRow("myRoom")]
         [DataRow("r:myRoom")]
-        public void CanParseRoomCommand(UIApplication uia, string cmd)
+        public void CanParseRoomCommand(RevitContext revitContext, string cmd)
         {
             var path = Path.Combine(GetDir(), @"..\..\assets\testmodel_rdq.rvt");
-            var document = uia.Application.OpenDocumentFile(path);
+            var document = revitContext.UIApplication.Application.OpenDocumentFile(path);
             
             CommandParser.LoadDocumentSpecificData(document);
 
@@ -157,10 +164,10 @@ namespace RevitDBExplorer.Tests.RDQ
         [RevitTestMethod]
         [DataRow("mySelectionFilter")]
         [DataRow("f:mySelectionFilter")]
-        public void CanParseRuleBasedFilterCommand(UIApplication uia, string cmd)
+        public void CanParseRuleBasedFilterCommand(RevitContext revitContext, string cmd)
         {
             var path = Path.Combine(GetDir(), @"..\..\assets\testmodel_rdq.rvt");
-            var document = uia.Application.OpenDocumentFile(path);
+            var document = revitContext.UIApplication.Application.OpenDocumentFile(path);
      
             CommandParser.LoadDocumentSpecificData(document);
 
@@ -177,7 +184,7 @@ namespace RevitDBExplorer.Tests.RDQ
         [RevitTestMethod]
         [DataRow("StructuralType.Brace")]
         [DataRow("s:Brace")]
-        public void CanParseStructuralTypeCommand(UIApplication uia, string cmd)
+        public void CanParseStructuralTypeCommand(RevitContext revitContext, string cmd)
         { 
             var result = CommandParser.Parse(cmd).First();
             Assert.IsInstanceOfType(result, typeof(StructuralTypeCmd));
@@ -191,7 +198,7 @@ namespace RevitDBExplorer.Tests.RDQ
         [RevitTestMethod]
         [DataRow("visible")]
         [DataRow("visible in view")]
-        public void CanParseVisibleInViewCommand(UIApplication uia, string cmd)
+        public void CanParseVisibleInViewCommand(RevitContext revitContext, string cmd)
         {
             var result = CommandParser.Parse(cmd).First();
             Assert.IsInstanceOfType(result, typeof(VisibleInViewCmd));
@@ -206,8 +213,11 @@ namespace RevitDBExplorer.Tests.RDQ
 
 
         public static string GetDir()
-        {           
-            string codeBase = Assembly.GetExecutingAssembly().CodeBase;
+        {
+            return "G:\\RevitDBExplorer\\tests\\bin\\Debug";
+
+            var asm = Assembly.GetExecutingAssembly();
+            string codeBase = asm.CodeBase;
             UriBuilder uri = new UriBuilder(codeBase);
             string path = Uri.UnescapeDataString(uri.Path);
             return Path.GetDirectoryName(path);            

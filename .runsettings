@@ -1,7 +1,0 @@
-﻿<RunSettings>
-  <MSTest> 
-    <AssemblyResolution>
-      <Directory path="D:\Autodesk\Revit 2023\" includeSubDirectories="false"/>
-    </AssemblyResolution>
-  </MSTest>
-</RunSettings>

@@ -3,12 +3,10 @@ using Autodesk.Revit.UI;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RevitDBExplorer.Domain.RevitDatabaseQuery;
 using RevitTestLibrary;
-using RevitTestLibrary.MSTest;
 
 namespace RevitDBExplorer.Tests
 {
-    [TestClass]
-    [RunOn(RevitVer.Revit2023)]
+    [TestClass]    
     public class QueryParserTests
     {
         [RevitTestMethod]
@@ -16,7 +14,7 @@ namespace RevitDBExplorer.Tests
         [DataRow("visible ,")]
         [DataRow("visible; ")]
         [DataRow(" , visible , ")]
-        public void CanParseSingleCommand(UIApplication uia, string query)
+        public void CanParseSingleCommand(RevitContext revitContext, string query)
         {           
             var result = QueryParser.Parse(query).ToList();
             Assert.AreEqual("visible", result[0].Text);
@@ -27,7 +25,7 @@ namespace RevitDBExplorer.Tests
         [DataRow("visible, mark = 1")]
         [DataRow("visible, mark = 1 ,")] 
         [DataRow(",visible, mark = 1 ,")]
-        public void CanParseTwoCommands(UIApplication uia, string query)
+        public void CanParseTwoCommands(RevitContext revitContext, string query)
         {
             var result = QueryParser.Parse(query).ToList();
             Assert.AreEqual("visible", result[0].Text);
@@ -38,7 +36,7 @@ namespace RevitDBExplorer.Tests
         [RevitTestMethod]
         [DataRow("mark = 1,00,view")]
         [DataRow(",mark = 1,00,view,")]   
-        public void CanParseDecimalWithComma(UIApplication uia, string query)
+        public void CanParseDecimalWithComma(RevitContext revitContext, string query)
         {
             var result = QueryParser.Parse(query).ToList();
             Assert.AreEqual("mark = 1,00", result[0].Text);
@@ -49,7 +47,7 @@ namespace RevitDBExplorer.Tests
         [RevitTestMethod]
         [DataRow("mark = 1,00,12345")]
         [DataRow(",mark = 1,00,12345,")]
-        public void CanParseDecimalWithCommaFollowedByInteger(UIApplication uia, string query)
+        public void CanParseDecimalWithCommaFollowedByInteger(RevitContext revitContext, string query)
         {
             var result = QueryParser.Parse(query).ToList();
             Assert.AreEqual("mark = 1,00", result[0].Text);
@@ -59,7 +57,7 @@ namespace RevitDBExplorer.Tests
 
         [RevitTestMethod]
         [DataRow(",mark = 1,00m,view,")]
-        public void CanParseDecimalWithCommaAndUnit(UIApplication uia, string query)
+        public void CanParseDecimalWithCommaAndUnit(RevitContext revitContext, string query)
         {
             var result = QueryParser.Parse(query).ToList();
             Assert.AreEqual("mark = 1,00m", result[0].Text);
@@ -69,7 +67,7 @@ namespace RevitDBExplorer.Tests
 
         [RevitTestMethod]
         [DataRow(",mark = 1,00m,12234,")]
-        public void CanParseDecimalWithCommaAndUnitFollowedByInteger(UIApplication uia, string query)
+        public void CanParseDecimalWithCommaAndUnitFollowedByInteger(RevitContext revitContext, string query)
         {
             var result = QueryParser.Parse(query).ToList();
             Assert.AreEqual("mark = 1,00m", result[0].Text);
