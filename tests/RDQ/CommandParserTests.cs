@@ -146,7 +146,7 @@ namespace RevitDBExplorer.Tests.RDQ
         [DataRow("r:myRoom")]
         public void CanParseRoomCommand(RevitContext revitContext, string cmd)
         {
-            var path = Path.Combine(GetDir(), @"..\..\assets\testmodel_rdq.rvt");
+            var path = Path.Combine(revitContext.TestAssemblyLocation, @"..\..\..\assets\testmodel_rdq.rvt");
             var document = revitContext.UIApplication.Application.OpenDocumentFile(path);
             
             CommandParser.LoadDocumentSpecificData(document);
@@ -166,7 +166,7 @@ namespace RevitDBExplorer.Tests.RDQ
         [DataRow("f:mySelectionFilter")]
         public void CanParseRuleBasedFilterCommand(RevitContext revitContext, string cmd)
         {
-            var path = Path.Combine(GetDir(), @"..\..\assets\testmodel_rdq.rvt");
+            var path = Path.Combine(revitContext.TestAssemblyLocation, @"..\..\..\assets\testmodel_rdq.rvt");
             var document = revitContext.UIApplication.Application.OpenDocumentFile(path);
      
             CommandParser.LoadDocumentSpecificData(document);
@@ -206,21 +206,6 @@ namespace RevitDBExplorer.Tests.RDQ
             //var match = result.MatchedArguments.First() as VisibleInViewMatch;
             //Assert.IsNotNull(match);
             //Assert.AreEqual(StructuralType.Brace, match.Value);
-        }
-
-
-
-
-
-        public static string GetDir()
-        {
-            return "G:\\RevitDBExplorer\\tests\\bin\\Debug";
-
-            var asm = Assembly.GetExecutingAssembly();
-            string codeBase = asm.CodeBase;
-            UriBuilder uri = new UriBuilder(codeBase);
-            string path = Uri.UnescapeDataString(uri.Path);
-            return Path.GetDirectoryName(path);            
         }
     }
 }
