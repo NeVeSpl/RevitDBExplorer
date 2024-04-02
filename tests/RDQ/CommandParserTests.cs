@@ -10,7 +10,7 @@ using RevitDBExplorer.Domain.RevitDatabaseQuery.Parser;
 using RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands;
 using RevitTestLibrary;
 
-[assembly: RevitPath("D:\\Autodesk\\Revit Preview\\Revit Preview Release\\Revit.exe")]
+[assembly: RevitPath("D:\\Autodesk\\Revit 2025\\Revit.exe")]
 
 namespace RevitDBExplorer.Tests.RDQ
 {

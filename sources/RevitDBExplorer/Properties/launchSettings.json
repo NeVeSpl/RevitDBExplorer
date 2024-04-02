@@ -2,7 +2,7 @@
   "profiles": {
     "Revit2025": {
       "commandName": "Executable",
-      "executablePath": "D:\\Autodesk\\Revit 2025\\Revit Preview Release\\Revit.exe",
+      "executablePath": "D:\\Autodesk\\Revit 2025\\Revit.exe",
       "commandLineArgs": "/language ENU"
     },
     "Revit2024": {
