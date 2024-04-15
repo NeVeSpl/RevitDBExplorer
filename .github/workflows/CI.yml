@@ -25,11 +25,6 @@ jobs:
 #        token: ${{ secrets.SR_PAT }}
 #        path: ./binaries/revit/2025/
 
-    - name: Remove obj folder
-      uses: JesseTG/rm@v1.0.3
-      with:
-        path: sources/RevitDBExplorer/obj
-
     - name: Setup MSBuild.exe
       uses: microsoft/setup-msbuild@v1.3.1
       
@@ -38,6 +33,9 @@ jobs:
 
     - name: Restore Packages
       run: nuget restore RevitDBExplorer.sln
+
+    - name: Restore Packages for .net framework
+      run: msbuild /r /p:Configuration=R2021
       
     - name: Build Project for R2021     
       working-directory: sources/RevitDBExplorer/
