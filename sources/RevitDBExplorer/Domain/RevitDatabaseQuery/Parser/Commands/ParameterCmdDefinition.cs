@@ -17,10 +17,10 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
 
         public void Init()
         {
-#if R2022b
+#if R2022_MIN
             var ids = ParameterUtils.GetAllBuiltInParameters().Select(x => ParameterUtils.GetBuiltInParameter(x)).ToList();
 #endif
-#if R2021e
+#if R2021_MAX
             var bips = System.Enum.GetValues(typeof(BuiltInParameter));
             var ids = new List<BuiltInParameter>(bips.Length);
             foreach (BuiltInParameter i in bips)

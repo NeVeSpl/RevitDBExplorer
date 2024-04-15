@@ -19,7 +19,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberTemplates
             templates = new ISnoopableMemberTemplate[]
             {
                 SnoopableMemberTemplate<Document>.Create((doc, target) => Document.GetDocumentVersion(target), kind: MemberKind.StaticMethod),
-#if R2023b
+#if R2023_MIN
                 SnoopableMemberTemplate<Document>.Create((doc, target) => target.GetChangedElements(Guid.Empty), kind: MemberKind.Method),
 #endif
 

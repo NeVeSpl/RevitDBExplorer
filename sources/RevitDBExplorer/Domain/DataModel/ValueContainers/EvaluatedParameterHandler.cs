@@ -5,7 +5,7 @@ using RevitDBExplorer.Domain.DataModel.ValueContainers.Base;
 
 namespace RevitDBExplorer.Domain.DataModel.ValueContainers
 {
-#if R2024b
+#if R2024_MIN
     internal class EvaluatedParameterHandler : TypeHandler<EvaluatedParameter>
     {
         protected override bool CanBeSnoooped(SnoopableContext context, EvaluatedParameter parameter) => false;

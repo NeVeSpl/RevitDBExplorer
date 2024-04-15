@@ -44,7 +44,7 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers.Base
             new GeometryElementHandler(),
             new TransformHandler(),
             new ParameterHandler(),
-#if R2024b
+#if R2024_MIN
             new EvaluatedParameterHandler(),
 #endif
             new FamilyParameterHandler(),

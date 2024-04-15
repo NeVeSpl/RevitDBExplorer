@@ -26,12 +26,12 @@ namespace RevitDBExplorer.Domain.DataModel.MemberTemplates
 
                 SnoopableMemberTemplate<Reference>.Create((doc, target) => doc.GetElement(target.ElementId).GetGeometryObjectFromReference(target), canBeUsed: x => x.ElementId != null, kind: MemberKind.AsArgument),
 
-#if R2023b
+#if R2023_MIN
                 SnoopableMemberTemplate<Element>.Create((doc, target) => AnalyticalNodeData.GetAnalyticalNodeData(target), kind: MemberKind.StaticMethod, canBeUsed: x => x is ReferencePoint),
                 SnoopableMemberTemplate<Element>.Create(typeof(AnalyticalToPhysicalAssociationManager), nameof(AnalyticalToPhysicalAssociationManager.HasAssociation), new AnalyticalToPhysicalAssociationManager_HasAssociation(), kind: MemberKind.AsArgument),
                 SnoopableMemberTemplate<Element>.Create(typeof(AnalyticalToPhysicalAssociationManager), nameof(AnalyticalToPhysicalAssociationManager.GetAssociatedElementId), new AnalyticalToPhysicalAssociationManager_GetAssociatedElementId(), kind: MemberKind.AsArgument),
 #endif
-#if R2024b
+#if R2024_MIN
                 SnoopableMemberTemplate<Element>.Create((doc, target) => AnalyticalToPhysicalAssociationManager.IsAnalyticalElement(doc, target.Id), kind: MemberKind.StaticMethod),
                 SnoopableMemberTemplate<Element>.Create((doc, target) => AnalyticalToPhysicalAssociationManager.IsPhysicalElement(doc, target.Id), kind: MemberKind.StaticMethod),
                 SnoopableMemberTemplate<Element>.Create(typeof(AnalyticalToPhysicalAssociationManager), nameof(AnalyticalToPhysicalAssociationManager.GetAssociatedElementIds), new AnalyticalToPhysicalAssociationManager_GetAssociatedElementIds(), kind: MemberKind.AsArgument),

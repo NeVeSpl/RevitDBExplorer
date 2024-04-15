@@ -6,7 +6,7 @@ using RevitDBExplorer.Domain.DataModel.MemberAccessors;
 
 namespace RevitDBExplorer.Domain.DataModel.MemberTemplates.Accessors
 {
-#if R2023b
+#if R2023_MIN
     internal class AnalyticalToPhysicalAssociationManager_GetAssociatedElementId : MemberAccessorByFunc<Element, ElementId>
     {
         public AnalyticalToPhysicalAssociationManager_GetAssociatedElementId() : base(GetAssociatedElementId)

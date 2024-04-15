@@ -18,7 +18,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
         protected override bool CanBeSnoooped(Document document, IndependentTag value) => false;
         protected override string GetLabel(Document document, IndependentTag value)
         {
-#if R2025b
+#if R2025_MIN
             if (RebarBendingDetail.IsBendingDetail(value))
             {
                 return string.Empty;

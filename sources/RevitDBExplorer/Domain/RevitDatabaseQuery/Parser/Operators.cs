@@ -117,7 +117,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser
             bool isInt = int.TryParse(text, out int intArg);
             bool isDouble = double.TryParse(text, out double doubleArg);
 
-#if R2022b
+#if R2022_MIN
             if ((dataTypeSpecId != null) && (SpecUtils.IsValidDataType(dataTypeSpecId) && UnitUtils.IsMeasurableSpec(dataTypeSpecId)))
             {
                 var units = Application.UIApplication?.ActiveUIDocument?.Document?.GetUnits();

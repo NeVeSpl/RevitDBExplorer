@@ -140,13 +140,13 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Filters
 
                 rule = @operator.Type switch
                 {
-#if R2022e
+#if R2022_MAX
                     OperatorType.Greater => ParameterFilterRuleFactory.CreateGreaterRule(parameter, argAsString, false),
                     OperatorType.GreaterOrEqual => ParameterFilterRuleFactory.CreateGreaterOrEqualRule(parameter, argAsString, false),
                     OperatorType.Less => ParameterFilterRuleFactory.CreateLessRule(parameter, argAsString, false),
                     OperatorType.LessOrEqual => ParameterFilterRuleFactory.CreateLessOrEqualRule(parameter, argAsString, false),
 #endif
-#if R2023b
+#if R2023_MIN
                     OperatorType.Greater => ParameterFilterRuleFactory.CreateGreaterRule(parameter, argAsString),
                     OperatorType.GreaterOrEqual => ParameterFilterRuleFactory.CreateGreaterOrEqualRule(parameter, argAsString),
                     OperatorType.Less => ParameterFilterRuleFactory.CreateLessRule(parameter, argAsString),
@@ -157,13 +157,13 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Filters
 
                 if (@operator.Type == OperatorType.Equals)
                 {
-#if R2023b
+#if R2023_MIN
                     if (startsWithWildcard == true && endsWithWildcard == true) rule = ParameterFilterRuleFactory.CreateContainsRule(parameter, serchTerm);
                     if (startsWithWildcard == true && endsWithWildcard == false) rule = ParameterFilterRuleFactory.CreateEndsWithRule(parameter, serchTerm);
                     if (startsWithWildcard == false && endsWithWildcard == true) rule = ParameterFilterRuleFactory.CreateBeginsWithRule(parameter, serchTerm);
                     if (startsWithWildcard == false && endsWithWildcard == false) rule = ParameterFilterRuleFactory.CreateEqualsRule(parameter, serchTerm);
 #endif
-#if R2022e
+#if R2022_MAX
                     if (startsWithWildcard == true && endsWithWildcard == true) rule = ParameterFilterRuleFactory.CreateContainsRule(parameter, serchTerm, false);
                     if (startsWithWildcard == true && endsWithWildcard == false) rule = ParameterFilterRuleFactory.CreateEndsWithRule(parameter, serchTerm, false);
                     if (startsWithWildcard == false && endsWithWildcard == true) rule = ParameterFilterRuleFactory.CreateBeginsWithRule(parameter, serchTerm, false);
@@ -172,13 +172,13 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Filters
                 }
                 if (@operator.Type == OperatorType.NotEquals)
                 {
-#if R2023b
+#if R2023_MIN
                     if (startsWithWildcard == true && endsWithWildcard == true) rule = ParameterFilterRuleFactory.CreateNotContainsRule(parameter, serchTerm);
                     if (startsWithWildcard == true && endsWithWildcard == false) rule = ParameterFilterRuleFactory.CreateNotEndsWithRule(parameter, serchTerm);
                     if (startsWithWildcard == false && endsWithWildcard == true) rule = ParameterFilterRuleFactory.CreateNotBeginsWithRule(parameter, serchTerm);
                     if (startsWithWildcard == false && endsWithWildcard == false) rule = ParameterFilterRuleFactory.CreateNotEqualsRule(parameter, serchTerm);
 #endif
-#if R2022e
+#if R2022_MAX
                     if (startsWithWildcard == true && endsWithWildcard == true) rule = ParameterFilterRuleFactory.CreateNotContainsRule(parameter, serchTerm, false);
                     if (startsWithWildcard == true && endsWithWildcard == false) rule = ParameterFilterRuleFactory.CreateNotEndsWithRule(parameter, serchTerm, false);
                     if (startsWithWildcard == false && endsWithWildcard == true) rule = ParameterFilterRuleFactory.CreateNotBeginsWithRule(parameter, serchTerm, false);

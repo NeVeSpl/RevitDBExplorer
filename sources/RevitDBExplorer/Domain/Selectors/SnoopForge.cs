@@ -22,7 +22,7 @@ namespace RevitDBExplorer.Domain.Selectors
 
             var title = selector switch
             {
-#if R2022b
+#if R2022_MIN
                 Selector.ForgeParameterUtilsGetAllBuiltInGroups => "ParameterUtils.GetAllBuiltInGroups()",
                 Selector.ForgeParameterUtilsGetAllBuiltInParameters => "ParameterUtils.GetAllBuiltInParameters()",
                 Selector.ForgeUnitUtilsGetAllMeasurableSpecs => "UnitUtils.GetAllMeasurableSpecs()",
@@ -42,7 +42,7 @@ namespace RevitDBExplorer.Domain.Selectors
 
             IList<ForgeTypeId> ids = selector switch
             {
-#if R2022b
+#if R2022_MIN
                 Selector.ForgeParameterUtilsGetAllBuiltInGroups => ParameterUtils.GetAllBuiltInGroups(),
                 Selector.ForgeParameterUtilsGetAllBuiltInParameters => ParameterUtils.GetAllBuiltInParameters(),
                 Selector.ForgeUnitUtilsGetAllMeasurableSpecs => UnitUtils.GetAllMeasurableSpecs(),

@@ -62,7 +62,7 @@ namespace RevitDBExplorer.Domain.DataModel
 
 
                         var units = Application.UIApplication?.ActiveUIDocument?.Document?.GetUnits();
-#if R2022b
+#if R2022_MIN
                         if (units != null)
                         {
                             var options = new FormatValueOptions { AppendUnitSymbol = true };

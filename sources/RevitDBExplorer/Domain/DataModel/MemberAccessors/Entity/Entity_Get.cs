@@ -57,10 +57,10 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 
         private bool IsMeasurableSpec(ForgeTypeId id)
         {
-#if R2022b
+#if R2022_MIN
             return UnitUtils.IsMeasurableSpec(id);
 #endif
-#if R2021e
+#if R2021_MAX
             try
             {
                 if (UnitUtils.IsSpec(id))

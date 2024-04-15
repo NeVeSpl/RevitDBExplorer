@@ -44,7 +44,7 @@ namespace RevitDBExplorer.Domain.Presentation
                     var references = geometryObjects.Select(x => x.GetReference()).ToList();
                     if (references.Any())
                     {
-#if R2023b
+#if R2023_MIN
                         ExternalExecutor.ExecuteInRevitContextAsync(x => { x.ActiveUIDocument?.Selection.SetReferences(references); });
 #endif
                     }

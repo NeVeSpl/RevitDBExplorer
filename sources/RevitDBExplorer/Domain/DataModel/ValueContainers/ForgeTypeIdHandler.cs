@@ -16,7 +16,7 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers
         {
             CacheForgeTypeIds(typeof(UnitTypeId));
             CacheForgeTypeIds(typeof(SpecTypeId));
-#if R2022b
+#if R2022_MIN
             CacheForgeTypeIds(typeof(SpecTypeId.Boolean));
             CacheForgeTypeIds(typeof(SpecTypeId.Int));
             CacheForgeTypeIds(typeof(SpecTypeId.Reference));

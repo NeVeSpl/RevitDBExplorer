@@ -10,7 +10,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberTemplates
 {
     internal class ForgeTypeId_Templates : IHaveMemberTemplates
     {
-#if R2022b
+#if R2022_MIN
         private static readonly HashSet<ForgeTypeId> AllDisciplines = new(UnitUtils.GetAllDisciplines());
 #endif
         private static readonly IEnumerable<ISnoopableMemberTemplate> ForForgeTypeId = Enumerable.Empty<ISnoopableMemberTemplate>();
@@ -22,7 +22,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberTemplates
         {
             ForForgeTypeId = new ISnoopableMemberTemplate[]
             {
-#if R2022b
+#if R2022_MIN
                 SnoopableMemberTemplate<ForgeTypeId>.Create((doc, forgeId) => Category.IsBuiltInCategory(forgeId)),
                 SnoopableMemberTemplate<ForgeTypeId>.Create((doc, forgeId) => Category.GetBuiltInCategory(forgeId), x => Category.IsBuiltInCategory(x)),
                 SnoopableMemberTemplate<ForgeTypeId>.Create((doc, forgeId) => doc.GetTypeOfStorage(forgeId), x=> ParameterUtils.IsBuiltInParameter(x)),
@@ -35,18 +35,18 @@ namespace RevitDBExplorer.Domain.DataModel.MemberTemplates
                 SnoopableMemberTemplate<ForgeTypeId>.Create((doc, forgeId) => UnitUtils.IsMeasurableSpec(forgeId)),
 #endif
 
-#if R2022b && R2024e
+#if R2022_MIN && R2024_MAX
                 SnoopableMemberTemplate<ForgeTypeId>.Create((doc, forgeId) => ParameterUtils.GetBuiltInParameterGroup(forgeId), x => ParameterUtils.IsBuiltInGroup(x)),
 #endif
 
                 SnoopableMemberTemplate<ForgeTypeId>.Create((doc, forgeId) => UnitUtils.IsSymbol(forgeId)),
                 SnoopableMemberTemplate<ForgeTypeId>.Create((doc, forgeId) => UnitUtils.IsUnit(forgeId)),
-#if R2022b
+#if R2022_MIN
                 SnoopableMemberTemplate<ForgeTypeId>.Create((doc, forgeId) => UnitUtils.GetDiscipline(forgeId), x => UnitUtils.IsMeasurableSpec(x)),
                 SnoopableMemberTemplate<ForgeTypeId>.Create((doc, forgeId) => UnitUtils.GetTypeCatalogStringForSpec(forgeId), x => UnitUtils.IsMeasurableSpec(x)),
 #endif
                 SnoopableMemberTemplate<ForgeTypeId>.Create((doc, forgeId) => UnitUtils.GetTypeCatalogStringForUnit(forgeId), x => UnitUtils.IsUnit(x)),
-#if R2022b
+#if R2022_MIN
                 SnoopableMemberTemplate<ForgeTypeId>.Create((doc, forgeId) => UnitUtils.GetValidUnits(forgeId), x => UnitUtils.IsMeasurableSpec(x)),
 
 
@@ -57,11 +57,11 @@ namespace RevitDBExplorer.Domain.DataModel.MemberTemplates
                 SnoopableMemberTemplate<ForgeTypeId>.Create((doc, forgeId) => LabelUtils.GetLabelForGroup(forgeId), x => ParameterUtils.IsBuiltInGroup(x)),
 #endif
                 SnoopableMemberTemplate<ForgeTypeId>.Create((doc, forgeId) => LabelUtils.GetLabelForUnit(forgeId), x => UnitUtils.IsUnit(x)),
-#if R2022b
+#if R2022_MIN
                 SnoopableMemberTemplate<ForgeTypeId>.Create((doc, forgeId) => LabelUtils.GetLabelForSpec(forgeId), x => SpecUtils.IsSpec(x)),
 #endif
                 SnoopableMemberTemplate<ForgeTypeId>.Create((doc, forgeId) => LabelUtils.GetLabelForSymbol(forgeId), x => UnitUtils.IsSymbol(x)),
-#if R2022b
+#if R2022_MIN
                 SnoopableMemberTemplate<ForgeTypeId>.Create((doc, forgeId) => LabelUtils.GetLabelForDiscipline(forgeId), x => AllDisciplines.Contains(x)),
 #endif
 
@@ -70,14 +70,14 @@ namespace RevitDBExplorer.Domain.DataModel.MemberTemplates
             };
             ForCategory = new ISnoopableMemberTemplate[]
             {
-#if R2022b
+#if R2022_MIN
                 SnoopableMemberTemplate<Category>.Create((doc, category) => Category.GetBuiltInCategoryTypeId((BuiltInCategory)category.Id.Value())),
                 SnoopableMemberTemplate<Category>.Create((doc, category) => ParameterFilterUtilities.GetFilterableParametersInCommon(doc, new[] { category.Id } )),
 #endif
             };
             ForParameter = new ISnoopableMemberTemplate[]
             {
-#if R2022b
+#if R2022_MIN
                 SnoopableMemberTemplate<Parameter>.Create((doc, parameter) => UnitFormatUtils.Format(doc.GetUnits(), parameter.Definition.GetDataType(), parameter.AsDouble(), false), x => UnitUtils.IsMeasurableSpec(x.Definition?.GetDataType())),
 #endif
             };            

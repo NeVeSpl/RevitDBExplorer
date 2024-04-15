@@ -8,7 +8,7 @@ using Autodesk.Revit.DB.Structure;
 
 namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
-#if R2022b
+#if R2022_MIN
     internal class Rebar_GetTransformedCenterlineCurves : MemberAccessorByType<Rebar>, ICanCreateMemberAccessor
     {
         IEnumerable<LambdaExpression> ICanCreateMemberAccessor.GetHandledMembers() { yield return (Rebar x) => x.GetTransformedCenterlineCurves(false, true, false, MultiplanarOption.IncludeOnlyPlanarCurves, 0); }      

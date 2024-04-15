@@ -6,10 +6,10 @@ namespace Autodesk.Revit.DB
     {
         public static long Value(this ElementId id)
         {
-#if R2023e
+#if R2023_MAX
             return id.IntegerValue;
 #endif
-#if R2024b
+#if R2024_MIN
             return id.Value;
 #endif
         }
@@ -18,10 +18,10 @@ namespace Autodesk.Revit.DB
     { 
         public static ElementId Create(long id)
         {
-#if R2023e
+#if R2023_MAX
             return new ElementId((int)id);
 #endif
-#if R2024b
+#if R2024_MIN
             return new ElementId(id);
 #endif
         }
