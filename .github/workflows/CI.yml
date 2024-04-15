@@ -18,12 +18,17 @@ jobs:
       with:
         fetch-depth: 0 
         
-    - name: Checkout Secret Repo
-      uses: actions/checkout@master
+#    - name: Checkout Secret Repo
+#      uses: actions/checkout@master
+#      with:
+#        repository: NeVeSpl/SecretRepository
+#        token: ${{ secrets.SR_PAT }}
+#        path: ./binaries/revit/2025/
+
+    - name: Remove obj folder
+      uses: JesseTG/rm@v1.0.3
       with:
-        repository: NeVeSpl/SecretRepository
-        token: ${{ secrets.SR_PAT }}
-        path: ./binaries/revit/2025/
+        path: sources/RevitDBExplorer/obj
 
     - name: Setup MSBuild.exe
       uses: microsoft/setup-msbuild@v1.3.1
@@ -59,7 +64,7 @@ jobs:
       with:
         path: sources/RevitDBExplorer/obj
 
-    - name: Restore Packages for .net 7.0
+    - name: Restore Packages for .net core
       run: msbuild /r /p:Configuration=R2025
 
     - name: Build Project for R2025     
