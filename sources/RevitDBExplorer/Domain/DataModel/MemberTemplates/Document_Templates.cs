@@ -28,6 +28,11 @@ namespace RevitDBExplorer.Domain.DataModel.MemberTemplates
                 SnoopableMemberTemplate<Document>.Create((doc, target) => BasePoint.GetSurveyPoint(doc), kind: MemberKind.StaticMethod),
                 SnoopableMemberTemplate<Document>.Create((doc, target) => BasePoint.GetProjectBasePoint(doc), kind: MemberKind.StaticMethod),
 
+#if R2024_MIN
+                SnoopableMemberTemplate<Document>.Create((doc, target) => doc.GetUnusedElements(new HashSet<ElementId>()), kind: MemberKind.Method),
+                SnoopableMemberTemplate<Document>.Create((doc, target) => doc.GetAllUnusedElements(new HashSet<ElementId>()), kind: MemberKind.Method),
+#endif
+
             };
         }
 
