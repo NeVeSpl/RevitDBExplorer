@@ -24,7 +24,10 @@ namespace RevitDBExplorer.Domain.DataModel.MemberTemplates
 #endif
 
                 SnoopableMemberTemplate<Document>.Create((doc, target) => BasicFileInfo.Extract(target.PathName), kind: MemberKind.StaticMethod),
-               
+
+                SnoopableMemberTemplate<Document>.Create((doc, target) => BasePoint.GetSurveyPoint(doc), kind: MemberKind.StaticMethod),
+                SnoopableMemberTemplate<Document>.Create((doc, target) => BasePoint.GetProjectBasePoint(doc), kind: MemberKind.StaticMethod),
+
             };
         }
 
