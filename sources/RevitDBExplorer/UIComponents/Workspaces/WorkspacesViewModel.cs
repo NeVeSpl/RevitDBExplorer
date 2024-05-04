@@ -29,6 +29,7 @@ namespace RevitDBExplorer.UIComponents.Workspaces
 
         public event Action<SelectedItemChangedEventArgs> SelectedItemsChanged;
         public ObservableCollection<WorkspaceViewModel> Workspaces => workspaces;
+        public IEnumerable<WorkspaceViewModel> ActiveWorkspaces => workspaces.TakeWhile(o=>o.IsActive);
         public WorkspaceViewModel SelectedWorkspace
         {
             get

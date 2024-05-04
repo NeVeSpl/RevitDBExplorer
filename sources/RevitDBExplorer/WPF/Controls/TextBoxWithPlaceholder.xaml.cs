@@ -97,6 +97,17 @@ namespace RevitDBExplorer.WPF.Controls
         private void ParentWindow_MouseDown(object sender, MouseButtonEventArgs e)
         {
             Popup_SetIsOpen(false);
+
+            var mainWindowViwModel = sender as MainWindow;
+            if (e.XButton2 == MouseButtonState.Pressed)
+            {
+                mainWindowViwModel.ActivateNextWorkspace();
+            }
+
+            if (e.XButton1 == MouseButtonState.Pressed)
+            {
+                mainWindowViwModel.ActivatePreviousWorkspace();
+            }
         }
 
 

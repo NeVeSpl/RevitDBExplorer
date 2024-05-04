@@ -391,5 +391,26 @@ namespace RevitDBExplorer
         }
 
         #endregion
+
+        internal void ActivateNextWorkspace()
+        {
+            var activeSpaces =  workspacesVM.ActiveWorkspaces.ToList();
+            var index = activeSpaces.IndexOf(Workspaces.SelectedWorkspace);
+            if (activeSpaces.Count()- 1 > index)
+            {
+                workspacesVM.SelectedWorkspace = activeSpaces[index + 1];
+            }
+        }
+
+        internal void ActivatePreviousWorkspace()
+        {
+            var activeSpaces =  workspacesVM.ActiveWorkspaces.ToList();
+            var index = activeSpaces.IndexOf(Workspaces.SelectedWorkspace);
+            if (0 < index)
+            {
+                workspacesVM.SelectedWorkspace = activeSpaces[index - 1];
+            }
+        }
+
     }
 }
