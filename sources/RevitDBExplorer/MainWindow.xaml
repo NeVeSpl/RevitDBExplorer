@@ -21,6 +21,7 @@
         Closed="Window_Closed"
         Closing="Window_Closing"
         KeyDown="Window_KeyDown" 
+        MouseDown="Window_MouseDown"
         SizeChanged="Window_SizeChanged"      
         Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"
         TextOptions.TextFormattingMode="Display"        

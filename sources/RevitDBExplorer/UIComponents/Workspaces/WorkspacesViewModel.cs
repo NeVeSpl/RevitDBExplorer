@@ -29,6 +29,7 @@ namespace RevitDBExplorer.UIComponents.Workspaces
 
         public event Action<SelectedItemChangedEventArgs> SelectedItemsChanged;
         public ObservableCollection<WorkspaceViewModel> Workspaces => workspaces;
+        public IEnumerable<WorkspaceViewModel> ActiveWorkspaces => workspaces.TakeWhile(o=>o.IsActive);
         public WorkspaceViewModel SelectedWorkspace
         {
             get
@@ -121,6 +122,24 @@ namespace RevitDBExplorer.UIComponents.Workspaces
             selectedWorkspace = workspaceViewModel;
             OnPropertyChanged(nameof(SelectedWorkspace));
             AdjustTabTitleLength();
+        }
+        internal void ActivateNextWorkspace()
+        {
+            var activeSpaces = ActiveWorkspaces.ToList();
+            var index = activeSpaces.IndexOf(SelectedWorkspace);
+            if (activeSpaces.Count() - 1 > index)
+            {
+                SetSelectedWorkspace(activeSpaces[index + 1]);
+            }
+        }
+        internal void ActivatePreviousWorkspace()
+        {
+            var activeSpaces = ActiveWorkspaces.ToList();
+            var index = activeSpaces.IndexOf(SelectedWorkspace);
+            if (0 < index)
+            {
+                SetSelectedWorkspace(activeSpaces[index - 1]);
+            }
         }
         private WorkspaceViewModel GetFirstAvailableWorkspace()
         {

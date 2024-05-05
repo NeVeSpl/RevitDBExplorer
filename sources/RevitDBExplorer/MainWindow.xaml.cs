@@ -331,6 +331,18 @@ namespace RevitDBExplorer
                 //Application.RevitWindowHandle.PostKeyMessage(vkey);
             }
         }
+        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.XButton2 == MouseButtonState.Pressed)
+            {
+                workspacesVM.ActivateNextWorkspace();
+            }
+
+            if (e.XButton1 == MouseButtonState.Pressed)
+            {
+                workspacesVM.ActivatePreviousWorkspace();
+            }
+        }
         private void GlobalKeyboardHook_KeyDown(object sender, System.Windows.Forms.KeyEventArgs e)
         {
             if (e.KeyValue == (int)System.Windows.Forms.Keys.F1)
