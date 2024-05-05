@@ -123,6 +123,24 @@ namespace RevitDBExplorer.UIComponents.Workspaces
             OnPropertyChanged(nameof(SelectedWorkspace));
             AdjustTabTitleLength();
         }
+        internal void ActivateNextWorkspace()
+        {
+            var activeSpaces = ActiveWorkspaces.ToList();
+            var index = activeSpaces.IndexOf(SelectedWorkspace);
+            if (activeSpaces.Count() - 1 > index)
+            {
+                SetSelectedWorkspace(activeSpaces[index + 1]);
+            }
+        }
+        internal void ActivatePreviousWorkspace()
+        {
+            var activeSpaces = ActiveWorkspaces.ToList();
+            var index = activeSpaces.IndexOf(SelectedWorkspace);
+            if (0 < index)
+            {
+                SetSelectedWorkspace(activeSpaces[index - 1]);
+            }
+        }
         private WorkspaceViewModel GetFirstAvailableWorkspace()
         {
             var workspace = Workspaces.Where(x => x.IsActive == false).FirstOrDefault();

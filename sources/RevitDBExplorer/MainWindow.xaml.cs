@@ -331,6 +331,18 @@ namespace RevitDBExplorer
                 //Application.RevitWindowHandle.PostKeyMessage(vkey);
             }
         }
+        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.XButton2 == MouseButtonState.Pressed)
+            {
+                workspacesVM.ActivateNextWorkspace();
+            }
+
+            if (e.XButton1 == MouseButtonState.Pressed)
+            {
+                workspacesVM.ActivatePreviousWorkspace();
+            }
+        }
         private void GlobalKeyboardHook_KeyDown(object sender, System.Windows.Forms.KeyEventArgs e)
         {
             if (e.KeyValue == (int)System.Windows.Forms.Keys.F1)
@@ -391,26 +403,5 @@ namespace RevitDBExplorer
         }
 
         #endregion
-
-        internal void ActivateNextWorkspace()
-        {
-            var activeSpaces =  workspacesVM.ActiveWorkspaces.ToList();
-            var index = activeSpaces.IndexOf(Workspaces.SelectedWorkspace);
-            if (activeSpaces.Count()- 1 > index)
-            {
-                workspacesVM.SelectedWorkspace = activeSpaces[index + 1];
-            }
-        }
-
-        internal void ActivatePreviousWorkspace()
-        {
-            var activeSpaces =  workspacesVM.ActiveWorkspaces.ToList();
-            var index = activeSpaces.IndexOf(Workspaces.SelectedWorkspace);
-            if (0 < index)
-            {
-                workspacesVM.SelectedWorkspace = activeSpaces[index - 1];
-            }
-        }
-
     }
 }
