@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Autodesk.Revit.DB;
-using RevitDBExplorer.Augmentations.RevitDatabaseVisualization.DrawingVisuals;
+using RevitExplorer.Visualizations.DrawingVisuals;
 using RevitDBExplorer.Domain.DataModel.ValueContainers.Base;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md

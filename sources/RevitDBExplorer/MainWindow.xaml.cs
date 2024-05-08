@@ -9,8 +9,6 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Threading;
-using RevitDBExplorer.Augmentations;
-using RevitDBExplorer.Augmentations.RevitDatabaseVisualization.DrawingVisuals;
 using RevitDBExplorer.Domain;
 using RevitDBExplorer.Domain.DataModel.ValueViewModels;
 using RevitDBExplorer.Domain.RevitDatabaseQuery;
@@ -25,6 +23,8 @@ using RevitDBExplorer.UIComponents.Trees.Base.Items;
 using RevitDBExplorer.UIComponents.Workspaces;
 using RevitDBExplorer.Utils;
 using RevitDBExplorer.WPF;
+using RevitExplorer.Visualizations;
+using RevitExplorer.Visualizations.DrawingVisuals;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
@@ -279,7 +279,7 @@ namespace RevitDBExplorer
                 //var cd = new CurveDrawingVisual(line, new Autodesk.Revit.DB.Color(255, 0, 0));
                 //drawingVisuals.AddRange(new DrawingVisual[] { cd, new CoordinateSystemDrawingVisual(min), new CoordinateSystemDrawingVisual(max) });
 
-                rdvController.AddDrawingVisuals(drawingVisuals);
+                rdvController.SetDrawingVisuals(drawingVisuals);
             }
         }
 

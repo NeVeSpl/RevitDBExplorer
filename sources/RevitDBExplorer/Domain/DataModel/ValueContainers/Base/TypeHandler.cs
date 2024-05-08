@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Autodesk.Revit.DB;
-using RevitDBExplorer.Augmentations.RevitDatabaseVisualization.DrawingVisuals;
+using RevitExplorer.Visualizations.DrawingVisuals;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 

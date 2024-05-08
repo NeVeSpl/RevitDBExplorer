@@ -17,7 +17,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberTemplates
         {
             templates = new ISnoopableMemberTemplate[]
             {
-               SnoopableMemberTemplate<FamilyInstance>.Create((doc, target) => AdaptiveComponentInstanceUtils.GetInstancePlacementPointElementRefIds(target),canBeUsed: (x)=> AdaptiveComponentInstanceUtils.IsAdaptiveComponentInstance(x) , kind: MemberKind.AsArgument),
+               SnoopableMemberTemplate<FamilyInstance>.Create((doc, target) => AdaptiveComponentInstanceUtils.GetInstancePlacementPointElementRefIds(target), canBeUsed: (x)=> AdaptiveComponentInstanceUtils.IsAdaptiveComponentInstance(x) , kind: MemberKind.StaticMethod),
             }; 
         }
 

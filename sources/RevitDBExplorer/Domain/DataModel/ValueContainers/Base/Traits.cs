@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using RevitDBExplorer.Augmentations.RevitDatabaseVisualization.DrawingVisuals;
+using RevitExplorer.Visualizations.DrawingVisuals;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 

@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
-using RevitDBExplorer.Augmentations;
 using RevitDBExplorer.Domain;
 using RevitDBExplorer.Domain.DataModel;
 using RevitDBExplorer.Domain.DataModel.MemberAccessors;
@@ -17,6 +16,7 @@ using RevitDBExplorer.Domain.RevitDatabaseQuery;
 using RevitDBExplorer.Properties;
 using RevitDBExplorer.Utils;
 using RevitDBScripting;
+using RevitExplorer.Visualizations;
 
 namespace RevitDBExplorer
 {
