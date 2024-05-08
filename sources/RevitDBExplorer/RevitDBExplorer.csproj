@@ -2,7 +2,7 @@
 	<PropertyGroup>	
 		<TargetFramework>net48</TargetFramework>
 		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-		<LangVersion>11.0</LangVersion>
+		<LangVersion>latest</LangVersion>
 		<RevitYear>2024</RevitYear>
 		<AssemblyTitle>Revit database explorer</AssemblyTitle>
 		<Company>https://github.com/NeVeSpl/RevitDBExplorer</Company>

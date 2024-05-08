@@ -7,9 +7,7 @@ using System.Linq;
 namespace RevitDBExplorer.Domain.DataModel.ValueContainers.Base
 {
     internal static class ValueContainerFactory
-    {        
-        //private static readonly bool RunStaticConstructorASAP = true;
-
+    {   
         private static readonly List<(Type type, Func<IValueContainer> factory)> FactoryMethodsForValueContainers = new List<(Type, Func<IValueContainer>)>();
         private static readonly ITypeHandler[] TypeHandlers = new ITypeHandler[]
         {
@@ -117,7 +115,7 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers.Base
 
 
         private static readonly Dictionary<Type, ITypeHandler> Cache_TypeHandlers = new();
-        public static ITypeHandler SelectTypeHandler(Type type)
+        public static ITypeHandler SelectTypeHandlerFor(Type type)
         {
             var typeHandler = Cache_TypeHandlers.GetOrCreate(type, SelectTypeHandlerInternal);         
             return typeHandler;

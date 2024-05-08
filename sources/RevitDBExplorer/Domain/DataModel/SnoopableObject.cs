@@ -138,7 +138,7 @@ namespace RevitDBExplorer.Domain.DataModel
         {
             if (Object is not null)
             {
-                var typeHandler = ValueContainerFactory.SelectTypeHandler(Object.GetType());  
+                var typeHandler = ValueContainerFactory.SelectTypeHandlerFor(Object.GetType());  
                 return typeHandler.GetVisualization(this.Context, Object);                
             }
             return Enumerable.Empty<DrawingVisual>();

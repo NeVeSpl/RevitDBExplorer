@@ -7,11 +7,11 @@
   <ItemGroup>
    
     <Reference Include="RevitAPI">
-      <HintPath>..\binaries\revit\2023\RevitAPI.dll</HintPath>
+      <HintPath>..\binaries\revit\2025\RevitAPI.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="RevitAPIUI">
-      <HintPath>..\binaries\revit\2023\RevitAPIUI.dll</HintPath>
+      <HintPath>..\binaries\revit\2025\RevitAPIUI.dll</HintPath>
       <Private>False</Private>
     </Reference>
   </ItemGroup>

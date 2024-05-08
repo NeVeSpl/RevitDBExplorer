@@ -15,7 +15,7 @@ namespace RevitDBExplorer.Domain
         }
         public static string GetLabelForObject(Type type, object @object, SnoopableContext context)
         {
-            var valueType = ValueContainerFactory.SelectTypeHandler(type);          
+            var valueType = ValueContainerFactory.SelectTypeHandlerFor(type);          
             return valueType.ToLabel(context, @object);
         }
 

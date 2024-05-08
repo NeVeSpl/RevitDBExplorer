@@ -8,10 +8,10 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers.Base
 {
     internal sealed class ValueContainer<T> : IValueContainer
     {       
-        private static readonly ITypeHandler<T> typeHandler;
-        private Type nativeType;
+        private static readonly ITypeHandler<T> typeHandler;       
         private SnoopableContext context;
         private T value;
+
 
         public Type TypeHandlerType => typeHandler.GetType();
         public Type Type => typeHandler.Type;
@@ -21,15 +21,15 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers.Base
             get
             {
                 var typeHandlerName = typeHandler.GetTypeHandlerName(value);
-                string TypeName = typeHandlerName != "Object" ? typeHandlerName : $"Object : {nativeType?.GetCSharpName()}";
-                return TypeName;                
+                string typeName = typeHandlerName != "Object" ? typeHandlerName : $"Object : unknown";
+                return typeName;                
              }
         }
 
 
         static ValueContainer()
         {
-            typeHandler ??= ValueContainerFactory.SelectTypeHandler(typeof(T)) as ITypeHandler<T>;
+            typeHandler ??= ValueContainerFactory.SelectTypeHandlerFor(typeof(T)) as ITypeHandler<T>;
         }
         public ValueContainer()
         {
