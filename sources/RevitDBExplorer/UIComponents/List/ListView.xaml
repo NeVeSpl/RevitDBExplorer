@@ -95,7 +95,7 @@
                 </Style>
 
 
-                <Style TargetType="{x:Type Button}" x:Key="MiniButton">
+                <Style x:Key="MiniButton" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
                     <Setter Property="Width" Value="15"/>
                     <Setter Property="Height" Value="15"/>
                     <Setter Property="Padding" Value="1"/>
@@ -142,14 +142,19 @@
                             ContentTemplateSelector="{StaticResource DataTemplateSelectorForPropertyType}"                         
                             HorizontalAlignment="Stretch"                 
                             />
-                            <Grid Grid.Column="1" Visibility="{Binding Data.IsComparisonActive, Source={StaticResource Proxy}, Converter={StaticResource InverseBoolToVisibilityConverter}}">
-                                <Button Style="{StaticResource MiniButton}" Padding="0 0 0 0" Visibility="{Binding CanGenerateCode, Converter={StaticResource BoolToVisibilityConverter}}"       
+                            <UniformGrid Grid.Column="1" Rows="1" Visibility="{Binding Data.IsComparisonActive, Source={StaticResource Proxy}, Converter={StaticResource InverseBoolToVisibilityConverter}}">
+
+                                <TextBlock Text="V" Foreground="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"  FontWeight="Heavy" FontFamily="Arial" FontSize="10"  Width="8"
+                                           Visibility="{Binding CanBeVisualized, Converter={StaticResource BoolToVisibilityConverter}}"
+                                           ToolTip="item has a visualization"
+                                           />
+                                <Button Style="{StaticResource MiniButton}" Background="Transparent" Padding="0 0 0 0" Visibility="{Binding CanGenerateCode, Converter={StaticResource BoolToVisibilityConverter}}"       
                                      ap:ButtonAP.OpenSubMenuOnClick="True"
                                     ContextMenu="{StaticResource ContextMenuForGenerateCSharpCode}"
                                     ToolTip="RDS: Generate C# code for a given member">
                                     <Path Style="{StaticResource IconQuery}" Width="10"  />
                                 </Button>
-                            </Grid>
+                            </UniformGrid>
                         </Grid>
                     </Border>
                 </DataTemplate>

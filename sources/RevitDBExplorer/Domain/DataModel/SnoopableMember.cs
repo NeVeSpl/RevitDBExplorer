@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Documents;
 using RevitDBExplorer.Domain.DataModel.Streams.Base;
+using RevitDBExplorer.Domain.DataModel.ValueViewModels;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
@@ -16,6 +17,7 @@ namespace RevitDBExplorer.Domain.DataModel
         public override string Name => memberDescriptor.Name; 
         public DocXml Documentation => memberDescriptor.Documentation;
         public override bool CanGenerateCode => memberDescriptor.Kind != MemberKind.None;
+        public bool CanBeVisualized => (ValueViewModel as DefaultPresenter)?.ValueContainer?.CanBeVisualized == true;
 
 
         public SnoopableMember(SnoopableObject parent, MemberDescriptor memberDescriptor) : base(parent, memberDescriptor.MemberAccessor)

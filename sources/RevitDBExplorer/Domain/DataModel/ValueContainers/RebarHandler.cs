@@ -29,6 +29,7 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers
         private readonly static Color StartColor = new Color(0, 255, 0);
         private readonly static Color EndColor = new Color(255, 0, 0);
 
+        protected override bool CanBeVisualized(SnoopableContext context, Rebar rebar) => true;
         protected override IEnumerable<DrawingVisual> GetVisualization(SnoopableContext context, Rebar rebar)
         {
             if (rebar.IsRebarShapeDriven())

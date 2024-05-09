@@ -13,11 +13,11 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers
         {
             return true;
         }
-
         protected override string ToLabel(SnoopableContext context, FailureDefinitionId value)
         {
             return $"FailureDefinitionId ({value.Guid})";
         }
+
         protected override IEnumerable<SnoopableObject> Snooop(SnoopableContext context, FailureDefinitionId value)
         {
             var failure = ControlledApplication.GetFailureDefinitionRegistry().FindFailureDefinition(value);

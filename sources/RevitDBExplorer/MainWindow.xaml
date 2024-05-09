@@ -280,7 +280,7 @@
                     <ToggleButton Style="{StaticResource ToolTooggle}" IsChecked="{Binding IsRDVEnabled}" Padding="0" Background="red"  ToolTip="Show visualization for the selected object in the Tree">
                         <Grid Background="#FEFCF7" Height="19" Width="38" >
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
-                                <TextBlock Text="V" Foreground="#1434CB"  FontWeight="Heavy" FontFamily="Arial" FontSize="15"/>
+                                <TextBlock Text="V" Foreground="#1434CB"  FontWeight="Heavy" FontFamily="Arial" FontSize="15" ToolTip="This item has visualization"/>
                                 <Grid>
                                     <TextBlock Text=":on "  Visibility="{Binding IsRDVEnabled, Converter={StaticResource BoolToVisibilityConverterHidden}}" Foreground="Black" VerticalAlignment="Bottom"/>
                                     <TextBlock Text=":off " Visibility="{Binding IsRDVEnabled, Converter={StaticResource BoolToVisibilityConverterHiddenInverted}}" Foreground="Black" VerticalAlignment="Bottom"/>

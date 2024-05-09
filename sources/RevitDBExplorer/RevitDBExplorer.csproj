@@ -71,7 +71,7 @@
 		<PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="7.0.0" />
 		<PackageReference Include="CircularBuffer" Version="1.3.0" />
 		<PackageReference Include="LoxSmoke.DocXml" Version="3.5.0" />
-		<PackageReference Include="NSourceGenerators.CodeToString" Version="0.3.0" />	
+		<PackageReference Include="NSourceGenerators.CodeToString" Version="0.4.0" />	
 		<PackageReference Include="RevitDBScripting" Version="1.1.0.$(RevitYear)" />
 		<PackageReference Include="RevitExplorer.Augmentations" Version="1.0.2.$(RevitYear)" />
 		<PackageReference Include="RevitExplorer.Visualizations" Version="1.0.2.$(RevitYear)" />

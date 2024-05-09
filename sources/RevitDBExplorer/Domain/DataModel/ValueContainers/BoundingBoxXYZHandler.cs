@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using Autodesk.Revit.DB;
-using RevitExplorer.Visualizations.DrawingVisuals;
+using NSourceGenerators;
 using RevitDBExplorer.Domain.DataModel.ValueContainers.Base;
+using RevitExplorer.Visualizations.DrawingVisuals;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
@@ -10,11 +11,13 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers
 {
     internal sealed class BoundingBoxXYZHandler : TypeHandler<BoundingBoxXYZ>, IHaveToolTip<BoundingBoxXYZ>
     {
-        protected override bool CanBeSnoooped(SnoopableContext context, BoundingBoxXYZ box) => box is not null;
+        protected override bool CanBeSnoooped(SnoopableContext context, BoundingBoxXYZ box) => true;
         protected override string ToLabel(SnoopableContext context, BoundingBoxXYZ box)
         {
             return $"Min({box.Min.X:0.##}, {box.Min.Y:0.##}, {box.Min.Z:0.##}), Max({box.Max.X:0.##}, {box.Max.Y:0.##}, {box.Max.Z:0.##})";
         }
+
+        [CodeToString]
         protected override IEnumerable<SnoopableObject> Snooop(SnoopableContext context, BoundingBoxXYZ box)
         {
             yield return new SnoopableObject(context.Document, box);
@@ -31,15 +34,14 @@ Min({value.Min.X.ToLengthDisplayString(units)}, {value.Min.Y.ToLengthDisplayStri
 WDH({(value.Max.X - value.Min.X).ToLengthDisplayString(units)}, {(value.Max.Y - value.Min.Y).ToLengthDisplayString(units)}, {(value.Max.Z - value.Min.Z).ToLengthDisplayString(units)})";
         }
 
-
+        protected override bool CanBeVisualized(SnoopableContext context, BoundingBoxXYZ value) => true;
+        [CodeToString]
         protected override IEnumerable<DrawingVisual> GetVisualization(SnoopableContext context, BoundingBoxXYZ box)
         {
-            var bb = box;
-
-            if (bb != null && (bb.Max != null) && (bb.Min != null))
+            if ((box.Max != null) && (box.Min != null))
             {
-                var min = box.Transform.OfPoint(bb.Min);
-                var max = box.Transform.OfPoint(bb.Max);
+                var min = box.Transform.OfPoint(box.Min);
+                var max = box.Transform.OfPoint(box.Max);
 
                 yield return new BoundingBoxDrawingVisual(min, max);
             }

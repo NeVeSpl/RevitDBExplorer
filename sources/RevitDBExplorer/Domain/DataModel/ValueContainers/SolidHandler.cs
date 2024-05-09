@@ -21,6 +21,7 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers
 
         private readonly static Color SolidColor = new Color(80, 175, 228);
 
+        protected override bool CanBeVisualized(SnoopableContext context, Solid solid) => true;
         protected override IEnumerable<DrawingVisual> GetVisualization(SnoopableContext context, Solid solid)
         {
             yield return new SolidDrawingVisual(solid, SolidColor);

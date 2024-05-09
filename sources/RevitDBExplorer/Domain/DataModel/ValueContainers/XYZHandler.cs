@@ -24,6 +24,7 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers
             return $"{ToLabel(context, xyz)}\n({xyz.X.ToLengthDisplayString(units)}, {xyz.Y.ToLengthDisplayString(units)},{xyz.Z.ToLengthDisplayString(units)})"; ;
         }
 
+        protected override bool CanBeVisualized(SnoopableContext context, XYZ xyz) => true;
         protected override IEnumerable<DrawingVisual> GetVisualization(SnoopableContext context, XYZ xyz)
         {
             yield return new CoordinateSystemDrawingVisual(xyz);
