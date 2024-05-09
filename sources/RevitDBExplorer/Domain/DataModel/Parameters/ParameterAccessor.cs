@@ -61,7 +61,7 @@ namespace RevitDBExplorer.Domain.DataModel.Parameters
                 case StorageType.None:
                     break;
             }
-            return new ReadResult(value.ValueAsString, "[ByParam] " + value.TypeName, value.CanBeSnooped, value);
+            return new ReadResult(value.ValueAsString, "[ByParam] " + value.TypeHandlerName, value.CanBeSnooped, value);
 
         }
         public IEnumerable<SnoopableObject> Snoop(SnoopableContext context, object @object, IValueContainer state)

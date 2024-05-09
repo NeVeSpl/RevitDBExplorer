@@ -24,12 +24,12 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers.Base
 
 
 
-        bool ICanBeSnooped.CanBeSnooped(SnoopableContext context, object value)
+        bool ISnoop.CanBeSnooped(SnoopableContext context, object value)
         {
             T typedValue = value.CastValue<T>(type);
-            return (this as ICanBeSnooped<T>).CanBeSnooped(context, typedValue);
+            return (this as ISnoop<T>).CanBeSnooped(context, typedValue);
         }
-        bool ICanBeSnooped<T>.CanBeSnooped(SnoopableContext context, T value)
+        bool ISnoop<T>.CanBeSnooped(SnoopableContext context, T value)
         {
             if (value is null) return false;
             return CanBeSnoooped(context, value);
@@ -51,12 +51,12 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers.Base
 
 
 
-        string IToLabel.ToLabel(SnoopableContext context, object value)
+        string IHaveLabel.ToLabel(SnoopableContext context, object value)
         {
             T typedValue = value.CastValue<T>(type);
-            return (this as IToLabel<T>).ToLabel(context, typedValue);
+            return (this as IHaveLabel<T>).ToLabel(context, typedValue);
         }
-        string IToLabel<T>.ToLabel(SnoopableContext context, T value)
+        string IHaveLabel<T>.ToLabel(SnoopableContext context, T value)
         {
             if (value is null) return "<null>";
             var label = ToLabel(context, value);
@@ -64,6 +64,20 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers.Base
             return label;
         }
         protected abstract string ToLabel(SnoopableContext context, T value);
+
+
+
+        bool IHaveVisualization.CanBeVisualized(SnoopableContext context, object value)
+        {
+            T typedValue = value.CastValue<T>(type);
+            return (this as IHaveVisualization<T>).CanBeVisualized(context, typedValue);
+        }
+        bool IHaveVisualization<T>.CanBeVisualized(SnoopableContext context, T value)
+        {
+            if (value is null) return false;
+            return CanBeVisualized(context, value);
+        }
+        protected virtual bool CanBeVisualized(SnoopableContext context, T value) => false;
 
 
 

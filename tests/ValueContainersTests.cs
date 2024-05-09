@@ -13,7 +13,7 @@ namespace RevitDBExplorer.Tests
     public class ValueContainersTests
     {
         [RevitTestMethod]       
-        public void SelectTypeHandlerFor_BuiltInParameter(RevitContext revitContext)
+        public void TypeHandlerFor_BuiltInParameter(RevitContext revitContext)
         {
             var type = typeof(BuiltInParameter);
             var typeHandler = ValueContainerFactory.SelectTypeHandlerFor(type);
@@ -23,7 +23,7 @@ namespace RevitDBExplorer.Tests
         }
 
         [RevitTestMethod]
-        public void SelectTypeHandlerFor_Long(RevitContext revitContext)
+        public void TypeHandlerFor_Long(RevitContext revitContext)
         {
             var type = typeof(long);
             var typeHandler = ValueContainerFactory.SelectTypeHandlerFor(type);
@@ -34,7 +34,7 @@ namespace RevitDBExplorer.Tests
 
 
         [RevitTestMethod]
-        public void CreateValueContainerFor_BuiltInParameter(RevitContext revitContext)
+        public void ValueContainerFor_BuiltInParameter(RevitContext revitContext)
         {           
             var document = OpenRevitFile(revitContext);
 
@@ -46,10 +46,27 @@ namespace RevitDBExplorer.Tests
             Assert.AreEqual(typeof(EnumHandler<System.Enum>), valueContainer.TypeHandlerType);
             Assert.AreEqual(typeof(System.Enum), valueContainer.Type);
            
-            Assert.AreEqual("Enum : BuiltInParameter", valueContainer.TypeName);
-            Assert.AreEqual("BuiltInParameter.FUNCTION_PARAM", valueContainer.ValueAsString);
+            Assert.AreEqual("Enum : BuiltInParameter", valueContainer.TypeHandlerName);
+            Assert.AreEqual("BuiltInParameter.FUNCTION_PARAM", valueContainer.ValueAsString);            
 
-            
+            document.Close(false);
+        }
+
+        [RevitTestMethod]
+        public void ValueContainerFor_Wall(RevitContext revitContext)
+        {
+            var document = OpenRevitFile(revitContext);
+
+            var wall = new FilteredElementCollector(document).WhereElementIsNotElementType().OfClass(typeof(Wall)).FirstElement();
+            var valueContainer = ValueContainerFactory.Create(typeof(Wall));
+            valueContainer.SetValue(new SnoopableContext() { Document = document }, wall);
+
+            Assert.AreEqual(typeof(ValueContainer<Element>), valueContainer.GetType());
+            Assert.AreEqual(typeof(ElementHandler), valueContainer.TypeHandlerType);
+            Assert.AreEqual(typeof(Element), valueContainer.Type);
+
+            Assert.AreEqual("Element : Wall", valueContainer.TypeHandlerName);
+            Assert.AreEqual("Basic Wall: Generic - 200mm (420680)", valueContainer.ValueAsString);
 
             document.Close(false);
         }

@@ -28,7 +28,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
             var resolvedArgs = ResolveArguments(paramsDef, context.Document, @object);            
             var result = getMethod.Invoke(@object, resolvedArgs);
             value.SetValue(context, result);
-            return new ReadResult(value.ValueAsString, "[ByRef] " + value.TypeName, value.CanBeSnooped, value);
+            return new ReadResult(value.ValueAsString, "[ByRef] " + value.TypeHandlerName, value.CanBeSnooped, value);
         }
         public override IEnumerable<SnoopableObject> Snoop(SnoopableContext context, object @object, IValueContainer state)
         {            

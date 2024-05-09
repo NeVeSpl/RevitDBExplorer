@@ -33,7 +33,7 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers
             var element = context.Document?.GetElement(id);
             if (element != null)
             {
-                return (new ElementHandler() as IToLabel<Element>).ToLabel(context, element);
+                return (new ElementHandler() as IHaveLabel<Element>).ToLabel(context, element);
             }
             return $"{id}";
         }

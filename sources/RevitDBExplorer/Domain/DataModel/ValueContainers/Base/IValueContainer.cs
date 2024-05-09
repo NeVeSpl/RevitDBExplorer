@@ -10,12 +10,13 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers.Base
     {
         Type Type { get; }
         Type TypeHandlerType { get; }
-        string TypeName { get; }
+        string TypeHandlerName { get; }
         IValueContainer SetValue(SnoopableContext context, object value);
 
 
         string ValueAsString { get; }
         bool CanBeSnooped { get; }
+        bool CanBeVisualized { get; }
         string ToolTip { get;  }
         IEnumerable<SnoopableObject> Snoop();
         IEnumerable<DrawingVisual> GetVisualization();

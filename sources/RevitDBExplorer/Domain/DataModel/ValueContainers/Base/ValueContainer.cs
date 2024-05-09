@@ -16,7 +16,7 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers.Base
         public Type TypeHandlerType => typeHandler.GetType();
         public Type Type => typeHandler.Type;
         public T Value => value;       
-        public string TypeName
+        public string TypeHandlerName
         {
             get
             {
@@ -38,10 +38,9 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers.Base
 
 
         public IValueContainer SetValue(SnoopableContext context, object value)
-        {
-            this.context = context;           
-            this.value = value.CastValue<T>(Type);
-         
+        {          
+            SetValueTyped(context, value.CastValue<T>(Type));
+
             return this;
         }
         public ValueContainer<T> SetValueTyped(SnoopableContext context, T value)
@@ -55,6 +54,7 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers.Base
 
         public string ValueAsString => typeHandler?.ToLabel(context, value) ?? "RDBE Error";
         public bool CanBeSnooped => typeHandler.CanBeSnooped(context, value);
+        public bool CanBeVisualized => typeHandler.CanBeVisualized(context, value);
 
         public string ToolTip
         {

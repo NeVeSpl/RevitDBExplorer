@@ -5,32 +5,26 @@ using RevitExplorer.Visualizations.DrawingVisuals;
 
 namespace RevitDBExplorer.Domain.DataModel.ValueContainers.Base
 {
-    internal interface ICanBeSnooped
-    {
-        bool CanBeSnooped(SnoopableContext context, object value);
-    }
-    internal interface ICanBeSnooped<in T>
-    {
-        bool CanBeSnooped(SnoopableContext context, T value);
-    }
-
-    internal interface IToLabel
-    {
-        string ToLabel(SnoopableContext context, object value);
-    }
-    internal interface IToLabel<in T>
-    {
-        string ToLabel(SnoopableContext context, T value);
-    }
-
     internal interface ISnoop
     {
+        bool CanBeSnooped(SnoopableContext context, object value);
         IEnumerable<SnoopableObject> Snoop(SnoopableContext context, object value);
     }
     internal interface ISnoop<in T>
     {
+        bool CanBeSnooped(SnoopableContext context, T value);
         IEnumerable<SnoopableObject> Snoop(SnoopableContext context, T value);
     }
+
+
+    internal interface IHaveLabel
+    {
+        string ToLabel(SnoopableContext context, object value);
+    }
+    internal interface IHaveLabel<in T>
+    {
+        string ToLabel(SnoopableContext context, T value);
+    }  
 
 
     internal interface IHaveToolTip<in T>
@@ -38,12 +32,15 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers.Base
         string GetToolTip(SnoopableContext context, T value);
     }
 
+
     internal interface IHaveVisualization
     {
+        bool CanBeVisualized(SnoopableContext context, object value);
         IEnumerable<DrawingVisual> GetVisualization(SnoopableContext context, object value);
     }
     internal interface IHaveVisualization<in T>
     {
+        bool CanBeVisualized(SnoopableContext context, T value);
         IEnumerable<DrawingVisual> GetVisualization(SnoopableContext context, T value);
     }
 }
