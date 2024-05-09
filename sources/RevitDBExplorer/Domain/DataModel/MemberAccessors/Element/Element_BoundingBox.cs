@@ -20,7 +20,10 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
         private static IEnumerable<SnoopableObject> Snoop(Document document, Element element)
         {
             yield return new SnoopableObject(document, null, new[] { new SnoopableObject(document, element.get_BoundingBox(null)) }) { NamePrefix = "view:" };
-            yield return new SnoopableObject(document, null, new[] { new SnoopableObject(document, element.get_BoundingBox(document.ActiveView)) }) { NamePrefix = "view:", Name = "Active view: " + document.ActiveView.Name };
+            if (document.ActiveView != null)
+            {
+                yield return new SnoopableObject(document, null, new[] { new SnoopableObject(document, element.get_BoundingBox(document.ActiveView)) }) { NamePrefix = "view:", Name = "Active view: " + document.ActiveView.Name };
+            }
        
         }
     }
