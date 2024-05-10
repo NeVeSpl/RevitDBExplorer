@@ -4,7 +4,7 @@ using Autodesk.Revit.UI;
 using Autodesk.RevitAddIns;
 using RevitDBExplorer.Domain.DataModel.MemberAccessors;
 using RevitDBExplorer.Domain.DataModel.MemberTemplates.Base;
-using RevitDBExplorer.Domain.DataModel.Streams;
+using RevitDBExplorer.Domain.DataModel.Members;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 

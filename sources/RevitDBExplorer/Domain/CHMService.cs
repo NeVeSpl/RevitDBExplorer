@@ -16,12 +16,12 @@ namespace RevitDBExplorer.Domain
                 string postfix = "";
                 switch (snoopableMember.MemberKind)
                 {
-                    case Domain.DataModel.Streams.Base.MemberKind.Property:
+                    case Domain.DataModel.Members.Base.MemberKind.Property:
                         postfix = " property";
                         break;
-                    case Domain.DataModel.Streams.Base.MemberKind.Method:
-                    case Domain.DataModel.Streams.Base.MemberKind.StaticMethod:
-                    case Domain.DataModel.Streams.Base.MemberKind.AsArgument:
+                    case Domain.DataModel.Members.Base.MemberKind.Method:
+                    case Domain.DataModel.Members.Base.MemberKind.StaticMethod:
+                    case Domain.DataModel.Members.Base.MemberKind.AsArgument:
                         postfix = " method";
                         break;
                 }

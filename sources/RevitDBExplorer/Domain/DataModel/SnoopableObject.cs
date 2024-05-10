@@ -6,7 +6,7 @@ using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.Structure.StructuralSections;
 using Autodesk.Revit.UI;
 using RevitExplorer.Visualizations.DrawingVisuals;
-using RevitDBExplorer.Domain.DataModel.Streams;
+using RevitDBExplorer.Domain.DataModel.Members;
 using RevitDBExplorer.Domain.DataModel.ValueContainers.Base;
 using RevitDBExplorer.WPF;
 

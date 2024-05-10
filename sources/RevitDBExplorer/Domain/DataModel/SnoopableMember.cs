@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Documents;
-using RevitDBExplorer.Domain.DataModel.Streams.Base;
+using RevitDBExplorer.Domain.DataModel.Members.Base;
 using RevitDBExplorer.Domain.DataModel.ValueViewModels;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md

@@ -10,7 +10,7 @@ using Autodesk.Revit.UI;
 using RevitDBExplorer.Domain;
 using RevitDBExplorer.Domain.DataModel;
 using RevitDBExplorer.Domain.DataModel.MemberAccessors;
-using RevitDBExplorer.Domain.DataModel.Streams;
+using RevitDBExplorer.Domain.DataModel.Members;
 using RevitDBExplorer.Domain.DataModel.ValueContainers.Base;
 using RevitDBExplorer.Domain.RevitDatabaseQuery;
 using RevitDBExplorer.Properties;

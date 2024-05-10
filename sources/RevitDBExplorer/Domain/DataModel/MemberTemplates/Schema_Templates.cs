@@ -3,8 +3,8 @@ using System.Linq;
 using Autodesk.Revit.DB.ExtensibleStorage;
 using RevitDBExplorer.Domain.DataModel.MemberTemplates.Accessors;
 using RevitDBExplorer.Domain.DataModel.MemberTemplates.Base;
-using RevitDBExplorer.Domain.DataModel.Streams;
-using RevitDBExplorer.Domain.DataModel.Streams.Base;
+using RevitDBExplorer.Domain.DataModel.Members;
+using RevitDBExplorer.Domain.DataModel.Members.Base;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 

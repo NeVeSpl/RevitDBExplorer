@@ -5,7 +5,7 @@ using RevitDBExplorer.Domain.DataModel.MemberAccessors;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
-namespace RevitDBExplorer.Domain.DataModel.Streams.Base
+namespace RevitDBExplorer.Domain.DataModel.Members.Base
 {
 
     internal class MemberDescriptor: IComparable<MemberDescriptor>, IEquatable<MemberDescriptor>

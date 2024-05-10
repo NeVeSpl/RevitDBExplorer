@@ -2,11 +2,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using RevitDBExplorer.Domain.DataModel.MemberAccessors;
-using RevitDBExplorer.Domain.DataModel.Streams.Base;
+using RevitDBExplorer.Domain.DataModel.Members.Base;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
-namespace RevitDBExplorer.Domain.DataModel.Streams
+namespace RevitDBExplorer.Domain.DataModel.Members
 {
     internal static class MemberStreamerForSystemType
     {
