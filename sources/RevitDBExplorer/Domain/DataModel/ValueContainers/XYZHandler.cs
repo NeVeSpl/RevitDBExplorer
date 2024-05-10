@@ -10,7 +10,7 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers
 {
     internal sealed class XYZHandler : TypeHandler<XYZ>, IHaveToolTip<XYZ>
     {
-        protected override bool CanBeSnoooped(SnoopableContext context, XYZ xyz) => false;
+        protected override bool CanBeSnoooped(SnoopableContext context, XYZ xyz) => true;
         protected override string ToLabel(SnoopableContext context, XYZ xyz)
         {
             return $"({xyz.X}, {xyz.Y}, {xyz.Z})";

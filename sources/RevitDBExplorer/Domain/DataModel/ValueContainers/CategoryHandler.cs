@@ -13,12 +13,6 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers
         protected override string ToLabel(SnoopableContext context, Category category)
         {
             return Labeler.GetLabelForObjectWithId(category.Name, category.Id.Value());
-        }
-
-        [CodeToString]
-        protected override IEnumerable<SnoopableObject> Snooop(SnoopableContext context, Category category)
-        {
-            yield return new SnoopableObject(context.Document, category);
-        }
+        }       
     }
 }

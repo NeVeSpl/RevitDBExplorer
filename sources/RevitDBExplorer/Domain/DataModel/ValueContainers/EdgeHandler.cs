@@ -14,12 +14,7 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers
         protected override bool CanBeSnoooped(SnoopableContext context, Edge edge) => true;
         protected override string ToLabel(SnoopableContext context, Edge edge) => edge.GetType()?.GetCSharpName();
 
-        [CodeToString]
-        protected override IEnumerable<SnoopableObject> Snooop(SnoopableContext context, Edge edge)
-        {
-            yield return new SnoopableObject(context.Document, edge);
-        }
-
+   
 
         private readonly static Color StartColor = new Color(0, 255, 0);
         private readonly static Color EndColor = new Color(255, 0, 0);

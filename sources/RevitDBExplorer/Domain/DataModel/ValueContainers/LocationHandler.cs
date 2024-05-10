@@ -9,7 +9,7 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers
 {
     internal class LocationHandler : TypeHandler<Location>
     {
-        protected override bool CanBeSnoooped(SnoopableContext context, Location location) => location is not null;
+        protected override bool CanBeSnoooped(SnoopableContext context, Location location) => true;
 
         protected override string ToLabel(SnoopableContext context, Location location)
         {
@@ -34,11 +34,6 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers
 
 
             return $"{typeName} : {details}";
-        }
-
-        protected override IEnumerable<SnoopableObject> Snooop(SnoopableContext context, Location location)
-        {
-            yield return new SnoopableObject(context.Document, location);
-        }
+        }        
     }
 }

@@ -8,7 +8,7 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers
 {
     internal sealed class ObjectHandler : TypeHandler<object>
     {
-        protected override bool CanBeSnoooped(SnoopableContext context, object @object) => @object is not null;
+        protected override bool CanBeSnoooped(SnoopableContext context, object @object) => true;
         protected override string ToLabel(SnoopableContext context, object @object)
         {
             string name = @object.TryGetPropertyValue(propertyThatContainsName);
@@ -20,10 +20,7 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers
             }
             return $"{typeName}";
         }
-        protected override IEnumerable<SnoopableObject> Snooop(SnoopableContext context, object @object)
-        {
-            yield return new SnoopableObject(context.Document, @object);
-        }
+       
 
 
         private static readonly string[] propertyThatContainsName = new[]  { "Name", "Title", "SchemaName", "FieldName" };       

@@ -10,12 +10,9 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers
 {
     internal sealed class SolidHandler : TypeHandler<Solid>
     {
-        protected override bool CanBeSnoooped(SnoopableContext context, Solid solid) => solid is not null;
+        protected override bool CanBeSnoooped(SnoopableContext context, Solid solid) => true;
         protected override string ToLabel(SnoopableContext context, Solid solid) => solid.GetType()?.GetCSharpName();
-        protected override IEnumerable<SnoopableObject> Snooop(SnoopableContext context, Solid solid)
-        {
-            yield return new SnoopableObject(context.Document, solid);
-        }
+     
 
 
 

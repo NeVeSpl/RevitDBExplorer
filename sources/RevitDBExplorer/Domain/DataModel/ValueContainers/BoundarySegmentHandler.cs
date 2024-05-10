@@ -13,12 +13,6 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers
         protected override string ToLabel(SnoopableContext context, BoundarySegment boundarySegment)
         {
             return $"ID: {boundarySegment.ElementId}, {boundarySegment.GetCurve()?.Length} ft"; ;
-        }
-
-        [CodeToString]
-        protected override IEnumerable<SnoopableObject> Snooop(SnoopableContext context, BoundarySegment boundarySegment)
-        {
-            yield return new SnoopableObject(context.Document, boundarySegment);
-        }
+        }        
     }
 }

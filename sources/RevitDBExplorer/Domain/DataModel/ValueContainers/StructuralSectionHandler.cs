@@ -18,9 +18,5 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers
             return value.ToString();
         }
 
-        protected override IEnumerable<SnoopableObject> Snooop(SnoopableContext context, StructuralSection value)
-        {
-            yield return new SnoopableObject(context.Document, value);
-        }
     }
 }

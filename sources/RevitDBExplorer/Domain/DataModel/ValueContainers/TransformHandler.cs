@@ -25,9 +25,6 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers
             return $"Transform: {id}";
         }
 
-        protected override IEnumerable<SnoopableObject> Snooop(SnoopableContext context, Transform transform)
-        {
-            yield return new SnoopableObject(context.Document, transform);
-        }
+       
     }
 }

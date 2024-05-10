@@ -10,12 +10,9 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers
 {
     class PointHandler : TypeHandler<Point>
     {
-        protected override bool CanBeSnoooped(SnoopableContext context, Point point) => point is not null;
+        protected override bool CanBeSnoooped(SnoopableContext context, Point point) => true;
         protected override string ToLabel(SnoopableContext context, Point point) => point.GetType()?.GetCSharpName();
-        protected override IEnumerable<SnoopableObject> Snooop(SnoopableContext context, Point point)
-        {
-            yield return new SnoopableObject(context.Document, point);
-        }
+      
 
 
      

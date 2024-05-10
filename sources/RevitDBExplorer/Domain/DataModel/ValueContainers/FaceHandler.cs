@@ -14,11 +14,7 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers
         protected override bool CanBeSnoooped(SnoopableContext context, Face face) => true;
         protected override string ToLabel(SnoopableContext context, Face face) => face.GetType()?.GetCSharpName();
 
-        protected override IEnumerable<SnoopableObject> Snooop(SnoopableContext context, Face face)
-        {
-            yield return new SnoopableObject(context.Document, face);
-        }
-
+        
 
         private readonly static Color FaceColor = new Color(80, 175, 228);
 

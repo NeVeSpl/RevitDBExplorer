@@ -47,7 +47,10 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers.Base
         {
             return Snooop(context, value) ?? Enumerable.Empty<SnoopableObject>();
         }
-        protected virtual IEnumerable<SnoopableObject> Snooop(SnoopableContext context, T value) => null;
+        protected virtual IEnumerable<SnoopableObject> Snooop(SnoopableContext context, T value)
+        {
+            yield return new SnoopableObject(context.Document, value);
+        }
 
 
 
