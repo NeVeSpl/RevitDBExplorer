@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq.Expressions;
 using Autodesk.Revit.DB;
+using RevitDBExplorer.Domain.DataModel.Accessors;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
@@ -8,17 +9,17 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
     internal class SpatialElement_GetBoundarySegments : MemberAccessorByType<SpatialElement>, ICanCreateMemberAccessor
     {
-        public IEnumerable<LambdaExpression> GetHandledMembers() { yield return (SpatialElement x) => x.GetBoundarySegments(null); }
+        public IEnumerable<LambdaExpression> GetHandledMembers() => [ (SpatialElement x) => x.GetBoundarySegments(null) ];
 
 
-        protected override bool CanBeSnoooped(Document document, SpatialElement value) => true;
-
-        protected override string GetLabel(Document document, SpatialElement value)
+        public override ReadResult Read(SnoopableContext context, SpatialElement spatialElement) => new()
         {
-            return "[[BoundarySegment]]";
-        }
+            Label = "[[BoundarySegment]]",
+            CanBeSnooped = true
+        };
 
-        protected override IEnumerable<SnoopableObject> Snooop(Document document, SpatialElement element)
+
+        protected override IEnumerable<SnoopableObject> Snoop(SnoopableContext context, SpatialElement element)
         {
             var options = new[]
             {
@@ -34,7 +35,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 
             foreach (var option in options)
             {
-                yield return SnoopableObject.CreateKeyValuePair(document, option, element.GetBoundarySegments(option), "options");
+                yield return SnoopableObject.CreateKeyValuePair(context.Document, option, element.GetBoundarySegments(option), "options");
             }
         }
     }

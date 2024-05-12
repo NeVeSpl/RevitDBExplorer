@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq.Expressions;
 using Autodesk.Revit.DB;
+using RevitDBExplorer.Domain.DataModel.Accessors;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
@@ -8,13 +9,13 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
     internal class Element_Id : MemberAccessorByType<Element>, ICanCreateMemberAccessor
     {
-        IEnumerable<LambdaExpression> ICanCreateMemberAccessor.GetHandledMembers()
-        {
-            yield return (Element x) => x.Id;            
-        }      
-        
+        IEnumerable<LambdaExpression> ICanCreateMemberAccessor.GetHandledMembers() => [ (Element x) => x.Id ];
 
-        protected override bool CanBeSnoooped(Document document, Element value) => false;
-        protected override string GetLabel(Document document, Element value) => value.Id.ToString();
+
+        public override ReadResult Read(SnoopableContext context, Element element) => new()
+        {
+            Label = element.Id.ToString(),
+            CanBeSnooped = false
+        };
     }
 }

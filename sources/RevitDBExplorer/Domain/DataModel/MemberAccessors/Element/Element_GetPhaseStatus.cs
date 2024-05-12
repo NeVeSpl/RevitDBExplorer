@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Linq.Expressions;
 using Autodesk.Revit.DB;
+using RevitDBExplorer.Domain.DataModel.Accessors;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
@@ -9,14 +10,19 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
     internal class Element_GetPhaseStatus : MemberAccessorByType<Element>, ICanCreateMemberAccessor
     {
-        IEnumerable<LambdaExpression> ICanCreateMemberAccessor.GetHandledMembers() { yield return (Element x, ElementId i) => x.GetPhaseStatus(i); }           
+        IEnumerable<LambdaExpression> ICanCreateMemberAccessor.GetHandledMembers() => [ (Element x, ElementId i) => x.GetPhaseStatus(i) ];
 
 
-        protected override bool CanBeSnoooped(Document document, Element element) => !document.Phases.IsEmpty;
-        protected override string GetLabel(Document document, Element element) => $"[{nameof(ElementOnPhaseStatus)}]";
-        protected override IEnumerable<SnoopableObject> Snooop(Document document, Element element)
+        public override ReadResult Read(SnoopableContext context, Element element) => new()
         {
-            var elementOnPhaseStatuses = document.Phases.OfType<Phase>().Select(x => SnoopableObject.CreateKeyValuePair(document, x, element.GetPhaseStatus(x.Id), "phase:", "status:"));
+            Label = Labeler.GetLabelForCollection(nameof(ElementOnPhaseStatus), context.Document.Phases.Size),
+            CanBeSnooped = !context.Document.Phases.IsEmpty
+        };
+
+
+        protected override IEnumerable<SnoopableObject> Snoop(SnoopableContext context, Element element)
+        {
+            var elementOnPhaseStatuses = context.Document.Phases.OfType<Phase>().Select(x => SnoopableObject.CreateKeyValuePair(context.Document, x, element.GetPhaseStatus(x.Id), "phase:", "status:"));
             return elementOnPhaseStatuses;
         }
     }

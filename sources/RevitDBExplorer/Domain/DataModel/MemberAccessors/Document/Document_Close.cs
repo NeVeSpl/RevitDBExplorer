@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq.Expressions;
 using Autodesk.Revit.DB;
+using RevitDBExplorer.Domain.DataModel.Accessors;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
@@ -8,10 +9,9 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
     internal class Document_Close : MemberAccessorByType<Document>, ICanCreateMemberAccessor
     {
-        IEnumerable<LambdaExpression> ICanCreateMemberAccessor.GetHandledMembers() { yield return (Document x) => x.Close(); yield return (Document x) => x.Close(true); }         
+        IEnumerable<LambdaExpression> ICanCreateMemberAccessor.GetHandledMembers() => [ (Document x) => x.Close(), (Document x) => x.Close(true) ];
 
-      
-        protected override bool CanBeSnoooped(Document document, Document value) => false;
-        protected override string GetLabel(Document document, Document value) => QuoteGenerator.Deny();       
+
+        public override ReadResult Read(SnoopableContext context, Document value) => ReadResult.Forbidden;
     }
 }

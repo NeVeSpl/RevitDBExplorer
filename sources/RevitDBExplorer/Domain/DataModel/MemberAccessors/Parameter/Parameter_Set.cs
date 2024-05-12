@@ -10,13 +10,13 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
     internal class Parameter_Set : MemberAccessorTyped<Parameter>, ICanCreateMemberAccessor
     {
-        IEnumerable<LambdaExpression> ICanCreateMemberAccessor.GetHandledMembers() 
-        {
-            yield return (Parameter x) => x.Set("foo");
-            yield return (Parameter x) => x.Set(7); 
-            yield return (Parameter x) => x.Set(7.77);
-            yield return (Parameter x) => x.Set(ElementIdFactory.Create(7)); 
-        }              
+        IEnumerable<LambdaExpression> ICanCreateMemberAccessor.GetHandledMembers() =>
+        [
+             (Parameter x) => x.Set("foo"),
+             (Parameter x) => x.Set(7), 
+             (Parameter x) => x.Set(7.77),
+             (Parameter x) => x.Set(ElementIdFactory.Create(7)), 
+        ];              
 
 
         public override IValueViewModel CreatePresenter(SnoopableContext context, Parameter parameter)

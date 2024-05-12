@@ -8,7 +8,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
     internal class Element_GetDependentElements : MemberAccessorByFunc<Element, IList<ElementId>>, ICanCreateMemberAccessor
     {
-        IEnumerable<LambdaExpression> ICanCreateMemberAccessor.GetHandledMembers() { yield return (Element x, ElementFilter ef) => x.GetDependentElements(ef); }
+        IEnumerable<LambdaExpression> ICanCreateMemberAccessor.GetHandledMembers() => [ (Element x, ElementFilter ef) => x.GetDependentElements(ef) ];
 
 
         public Element_GetDependentElements() : base( (document, element) => element.GetDependentElements(null) )

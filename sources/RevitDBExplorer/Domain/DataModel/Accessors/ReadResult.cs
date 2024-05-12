@@ -38,5 +38,7 @@ namespace RevitDBExplorer.Domain.DataModel.Accessors
             CanBeVisualized = canBeVisualized;
             State = state;
         }
+
+        public static ReadResult Forbidden => new ReadResult("<access denied / forbidden>", null, false, null);
     }
 }

@@ -8,7 +8,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
     internal class Element_BoundingBox : MemberAccessorByFunc<Element, BoundingBoxXYZ>, ICanCreateMemberAccessor
     {
-        IEnumerable<LambdaExpression> ICanCreateMemberAccessor.GetHandledMembers() { yield return (Element x, View v) => x.get_BoundingBox(v); }
+        IEnumerable<LambdaExpression> ICanCreateMemberAccessor.GetHandledMembers() => [ (Element x, View v) => x.get_BoundingBox(v) ];
 
 
         public Element_BoundingBox() : base((document, element) => element.get_BoundingBox(document.ActiveView), Snoop)
@@ -19,6 +19,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 
         private static IEnumerable<SnoopableObject> Snoop(Document document, Element element)
         {
+            //var document = context.Document;
             yield return new SnoopableObject(document, null, new[] { new SnoopableObject(document, element.get_BoundingBox(null)) }) { NamePrefix = "view:" };
             if (document.ActiveView != null)
             {

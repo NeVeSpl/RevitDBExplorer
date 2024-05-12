@@ -2,6 +2,7 @@
 using System.Linq.Expressions;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.ExtensibleStorage;
+using RevitDBExplorer.Domain.DataModel.Accessors;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
@@ -9,10 +10,15 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
     internal class Element_GetEntity : MemberAccessorByType<Element>, ICanCreateMemberAccessor
     {
-        IEnumerable<LambdaExpression> ICanCreateMemberAccessor.GetHandledMembers() { yield return (Element x, Schema s) => x.GetEntity(s); }        
+        IEnumerable<LambdaExpression> ICanCreateMemberAccessor.GetHandledMembers() => [ (Element x, Schema s) => x.GetEntity(s) ];
 
 
-        protected override bool CanBeSnoooped(Document document, Element element)
+        public override ReadResult Read(SnoopableContext context, Element element) => new()
+        {
+            Label = Labeler.GetLabelForCollection(nameof(Entity), null),
+            CanBeSnooped = CanBeSnoooped(element)
+        };
+        private bool CanBeSnoooped(Element element)
         {
             foreach (var id in element.GetEntitySchemaGuids())
             {
@@ -21,11 +27,9 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
             }
             return false;
         }
-        protected override string GetLabel(Document document, Element element)
-        {          
-            return $"[{nameof(Entity)}]";
-        }
-        protected override IEnumerable<SnoopableObject> Snooop(Document document, Element element)
+      
+
+        protected override IEnumerable<SnoopableObject> Snoop(SnoopableContext context, Element element)
         {
             var schemas = Schema.ListSchemas();
 
@@ -35,7 +39,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
                 var entity = element.GetEntity(schema);
                 if (!entity.IsValid()) continue;
 
-                yield return SnoopableObject.CreateInOutPair(document, schema, entity);
+                yield return SnoopableObject.CreateInOutPair(context.Document, schema, entity);
             }         
         }       
     }

@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Linq.Expressions;
 using Autodesk.Revit.DB;
+using RevitDBExplorer.Domain.DataModel.Accessors;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
@@ -9,14 +10,19 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
     internal class Document_PlanTopology : MemberAccessorByType<Document>, ICanCreateMemberAccessor
     {
-        IEnumerable<LambdaExpression> ICanCreateMemberAccessor.GetHandledMembers() { yield return (Document x, Phase phase) => x.get_PlanTopologies(phase); }       
+        IEnumerable<LambdaExpression> ICanCreateMemberAccessor.GetHandledMembers() => [ (Document x, Phase phase) => x.get_PlanTopologies(phase) ];
 
 
-        protected override bool CanBeSnoooped(Document document, Document value) => false;// document.Phases.Size > 0;
-        protected override string GetLabel(Document document, Document value) => $"[{nameof(PlanTopology)}]";
-
-        protected override IEnumerable<SnoopableObject> Snooop(Document document, Document value)
+        public override ReadResult Read(SnoopableContext context, Document value) => new()
         {
+            Label = Labeler.GetLabelForCollection(nameof(PlanTopology), null),
+            CanBeSnooped = false
+        };
+       
+
+        protected override IEnumerable<SnoopableObject> Snoop(SnoopableContext context, Document value)
+        {
+            var document = context.Document;
             var transaction = document.IsModifiable == false ? new Transaction(document, GetType().Name) : null;
             transaction?.Start();
             try

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using Autodesk.Revit.DB;
+using RevitDBExplorer.Domain.DataModel.Accessors;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
@@ -9,10 +10,15 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
     internal sealed class Element_Geometry : MemberAccessorByType<Element>, ICanCreateMemberAccessor
     {
-        IEnumerable<LambdaExpression> ICanCreateMemberAccessor.GetHandledMembers() { yield return (Element x, Options o) => x.get_Geometry(o); } 
-   
+        IEnumerable<LambdaExpression> ICanCreateMemberAccessor.GetHandledMembers() => [ (Element x, Options o) => x.get_Geometry(o) ];
 
-        protected override bool CanBeSnoooped(Document document, Element element)
+
+        public override ReadResult Read(SnoopableContext context, Element element) => new()
+        {
+            Label = Labeler.GetLabelForCollection(nameof(GeometryElement), null),
+            CanBeSnooped = CanBeSnoooped(context.Document, element),
+        };
+        private bool CanBeSnoooped(Document document, Element element)
         {          
             var options = element.ViewSpecific ? new Options() { View = document.ActiveView } : new Options();
             var geometry = element.get_Geometry(options);
@@ -20,9 +26,11 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 
             return canBeSnooped;
         }
-        protected override string GetLabel(Document document, Element element) => $"[{nameof(GeometryElement)}]";
-        protected override IEnumerable<SnoopableObject> Snooop(Document document, Element element)
+        
+
+        protected override IEnumerable<SnoopableObject> Snoop(SnoopableContext context, Element element)
         {
+            var document = context.Document;
             var optionsForActiveView = new List<Options>();
             if (document.ActiveView != null)
             {

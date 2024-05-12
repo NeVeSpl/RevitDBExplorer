@@ -10,7 +10,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
     internal class Parameter_SetValueString : MemberAccessorTyped<Parameter>, ICanCreateMemberAccessor
     {
-        IEnumerable<LambdaExpression> ICanCreateMemberAccessor.GetHandledMembers() { yield return (Parameter x) => x.SetValueString("foo"); }
+        IEnumerable<LambdaExpression> ICanCreateMemberAccessor.GetHandledMembers() => [ (Parameter x) => x.SetValueString("foo") ];
 
 
 
