@@ -92,6 +92,10 @@
 				<PackageReference Include="System.Text.Json" Version="7.0.2" />
 				<PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
 				<PackageReference Include="System.ValueTuple" Version="4.5.0" />
+				<PackageReference Include="PolySharp" Version="1.14.1">
+					<PrivateAssets>all</PrivateAssets>
+					<IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+				</PackageReference>
 			</ItemGroup>
 			<ItemGroup>
 				<Reference Include="System.Data.DataSetExtensions" />

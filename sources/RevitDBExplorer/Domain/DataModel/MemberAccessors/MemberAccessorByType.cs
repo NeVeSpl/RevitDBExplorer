@@ -36,12 +36,16 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 
         protected override bool CanBeSnoooped(Document document, TSnoopedObjectType value)
         {
+#if NET
             ArgumentNullException.ThrowIfNull(Override.CanBeSnooped);
+#endif
             return Override.CanBeSnooped(document, value);
         }
         protected override string GetLabel(Document document, TSnoopedObjectType value)
         {
+#if NET
             ArgumentNullException.ThrowIfNull(Override.GetLabel);
+#endif
             return Override.GetLabel(document, value);
         }
         protected override IEnumerable<SnoopableObject> Snooop(Document document, TSnoopedObjectType value)
