@@ -10,7 +10,7 @@ using RevitDBExplorer.Domain.RevitDatabaseScripting;
 
 namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
-    internal sealed class MemberAccessorByRef : MemberAccessorTypedWithReadAndSnoop<object>, IAccessorWithCodeGeneration
+    internal sealed class MemberAccessorByRef : MemberAccessorTypedWithDefaultPresenter<object>, IAccessorWithCodeGeneration
     {
         private readonly MethodInfo getMethod;          
 
@@ -28,12 +28,9 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
             var resolvedArgs = ResolveArguments(paramsDef, context.Document, @object);            
             var result = getMethod.Invoke(@object, resolvedArgs);
             value.SetValue(context, result);
-            return new ReadResult(value.ValueAsString, "[ByRef] " + value.TypeHandlerName, value.CanBeSnooped, value);
+            return new ReadResult(value.ValueAsString, "[ByRef] " + value.TypeHandlerName, value.CanBeSnooped, value.CanBeVisualized, value);
         }
-        public override IEnumerable<SnoopableObject> Snoop(SnoopableContext context, object @object, IValueContainer state)
-        {            
-            return state.Snoop();
-        }
+       
 
         public static Type[] HandledParameterTypes = new[] { typeof(Document), typeof(Options), typeof(View), typeof(SpatialElementBoundaryOptions) };
 

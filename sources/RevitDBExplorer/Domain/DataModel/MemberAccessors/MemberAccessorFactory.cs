@@ -11,7 +11,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
     internal static class MemberAccessorFactory
     {        
-        private static readonly Dictionary<string, Func<IAccessor>> forTypeMembers = new();
+        private static readonly Dictionary<string, Func<IAccessor>> memberAccessorOverrides = new();
 
 
         public static void Init()
@@ -26,7 +26,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
                 foreach (var handledMember in accessor.GetHandledMembers())
                 {
                     var memberId = handledMember.GetUniqueId();
-                    forTypeMembers[memberId] = accessor.GetType().CompileFactoryMethod<IAccessor>();
+                    memberAccessorOverrides[memberId] = accessor.GetType().CompileFactoryMethod<IAccessor>();
                 }
             }
         }
@@ -50,20 +50,20 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 
         private static IAccessor CreateMemberAccessor(MethodInfo getMethod)
         {
+            if (memberAccessorOverrides.TryGetValue(getMethod.GetUniqueId(), out Func<IAccessor> factory))
+            {
+                return factory();
+            }
+
             if (getMethod.IsStatic)
             {
                 return new MemberAccessorForStatic(getMethod);
             }
 
-            if (getMethod.ReturnType == typeof(void) && getMethod.Name != "GetOverridableHookParameters")
+            if (getMethod.ReturnType == typeof(void))
             {
                 return new MemberAccessorForNotExposed(getMethod);
-            }            
-
-            if (forTypeMembers.TryGetValue(getMethod.GetUniqueId(), out Func<IAccessor> factory))
-            {
-                return factory();
-            }
+            }  
 
             var @params = getMethod.GetParameters();
           

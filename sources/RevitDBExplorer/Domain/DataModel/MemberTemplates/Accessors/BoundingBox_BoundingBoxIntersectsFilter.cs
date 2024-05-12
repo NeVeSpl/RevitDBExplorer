@@ -9,7 +9,7 @@ using RevitDBExplorer.Domain.DataModel.ValueContainers.Base;
 
 namespace RevitDBExplorer.Domain.DataModel.MemberTemplates.Accessors
 {
-    internal class BoundingBox_BoundingBoxIntersectsFilter : MemberAccessorTypedWithReadAndSnoop<BoundingBoxXYZ>
+    internal class BoundingBox_BoundingBoxIntersectsFilter : MemberAccessorTypedWithDefaultPresenter<BoundingBoxXYZ>
     {
         public override ReadResult Read(SnoopableContext context, BoundingBoxXYZ boundingBox)
         {

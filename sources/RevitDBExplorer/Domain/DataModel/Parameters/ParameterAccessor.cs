@@ -6,12 +6,13 @@ using RevitDBExplorer.Domain.DataModel.ValueContainers.Base;
 using RevitDBExplorer.Domain.DataModel.ValueViewModels.Base;
 using RevitDBExplorer.Domain.DataModel.ValueViewModels;
 using RevitDBExplorer.Domain.RevitDatabaseScripting;
+using RevitExplorer.Visualizations.DrawingVisuals;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
 namespace RevitDBExplorer.Domain.DataModel.Parameters
 {
-    internal sealed class ParameterAccessor : IAccessor, IAccessorWithReadAndSnoop, IAccessorWithCodeGeneration
+    internal sealed class ParameterAccessor : IAccessor, IAccessorForDefaultPresenter, IAccessorWithCodeGeneration
     {
         private readonly Parameter parameter;
         private readonly IValueContainer value;
@@ -37,7 +38,7 @@ namespace RevitDBExplorer.Domain.DataModel.Parameters
         {
             if (!parameter.HasValue)
             {
-                return new ReadResult("<has no value>", "[ByParam]", false);
+                return new ReadResult("<has no value>", "[ByParam]", false, false);
             }
 
             switch (parameter.StorageType)
@@ -67,6 +68,10 @@ namespace RevitDBExplorer.Domain.DataModel.Parameters
         public IEnumerable<SnoopableObject> Snoop(SnoopableContext context, object @object, IValueContainer state)
         {
             return state.Snoop();
+        }
+        public IEnumerable<DrawingVisual> GetVisualization(SnoopableContext context, object @object, IValueContainer state)
+        {
+            return state.GetVisualization();
         }
 
 
@@ -105,6 +110,6 @@ namespace RevitDBExplorer.Domain.DataModel.Parameters
                
             }
             throw new NotImplementedException();
-        }
+        }      
     }
 }

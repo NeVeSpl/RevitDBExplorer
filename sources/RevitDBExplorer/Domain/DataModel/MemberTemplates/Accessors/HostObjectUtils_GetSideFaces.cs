@@ -9,7 +9,7 @@ using RevitDBExplorer.Domain.DataModel.ValueContainers.Base;
 
 namespace RevitDBExplorer.Domain.DataModel.MemberTemplates.Accessors
 {
-    internal class HostObjectUtils_GetSideFaces : MemberAccessorTypedWithReadAndSnoop<HostObject>
+    internal class HostObjectUtils_GetSideFaces : MemberAccessorTypedWithDefaultPresenter<HostObject>
     {
         public override ReadResult Read(SnoopableContext context, HostObject element)
         {            

@@ -8,7 +8,7 @@ using RevitDBExplorer.Domain.DataModel.ValueContainers.Base;
 
 namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
-    internal class MemberAccessorByFunc<TSnoopedObjectType, TReturnType> : MemberAccessorTypedWithReadAndSnoop<TSnoopedObjectType>
+    internal class MemberAccessorByFunc<TSnoopedObjectType, TReturnType> : MemberAccessorTypedWithDefaultPresenter<TSnoopedObjectType>
     {     
         private readonly Func<Document, TSnoopedObjectType, TReturnType> get;
         private readonly Func<Document, TSnoopedObjectType, IEnumerable<SnoopableObject>> snoop;
@@ -25,7 +25,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
             var value = new ValueContainer<TReturnType>();
             var result = get(context.Document, @object);
             value.SetValueTyped(context, result);
-            return new ReadResult(value.ValueAsString, "[ByFunc] " + value.TypeHandlerName, value.CanBeSnooped, value);
+            return new ReadResult(value.ValueAsString, "[ByFunc] " + value.TypeHandlerName, value.CanBeSnooped, value.CanBeVisualized, value);
         }
         public override IEnumerable<SnoopableObject> Snoop(SnoopableContext context, TSnoopedObjectType @object, IValueContainer state)
         {

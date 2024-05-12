@@ -10,7 +10,7 @@ using RevitDBExplorer.Domain.DataModel.ValueContainers.Base;
 
 namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
-    internal sealed class MemberAccessorByIteration<TSnoopedObjectType, TReturnType> : MemberAccessorTypedWithReadAndSnoop<TSnoopedObjectType>
+    internal sealed class MemberAccessorByIteration<TSnoopedObjectType, TReturnType> : MemberAccessorTypedWithDefaultPresenter<TSnoopedObjectType>
     {
         private readonly string getMethodReturnTypeName;
         private readonly ParameterInfo getMethodParameter;
@@ -30,7 +30,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
         public override ReadResult Read(SnoopableContext context, TSnoopedObjectType @object)
         {
             var count = CountValues(context, getMethodParameter.ParameterType);
-            return new ReadResult(Labeler.GetLabelForCollection(getMethodReturnTypeName, count), "[ByIteration]", true);
+            return new ReadResult(Labeler.GetLabelForCollection(getMethodReturnTypeName, count), "[ByIteration]", true, false);
         }
         public override IEnumerable<SnoopableObject> Snoop(SnoopableContext context, TSnoopedObjectType @object, IValueContainer state)
         {            

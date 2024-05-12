@@ -9,7 +9,7 @@ using RevitDBExplorer.Domain.RevitDatabaseScripting;
 
 namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 {
-    internal sealed class MemberAccessorByRefCompiled<TSnoopedObjectType, TReturnType> : MemberAccessorTypedWithReadAndSnoop<TSnoopedObjectType>, IAccessorWithCodeGeneration
+    internal sealed class MemberAccessorByRefCompiled<TSnoopedObjectType, TReturnType> : MemberAccessorTypedWithDefaultPresenter<TSnoopedObjectType>, IAccessorWithCodeGeneration
     {
         private readonly MethodInfo getMethod;
         private readonly Func<TSnoopedObjectType, TReturnType> func;
@@ -25,13 +25,8 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
             var value = new ValueContainer<TReturnType>();        
             var result = func(typedObject);
             value.SetValueTyped(context, result);
-            return new ReadResult(value.ValueAsString, "[ByRefComp] " + value.TypeHandlerName, value.CanBeSnooped, value);
-        }
-
-        public override IEnumerable<SnoopableObject> Snoop(SnoopableContext context, TSnoopedObjectType typedObject, IValueContainer state)
-        {
-            return state.Snoop();
-        }
+            return new ReadResult(value.ValueAsString, "[ByRefComp] " + value.TypeHandlerName, value.CanBeSnooped, value.CanBeVisualized, value);
+        }      
 
 
         public string GenerateInvocationForScript(TemplateInputsKind inputsKind)
