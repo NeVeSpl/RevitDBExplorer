@@ -4,6 +4,7 @@ using System.Linq.Expressions;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.Structure;
 using RevitDBExplorer.Domain.DataModel.Accessors;
+using RevitDBExplorer.Domain.DataModel.Members;
 using RevitDBExplorer.Domain.DataModel.Members.Accessors;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
@@ -17,11 +18,11 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 
         public Rebar_GetCenterlineCurves()
         {
-            DefaultInvocation = "GetCenterlineCurves(false, true, false, MultiplanarOption.IncludeOnlyPlanarCurves, 0)";
+            DefaultInvocation.Syntax = "GetCenterlineCurves(false, true, false, MultiplanarOption.IncludeOnlyPlanarCurves, 0)";
         }
 
 
-        public override ReadResult Read(SnoopableContext context, Rebar rebar) => new()
+        protected override ReadResult Read(SnoopableContext context, Rebar rebar) => new()
         {
             Label = Labeler.GetLabelForCollection(nameof(Curve), rebar.NumberOfBarPositions),
             CanBeSnooped = true

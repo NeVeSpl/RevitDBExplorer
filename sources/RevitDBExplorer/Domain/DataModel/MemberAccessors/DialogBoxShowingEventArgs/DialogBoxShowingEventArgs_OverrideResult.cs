@@ -2,6 +2,7 @@
 using System.Linq.Expressions;
 using Autodesk.Revit.UI.Events;
 using RevitDBExplorer.Domain.DataModel.Accessors;
+using RevitDBExplorer.Domain.DataModel.Members;
 using RevitDBExplorer.Domain.DataModel.Members.Accessors;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
@@ -13,7 +14,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
         IEnumerable<LambdaExpression> ICanCreateMemberAccessor.GetHandledMembers() => [ (DialogBoxShowingEventArgs x) => x.OverrideResult(0) ];
 
 
-        public override ReadResult Read(SnoopableContext context, DialogBoxShowingEventArgs value) => ReadResult.Forbidden;
+        protected override ReadResult Read(SnoopableContext context, DialogBoxShowingEventArgs value) => ReadResult.Forbidden;
 
     }
 }

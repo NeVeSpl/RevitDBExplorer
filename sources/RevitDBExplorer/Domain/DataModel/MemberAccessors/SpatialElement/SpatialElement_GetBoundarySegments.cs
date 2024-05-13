@@ -2,6 +2,7 @@
 using System.Linq.Expressions;
 using Autodesk.Revit.DB;
 using RevitDBExplorer.Domain.DataModel.Accessors;
+using RevitDBExplorer.Domain.DataModel.Members;
 using RevitDBExplorer.Domain.DataModel.Members.Accessors;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
@@ -13,7 +14,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
         public IEnumerable<LambdaExpression> GetHandledMembers() => [ (SpatialElement x) => x.GetBoundarySegments(null) ];
 
 
-        public override ReadResult Read(SnoopableContext context, SpatialElement spatialElement) => new()
+        protected override ReadResult Read(SnoopableContext context, SpatialElement spatialElement) => new()
         {
             Label = "[[BoundarySegment]]",
             CanBeSnooped = true

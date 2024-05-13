@@ -4,6 +4,7 @@ using System.Linq.Expressions;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.Structure;
 using RevitDBExplorer.Domain.DataModel.Accessors;
+using RevitDBExplorer.Domain.DataModel.Members;
 using RevitDBExplorer.Domain.DataModel.Members.Accessors;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
@@ -15,7 +16,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
         IEnumerable<LambdaExpression> ICanCreateMemberAccessor.GetHandledMembers() => [ (Rebar x, ISet<ElementId> s1, ISet<ElementId> s2, ISet<ElementId> s3, ISet<ElementId> s4) => x.GetOverridableHookParameters(out s1, out s2, out s3, out s4) ];
 
 
-        public override ReadResult Read(SnoopableContext context, Rebar rebar) => new()
+        protected override ReadResult Read(SnoopableContext context, Rebar rebar) => new()
         {
             Label = Labeler.GetLabelForCollection(nameof(ElementId), null),
             CanBeSnooped = rebar.IsHookLengthOverrideEnabled()

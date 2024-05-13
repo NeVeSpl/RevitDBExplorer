@@ -11,7 +11,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberTemplates.Accessors
 {
     internal class BoundingBox_BoundingBoxIntersectsFilter : MemberAccessorTypedWithDefaultPresenter<BoundingBoxXYZ>
     {
-        public override ReadResult Read(SnoopableContext context, BoundingBoxXYZ boundingBox)
+        protected override ReadResult Read(SnoopableContext context, BoundingBoxXYZ boundingBox)
         {
             var outline = new Outline(boundingBox.Min, boundingBox.Max);
             int count = new FilteredElementCollector(context.Document).WherePasses(new BoundingBoxIntersectsFilter(outline)).GetElementCount();
@@ -23,7 +23,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberTemplates.Accessors
             };
         }
 
-        public override IEnumerable<SnoopableObject> Snoop(SnoopableContext context, BoundingBoxXYZ boundingBox, IValueContainer state)
+        protected override IEnumerable<SnoopableObject> Snoop(SnoopableContext context, BoundingBoxXYZ boundingBox, IValueContainer state)
         {
             var outline = new Outline(boundingBox.Min, boundingBox.Max);
             var elements = new FilteredElementCollector(context.Document).WherePasses(new BoundingBoxIntersectsFilter(outline)).ToElements();

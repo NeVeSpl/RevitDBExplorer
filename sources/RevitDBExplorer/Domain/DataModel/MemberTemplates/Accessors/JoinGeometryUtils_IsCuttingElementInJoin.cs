@@ -11,7 +11,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberTemplates.Accessors
 {
     internal class JoinGeometryUtils_IsCuttingElementInJoin : MemberAccessorTypedWithDefaultPresenter<Element>
     {
-        public override ReadResult Read(SnoopableContext context, Element element)
+        protected override ReadResult Read(SnoopableContext context, Element element)
         {            
             var elementIds = JoinGeometryUtils.GetJoinedElements(context.Document, element);
             return new ReadResult()
@@ -23,7 +23,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberTemplates.Accessors
 
         }
 
-        public override IEnumerable<SnoopableObject> Snoop(SnoopableContext context, Element element, IValueContainer state)
+        protected override IEnumerable<SnoopableObject> Snoop(SnoopableContext context, Element element, IValueContainer state)
         {
             var elementIds = JoinGeometryUtils.GetJoinedElements(context.Document, element);
             if (elementIds.Any())

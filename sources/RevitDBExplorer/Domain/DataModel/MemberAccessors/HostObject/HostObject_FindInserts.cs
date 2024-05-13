@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq.Expressions;
 using Autodesk.Revit.DB;
+using RevitDBExplorer.Domain.DataModel.Members;
 using RevitDBExplorer.Domain.DataModel.Members.Accessors;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
@@ -14,7 +15,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 
         public HostObject_FindInserts() : base((document, hostObject) => hostObject.FindInserts(true, true, true, true))
         {
-            DefaultInvocation = "FindInserts(true, true, true, true)";
+            DefaultInvocation.Syntax = "FindInserts(true, true, true, true)";
         }
     }
 }

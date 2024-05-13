@@ -4,13 +4,16 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using RevitDBExplorer.Domain.DataModel.Accessors;
+using RevitDBExplorer.Domain.DataModel.MemberAccessors;
+using RevitDBExplorer.Domain.DataModel.Members.Accessors;
+
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
-namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
+namespace RevitDBExplorer.Domain.DataModel.Members
 {
     internal static class MemberAccessorFactory
-    {        
+    {
         private static readonly Dictionary<string, Func<IAccessor>> memberAccessorOverrides = new();
 
 
@@ -45,9 +48,9 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
             var memberAccessor = CreateMemberAccessor(getMethod);
             memberAccessor.UniqueId = getMethod.GetUniqueId();
 
-            if (string.IsNullOrEmpty(memberAccessor.DefaultInvocation))
+            if (string.IsNullOrEmpty(memberAccessor.DefaultInvocation.Syntax))
             {
-                memberAccessor.DefaultInvocation = getMethod.GenerateInvocation();
+                memberAccessor.DefaultInvocation.Syntax = getMethod.GenerateInvocation();
             }
 
             return memberAccessor;
@@ -68,16 +71,16 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
             if (getMethod.ReturnType == typeof(void))
             {
                 return new MemberAccessorForNotExposed(getMethod);
-            }  
+            }
 
             var @params = getMethod.GetParameters();
-          
+
             if (@params.Length == 0)
             {
                 var genericFactory = GenericFactory.GetInstance(getMethod.DeclaringType, getMethod.ReturnType);
                 var accessor = genericFactory.CreateMemberAccessorByRefCompiled(getMethod);
                 return accessor;
-            }            
+            }
 
             if (@params.Length == 1)
             {
@@ -92,7 +95,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
             {
                 return new MemberAccessorByRef(getMethod);
             }
-            
+
             return new MemberAccessorForNotExposed(getMethod);
         }
     }

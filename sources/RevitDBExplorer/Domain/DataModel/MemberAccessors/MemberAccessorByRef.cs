@@ -22,7 +22,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
         }
 
 
-        public override ReadResult Read(SnoopableContext context, object @object)
+        protected override ReadResult Read(SnoopableContext context, object @object)
         {
             var value = ValueContainerFactory.Create(getMethod.ReturnType);
             var paramsDef = getMethod.GetParameters();

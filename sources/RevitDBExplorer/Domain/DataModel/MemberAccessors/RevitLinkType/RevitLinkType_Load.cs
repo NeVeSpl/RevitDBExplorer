@@ -2,6 +2,7 @@
 using System.Linq.Expressions;
 using Autodesk.Revit.DB;
 using RevitDBExplorer.Domain.DataModel.Accessors;
+using RevitDBExplorer.Domain.DataModel.Members;
 using RevitDBExplorer.Domain.DataModel.Members.Accessors;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
@@ -17,6 +18,6 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
         ];
 
 
-        public override ReadResult Read(SnoopableContext context, RevitLinkType revitLinkType) => ReadResult.Forbidden;       
+        protected override ReadResult Read(SnoopableContext context, RevitLinkType revitLinkType) => ReadResult.Forbidden;       
     }
 }

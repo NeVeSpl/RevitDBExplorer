@@ -6,6 +6,7 @@ using System.Reflection;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.ExtensibleStorage;
 using RevitDBExplorer.Domain.DataModel.Accessors;
+using RevitDBExplorer.Domain.DataModel.Members;
 using RevitDBExplorer.Domain.DataModel.Members.Accessors;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
@@ -17,7 +18,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
         IEnumerable<LambdaExpression> ICanCreateMemberAccessor.GetHandledMembers() => [ (Entity x, Field f) => x.Get<object>(f) ];
 
 
-        public override ReadResult Read(SnoopableContext context, Entity entity) => new()
+        protected override ReadResult Read(SnoopableContext context, Entity entity) => new()
         {
             Label = "[Extensible storage field values]",
             CanBeSnooped = entity.IsValid() && entity.Schema.ReadAccessGranted() && entity.Schema.ListFields().Count > 0
@@ -56,7 +57,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
             }
         }
 
-        private bool IsMeasurableSpec(ForgeTypeId id)
+        private static bool IsMeasurableSpec(ForgeTypeId id)
         {
 #if R2022_MIN
             return UnitUtils.IsMeasurableSpec(id);
@@ -78,7 +79,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
 #endif
         }
 
-        private Type GetFieldValueType(Field field)
+        private static Type GetFieldValueType(Field field)
         {
             return field.ContainerType switch
             {

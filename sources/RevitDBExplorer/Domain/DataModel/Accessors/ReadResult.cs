@@ -5,10 +5,10 @@ using RevitDBExplorer.Domain.DataModel.ValueContainers.Base;
 
 namespace RevitDBExplorer.Domain.DataModel.Accessors
 {
-    internal readonly ref struct ReadResult
+    internal ref struct ReadResult
     {
         public required string Label { get; init; }
-        public string AccessorName { get; init; }
+        public string AccessorName { get; set; }
         public required bool CanBeSnooped { get; init; } = false;
         public bool CanBeVisualized { get; init; } = false;
         public IValueContainer State { get; init; }
@@ -17,20 +17,10 @@ namespace RevitDBExplorer.Domain.DataModel.Accessors
         public ReadResult()
         {
             
-        }
-
-
-        [SetsRequiredMembers]
-        public ReadResult(string label, string accessorName, bool canBeSnooped, IValueContainer state = null)
-        {
-            Label = label;
-            AccessorName = accessorName;
-            CanBeSnooped = canBeSnooped;
-            State = state;
-        }
+        }   
 
         [SetsRequiredMembers]
-        public ReadResult(string label, string accessorName, bool canBeSnooped = false, bool canBeVisualized = false, IValueContainer state = null)
+        public ReadResult(string label, string accessorName = null, bool canBeSnooped = false, bool canBeVisualized = false, IValueContainer state = null)
         {
             Label = label;
             AccessorName = accessorName;
@@ -39,6 +29,7 @@ namespace RevitDBExplorer.Domain.DataModel.Accessors
             State = state;
         }
 
-        public static ReadResult Forbidden => new ReadResult("<access denied / forbidden>", null, false, null);
+
+        public static ReadResult Forbidden => new ReadResult("<access denied / forbidden>");
     }
 }

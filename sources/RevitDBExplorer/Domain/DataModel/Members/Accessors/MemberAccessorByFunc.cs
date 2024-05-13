@@ -20,14 +20,14 @@ namespace RevitDBExplorer.Domain.DataModel.Members.Accessors
         }
 
 
-        public override ReadResult Read(SnoopableContext context, TSnoopedObjectType @object)
+        protected override ReadResult Read(SnoopableContext context, TSnoopedObjectType @object)
         {
             var value = new ValueContainer<TReturnType>();
             var result = get(context.Document, @object);
             value.SetValueTyped(context, result);
             return new ReadResult(value.ValueAsString, "[ByFunc] " + value.TypeHandlerName, value.CanBeSnooped, value.CanBeVisualized, value);
         }
-        public override IEnumerable<SnoopableObject> Snoop(SnoopableContext context, TSnoopedObjectType @object, IValueContainer state)
+        protected override IEnumerable<SnoopableObject> Snoop(SnoopableContext context, TSnoopedObjectType @object, IValueContainer state)
         {
             if (snoop != null)
             {

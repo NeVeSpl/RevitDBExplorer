@@ -5,6 +5,7 @@ using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.Mechanical;
 using Autodesk.Revit.DB.Plumbing;
 using RevitDBExplorer.Domain.DataModel.Accessors;
+using RevitDBExplorer.Domain.DataModel.Members;
 using RevitDBExplorer.Domain.DataModel.Members.Accessors;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
@@ -17,7 +18,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors.MepSection
         public IEnumerable<LambdaExpression> GetHandledMembers() => [ (MEPSection x) => x.IsMain(null) ];
 
 
-        public override ReadResult Read(SnoopableContext context, MEPSection value) => new()
+        protected override ReadResult Read(SnoopableContext context, MEPSection value) => new()
         {
             Label = Labeler.GetLabelForCollection(nameof(Boolean), null),
             CanBeSnooped = value.GetElementIds().Count > 0

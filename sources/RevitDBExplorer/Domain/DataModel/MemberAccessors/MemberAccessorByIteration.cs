@@ -28,12 +28,12 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
         }
 
 
-        public override ReadResult Read(SnoopableContext context, TSnoopedObjectType @object)
+        protected override ReadResult Read(SnoopableContext context, TSnoopedObjectType @object)
         {
             var count = CountValues(context, getMethodParameter.ParameterType);
             return new ReadResult(Labeler.GetLabelForCollection(getMethodReturnTypeName, count), "[ByIteration]", true, false);
         }
-        public override IEnumerable<SnoopableObject> Snoop(SnoopableContext context, TSnoopedObjectType @object, IValueContainer state)
+        protected override IEnumerable<SnoopableObject> Snoop(SnoopableContext context, TSnoopedObjectType @object, IValueContainer state)
         {            
             var result = new List<SnoopableObject>();           
 

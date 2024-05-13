@@ -18,7 +18,7 @@ namespace RevitDBExplorer.Domain.DataModel.Parameters
         private readonly IValueContainer value;
        
         public string UniqueId { get; set; }
-        public string DefaultInvocation { get; set; }
+        public Invocation DefaultInvocation { get; } = new Invocation();
 
 
         public ParameterAccessor(Parameter parameter)
@@ -62,7 +62,7 @@ namespace RevitDBExplorer.Domain.DataModel.Parameters
                 case StorageType.None:
                     break;
             }
-            return new ReadResult(value.ValueAsString, "[ByParam] " + value.TypeHandlerName, value.CanBeSnooped, value);
+            return new ReadResult(value.ValueAsString, "[ByParam] " + value.TypeHandlerName, value.CanBeSnooped, value.CanBeVisualized, value);
 
         }
         public IEnumerable<SnoopableObject> Snoop(SnoopableContext context, object @object, IValueContainer state)

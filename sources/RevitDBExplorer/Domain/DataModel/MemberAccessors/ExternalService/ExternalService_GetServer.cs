@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using Autodesk.Revit.DB.ExternalService;
 using RevitDBExplorer.Domain.DataModel.Accessors;
+using RevitDBExplorer.Domain.DataModel.Members;
 using RevitDBExplorer.Domain.DataModel.Members.Accessors;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
@@ -15,7 +16,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
         IEnumerable<LambdaExpression> ICanCreateMemberAccessor.GetHandledMembers() => [ (ExternalService x) => x.GetServer(new Guid()) ];
 
 
-        public override ReadResult Read(SnoopableContext context, ExternalService externalService) => new()
+        protected override ReadResult Read(SnoopableContext context, ExternalService externalService) => new()
         {
             Label = Labeler.GetLabelForCollection(nameof(ExternalService), externalService.GetRegisteredServerIds().Count),
             CanBeSnooped = externalService.GetRegisteredServerIds().Any()

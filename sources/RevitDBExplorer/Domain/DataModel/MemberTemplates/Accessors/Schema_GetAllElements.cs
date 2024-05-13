@@ -12,7 +12,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberTemplates.Accessors
 {
     internal class Schema_GetAllElements : MemberAccessorTypedWithDefaultPresenter<Schema>
     {
-        public override ReadResult Read(SnoopableContext context, Schema schema)
+        protected override ReadResult Read(SnoopableContext context, Schema schema)
         {
             int count = new FilteredElementCollector(context.Document).WherePasses(new ExtensibleStorageFilter(schema.GUID)).GetElementCount();
             return new ReadResult() 
@@ -23,7 +23,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberTemplates.Accessors
             };            
         }
 
-        public override IEnumerable<SnoopableObject> Snoop(SnoopableContext context, Schema schema, IValueContainer state)
+        protected override IEnumerable<SnoopableObject> Snoop(SnoopableContext context, Schema schema, IValueContainer state)
         {
             var elements = new FilteredElementCollector(context.Document).WherePasses(new ExtensibleStorageFilter(schema.GUID)).ToElements();
             return elements.Select(x => new SnoopableObject(context.Document, x));

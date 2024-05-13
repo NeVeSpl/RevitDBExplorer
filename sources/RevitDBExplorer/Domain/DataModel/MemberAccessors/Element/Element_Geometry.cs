@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using Autodesk.Revit.DB;
 using RevitDBExplorer.Domain.DataModel.Accessors;
+using RevitDBExplorer.Domain.DataModel.Members;
 using RevitDBExplorer.Domain.DataModel.Members.Accessors;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
@@ -14,12 +15,12 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
         IEnumerable<LambdaExpression> ICanCreateMemberAccessor.GetHandledMembers() => [ (Element x, Options o) => x.get_Geometry(o) ];
 
 
-        public override ReadResult Read(SnoopableContext context, Element element) => new()
+        protected override ReadResult Read(SnoopableContext context, Element element) => new()
         {
             Label = Labeler.GetLabelForCollection(nameof(GeometryElement), null),
             CanBeSnooped = CanBeSnoooped(context.Document, element),
         };
-        private bool CanBeSnoooped(Document document, Element element)
+        private static bool CanBeSnoooped(Document document, Element element)
         {          
             var options = element.ViewSpecific ? new Options() { View = document.ActiveView } : new Options();
             var geometry = element.get_Geometry(options);
@@ -49,7 +50,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
             yield return new SnoopableObject(document, null, GetGeometry(document, element, options)) { Name = "null", NamePrefix = "view:" };
         }
 
-        private IEnumerable<SnoopableObject> GetGeometry(Document document, Element element, IEnumerable<Options> options)
+        private static IEnumerable<SnoopableObject> GetGeometry(Document document, Element element, IEnumerable<Options> options)
         {
             foreach (var option in options)
             {

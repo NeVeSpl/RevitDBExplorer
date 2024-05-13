@@ -2,6 +2,7 @@
 using System.Linq.Expressions;
 using Autodesk.Revit.DB;
 using RevitDBExplorer.Domain.DataModel.Accessors;
+using RevitDBExplorer.Domain.DataModel.Members;
 using RevitDBExplorer.Domain.DataModel.Members.Accessors;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
@@ -13,12 +14,12 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
         IEnumerable<LambdaExpression> ICanCreateMemberAccessor.GetHandledMembers() => [ (Curve x) => x.GetEndPoint(0) ];
 
 
-        public override ReadResult Read(SnoopableContext context, Curve curve) => new()
+        protected override ReadResult Read(SnoopableContext context, Curve curve) => new()
         {
             Label = GetLabel(curve),
             CanBeSnooped = curve.IsBound
         };        
-        private string GetLabel(Curve curve)
+        private static string GetLabel(Curve curve)
         {
             var p0 = curve.GetEndPoint(0);
             var p1 = curve.GetEndPoint(1);

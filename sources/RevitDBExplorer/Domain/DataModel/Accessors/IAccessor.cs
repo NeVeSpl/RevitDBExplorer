@@ -8,6 +8,7 @@ namespace RevitDBExplorer.Domain.DataModel.Accessors
     {
         IValueViewModel CreatePresenter(SnoopableContext context, object @object);
         string UniqueId { get; set; }
-        string DefaultInvocation { get; set; }
+
+        Invocation DefaultInvocation { get; }      
     }
 }

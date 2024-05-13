@@ -6,16 +6,17 @@ using RevitDBExplorer.Domain.RevitDatabaseScripting;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
-namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
+namespace RevitDBExplorer.Domain.DataModel.Members.Accessors
 {
-    internal sealed class MemberAccessorForStatic : IAccessorWithCodeGeneration
+    internal sealed class MemberAccessorForNotExposed : IAccessorWithCodeGeneration
     {
         private readonly MethodInfo getMethod;
 
         public string UniqueId { get; set; }
-        public string DefaultInvocation { get; set; }
+        public Invocation DefaultInvocation { get; } = new Invocation();
 
-        public MemberAccessorForStatic(MethodInfo getMethod)
+
+        public MemberAccessorForNotExposed(MethodInfo getMethod)
         {
             this.getMethod = getMethod;
         }
@@ -27,7 +28,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
         }
         public string GenerateInvocationForScript(TemplateInputsKind inputsKind)
         {
-            return new MemberInvocationTemplateSelector().Evaluate(getMethod, "", inputsKind);
+            return new MemberInvocationTemplateSelector().Evaluate(getMethod, null, inputsKind);
         }
     }
 }

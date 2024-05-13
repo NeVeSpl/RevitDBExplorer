@@ -10,7 +10,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberTemplates.Accessors
 {
     internal class Schema_EraseSchemaAndAllEntities : MemberAccessorTyped<Schema>
     {
-        public override IValueViewModel CreatePresenter(SnoopableContext context, Schema schema)
+        protected override IValueViewModel CreatePresenter(SnoopableContext context, Schema schema)
         {
             return new ExecuteEditor(this, () => Execute(context, schema), () => CanBeWritten(context, schema));
         }

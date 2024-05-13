@@ -3,6 +3,7 @@ using System.Linq;
 using Autodesk.Revit.DB;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RevitDBExplorer.Domain.DataModel;
+using RevitDBExplorer.Domain.DataModel.Accessors;
 using RevitDBExplorer.Domain.DataModel.MemberAccessors;
 using RevitTestLibrary;
 
@@ -17,7 +18,7 @@ namespace RevitDBExplorer.Tests
             var document = OpenRevitFile(revitContext);
             var context = new SnoopableContext() { Document = document };
             var asset = revitContext.UIApplication.Application.GetAssets(Autodesk.Revit.DB.Visual.AssetType.Content).FirstOrDefault();
-            var memberUnderTest = new AssetProperties_Item();
+            var memberUnderTest = new AssetProperties_Item() as IAccessorForDefaultPresenter;
 
             var readResult = memberUnderTest.Read(context, asset);
             Assert.AreEqual("[AssetProperty: 24]", readResult.Label);

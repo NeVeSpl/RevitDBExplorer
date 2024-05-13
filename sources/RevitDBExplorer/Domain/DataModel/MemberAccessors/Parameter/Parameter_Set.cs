@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq.Expressions;
 using Autodesk.Revit.DB;
+using RevitDBExplorer.Domain.DataModel.Members;
 using RevitDBExplorer.Domain.DataModel.Members.Accessors;
 using RevitDBExplorer.Domain.DataModel.ValueViewModels;
 using RevitDBExplorer.Domain.DataModel.ValueViewModels.Base;
@@ -17,10 +18,10 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
              (Parameter x) => x.Set(7), 
              (Parameter x) => x.Set(7.77),
              (Parameter x) => x.Set(ElementIdFactory.Create(7)), 
-        ];              
+        ];
 
 
-        public override IValueViewModel CreatePresenter(SnoopableContext context, Parameter parameter)
+        protected override IValueViewModel CreatePresenter(SnoopableContext context, Parameter parameter)
         {
             switch (parameter.StorageType)
             {

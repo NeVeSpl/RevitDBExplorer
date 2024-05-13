@@ -11,7 +11,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberTemplates.Accessors
 {
     internal class HostObjectUtils_GetSideFaces : MemberAccessorTypedWithDefaultPresenter<HostObject>
     {
-        public override ReadResult Read(SnoopableContext context, HostObject element)
+        protected override ReadResult Read(SnoopableContext context, HostObject element)
         {            
             return new ReadResult()
             {
@@ -22,7 +22,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberTemplates.Accessors
 
         }
 
-        public override IEnumerable<SnoopableObject> Snoop(SnoopableContext context, HostObject element, IValueContainer state)
+        protected override IEnumerable<SnoopableObject> Snoop(SnoopableContext context, HostObject element, IValueContainer state)
         {
             var interior = HostObjectUtils.GetSideFaces(element, ShellLayerType.Interior);
             var exterior = HostObjectUtils.GetSideFaces(element, ShellLayerType.Exterior);

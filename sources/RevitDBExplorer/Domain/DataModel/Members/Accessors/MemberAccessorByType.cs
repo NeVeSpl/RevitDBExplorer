@@ -8,13 +8,13 @@ namespace RevitDBExplorer.Domain.DataModel.Members.Accessors
 {
     internal abstract class MemberAccessorByType<TSnoopedObjectType> : MemberAccessorTypedWithDefaultPresenter<TSnoopedObjectType> where TSnoopedObjectType : class
     {
-        public sealed override IEnumerable<SnoopableObject> Snoop(SnoopableContext context, TSnoopedObjectType @object, IValueContainer state)
+        protected sealed override IEnumerable<SnoopableObject> Snoop(SnoopableContext context, TSnoopedObjectType @object, IValueContainer state)
         {
             return Snoop(context, @object);
         }
         protected virtual IEnumerable<SnoopableObject> Snoop(SnoopableContext context, TSnoopedObjectType value) => null;
 
-        public sealed override IEnumerable<DrawingVisual> GetVisualization(SnoopableContext context, TSnoopedObjectType @object, IValueContainer state)
+        protected sealed override IEnumerable<DrawingVisual> GetVisualization(SnoopableContext context, TSnoopedObjectType @object, IValueContainer state)
         {
             return GetVisualization(context, @object);
         }

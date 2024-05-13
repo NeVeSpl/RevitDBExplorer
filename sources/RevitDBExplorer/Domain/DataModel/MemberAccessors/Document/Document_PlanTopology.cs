@@ -3,6 +3,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using Autodesk.Revit.DB;
 using RevitDBExplorer.Domain.DataModel.Accessors;
+using RevitDBExplorer.Domain.DataModel.Members;
 using RevitDBExplorer.Domain.DataModel.Members.Accessors;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
@@ -14,7 +15,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
         IEnumerable<LambdaExpression> ICanCreateMemberAccessor.GetHandledMembers() => [ (Document x, Phase phase) => x.get_PlanTopologies(phase) ];
 
 
-        public override ReadResult Read(SnoopableContext context, Document value) => new()
+        protected override ReadResult Read(SnoopableContext context, Document value) => new()
         {
             Label = Labeler.GetLabelForCollection(nameof(PlanTopology), null),
             CanBeSnooped = false
