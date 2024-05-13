@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using RevitDBExplorer.Domain.DataModel.Accessors;
+using RevitDBExplorer.Domain.DataModel.Members.Accessors;
 using RevitDBExplorer.Domain.DataModel.ValueContainers.Base;
 using RevitDBExplorer.Domain.RevitDatabaseScripting;
 

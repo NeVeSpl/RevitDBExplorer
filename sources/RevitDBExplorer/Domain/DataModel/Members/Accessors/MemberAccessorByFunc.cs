@@ -6,19 +6,19 @@ using RevitDBExplorer.Domain.DataModel.ValueContainers.Base;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
-namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
+namespace RevitDBExplorer.Domain.DataModel.Members.Accessors
 {
     internal class MemberAccessorByFunc<TSnoopedObjectType, TReturnType> : MemberAccessorTypedWithDefaultPresenter<TSnoopedObjectType>
-    {     
+    {
         private readonly Func<Document, TSnoopedObjectType, TReturnType> get;
         private readonly Func<Document, TSnoopedObjectType, IEnumerable<SnoopableObject>> snoop;
 
         public MemberAccessorByFunc(Func<Document, TSnoopedObjectType, TReturnType> get, Func<Document, TSnoopedObjectType, IEnumerable<SnoopableObject>> snoop = null)
         {
-            this.get = get;            
+            this.get = get;
             this.snoop = snoop;
         }
-        
+
 
         public override ReadResult Read(SnoopableContext context, TSnoopedObjectType @object)
         {

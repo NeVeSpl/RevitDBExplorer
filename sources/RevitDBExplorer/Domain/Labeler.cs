@@ -51,9 +51,9 @@ namespace RevitDBExplorer.Domain
         {
             if (count.HasValue)
             {
-                return $"[{typeName}: {count.Value}]";
+                return $"[{typeName.ReduceTypeName()}: {count.Value}]";
             }
-            return $"[{typeName}: ?]";
+            return $"[{typeName.ReduceTypeName()}: ?]";
         }
         public static string GetLabelForObjectWithId(string typeName, long? id)
         {

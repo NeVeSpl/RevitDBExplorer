@@ -8,7 +8,7 @@ using RevitExplorer.Visualizations.DrawingVisuals;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
-namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
+namespace RevitDBExplorer.Domain.DataModel.Members.Accessors
 {
     internal abstract class MemberAccessorTyped<TSnoopedObjectType> : IAccessor
     {
@@ -28,14 +28,14 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
     internal abstract class MemberAccessorTypedWithDefaultPresenter<TSnoopedObjectType> : MemberAccessorTyped<TSnoopedObjectType>, IAccessorForDefaultPresenter
     {
         public override IValueViewModel CreatePresenter(SnoopableContext context, TSnoopedObjectType @object)
-        {            
+        {
             return new DefaultPresenter(this);
         }
 
         ReadResult IAccessorForDefaultPresenter.Read(SnoopableContext context, object @object)
         {
-            Guard.IsAssignableToType<TSnoopedObjectType>(@object);      
-            var typedObject = (TSnoopedObjectType) @object;          
+            Guard.IsAssignableToType<TSnoopedObjectType>(@object);
+            var typedObject = (TSnoopedObjectType)@object;
             return Read(context, typedObject);
         }
         public abstract ReadResult Read(SnoopableContext context, TSnoopedObjectType typedObject);
@@ -43,7 +43,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
         IEnumerable<SnoopableObject> IAccessorForDefaultPresenter.Snoop(SnoopableContext context, object @object, IValueContainer state)
         {
             Guard.IsAssignableToType<TSnoopedObjectType>(@object);
-            var typedObject = (TSnoopedObjectType) @object;            
+            var typedObject = (TSnoopedObjectType)@object;
             return Snoop(context, typedObject, state) ?? Enumerable.Empty<SnoopableObject>();
         }
         public virtual IEnumerable<SnoopableObject> Snoop(SnoopableContext context, TSnoopedObjectType typedObject, IValueContainer state)

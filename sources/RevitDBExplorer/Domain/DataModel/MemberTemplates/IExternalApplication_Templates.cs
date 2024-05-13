@@ -2,7 +2,7 @@
 using System.Linq;
 using Autodesk.Revit.UI;
 using Autodesk.RevitAddIns;
-using RevitDBExplorer.Domain.DataModel.MemberAccessors;
+using RevitDBExplorer.Domain.DataModel.Members.Accessors;
 using RevitDBExplorer.Domain.DataModel.MemberTemplates.Base;
 using RevitDBExplorer.Domain.DataModel.Members;
 

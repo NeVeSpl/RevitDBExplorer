@@ -68,9 +68,32 @@ namespace System
             { typeof(void), "void" },
         };
 
+        private static readonly Dictionary<string, string> Aliases = new Dictionary<string, string>()
+        {
+          { nameof(Byte), "byte" }, 
+          { nameof(Int32), "int" },
+          { nameof(Int64), "long" },
+          { nameof(Single), "float" },
+          { nameof(Double), "double" },
+          { nameof(Decimal), "decimal" },
+          { nameof(Object), "object" },
+          { nameof(Boolean), "bool" },
+          { nameof(Char), "char" },
+          { nameof(String), "string" } 
+        };
+
+        public static string ReduceTypeName(this string typeName)
+        {
+            if (Aliases.TryGetValue(typeName, out var result)) 
+            {
+                return result;
+            }
+            return typeName;
+        }
+
         public static bool IsPrimitiveTypeName(this string typeName)
         {
-            return primitiveTypes.Values.Contains(typeName);
+            return primitiveTypes.Values.Contains(typeName, StringComparer.OrdinalIgnoreCase);
         }
 
 

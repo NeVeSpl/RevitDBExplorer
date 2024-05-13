@@ -4,6 +4,7 @@ using System.Linq.Expressions;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.Structure;
 using RevitDBExplorer.Domain.DataModel.Accessors;
+using RevitDBExplorer.Domain.DataModel.Members.Accessors;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
@@ -13,6 +14,12 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
     internal class Rebar_GetTransformedCenterlineCurves : MemberAccessorByType<Rebar>, ICanCreateMemberAccessor
     {
         IEnumerable<LambdaExpression> ICanCreateMemberAccessor.GetHandledMembers() => [ (Rebar x) => x.GetTransformedCenterlineCurves(false, true, false, MultiplanarOption.IncludeOnlyPlanarCurves, 0) ];
+
+
+        public Rebar_GetTransformedCenterlineCurves()
+        {
+            DefaultInvocation = "GetTransformedCenterlineCurves(false, true, false, MultiplanarOption.IncludeOnlyPlanarCurves, 0)";
+        }
 
 
         public override ReadResult Read(SnoopableContext context, Rebar rebar) => new()

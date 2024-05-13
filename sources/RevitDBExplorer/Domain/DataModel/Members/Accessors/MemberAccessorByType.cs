@@ -4,19 +4,19 @@ using RevitExplorer.Visualizations.DrawingVisuals;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
-namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
+namespace RevitDBExplorer.Domain.DataModel.Members.Accessors
 {
     internal abstract class MemberAccessorByType<TSnoopedObjectType> : MemberAccessorTypedWithDefaultPresenter<TSnoopedObjectType> where TSnoopedObjectType : class
     {
         public sealed override IEnumerable<SnoopableObject> Snoop(SnoopableContext context, TSnoopedObjectType @object, IValueContainer state)
         {
-            return this.Snoop(context, @object);
+            return Snoop(context, @object);
         }
         protected virtual IEnumerable<SnoopableObject> Snoop(SnoopableContext context, TSnoopedObjectType value) => null;
 
         public sealed override IEnumerable<DrawingVisual> GetVisualization(SnoopableContext context, TSnoopedObjectType @object, IValueContainer state)
         {
-            return this.GetVisualization(context, @object);
+            return GetVisualization(context, @object);
         }
         protected virtual IEnumerable<DrawingVisual> GetVisualization(SnoopableContext context, TSnoopedObjectType @object) => null;
     }

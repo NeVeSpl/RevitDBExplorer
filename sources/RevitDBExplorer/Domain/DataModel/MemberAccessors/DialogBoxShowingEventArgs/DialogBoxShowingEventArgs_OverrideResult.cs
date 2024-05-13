@@ -2,6 +2,7 @@
 using System.Linq.Expressions;
 using Autodesk.Revit.UI.Events;
 using RevitDBExplorer.Domain.DataModel.Accessors;
+using RevitDBExplorer.Domain.DataModel.Members.Accessors;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 

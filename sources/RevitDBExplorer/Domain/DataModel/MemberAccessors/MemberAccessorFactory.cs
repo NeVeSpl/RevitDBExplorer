@@ -44,7 +44,12 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
         {
             var memberAccessor = CreateMemberAccessor(getMethod);
             memberAccessor.UniqueId = getMethod.GetUniqueId();
-            memberAccessor.DefaultInvocation = getMethod.GenerateInvocation();
+
+            if (string.IsNullOrEmpty(memberAccessor.DefaultInvocation))
+            {
+                memberAccessor.DefaultInvocation = getMethod.GenerateInvocation();
+            }
+
             return memberAccessor;
         }
 
