@@ -4,7 +4,7 @@ using Autodesk.Revit.DB;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RevitDBExplorer.Domain.DataModel;
 using RevitDBExplorer.Domain.DataModel.Accessors;
-using RevitDBExplorer.Domain.DataModel.MemberAccessors;
+using RevitDBExplorer.Domain.DataModel.MembersOverrides;
 using RevitTestLibrary;
 
 namespace RevitDBExplorer.Tests
