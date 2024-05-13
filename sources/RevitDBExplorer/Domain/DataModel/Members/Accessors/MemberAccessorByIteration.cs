@@ -4,20 +4,19 @@ using System.Linq;
 using System.Reflection;
 using Autodesk.Revit.DB;
 using RevitDBExplorer.Domain.DataModel.Accessors;
-using RevitDBExplorer.Domain.DataModel.Members.Accessors;
 using RevitDBExplorer.Domain.DataModel.Members.Internals;
 using RevitDBExplorer.Domain.DataModel.ValueContainers.Base;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
-namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
+namespace RevitDBExplorer.Domain.DataModel.Members.Accessors
 {
     internal sealed class MemberAccessorByIteration<TSnoopedObjectType, TReturnType> : MemberAccessorTypedWithDefaultPresenter<TSnoopedObjectType>
     {
         private readonly string getMethodReturnTypeName;
         private readonly ParameterInfo getMethodParameter;
         private readonly Func<TSnoopedObjectType, object, TReturnType> func;
-        
+
 
         public MemberAccessorByIteration(MethodInfo getMethod)
         {
@@ -32,38 +31,55 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
         protected override ReadResult Read(SnoopableContext context, TSnoopedObjectType @object)
         {
             var count = CountValues(context, getMethodParameter.ParameterType);
-            return new ReadResult(Labeler.GetLabelForCollection(getMethodReturnTypeName, count), "[ByIteration]", true, false);
+            var canBeSnooped = count > 0 || count.HasValue == false;
+            return new ReadResult(Labeler.GetLabelForCollection(getMethodReturnTypeName, count), "[ByIteration]", canBeSnooped, false);
         }
         protected override IEnumerable<SnoopableObject> Snoop(SnoopableContext context, TSnoopedObjectType @object, IValueContainer state)
-        {            
-            var result = new List<SnoopableObject>();           
+        {
+            var result = new List<SnoopableObject>();
 
             foreach (var input in StreamValues(context, getMethodParameter.ParameterType))
-            {                   
+            {
                 object resultOfInvocation = null;
                 try
                 {
-                    resultOfInvocation = func(@object, input);          
+                    resultOfInvocation = func(@object, input);
                 }
                 catch (Exception ex)
                 {
-                    if (getMethodParameter.ParameterType == typeof(int))
+                    if (getMethodParameter.ParameterType == typeof(int) && IsNotExpectedException(ex))
                     {
                         break;
                     }
-                    resultOfInvocation = Labeler.GetLabelForException(ex);
+                    resultOfInvocation = ex;// Labeler.GetLabelForException(ex);
                 }
                 result.Add(SnoopableObject.CreateInOutPair(context.Document, input, resultOfInvocation, keyPrefix: getMethodParameter.Name + ":"));
             }
 
             return result;
         }
+        private bool IsNotExpectedException(Exception ex)
+        {
+            if (ex is Autodesk.Revit.Exceptions.ArgumentOutOfRangeException)
+            {
+                return true;
+            }
+
+            if (ex is Autodesk.Revit.Exceptions.ArgumentException argumentException)
+            {
+                if (argumentException.ParamName == "barEnd")
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
 
         private IEnumerable<object> StreamValues(SnoopableContext context, Type type)
         {
             if (type == typeof(int))
             {
-                for (int i =  0; i < 757; ++i)
+                for (int i = 0; i < 757; ++i)
                 {
                     yield return i;
                 }
@@ -76,7 +92,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
                 }
             }
             if (type == typeof(bool))
-            {                
+            {
                 yield return true;
                 yield return false;
             }
