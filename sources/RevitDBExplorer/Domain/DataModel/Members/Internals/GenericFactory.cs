@@ -4,10 +4,12 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using RevitDBExplorer.Domain.DataModel.Accessors;
+using RevitDBExplorer.Domain.DataModel.MemberAccessors;
+using RevitDBExplorer.Domain.DataModel.Members.Accessors;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
-namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
+namespace RevitDBExplorer.Domain.DataModel.Members.Internals
 {
     internal interface IGenericFactory
     {
@@ -47,7 +49,7 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
             if (!returnTypeCache.TryGetValue(returnType, out var factory))
             {
                 var closedType = typeof(GenericFactory2<,>).MakeGenericType(new Type[] { snoopedObjectType, returnType });
-                factory = Activator.CreateInstance(closedType) as IGenericFactory2;               
+                factory = Activator.CreateInstance(closedType) as IGenericFactory2;
                 returnTypeCache[returnType] = factory;
             }
 
@@ -95,11 +97,11 @@ namespace RevitDBExplorer.Domain.DataModel.MemberAccessors
         public Func<object, object> CreateCompiledLambda(MethodInfo getMethod)
         {
             var lambda = CreateLambda(getMethod);
-            return (object input) => { return lambda((TSnoopedObjectType)input); };
+            return (input) => { return lambda((TSnoopedObjectType)input); };
         }
 
         public IAccessor CreateMemberAccessorByRefCompiled(MethodInfo getMethod)
-        {           
+        {
             var func = CreateLambda(getMethod);
             var accessor = new MemberAccessorByRefCompiled<TSnoopedObjectType, TReturnType>(getMethod, func);
 
