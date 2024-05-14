@@ -27,13 +27,13 @@ namespace RevitDBExplorer.Domain.DataModel.MembersOverrides
         {
             var hookTypes = new FilteredElementCollector(context.Document).OfClass(typeof(RebarHookType));
             var result = new List<SnoopableObject>();
-            foreach(var hookType in hookTypes)
+            foreach (var hookType in hookTypes)
             {
                 try
                 {
                     result.Add(SnoopableObject.CreateInOutPair(context.Document, hookType, rebarBarType.GetHookOffsetLength(hookType.Id)));
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     result.Add(SnoopableObject.CreateInOutPair(context.Document, hookType, ex));
                 }

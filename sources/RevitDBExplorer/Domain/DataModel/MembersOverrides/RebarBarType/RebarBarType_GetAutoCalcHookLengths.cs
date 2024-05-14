@@ -26,7 +26,7 @@ namespace RevitDBExplorer.Domain.DataModel.MembersOverrides
         protected override IEnumerable<SnoopableObject> Snoop(SnoopableContext context, RebarBarType rebarBarType)
         {
             var hookTypes = new FilteredElementCollector(context.Document).OfClass(typeof(RebarHookType));
-            foreach(var hookType in hookTypes)
+            foreach (var hookType in hookTypes)
             {
                 yield return SnoopableObject.CreateInOutPair(context.Document, hookType, rebarBarType.GetAutoCalcHookLengths(hookType.Id));
             }           

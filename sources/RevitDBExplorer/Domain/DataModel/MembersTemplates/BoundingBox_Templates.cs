@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Autodesk.Revit.DB;
-using RevitDBExplorer.Domain.DataModel.MembersTemplates.Accessors;
 using RevitDBExplorer.Domain.DataModel.Members;
 using RevitDBExplorer.Domain.DataModel.Members.Base;
+using RevitDBExplorer.Domain.DataModel.MembersTemplates.Accessors;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 

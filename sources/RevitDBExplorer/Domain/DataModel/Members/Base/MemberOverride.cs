@@ -25,12 +25,19 @@ namespace RevitDBExplorer.Domain.DataModel.Members.Base
         public static IMemberOverride ByFunc<TReturnType>(Expression<Func<Document, TForType, TReturnType>> getter)
         {
             var compiledGetter = getter.Compile();
+            var methodCallExpression = getter.Body as MethodCallExpression;
+            //var syntax = methodCallExpression.ToString();
             var uniqueId = getter.GetUniqueId();
 
             return new MemberOverride<TForType>()
             {
                 UniqueId = uniqueId,
-                MemberAccessorFactory = () => new MemberAccessorByFunc<TForType, TReturnType>(compiledGetter)
+                MemberAccessorFactory = () =>  
+                { 
+                    var accessor = new MemberAccessorByFunc<TForType, TReturnType>(compiledGetter); 
+                    //accessor.DefaultInvocation.Syntax = syntax;
+                    return accessor;
+                }
             };            
         }
     }
