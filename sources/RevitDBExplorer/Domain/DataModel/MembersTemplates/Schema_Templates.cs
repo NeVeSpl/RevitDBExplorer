@@ -2,7 +2,6 @@
 using System.Linq;
 using Autodesk.Revit.DB.ExtensibleStorage;
 using RevitDBExplorer.Domain.DataModel.MembersTemplates.Accessors;
-using RevitDBExplorer.Domain.DataModel.MembersTemplates.Base;
 using RevitDBExplorer.Domain.DataModel.Members;
 using RevitDBExplorer.Domain.DataModel.Members.Base;
 
@@ -19,8 +18,8 @@ namespace RevitDBExplorer.Domain.DataModel.MembersTemplates
         {
             templates = new ISnoopableMemberTemplate[]
             {
-                SnoopableMemberTemplate<Schema>.Create(typeof(Schema), "Get all elements that have entity of this schema", new Schema_GetAllElements(), kind: MemberKind.Extra),
-                SnoopableMemberTemplate<Schema>.Create(typeof(Schema), "Erase schema and all entities from the document", new Schema_EraseSchemaAndAllEntities(), kind: MemberKind.Extra),
+                MemberTemplate<Schema>.Create(typeof(Schema), "Get all elements that have entity of this schema", new Schema_GetAllElements(), kind: MemberKind.Extra),
+                MemberTemplate<Schema>.Create(typeof(Schema), "Erase schema and all entities from the document", new Schema_EraseSchemaAndAllEntities(), kind: MemberKind.Extra),
             };            
         }
 

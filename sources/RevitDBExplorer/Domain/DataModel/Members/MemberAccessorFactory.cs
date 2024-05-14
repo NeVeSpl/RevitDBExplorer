@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using RevitDBExplorer.Domain.DataModel.Accessors;
 using RevitDBExplorer.Domain.DataModel.Members.Accessors;
+using RevitDBExplorer.Domain.DataModel.Members.Base;
 using RevitDBExplorer.Domain.DataModel.Members.Internals;
 
 
@@ -15,7 +16,7 @@ namespace RevitDBExplorer.Domain.DataModel.Members
     internal static class MemberAccessorFactory
     {
         private static readonly Dictionary<string, Func<IAccessor>> memberAccessorOverrides = new();
-
+        
 
         public static void Init()
         {
@@ -32,6 +33,16 @@ namespace RevitDBExplorer.Domain.DataModel.Members
                     memberAccessorOverrides[memberId] = accessor.GetType().CompileFactoryMethod<IAccessor>();
                 }
             }
+
+            var overridesCollections = GetAllInstancesThatImplement<IHaveMembersOverrides>();
+
+            foreach (var collection in overridesCollections)
+            {
+                foreach (var memberOverride in collection.GetOverrides())
+                {
+                    memberAccessorOverrides[memberOverride.UniqueId] = memberOverride.MemberAccessorFactory;
+                }
+            }
         }
         private static IEnumerable<T> GetAllInstancesThatImplement<T>() where T : class
         {
@@ -46,8 +57,8 @@ namespace RevitDBExplorer.Domain.DataModel.Members
         public static IAccessor CreateMemberAccessor(MethodInfo getMethod, MethodInfo setMethod)
         {
             var memberAccessor = CreateMemberAccessor(getMethod);
-            memberAccessor.UniqueId = getMethod.GetUniqueId();
 
+            memberAccessor.UniqueId = getMethod.GetUniqueId();
             if (string.IsNullOrEmpty(memberAccessor.DefaultInvocation.Syntax))
             {
                 memberAccessor.DefaultInvocation.Syntax = getMethod.GenerateInvocation();
@@ -61,7 +72,7 @@ namespace RevitDBExplorer.Domain.DataModel.Members
             if (memberAccessorOverrides.TryGetValue(getMethod.GetUniqueId(), out Func<IAccessor> factory))
             {
                 return factory();
-            }
+            }            
 
             if (getMethod.IsStatic)
             {
@@ -102,6 +113,11 @@ namespace RevitDBExplorer.Domain.DataModel.Members
 
     internal interface ICanCreateMemberAccessor
     {
-        IEnumerable<LambdaExpression> GetHandledMembers();
+        IEnumerable<LambdaExpression> GetHandledMembers();       
+    }
+
+    internal interface IHaveMembersOverrides
+    {
+        IEnumerable<IMemberOverride> GetOverrides();
     }
 }

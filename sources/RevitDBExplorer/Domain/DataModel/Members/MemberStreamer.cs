@@ -33,14 +33,14 @@ namespace RevitDBExplorer.Domain.DataModel.Members
             }
 
             var type = snoopableObject.GetType();
-            var cachableDescriptors = Cache_Descriptors.GetOrCreate(type, _ => StreamDescriptorsForPropsAndMethods(snoopableObject).ToArray());
+            var cachableDescriptors = Cache_DescriptorsForPropsAndMethods.GetOrCreate(type, _ => StreamDescriptorsForPropsAndMethods(snoopableObject).ToArray());
 
             foreach (var member in cachableDescriptors)
             {
                 yield return member;
             }
         }
-        private static readonly Dictionary<Type, IReadOnlyList<MemberDescriptor>> Cache_Descriptors = new();
+        private static readonly Dictionary<Type, IReadOnlyList<MemberDescriptor>> Cache_DescriptorsForPropsAndMethods = new();
 
         private static IEnumerable<MemberDescriptor> StreamDescriptorsForPropsAndMethods(object snoopableObject)
         {

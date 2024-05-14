@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Autodesk.Revit.DB;
-using RevitDBExplorer.Domain.DataModel.MembersTemplates.Base;
 using RevitDBExplorer.Domain.DataModel.Members;
 using RevitDBExplorer.Domain.DataModel.Members.Base;
 
@@ -17,7 +16,7 @@ namespace RevitDBExplorer.Domain.DataModel.MembersTemplates
         {
             templates = new ISnoopableMemberTemplate[]
             {
-               SnoopableMemberTemplate<Solid>.Create((document, target) => SolidUtils.SplitVolumes(target), kind: MemberKind.StaticMethod),
+               MemberTemplate<Solid>.Create((document, target) => SolidUtils.SplitVolumes(target), kind: MemberKind.StaticMethod),
             };
         }
 

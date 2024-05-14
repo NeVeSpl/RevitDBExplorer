@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Autodesk.Revit.DB;
-using RevitDBExplorer.Domain.DataModel.MembersTemplates.Base;
 using RevitDBExplorer.Domain.DataModel.Members;
 using RevitDBExplorer.Domain.DataModel.Members.Base;
 
@@ -18,8 +17,8 @@ namespace RevitDBExplorer.Domain.DataModel.MembersTemplates
         {
             templates = new ISnoopableMemberTemplate[]
             {
-               SnoopableMemberTemplate<Family>.Create((doc, target) => doc.EditFamily(target), kind: MemberKind.AsArgument),
-               SnoopableMemberTemplate<Family>.Create((doc, target) => FamilySizeTableManager.GetFamilySizeTableManager(doc, target.Id), kind: MemberKind.StaticMethod),
+               MemberTemplate<Family>.Create((doc, target) => doc.EditFamily(target), kind: MemberKind.AsArgument),
+               MemberTemplate<Family>.Create((doc, target) => FamilySizeTableManager.GetFamilySizeTableManager(doc, target.Id), kind: MemberKind.StaticMethod),
                
             }; 
         }

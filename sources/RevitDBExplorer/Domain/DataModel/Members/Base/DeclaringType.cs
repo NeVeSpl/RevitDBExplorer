@@ -16,10 +16,10 @@ namespace RevitDBExplorer.Domain.DataModel.Members.Base
         public DocXml Documentation => documentation?.Value ?? DocXml.Empty;
 
 
-        private DeclaringType(string name, int level,  Func<DocXml> documentationFactoryMethod = null)
+        private DeclaringType(string name, int inheritanceLevel, Func<DocXml> documentationFactoryMethod = null)
         {
             Name = name;
-            InheritanceLevel = level;
+            InheritanceLevel = inheritanceLevel;
             if (documentationFactoryMethod != null)
             {
                 documentation = new Lazy<DocXml>(documentationFactoryMethod);

@@ -2,8 +2,8 @@
 using System.Linq;
 using Autodesk.Revit.DB;
 using RevitDBExplorer.Domain.DataModel.Members.Accessors;
-using RevitDBExplorer.Domain.DataModel.MembersTemplates.Base;
 using RevitDBExplorer.Domain.DataModel.Members;
+using RevitDBExplorer.Domain.DataModel.Members.Base;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
@@ -18,7 +18,7 @@ namespace RevitDBExplorer.Domain.DataModel.MembersTemplates
         {
             templates = new ISnoopableMemberTemplate[]
             {
-               SnoopableMemberTemplate<UpdaterInfo>.Create(typeof(IUpdater), "GetUpdaterId", new MemberAccessorByFunc<UpdaterInfo, UpdaterId>((doc, target) => UpdaterInfoWizard.Get(target.ApplicationName, target.UpdaterName))),             
+               MemberTemplate<UpdaterInfo>.Create(typeof(IUpdater), "GetUpdaterId", new MemberAccessorByFunc<UpdaterInfo, UpdaterId>((doc, target) => UpdaterInfoWizard.Get(target.ApplicationName, target.UpdaterName))),             
             };
         }
 

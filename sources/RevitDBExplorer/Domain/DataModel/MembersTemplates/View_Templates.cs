@@ -2,7 +2,6 @@
 using System.Linq;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.Analysis;
-using RevitDBExplorer.Domain.DataModel.MembersTemplates.Base;
 using RevitDBExplorer.Domain.DataModel.Members;
 using RevitDBExplorer.Domain.DataModel.Members.Base;
 
@@ -19,8 +18,8 @@ namespace RevitDBExplorer.Domain.DataModel.MembersTemplates
         {
             templates = new ISnoopableMemberTemplate[]
             {       
-               SnoopableMemberTemplate<View>.Create((document, target) => SpatialFieldManager.GetSpatialFieldManager(target), kind: MemberKind.StaticMethod),
-               SnoopableMemberTemplate<ViewSchedule>.Create((document, target) => TableView.GetAvailableParameters(document, target.Definition.CategoryId), kind: MemberKind.StaticMethod),
+               MemberTemplate<View>.Create((document, target) => SpatialFieldManager.GetSpatialFieldManager(target), kind: MemberKind.StaticMethod),
+               MemberTemplate<ViewSchedule>.Create((document, target) => TableView.GetAvailableParameters(document, target.Definition.CategoryId), kind: MemberKind.StaticMethod),
             }; 
         }
 

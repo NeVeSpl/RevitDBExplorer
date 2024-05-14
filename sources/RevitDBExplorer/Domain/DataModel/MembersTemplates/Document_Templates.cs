@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Autodesk.Revit.DB;
-using RevitDBExplorer.Domain.DataModel.MembersTemplates.Base;
 using RevitDBExplorer.Domain.DataModel.Members;
 using RevitDBExplorer.Domain.DataModel.Members.Base;
 
@@ -18,20 +17,20 @@ namespace RevitDBExplorer.Domain.DataModel.MembersTemplates
         {
             templates = new ISnoopableMemberTemplate[]
             {
-                SnoopableMemberTemplate<Document>.Create((doc, target) => Document.GetDocumentVersion(target), kind: MemberKind.StaticMethod),
+                MemberTemplate<Document>.Create((doc, target) => Document.GetDocumentVersion(target), kind: MemberKind.StaticMethod),
 #if R2023_MIN
-                SnoopableMemberTemplate<Document>.Create((doc, target) => target.GetChangedElements(Guid.Empty), kind: MemberKind.Method),
+                MemberTemplate<Document>.Create((doc, target) => target.GetChangedElements(Guid.Empty), kind: MemberKind.Method),
 #endif
 
-                SnoopableMemberTemplate<Document>.Create((doc, target) => BasicFileInfo.Extract(target.PathName), kind: MemberKind.StaticMethod),
+                MemberTemplate<Document>.Create((doc, target) => BasicFileInfo.Extract(target.PathName), kind: MemberKind.StaticMethod),
 
-                SnoopableMemberTemplate<Document>.Create((doc, target) => BasePoint.GetSurveyPoint(doc), kind: MemberKind.StaticMethod),
-                SnoopableMemberTemplate<Document>.Create((doc, target) => BasePoint.GetProjectBasePoint(doc), kind: MemberKind.StaticMethod),
-                SnoopableMemberTemplate<Document>.Create((doc, target) => InternalOrigin.Get(doc), kind: MemberKind.StaticMethod),
+                MemberTemplate<Document>.Create((doc, target) => BasePoint.GetSurveyPoint(doc), kind: MemberKind.StaticMethod),
+                MemberTemplate<Document>.Create((doc, target) => BasePoint.GetProjectBasePoint(doc), kind: MemberKind.StaticMethod),
+                MemberTemplate<Document>.Create((doc, target) => InternalOrigin.Get(doc), kind: MemberKind.StaticMethod),
 
 #if R2024_MIN
-                SnoopableMemberTemplate<Document>.Create((doc, target) => doc.GetUnusedElements(new HashSet<ElementId>()), kind: MemberKind.Method),
-                SnoopableMemberTemplate<Document>.Create((doc, target) => doc.GetAllUnusedElements(new HashSet<ElementId>()), kind: MemberKind.Method),
+                MemberTemplate<Document>.Create((doc, target) => doc.GetUnusedElements(new HashSet<ElementId>()), kind: MemberKind.Method),
+                MemberTemplate<Document>.Create((doc, target) => doc.GetAllUnusedElements(new HashSet<ElementId>()), kind: MemberKind.Method),
 #endif
 
             };

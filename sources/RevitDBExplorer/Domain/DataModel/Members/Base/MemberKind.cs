@@ -2,5 +2,13 @@
 
 namespace RevitDBExplorer.Domain.DataModel.Members.Base
 {
-    internal enum MemberKind { Property, Method, StaticMethod, Extra, AsArgument, None }
+    internal enum MemberKind 
+    {
+        Property,
+        Method,
+        StaticMethod, 
+        Extra,
+        AsArgument,
+        None
+    }
 }

@@ -2,7 +2,6 @@
 using System.Linq;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.Structure;
-using RevitDBExplorer.Domain.DataModel.MembersTemplates.Base;
 using RevitDBExplorer.Domain.DataModel.Members;
 using RevitDBExplorer.Domain.DataModel.Members.Base;
 
@@ -20,15 +19,15 @@ namespace RevitDBExplorer.Domain.DataModel.MembersTemplates
             {
               
 #if R2025_MIN
-                SnoopableMemberTemplate<IndependentTag>.Create((doc, target) =>  RebarBendingDetail.IsBendingDetail(target), kind: MemberKind.StaticMethod),
-                SnoopableMemberTemplate<IndependentTag>.Create((doc, target) =>  RebarBendingDetail.GetHost(target), kind: MemberKind.StaticMethod, canBeUsed: x => RebarBendingDetail.IsBendingDetail(x)),
-                SnoopableMemberTemplate<IndependentTag>.Create((doc, target) =>  RebarBendingDetail.GetHosts(target), kind: MemberKind.StaticMethod, canBeUsed: x => RebarBendingDetail.IsBendingDetail(x)),
-                SnoopableMemberTemplate<IndependentTag>.Create((doc, target) =>  RebarBendingDetail.GetPosition(target), kind: MemberKind.StaticMethod, canBeUsed: x => RebarBendingDetail.IsBendingDetail(x)),
-                SnoopableMemberTemplate<IndependentTag>.Create((doc, target) =>  RebarBendingDetail.GetRotation(target), kind: MemberKind.StaticMethod, canBeUsed: x => RebarBendingDetail.IsBendingDetail(x)),
-                SnoopableMemberTemplate<IndependentTag>.Create((doc, target) =>  RebarBendingDetail.GetTagRelativeRotation(target), kind: MemberKind.StaticMethod, canBeUsed: x => RebarBendingDetail.IsBendingDetail(x)),
-                SnoopableMemberTemplate<IndependentTag>.Create((doc, target) =>  RebarBendingDetail.IsRealisticBendingDetail(target), kind: MemberKind.StaticMethod, canBeUsed: x => RebarBendingDetail.IsBendingDetail(x)),
-                SnoopableMemberTemplate<IndependentTag>.Create((doc, target) =>  RebarBendingDetail.GetTagRelativePosition(target), kind: MemberKind.StaticMethod, canBeUsed: x => RebarBendingDetail.IsBendingDetail(x)),
-                SnoopableMemberTemplate<IndependentTag>.Create((doc, target) =>  RebarBendingDetail.IsSchematicBendingDetail(target), kind: MemberKind.StaticMethod, canBeUsed: x => RebarBendingDetail.IsBendingDetail(x)),
+                MemberTemplate<IndependentTag>.Create((doc, target) =>  RebarBendingDetail.IsBendingDetail(target), kind: MemberKind.StaticMethod),
+                MemberTemplate<IndependentTag>.Create((doc, target) =>  RebarBendingDetail.GetHost(target), kind: MemberKind.StaticMethod, canBeUsed: x => RebarBendingDetail.IsBendingDetail(x)),
+                MemberTemplate<IndependentTag>.Create((doc, target) =>  RebarBendingDetail.GetHosts(target), kind: MemberKind.StaticMethod, canBeUsed: x => RebarBendingDetail.IsBendingDetail(x)),
+                MemberTemplate<IndependentTag>.Create((doc, target) =>  RebarBendingDetail.GetPosition(target), kind: MemberKind.StaticMethod, canBeUsed: x => RebarBendingDetail.IsBendingDetail(x)),
+                MemberTemplate<IndependentTag>.Create((doc, target) =>  RebarBendingDetail.GetRotation(target), kind: MemberKind.StaticMethod, canBeUsed: x => RebarBendingDetail.IsBendingDetail(x)),
+                MemberTemplate<IndependentTag>.Create((doc, target) =>  RebarBendingDetail.GetTagRelativeRotation(target), kind: MemberKind.StaticMethod, canBeUsed: x => RebarBendingDetail.IsBendingDetail(x)),
+                MemberTemplate<IndependentTag>.Create((doc, target) =>  RebarBendingDetail.IsRealisticBendingDetail(target), kind: MemberKind.StaticMethod, canBeUsed: x => RebarBendingDetail.IsBendingDetail(x)),
+                MemberTemplate<IndependentTag>.Create((doc, target) =>  RebarBendingDetail.GetTagRelativePosition(target), kind: MemberKind.StaticMethod, canBeUsed: x => RebarBendingDetail.IsBendingDetail(x)),
+                MemberTemplate<IndependentTag>.Create((doc, target) =>  RebarBendingDetail.IsSchematicBendingDetail(target), kind: MemberKind.StaticMethod, canBeUsed: x => RebarBendingDetail.IsBendingDetail(x)),
 #endif
                 
             };
