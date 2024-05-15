@@ -13,7 +13,7 @@ namespace RevitDBExplorer.Domain.DataModel.MembersTemplates
     {
         public IEnumerable<ISnoopableMemberTemplate> GetTemplates() =>
         [
-            MemberTemplate<IExternalApplication>.Create(typeof(AddInManifestUtility), "GetRevitAddInManifest", new MemberAccessorByFunc<IExternalApplication, RevitAddInManifest>((doc, target) => AddInManifestWizard.Get(target.GetType().Assembly.Location))),              
+            MemberTemplate<IExternalApplication>.WithCustomAC(typeof(AddInManifestUtility), "GetRevitAddInManifest", new MemberAccessorByFunc<IExternalApplication, RevitAddInManifest>((doc, target) => AddInManifestWizard.Get(target.GetType().Assembly.Location))),              
         ];       
     }
 }

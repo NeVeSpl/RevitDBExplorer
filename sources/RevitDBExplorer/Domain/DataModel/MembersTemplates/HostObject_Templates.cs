@@ -14,7 +14,7 @@ namespace RevitDBExplorer.Domain.DataModel.MembersTemplates
         [   
                MemberTemplate<HostObject>.Create((doc, target) => HostObjectUtils.GetTopFaces(target), kind: MemberKind.StaticMethod),
                MemberTemplate<HostObject>.Create((doc, target) => HostObjectUtils.GetBottomFaces(target), kind: MemberKind.StaticMethod),
-               MemberTemplate<HostObject>.Create(typeof(HostObjectUtils), "GetSideFaces", new HostObjectUtils_GetSideFaces(), kind: MemberKind.StaticMethod ),           
+               MemberTemplate<HostObject>.WithCustomAC(typeof(HostObjectUtils), "GetSideFaces", new HostObjectUtils_GetSideFaces(), kind: MemberKind.StaticMethod ),           
         ]; 
     }
 }

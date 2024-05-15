@@ -22,13 +22,13 @@ namespace RevitDBExplorer.Domain.DataModel.MembersTemplates
 
 #if R2023_MIN
             MemberTemplate<Element>.Create((doc, target) => AnalyticalNodeData.GetAnalyticalNodeData(target), kind: MemberKind.StaticMethod, canBeUsed: x => x is ReferencePoint),
-            MemberTemplate<Element>.Create(typeof(AnalyticalToPhysicalAssociationManager), nameof(AnalyticalToPhysicalAssociationManager.HasAssociation), new AnalyticalToPhysicalAssociationManager_HasAssociation(), kind: MemberKind.AsArgument),
-            MemberTemplate<Element>.Create(typeof(AnalyticalToPhysicalAssociationManager), nameof(AnalyticalToPhysicalAssociationManager.GetAssociatedElementId), new AnalyticalToPhysicalAssociationManager_GetAssociatedElementId(), kind: MemberKind.AsArgument),
+            MemberTemplate<Element>.WithCustomAC(typeof(AnalyticalToPhysicalAssociationManager), nameof(AnalyticalToPhysicalAssociationManager.HasAssociation), new AnalyticalToPhysicalAssociationManager_HasAssociation(), kind: MemberKind.AsArgument),
+            MemberTemplate<Element>.WithCustomAC(typeof(AnalyticalToPhysicalAssociationManager), nameof(AnalyticalToPhysicalAssociationManager.GetAssociatedElementId), new AnalyticalToPhysicalAssociationManager_GetAssociatedElementId(), kind: MemberKind.AsArgument),
 #endif
 #if R2024_MIN
             MemberTemplate<Element>.Create((doc, target) => AnalyticalToPhysicalAssociationManager.IsAnalyticalElement(doc, target.Id), kind: MemberKind.StaticMethod),
             MemberTemplate<Element>.Create((doc, target) => AnalyticalToPhysicalAssociationManager.IsPhysicalElement(doc, target.Id), kind: MemberKind.StaticMethod),
-            MemberTemplate<Element>.Create(typeof(AnalyticalToPhysicalAssociationManager), nameof(AnalyticalToPhysicalAssociationManager.GetAssociatedElementIds), new AnalyticalToPhysicalAssociationManager_GetAssociatedElementIds(), kind: MemberKind.AsArgument),
+            MemberTemplate<Element>.WithCustomAC(typeof(AnalyticalToPhysicalAssociationManager), nameof(AnalyticalToPhysicalAssociationManager.GetAssociatedElementIds), new AnalyticalToPhysicalAssociationManager_GetAssociatedElementIds(), kind: MemberKind.AsArgument),
 #endif
         ];
     }

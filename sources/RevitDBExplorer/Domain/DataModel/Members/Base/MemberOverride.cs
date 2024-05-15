@@ -26,7 +26,17 @@ namespace RevitDBExplorer.Domain.DataModel.Members.Base
         {
             var compiledGetter = getter.Compile();
             var methodCallExpression = getter.Body as MethodCallExpression;
-            //var syntax = methodCallExpression.ToString();
+
+            string syntax = null;
+            if (methodCallExpression.Object is ParameterExpression)
+            {
+                var uniformMethodCallExpression = methodCallExpression.Update(Expression.Parameter(methodCallExpression.Object.Type, "item"), methodCallExpression.Arguments);
+                syntax = uniformMethodCallExpression.ToString();
+            }
+            if (methodCallExpression.Object == null)
+            {
+                syntax = $"{methodCallExpression.Method.DeclaringType.Name}." + methodCallExpression.ToString();
+            }
             var uniqueId = getter.GetUniqueId();
 
             return new MemberOverride<TForType>()
@@ -35,7 +45,7 @@ namespace RevitDBExplorer.Domain.DataModel.Members.Base
                 MemberAccessorFactory = () =>  
                 { 
                     var accessor = new MemberAccessorByFunc<TForType, TReturnType>(compiledGetter); 
-                    //accessor.DefaultInvocation.Syntax = syntax;
+                    accessor.DefaultInvocation.Syntax = syntax;
                     return accessor;
                 }
             };            

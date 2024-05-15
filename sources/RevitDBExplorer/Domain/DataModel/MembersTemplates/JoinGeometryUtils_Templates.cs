@@ -13,7 +13,7 @@ namespace RevitDBExplorer.Domain.DataModel.MembersTemplates
         public IEnumerable<ISnoopableMemberTemplate> GetTemplates() =>
         [
             MemberTemplate<Element>.Create((doc, target) => JoinGeometryUtils.GetJoinedElements(doc, target)),
-            MemberTemplate<Element>.Create(typeof(JoinGeometryUtils), nameof(JoinGeometryUtils.IsCuttingElementInJoin), new JoinGeometryUtils_IsCuttingElementInJoin())
+            MemberTemplate<Element>.WithCustomAC(typeof(JoinGeometryUtils), nameof(JoinGeometryUtils.IsCuttingElementInJoin), new JoinGeometryUtils_IsCuttingElementInJoin())
         ];       
     }
 }

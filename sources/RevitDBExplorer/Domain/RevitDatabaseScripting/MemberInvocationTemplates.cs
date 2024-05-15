@@ -26,8 +26,8 @@ namespace RevitDBExplorer.Domain.RevitDatabaseScripting
         [CodeToString(nameof(MemberInvocation_SelectSingle_Template))]
         object Select(Document document, IEnumerable<TypePlaceholder> inputs)
         {
-            var input = inputs.FirstOrDefault();
-            return input.MethodPlaceholder();            
+            var item = inputs.FirstOrDefault();
+            return item.MethodPlaceholder();            
         }
     }
 
@@ -50,8 +50,8 @@ namespace RevitDBExplorer.Domain.RevitDatabaseScripting
         [CodeToString(nameof(MemberInvocation_UpdateSingle_Template))]
         void Update(Document document, IEnumerable<TypePlaceholder> inputs)
         {
-            var input = inputs.FirstOrDefault();            
-            input.MethodPlaceholder();            
+            var item = inputs.FirstOrDefault();
+            item.MethodPlaceholder();            
         }
     }
 }

@@ -61,7 +61,7 @@ namespace RevitDBExplorer.Domain.DataModel.Members
             memberAccessor.UniqueId = getMethod.GetUniqueId();
             if (string.IsNullOrEmpty(memberAccessor.DefaultInvocation.Syntax))
             {
-                memberAccessor.DefaultInvocation.Syntax = getMethod.GenerateInvocation();
+                memberAccessor.DefaultInvocation.Syntax = "item." + getMethod.GenerateInvocation();
             }
 
             return memberAccessor;

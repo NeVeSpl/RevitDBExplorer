@@ -31,16 +31,37 @@ namespace RevitDBExplorer.Domain.DataModel.Members.Base
         }
 
 
-        public static ISnoopableMemberTemplate Create<TReturnType>(Expression<Func<Document, TForType, TReturnType>> getter, Func<TForType, bool> canBeUsed = null, MemberKind kind = MemberKind.StaticMethod)
+        public static ISnoopableMemberTemplate Create<TReturnType>(Expression<Func<Document, TForType, TReturnType>> getter,
+                                                                   Func<TForType, bool> canBeUsed = null,
+                                                                   MemberKind kind = MemberKind.StaticMethod)
         {
             var compiledGetter = getter.Compile();
             var methodCallExpression = getter.Body as MethodCallExpression;
             var memberAccessor = new MemberAccessorByFunc<TForType, TReturnType>(compiledGetter);
 
-            return Create(methodCallExpression.Method.DeclaringType, methodCallExpression.Method.Name, memberAccessor, canBeUsed, kind, () => RevitDocumentationReader.GetMethodComments(methodCallExpression.Method));
+            memberAccessor.UniqueId = $"{typeof(TForType).Name}_{getter.GetUniqueId()}";
+
+
+            return WithCustomAC(methodCallExpression.Method.DeclaringType, methodCallExpression.Method.Name, memberAccessor, canBeUsed, kind, () => RevitDocumentationReader.GetMethodComments(methodCallExpression.Method));
         }
-        public static ISnoopableMemberTemplate Create(Type declaringType, string memberName, IAccessor memberAccessor, Func<TForType, bool> canBeUsed = null, MemberKind kind = MemberKind.StaticMethod, Func<DocXml> documentationFactoryMethod = null)
+
+
+        public static ISnoopableMemberTemplate WithCustomAC(Type declaringType,
+                                                            string memberName,
+                                                            IAccessor memberAccessor,
+                                                            Func<TForType, bool> canBeUsed = null,
+                                                            MemberKind kind = MemberKind.StaticMethod,
+                                                            Func<DocXml> documentationFactoryMethod = null)
         {
+            if (string.IsNullOrEmpty(memberAccessor.UniqueId))
+            {
+                memberAccessor.UniqueId= $"{typeof(TForType).Name}_{memberAccessor.GetType().Name}.{memberName}";
+            }
+            if (string.IsNullOrEmpty(memberAccessor.DefaultInvocation.Syntax))
+            {
+
+            }
+
             return new MemberTemplate<TForType>()
             {
                 Descriptor = new MemberDescriptor(typeof(TForType), kind, memberName, declaringType, memberAccessor, documentationFactoryMethod),

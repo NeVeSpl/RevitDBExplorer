@@ -15,7 +15,7 @@ namespace RevitDBExplorer.Domain.DataModel.MembersOverrides
 
         public HostObject_FindInserts() : base((document, hostObject) => hostObject.FindInserts(true, true, true, true))
         {
-            DefaultInvocation.Syntax = "FindInserts(true, true, true, true)";
+            DefaultInvocation.Syntax = "item.FindInserts(true, true, true, true)";
         }
     }
 }

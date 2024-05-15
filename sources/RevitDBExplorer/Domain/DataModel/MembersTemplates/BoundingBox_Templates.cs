@@ -12,7 +12,7 @@ namespace RevitDBExplorer.Domain.DataModel.MembersTemplates
     {
         public IEnumerable<ISnoopableMemberTemplate> GetTemplates() =>
         [
-            MemberTemplate<BoundingBoxXYZ>.Create(typeof(BoundingBoxXYZ), "BoundingBoxIntersectsFilter", new BoundingBox_BoundingBoxIntersectsFilter(), kind: MemberKind.Extra),
+            MemberTemplate<BoundingBoxXYZ>.WithCustomAC(typeof(BoundingBoxXYZ), "BoundingBoxIntersectsFilter", new BoundingBox_BoundingBoxIntersectsFilter(), kind: MemberKind.Extra, documentationFactoryMethod: () => new DocXml() { Summary ="TEST" }),
         ]; 
     }
 }

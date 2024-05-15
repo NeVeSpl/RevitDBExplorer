@@ -13,7 +13,11 @@ namespace RevitDBExplorer.Domain.RevitDatabaseScripting
     {
         public string Evaluate(MethodInfo getMethod, string invocation, TemplateInputsKind inputsKind)
         {
-            invocation ??= getMethod.GenerateInvocation();
+            if (string.IsNullOrEmpty(invocation))
+            {
+                var prefix = getMethod.IsStatic == false ? "item." : $"{getMethod.DeclaringType.Name}.";
+                invocation = prefix + getMethod.GenerateInvocation();
+            }
             var cmdkind = getMethod.ReturnType == typeof(void) ? TemplateCmdKind.Update : TemplateCmdKind.Select;
 
             return Evaluate(getMethod.DeclaringType, invocation, cmdkind, inputsKind);
@@ -22,7 +26,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseScripting
         {
             var template = GetTemplateType(cmdkind, inputsKind);
 
-            return Evaluate(template, type, invocation);
+            return EvaluateInternal(template, type, invocation);
         }
         private Type GetTemplateType(TemplateCmdKind cmdKind, TemplateInputsKind inputsKind)
         {
@@ -48,13 +52,13 @@ namespace RevitDBExplorer.Domain.RevitDatabaseScripting
 
         
 
-        private string Evaluate(System.Type templateType, System.Type type, string invocation)
+        private string EvaluateInternal(System.Type templateType, System.Type type, string invocation)
         {
             var template = CodeToStringRepo.GetText(templateType.Name, true);
             var result = template.ReplaceMany(new[]
             {
                 ("TypePlaceholder", type.GetCSharpName()),
-                ("MethodPlaceholder()", invocation)
+                ("item.MethodPlaceholder()", invocation)
             });
 
             return result;

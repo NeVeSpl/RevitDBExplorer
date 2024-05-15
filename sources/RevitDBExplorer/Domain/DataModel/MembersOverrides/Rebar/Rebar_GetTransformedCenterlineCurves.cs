@@ -19,7 +19,7 @@ namespace RevitDBExplorer.Domain.DataModel.MembersOverrides
 
         public Rebar_GetTransformedCenterlineCurves()
         {
-            DefaultInvocation.Syntax = "GetTransformedCenterlineCurves(false, true, false, MultiplanarOption.IncludeOnlyPlanarCurves, 0)";
+            DefaultInvocation.Syntax = "item.GetTransformedCenterlineCurves(false, true, false, MultiplanarOption.IncludeOnlyPlanarCurves, 0)";
         }
 
 

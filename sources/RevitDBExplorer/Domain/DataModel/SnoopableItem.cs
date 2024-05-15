@@ -116,7 +116,7 @@ namespace RevitDBExplorer.Domain.DataModel
             {
                 return accessorWithCodeGeneration.GenerateInvocationForScript(inputsKind);
             }
-            var invocation = accessor.DefaultInvocation.Syntax ?? Name;
+            var invocation = accessor.DefaultInvocation.Syntax ?? $"item.{Name}";
 
             return new MemberInvocationTemplateSelector().Evaluate(parent.Object.GetType(), invocation, TemplateCmdKind.Select, inputsKind);
         }

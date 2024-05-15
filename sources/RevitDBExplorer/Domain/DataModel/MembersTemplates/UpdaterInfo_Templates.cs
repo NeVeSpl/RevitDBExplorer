@@ -12,7 +12,7 @@ namespace RevitDBExplorer.Domain.DataModel.MembersTemplates
     {
         public IEnumerable<ISnoopableMemberTemplate> GetTemplates() =>
         [
-            MemberTemplate<UpdaterInfo>.Create(typeof(IUpdater), "GetUpdaterId", new MemberAccessorByFunc<UpdaterInfo, UpdaterId>((doc, target) => UpdaterInfoWizard.Get(target.ApplicationName, target.UpdaterName))),             
+            MemberTemplate<UpdaterInfo>.WithCustomAC(typeof(IUpdater), "GetUpdaterId", new MemberAccessorByFunc<UpdaterInfo, UpdaterId>((doc, target) => UpdaterInfoWizard.Get(target.ApplicationName, target.UpdaterName))),             
         ];        
     }
 }

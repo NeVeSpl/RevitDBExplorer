@@ -11,8 +11,7 @@ namespace RevitDBExplorer.Domain.DataModel.MembersTemplates
     internal class Document_Templates : IHaveMemberTemplates
     {        
         public IEnumerable<ISnoopableMemberTemplate> GetTemplates() =>
-        [
-            MemberTemplate<Document>.Create((doc, target) => Document.GetDocumentVersion(target), kind: MemberKind.StaticMethod),
+        [            
 #if R2023_MIN
             MemberTemplate<Document>.Create((doc, target) => target.GetChangedElements(Guid.Empty), kind: MemberKind.Method),
 #endif

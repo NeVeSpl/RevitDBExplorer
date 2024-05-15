@@ -12,8 +12,8 @@ namespace RevitDBExplorer.Domain.DataModel.MembersTemplates
     {
         public IEnumerable<ISnoopableMemberTemplate> GetTemplates() =>
         [
-            MemberTemplate<Schema>.Create(typeof(Schema), "Get all elements that have entity of this schema", new Schema_GetAllElements(), kind: MemberKind.Extra),
-            MemberTemplate<Schema>.Create(typeof(Schema), "Erase schema and all entities from the document", new Schema_EraseSchemaAndAllEntities(), kind: MemberKind.Extra),
+            MemberTemplate<Schema>.WithCustomAC(typeof(Schema), "Get all elements that have entity of this schema", new Schema_GetAllElements(), kind: MemberKind.Extra),
+            MemberTemplate<Schema>.WithCustomAC(typeof(Schema), "Erase schema and all entities from the document", new Schema_EraseSchemaAndAllEntities(), kind: MemberKind.Extra),
         ]; 
     }
 }
