@@ -27,16 +27,7 @@ namespace RevitDBExplorer.Domain.DataModel.Members.Base
             var compiledGetter = getter.Compile();
             var methodCallExpression = getter.Body as MethodCallExpression;
 
-            string syntax = null;
-            if (methodCallExpression.Object is ParameterExpression)
-            {
-                var uniformMethodCallExpression = methodCallExpression.Update(Expression.Parameter(methodCallExpression.Object.Type, "item"), methodCallExpression.Arguments);
-                syntax = uniformMethodCallExpression.ToString();
-            }
-            if (methodCallExpression.Object == null)
-            {
-                syntax = $"{methodCallExpression.Method.DeclaringType.Name}." + methodCallExpression.ToString();
-            }
+            string syntax = methodCallExpression.ToCeSharp();           
             var uniqueId = getter.GetUniqueId();
 
             return new MemberOverride<TForType>()
