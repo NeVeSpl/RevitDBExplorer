@@ -40,7 +40,7 @@ namespace RevitDBExplorer.Domain.DataModel.Members.Base
             var memberAccessor = new MemberAccessorByFunc<TForType, TReturnType>(compiledGetter);
 
             memberAccessor.UniqueId = $"{typeof(TForType).Name}_{getter.GetUniqueId()}";
-            memberAccessor.DefaultInvocation.Syntax = methodCallExpression.ToCeSharp();
+            memberAccessor.DefaultInvocation.Syntax = getter.ToCeSharp();
 
             return WithCustomAC(methodCallExpression.Method.DeclaringType, methodCallExpression.Method.Name, memberAccessor, canBeUsed, kind, () => RevitDocumentationReader.GetMethodComments(methodCallExpression.Method));
         }

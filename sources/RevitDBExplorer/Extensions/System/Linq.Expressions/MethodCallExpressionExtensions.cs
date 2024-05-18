@@ -1,50 +1,41 @@
-﻿using System.Collections.Generic;
-using System.Reflection;
-using Autodesk.Revit.DB;
+﻿using Autodesk.Revit.DB;
 using ExpressionTreeToString;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
 namespace System.Linq.Expressions
 {
-    internal static class MethodCallExpressionExtensions
+    internal static class LambdaExpressionExtensions
     {
-        public static string ToCeSharp(this MethodCallExpression methodCallExpression)
+        public static string ToCeSharp(this LambdaExpression lambdaExpression)
         {
-            string syntax = null;
-            if (methodCallExpression.Object is ParameterExpression)
-            {
-                var uniformMethodCallExpression = methodCallExpression.Update(Expression.Parameter(methodCallExpression.Object.Type, "item"), methodCallExpression.Arguments);
-                syntax = uniformMethodCallExpression.ToString("C#");
-            }
-            if (methodCallExpression.Object == null)
-            {
-                var arguments = new List<Expression>();
-                foreach (var arg in methodCallExpression.Arguments) 
-                {
-                    if (arg is ParameterExpression)
-                    {
-                        var isDocument = arg.Type == typeof(Document);                        
-                        arguments.Add(Expression.Parameter(arg.Type, isDocument ? "document" : "item"));
-                        continue;
-                        
-                    }
-                    if (arg is MemberExpression member)
-                    {
-                        var isDocument = member.Expression.Type == typeof(Document);
-                        arguments.Add(Expression.Property(Expression.Parameter(member.Expression.Type, isDocument ? "document" : "item"), member.Member as PropertyInfo));
-                        continue;
-                    }
-                    arguments.Add(arg);
-                }
-
-
-
-                var uniformMethodCallExpression = methodCallExpression.Update(null, arguments);
-                //var syntaxb = methodCallExpression.ToString("C#");
-                syntax = uniformMethodCallExpression.ToString("C#");
-            }
+            var body = new ParameterReplacer(lambdaExpression.Parameters[0], Expression.Parameter(lambdaExpression.Parameters[0].Type, "document")).Visit(lambdaExpression.Body);
+           
+            var isDocument = lambdaExpression.Parameters[1].Type == typeof(Document);
+            var secondParamName = isDocument ? "document" : "item";
+            body = new ParameterReplacer(lambdaExpression.Parameters[1], Expression.Parameter(lambdaExpression.Parameters[1].Type, secondParamName)).Visit(body);
+           
+            var methodCallExpression = body as MethodCallExpression;        
+            var syntax = methodCallExpression.ToString("C#");
+        
             return syntax;
+        }
+
+        private class ParameterReplacer : ExpressionVisitor
+        {
+            private readonly ParameterExpression oldParameter;
+            private readonly ParameterExpression newParameter;
+
+            public ParameterReplacer(ParameterExpression oldParameter, ParameterExpression newParameter)
+            {
+                this.oldParameter = oldParameter;
+                this.newParameter = newParameter;
+            }
+
+            protected override Expression VisitParameter(ParameterExpression node)
+            {
+                return node == oldParameter ? newParameter : node;
+            }
         }
     }
 }

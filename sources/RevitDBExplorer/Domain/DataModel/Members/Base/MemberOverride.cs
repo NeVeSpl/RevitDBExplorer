@@ -24,10 +24,8 @@ namespace RevitDBExplorer.Domain.DataModel.Members.Base
 
         public static IMemberOverride ByFunc<TReturnType>(Expression<Func<Document, TForType, TReturnType>> getter)
         {
-            var compiledGetter = getter.Compile();
-            var methodCallExpression = getter.Body as MethodCallExpression;
-
-            string syntax = methodCallExpression.ToCeSharp();           
+            var compiledGetter = getter.Compile();   
+            string syntax = getter.ToCeSharp();           
             var uniqueId = getter.GetUniqueId();
 
             return new MemberOverride<TForType>()

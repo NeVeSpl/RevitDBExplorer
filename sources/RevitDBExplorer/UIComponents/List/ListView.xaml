@@ -77,10 +77,7 @@
                                     <Run Text="Remarks:" Foreground="{DynamicResource ToolTip.Key}"/><LineBreak/>
                                     <Run Text="{Binding Documentation.Remarks, Mode=OneWay}"  Foreground="{DynamicResource ToolTip.Value}"/><LineBreak/>
                         </TextBlock>
-                        <TextBlock TextWrapping="Wrap" Visibility="{Binding AccessorName, Converter={StaticResource StringToVisibilityConverter}}">
-                                    <Run Text="Accessor:" Foreground="{DynamicResource ToolTip.Key}"/><LineBreak/>
-                                    <Run Text="{Binding AccessorName, Mode=OneWay}" Foreground="{DynamicResource ToolTip.Value}" />
-                        </TextBlock>
+                        
                     </StackPanel>
                 </ToolTip>
 

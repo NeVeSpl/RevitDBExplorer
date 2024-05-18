@@ -11,7 +11,13 @@ namespace RevitDBExplorer.Domain.DataModel.MembersTemplates
     {
         public IEnumerable<ISnoopableMemberTemplate> GetTemplates() =>
         [
-            MemberTemplate<Solid>.Create((document, target) => SolidUtils.SplitVolumes(target), kind: MemberKind.StaticMethod),
+            MemberTemplate<Solid>.Create((document, target) => SolidUtils.SplitVolumes(target)),
+
+
+            MemberTemplate<Solid>.Create((document, target) => SolidUtils.IsValidForTessellation(target)),
+            MemberTemplate<Solid>.Create((document, target) => SolidUtils.TessellateSolidOrShell(target, new SolidOrShellTessellationControls()), canBeUsed: x => SolidUtils.IsValidForTessellation(x)),
+
+            
         ];       
     }
 }

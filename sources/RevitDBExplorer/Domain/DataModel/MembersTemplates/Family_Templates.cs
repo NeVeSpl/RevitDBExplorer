@@ -12,8 +12,7 @@ namespace RevitDBExplorer.Domain.DataModel.MembersTemplates
         public IEnumerable<ISnoopableMemberTemplate> GetTemplates() =>
         [
             MemberTemplate<Family>.Create((doc, target) => doc.EditFamily(target), kind: MemberKind.AsArgument),
-            MemberTemplate<Family>.Create((doc, target) => FamilySizeTableManager.GetFamilySizeTableManager(doc, target.Id), kind: MemberKind.StaticMethod),
-               
+            MemberTemplate<Family>.Create((doc, target) => FamilySizeTableManager.GetFamilySizeTableManager(doc, target.Id), kind: MemberKind.StaticMethod),               
         ]; 
     }
 }

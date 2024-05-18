@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Autodesk.Revit.DB;
 using RevitDBExplorer.Domain.DataModel.Members;
 using RevitDBExplorer.Domain.DataModel.Members.Base;
@@ -13,24 +12,19 @@ namespace RevitDBExplorer.Domain.DataModel.MembersTemplates
 #if R2022_MIN
         private static readonly HashSet<ForgeTypeId> AllDisciplines = new(UnitUtils.GetAllDisciplines());
 #endif
-        private static readonly IEnumerable<ISnoopableMemberTemplate> ForForgeTypeId = Enumerable.Empty<ISnoopableMemberTemplate>();
-        private static readonly IEnumerable<ISnoopableMemberTemplate> ForCategory = Enumerable.Empty<ISnoopableMemberTemplate>();
-        private static readonly IEnumerable<ISnoopableMemberTemplate> ForParameter = Enumerable.Empty<ISnoopableMemberTemplate>();
+        
 
-
-        static ForgeTypeId_Templates()
-        {
-            ForForgeTypeId = new ISnoopableMemberTemplate[]
-            {
+        public IEnumerable<ISnoopableMemberTemplate> GetTemplates() =>
+        [
 #if R2022_MIN
                 MemberTemplate<ForgeTypeId>.Create((doc, forgeId) => Category.IsBuiltInCategory(forgeId)),
                 MemberTemplate<ForgeTypeId>.Create((doc, forgeId) => Category.GetBuiltInCategory(forgeId), x => Category.IsBuiltInCategory(x)),
-                MemberTemplate<ForgeTypeId>.Create((doc, forgeId) => doc.GetTypeOfStorage(forgeId), x=> ParameterUtils.IsBuiltInParameter(x)),
-                MemberTemplate<ForgeTypeId>.Create((doc, forgeId) => doc.GetUnits().GetFormatOptions(forgeId), x => UnitUtils.IsMeasurableSpec(x), Members.Base.MemberKind.AsArgument),
+                MemberTemplate<ForgeTypeId>.Create((doc, forgeId) => doc.GetTypeOfStorage(forgeId), x=> ParameterUtils.IsBuiltInParameter(x), MemberKind.AsArgument),
+                MemberTemplate<ForgeTypeId>.Create((doc, forgeId) => doc.GetUnits().GetFormatOptions(forgeId), x => UnitUtils.IsMeasurableSpec(x), MemberKind.AsArgument),
                 MemberTemplate<ForgeTypeId>.Create((doc, forgeId) => ParameterUtils.IsBuiltInParameter(forgeId)),
                 MemberTemplate<ForgeTypeId>.Create((doc, forgeId) => ParameterUtils.GetBuiltInParameter(forgeId), x=> ParameterUtils.IsBuiltInParameter(x)),
                 MemberTemplate<ForgeTypeId>.Create((doc, forgeId) => ParameterUtils.IsBuiltInGroup(forgeId), x => true),
-                
+
 
                 MemberTemplate<ForgeTypeId>.Create((doc, forgeId) => UnitUtils.IsMeasurableSpec(forgeId)),
 #endif
@@ -67,26 +61,6 @@ namespace RevitDBExplorer.Domain.DataModel.MembersTemplates
 
                 MemberTemplate<ForgeTypeId>.Create((doc, forgeId) => FormatOptions.GetValidSymbols(forgeId), x => UnitUtils.IsUnit(x)),
                 MemberTemplate<ForgeTypeId>.Create((doc, forgeId) => FormatOptions.CanHaveSymbol(forgeId), x => UnitUtils.IsUnit(x)),
-            };
-            ForCategory = new ISnoopableMemberTemplate[]
-            {
-#if R2022_MIN
-                MemberTemplate<Category>.Create((doc, category) => Category.GetBuiltInCategoryTypeId((BuiltInCategory)category.Id.Value())),
-                MemberTemplate<Category>.Create((doc, category) => ParameterFilterUtilities.GetFilterableParametersInCommon(doc, new[] { category.Id } )),
-#endif
-            };
-            ForParameter = new ISnoopableMemberTemplate[]
-            {
-#if R2022_MIN
-                MemberTemplate<Parameter>.Create((doc, parameter) => UnitFormatUtils.Format(doc.GetUnits(), parameter.Definition.GetDataType(), parameter.AsDouble(), false), x => UnitUtils.IsMeasurableSpec(x.Definition?.GetDataType())),
-#endif
-            };            
-        }
-
-
-        public IEnumerable<ISnoopableMemberTemplate> GetTemplates()
-        {
-            return ForForgeTypeId.Concat(ForCategory).Concat(ForParameter);
-        }
+         ];        
     }
 }
