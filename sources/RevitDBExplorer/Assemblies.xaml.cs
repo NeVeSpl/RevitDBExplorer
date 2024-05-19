@@ -1,21 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using System.Runtime.Loader;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using RevitDBExplorer.WPF;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
@@ -100,10 +91,20 @@ namespace RevitDBExplorer
         public bool Filter(string text)
         {
             if (string.IsNullOrEmpty(text)) return true;
+
+#if R2025_MIN
             if (Name?.Contains(text, StringComparison.OrdinalIgnoreCase) == true) return true;
             if (Path?.Contains(text, StringComparison.OrdinalIgnoreCase) == true) return true;
             if (AssemblyLoadContext?.Contains(text, StringComparison.OrdinalIgnoreCase) == true) return true;
             if (Version?.Contains(text, StringComparison.OrdinalIgnoreCase) == true) return true;
+#endif
+
+#if R2024_MAX
+            if (Name?.Contains(text) == true) return true;
+            if (Path?.Contains(text) == true) return true;
+            if (AssemblyLoadContext?.Contains(text) == true) return true;
+            if (Version?.Contains(text) == true) return true;
+#endif
 
             return false;
         }
