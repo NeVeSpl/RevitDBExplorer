@@ -141,10 +141,10 @@
                             />
                             <UniformGrid Grid.Column="1" Rows="1" Visibility="{Binding Data.IsComparisonActive, Source={StaticResource Proxy}, Converter={StaticResource InverseBoolToVisibilityConverter}}">
 
-                                <TextBlock Text="V" Foreground="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"  FontWeight="Heavy" FontFamily="Arial" FontSize="10"  Width="8"
+                                <!--<TextBlock Text="V" Foreground="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"  FontWeight="Heavy" FontFamily="Arial" FontSize="10"  Width="8"
                                            Visibility="{Binding CanBeVisualized, Converter={StaticResource BoolToVisibilityConverter}}" VerticalAlignment="Bottom"
                                            ToolTip="item has a visualization"
-                                           />
+                                           />-->
                                 <Button Style="{StaticResource MiniButton}" Background="Transparent" Padding="0 0 0 0" Visibility="{Binding CanGenerateCode, Converter={StaticResource BoolToVisibilityConverter}}"       
                                      ap:ButtonAP.OpenSubMenuOnClick="True"
                                     ContextMenu="{StaticResource ContextMenuForGenerateCSharpCode}"
