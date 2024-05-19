@@ -221,6 +221,7 @@
                             <MenuItem Header="Snoop loaded external applications" InputGestureText="UIApplication.LoadedApplications" Click="SelectorButton_Click" Tag="LoadedApplications" />
                             <MenuItem Header="Snoop updaters" InputGestureText="UpdaterRegistry.GetRegisteredUpdaterInfos()" Click="SelectorButton_Click" Tag="Updaters" />
                             <MenuItem Header="Snoop external services" InputGestureText="ExternalServiceRegistry.GetServices()" Click="SelectorButton_Click" Tag="ExternalServices"/>
+                            <MenuItem Header="Snoop loaded assemblies" InputGestureText="AppDomain.CurrentDomain.GetAssemblies()" Click="SnoopLoadedAssemblies"  />
                         </ContextMenu>
                     </Button.ContextMenu>
                 </Button>

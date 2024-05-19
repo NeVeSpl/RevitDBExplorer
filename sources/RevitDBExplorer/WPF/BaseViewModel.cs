@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 
 namespace RevitDBExplorer.WPF
 {
-    internal class BaseViewModel : INotifyPropertyChanged
+    public class BaseViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
 

@@ -301,9 +301,18 @@ namespace RevitDBExplorer
         private void OpenRDS()
         {
             Application.RDSController.Open(this.Left, this.Top + this.ActualHeight);
-        }        
+        }
 
-               
+
+        private void SnoopLoadedAssemblies(object sender, RoutedEventArgs e)
+        {
+            var window = new Assemblies();
+            window.Owner = this;
+            window.Show();
+        }
+
+
+
         private void Window_Closed(object sender, EventArgs e)
         {
             globalKeyboardHook.unhook();
