@@ -15,7 +15,7 @@ namespace RevitDBExplorer.Domain.DataModel.MembersTemplates
             MemberTemplate<Parameter>.Create((doc, parameter) => UnitFormatUtils.Format(doc.GetUnits(), parameter.Definition.GetDataType(), parameter.AsDouble(), false), x => UnitUtils.IsMeasurableSpec(x.Definition?.GetDataType())),
 #endif
             MemberTemplate<Parameter>.Create((doc, target) => GlobalParametersManager.IsValidGlobalParameter(doc, target.Id)),
-            MemberTemplate<Parameter>.Create((doc, target) => doc.FamilyManager.GetAssociatedFamilyParameter(target)),
+            MemberTemplate<Parameter>.Create((doc, target) => doc.FamilyManager.GetAssociatedFamilyParameter(target), kind: MemberKind.AsArgument),
         ];
     }
 }
