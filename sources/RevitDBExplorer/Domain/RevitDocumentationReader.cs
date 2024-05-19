@@ -63,7 +63,7 @@ namespace RevitDBExplorer.Domain
 
             if (parameters.Any())
             {
-                titleCollored = ToInlinesMethod(returnType, name, parameters).ToArray();
+                titleCollored = ToInlinesMethod(returnType, info.DeclaringType.Name, name, parameters).ToArray();
             }
             else
             {
@@ -83,7 +83,7 @@ namespace RevitDBExplorer.Domain
             var methodComments = docXml?.GetMethodComments(info);
             var returnType = info.ReturnType.GetCSharpName();
             var invocation = "(" + String.Join(", ", info.GetParameters().Select(p => $"{p.ParameterType.GetCSharpName()} {p.Name}").ToArray()) + ")";
-            var titleCollored = ToInlinesMethod(returnType, info.Name, info.GetParameters()).ToArray();
+            var titleCollored = ToInlinesMethod(returnType, info.DeclaringType.Name, info.Name, info.GetParameters()).ToArray();
 
             var doc = new DocXml(returnType, info.Name, invocation, titleCollored)
             {
@@ -116,10 +116,12 @@ namespace RevitDBExplorer.Domain
             }
             yield return new Run("}");
         }
-        private static IEnumerable<Inline> ToInlinesMethod(string returnType, string name, ParameterInfo[] parameterInfos)
+        private static IEnumerable<Inline> ToInlinesMethod(string returnType, string declaringType, string name, ParameterInfo[] parameterInfos)
         {
             yield return new Run(returnType) { Foreground = returnType.IsPrimitiveTypeName() ? PropTypeBrush : TypeBrush };
             yield return new Run(" ");
+            yield return new Run(declaringType) { Foreground = TypeBrush };
+            yield return new Run(".");
             yield return new Run(name) { Foreground = NameBrush };
             yield return new Run("(");
             for (int i = 0; i < parameterInfos.Length; i++)

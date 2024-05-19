@@ -67,6 +67,7 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers.Base
             new ElementHandler(),
 
             // collections
+            new ExecuteResultCollectionHandler(),
             new IListElementIdHandler(),
             new IEnumerableHandler(),
 
