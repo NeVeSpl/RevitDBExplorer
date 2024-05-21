@@ -7,7 +7,6 @@ using RevitDBExplorer.Domain.DataModel.Members.Accessors;
 
 namespace RevitDBExplorer.Domain.DataModel.Members.Base
 {
-
     internal class MemberDescriptor: IComparable<MemberDescriptor>, IEquatable<MemberDescriptor>
     {
         private readonly Lazy<DocXml> documentation;
@@ -19,6 +18,7 @@ namespace RevitDBExplorer.Domain.DataModel.Members.Base
         public IAccessor MemberAccessor { get; }
         public Func<DocXml> DocumentationFactoryMethod { get; }
         public DocXml Documentation => documentation?.Value ?? DocXml.Empty;
+        public string IntroducedInRevitVersion { get; init; }
 
 
         public MemberDescriptor(Type forType, MemberKind memberKind, string name, Type declaringType, IAccessor memberAccessor, Func<DocXml> documentationFactoryMethod)
@@ -28,6 +28,7 @@ namespace RevitDBExplorer.Domain.DataModel.Members.Base
             Name = name;            
             MemberAccessor = memberAccessor;
             DocumentationFactoryMethod = documentationFactoryMethod;
+            IntroducedInRevitVersion = WhatIsNew.WhenIntroduced(memberAccessor.UniqueId);
             if (documentationFactoryMethod != null)
             {
                 this.documentation = new Lazy<DocXml>(documentationFactoryMethod);

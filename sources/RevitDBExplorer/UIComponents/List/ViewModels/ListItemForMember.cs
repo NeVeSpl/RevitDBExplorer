@@ -11,7 +11,7 @@ namespace RevitDBExplorer.UIComponents.List.ViewModels
         public string Icon => $"Icon{SnoopableItem.MemberKind}";
         public DeclaringType DeclaringType => SnoopableItem.DeclaringType;
         public RevitDBExplorer.Domain.DocXml Documentation => SnoopableItem.Documentation;
-        
+        public string RevitVersion => SnoopableItem.IntroducedInRevitVersion;
 
         public ListItemForMember(SnoopableMember left, SnoopableMember right, Action askForReload, bool doCompare) : base(left, right, askForReload, doCompare) 
         { 

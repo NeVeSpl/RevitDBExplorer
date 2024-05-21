@@ -84,7 +84,7 @@
 
                 <Style TargetType="{x:Type Grid}" x:Key="sBackgroundGrid" >
                     <Setter Property="Background" Value="Transparent" />
-                    <Setter Property="Margin" Value="-6 0 0 0"/>                    
+                    <Setter Property="Margin" Value="-6 0 -6 0"/>                    
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding IsFavourite}" Value="true" >
                             <Setter Property="Background" Value="{DynamicResource List.Favourite}" />
@@ -111,13 +111,27 @@
                           Style="{StaticResource sBackgroundGrid}"
                           ContextMenu="{StaticResource ContextMenuForNameColumn}" 
                           >
-                        <StackPanel Orientation="Horizontal"
+                        <Grid 
                                     Margin="5 3 0 3"
                                     ToolTipService.ShowDuration="50000" 
                                     ToolTip="{StaticResource ToolTipWithRevitHelp}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="auto"/>
+                            </Grid.ColumnDefinitions>
+                            
                             <Path Style="{Binding Icon, Converter={StaticResource ToResourceWithKeyConverter}}" Margin="0 1 4 0"  />
-                            <TextBlock Text="{Binding Name, Mode=OneWay}" Foreground="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"  />
-                        </StackPanel>
+                            <TextBlock Text="{Binding Name, Mode=OneWay}" Foreground="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" Grid.Column="1"  />
+                            <TextBlock Text="{Binding RevitVersion, Mode=OneWay}" Foreground="white" Background="#0C3D91" 
+                                       FontWeight="Bold" 
+                                       TextAlignment="Center"
+                                       Padding="2 1" 
+                                       Margin="0 -1"
+                                       Grid.Column="2"
+                                       Visibility="{Binding RevitVersion, Converter={StaticResource StringToVisibilityConverter}}"
+                                       ToolTip="First appeared in Revit"/>
+                        </Grid>
                     </Grid>
                     <DataTemplate.Resources>
                         
