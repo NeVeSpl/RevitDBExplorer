@@ -56,6 +56,7 @@ namespace RevitDBExplorer.UIComponents.List.ViewModels
             set
             {
                 isFavourite = value;
+                SaveFavourite();
                 OnPropertyChanged();
             }
         }
@@ -83,7 +84,7 @@ namespace RevitDBExplorer.UIComponents.List.ViewModels
             }
 
             Compare();
-            IsFavourite = FavoriteMembersManager.IsFavorite(SnoopableItem.GetUniqueId());
+            isFavourite = FavoriteMembersManager.IsFavorite(SnoopableItem.GetUniqueId());
         }
 
 
@@ -146,6 +147,10 @@ namespace RevitDBExplorer.UIComponents.List.ViewModels
         public void ToogleFavourite()
         {
             IsFavourite = !IsFavourite;
+            SaveFavourite();
+        }
+        public void SaveFavourite()
+        {
             if (IsFavourite)
             {
                 FavoriteMembersManager.AddFavorite(SnoopableItem.GetUniqueId());
