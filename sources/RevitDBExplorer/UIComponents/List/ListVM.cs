@@ -83,6 +83,7 @@ namespace RevitDBExplorer.UIComponents.List
         public RelayCommand ReloadCommand { get; }
         public RelayCommand CopyNameCommand { get; }
         public RelayCommand CopyValueCommand { get; }
+        public RelayCommand FavouriteCommand { get; }
         public RelayCommand OpenCHMCommand { get; }
         public RelayCommand SnoopParamInNewWindowCommand { get; }
         public RelayCommand SearchForParameterValueCommand { get; }
@@ -180,6 +181,7 @@ namespace RevitDBExplorer.UIComponents.List
             ReloadCommand = new RelayCommand(Reload);
             CopyNameCommand = new RelayCommand(CopyName);
             CopyValueCommand = new RelayCommand(CopyValue);
+            FavouriteCommand = new RelayCommand(Favourite);
             OpenCHMCommand = new RelayCommand(OpenCHM);
             SnoopParamInNewWindowCommand = new RelayCommand(SnoopParamInNewWindow);
             SearchForParameterValueCommand = new RelayCommand(SearchForParameterValue);
@@ -373,7 +375,7 @@ namespace RevitDBExplorer.UIComponents.List
         {
             if (obj is ListItemForMember listItem)
             {
-                CHMService.OpenCHM(listItem[0] ?? listItem[1]);
+                listItem.OpenCHM();
             }
         }
         private void SnoopParamInNewWindow(object obj)
@@ -408,9 +410,15 @@ namespace RevitDBExplorer.UIComponents.List
                 }
             }
         }
+        private void Favourite(object obj)
+        {
+            if (obj is ListItemForMember listItemForMember)
+            {
+                listItemForMember.ToogleFavourite();
+            }
+        }
 
 
-       
         private async void Reload()
         {
             await ExternalExecutor.ExecuteInRevitContextAsync(uiApp => ReloadItems());

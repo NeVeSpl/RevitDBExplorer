@@ -11,9 +11,9 @@ namespace RevitDBExplorer.WPF.Converters
         {
             if (value is DefaultPresenter presenter)
             {
-                if (!string.IsNullOrEmpty(presenter.ValueContainer?.ToolTip))
+                if (!string.IsNullOrEmpty(presenter.ToolTip))
                 {
-                    return presenter.ValueContainer.ToolTip;
+                    return presenter.ToolTip;
                 }
                 return presenter.Label; 
             }

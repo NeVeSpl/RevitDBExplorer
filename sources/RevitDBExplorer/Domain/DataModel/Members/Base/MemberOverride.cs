@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq.Expressions;
 using Autodesk.Revit.DB;
 using RevitDBExplorer.Domain.DataModel.Accessors;
@@ -38,6 +39,26 @@ namespace RevitDBExplorer.Domain.DataModel.Members.Base
                     return accessor;
                 }
             };            
+        }
+
+        public static IMemberOverride ByFunc<TParam0Type, TReturnType>(Expression<Func<Document, TForType, TParam0Type, TReturnType>> getter, IEnumerable<TParam0Type> param_0_arguments)
+        {
+            var compiledGetter = getter.Compile();
+            string syntax = getter.ToCeSharp();
+            var uniqueId = getter.GetUniqueId();
+
+            var param_0_name = getter.Parameters[2].Name;
+
+            return new MemberOverride<TForType>()
+            {
+                UniqueId = uniqueId,
+                MemberAccessorFactory = () =>
+                {
+                    var accessor = new MemberAccessorByFuncUltra<TForType, TParam0Type, TReturnType>(compiledGetter, param_0_arguments, param_0_name);
+                    accessor.DefaultInvocation.Syntax = syntax;
+                    return accessor;
+                }
+            };
         }
     }
 }

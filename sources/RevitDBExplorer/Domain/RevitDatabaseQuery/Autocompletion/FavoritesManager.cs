@@ -12,7 +12,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Autocompletion
 {
     internal class FavoritesManager
     {
-        private static readonly string FilePath;
+        private static readonly string FilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "_RDBE_\\FavoriteQueries.json");
         private static List<FavoriteQueryDTO> favoriteQueries = new List<FavoriteQueryDTO>()
         {
             new FavoriteQueryDTO() { Query = "t: ParameterElement", Description = "User defined parameters" }
@@ -33,9 +33,7 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Autocompletion
 
 
         static FavoritesManager()
-        {
-            var lad = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);   
-            FilePath = Path.Combine(lad, "_RDBE_\\FavoriteQueries.json");
+        {            
             Load();
         }
 

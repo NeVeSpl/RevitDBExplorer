@@ -101,6 +101,7 @@
     <SolidColorBrush x:Key="Query.BorderBrush" Color="{StaticResource Primary}"/>
 
     <SolidColorBrush x:Key="List.Highlighted" Color="#FF476C"/>
+    <SolidColorBrush x:Key="List.Favourite" Color="#222933"/>
 
     <SolidColorBrush x:Key="TabItem.Selected" Color="{StaticResource Primary}"/>
 

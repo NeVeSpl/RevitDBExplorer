@@ -7,6 +7,7 @@ using RevitDBExplorer.Domain.DataModel.ValueViewModels;
 using RevitDBExplorer.Domain.DataModel.ValueViewModels.Base;
 using RevitDBExplorer.Domain.RevitDatabaseScripting;
 using RevitDBExplorer.WPF;
+using RevitExplorer.Visualizations.DrawingVisuals;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
@@ -19,7 +20,7 @@ namespace RevitDBExplorer.Domain.DataModel
         private readonly IValueViewModel itemValueViewModel;
 
         public event Action ParentObjectChanged;
-        public string AccessorName { get; private set; }
+        
         public virtual string Name { get; }
         public IValueViewModel ValueViewModel { get; private set; } = EmptyPresenter.Instance;
         public bool CanBeSnooped
@@ -33,6 +34,7 @@ namespace RevitDBExplorer.Domain.DataModel
                 return false;
             }
         }
+        public bool CanBeVisualized => (ValueViewModel as DefaultPresenter)?.CanBeVisualized == true;
         public virtual bool CanGenerateCode { get; }
 
 
@@ -69,9 +71,9 @@ namespace RevitDBExplorer.Domain.DataModel
             {
                 ValueViewModel = new ErrorPresenter(Labeler.GetLabelForException(valueAccessException));
             }
-            OnPropertyChanged(nameof(ValueViewModel));
-            OnPropertyChanged(nameof(AccessorName));
+            OnPropertyChanged(nameof(ValueViewModel));           
             OnPropertyChanged(nameof(CanBeSnooped));
+            OnPropertyChanged(nameof(CanBeVisualized));
         }
         private void RaiseParentObjectChanged()
         {
@@ -89,6 +91,16 @@ namespace RevitDBExplorer.Domain.DataModel
                 return snooper.Snoop(parent.Context, parent.Object);
             }
             return Enumerable.Empty<SnoopableObject>();
+        }
+
+
+        public IEnumerable<DrawingVisual> GetVisualization()
+        {
+            if (ValueViewModel is DefaultPresenter defaultPresenter)
+            {
+                return defaultPresenter.GetVisualization(parent.Context, parent.Object);
+            }
+            return [];
         }
 
 
@@ -119,6 +131,10 @@ namespace RevitDBExplorer.Domain.DataModel
             var invocation = accessor.DefaultInvocation.Syntax ?? $"item.{Name}";
 
             return new MemberInvocationTemplateSelector().Evaluate(parent.Object.GetType(), invocation, TemplateCmdKind.Select, inputsKind);
+        }
+        public string GetUniqueId()
+        {
+            return accessor?.UniqueId;
         }
     }
 }

@@ -11,7 +11,7 @@ namespace RevitDBExplorer.Domain.DataModel.MembersOverrides
     {
         public IEnumerable<IMemberOverride> GetOverrides() =>
         [
-            MemberOverride<Element>.ByFunc((document, element) => element.GetDependentElements(null)),
+            MemberOverride<Element>.ByFunc((document, element) => element.GetDependentElements(null)),           
         ];
     }
 }

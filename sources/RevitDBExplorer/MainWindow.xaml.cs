@@ -264,14 +264,8 @@ namespace RevitDBExplorer
                         drawingVisuals.AddRange(snoopableObjectTreeItem.Object.GetVisualization());
                     }
                     if (selectedItem is ListItemForMember listItemForMember)
-                    {
-                        var leftOne = listItemForMember[0];
-                        var righttOne = listItemForMember[1];
-
-                        if (leftOne?.ValueViewModel is DefaultPresenter { ValueContainer: { } } presenter)
-                        {
-                            drawingVisuals.AddRange(presenter.ValueContainer.GetVisualization());                            
-                        }
+                    {                                            
+                        drawingVisuals.AddRange(listItemForMember.GetVisualization()); 
                     }
                 }                
 
@@ -364,7 +358,7 @@ namespace RevitDBExplorer
                     var snoopableObjectTreeItem = selectedItems.OfType<SnoopableObjectTreeItem>().FirstOrDefault();
                     if (listItemForMember != null)
                     {
-                        CHMService.OpenCHM(listItemForMember[0] ?? listItemForMember[1]);
+                        listItemForMember.OpenCHM();
                         return;
                     }
                     if (snoopableObjectTreeItem != null)

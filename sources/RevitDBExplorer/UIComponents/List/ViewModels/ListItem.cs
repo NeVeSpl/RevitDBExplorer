@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using RevitDBExplorer.Domain;
 using RevitDBExplorer.Domain.DataModel;
 using RevitDBExplorer.Domain.DataModel.ValueViewModels.Base;
 using RevitDBExplorer.WPF;
+using RevitExplorer.Visualizations.DrawingVisuals;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
@@ -13,6 +16,7 @@ namespace RevitDBExplorer.UIComponents.List.ViewModels
         string GroupingKey { get;  }
         public string Name { get; }
         public bool IsHighlighted { get; }
+        public bool IsFavourite { get; }
 
 
         bool Filter(string filterPhrase);
@@ -25,6 +29,7 @@ namespace RevitDBExplorer.UIComponents.List.ViewModels
         private readonly T rightItem;
         private readonly bool doCompare;
         private bool isHighlighted;
+        private bool isFavourite;
 
         protected T SnoopableItem => leftItem ?? rightItem;
         public string SortingKey { get; init; }
@@ -39,6 +44,18 @@ namespace RevitDBExplorer.UIComponents.List.ViewModels
             set
             {
                 isHighlighted = value;
+                OnPropertyChanged();
+            }
+        }
+        public bool IsFavourite
+        {
+            get
+            {
+                return isFavourite;
+            }
+            set
+            {
+                isFavourite = value;
                 OnPropertyChanged();
             }
         }
@@ -66,6 +83,7 @@ namespace RevitDBExplorer.UIComponents.List.ViewModels
             }
 
             Compare();
+            IsFavourite = FavoriteMembersManager.IsFavorite(SnoopableItem.GetUniqueId());
         }
 
 
@@ -111,7 +129,31 @@ namespace RevitDBExplorer.UIComponents.List.ViewModels
         {
             leftItem?.Read();
             rightItem?.Read();
-            Compare();
+            Compare();            
+        }
+
+        public IEnumerable<DrawingVisual> GetVisualization()
+        {
+            return SnoopableItem.GetVisualization();
+        }
+        public void OpenCHM()
+        {
+            if (SnoopableItem is SnoopableMember snoopableMember)
+            {
+                CHMService.OpenCHM(snoopableMember);
+            }
+        }
+        public void ToogleFavourite()
+        {
+            IsFavourite = !IsFavourite;
+            if (IsFavourite)
+            {
+                FavoriteMembersManager.AddFavorite(SnoopableItem.GetUniqueId());
+            }
+            else
+            {
+                FavoriteMembersManager.RemoveFavorite(SnoopableItem.GetUniqueId());
+            }
         }
     }
 }
