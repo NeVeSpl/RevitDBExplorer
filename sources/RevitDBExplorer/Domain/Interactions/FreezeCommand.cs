@@ -2,7 +2,7 @@
 using RevitDBExplorer.UIComponents.Trees.Base.Items;
 using RevitDBExplorer.WPF;
 
-namespace RevitDBExplorer.Domain.Presentation
+namespace RevitDBExplorer.Domain.Interactions
 {
     internal class FreezeCommand : BaseCommand
     {

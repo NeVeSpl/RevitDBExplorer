@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Data;
 using RevitDBExplorer.Domain;
 using RevitDBExplorer.Domain.DataModel;
+using RevitDBExplorer.Domain.DataModel.Members;
 using RevitDBExplorer.Domain.DataModel.ValueViewModels.Base;
 using RevitDBExplorer.Domain.RevitDatabaseScripting;
 using RevitDBExplorer.UIComponents.List.ViewModels;
@@ -216,8 +217,11 @@ namespace RevitDBExplorer.UIComponents.List
                 IsComparisonActive = false;
 
                 var items = await GetSnoopableItemsFromRevit(snoopableObjectTreeItem.Object);
-                ListItems = new(items.Select(x => ListItemFactory.Create(x, null, Reload)));  
-                SetupListView();
+                ListItems = new(items.Select(x => ListItemFactory.Create(x, null, Reload)));
+
+                bool isSystemType  = MemberStreamerForSystemType.IsSystemType(snoopableObjectTreeItem.Object.Object);
+
+                SetupListView(isSystemType);
 
                 return true;
             }
@@ -231,10 +235,10 @@ namespace RevitDBExplorer.UIComponents.List
         {
             if (IsMemberViewVisible)
             {
-                var members = await ExternalExecutor.ExecuteInRevitContextAsync(x => snoopableObject.GetMembers(x).OrderBy(x => x).OfType<SnoopableItem>().ToList());
+                var members = await ExternalExecutor.ExecuteInRevitContextAsync(x => snoopableObject.GetMembers(x).OfType<SnoopableItem>().ToList());
                 return members;
             }
-            var parameters = await ExternalExecutor.ExecuteInRevitContextAsync(x => snoopableObject.GetParameters(x).OrderBy(x => x).OfType<SnoopableItem>().ToList());
+            var parameters = await ExternalExecutor.ExecuteInRevitContextAsync(x => snoopableObject.GetParameters(x).OfType<SnoopableItem>().ToList());
             return parameters;
         }
 
@@ -257,8 +261,8 @@ namespace RevitDBExplorer.UIComponents.List
 
             HasParameters = leftItem.Object.HasParameters;
 
-            var leftItems = await GetSnoopableItemsFromRevit(leftItem.Object);
-            var rightItems = await GetSnoopableItemsFromRevit(rightItem.Object);
+            var leftItems = (await GetSnoopableItemsFromRevit(leftItem.Object)).OrderBy(x => x).ToList();
+            var rightItems = (await GetSnoopableItemsFromRevit(rightItem.Object)).OrderBy(x => x).ToList();
             var mergedItems = MergeTwoLists(leftItems, rightItems).Select(x => ListItemFactory.Create(x.first, x.second, Reload, true));
 
             ListItems = new(mergedItems);
@@ -303,11 +307,11 @@ namespace RevitDBExplorer.UIComponents.List
                 ++j;
             }
         }
-        private void SetupListView()
+        private void SetupListView(bool isSystemType = false)
         {
             var lcv = (ListCollectionView)CollectionViewSource.GetDefaultView(ListItems);
 
-            if (ListItems.Count < 666)
+            if (ListItems.Count < 666 && isSystemType == false)
             {
                 lcv.GroupDescriptions.Add(new PropertyGroupDescription(nameof(IListItem.GroupingKey)));
                 lcv.SortDescriptions.Add(new SortDescription(nameof(IListItem.SortingKey), ListSortDirection.Ascending));

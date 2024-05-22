@@ -11,6 +11,21 @@ namespace RevitDBExplorer.Domain.DataModel.Members
 {
     internal static class MemberStreamerForSystemType
     {
+        public static bool IsSystemType(object target)
+        {
+            var type = target?.GetType();
+
+            if (target is Type { IsEnum: true } runtimeType)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+
+
+
         public static IEnumerable<MemberDescriptor> Stream(SnoopableContext context, object target)
         {
             var type = target.GetType();

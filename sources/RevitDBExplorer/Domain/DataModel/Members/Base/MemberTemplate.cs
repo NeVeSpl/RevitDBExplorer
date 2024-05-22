@@ -40,7 +40,7 @@ namespace RevitDBExplorer.Domain.DataModel.Members.Base
             var methodCallExpression = getter.Body as MethodCallExpression;
             var memberAccessor = new MemberAccessorByFunc<TForType, TReturnType>(compiledGetter);
             
-            memberAccessor.UniqueId = $"{typeof(TForType).Name}_{getter.GetUniqueId()}";
+            memberAccessor.UniqueId = $"{getter.GetUniqueId()}";
             memberAccessor.DefaultInvocation.Syntax = getter.ToCeSharp();
 
             return WithCustomAC(methodCallExpression.Method.DeclaringType, methodCallExpression.Method.Name, memberAccessor, canBeUsed, kind, () => RevitDocumentationReader.GetMethodComments(methodCallExpression.Method));
@@ -56,7 +56,7 @@ namespace RevitDBExplorer.Domain.DataModel.Members.Base
             var param_0_name = getter.Parameters[2].Name;
             var memberAccessor = new MemberAccessorByFuncUltra<TForType, TParam0Type, TReturnType>(compiledGetter, param_0_arguments, param_0_name);
 
-            memberAccessor.UniqueId = $"{typeof(TForType).Name}_{getter.GetUniqueId()}";
+            memberAccessor.UniqueId = $"{getter.GetUniqueId()}";
             memberAccessor.DefaultInvocation.Syntax = getter.ToCeSharp();
 
             return WithCustomAC(methodCallExpression.Method.DeclaringType, methodCallExpression.Method.Name, memberAccessor, canBeUsed, kind, () => RevitDocumentationReader.GetMethodComments(methodCallExpression.Method));

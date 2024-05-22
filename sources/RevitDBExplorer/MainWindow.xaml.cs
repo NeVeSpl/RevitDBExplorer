@@ -264,8 +264,13 @@ namespace RevitDBExplorer
                         drawingVisuals.AddRange(snoopableObjectTreeItem.Object.GetVisualization());
                     }
                     if (selectedItem is ListItemForMember listItemForMember)
-                    {                                            
-                        drawingVisuals.AddRange(listItemForMember.GetVisualization()); 
+                    {
+                        var listItemVisualization = listItemForMember.GetVisualization();
+                        if (listItemVisualization.Any())
+                        {
+                            drawingVisuals.AddRange(listItemVisualization);
+                            break;
+                        }                       
                     }
                 }                
 

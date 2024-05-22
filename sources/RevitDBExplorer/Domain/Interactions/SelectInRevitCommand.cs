@@ -7,7 +7,7 @@ using RevitDBExplorer.WPF;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
-namespace RevitDBExplorer.Domain.Presentation
+namespace RevitDBExplorer.Domain.Interactions
 {
     internal class SelectInRevitCommand : BaseCommand
     {
