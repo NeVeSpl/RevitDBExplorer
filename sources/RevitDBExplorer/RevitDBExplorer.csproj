@@ -73,9 +73,9 @@
 		<PackageReference Include="CircularBuffer" Version="1.3.0" />
 		<PackageReference Include="LoxSmoke.DocXml" Version="3.5.0" />
 		<PackageReference Include="NSourceGenerators.CodeToString" Version="0.4.0" />	
-		<PackageReference Include="RevitExplorer.Augmentations" Version="1.1.0.$(RevitYear)" />
-		<PackageReference Include="RevitExplorer.Scripting" Version="1.1.0.$(RevitYear)" />
-		<PackageReference Include="RevitExplorer.Visualizations" Version="1.1.0.$(RevitYear)" />
+		<PackageReference Include="RevitExplorer.Augmentations" Version="1.2.0.$(RevitYear)" />
+		<PackageReference Include="RevitExplorer.Scripting" Version="1.2.0.$(RevitYear)" />
+		<PackageReference Include="RevitExplorer.Visualizations" Version="1.2.0.$(RevitYear)" />
 		<PackageReference Include="SimMetrics.Net" Version="1.0.5" />
 	</ItemGroup>
 
@@ -166,12 +166,14 @@
 			<Link>RevitDBExplorer.addin</Link>
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
+		<None Include="Domain\DataModel\MembersOverrides\RebarConstraintsManager\RebarConstraintsManager_GetConstraintCandidatesForHandle.cs" />
 		<None Include="Domain\Selectors\SnoopDependentElements.cs" />
 	</ItemGroup>	
 	<ItemGroup>
 		<Compile Remove="obj\*.*" />
 	</ItemGroup>	
 	<ItemGroup>
+	  <Compile Remove="Domain\DataModel\MembersOverrides\RebarConstraintsManager\RebarConstraintsManager_GetConstraintCandidatesForHandle.cs" />
 	  <Compile Remove="Domain\Selectors\SnoopDependentElements.cs" />
 	</ItemGroup>	
 	<ItemGroup>
