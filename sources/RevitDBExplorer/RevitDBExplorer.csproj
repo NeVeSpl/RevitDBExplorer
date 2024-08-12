@@ -74,7 +74,7 @@
 		<PackageReference Include="LoxSmoke.DocXml" Version="3.5.0" />
 		<PackageReference Include="NSourceGenerators.CodeToString" Version="0.4.0" />	
 		<PackageReference Include="RevitExplorer.Augmentations" Version="1.2.0.$(RevitYear)" />
-		<PackageReference Include="RevitExplorer.Scripting" Version="1.2.0.$(RevitYear)" />
+		<PackageReference Include="RevitExplorer.Scripting" Version="1.2.1.$(RevitYear)" />
 		<PackageReference Include="RevitExplorer.Visualizations" Version="1.2.0.$(RevitYear)" />
 		<PackageReference Include="SimMetrics.Net" Version="1.0.5" />
 	</ItemGroup>

@@ -17,6 +17,14 @@ namespace RevitDBExplorer.Domain
             "Element.get_Geometry(Options)",
             "Element.get_Parameters()",
             "Rebar.GetCenterlineCurves(Boolean,Boolean,Boolean,MultiplanarOption,Int32)",
+            "FamilyInstance.get_Symbol()",
+            "FamilyInstance.get_Location()",
+            "Instance.GetTransform()",
+            "Element.GetEntity(Schema)",
+            "Document.get_ParameterBindings()",
+            "Application.OpenSharedParameterFile()",
+            "Rebar.GetRebarConstraintsManager()",
+            "Element.GetTypeId()",
         };
 
         static FavoriteMembersManager()
