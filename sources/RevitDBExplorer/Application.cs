@@ -63,7 +63,7 @@ namespace RevitDBExplorer
             MemberStreamerForTemplates.Init();
             RevitDocumentationReader.Init();
             RevitDatabaseQueryService.Init();
-            RevitDatabaseVisualizationFactory.Init(UIApplication);
+            RevitVisualizationFactory.Init(UIApplication, new ServerIdentity("Revit Explorer Visualizations", "RevitDBExplorer", ""));
             EventMonitor.Register(application);
 
             ApplicationModifyTab.Init(panel.GetRibbonPanel(), AppSettings.Default.AddRDBECmdToModifyTab);

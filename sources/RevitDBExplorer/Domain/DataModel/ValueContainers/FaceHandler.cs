@@ -13,16 +13,20 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers
     {
         protected override bool CanBeSnoooped(SnoopableContext context, Face face) => true;
         protected override string ToLabel(SnoopableContext context, Face face) => face.GetType()?.GetCSharpName();
-
+               
         
-
-        private readonly static Color FaceColor = new Color(80, 175, 228);
 
         protected override bool CanBeVisualized(SnoopableContext context, Face face) => true;
         [CodeToString]
-        protected override IEnumerable<DrawingVisual> GetVisualization(SnoopableContext context, Face face)
-        {
-            yield return new FaceDrawingVisual(face, FaceColor);
+        protected override IEnumerable<VisualizationItem> GetVisualization(SnoopableContext context, Face face)
+        {            
+            if (face is PlanarFace planarFace)
+            {
+                yield return new VisualizationItem("PlanarFace", "*", new FaceDrawingVisual(face, VisualizationItem.FaceColor));
+                yield return new VisualizationItem("PlanarFace", "Normal", new ArrowDrawingVisual(planarFace.Origin, planarFace.FaceNormal, VisualizationItem.NormalColor));
+                yield return new VisualizationItem("PlanarFace", "XVector", new ArrowDrawingVisual(planarFace.Origin, planarFace.XVector, VisualizationItem.XAxisColor));
+                yield return new VisualizationItem("PlanarFace", "YVector", new ArrowDrawingVisual(planarFace.Origin, planarFace.YVector, VisualizationItem.YAxisColor));
+            }
         }
     }
 }

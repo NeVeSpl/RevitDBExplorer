@@ -5,7 +5,6 @@ using System.Linq;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.Structure.StructuralSections;
 using Autodesk.Revit.UI;
-using RevitExplorer.Visualizations.DrawingVisuals;
 using RevitDBExplorer.Domain.DataModel.Members;
 using RevitDBExplorer.Domain.DataModel.ValueContainers.Base;
 using RevitDBExplorer.WPF;
@@ -134,14 +133,14 @@ namespace RevitDBExplorer.Domain.DataModel
         }
 
 
-        public IEnumerable<DrawingVisual> GetVisualization()
+        public IEnumerable<VisualizationItem> GetVisualization()
         {
             if (Object is not null)
             {
                 var typeHandler = ValueContainerFactory.SelectTypeHandlerFor(Object.GetType());  
                 return typeHandler.GetVisualization(this.Context, Object);                
             }
-            return Enumerable.Empty<DrawingVisual>();
+            return Enumerable.Empty<VisualizationItem>();
         }
 
 

@@ -10,7 +10,7 @@ using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Threading;
 using RevitDBExplorer.Domain;
-using RevitDBExplorer.Domain.DataModel.ValueViewModels;
+using RevitDBExplorer.Domain.DataModel;
 using RevitDBExplorer.Domain.RevitDatabaseQuery;
 using RevitDBExplorer.Domain.RevitDatabaseScripting;
 using RevitDBExplorer.Domain.Selectors;
@@ -20,11 +20,11 @@ using RevitDBExplorer.UIComponents.List.ViewModels;
 using RevitDBExplorer.UIComponents.QueryEditor;
 using RevitDBExplorer.UIComponents.QueryVisualization;
 using RevitDBExplorer.UIComponents.Trees.Base.Items;
+using RevitDBExplorer.UIComponents.Visualizations;
 using RevitDBExplorer.UIComponents.Workspaces;
 using RevitDBExplorer.Utils;
 using RevitDBExplorer.WPF;
 using RevitExplorer.Visualizations;
-using RevitExplorer.Visualizations.DrawingVisuals;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
@@ -34,9 +34,10 @@ namespace RevitDBExplorer
     {
         private readonly QueryEditorViewModel queryEditorVM;
         private readonly QueryVisualizationVM queryVisualizationVM;
-        private readonly WorkspacesViewModel workspacesVM;        
+        private readonly WorkspacesViewModel workspacesVM;       
+        private readonly VisualizationsManagerVM visualizationsManagerVM;
         private readonly DispatcherTimer isRevitBusyDispatcher;
-        private readonly IRDV3DController rdvController;
+        private readonly IRV3DController rvController;
         private readonly GlobalKeyboardHook globalKeyboardHook;
         private bool isRevitBusy;
         private bool isNewVerAvailable;
@@ -49,7 +50,8 @@ namespace RevitDBExplorer
 
         public QueryEditorViewModel QueryEditor => queryEditorVM;
         public QueryVisualizationVM QueryVisualization => queryVisualizationVM;
-        public WorkspacesViewModel Workspaces => workspacesVM;                                  
+        public WorkspacesViewModel Workspaces => workspacesVM;
+        public VisualizationsManagerVM VisualizationsManager => visualizationsManagerVM;
         public bool IsRevitBusy
         {
             get
@@ -117,12 +119,12 @@ namespace RevitDBExplorer
         {
             get
             {
-                return rdvController.IsEnabled;
+                return rvController.IsEnabled;
             }
             set
             {
-                rdvController.IsEnabled = value;
-                UpdateRDV();
+                rvController.IsEnabled = value;
+                UpdateVisualizations();
                 OnPropertyChanged();
             }
         }
@@ -140,11 +142,12 @@ namespace RevitDBExplorer
         {
             Dispatcher.UnhandledException += Dispatcher_UnhandledException;
 
+            rvController = RevitVisualizationFactory.CreateController();
+
             queryEditorVM = new QueryEditorViewModel(TryQueryDatabase, GenerateScriptForQueryAndOpenRDS);
             queryVisualizationVM = new QueryVisualizationVM();
-            workspacesVM = new WorkspacesViewModel(this, queryEditorVM, OpenRDSWithGivenScript);            
-            
-            rdvController = RevitDatabaseVisualizationFactory.CreateController();
+            workspacesVM = new WorkspacesViewModel(this, queryEditorVM, OpenRDSWithGivenScript);
+            visualizationsManagerVM = new VisualizationsManagerVM(rvController);     
 
             InitializeComponent();
             InitializeAsync().Forget();
@@ -172,7 +175,7 @@ namespace RevitDBExplorer
             (MouseStatus,  min,  max, var isValid) = Application.GetMouseStatus();
             cSelectorButtonScreen.IsEnabled = isValid;
             var v = max - min;
-            rdvController.ScaleFactor = v.GetLength();
+            rvController.ScaleFactor = v.GetLength();
         }
         private void Dispatcher_UnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
@@ -217,7 +220,7 @@ namespace RevitDBExplorer
         }
         private void Workspaces_SelectedItemChanged(SelectedItemChangedEventArgs obj)
         {
-            UpdateRDV();
+            UpdateVisualizations();
         }       
         void IAmWindowOpener.Open(SourceOfObjects sourceOfObjects)
         {           
@@ -251,34 +254,34 @@ namespace RevitDBExplorer
         }
         
 
-        private void UpdateRDV()
+        private void UpdateVisualizations()
         {
-            rdvController.RemoveAll();
-            if (rdvController.IsEnabled)
+            rvController.RemoveAll();
+            if (rvController.IsEnabled)
             {
-                var drawingVisuals = new List<DrawingVisual>();
+                var visualizationItems = new List<VisualizationItem>();
                 foreach (var selectedItem in Workspaces.GetSelectedItems())
                 {
                     if (selectedItem is SnoopableObjectTreeItem snoopableObjectTreeItem)
                     {
-                        drawingVisuals.AddRange(snoopableObjectTreeItem.Object.GetVisualization());
+                        visualizationItems.AddRange(snoopableObjectTreeItem.Object.GetVisualization());
                     }
                     if (selectedItem is ListItemForMember listItemForMember)
                     {
                         var listItemVisualization = listItemForMember.GetVisualization();
                         if (listItemVisualization.Any())
                         {
-                            drawingVisuals.AddRange(listItemVisualization);
+                            visualizationItems.AddRange(listItemVisualization);
                             break;
                         }                       
                     }
-                }                
-
-                //var line = Autodesk.Revit.DB.Line.CreateBound(min, max);
-                //var cd = new CurveDrawingVisual(line, new Autodesk.Revit.DB.Color(255, 0, 0));
-                //drawingVisuals.AddRange(new DrawingVisual[] { cd, new CoordinateSystemDrawingVisual(min), new CoordinateSystemDrawingVisual(max) });
-
-                rdvController.SetDrawingVisuals(drawingVisuals);
+                }  
+                
+                visualizationsManagerVM.Populate(visualizationItems);
+            }
+            else
+            {
+                visualizationsManagerVM.Close();
             }
         }
 
@@ -293,7 +296,7 @@ namespace RevitDBExplorer
             OpenRDS();
             Application.RDSController.SetText(scriptText);
         }
-        private void RDSButton_Click(object sender, RoutedEventArgs e)
+        private void ScriptingButton_Click(object sender, RoutedEventArgs e)
         {
             OpenRDS();
         }
@@ -315,7 +318,7 @@ namespace RevitDBExplorer
         private void Window_Closed(object sender, EventArgs e)
         {
             globalKeyboardHook.unhook();
-            rdvController.Dispose();
+            rvController.Dispose();
             //Application.RevitWindowHandle.BringWindowToFront();
             Dispatcher.UnhandledException -= Dispatcher_UnhandledException;           
             isRevitBusyDispatcher.Tick -= IsRevitBusyDispatcher_Tick;
@@ -382,7 +385,7 @@ namespace RevitDBExplorer
         private DispatcherTimer window_SizeChanged_Debouncer;  
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            IsWiderThan800px = this.Width > 800;
+            IsWiderThan800px = this.Width > 737;
             window_SizeChanged_Debouncer = window_SizeChanged_Debouncer.Debounce(TimeSpan.FromSeconds(4), SaveUserSettings);               
         }
         private void SaveUserSettings()

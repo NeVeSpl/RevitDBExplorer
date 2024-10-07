@@ -31,14 +31,15 @@ WDH({(value.Max.X - value.Min.X).ToLengthDisplayString(units)}, {(value.Max.Y - 
 
         protected override bool CanBeVisualized(SnoopableContext context, BoundingBoxXYZ value) => true;
         [CodeToString]
-        protected override IEnumerable<DrawingVisual> GetVisualization(SnoopableContext context, BoundingBoxXYZ box)
+        protected override IEnumerable<VisualizationItem> GetVisualization(SnoopableContext context, BoundingBoxXYZ box)
         {
             if ((box.Max != null) && (box.Min != null))
             {
                 var min = box.Transform.OfPoint(box.Min);
-                var max = box.Transform.OfPoint(box.Max);
+                var max = box.Transform.OfPoint(box.Max);                
 
-                yield return new BoundingBoxDrawingVisual(min, max);
+                yield return new VisualizationItem("BoundingBoxXYZ", "Transform.OfPoint(box.Min)", new CrossDrawingVisual(min, VisualizationItem.StartColor));
+                yield return new VisualizationItem("BoundingBoxXYZ", "Transform.OfPoint(box.Max)", new CrossDrawingVisual(max, VisualizationItem.EndColor));
             }
         }
     }

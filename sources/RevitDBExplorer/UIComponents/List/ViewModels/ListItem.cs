@@ -4,7 +4,6 @@ using RevitDBExplorer.Domain;
 using RevitDBExplorer.Domain.DataModel;
 using RevitDBExplorer.Domain.DataModel.ValueViewModels.Base;
 using RevitDBExplorer.WPF;
-using RevitExplorer.Visualizations.DrawingVisuals;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
@@ -133,7 +132,7 @@ namespace RevitDBExplorer.UIComponents.List.ViewModels
             Compare();            
         }
 
-        public IEnumerable<DrawingVisual> GetVisualization()
+        public IEnumerable<VisualizationItem> GetVisualization()
         {
             return SnoopableItem.GetVisualization();
         }

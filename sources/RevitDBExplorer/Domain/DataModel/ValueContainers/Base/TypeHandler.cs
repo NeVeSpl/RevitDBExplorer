@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Autodesk.Revit.DB;
-using RevitExplorer.Visualizations.DrawingVisuals;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
@@ -84,24 +83,24 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers.Base
 
 
 
-        IEnumerable<DrawingVisual> IHaveVisualization.GetVisualization(SnoopableContext context, object value)
+        IEnumerable<VisualizationItem> IHaveVisualization.GetVisualization(SnoopableContext context, object value)
         {
             T typedValue = value.CastValue<T>(type);
             return (this as IHaveVisualization<T>).GetVisualization(context, typedValue);
         }
-        IEnumerable<DrawingVisual> IHaveVisualization<T>.GetVisualization(SnoopableContext context, T value)
+        IEnumerable<VisualizationItem> IHaveVisualization<T>.GetVisualization(SnoopableContext context, T value)
         {            
             if (value is not null) 
             {
                 if ((value is Element element) && (!element.IsValidObject))
                 {
-                    return Enumerable.Empty<DrawingVisual>();
+                    return Enumerable.Empty<VisualizationItem>();
                 }
 
-                return GetVisualization(context, value) ?? Enumerable.Empty<DrawingVisual>();
+                return GetVisualization(context, value) ?? Enumerable.Empty<VisualizationItem>();
             }
-            return Enumerable.Empty<DrawingVisual>();
+            return Enumerable.Empty<VisualizationItem>();
         }
-        protected virtual IEnumerable<DrawingVisual> GetVisualization(SnoopableContext context, T value) => null;
+        protected virtual IEnumerable<VisualizationItem> GetVisualization(SnoopableContext context, T value) => null;
     }
 }

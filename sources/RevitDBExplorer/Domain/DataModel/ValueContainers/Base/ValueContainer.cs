@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using RevitExplorer.Visualizations.DrawingVisuals;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
@@ -69,6 +68,6 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers.Base
         }
 
         public IEnumerable<SnoopableObject> Snoop() => typeHandler.Snoop(context, value);
-        public IEnumerable<DrawingVisual> GetVisualization() => typeHandler.GetVisualization(context, value);
+        public IEnumerable<VisualizationItem> GetVisualization() => typeHandler.GetVisualization(context, value);
     }
 }

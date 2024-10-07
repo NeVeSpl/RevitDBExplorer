@@ -30,7 +30,7 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers
         private readonly static Color EndColor = new Color(255, 0, 0);
 
         protected override bool CanBeVisualized(SnoopableContext context, Rebar rebar) => true;
-        protected override IEnumerable<DrawingVisual> GetVisualization(SnoopableContext context, Rebar rebar)
+        protected override IEnumerable<VisualizationItem> GetVisualization(SnoopableContext context, Rebar rebar)
         {
             if (rebar.IsRebarShapeDriven())
             {
@@ -40,14 +40,14 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers
                 var rebarShapeDrivenAccessor = rebar.GetShapeDrivenAccessor();
                 var normal = rebarShapeDrivenAccessor.Normal;
 
-                yield return new ArrowDrawingVisual(center, normal, ArrowColor);
+                yield return new VisualizationItem("Rebar", "GetShapeDrivenAccessor().Normal", new ArrowDrawingVisual(center, normal, VisualizationItem.NormalColor));
 
                 var curves = rebar.GetCenterlineCurves(false, true, true, MultiplanarOption.IncludeOnlyPlanarCurves, 0);
                 var startPoint = curves.First().GetEndPoint(0);
                 var endPoint = curves.Last().GetEndPoint(1);
 
-                yield return new CubeDrawingVisual(startPoint, StartColor);
-                yield return new CubeDrawingVisual(endPoint, EndColor);
+                yield return new VisualizationItem("Rebar", "start", new CubeDrawingVisual(startPoint, VisualizationItem.StartColor));
+                yield return new VisualizationItem("Rebar", "end", new CubeDrawingVisual(endPoint, VisualizationItem.EndColor));
             }
         }
     }

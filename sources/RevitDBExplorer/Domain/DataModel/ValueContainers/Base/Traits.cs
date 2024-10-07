@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using RevitExplorer.Visualizations.DrawingVisuals;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
@@ -36,11 +35,11 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers.Base
     internal interface IHaveVisualization
     {
         bool CanBeVisualized(SnoopableContext context, object value);
-        IEnumerable<DrawingVisual> GetVisualization(SnoopableContext context, object value);
+        IEnumerable<VisualizationItem> GetVisualization(SnoopableContext context, object value);
     }
     internal interface IHaveVisualization<in T>
     {
         bool CanBeVisualized(SnoopableContext context, T value);
-        IEnumerable<DrawingVisual> GetVisualization(SnoopableContext context, T value);
+        IEnumerable<VisualizationItem> GetVisualization(SnoopableContext context, T value);
     }
 }

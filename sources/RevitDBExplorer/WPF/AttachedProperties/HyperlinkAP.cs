@@ -8,7 +8,7 @@ namespace RevitDBExplorer.WPF.AttachedProperties
 {
     internal class HyperlinkAP
     {
-        public static readonly DependencyProperty OpenOnClickProperty = DependencyProperty.RegisterAttached("OpenOnClick", typeof(bool), typeof(ButtonAP), new PropertyMetadata(false, OpenOnClickkPropertyChanged));
+        public static readonly DependencyProperty OpenOnClickProperty = DependencyProperty.RegisterAttached("OpenOnClick", typeof(bool), typeof(HyperlinkAP), new PropertyMetadata(false, OpenOnClickkPropertyChanged));
 
 
         public static bool GetOpenOnClick(DependencyObject element)

@@ -4,7 +4,6 @@ using RevitDBExplorer.Domain.DataModel.Accessors;
 using RevitDBExplorer.Domain.DataModel.ValueContainers.Base;
 using RevitDBExplorer.Domain.DataModel.ValueViewModels;
 using RevitDBExplorer.Domain.DataModel.ValueViewModels.Base;
-using RevitExplorer.Visualizations.DrawingVisuals;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
@@ -57,13 +56,13 @@ namespace RevitDBExplorer.Domain.DataModel.Members.Accessors
             return state?.Snoop();
         }
 
-        IEnumerable<DrawingVisual> IAccessorForDefaultPresenter.GetVisualization(SnoopableContext context, object @object, IValueContainer state)
+        IEnumerable<VisualizationItem> IAccessorForDefaultPresenter.GetVisualization(SnoopableContext context, object @object, IValueContainer state)
         {
             Guard.IsAssignableToType<TSnoopedObjectType>(@object);
             var typedObject = (TSnoopedObjectType)@object;
-            return GetVisualization(context, typedObject, state) ?? Enumerable.Empty<DrawingVisual>();
+            return GetVisualization(context, typedObject, state) ?? Enumerable.Empty<VisualizationItem>();
         }
-        protected virtual IEnumerable<DrawingVisual> GetVisualization(SnoopableContext context, TSnoopedObjectType typedObject, IValueContainer state)
+        protected virtual IEnumerable<VisualizationItem> GetVisualization(SnoopableContext context, TSnoopedObjectType typedObject, IValueContainer state)
         {
             return state?.GetVisualization();
         }

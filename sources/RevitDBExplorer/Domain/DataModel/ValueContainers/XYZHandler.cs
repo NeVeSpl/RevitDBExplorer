@@ -25,9 +25,9 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers
         }
 
         protected override bool CanBeVisualized(SnoopableContext context, XYZ xyz) => true;
-        protected override IEnumerable<DrawingVisual> GetVisualization(SnoopableContext context, XYZ xyz)
+        protected override IEnumerable<VisualizationItem> GetVisualization(SnoopableContext context, XYZ xyz)
         {
-            yield return new CoordinateSystemDrawingVisual(xyz);
+            yield return new VisualizationItem("XYZ", "*", new CrossDrawingVisual(xyz, VisualizationItem.PointColor));
         }
     }
 }

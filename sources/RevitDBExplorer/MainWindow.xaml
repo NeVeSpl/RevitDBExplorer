@@ -8,6 +8,7 @@
         xmlns:componentQueryVisualization="clr-namespace:RevitDBExplorer.UIComponents.QueryVisualization"
         xmlns:componentBusyIndicator="clr-namespace:RevitDBExplorer.UIComponents.BusyIndicator"    
         xmlns:componentWorkspaces="clr-namespace:RevitDBExplorer.UIComponents.Workspaces"    
+        xmlns:componentVisualizations="clr-namespace:RevitDBExplorer.UIComponents.Visualizations"  
         xmlns:converters="clr-namespace:RevitDBExplorer.WPF.Converters" 
         xmlns:ext="clr-namespace:RevitDBExplorer.WPF.MarkupExtensions"    
         xmlns:wpf="clr-namespace:RevitDBExplorer.WPF"
@@ -47,7 +48,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="1*" MinHeight="200"/>
             <RowDefinition Height="auto"/>
-            <RowDefinition Height="0"  />
+            <RowDefinition Height="{Binding VisualizationsManager.Height, Mode=TwoWay}"  />
         </Grid.RowDefinitions>
 
         <Grid Margin="2 2 2 0" >           
@@ -291,7 +292,7 @@
                         </Grid>
                     </ToggleButton>
 
-                    <Button Grid.Column="2" Style="{StaticResource ToolButton}" ToolTip="Open Revit Database Scripting" Click="RDSButton_Click" Background="#FFF200" >
+                    <Button Grid.Column="2" Style="{StaticResource ToolButton}" ToolTip="Open Revit Database Scripting" Click="ScriptingButton_Click" Background="#FFF200" >
                         <TextBlock Text="S" Foreground="#ED1A24"  FontWeight="Heavy" FontFamily="Arial" FontSize="15"/>
                     </Button>
 
@@ -311,6 +312,9 @@
             </Grid>  
             
         </Grid>
-        
+
+        <GridSplitter Grid.Row="1"  Background="{DynamicResource GridSplitter.Background}" Height="3" HorizontalAlignment="Stretch" Visibility="{Binding VisualizationsManager.IsOpen, Converter={StaticResource BoolToVisibilityConverterCollapsed}}"/>
+
+        <componentVisualizations:VisualizationsManager Grid.Row="2" DataContext="{Binding VisualizationsManager}" Visibility="{Binding IsOpen, Converter={StaticResource BoolToVisibilityConverterCollapsed}}"/>
     </Grid>
 </Window>

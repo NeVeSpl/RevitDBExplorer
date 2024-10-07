@@ -39,13 +39,14 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers
 
         protected override bool CanBeVisualized(SnoopableContext context, Element element) => element is not ElementType;
         [CodeToString]
-        protected override IEnumerable<DrawingVisual> GetVisualization(SnoopableContext context, Element element)
+        protected override IEnumerable<VisualizationItem> GetVisualization(SnoopableContext context, Element element)
         {            
             var bb = element.get_BoundingBox(null);
 
             if (bb != null && (bb.Max != null) && (bb.Min != null))
             {
-                yield return new BoundingBoxDrawingVisual(bb.Min, bb.Max);
+                yield return new VisualizationItem("Element", "get_BoundingBox(null).Min", new CrossDrawingVisual(bb.Min, VisualizationItem.StartColor));
+                yield return new VisualizationItem("Element", "get_BoundingBox(null).Max", new CrossDrawingVisual(bb.Max, VisualizationItem.EndColor));
             }            
         }
     }

@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using Autodesk.Revit.DB;
 using RevitDBExplorer.Domain.DataModel.Accessors;
 using RevitDBExplorer.Domain.DataModel.ValueContainers.Base;
-using RevitDBExplorer.Domain.DataModel.ValueViewModels.Base;
 using RevitDBExplorer.Domain.DataModel.ValueViewModels;
+using RevitDBExplorer.Domain.DataModel.ValueViewModels.Base;
 using RevitDBExplorer.Domain.RevitDatabaseScripting;
-using RevitExplorer.Visualizations.DrawingVisuals;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
@@ -69,7 +68,7 @@ namespace RevitDBExplorer.Domain.DataModel.Parameters
         {
             return state.Snoop();
         }
-        public IEnumerable<DrawingVisual> GetVisualization(SnoopableContext context, object @object, IValueContainer state)
+        public IEnumerable<VisualizationItem> GetVisualization(SnoopableContext context, object @object, IValueContainer state)
         {
             return state.GetVisualization();
         }

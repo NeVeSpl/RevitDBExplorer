@@ -7,7 +7,6 @@ using RevitDBExplorer.Domain.DataModel.ValueViewModels;
 using RevitDBExplorer.Domain.DataModel.ValueViewModels.Base;
 using RevitDBExplorer.Domain.RevitDatabaseScripting;
 using RevitDBExplorer.WPF;
-using RevitExplorer.Visualizations.DrawingVisuals;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
@@ -94,7 +93,7 @@ namespace RevitDBExplorer.Domain.DataModel
         }
 
 
-        public IEnumerable<DrawingVisual> GetVisualization()
+        public IEnumerable<VisualizationItem> GetVisualization()
         {
             if (ValueViewModel is DefaultPresenter defaultPresenter)
             {

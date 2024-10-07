@@ -19,10 +19,10 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers
         private readonly static Color PointColor = new Color(80, 175, 228);
 
         protected override bool CanBeVisualized(SnoopableContext context, Point point) => true;
-        protected override IEnumerable<DrawingVisual> GetVisualization(SnoopableContext context, Point point)
+        protected override IEnumerable<VisualizationItem> GetVisualization(SnoopableContext context, Point point)
         {
             XYZ coord = point.Coord;
-            yield return new CubeDrawingVisual(coord, PointColor);
+            yield return new VisualizationItem("Point", "Coord", new CubeDrawingVisual(coord, PointColor));
         }
     }
 }

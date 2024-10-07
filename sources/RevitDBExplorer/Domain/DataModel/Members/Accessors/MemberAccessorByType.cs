@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using RevitDBExplorer.Domain.DataModel.ValueContainers.Base;
-using RevitExplorer.Visualizations.DrawingVisuals;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
@@ -14,11 +13,11 @@ namespace RevitDBExplorer.Domain.DataModel.Members.Accessors
         }
         protected virtual IEnumerable<SnoopableObject> Snoop(SnoopableContext context, TSnoopedObjectType value) => null;
 
-        protected sealed override IEnumerable<DrawingVisual> GetVisualization(SnoopableContext context, TSnoopedObjectType @object, IValueContainer state)
+        protected sealed override IEnumerable<VisualizationItem> GetVisualization(SnoopableContext context, TSnoopedObjectType @object, IValueContainer state)
         {
             return GetVisualization(context, @object);
         }
-        protected virtual IEnumerable<DrawingVisual> GetVisualization(SnoopableContext context, TSnoopedObjectType @object) => null;
+        protected virtual IEnumerable<VisualizationItem> GetVisualization(SnoopableContext context, TSnoopedObjectType @object) => null;
     }
 
     /*

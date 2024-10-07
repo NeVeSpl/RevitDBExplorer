@@ -12,26 +12,22 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers
     internal sealed class CurveHandler : TypeHandler<Curve>
     {
         protected override bool CanBeSnoooped(SnoopableContext context, Curve curve) => true;
-        protected override string ToLabel(SnoopableContext context, Curve curve) => curve.GetType()?.GetCSharpName();
+        protected override string ToLabel(SnoopableContext context, Curve curve) => curve.GetType()?.GetCSharpName();       
 
-       
-
-        private readonly static Color StartColor = new Color(0, 255, 0);
-        private readonly static Color EndColor = new Color(255, 0, 0);
-        private readonly static Color CurveColor = new Color(80, 175, 228);
+        
         protected override bool CanBeVisualized(SnoopableContext context, Curve curve) => true;
         [CodeToString]
-        protected override IEnumerable<DrawingVisual> GetVisualization(SnoopableContext context, Curve curve)
+        protected override IEnumerable<VisualizationItem> GetVisualization(SnoopableContext context, Curve curve)
         {
             if (curve.IsBound)
             {
                 var startPoint = curve.GetEndPoint(0);
                 var endPoint = curve.GetEndPoint(1);
 
-                yield return new CubeDrawingVisual(startPoint, StartColor);
-                yield return new CubeDrawingVisual(endPoint, EndColor);
+                yield return new VisualizationItem("Curve", "start - curve.GetEndPoint(0)", new CubeDrawingVisual(startPoint, VisualizationItem.StartColor));
+                yield return new VisualizationItem("Curve", "end - curve.GetEndPoint(1)", new CubeDrawingVisual(endPoint, VisualizationItem.EndColor));
             }
-            yield return new CurveDrawingVisual(curve, CurveColor);
+            yield return new VisualizationItem("Curve", "*", new CurveDrawingVisual(curve, VisualizationItem.CurveColor));
         }
     }
 }
