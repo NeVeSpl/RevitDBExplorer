@@ -6,6 +6,16 @@ namespace Autodesk.Revit.DB
 {
     internal static class BoundingBoxXYZExtensions
     {
+        public static XYZ CenterPoint(this BoundingBoxXYZ bb)
+        {
+            if ((bb?.Max != null) && (bb?.Min != null))
+            {
+                return bb.Min.Add(0.5 * bb.Max.Subtract(bb.Min));
+            }
+            return XYZ.Zero;
+        }
+
+
         public static IList<Line> GetEdges(this BoundingBoxXYZ bb)
         {
             var min = bb.Transform.OfPoint(bb.Min);

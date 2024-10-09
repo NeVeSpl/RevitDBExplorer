@@ -21,6 +21,20 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers
         protected override bool CanBeVisualized(SnoopableContext context, Solid solid) => true;
         protected override IEnumerable<VisualizationItem> GetVisualization(SnoopableContext context, Solid solid)
         {
+            XYZ centroid = null;
+            try
+            {
+                centroid = solid.ComputeCentroid();               
+            }
+            catch
+            {
+
+            }
+            if (centroid != null)
+            {
+                yield return new VisualizationItem("Solid", "ComputeCentroid", new CubeDrawingVisual(centroid, VisualizationItem.PointColor));
+            }
+
             yield return new VisualizationItem("Solid", "*", new SolidDrawingVisual(solid, VisualizationItem.SolidColor));
         }
     }

@@ -19,6 +19,12 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers
         [CodeToString]
         protected override IEnumerable<VisualizationItem> GetVisualization(SnoopableContext context, Curve curve)
         {
+            if (curve is Line line)
+            {
+                yield return new VisualizationItem("Line", "Origin", new CubeDrawingVisual(line.Origin, VisualizationItem.Accent1Color));
+                yield return new VisualizationItem("Line", "Direction", new ArrowDrawingVisual(line.Origin, line.Direction, VisualizationItem.Accent2Color));
+            }
+
             if (curve.IsBound)
             {
                 var startPoint = curve.GetEndPoint(0);

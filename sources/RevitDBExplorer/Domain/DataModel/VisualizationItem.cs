@@ -16,7 +16,10 @@ namespace RevitDBExplorer.Domain.DataModel
         public readonly static Color StartColor = new Color(0, 255, 0);
         public readonly static Color EndColor = new Color(255, 0, 0);
         public readonly static Color CurveColor = new Color(80, 175, 228);
-        public readonly static Color PointColor = new Color(255, 69, 0);
+        public readonly static Color PointColor = new Color(0, 0, 255);
+        public readonly static Color Accent1Color = new Color(0, 255, 255);      
+        public readonly static Color Accent2Color = new Color(255, 0, 255);
+        public readonly static Color Accent3Color = new Color(255, 255, 0);
 
 
         public string Group { get; set; }

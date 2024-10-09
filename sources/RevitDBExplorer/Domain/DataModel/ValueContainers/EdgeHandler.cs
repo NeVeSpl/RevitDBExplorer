@@ -21,6 +21,12 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers
         {
             var curve = edge.AsCurve();
 
+            if (curve is Line line)
+            {
+                //yield return new VisualizationItem("Edge", "AsCurve().Origin", new CubeDrawingVisual(line.Origin, VisualizationItem.Accent1Color));
+                //yield return new VisualizationItem("Edge", "AsCurve().Direction", new ArrowDrawingVisual(line.Origin, line.Direction, VisualizationItem.Accent2Color));
+            }
+
             if (curve.IsBound)
             {
                 var startPoint = curve.GetEndPoint(0);

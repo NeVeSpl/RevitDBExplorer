@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Autodesk.Revit.DB;
 using NSourceGenerators;
 using RevitDBExplorer.Domain.DataModel.ValueContainers.Base;
@@ -40,14 +41,51 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers
         protected override bool CanBeVisualized(SnoopableContext context, Element element) => element is not ElementType;
         [CodeToString]
         protected override IEnumerable<VisualizationItem> GetVisualization(SnoopableContext context, Element element)
-        {            
+        {
             var bb = element.get_BoundingBox(null);
+            var refPoint = bb.CenterPoint();
+
+            if (element is FamilyInstance familyInstance)
+            {      
+                yield return new VisualizationItem("FamilyInstance", "FacingOrientation", new ArrowDrawingVisual(refPoint, familyInstance.FacingOrientation, VisualizationItem.Accent1Color));
+                yield return new VisualizationItem("FamilyInstance", "HandOrientation", new ArrowDrawingVisual(refPoint, familyInstance.HandOrientation, VisualizationItem.Accent2Color));   
+
+                var totalTransform = familyInstance.GetTotalTransform();
+                var transformedOrgin = totalTransform.OfPoint(XYZ.Zero);
+
+                yield return new VisualizationItem("FamilyInstance", "GetTotalTransform", new VectorDrawingVisual(XYZ.Zero, transformedOrgin, VisualizationItem.Accent3Color));
+
+                if (familyInstance.HasSweptProfile())
+                {
+                    var profile = familyInstance.GetSweptProfile();
+                    var sweptProfile = profile.GetSweptProfile();
+                    //yield return new VisualizationItem("FamilyInstance", "GetSweptProfile().GetSweptProfile().Curves", new CurvesDrawingVisual(sweptProfile.Curves.ToEnumerable().ToArray(), VisualizationItem.Accent3Color));
+                }
+            }
+            
+
+            if (element is Wall wall)
+            {
+                yield return new VisualizationItem("Wall", "Orientation", new ArrowDrawingVisual(refPoint, wall.Orientation, VisualizationItem.Accent1Color));
+            }          
+            
+            if (element.Location is not null)
+            {
+                if (element.Location is LocationPoint locationPoint)
+                {
+                    yield return new VisualizationItem("Element", "Location.Point", new CubeDrawingVisual(locationPoint.Point, VisualizationItem.PointColor));
+                }
+                if (element.Location is LocationCurve locationCurve)
+                {
+                    yield return new VisualizationItem("Element", "Location.Curve", new CurveDrawingVisual(locationCurve.Curve, VisualizationItem.PointColor));
+                }
+            }
 
             if (bb != null && (bb.Max != null) && (bb.Min != null))
             {
                 yield return new VisualizationItem("Element", "get_BoundingBox(null).Min", new CrossDrawingVisual(bb.Min, VisualizationItem.StartColor));
                 yield return new VisualizationItem("Element", "get_BoundingBox(null).Max", new CrossDrawingVisual(bb.Max, VisualizationItem.EndColor));
-            }            
+            }           
         }
     }
 }

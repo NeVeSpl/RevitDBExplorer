@@ -34,13 +34,13 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers
         {
             if (rebar.IsRebarShapeDriven())
             {
-                var bb = rebar.get_BoundingBox(null);
-                var center = (bb.Min + bb.Max) / 2;
+                var refPoint = rebar.get_BoundingBox(null).CenterPoint();
+               
 
                 var rebarShapeDrivenAccessor = rebar.GetShapeDrivenAccessor();
                 var normal = rebarShapeDrivenAccessor.Normal;
 
-                yield return new VisualizationItem("Rebar", "GetShapeDrivenAccessor().Normal", new ArrowDrawingVisual(center, normal, VisualizationItem.NormalColor));
+                yield return new VisualizationItem("Rebar", "GetShapeDrivenAccessor().Normal", new ArrowDrawingVisual(refPoint, normal, VisualizationItem.NormalColor));
 
                 var curves = rebar.GetCenterlineCurves(false, true, true, MultiplanarOption.IncludeOnlyPlanarCurves, 0);
                 var startPoint = curves.First().GetEndPoint(0);
