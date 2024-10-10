@@ -29,6 +29,7 @@ namespace RevitDBExplorer.Domain.DataModel.MembersTemplates
             MemberTemplate<Element>.Create((document, target) => SolidSolidCutUtils.IsAllowedForSolidCut(target)),
             MemberTemplate<Element>.Create((document, target) => SolidSolidCutUtils.GetCuttingSolids(target)),
             MemberTemplate<Element>.Create((document, target) => SolidSolidCutUtils.GetSolidsBeingCut(target)),
+            MemberTemplate<Element>.Create((document, target) => SolidSolidCutUtils.IsElementFromAppropriateContext(target)),
 
             MemberTemplate<Element>.Create((document, target) => ElementTransformUtils.CanMirrorElement(document, target.Id)),
         ];

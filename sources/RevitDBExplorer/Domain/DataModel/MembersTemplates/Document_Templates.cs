@@ -29,6 +29,12 @@ namespace RevitDBExplorer.Domain.DataModel.MembersTemplates
 #if R2023_MIN
             MemberTemplate<Document>.Create((doc, target) => AnalyticalToPhysicalAssociationManager.GetAnalyticalToPhysicalAssociationManager(doc)),
 #endif
+            MemberTemplate<Document>.Create((doc, target) => StructuralSettings.GetStructuralSettings(doc)),
+            MemberTemplate<Document>.Create((doc, target) => SunAndShadowSettings.GetActiveSunAndShadowSettings(target)),
+#if R2022_MIN
+            MemberTemplate<Document>.Create((doc, target) => RevisionNumberingSequence.GetAllRevisionNumberingSequences(target)),
+#endif
+            MemberTemplate<Document>.Create((doc, target) => AreaVolumeSettings.GetAreaVolumeSettings(target)),
         ];
     }
 }

@@ -13,6 +13,9 @@ namespace RevitDBExplorer.Domain.DataModel.MembersTemplates
         [
             MemberTemplate<Family>.Create((doc, target) => doc.EditFamily(target), kind: MemberKind.AsArgument),
             MemberTemplate<Family>.Create((doc, target) => FamilySizeTableManager.GetFamilySizeTableManager(doc, target.Id), kind: MemberKind.StaticMethod),               
+
+            MemberTemplate<Family>.Create((doc, target) => FamilyUtils.FamilyCanConvertToFaceHostBased(doc, target.Id), kind: MemberKind.StaticMethod),
+            
         ]; 
     }
 }
