@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Windows;
 using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using RevitDBExplorer.Domain.Selectors;
+using RevitDBExplorer.Properties;
 
 namespace RevitDBExplorer
 {
@@ -20,6 +22,9 @@ namespace RevitDBExplorer
             var source = SelectorFactory.Create(Selector.CurrentSelection);
             source.ReadFromTheSource(commandData.Application);
             var window = new MainWindow(source, commandData.Application.MainWindowHandle);
+            window.WindowStartupLocation = WindowStartupLocation.Manual;
+            window.Top = AppSettings.Default.MainWindowTop;
+            window.Left = AppSettings.Default.MainWindowLeft;
             window.Show();
 
             windows.Add(new WeakReference(window));

@@ -123,14 +123,15 @@
                             
                             <Path Style="{Binding Icon, Converter={StaticResource ToResourceWithKeyConverter}}" Margin="0 1 4 0"  />
                             <TextBlock Text="{Binding Name, Mode=OneWay}" Foreground="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" Grid.Column="1"  />
-                            <TextBlock Text="{Binding RevitVersion, Mode=OneWay}" Foreground="white" Background="#0C3D91" 
-                                       FontWeight="Bold" 
-                                       TextAlignment="Center"
-                                       Padding="2 1" 
-                                       Margin="0 -1"
-                                       Grid.Column="2"
-                                       Visibility="{Binding RevitVersion, Converter={StaticResource StringToVisibilityConverter}}"
-                                       ToolTip="First appeared in Revit"/>
+                            <Border BorderThickness="1" BorderBrush="#0C3D91" Background="#0C3D91"  Grid.Column="2"  Padding="1 0" Visibility="{Binding RevitVersion, Converter={StaticResource StringToVisibilityConverter}}" >
+                                <TextBlock Text="{Binding RevitVersion, Mode=OneWay}" Foreground="white" Background="#0C3D91" 
+                                           FontWeight="Bold" 
+                                           TextAlignment="Center"  
+                                           Margin="0 -1"
+                                           Padding="0"
+                                           Visibility="{Binding RevitVersion, Converter={StaticResource StringToVisibilityConverter}}"
+                                           ToolTip="First appeared in Revit"/>
+                            </Border>
                         </Grid>
                     </Grid>
                     <DataTemplate.Resources>

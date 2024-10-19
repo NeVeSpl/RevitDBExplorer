@@ -196,7 +196,7 @@
                         <ContextMenu>
                             <MenuItem Header="Snoop Groups" InputGestureText="ParameterUtils.GetAllBuiltInGroups()" Click="SelectorButton_Click" Tag="ForgeParameterUtilsGetAllBuiltInGroups"/>
                             <MenuItem Header="Snoop Parameters" InputGestureText="ParameterUtils.GetAllBuiltInParameters()" Click="SelectorButton_Click" Tag="ForgeParameterUtilsGetAllBuiltInParameters"/>
-                            <MenuItem Header="Snoop measurable Specs" InputGestureText="UnitUtils.GetAllMeasurableSpecs()" Click="SelectorButton_Click" Tag="ForgeUnitUtilsGetAllMeasurableSpecs"/>
+                            <MenuItem Header="Snoop Measurable Specs" InputGestureText="UnitUtils.GetAllMeasurableSpecs()" Click="SelectorButton_Click" Tag="ForgeUnitUtilsGetAllMeasurableSpecs"/>
                             <MenuItem Header="Snoop Units" InputGestureText="UnitUtils.GetAllUnits()" Click="SelectorButton_Click" Tag="ForgeUnitUtilsGetAllUnits"/>
                             <MenuItem Header="Snoop Disciplines" InputGestureText="UnitUtils.GetAllDisciplines()" Click="SelectorButton_Click" Tag="ForgeUnitUtilsGetAllDisciplines"/>
                             <MenuItem Header="Snoop Specs" InputGestureText="SpecUtils.GetAllSpecs()"  Click="SelectorButton_Click" Tag="ForgeSpecUtilsGetAllSpecs"/>

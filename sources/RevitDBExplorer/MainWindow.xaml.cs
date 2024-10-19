@@ -392,6 +392,8 @@ namespace RevitDBExplorer
         {
             AppSettings.Default.MainWindowHeight = Height;
             AppSettings.Default.MainWindowWidth = Width;
+            AppSettings.Default.MainWindowTop = Top;
+            AppSettings.Default.MainWindowLeft = Left;
             AppSettings.Default.FirstColumnWidth = Workspaces.GetFirstColumnWidth();
             AppSettings.Default.Save();
         }
