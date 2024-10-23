@@ -21,12 +21,21 @@ namespace RevitDBExplorer.Domain.DataModel.MembersOverrides
             CanBeSnooped = CanBeSnoooped(context.Document, element),
         };
         private static bool CanBeSnoooped(Document document, Element element)
-        {          
-            var options = element.ViewSpecific ? new Options() { View = document.ActiveView } : new Options();
-            var geometry = element.get_Geometry(options);
-            var canBeSnooped = geometry != null;
-
-            return canBeSnooped;
+        {
+            if (element.ViewSpecific)
+            {
+                var options = new Options() { View = document.ActiveView };
+                var geometry = element.get_Geometry(options);
+                var canBeSnooped = geometry != null;
+                return canBeSnooped;
+            } 
+            else
+            { 
+                var geometry = element.get_Geometry(new Options());
+                var geometryViewSpecific = element.get_Geometry(new Options() { View = document.ActiveView });
+                var canBeSnooped = geometry != null || geometryViewSpecific != null;
+                return canBeSnooped;
+            }
         }
         
 
