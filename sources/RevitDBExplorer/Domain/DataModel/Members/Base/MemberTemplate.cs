@@ -46,8 +46,8 @@ namespace RevitDBExplorer.Domain.DataModel.Members.Base
             return WithCustomAC(methodCallExpression.Method.DeclaringType, methodCallExpression.Method.Name, memberAccessor, canBeUsed, kind, () => RevitDocumentationReader.GetMethodComments(methodCallExpression.Method));
         }
 
-        public static ISnoopableMemberTemplate Create<TParam0Type, TReturnType>(Expression<Func<Document, TForType, TParam0Type, TReturnType>> getter,
-                                                                                IEnumerable<TParam0Type> param_0_arguments,
+        public static ISnoopableMemberTemplate CreateWithParam<TParam0Type, TReturnType>(Expression<Func<Document, TForType, TParam0Type, TReturnType>> getter,
+                                                                                Func<Document, TForType, IEnumerable<TParam0Type>> param_0_arguments,
                                                                                 Func<TForType, bool> canBeUsed = null,
                                                                                 MemberKind kind = MemberKind.StaticMethod)
         {

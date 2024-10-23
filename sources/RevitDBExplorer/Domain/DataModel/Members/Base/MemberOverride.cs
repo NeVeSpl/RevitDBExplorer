@@ -41,7 +41,7 @@ namespace RevitDBExplorer.Domain.DataModel.Members.Base
             };            
         }
 
-        public static IMemberOverride ByFunc<TParam0Type, TReturnType>(Expression<Func<Document, TForType, TParam0Type, TReturnType>> getter, IEnumerable<TParam0Type> param_0_arguments)
+        public static IMemberOverride ByFuncWithParam<TParam0Type, TReturnType>(Expression<Func<Document, TForType, TParam0Type, TReturnType>> getter, Func<Document, TForType, IEnumerable<TParam0Type>> param_0_arguments)
         {
             var compiledGetter = getter.Compile();
             string syntax = getter.ToCeSharp();

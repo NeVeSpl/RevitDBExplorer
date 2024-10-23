@@ -13,7 +13,7 @@ namespace RevitDBExplorer.Domain.DataModel.MembersTemplates
         [   
              MemberTemplate<HostObject>.Create((doc, target) => HostObjectUtils.GetTopFaces(target), kind: MemberKind.StaticMethod),
              MemberTemplate<HostObject>.Create((doc, target) => HostObjectUtils.GetBottomFaces(target), kind: MemberKind.StaticMethod),  
-             MemberTemplate<HostObject>.Create((doc, target, side) => HostObjectUtils.GetSideFaces(target, side), [ShellLayerType.Interior, ShellLayerType.Exterior]),
+             MemberTemplate<HostObject>.CreateWithParam((doc, target, side) => HostObjectUtils.GetSideFaces(target, side),  (doc, target) => new ShellLayerType[] {ShellLayerType.Interior, ShellLayerType.Exterior }),
         ]; 
     }
 }
