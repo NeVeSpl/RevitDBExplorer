@@ -24,7 +24,7 @@ namespace RevitDBExplorer.Domain.DataModel.MembersOverrides
         {
             if (element.ViewSpecific)
             {
-                var options = new Options() { View = document.ActiveView };
+                var options = GetOptionsForView(document.ActiveView);
                 var geometry = element.get_Geometry(options);
                 var canBeSnooped = geometry != null;
                 return canBeSnooped;
@@ -32,7 +32,7 @@ namespace RevitDBExplorer.Domain.DataModel.MembersOverrides
             else
             { 
                 var geometry = element.get_Geometry(new Options());
-                var geometryViewSpecific = element.get_Geometry(new Options() { View = document.ActiveView });
+                var geometryViewSpecific = element.get_Geometry(GetOptionsForView(document.ActiveView));
                 var canBeSnooped = geometry != null || geometryViewSpecific != null;
                 return canBeSnooped;
             }
@@ -67,6 +67,15 @@ namespace RevitDBExplorer.Domain.DataModel.MembersOverrides
                 var snoopableObject = new SnoopableObject(document, result) { Name = $"{option.DetailLevel}" + (option.IncludeNonVisibleObjects ? ", include non-visible objects" : ""), NamePrefix= "detail level:"  };
                 yield return snoopableObject;
             }
+        }
+
+        private static Options GetOptionsForView(View view)
+        {
+            if (view != null)
+            {
+                return new Options() { View = view };
+            }
+            return new Options();
         }
     }
 }
