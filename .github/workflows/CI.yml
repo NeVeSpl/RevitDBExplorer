@@ -86,7 +86,7 @@ jobs:
     #      & 'C:/Program Files (x86)/Windows Kits/10/bin/10.0.17763.0/x86/signtool.exe' sign /f certificate\certificate.pfx /p '${{ secrets.PFX_KEY }}' /t http://timestamp.comodoca.com/authenticode sources/bin/Release/RevitDBExplorer.dll      
    
     - name: Upload a Build Artifact
-      uses: actions/upload-artifact@v3.1.0
+      uses: actions/upload-artifact@v4
       with:
         name: Build
         path: "sources/bin/"    
@@ -105,7 +105,7 @@ jobs:
     #      & 'C:/Program Files (x86)/Windows Kits/10/bin/10.0.17763.0/x86/signtool.exe' sign /f certificate\certificate.pfx /p '${{ secrets.PFX_KEY }}' /t http://timestamp.comodoca.com/authenticode setup/bin/Release/*.msi  
           
     - name: Upload a Build Artifact
-      uses: actions/upload-artifact@v3.1.0
+      uses: actions/upload-artifact@v4
       with:
         name: Setup
         path: setup/bin/Release/RevitDBExplorer.msi
