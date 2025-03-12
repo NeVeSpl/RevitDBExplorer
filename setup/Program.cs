@@ -11,7 +11,7 @@ namespace SetupBuilder
     {
         static void Main(string[] args)
         {
-            var fileVersionInfo = FileVersionInfo.GetVersionInfo($@"..\..\..\sources\bin\R2025\RevitDBExplorer.dll");
+            var fileVersionInfo = FileVersionInfo.GetVersionInfo($@"..\..\..\sources\bin\R2026\RevitDBExplorer.dll");
             var productVersion = fileVersionInfo.FileVersion;
 
             var project = new Project()
@@ -38,7 +38,7 @@ namespace SetupBuilder
 
             project.Dirs = new Dir[]
             {
-                new Dir(@"%AppDataFolder%\Autodesk\Revit\Addins", CreateDirFor(2021), CreateDirFor(2022), CreateDirFor(2023), CreateDirFor(2024), CreateDirFor(2025))
+                new Dir(@"%AppDataFolder%\Autodesk\Revit\Addins", CreateDirFor(2021), CreateDirFor(2022), CreateDirFor(2023), CreateDirFor(2024), CreateDirFor(2025), CreateDirFor(2026))
             };
 
             project.RemoveDialogsBetween(NativeDialogs.WelcomeDlg, NativeDialogs.InstallDirDlg);
