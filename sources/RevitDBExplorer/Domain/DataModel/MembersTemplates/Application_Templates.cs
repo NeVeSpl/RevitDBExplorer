@@ -13,6 +13,13 @@ namespace RevitDBExplorer.Domain.DataModel.MembersTemplates
         [
             MemberTemplate<Autodesk.Revit.ApplicationServices.Application>.Create((doc, category) => FormulaManager.GetFunctions()),
             MemberTemplate<Autodesk.Revit.ApplicationServices.Application>.Create((doc, category) => FormulaManager.GetOperators()),
+
+
+            MemberTemplate<Autodesk.Revit.ApplicationServices.Application>.Create((doc, category) => OptionalFunctionalityUtils.IsGraphicsAvailable()),
+            MemberTemplate<Autodesk.Revit.ApplicationServices.Application>.Create((doc, category) => OptionalFunctionalityUtils.IsIFCAvailable()),
+#if R2026_MIN
+            MemberTemplate<Autodesk.Revit.ApplicationServices.Application>.Create((doc, category) => OptionalFunctionalityUtils.IsMaterialLibraryAvailable()),
+#endif
         ];
     }
 }

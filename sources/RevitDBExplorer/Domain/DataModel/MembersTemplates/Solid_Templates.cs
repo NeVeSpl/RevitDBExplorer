@@ -17,7 +17,10 @@ namespace RevitDBExplorer.Domain.DataModel.MembersTemplates
             MemberTemplate<Solid>.Create((document, target) => SolidUtils.IsValidForTessellation(target)),
             MemberTemplate<Solid>.Create((document, target) => SolidUtils.TessellateSolidOrShell(target, new SolidOrShellTessellationControls()), canBeUsed: x => SolidUtils.IsValidForTessellation(x)),
 
-            
+#if R2026_MIN
+            MemberTemplate<Solid>.Create((document, target) => SolidUtils.ComputeIsTopologicallyClosed(target)),
+            MemberTemplate<Solid>.Create((document, target) => SolidUtils.ComputeIsGeometricallyClosed(target)),
+#endif
         ];       
     }
 }
