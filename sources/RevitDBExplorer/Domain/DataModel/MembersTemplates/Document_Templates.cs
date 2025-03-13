@@ -38,6 +38,15 @@ namespace RevitDBExplorer.Domain.DataModel.MembersTemplates
 #endif
             MemberTemplate<Document>.Create((doc, target) => AreaVolumeSettings.GetAreaVolumeSettings(target)),
 
+#if R2025_MIN
+            MemberTemplate<Document>.Create((doc, target) => Toposolid.IsSmoothedSurfaceEnabled(target)),
+            MemberTemplate<Document>.Create((doc, target) => RebarSpliceTypeUtils.GetAllRebarSpliceTypes(target)),
+            MemberTemplate<Document>.Create((doc, target) => LinearArray.GetMinimumSize(target)),
+            MemberTemplate<Document>.Create((doc, target) => RadialArray.GetMinimumSize(target)),
+            MemberTemplate<Document>.Create((doc, target) => IFCCategoryTemplate.GetActiveTemplate(target)),
+            MemberTemplate<Document>.Create((doc, target) => IFCCategoryTemplate.ListNames(target)),
+#endif
+
 #if R2026_MIN
             MemberTemplate<Document>.Create((doc, target) => EnergyDataSettings.GetEnergyDataSettings(target)),
             MemberTemplate<Document>.Create((doc, target) => CableSize.GetCableSizeIds(target)),           
@@ -52,7 +61,8 @@ namespace RevitDBExplorer.Domain.DataModel.MembersTemplates
             MemberTemplate<Document>.Create((doc, target) => ConductorSize.GetConductorSizeIds(target)),
             MemberTemplate<Document>.CreateWithParam((doc, target, conductorSizeId) => ConductorSize.GetConductorSize(target, conductorSizeId),  (doc, target) => ConductorSize.GetConductorSizeIds(target)),
 
-            MemberTemplate<Document>.Create((doc, target) => RebarCrankTypeUtils.GetAllRebarCrankTypes(target)),    
+            MemberTemplate<Document>.Create((doc, target) => RebarCrankTypeUtils.GetAllRebarCrankTypes(target)),            
+            MemberTemplate<Document>.Create((doc, target) => Toposolid.IsCutVoidStabilityEnabled(target)),            
 #endif
         ];
     }

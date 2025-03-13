@@ -16,14 +16,14 @@ namespace RevitDBExplorer.Domain.DataModel.MembersTemplates
             MemberTemplate<Element>.Create((doc, target) => doc.GetWorksetId(target.Id), kind: MemberKind.AsArgument),            
 
 #if R2023_MIN       
-            MemberTemplate<Element>.Create((doc, target) =>  AnalyticalToPhysicalAssociationManager.GetAnalyticalToPhysicalAssociationManager(doc).HasAssociation(target.Id), kind: MemberKind.AsArgument),
-            MemberTemplate<Element>.Create((doc, target) =>  AnalyticalToPhysicalAssociationManager.GetAnalyticalToPhysicalAssociationManager(doc).GetAssociatedElementId(target.Id), kind: MemberKind.AsArgument),            
+            MemberTemplate<Element>.Create((doc, target) =>  AnalyticalToPhysicalAssociationManager.GetAnalyticalToPhysicalAssociationManager(doc).HasAssociation(target.Id), (target) => target is not ElementType, kind: MemberKind.AsArgument),
+            MemberTemplate<Element>.Create((doc, target) =>  AnalyticalToPhysicalAssociationManager.GetAnalyticalToPhysicalAssociationManager(doc).GetAssociatedElementId(target.Id), (target) => target is not ElementType, kind: MemberKind.AsArgument),            
 #endif
 
 #if R2024_MIN
-            MemberTemplate<Element>.Create((doc, target) => AnalyticalToPhysicalAssociationManager.IsAnalyticalElement(doc, target.Id), kind: MemberKind.StaticMethod),
-            MemberTemplate<Element>.Create((doc, target) => AnalyticalToPhysicalAssociationManager.IsPhysicalElement(doc, target.Id), kind: MemberKind.StaticMethod),
-            MemberTemplate<Element>.Create((doc, target) => AnalyticalToPhysicalAssociationManager.GetAnalyticalToPhysicalAssociationManager(doc).GetAssociatedElementIds(target.Id), kind: MemberKind.AsArgument), 
+            MemberTemplate<Element>.Create((doc, target) => AnalyticalToPhysicalAssociationManager.IsAnalyticalElement(doc, target.Id), (target) => target is not ElementType, kind: MemberKind.StaticMethod),
+            MemberTemplate<Element>.Create((doc, target) => AnalyticalToPhysicalAssociationManager.IsPhysicalElement(doc, target.Id), (target) => target is not ElementType, kind: MemberKind.StaticMethod),
+            MemberTemplate<Element>.Create((doc, target) => AnalyticalToPhysicalAssociationManager.GetAnalyticalToPhysicalAssociationManager(doc).GetAssociatedElementIds(target.Id), (target) => target is not ElementType, kind: MemberKind.AsArgument), 
 #endif
 
             MemberTemplate<Element>.Create((document, target) => SolidSolidCutUtils.IsAllowedForSolidCut(target)),
@@ -32,6 +32,12 @@ namespace RevitDBExplorer.Domain.DataModel.MembersTemplates
             MemberTemplate<Element>.Create((document, target) => SolidSolidCutUtils.IsElementFromAppropriateContext(target)),
 
             MemberTemplate<Element>.Create((document, target) => ElementTransformUtils.CanMirrorElement(document, target.Id)),
+
+#if R2025_MIN
+            MemberTemplate<Element>.Create((document, target) => LinearArray.IsElementArrayable(document, target.Id)),
+            MemberTemplate<Element>.Create((document, target) => AnnotationMultipleAlignmentUtils.ElementSupportsMultiAlign(target)),
+            MemberTemplate<Element>.Create((document, target) => AnnotationMultipleAlignmentUtils.GetAnnotationOutlineWithoutLeaders(target)),
+#endif
         ];
     }
 }

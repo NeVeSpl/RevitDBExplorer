@@ -12,7 +12,12 @@ namespace RevitDBExplorer.Domain.DataModel.MembersTemplates
     {
         public IEnumerable<ISnoopableMemberTemplate> GetTemplates() =>
         [       
-            MemberTemplate<View>.Create((document, target) => SpatialFieldManager.GetSpatialFieldManager(target), kind: MemberKind.StaticMethod),        
+            MemberTemplate<View>.Create((document, target) => SpatialFieldManager.GetSpatialFieldManager(target), kind: MemberKind.StaticMethod),
+
+
+#if R2025_MIN
+            MemberTemplate<View>.Create((document, target) => RevitLinkGraphicsSettings.IsViewRangeSupported(target)),
+#endif
         ];        
     }
 }

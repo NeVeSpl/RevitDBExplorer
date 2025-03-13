@@ -11,8 +11,13 @@ namespace RevitDBExplorer.Domain.DataModel.MembersTemplates
     internal class ElementType_Templates : IHaveMemberTemplates
     {
         public IEnumerable<ISnoopableMemberTemplate> GetTemplates() =>
-        [   
-         
+        [  
+            
+#if R2025_MIN       
+             MemberTemplate<ElementType>.Create((doc, target) =>  RebarSpliceTypeUtils.GetLapLengthMultiplier(doc, target.Id), kind: MemberKind.StaticMethod),
+             MemberTemplate<ElementType>.Create((doc, target) =>  RebarSpliceTypeUtils.GetStaggerLengthMultiplier(doc, target.Id), kind: MemberKind.StaticMethod),
+             MemberTemplate<ElementType>.Create((doc, target) =>  RebarSpliceTypeUtils.GetShiftOption(doc, target.Id), kind: MemberKind.StaticMethod),            
+#endif  
 
 #if R2026_MIN       
              MemberTemplate<ElementType>.Create((doc, target) =>  RebarCrankTypeUtils.GetCrankRatio(doc, target.Id), kind: MemberKind.StaticMethod),
