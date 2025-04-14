@@ -28,7 +28,7 @@ List of features:
 
 ## Installation
 
-Download and install [RevitDBExplorer.msi](https://github.com/NeVeSpl/RevitDBExplorer/releases/latest/download/RevitDBExplorer.msi). Setup will install Revit database explorer for Revit 2021, 2022, 2023, 2024, 2025.
+Download and install [RevitDBExplorer.msi](https://github.com/NeVeSpl/RevitDBExplorer/releases/latest/download/RevitDBExplorer.msi). Setup will install Revit database explorer for Revit 2021, 2022, 2023, 2024, 2025, 2026.
 
 ## YouTube tutorials
 
