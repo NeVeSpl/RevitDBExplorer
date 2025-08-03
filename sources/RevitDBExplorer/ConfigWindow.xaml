@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:wpf="clr-namespace:RevitDBExplorer.WPF"
+        xmlns:componentAbout="clr-namespace:RevitDBExplorer.UIComponents.About"
         x:ClassModifier="internal"
         WindowStartupLocation="CenterOwner"
         xmlns:local="clr-namespace:RevitDBExplorer"
@@ -27,16 +28,12 @@
     </Window.Resources>
     <Grid Margin="7">
         <Grid.RowDefinitions>
-            <RowDefinition Height="27"></RowDefinition>
+            <RowDefinition Height="69"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="auto"></RowDefinition>
         </Grid.RowDefinitions>
 
-        <TextBlock   HorizontalAlignment="Center">           
-                <Hyperlink NavigateUri="https://github.com/NeVeSpl/RevitDBExplorer" RequestNavigate="Hyperlink_RequestNavigate">
-                    https://github.com/NeVeSpl/RevitDBExplorer
-                </Hyperlink>
-        </TextBlock>
+        <componentAbout:AboutControl/>
 
         <TabControl Grid.Row="1" Margin="0 0 0 7" Padding="7">
             <TabItem Header="General">
