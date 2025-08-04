@@ -143,6 +143,10 @@
                             <MenuItem Header="Snoop application" InputGestureText="commandData.Application.Application" Click="SelectorButton_Click" Tag="Application" />
                             <MenuItem Header="Snoop document" InputGestureText="commandData.Application.ActiveUIDocument.Document" Click="SelectorButton_Click" Tag="ActiveDocument" />
                             <MenuItem Header="Snoop active view" InputGestureText="commandData.Application.ActiveUIDocument.Document.ActiveView" Click="SelectorButton_Click" Tag="ActiveView" />
+                            <Separator />
+                            <MenuItem Header="Snoop ui application" InputGestureText="commandData.Application" Click="SelectorButton_Click" Tag="UIApplication" />
+                            <MenuItem Header="Snoop ui document" InputGestureText="commandData.Application.ActiveUIDocument" Click="SelectorButton_Click" Tag="UIDocument" />
+                            <MenuItem Header="Snoop active ui view" InputGestureText="commandData.Application.ActiveUIDocument.GetOpenUIViews()" Click="SelectorButton_Click" Tag="UIView" />
                         </ContextMenu>
                     </Button.ContextMenu>
                 </Button>

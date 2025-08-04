@@ -32,6 +32,9 @@ namespace RevitDBExplorer.Domain.Selectors
         LoadedApplications,
         ExternalServices,
         VisibleInView,
+        UIApplication,
+        UIDocument,
+        UIView,
     }
 
     internal static class SelectorFactory
@@ -71,6 +74,9 @@ namespace RevitDBExplorer.Domain.Selectors
                 Selector.LoadedApplications => new SnoopLoadedApplications(),
                 Selector.ExternalServices => new SnoopExternalServices(),
                 Selector.VisibleInView => new SnoopVisibleInView(),
+                Selector.UIApplication => new SnoopUIApplication(),
+                Selector.UIDocument => new SnoopUIDocument(),
+                Selector.UIView => new SnoopUIView(),
                 _ => throw new NotImplementedException()
             }; ;
             return result;
