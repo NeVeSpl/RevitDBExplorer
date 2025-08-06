@@ -38,6 +38,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition/>
+            <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
 
         <Grid  Margin="0 0 0 3">
@@ -64,5 +65,18 @@
         </Grid>
 
         <componentBaseTree:BaseTreeView Margin="0 2 0 0" Grid.Row="1"/>
+
+        <Grid Grid.Row="2" Visibility="{Binding EnrichWithVisibilityData, Converter={StaticResource BoolToVisibilityConverterCollapsed}}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="auto"/>
+            </Grid.ColumnDefinitions>
+
+            <Button Grid.Column="3" Style="{StaticResource ToolButton}"  ToolTip="???" Command="{Binding ToggleHideCommand}" Visibility="{Binding TreeNotForEvents, Converter={StaticResource BoolToVisibilityConverterCollapsed}}">
+                <Path Style="{StaticResource IconSwitch}"  />
+            </Button>
+        </Grid>
     </Grid>
 </UserControl>

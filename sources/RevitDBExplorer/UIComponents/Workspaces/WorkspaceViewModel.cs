@@ -93,6 +93,7 @@ namespace RevitDBExplorer.UIComponents.Workspaces
             ExplorerTree.SelectedItemChanged += Tree_SelectedItemChanged;
             UtilityTree.SelectedItemChanged += Tree_SelectedItemChanged;
             List.SelectedItemChanged += List_SelectedItemChanged;               
+            explorerTreeVM.BindEvents();
         }
 
 
@@ -188,6 +189,7 @@ namespace RevitDBExplorer.UIComponents.Workspaces
         }
         public void UnbindEvents()
         {
+            explorerTreeVM.UnbindEvents();
             ExplorerTree.SelectedItemChanged -= Tree_SelectedItemChanged;
             UtilityTree.SelectedItemChanged -= Tree_SelectedItemChanged;
             List.SelectedItemChanged -= List_SelectedItemChanged;            

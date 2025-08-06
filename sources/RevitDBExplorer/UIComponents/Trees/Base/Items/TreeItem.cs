@@ -15,6 +15,7 @@ namespace RevitDBExplorer.UIComponents.Trees.Base.Items
         private bool isSelected = false;
         private bool isExpanded = false;
         private bool isEnabled = true;
+        private bool isSelectedinRevit = false;
         private ObservableCollection<TreeItem> items = null;
 
         public bool IsSelected
@@ -50,6 +51,18 @@ namespace RevitDBExplorer.UIComponents.Trees.Base.Items
             set
             {
                 isEnabled = value;
+                OnPropertyChanged();
+            }
+        }
+        public bool IsSelectedInRevit
+        {
+            get
+            {
+                return isSelectedinRevit;
+            }
+            set
+            {
+                isSelectedinRevit = value;
                 OnPropertyChanged();
             }
         }
@@ -140,6 +153,31 @@ namespace RevitDBExplorer.UIComponents.Trees.Base.Items
                 foreach (var group in Items.OfType<GroupTreeItem>())
                 {
                     foreach (var item in group.GetAllSnoopableObjects())
+                    {
+                        yield return item;
+                    }
+                }
+            }
+        }
+        public IEnumerable<SnoopableObjectTreeItem> GetAllSnoopableObjectTreeItems()
+        {
+            if (this is SnoopableObjectTreeItem snoopableObjectTreeVM)
+            {
+                yield return snoopableObjectTreeVM;
+            }
+            if (Items != null)
+            {
+                var collectionView = CollectionViewSource.GetDefaultView(Items);
+                foreach (var item in collectionView.OfType<SnoopableObjectTreeItem>())
+                {
+                    if (item.Object != null)
+                    {
+                        yield return item;
+                    }
+                }
+                foreach (var group in Items.OfType<GroupTreeItem>())
+                {
+                    foreach (var item in group.GetAllSnoopableObjectTreeItems())
                     {
                         yield return item;
                     }

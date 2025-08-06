@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Documents;
+using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using RevitDBExplorer.Domain.DataModel;
 
@@ -24,6 +25,7 @@ namespace RevitDBExplorer.Domain
                 
         public InfoAboutSource Info { get => info; init => info = value; }
         public IList<SnoopableObject> Objects { get; private set; } = new SnoopableObject[0];
+        public Document RevitDocument { get; private set; }
 
 
         public SourceOfObjects()
@@ -51,6 +53,8 @@ namespace RevitDBExplorer.Domain
             {
                 info = sourceWithInfo.Info;
             }            
+
+            RevitDocument = uiApplication.ActiveUIDocument?.Document;
         }
     }
 
@@ -58,7 +62,8 @@ namespace RevitDBExplorer.Domain
     {
         public string ShortTitle { get; set; } = "";
         public string FullTitle { get; set; } = "";
-        public IEnumerable<Inline> FullTitleColored { get;set; }
+        public IEnumerable<Inline> FullTitleColored { get; set; }
+        public bool EnrichWithVisibilityData { get; set; }
 
 
         public InfoAboutSource()

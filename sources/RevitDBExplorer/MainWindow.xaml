@@ -60,7 +60,7 @@
                 <RowDefinition Height="auto"  MaxHeight="21"/>
             </Grid.RowDefinitions>
 
-            <UniformGrid Columns="11" Margin="0 0 0 2" >
+            <UniformGrid Columns="10" Margin="0 0 0 2" >
                 <UniformGrid.Resources>
                     <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
                         <Setter Property="Background" Value="Transparent"/>
@@ -108,7 +108,7 @@
                 <Button Click="SelectorButton_Click" Tag="Db" ToolTip="Snoop Database - all elements returned from FilteredElementCollector" >
                     <StackPanel>
                         <Path Height="20" Style="{StaticResource IconDb}"  />
-                        <TextBlock >Database</TextBlock>
+                        <TextBlock>Database</TextBlock>
                     </StackPanel>
                 </Button>
                 <!--<Button Click="SelectorButton_Click" Tag="ActiveView" ToolTip="Snoop active view, &#x0a;&#x0a;source: commandData.Application.ActiveUIDocument.Document.ActiveView">
@@ -165,17 +165,23 @@
                         <ContextMenu>
                             <MenuItem Header="Snoop face" Click="SelectorButton_Click" Tag="PickFace" ToolTip="Snoop by selecting face in Revit"/>
                             <MenuItem Header="Snoop edge" Icon="" Click="SelectorButton_Click" Tag="PickEdge" ToolTip="Snoop by selecting edge in Revit"/>
+                            <Separator />
+                            <MenuItem Header="Snoop an element from a linked file"  Click="SelectorButton_Click" Tag="LinkedElement" ToolTip="Snoop by selecting linked element in Revit">
+                                <MenuItem.Icon>
+                                    <Path Height="14" Style="{StaticResource IconLinkedElement}" />
+                                </MenuItem.Icon>
+                            </MenuItem>
                             <!--<MenuItem Header="Snoop point on element" Icon="" Click="SelectorButton_Click" Tag="PickPoint" ToolTip="Snoop by selecting point in Revit"/>
                             <MenuItem Header="Snoop subelement" Icon="" Click="SelectorButton_Click" Tag="PickSubelement" ToolTip="Snoop by selecting subelement in Revit"/>-->
                         </ContextMenu>
                     </Button.ContextMenu>
                 </Button>
-                <Button Click="SelectorButton_Click" Tag="LinkedElement" ToolTip="Snoop by selecting linked element in Revit">
+                <!--<Button Click="SelectorButton_Click" Tag="LinkedElement" ToolTip="Snoop by selecting linked element in Revit">
                     <StackPanel>
                         <Path Height="20" Style="{StaticResource IconLinkedElement}" />
                         <TextBlock >Linked</TextBlock>
                     </StackPanel>
-                </Button>               
+                </Button>-->               
                 <Button Click="SelectorButton_Click" Tag="Schemas" ToolTip="Snoop Extensible Storage framework schemas located in memory">
                     <StackPanel>
                         <Path Height="20" Style="{StaticResource IconSchemas}" />

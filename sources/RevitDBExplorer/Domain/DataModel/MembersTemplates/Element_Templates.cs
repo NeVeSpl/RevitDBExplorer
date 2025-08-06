@@ -38,6 +38,8 @@ namespace RevitDBExplorer.Domain.DataModel.MembersTemplates
             MemberTemplate<Element>.Create((document, target) => AnnotationMultipleAlignmentUtils.ElementSupportsMultiAlign(target)),
             MemberTemplate<Element>.Create((document, target) => AnnotationMultipleAlignmentUtils.GetAnnotationOutlineWithoutLeaders(target)),
 #endif
+
+            MemberTemplate<Element>.CreateWithParam((doc, target, viewMode) => doc.ActiveView.IsElementVisibleInTemporaryViewMode(viewMode, target.Id),  (doc, target) => new TemporaryViewMode[] { TemporaryViewMode.TemporaryHideIsolate }),
         ];
     }
 }

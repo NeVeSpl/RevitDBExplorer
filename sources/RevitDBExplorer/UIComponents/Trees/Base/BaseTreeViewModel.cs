@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Autodesk.Revit.DB;
+using RevitDBExplorer.Domain.DataModel;
 using RevitDBExplorer.Domain.RevitDatabaseScripting;
 using RevitDBExplorer.UIComponents.Trees.Base.Items;
 using RevitDBExplorer.WPF;
@@ -17,6 +18,7 @@ namespace RevitDBExplorer.UIComponents.Trees.Base
         private ObservableCollection<TreeItem> treeItems = new();
         private TreeItem selectedItem;
         private bool allowToFrezeeItem;
+        private bool enrichWithVisibilityData;
 
         public event Action<TreeSelectedItemChangedEventArgs> SelectedItemChanged;
      
@@ -57,6 +59,18 @@ namespace RevitDBExplorer.UIComponents.Trees.Base
                 OnPropertyChanged();
             }
         }
+        public bool EnrichWithVisibilityData
+        {
+            get
+            {
+                return enrichWithVisibilityData;
+            }
+            set
+            {
+                enrichWithVisibilityData = value;
+                OnPropertyChanged();
+            }
+        }
 
 
         public BaseTreeViewModel()
@@ -73,7 +87,16 @@ namespace RevitDBExplorer.UIComponents.Trees.Base
         }
         
 
-       
+        public IEnumerable<SnoopableObjectTreeItem> StreamSnoopableObjectTreeItems()
+        {
+            foreach (var item in TreeItems)
+            {
+                foreach (var item2 in item.GetAllSnoopableObjectTreeItems())
+                {
+                    yield return item2;
+                }
+            }
+        }
 
 
         public static IEnumerable<object> GetObjectsForTransfer(TreeItem treeViewItem)

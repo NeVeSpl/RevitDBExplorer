@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Autodesk.Revit.DB;
+using Autodesk.Revit.UI;
 using RevitDBExplorer.Domain;
-using RevitDBExplorer.Domain.DataModel;
 using RevitDBExplorer.UIComponents.Trees.Base;
 using RevitDBExplorer.UIComponents.Trees.Base.Items;
 using RevitDBExplorer.WPF;
@@ -18,10 +19,12 @@ namespace RevitDBExplorer.UIComponents.Trees.Explorer
         private string filterPhrase = string.Empty;
         private bool isExpanded = true;
         private bool treeNotForEvents;
+        
 
         public RelayCommand SwitchViewCommand { get; }
         public RelayCommand ReloadCommand { get; }
-        public RelayCommand CollapseCommand { get; }
+        public RelayCommand CollapseCommand { get; }        
+        public RelayCommand ToggleHideCommand { get; }
 
 
         public string FilterPhrase
@@ -56,6 +59,7 @@ namespace RevitDBExplorer.UIComponents.Trees.Explorer
             SwitchViewCommand = new RelayCommand(SwitchView);
             ReloadCommand = new RelayCommand(Reload);
             CollapseCommand = new RelayCommand(Collapse);
+            ToggleHideCommand = new RelayCommand(ToggleHide);
         }
 
 
@@ -67,6 +71,7 @@ namespace RevitDBExplorer.UIComponents.Trees.Explorer
         }
         public void PopulateTreeView(SourceOfObjects sourceOfObjects)
         {
+            EnrichWithVisibilityData = sourceOfObjects?.Info?.EnrichWithVisibilityData == true;
             TreeNotForEvents = true;
             FilterPhrase = "";
             this.sourceOfObjects = sourceOfObjects;
@@ -102,9 +107,13 @@ namespace RevitDBExplorer.UIComponents.Trees.Explorer
             {
                 TreeItems = new(new[] { groupTreeVM });
             }
+
+            PopulateElementIdTreeItemMap();
+            SynchronizeSelectionWithRevit();
         }
         public void PopulateWithEvents(SourceOfObjects sourceOfObjects)
         {
+            EnrichWithVisibilityData = false;
             TreeNotForEvents = false;
             var snoopableTreeObjects = sourceOfObjects.Objects.Select(x => new SnoopableObjectTreeItem(x, TreeItemsCommands) { IsExpanded = true }).ToList();
             TreeItems = new(snoopableTreeObjects);
@@ -158,6 +167,61 @@ namespace RevitDBExplorer.UIComponents.Trees.Explorer
                 }
             }
             isExpanded = !isExpanded;
+        }
+        private void ToggleHide(object parameter)
+        {
+            if (SelectedItem is SnoopableObjectTreeItem soti)
+            {
+                
+            }
+        }
+
+        public void BindEvents()
+        {
+            EventListener.SelectionChanged += EventListener_SelectionChanged;
+        }
+        public void UnbindEvents()
+        {
+            EventListener.SelectionChanged -= EventListener_SelectionChanged;
+        }
+
+
+        private void EventListener_SelectionChanged(object sender, Autodesk.Revit.UI.Events.SelectionChangedEventArgs e)
+        {
+            SynchronizeSelectionWithRevit();
+        }
+
+        Dictionary<ElementId, SnoopableObjectTreeItem> elementIdTreeItemMap = new ();
+        List<SnoopableObjectTreeItem> selectedTreeItemsInRevit = new ();
+        private void PopulateElementIdTreeItemMap()
+        {
+            elementIdTreeItemMap = new Dictionary<ElementId, SnoopableObjectTreeItem>();
+
+            foreach (var treeItem in StreamSnoopableObjectTreeItems())
+            {
+                if (treeItem.Object?.Object is Element element)
+                {
+                    if (element.Id != ElementId.InvalidElementId)
+                    {
+                        elementIdTreeItemMap[element.Id] = treeItem;
+                    }
+                }
+            }            
+        }
+        private void SynchronizeSelectionWithRevit()
+        {
+            var uiDocument = new UIDocument(sourceOfObjects.RevitDocument);
+            selectedTreeItemsInRevit.ForEach(x => x.IsSelectedInRevit = false);
+            selectedTreeItemsInRevit.Clear();
+
+            foreach (var id in  uiDocument.Selection.GetElementIds())
+            {
+                if (elementIdTreeItemMap.TryGetValue(id, out var treeItem))
+                {
+                    treeItem.IsSelectedInRevit = true;  
+                    selectedTreeItemsInRevit.Add(treeItem);
+                }
+            }
         }
     }
 }
