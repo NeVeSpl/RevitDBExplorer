@@ -8,22 +8,25 @@ namespace RevitDBExplorer.Domain
 {
     internal class EventListener
     {
-        public static event EventHandler<SelectionChangedEventArgs> SelectionChanged; 
+        public static event Action<object> SelectionChanged; 
 
 
 
         public static void Register(UIControlledApplication application)
         {
+#if R2023_MIN
             application.SelectionChanged += Application_SelectionChanged;
+#endif
         }
 
 
-        
 
 
-        private static void Application_SelectionChanged(object sender, SelectionChangedEventArgs e)
+#if R2023_MIN
+        private static void Application_SelectionChanged(object sender, SelectionChangedEventArgs selectionChangedEventArgs)
         {
-            SelectionChanged?.Invoke(sender, e);
+            SelectionChanged?.Invoke(sender);
         }
+#endif
     }
 }

@@ -186,7 +186,7 @@ namespace RevitDBExplorer.UIComponents.Trees.Explorer
         }
 
 
-        private void EventListener_SelectionChanged(object sender, Autodesk.Revit.UI.Events.SelectionChangedEventArgs e)
+        private void EventListener_SelectionChanged(object sender)
         {
             SynchronizeSelectionWithRevit();
         }
