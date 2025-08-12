@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
@@ -36,7 +37,8 @@ namespace RevitDBExplorer.Domain.Selectors
                 //var deltaBottom = currentElevation - bottomElevation;
             }
 
-            var view = app.ActiveUIDocument.ActiveView;
+            var view = app.ActiveUIDocument.ActiveGraphicalView;
+            if (view == null) return null;
 
             if (view.ViewDirection.IsParallelTo(XYZ.BasisX) == false && view.ViewDirection.IsParallelTo(XYZ.BasisY) == false && view.ViewDirection.IsParallelTo(XYZ.BasisZ) == false)
                 return null;

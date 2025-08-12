@@ -139,7 +139,6 @@ namespace RevitDBExplorer
                     var min = corners[0];
                     var max = corners[1];
                     var v = max - min;
-                    var l = v.GetLength();
 
                     var vr = dx * new XYZ(v.X * view.RightDirection.X, v.Y * view.RightDirection.Y, v.Z * view.RightDirection.Z);
                     var vu = dy * new XYZ(v.X * view.UpDirection.X, v.Y * view.UpDirection.Y, v.Z * view.UpDirection.Z);
@@ -150,31 +149,45 @@ namespace RevitDBExplorer
                     min -= vv;
                     max -= vv;
 
-                    if ((Math.Abs(view.RightDirection.X) < 0.999) && (Math.Abs(view.RightDirection.Y) < 0.999) && (Math.Abs(view.RightDirection.Z) < 0.999))
+                    //
+
+                    var upDirection = view.UpDirection;
+                    var forwardDirection = view.ViewDirection;
+
+                    if (view is View3D view3D)
                     {
-                        return ("(?,,)", min, max, false);
-                    }
-                    if ((Math.Abs(view.UpDirection.X) < 0.999) && (Math.Abs(view.UpDirection.Y) < 0.999) && (Math.Abs(view.UpDirection.Z) < 0.999))
-                    {
-                        return ("(,?,)", min, max, false);
-                    }
-                    if ((Math.Abs(view.ViewDirection.X) < 0.999) && (Math.Abs(view.ViewDirection.Y) < 0.999) && (Math.Abs(view.ViewDirection.Z) < 0.999))
-                    {
-                        return ("(,,?)", min, max, false);
-                    }
+                        if (view3D.IsPerspective)
+                        {
+                            return ("(?,,)", min, max, false);
+                        }
+
+                        var orientation = view3D.GetOrientation();
+                        upDirection = orientation.UpDirection;
+                        forwardDirection = orientation.ForwardDirection;
+                    }                 
+                    
+                    var rightDirection = forwardDirection.CrossProduct(upDirection).Normalize();   
+
+                    var diagVector = corners[0] - corners[1];
+                    double height = Math.Abs(diagVector.DotProduct(view.UpDirection));
+                    double width = Math.Abs(diagVector.DotProduct(view.RightDirection));
+
+                    var r = corners[0] + (rightDirection * width * dx) + (upDirection * height * dy);  
 
                     if (view.ViewDirection.IsParallelTo(XYZ.BasisX))
                     {
-                        return ($"(-,--, {q.Y:f3}, {q.Z:f3})", min, max, true);
+                        return ($"(-,--, {r.Y:f3}, {r.Z:f3})", min, max, true);
                     }
                     if (view.ViewDirection.IsParallelTo(XYZ.BasisY))
                     {
-                        return ($"({q.X:f3}, -,--, {q.Z:f3})", min, max, true);
+                        return ($"({r.X:f3}, -,--, {r.Z:f3})", min, max, true);
                     }
                     if (view.ViewDirection.IsParallelTo(XYZ.BasisZ))
                     {
-                        return ($"({q.X:f3}, {q.Y:f3}, -,--)", min, max, true);
+                        return ($"({r.X:f3}, {r.Y:f3}, -,--)", min, max, true);
                     }
+
+                    return ("(-,--,-,--,-,--)", XYZ.Zero, XYZ.Zero, true);
                 }
                 catch
                 {
