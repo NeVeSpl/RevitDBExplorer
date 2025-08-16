@@ -21,16 +21,6 @@ namespace Autodesk.Revit.DB
             var dotProduct = first.Normalize().DotProduct(second.Normalize());
 
             return Math.Abs(dotProduct - 1.0) < 1e-6;
-        }
-
-        public static XYZ Min(this XYZ first, XYZ second) 
-        {
-            return new XYZ(Math.Min(first.X, second.X), Math.Min(first.Y, second.Y), Math.Min(first.Z, second.Z));
-        }
-
-        public static XYZ Max(this XYZ first, XYZ second)
-        {
-            return new XYZ(Math.Max(first.X, second.X), Math.Max(first.Y, second.Y), Math.Max(first.Z, second.Z));
-        }
+        }       
     }
 }

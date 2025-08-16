@@ -88,7 +88,7 @@
 		<PackageReference Include="CircularBuffer" Version="1.4.0" />
 		<PackageReference Include="LoxSmoke.DocXml" Version="3.7.1" />
 		<PackageReference Include="NSourceGenerators.CodeToString" Version="0.4.0" />	
-		<PackageReference Include="RevitExplorer.Augmentations" Version="1.4.1.$(RevitYear)" />
+		<PackageReference Include="RevitExplorer.Augmentations" Version="1.4.2.$(RevitYear)" />
 		<PackageReference Include="RevitExplorer.Scripting" Version="1.4.2.$(RevitYear)" />
 		<PackageReference Include="RevitExplorer.Visualizations" Version="1.4.0.$(RevitYear)" />
 		<PackageReference Include="SimMetrics.Net" Version="1.0.5" />

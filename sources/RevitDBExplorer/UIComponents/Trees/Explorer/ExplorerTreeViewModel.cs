@@ -210,6 +210,9 @@ namespace RevitDBExplorer.UIComponents.Trees.Explorer
         }
         private void SynchronizeSelectionWithRevit()
         {
+            if (sourceOfObjects == null) 
+                return;
+
             var uiDocument = new UIDocument(sourceOfObjects.RevitDocument);
             selectedTreeItemsInRevit.ForEach(x => x.IsSelectedInRevit = false);
             selectedTreeItemsInRevit.Clear();

@@ -110,7 +110,7 @@ namespace RevitDBExplorer
             if (e.CurrentActiveView != null)
             {
                 var uiViews = UIApplication.ActiveUIDocument.GetOpenUIViews();
-                UIView = uiViews.FirstOrDefault(x => x.ViewId  == e.CurrentActiveView.Id);
+                UIView = uiViews.FirstOrDefault(x => x.ViewId == e.CurrentActiveView.Id);
                 View = e.CurrentActiveView;
             }
             else
@@ -153,20 +153,25 @@ namespace RevitDBExplorer
 
                     var upDirection = view.UpDirection;
                     var forwardDirection = view.ViewDirection;
+                    var rightDirection = view.RightDirection;
 
                     if (view is View3D view3D)
                     {
                         if (view3D.IsPerspective)
                         {
-                            return ("(?,,)", min, max, false);
+                            return ("(IsPerspective == true)", min, max, false);
                         }
 
                         var orientation = view3D.GetOrientation();
                         upDirection = orientation.UpDirection;
                         forwardDirection = orientation.ForwardDirection;
-                    }                 
-                    
-                    var rightDirection = forwardDirection.CrossProduct(upDirection).Normalize();   
+                    }
+
+                    var rightDirection2 = forwardDirection.CrossProduct(upDirection).Normalize();
+                    if (rightDirection2.IsParallelTo(rightDirection) == false)
+                    {
+
+                    }
 
                     var diagVector = corners[0] - corners[1];
                     double height = Math.Abs(diagVector.DotProduct(view.UpDirection));
@@ -187,7 +192,7 @@ namespace RevitDBExplorer
                         return ($"({r.X:f3}, {r.Y:f3}, -,--)", min, max, true);
                     }
 
-                    return ("(-,--,-,--,-,--)", XYZ.Zero, XYZ.Zero, true);
+                    return ("(not parallel)", XYZ.Zero, XYZ.Zero, true);
                 }
                 catch
                 {
