@@ -20,7 +20,7 @@ namespace RevitDBExplorer.Domain.Selectors
 
             if (view == null) yield break;
 
-            yield return new SnoopableObject(null, view);
+            yield return new SnoopableObject(app.ActiveUIDocument.Document, view);
         }
     }
 }
