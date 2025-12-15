@@ -21,7 +21,6 @@ namespace SetupBuilder
                 UpgradeCode = new Guid("E92B4658-0D37-4FF6-AD09-379881769A8D"),
                 Platform = Platform.x64,
                 UI = WUI.WixUI_InstallDir,
-                InstallScope = InstallScope.perUser,
                 MajorUpgrade = MajorUpgrade.Default,
                 Version = new Version(productVersion),
                 OutFileName = $"RevitDBExplorer",
@@ -36,12 +35,19 @@ namespace SetupBuilder
                 ProductIcon = "Resources\\RDBE.ico"
             };
 
+            project.RemoveDialogsBetween(NativeDialogs.WelcomeDlg, NativeDialogs.InstallDirDlg);
+
+            BuildMsi(project, InstallScope.perUser, @"%AppDataFolder%\Autodesk\Revit\Addins");
+            BuildMsi(project, InstallScope.perMachine, @"%CommonAppDataFolder%\Autodesk\Revit\Addins\");
+        }
+
+        private static void BuildMsi(Project project, InstallScope scope, string rootPath)
+        {
+            project.InstallScope = scope;
             project.Dirs = new Dir[]
             {
-                new Dir(@"%AppDataFolder%\Autodesk\Revit\Addins", CreateDirFor(2021), CreateDirFor(2022), CreateDirFor(2023), CreateDirFor(2024), CreateDirFor(2025), CreateDirFor(2026))
+                new Dir(rootPath, CreateDirFor(2021), CreateDirFor(2022), CreateDirFor(2023), CreateDirFor(2024), CreateDirFor(2025), CreateDirFor(2026))
             };
-
-            project.RemoveDialogsBetween(NativeDialogs.WelcomeDlg, NativeDialogs.InstallDirDlg);
             Compiler.BuildMsi(project);
         }
 
