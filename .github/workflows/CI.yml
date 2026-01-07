@@ -80,6 +80,9 @@ jobs:
       with:
         path: sources/RevitDBExplorer/obj
 
+    - name: Restore Packages for .net 10
+      run: msbuild /r /p:Configuration=R2027
+
     - name: Build Project for R2027     
       working-directory: sources/RevitDBExplorer/
       run: |
