@@ -83,7 +83,7 @@ namespace RevitDBExplorer.UIComponents.Trees.Base
         {
             var oldOne = SelectedItem;
             SelectedItem = item;            
-            SelectedItemChanged?.Invoke(new TreeSelectedItemChangedEventArgs(this, oldOne, item));
+            SelectedItemChanged?.Invoke(new TreeSelectedItemChangedEventArgs(this, oldOne, item));      
         }
         
 
@@ -97,6 +97,43 @@ namespace RevitDBExplorer.UIComponents.Trees.Base
                 }
             }
         }
+
+
+        // multiselection
+        private List<TreeItem> selectedItems = new List<TreeItem>();
+        public void ResetMultiSelection()
+        {
+            selectedItems.Clear();
+        }
+        public void SelectSingleItem(TreeItem treeItem, bool withCtrl)
+        {
+            if (treeItem == null)
+                return;
+
+            if (withCtrl == false)
+            {
+                selectedItems.ForEach(x => x.IsMultiSelected = false);
+                selectedItems.Clear();
+                treeItem.IsMultiSelected = true;
+                selectedItems.Add(treeItem);
+            }
+            if (withCtrl == true)
+            {
+                if (treeItem.IsMultiSelected)
+                {
+                    treeItem.IsMultiSelected = false;
+                    treeItem.IsSelected = false;
+                    selectedItems.Remove(treeItem);
+                }
+                else
+                {
+                    treeItem.IsMultiSelected = true;
+                    selectedItems.Add(treeItem);
+                }
+            }            
+        }
+
+
 
 
         public static IEnumerable<object> GetObjectsForTransfer(TreeItem treeViewItem)

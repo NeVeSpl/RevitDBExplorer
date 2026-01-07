@@ -146,7 +146,12 @@
                         </Style>
                         <!--<SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="Yellow"/>-->
                     </Style.Resources>
-                    <Style.Triggers>                        
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsMultiSelected}" Value="True">
+                            <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"  >                               
+                            </Setter>                            
+                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" />
+                        </DataTrigger>
                         <Trigger Property="IsSelected" Value="True">
                             <Setter Property="BorderBrush" Value="{DynamicResource TreeViewItem.BorderBrush.IsSelected}" />
                         </Trigger>

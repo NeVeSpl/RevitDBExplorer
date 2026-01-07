@@ -66,5 +66,26 @@ namespace Autodesk.Revit.DB
                 yield return curve;
             }
         }
+
+        public static IEnumerable<Solid> StreamSolids(this GeometryObject geometryObject)
+        {
+            if (geometryObject is GeometryElement geometryElement)
+            {
+                foreach (var geometryObject_ in geometryElement)
+                {
+                    var result = StreamSolids(geometryObject_);
+                    foreach (var item in result) yield return item;
+                }
+            }
+            if (geometryObject is GeometryInstance geometryInstance)
+            {
+                var result = StreamSolids(geometryInstance.GetInstanceGeometry());
+                foreach (var item in result) yield return item;
+            }
+            if (geometryObject is Solid solid)
+            {
+                yield return solid;
+            }
+        }
     }
 }

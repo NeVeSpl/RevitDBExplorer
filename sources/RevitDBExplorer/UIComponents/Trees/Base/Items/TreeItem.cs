@@ -13,6 +13,7 @@ namespace RevitDBExplorer.UIComponents.Trees.Base.Items
     internal abstract class TreeItem : BaseViewModel
     {
         private bool isSelected = false;
+        private bool isMultiSelected = false;
         private bool isExpanded = false;
         private bool isEnabled = true;
         private bool isSelectedinRevit = false;
@@ -27,6 +28,18 @@ namespace RevitDBExplorer.UIComponents.Trees.Base.Items
             set
             {
                 isSelected = value;
+                OnPropertyChanged();
+            }
+        }
+        public bool IsMultiSelected
+        {
+            get
+            {
+                return isMultiSelected;
+            }
+            set
+            {
+                isMultiSelected = value;
                 OnPropertyChanged();
             }
         }
@@ -116,7 +129,7 @@ namespace RevitDBExplorer.UIComponents.Trees.Base.Items
                 }
             }
         }
-        public void SelectFirstDeepestVisibleItem()
+        public TreeItem SelectFirstDeepestVisibleItem()
         {
             TreeItem candidate = null;
 
@@ -127,12 +140,13 @@ namespace RevitDBExplorer.UIComponents.Trees.Base.Items
 
             if (candidate != null)
             {
-                candidate.SelectFirstDeepestVisibleItem();
+                candidate = candidate.SelectFirstDeepestVisibleItem();
             }
             else
             {
                 IsSelected = true;
             }
+            return candidate;
         }
         public IEnumerable<SnoopableObject> GetAllSnoopableObjects()
         {

@@ -1,7 +1,9 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 using RevitDBExplorer.UIComponents.Trees.Base.Items;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
@@ -18,7 +20,7 @@ namespace RevitDBExplorer.UIComponents.Trees.Base
         {
             InitializeComponent();
             cTreeView.SelectedItemChanged += TreeView_SelectedItemChanged;
-            
+            cTreeView.AddHandler(TreeViewItem.MouseLeftButtonDownEvent, new MouseButtonEventHandler(TreeViewItem_MouseLeftButtonDown), true);
         }
 
         private void TreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
@@ -100,5 +102,54 @@ namespace RevitDBExplorer.UIComponents.Trees.Base
                 }
             }
         }
+
+
+
+        public void TreeViewItem_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            TreeViewItem treeViewItem = FindTreeViewItem(e.OriginalSource as DependencyObject);
+            TreeView treeView = sender as TreeView;
+            TreeItem treeItem = treeViewItem?.DataContext as TreeItem;
+
+            if (treeViewItem == null || treeView == null || treeItem == null)
+                return;
+
+            if (this.DataContext is BaseTreeViewModel treeViewVM)
+            {
+                if (Keyboard.Modifiers == ModifierKeys.Control)
+                {
+                    treeViewVM.SelectSingleItem(treeItem, withCtrl: true);
+                }
+                else if (Keyboard.Modifiers == ModifierKeys.Shift)
+                {
+                    //SelectMultipleItemsContinuously(treeView, treeViewItem);
+                }
+                else
+                {
+                    treeViewVM.SelectSingleItem(treeItem, withCtrl: false);
+                }
+            }
+            e.Handled = true;
+        }
+
+        private static TreeViewItem FindTreeViewItem(DependencyObject dependencyObject)
+        {          
+            if (dependencyObject is System.Windows.Controls.Primitives.ButtonBase)
+                return null;
+
+            if (dependencyObject == null)
+            {
+                return null;
+            }
+
+            TreeViewItem treeViewItem = dependencyObject as TreeViewItem;
+            if (treeViewItem != null)
+            {
+                return treeViewItem;
+            }
+
+            return FindTreeViewItem(VisualTreeHelper.GetParent(dependencyObject));
+        }
+
     }
 }

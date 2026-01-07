@@ -85,7 +85,18 @@ namespace RevitDBExplorer.Domain.DataModel.ValueContainers
             {
                 yield return new VisualizationItem("Element", "get_BoundingBox(null).Min", new CrossDrawingVisual(bb.Min, VisualizationItem.StartColor));
                 yield return new VisualizationItem("Element", "get_BoundingBox(null).Max", new CrossDrawingVisual(bb.Max, VisualizationItem.EndColor));
-            }           
+            }
+
+            var view = context.Document.ActiveView;
+            var geometry = element.get_Geometry(new Options() { View = view});
+            
+            foreach (var geometryObject in geometry.StreamSolids())
+            {
+                if (geometryObject is Solid { Volume: > 0 } solid)
+                {
+                    yield return new VisualizationItem("Element", "get_Geometry()", new SolidDrawingVisual(solid, VisualizationItem.SolidColor));
+                }
+            }            
         }
     }
 }

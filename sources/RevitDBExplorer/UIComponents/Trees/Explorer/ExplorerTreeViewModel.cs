@@ -71,6 +71,7 @@ namespace RevitDBExplorer.UIComponents.Trees.Explorer
         }
         public void PopulateTreeView(SourceOfObjects sourceOfObjects)
         {
+            ResetMultiSelection();
             EnrichWithVisibilityData = sourceOfObjects?.Info?.EnrichWithVisibilityData == true;
             TreeNotForEvents = true;
             FilterPhrase = "";
@@ -91,7 +92,8 @@ namespace RevitDBExplorer.UIComponents.Trees.Explorer
             {
                 groupTreeVM.IsExpanded = true;
             }
-            groupTreeVM.SelectFirstDeepestVisibleItem();
+            var treeItem = groupTreeVM.SelectFirstDeepestVisibleItem();
+            SelectSingleItem(treeItem, false);
 
             if (groupTreeVM.Items.Count == 1)
             {
