@@ -11,7 +11,7 @@ namespace SetupBuilder
     {
         static void Main(string[] args)
         {
-            var fileVersionInfo = FileVersionInfo.GetVersionInfo($@"..\..\..\sources\bin\R2026\RevitDBExplorer.dll");
+            var fileVersionInfo = FileVersionInfo.GetVersionInfo($@"..\..\..\sources\bin\R2027\RevitDBExplorer.dll");
             var productVersion = fileVersionInfo.FileVersion;
 
             var project = new Project()
@@ -22,8 +22,7 @@ namespace SetupBuilder
                 Platform = Platform.x64,
                 UI = WUI.WixUI_InstallDir,
                 MajorUpgrade = MajorUpgrade.Default,
-                Version = new Version(productVersion),
-                OutFileName = $"RevitDBExplorer",
+                Version = new Version(productVersion),                
                 BackgroundImage = "Resources\\BackgroundImage.png",
                 BannerImage = "Resources\\BannerImage.png"
             };
@@ -37,102 +36,20 @@ namespace SetupBuilder
 
             project.RemoveDialogsBetween(NativeDialogs.WelcomeDlg, NativeDialogs.InstallDirDlg);
 
-            BuildMsi(project, InstallScope.perUser, @"%AppDataFolder%\Autodesk\Revit\Addins");
-            BuildMsi(project, InstallScope.perMachine, @"%CommonAppDataFolder%\Autodesk\Revit\Addins\");
+            BuildMsi(project, InstallScope.perUser, @"%AppDataFolder%\Autodesk\Revit\Addins", $"RevitDBExplorer");
+            BuildMsi(project, InstallScope.perMachine, @"%CommonAppDataFolder%\Autodesk\Revit\Addins\", $"RevitDBExplorer-perMachine");
         }
 
-        private static void BuildMsi(Project project, InstallScope scope, string rootPath)
+        private static void BuildMsi(Project project, InstallScope scope, string rootPath, string outFileName)
         {
             project.InstallScope = scope;
+            project.OutFileName = outFileName;
             project.Dirs = new Dir[]
             {
-                new Dir(rootPath, CreateDirFor(2021), CreateDirFor(2022), CreateDirFor(2023), CreateDirFor(2024), CreateDirFor(2025), CreateDirFor(2026))
+                new Dir(rootPath, CreateDirFor(2021), CreateDirFor(2022), CreateDirFor(2023), CreateDirFor(2024), CreateDirFor(2025), CreateDirFor(2026), CreateDirFor(2027))
             };
             Compiler.BuildMsi(project);
         }
-
-        //readonly static string[] filesNet48 = new string[]
-        //{
-        //    "CircularBuffer.dll",
-        //    "DocXml.dll",
-        //    "Humanizer.dll",
-        //    "ICSharpCode.AvalonEdit.dll",            
-        //    "Microsoft.Bcl.AsyncInterfaces.dll",
-        //    "Microsoft.CodeAnalysis.AnalyzerUtilities.dll",
-        //    "Microsoft.CodeAnalysis.CSharp.dll",
-        //    "Microsoft.CodeAnalysis.CSharp.Features.dll",
-        //    "Microsoft.CodeAnalysis.CSharp.Scripting.dll",
-        //    "Microsoft.CodeAnalysis.CSharp.Workspaces.dll",
-        //    "Microsoft.CodeAnalysis.dll",
-        //    "Microsoft.CodeAnalysis.Features.dll",
-        //    "Microsoft.CodeAnalysis.Scripting.dll",
-        //    "Microsoft.CodeAnalysis.Workspaces.dll",
-        //    "Microsoft.DiaSymReader.dll",
-        //    "RevitDBExplorer.dll",
-        //    "RevitDBExplorer.dll.config",
-        //    "RevitDBExplorer.API.dll",
-        //    "RevitDBExplorer.Augmentations.dll",           
-        //    "RevitDBScripting.dll",
-        //    "RoslynPad.Editor.Windows.dll",
-        //    "RoslynPad.Roslyn.dll",
-        //    "RoslynPad.Roslyn.Windows.dll",
-        //    "SimMetrics.Net.dll",
-        //    "System.Buffers.dll",
-        //    "System.Collections.Immutable.dll",
-        //    "System.Composition.AttributedModel.dll",
-        //    "System.Composition.Convention.dll",
-        //    "System.Composition.Hosting.dll",
-        //    "System.Composition.Runtime.dll",
-        //    "System.Composition.TypedParts.dll",
-        //    "System.Memory.dll",
-        //    "System.Net.Http.Json.dll",
-        //    "System.Numerics.Vectors.dll",
-        //    "System.Reactive.dll",
-        //    "System.Reactive.Linq.dll",
-        //    "System.Reflection.Metadata.dll",
-        //    "System.Runtime.CompilerServices.Unsafe.dll",
-        //    "System.Text.Encoding.CodePages.dll",
-        //    "System.Text.Encodings.Web.dll",
-        //    "System.Text.Json.dll",
-        //    "System.Threading.Tasks.Extensions.dll",
-        //    "System.ValueTuple.dll",
-        //    "TrieNet.dll"
-        //};
-        //readonly static string[] filesNet70 = new string[]
-        //{
-        //    "CircularBuffer.dll",
-        //    "DocXml.dll",
-        //    "Humanizer.dll",
-        //    "ICSharpCode.AvalonEdit.dll",
-        //    "Microsoft.Bcl.AsyncInterfaces.dll",
-        //    "Microsoft.CodeAnalysis.AnalyzerUtilities.dll",
-        //    "Microsoft.CodeAnalysis.CSharp.dll",
-        //    "Microsoft.CodeAnalysis.CSharp.Features.dll",
-        //    "Microsoft.CodeAnalysis.CSharp.Scripting.dll",
-        //    "Microsoft.CodeAnalysis.CSharp.Workspaces.dll",
-        //    "Microsoft.CodeAnalysis.dll",
-        //    "Microsoft.CodeAnalysis.Features.dll",
-        //    "Microsoft.CodeAnalysis.Scripting.dll",
-        //    "Microsoft.CodeAnalysis.Workspaces.dll",
-        //    "Microsoft.DiaSymReader.dll",
-        //    "RevitDBExplorer.dll",
-        //    "RevitDBExplorer.dll.config",
-        //    "RevitDBExplorer.API.dll",
-        //    "RevitDBExplorer.Augmentations.dll",
-        //    "RevitDBScripting.dll",
-        //    "RoslynPad.Editor.Windows.dll",
-        //    "RoslynPad.Roslyn.dll",
-        //    "RoslynPad.Roslyn.Windows.dll",
-        //    "SimMetrics.Net.dll",
-        //    "System.Composition.AttributedModel.dll",
-        //    "System.Composition.Convention.dll",
-        //    "System.Composition.Hosting.dll",
-        //    "System.Composition.Runtime.dll",
-        //    "System.Composition.TypedParts.dll",
-        //    "System.Reactive.dll",
-        //    "System.Reactive.Linq.dll",       
-        //    "TrieNet.dll"
-        //};
 
         static Dir CreateDirFor(int year)
         {
