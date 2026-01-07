@@ -73,7 +73,7 @@ jobs:
     - name: Build Project for R2026     
       working-directory: sources/RevitDBExplorer/
       run: |
-          msbuild /p:Configuration=R2026
+          msbuild /p:Configuration=R2026	 
 		  
     - name: Remove obj folder
       uses: JesseTG/rm@v1.0.3
