@@ -75,6 +75,11 @@ jobs:
       run: |
           msbuild /p:Configuration=R2026
 
+    - name: Build Project for R2027     
+      working-directory: sources/RevitDBExplorer/
+      run: |
+          msbuild /p:Configuration=R2027
+
     - name: Create Code Signing Certificate
       run: |
           New-Item -ItemType directory -Path certificate

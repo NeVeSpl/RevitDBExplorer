@@ -10,11 +10,11 @@
 		<OutputPath>..\bin\$(Configuration)\</OutputPath>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<UseWPF>true</UseWPF>
-		<Configurations>D2024;D2025;R2021;R2022;R2023;R2024;R2025;D2026;R2026</Configurations>
+		<Configurations>D2024;D2025;R2021;R2022;R2023;R2024;R2025;D2026;R2026;D2027;R2027</Configurations>
 	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
 		<DebugType>full</DebugType>
-		<DefineConstants>TRACE;DEBUG;R2021_MIN, R2022_MIN, R2023_MIN, R2023_MAX, R2024_MAX, R2025_MAX, R2026_MAX</DefineConstants>
+		<DefineConstants>TRACE;DEBUG;R2021_MIN, R2022_MIN, R2023_MIN, R2023_MAX, R2024_MAX, R2025_MAX, R2026_MAX, R2027_MAX</DefineConstants>
 		<RevitYear>2023</RevitYear>
 	</PropertyGroup>
 	<PropertyGroup>
@@ -23,63 +23,77 @@
 	</PropertyGroup>
 	
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'R2021|AnyCPU'">
-		<DefineConstants>TRACE;R2021_MIN, R2021_MAX, R2022_MAX, R2023_MAX, R2024_MAX, R2025_MAX, R2026_MAX</DefineConstants>
+		<DefineConstants>TRACE;R2021_MIN, R2021_MAX, R2022_MAX, R2023_MAX, R2024_MAX, R2025_MAX, R2026_MAX, R2027_MAX</DefineConstants>
 		<Optimize>true</Optimize>
 		<DebugType>pdbonly</DebugType>
 		<RevitYear>2021</RevitYear>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'R2022|AnyCPU'">
-		<DefineConstants>TRACE;R2021_MIN, R2022_MIN, R2022_MAX, R2023_MAX, R2024_MAX, R2025_MAX, R2026_MAX</DefineConstants>
+		<DefineConstants>TRACE;R2021_MIN, R2022_MIN, R2022_MAX, R2023_MAX, R2024_MAX, R2025_MAX, R2026_MAX, R2027_MAX</DefineConstants>
 		<Optimize>true</Optimize>
 		<DebugType>pdbonly</DebugType>
 		<RevitYear>2022</RevitYear>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'R2023|AnyCPU'">
-		<DefineConstants>TRACE;R2021_MIN, R2022_MIN, R2023_MIN, R2023_MAX, R2024_MAX, R2025_MAX, R2026_MAX</DefineConstants>
+		<DefineConstants>TRACE;R2021_MIN, R2022_MIN, R2023_MIN, R2023_MAX, R2024_MAX, R2025_MAX, R2026_MAX, R2027_MAX</DefineConstants>
 		<Optimize>true</Optimize>
 		<DebugType>pdbonly</DebugType>
 		<RevitYear>2023</RevitYear>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'R2024|AnyCPU'">
-		<DefineConstants>TRACE;R2021_MIN, R2022_MIN, R2023_MIN, R2024_MIN, R2024_MAX, R2025_MAX, R2026_MAX</DefineConstants>
+		<DefineConstants>TRACE;R2021_MIN, R2022_MIN, R2023_MIN, R2024_MIN, R2024_MAX, R2025_MAX, R2026_MAX, R2027_MAX</DefineConstants>
 		<Optimize>true</Optimize>
 		<DebugType>pdbonly</DebugType>
 		<RevitYear>2024</RevitYear>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'R2025|AnyCPU'">
-		<DefineConstants>TRACE;R2021_MIN, R2022_MIN, R2023_MIN, R2024_MIN, R2025_MIN, R2025_MAX, R2026_MAX</DefineConstants>
+		<DefineConstants>TRACE;R2021_MIN, R2022_MIN, R2023_MIN, R2024_MIN, R2025_MIN, R2025_MAX, R2026_MAX, R2027_MAX</DefineConstants>
 		<Optimize>true</Optimize>
 		<DebugType>pdbonly</DebugType>
 		<RevitYear>2025</RevitYear>
 		<TargetFramework>net8.0-windows</TargetFramework>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='R2026|AnyCPU'">
-	  <DefineConstants>TRACE;R2021_MIN, R2022_MIN, R2023_MIN, R2024_MIN, R2025_MIN, R2026_MIN, R2026_MAX</DefineConstants>
+	  <DefineConstants>TRACE;R2021_MIN, R2022_MIN, R2023_MIN, R2024_MIN, R2025_MIN, R2026_MIN, R2026_MAX, R2027_MAX</DefineConstants>
 	  <Optimize>true</Optimize>
 	  <DebugType>pdbonly</DebugType>
 	  <RevitYear>2026</RevitYear>
 	  <TargetFramework>net8.0-windows</TargetFramework>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='R2027|AnyCPU'">
+	  <DefineConstants>TRACE;R2021_MIN, R2022_MIN, R2023_MIN, R2024_MIN, R2025_MIN, R2026_MIN, R2027_MIN, R2027_MAX</DefineConstants>
+	  <Optimize>true</Optimize>
+	  <DebugType>pdbonly</DebugType>
+	  <RevitYear>2026</RevitYear>
+	  <TargetFramework>net10.0-windows</TargetFramework>
 	</PropertyGroup>	
 	
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'D2024|AnyCPU'">
 		<DebugSymbols>true</DebugSymbols>
-		<DefineConstants>TRACE;DEBUG;R2021_MIN, R2022_MIN, R2023_MIN, R2024_MIN, R2024_MAX, R2025_MAX, R2026_MAX</DefineConstants>
+		<DefineConstants>TRACE;DEBUG;R2021_MIN, R2022_MIN, R2023_MIN, R2024_MIN, R2024_MAX, R2025_MAX, R2026_MAX, R2027_MAX</DefineConstants>
 		<DebugType>full</DebugType>
 		<RevitYear>2024</RevitYear>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'D2025|AnyCPU'">
 		<DebugSymbols>true</DebugSymbols>
-		<DefineConstants>TRACE;DEBUG;R2021_MIN, R2022_MIN, R2023_MIN, R2024_MIN, R2025_MIN, R2025_MAX, R2026_MAX</DefineConstants>
+		<DefineConstants>TRACE;DEBUG;R2021_MIN, R2022_MIN, R2023_MIN, R2024_MIN, R2025_MIN, R2025_MAX, R2026_MAX, R2027_MAX</DefineConstants>
 		<DebugType>full</DebugType>
 		<RevitYear>2025</RevitYear>
 		<TargetFramework>net8.0-windows</TargetFramework>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='D2026|AnyCPU'">
 	  <DebugSymbols>true</DebugSymbols>
-	  <DefineConstants>TRACE;R2021_MIN, R2022_MIN, R2023_MIN, R2024_MIN, R2025_MIN, R2026_MIN, R2026_MAX</DefineConstants>
+	  <DefineConstants>TRACE;R2021_MIN, R2022_MIN, R2023_MIN, R2024_MIN, R2025_MIN, R2026_MIN, R2026_MAX, R2027_MAX</DefineConstants>
 	  <DebugType>full</DebugType>
 	  <RevitYear>2026</RevitYear>
 	  <TargetFramework>net8.0-windows</TargetFramework>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='D2027|AnyCPU'">
+	  <DebugSymbols>true</DebugSymbols>
+	  <DefineConstants>TRACE;R2021_MIN, R2022_MIN, R2023_MIN, R2024_MIN, R2025_MIN, R2026_MIN, R2027_MIN, R2027_MAX</DefineConstants>
+	  <DebugType>full</DebugType>
+	  <RevitYear>2026</RevitYear>
+	  <TargetFramework>net10.0-windows</TargetFramework>
 	</PropertyGroup>
 	
 
