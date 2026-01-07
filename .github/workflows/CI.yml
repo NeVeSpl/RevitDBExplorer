@@ -74,6 +74,11 @@ jobs:
       working-directory: sources/RevitDBExplorer/
       run: |
           msbuild /p:Configuration=R2026
+		  
+	- name: Remove obj folder
+      uses: JesseTG/rm@v1.0.3
+      with:
+        path: sources/RevitDBExplorer/obj
 
     - name: Build Project for R2027     
       working-directory: sources/RevitDBExplorer/
