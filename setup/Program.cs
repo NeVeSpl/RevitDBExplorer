@@ -10,6 +10,12 @@ namespace SetupBuilder
     internal class Program
     {
         static void Main(string[] args)
+        {   
+            BuildMsi(InstallScope.perUser, @"%AppDataFolder%\Autodesk\Revit\Addins", $"RevitDBExplorer");           
+            BuildMsi(InstallScope.perMachine, @"%CommonAppDataFolder%\Autodesk\Revit\Addins\", $"RevitDBExplorer-perMachine");
+        }
+
+        private static void BuildMsi(InstallScope scope, string rootPath, string outFileName)
         {
             var fileVersionInfo = FileVersionInfo.GetVersionInfo($@"..\..\..\sources\bin\R2027\RevitDBExplorer.dll");
             var productVersion = fileVersionInfo.FileVersion;
@@ -22,10 +28,13 @@ namespace SetupBuilder
                 Platform = Platform.x64,
                 UI = WUI.WixUI_InstallDir,
                 MajorUpgrade = MajorUpgrade.Default,
-                Version = new Version(productVersion),                
+                Version = new Version(productVersion),
                 BackgroundImage = "Resources\\BackgroundImage.png",
                 BannerImage = "Resources\\BannerImage.png"
             };
+
+            project.InstallScope = scope;
+            project.OutFileName = outFileName;
 
             project.ControlPanelInfo = new ProductInfo
             {
@@ -36,14 +45,6 @@ namespace SetupBuilder
 
             project.RemoveDialogsBetween(NativeDialogs.WelcomeDlg, NativeDialogs.InstallDirDlg);
 
-            BuildMsi(project, InstallScope.perUser, @"%AppDataFolder%\Autodesk\Revit\Addins", $"RevitDBExplorer");
-            BuildMsi(project, InstallScope.perMachine, @"%CommonAppDataFolder%\Autodesk\Revit\Addins\", $"RevitDBExplorer-perMachine");
-        }
-
-        private static void BuildMsi(Project project, InstallScope scope, string rootPath, string outFileName)
-        {
-            project.InstallScope = scope;
-            project.OutFileName = outFileName;
             project.Dirs = new Dir[]
             {
                 new Dir(rootPath, CreateDirFor(2021), CreateDirFor(2022), CreateDirFor(2023), CreateDirFor(2024), CreateDirFor(2025), CreateDirFor(2026), CreateDirFor(2027))
