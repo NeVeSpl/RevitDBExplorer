@@ -71,6 +71,7 @@ namespace RevitDBExplorer.Domain.DataModel.Members
             {                
                 if (method.IsSpecialName) continue;
                 if (method.DeclaringType == typeof(object) && method.Name != "GetType") continue;
+                if (method.Name == "GetExtendedApiService") continue;           
 
                 if (method.Name == "Set" && snoopableObject is Parameter parameter)
                 {
