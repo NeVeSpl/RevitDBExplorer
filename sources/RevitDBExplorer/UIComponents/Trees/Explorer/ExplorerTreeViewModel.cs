@@ -212,7 +212,7 @@ namespace RevitDBExplorer.UIComponents.Trees.Explorer
         }
         private void SynchronizeSelectionWithRevit()
         {
-            if (sourceOfObjects == null) 
+            if (sourceOfObjects?.RevitDocument == null) 
                 return;
 
             var uiDocument = new UIDocument(sourceOfObjects.RevitDocument);
