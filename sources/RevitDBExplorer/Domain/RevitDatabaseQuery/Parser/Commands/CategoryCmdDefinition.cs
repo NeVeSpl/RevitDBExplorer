@@ -23,7 +23,14 @@ namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
            
             foreach (Category category in categories)
             {
+#if R2023_MIN
                 var builtInCategory = category.BuiltInCategory;
+#endif
+#if R2022_MAX
+                var builtInCategory = (BuiltInCategory)category.Id.IntegerValue;
+#endif
+
+                if (builtInCategory == BuiltInCategory.INVALID) continue;
 
                 var label = LabelUtils.GetLabelFor(builtInCategory);
 
