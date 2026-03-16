@@ -9,28 +9,31 @@ using RevitDBExplorer.Domain.RevitDatabaseQuery.FuzzySearch;
 
 namespace RevitDBExplorer.Domain.RevitDatabaseQuery.Parser.Commands
 {
-    internal class CategoryCmdDefinition : ICommandDefinition, INeedInitialization, IOfferArgumentAutocompletion
+    internal class CategoryCmdDefinition : ICommandDefinition, INeedInitializationWithDocument, IOfferArgumentAutocompletion
     {
         private static readonly AutocompleteItem AutocompleteItem = new AutocompleteItem("c: ", "c:[category]", "select elements of given category", AutocompleteItemGroups.Commands);
         private readonly DataBucket<CategoryCmdArgument> dataBucket = new DataBucket<CategoryCmdArgument>(0.59);
 
 
-        public void Init()
+        public void Init(Document document)
         {
-            var allFilterableCategories = ParameterFilterUtilities.GetAllFilterableCategories();
+            dataBucket.Clear();
+
+            var categories = document.Settings.Categories;
            
-            foreach (ElementId categoryId in allFilterableCategories)
+            foreach (Category category in categories)
             {
-                var category = (BuiltInCategory)categoryId.Value();
-                var label = LabelUtils.GetLabelFor(category);
+                var builtInCategory = category.BuiltInCategory;
 
-                var strCategory = category.ToString();
+                var label = LabelUtils.GetLabelFor(builtInCategory);
 
-                if (!Category.IsBuiltInCategoryValid(category))
+                var strCategory = builtInCategory.ToString();
+
+                if (!Category.IsBuiltInCategoryValid(builtInCategory))
                 {
                     continue;
                 }
-                dataBucket.Add(new AutocompleteItem(strCategory, strCategory, label), new CategoryCmdArgument(category), label, strCategory);             
+                dataBucket.Add(new AutocompleteItem(strCategory, strCategory, label), new CategoryCmdArgument(builtInCategory), label, strCategory);             
             }
 
             dataBucket.Rebuild();
