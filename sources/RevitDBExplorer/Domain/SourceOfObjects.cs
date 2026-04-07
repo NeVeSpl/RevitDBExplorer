@@ -40,6 +40,11 @@ namespace RevitDBExplorer.Domain
         {
             Objects = snoopableObjects ?? new SnoopableObject[0];
         }
+        public SourceOfObjects(IList<SnoopableObject> snoopableObjects, Document document)
+        {
+            Objects = snoopableObjects ?? new SnoopableObject[0];
+            RevitDocument = document;
+        }
 
 
         public void ReadFromTheSource(UIApplication uiApplication)
