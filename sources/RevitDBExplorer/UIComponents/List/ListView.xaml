@@ -166,7 +166,7 @@
                             ContentTemplateSelector="{StaticResource DataTemplateSelectorForPropertyType}"                         
                             HorizontalAlignment="Stretch"                 
                             />
-                            <UniformGrid Grid.Column="1" Rows="1" Visibility="{Binding Data.IsComparisonActive, Source={StaticResource Proxy}, Converter={StaticResource InverseBoolToVisibilityConverter}}">
+                            <UniformGrid Grid.Column="1" Rows="1" Visibility="Collapsed">
 
                                 <!--<TextBlock Text="V" Foreground="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"  FontWeight="Heavy" FontFamily="Arial" FontSize="10"  Width="8"
                                            Visibility="{Binding CanBeVisualized, Converter={StaticResource BoolToVisibilityConverter}}" VerticalAlignment="Bottom"
@@ -203,7 +203,7 @@
                                     ToolTip="RDQ: Search Revit database for elements that have a given parameter value" >
                                 <Path Style="{StaticResource IconSearch}" Height="14" />
                             </Button>
-                            <Grid Grid.Column="2" Visibility="{Binding Data.IsComparisonActive, Source={StaticResource Proxy}, Converter={StaticResource InverseBoolToVisibilityConverter}}">
+                            <Grid Grid.Column="2" Visibility="Collapsed">
                                 <Button  Style="{StaticResource MiniButton}" Padding="0" Visibility="{Binding CanGenerateCode, Converter={StaticResource BoolToVisibilityConverter}}"       
                                     ap:ButtonAP.OpenSubMenuOnClick="True"
                                     ContextMenu="{StaticResource ContextMenuForGenerateCSharpCode}"
