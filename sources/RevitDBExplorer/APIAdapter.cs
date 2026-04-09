@@ -7,7 +7,7 @@ using RevitDBExplorer.Domain.DataModel;
 
 namespace RevitDBExplorer
 {
-    internal class APIAdapter : IRDBEController
+    internal class APIAdapter : IController
     {
         public void Snoop(object document, IEnumerable<object> elements)
         {

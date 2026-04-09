@@ -2,7 +2,7 @@
 
 namespace RevitExplorer.API
 {
-    public interface IRDBEController
+    public interface IController
     {
         void Snoop(object document, IEnumerable<object> elements);
     }

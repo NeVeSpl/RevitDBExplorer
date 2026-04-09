@@ -5,7 +5,7 @@ namespace RevitExplorer.API
 {
     public class RevitExplorer
     {
-        public static IRDBEController CreateController()
+        public static IController CreateController()
         {
             var rdbeAssembly = AppDomain.CurrentDomain.GetAssemblies().Where(e => e.FullName.StartsWith("RevitDBExplorer,")).FirstOrDefault();
            
@@ -23,7 +23,7 @@ namespace RevitExplorer.API
             }
 
             var controllerIType = rdbeAssembly.GetType("RevitDBExplorer.APIAdapter");
-            var controller = Activator.CreateInstance(controllerIType) as IRDBEController;
+            var controller = Activator.CreateInstance(controllerIType) as IController;
             return controller;
         }
     }

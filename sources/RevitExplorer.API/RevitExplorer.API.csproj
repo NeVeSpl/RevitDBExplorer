@@ -3,7 +3,7 @@
 		<TargetFramework>netstandard2.0</TargetFramework>
 		<LangVersion>10.0</LangVersion>				
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-		<Version>2.0.1</Version>
+		<Version>2.0.2</Version>
 		<Authors>NeVeSpl</Authors>
 		<Company>NeVeSpl</Company>
 		<Copyright>(c) Revit Database Explorer</Copyright>
