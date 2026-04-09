@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace RevitDBExplorer.API
+namespace RevitExplorer.API
 {
     public interface IRDBEController
     {

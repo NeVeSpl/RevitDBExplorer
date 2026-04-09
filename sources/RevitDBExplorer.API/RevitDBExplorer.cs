@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace RevitDBExplorer.API
+namespace RevitExplorer.API
 {
     public class RevitDBExplorer
     {
