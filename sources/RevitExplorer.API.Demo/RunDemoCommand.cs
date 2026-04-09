@@ -5,16 +5,14 @@ using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 
-namespace RevitDBExplorer.API.Demo
+namespace RevitExplorer.API.Demo
 {
     [Transaction(TransactionMode.Manual)]
     [Regeneration(RegenerationOption.Manual)]
     public class RunDemoCommand : IExternalCommand
     {
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elementSet)
-        {
-            // 
-
+        {           
             var selectedIds = commandData.Application.ActiveUIDocument.Selection.GetElementIds();
             var document = commandData.Application.ActiveUIDocument.Document;
 
@@ -30,20 +28,17 @@ namespace RevitDBExplorer.API.Demo
             }
 
             var elements = collector.ToElements();
-
-            //
+                        
             try
             {
-                var controller = RevitDBExplorer.CreateController();
+                var controller = RevitExplorer.CreateController();
                 controller.Snoop(document, elements);
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "RevitDBExplorer.API.Demo", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(ex.Message, "RevitExplorer.API.Demo", MessageBoxButton.OK, MessageBoxImage.Error);
                 return Result.Failed;
-            }
-
-            //
+            }            
 
             return Result.Succeeded;
         }

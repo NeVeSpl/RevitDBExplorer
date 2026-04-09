@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace RevitExplorer.API
 {
-    public class RevitDBExplorer
+    public class RevitExplorer
     {
         public static IRDBEController CreateController()
         {
@@ -15,7 +15,7 @@ namespace RevitExplorer.API
             }
 
             var rdbeVersion = rdbeAssembly.GetName().Version;
-            var apiVersion = typeof(RevitDBExplorer).Assembly.GetName().Version;
+            var apiVersion = typeof(RevitExplorer).Assembly.GetName().Version;
 
             if (rdbeVersion < apiVersion)
             {
