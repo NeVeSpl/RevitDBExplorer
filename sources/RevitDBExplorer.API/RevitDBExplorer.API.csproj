@@ -28,9 +28,17 @@
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>		
 		<PackageId>RevitExplorer.API</PackageId>
 		<Product>RevitExplorer.API</Product>		
+		<PackageIcon>RDBE.Icon.128.png</PackageIcon>
 	</PropertyGroup>	
 	
 	<ItemGroup>
 		<Compile Remove="obj\*.*" />
+	</ItemGroup>	
+	
+	<ItemGroup>
+	  <None Include="..\..\documentation\images\RDBE.Icon.128.png">
+	    <Pack>True</Pack>
+	    <PackagePath>\</PackagePath>
+	  </None>
 	</ItemGroup>	
 </Project>
