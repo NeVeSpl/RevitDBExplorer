@@ -99,7 +99,7 @@
                             </ContextMenu>
                         </StackPanel.ContextMenu>
 
-                        <CheckBox IsChecked="{Binding IsSelectedInRevit}" IsEnabled="False" Visibility="{Binding CanBeSelectedInRevit, Converter={StaticResource BoolToVisibilityConverter}}" ToolTip="Is element selected in revit" />
+                        <CheckBox IsChecked="{Binding IsSelectedInRevit}"  Visibility="{Binding CanBeSelectedInRevit, Converter={StaticResource BoolToVisibilityConverter}}" ToolTip="Is element selected in revit" />
                         <Path Style="{Binding Object.NamePrefixIcon, Converter={StaticResource ToResourceWithKeyConverter}, ConverterParameter=Icon}" Margin="0 1 4 0" Fill="{Binding ElementName=cTextBlock, Path=Foreground}"  />
                         <TextBlock x:Name="cTextBlock" IsHitTestVisible="False">             
                              <Run Text="{Binding Prefix, Mode=OneWay}">
@@ -120,7 +120,7 @@
                              <Run Text="{Binding Object.NamePostfix, Mode=OneWay}"/>
                         </TextBlock>
                         <StackPanel Visibility="{Binding IsSelected, Converter={StaticResource BoolToVisibilityConverter}}" Margin="3 0 0 0">
-                            <Button Style="{StaticResource TreeToolButton}"  ToolTip="Select in Revit" Command="{Binding Commands.SelectInRevit}" CommandParameter="{Binding .}" Visibility="{Binding RelativeSource={RelativeSource Mode=Self}, Path=IsEnabled, Converter={StaticResource BoolToVisibilityConverter}}">
+                            <Button Style="{StaticResource TreeToolButton}"  ToolTip="Select in Revit" Command="{Binding Commands.SelectInRevit}" CommandParameter="{Binding .}" Visibility="Collapsed">
                                 <Path Style="{StaticResource IconArrowSelectorTool}" />
                             </Button>
                         </StackPanel>

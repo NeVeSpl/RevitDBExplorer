@@ -216,14 +216,14 @@ namespace RevitDBExplorer.UIComponents.Trees.Explorer
                 return;
 
             var uiDocument = new UIDocument(sourceOfObjects.RevitDocument);
-            selectedTreeItemsInRevit.ForEach(x => x.IsSelectedInRevit = false);
+            selectedTreeItemsInRevit.ForEach(x => x.SetIsSelectedInRevit(false));
             selectedTreeItemsInRevit.Clear();
 
             foreach (var id in  uiDocument.Selection.GetElementIds())
             {
                 if (elementIdTreeItemMap.TryGetValue(id, out var treeItem))
                 {
-                    treeItem.IsSelectedInRevit = true;  
+                    treeItem.SetIsSelectedInRevit(true);  
                     selectedTreeItemsInRevit.Add(treeItem);
                 }
             }

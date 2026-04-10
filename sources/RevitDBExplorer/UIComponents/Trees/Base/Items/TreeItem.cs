@@ -75,9 +75,13 @@ namespace RevitDBExplorer.UIComponents.Trees.Base.Items
             }
             set
             {
-                isSelectedinRevit = value;
-                OnPropertyChanged();
+                Commands.FlipSelectionInRevit.Execute(this);
             }
+        }
+        public void SetIsSelectedInRevit(bool value)
+        {
+            isSelectedinRevit = value;
+            OnPropertyChanged(nameof(IsSelectedInRevit));
         }
         public virtual bool CanBeSelectedInRevit => false;
         public TreeItemsCommands Commands { get; }
