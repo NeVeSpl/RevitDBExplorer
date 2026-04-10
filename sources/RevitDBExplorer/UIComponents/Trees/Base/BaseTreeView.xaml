@@ -99,6 +99,7 @@
                             </ContextMenu>
                         </StackPanel.ContextMenu>
 
+                        <CheckBox IsChecked="{Binding IsSelectedInRevit}" IsEnabled="False" Visibility="{Binding CanBeSelectedInRevit, Converter={StaticResource BoolToVisibilityConverter}}" ToolTip="Is element selected in revit" />
                         <Path Style="{Binding Object.NamePrefixIcon, Converter={StaticResource ToResourceWithKeyConverter}, ConverterParameter=Icon}" Margin="0 1 4 0" Fill="{Binding ElementName=cTextBlock, Path=Foreground}"  />
                         <TextBlock x:Name="cTextBlock" IsHitTestVisible="False">             
                              <Run Text="{Binding Prefix, Mode=OneWay}">
@@ -163,9 +164,6 @@
                             <Setter Property="Foreground" Value="{DynamicResource TreeViewItem.InactiveSelectionHighlightTextBrushKey}"/>
                             <Setter Property="Border.Background" Value="red"/>
                         </MultiTrigger>
-                        <DataTrigger Binding="{Binding IsSelectedInRevit}" Value="True">
-                            <Setter Property="BorderBrush" Value="{DynamicResource TextBox.Focus.Border}" />
-                        </DataTrigger>
                     </Style.Triggers>
                 </Style>
             </TreeView.ItemContainerStyle>

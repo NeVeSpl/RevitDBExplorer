@@ -24,6 +24,7 @@ namespace RevitDBExplorer.UIComponents.Trees.Base.Items
                 return "";
             }
         }
+        public override bool CanBeSelectedInRevit => Object.HasParameters;
 
 
         public SnoopableObjectTreeItem(SnoopableObject @object, TreeItemsCommands commands) : base(commands)

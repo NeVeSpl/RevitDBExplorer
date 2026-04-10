@@ -79,6 +79,7 @@ namespace RevitDBExplorer.UIComponents.Trees.Base.Items
                 OnPropertyChanged();
             }
         }
+        public virtual bool CanBeSelectedInRevit => false;
         public TreeItemsCommands Commands { get; }
         public ObservableCollection<TreeItem> Items
         {
