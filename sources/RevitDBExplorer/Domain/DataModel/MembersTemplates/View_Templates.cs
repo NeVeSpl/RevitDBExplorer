@@ -18,6 +18,8 @@ namespace RevitDBExplorer.Domain.DataModel.MembersTemplates
 #if R2025_MIN
             MemberTemplate<View>.Create((document, target) => RevitLinkGraphicsSettings.IsViewRangeSupported(target)),
 #endif
+
+            MemberTemplate<View>.Create((document, target) => ReferenceableViewUtils.GetReferencedViewId(document, target.Id)),
         ];        
     }
 }

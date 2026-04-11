@@ -16,7 +16,12 @@ namespace RevitDBExplorer.Domain.DataModel.MembersOverrides
 #endif  
 #if R2023_MIN
             MemberOverride<Category>.ByFunc((doc, category) => Category.GetBuiltInCategoryTypeId(category.BuiltInCategory)),
+            MemberOverride<Category>.ByFunc((doc, category) => Category.IsBuiltInCategoryValid(category.BuiltInCategory)),
 #endif  
+#if R2027_MIN
+            MemberOverride<Category>.ByFunc((doc, category) => Category.GetBuiltInCategoryDisciplines(category.BuiltInCategory)),
+#endif  
+            
         ];
     }
 }

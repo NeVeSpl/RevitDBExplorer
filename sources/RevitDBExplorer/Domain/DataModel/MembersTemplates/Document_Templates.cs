@@ -2,6 +2,9 @@
 using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.Analysis;
 using Autodesk.Revit.DB.Electrical;
+#if R2027_MIN
+using Autodesk.Revit.DB.ExternalData;
+#endif
 using Autodesk.Revit.DB.Lighting;
 using Autodesk.Revit.DB.Structure;
 using RevitDBExplorer.Domain.DataModel.Members;
@@ -64,6 +67,21 @@ namespace RevitDBExplorer.Domain.DataModel.MembersTemplates
             MemberTemplate<Document>.Create((doc, target) => RebarCrankTypeUtils.GetAllRebarCrankTypes(target)),            
             MemberTemplate<Document>.Create((doc, target) => Toposolid.IsCutVoidStabilityEnabled(target)),            
 #endif
+
+            MemberTemplate<Document>.Create((doc, target) => ExternalFileUtils.GetAllExternalFileReferences(target)),
+            MemberTemplate<Document>.CreateWithParam((doc, target, id) => ExternalFileUtils.GetExternalFileReference(target, id), (doc, target) => ExternalFileUtils.GetAllExternalFileReferences(target)),
+            MemberTemplate<Document>.CreateWithParam((doc, target, id) => ExternalFileUtils.IsExternalFileReference(target, id), (doc, target) => ExternalFileUtils.GetAllExternalFileReferences(target)),
+
+            MemberTemplate<Document>.Create((doc, target) => ExternalResourceUtils.GetAllExternalResourceReferences(target)),
+#if R2027_MIN
+            MemberTemplate<Document>.Create((doc, target) => CoordinationModelLinkUtils.GetAllCoordinationModelInstanceIds(target)),
+            MemberTemplate<Document>.Create((doc, target) => CoordinationModelLinkUtils.GetAllCoordinationModelTypeIds(target)),
+#endif
+
+            MemberTemplate<Document>.Create((doc, target) => AssemblyCodeTable.GetAssemblyCodeTable(target)),
+            MemberTemplate<Document>.Create((doc, target) => KeynoteTable.GetKeynoteTable(target)),
+
+            MemberTemplate<Document>.Create((doc, target) => RebarShapeParameters.GetAllRebarShapeParameters(target)),
         ];
     }
 }
