@@ -65,6 +65,11 @@ namespace RevitDBExplorer.Domain.DataModel.MembersTemplates
 #if R2026_MIN
                 MemberTemplate<ForgeTypeId>.Create((doc, forgeId) => ParameterUtils.GetBuiltInParameterGroupTypeId(forgeId), x=> ParameterUtils.IsBuiltInParameter(x)),
 #endif
+
+#if R2027_MIN
+                MemberTemplate<ForgeTypeId>.Create((doc, forgeId) => ParameterUtils.GetDefinition(forgeId), x=> ParameterUtils.IsBuiltInParameter(x)),
+#endif
+
          ];        
     }
 }

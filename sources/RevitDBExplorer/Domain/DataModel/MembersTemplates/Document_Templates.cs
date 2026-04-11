@@ -76,6 +76,8 @@ namespace RevitDBExplorer.Domain.DataModel.MembersTemplates
 #if R2027_MIN
             MemberTemplate<Document>.Create((doc, target) => CoordinationModelLinkUtils.GetAllCoordinationModelInstanceIds(target)),
             MemberTemplate<Document>.Create((doc, target) => CoordinationModelLinkUtils.GetAllCoordinationModelTypeIds(target)),
+
+            MemberTemplate<Document>.Create((doc, target) => Material.GetIdentityParameterIds()),            
 #endif
 
             MemberTemplate<Document>.Create((doc, target) => AssemblyCodeTable.GetAssemblyCodeTable(target)),
