@@ -4,22 +4,24 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using RevitDBExplorer.Domain;
 using RevitDBExplorer.Properties;
 using RevitDBExplorer.UIComponents.List;
 using RevitDBExplorer.UIComponents.List.ViewModels;
 using RevitDBExplorer.UIComponents.Trees.Base;
 using RevitDBExplorer.UIComponents.Trees.Base.Items;
+using RevitDBExplorer.Utils;
 using RevitDBExplorer.WPF;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
 
 namespace RevitDBExplorer.UIComponents.Workspaces
 {
-    internal class WorkspacesViewModel : BaseViewModel
+    internal class WorkspacesViewModel : BaseViewModel, IRecipient<OpenWorkspaceCommand>
     {
+        private readonly IMessenger iAmMessenger;
         private readonly Action<string> openRDSWithGivenScript;
-        private readonly IAmWindowOpener windowOpener;
         private readonly IAmQueryExecutor queryExecutor;
         private readonly ObservableCollection<WorkspaceViewModel> workspaces = new ObservableCollection<WorkspaceViewModel>();
         private WorkspaceViewModel selectedWorkspace;
@@ -69,9 +71,10 @@ namespace RevitDBExplorer.UIComponents.Workspaces
         }
 
 
-        public WorkspacesViewModel(IAmWindowOpener windowOpener, IAmQueryExecutor queryExecutor, Action<string> openRDSWithGivenScript)
+        public WorkspacesViewModel(IMessenger iAmMessenger, IAmQueryExecutor queryExecutor, Action<string> openRDSWithGivenScript)
         {
-            this.windowOpener = windowOpener;
+            this.iAmMessenger = iAmMessenger;
+            iAmMessenger.RegisterAll(this);
             this.queryExecutor = queryExecutor;
             this.openRDSWithGivenScript = openRDSWithGivenScript;
             firstColumnWidth = AppSettings.Default.FirstColumnWidth;                       
@@ -154,7 +157,7 @@ namespace RevitDBExplorer.UIComponents.Workspaces
         }
         private WorkspaceViewModel CreateNewWorkspace()
         {
-            var workspace = new WorkspaceViewModel(OpenLink, queryExecutor, openRDSWithGivenScript);
+            var workspace = new WorkspaceViewModel(iAmMessenger, queryExecutor, openRDSWithGivenScript);
             workspace.IsActive = false;
             workspace.ListSelectedItemChanged += Workspace_ListSelectedItemChanged;
             workspace.TreeSelectedItemChanged += Workspace_TreeSelectedItemChanged;  
@@ -176,18 +179,18 @@ namespace RevitDBExplorer.UIComponents.Workspaces
                 }
             }
         }
-        private void OpenLink(WorkspaceViewModel sender, SourceOfObjects sourceOfObjects)
+        public void Receive(OpenWorkspaceCommand cmd)
         {
             bool openNewWindow = Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift);
             openNewWindow |= AppSettings.Default.OpenLinksInNewWindow;
             if (openNewWindow)
             {
-                windowOpener.Open(sourceOfObjects);
+                iAmMessenger.Send(new OpenWindowCommand(cmd.SourceOfObjects));
             }
             else
             {
-                AnnihilateAllWorkspacesAfterThatOne(sender);
-                OpenWorkspace(sourceOfObjects);
+                AnnihilateAllWorkspacesAfterThatOne(cmd.Sender as WorkspaceViewModel);
+                OpenWorkspace(cmd.SourceOfObjects);
             }
         }
 
@@ -216,4 +219,9 @@ namespace RevitDBExplorer.UIComponents.Workspaces
     }
 
     internal record class SelectedItemChangedEventArgs(TreeItem treeItem, IListItem listItem);
+
+    internal sealed record OpenWorkspaceCommand(SourceOfObjects SourceOfObjects) : IHaveSender
+    {
+        public object Sender { get; set; }
+    }
 }

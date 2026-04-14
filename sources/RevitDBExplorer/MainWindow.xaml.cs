@@ -9,13 +9,13 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Threading;
+using CommunityToolkit.Mvvm.Messaging;
 using RevitDBExplorer.Domain;
 using RevitDBExplorer.Domain.DataModel;
 using RevitDBExplorer.Domain.RevitDatabaseQuery;
 using RevitDBExplorer.Domain.RevitDatabaseScripting;
 using RevitDBExplorer.Domain.Selectors;
 using RevitDBExplorer.Properties;
-using RevitDBExplorer.UIComponents.List;
 using RevitDBExplorer.UIComponents.List.ViewModels;
 using RevitDBExplorer.UIComponents.QueryEditor;
 using RevitDBExplorer.UIComponents.QueryVisualization;
@@ -30,8 +30,9 @@ using RevitExplorer.Visualizations;
 
 namespace RevitDBExplorer
 {
-    internal partial class MainWindow : Window, IAmWindowOpener, INotifyPropertyChanged
+    internal partial class MainWindow : Window, INotifyPropertyChanged, IRecipient<OpenWindowCommand>
     {
+        private readonly IMessenger iAmMessenger;
         private readonly QueryEditorViewModel queryEditorVM;
         private readonly QueryVisualizationVM queryVisualizationVM;
         private readonly WorkspacesViewModel workspacesVM;       
@@ -140,13 +141,15 @@ namespace RevitDBExplorer
         }
         public MainWindow()
         {
+            iAmMessenger = new StrongReferenceMessenger();
+            iAmMessenger.RegisterAll(this);      
             Dispatcher.UnhandledException += Dispatcher_UnhandledException;
 
             rvController = RevitVisualizationFactory.CreateController();
 
             queryEditorVM = new QueryEditorViewModel(TryQueryDatabase, GenerateScriptForQueryAndOpenRDS);
             queryVisualizationVM = new QueryVisualizationVM();
-            workspacesVM = new WorkspacesViewModel(this, queryEditorVM, OpenRDSWithGivenScript);
+            workspacesVM = new WorkspacesViewModel(iAmMessenger, queryEditorVM, OpenRDSWithGivenScript);
             visualizationsManagerVM = new VisualizationsManagerVM(rvController);     
 
             InitializeComponent();
@@ -222,10 +225,10 @@ namespace RevitDBExplorer
         {
             UpdateVisualizations();
         }       
-        void IAmWindowOpener.Open(SourceOfObjects sourceOfObjects)
-        {           
+        public void Receive(OpenWindowCommand cmd)
+        {
             SaveUserSettings();
-            var window = new MainWindow(sourceOfObjects);
+            var window = new MainWindow(cmd.sourceOfObjects);
             window.Owner = this;
             window.Show();           
         }
@@ -417,4 +420,6 @@ namespace RevitDBExplorer
 
         #endregion
     }
+
+    internal sealed record OpenWindowCommand(SourceOfObjects sourceOfObjects);
 }

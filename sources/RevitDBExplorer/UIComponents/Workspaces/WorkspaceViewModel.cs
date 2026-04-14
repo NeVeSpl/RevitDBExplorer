@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows;
+using CommunityToolkit.Mvvm.Messaging;
 using RevitDBExplorer.Domain;
 using RevitDBExplorer.UIComponents.List;
 using RevitDBExplorer.UIComponents.Trees.Base;
 using RevitDBExplorer.UIComponents.Trees.Base.Items;
 using RevitDBExplorer.UIComponents.Trees.Explorer;
 using RevitDBExplorer.UIComponents.Trees.Utility;
+using RevitDBExplorer.Utils;
 using RevitDBExplorer.WPF;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
@@ -16,10 +18,10 @@ namespace RevitDBExplorer.UIComponents.Workspaces
 {
     internal enum RightView { None, List, CommandAndControl, CompareAndPinToolInfo }
 
-    internal class WorkspaceViewModel : BaseViewModel, IAmWindowOpener, IAmScriptOpener
+    internal class WorkspaceViewModel : BaseViewModel, IAmScriptOpener
     {
-        private readonly Action<string> openRDSWithGivenScript;
-        private readonly Action<WorkspaceViewModel, SourceOfObjects> openLink;
+        private readonly IMessenger iAmMessenger;
+        private readonly Action<string> openRDSWithGivenScript;    
         private readonly ExplorerTreeViewModel explorerTreeVM = new();
         private readonly UtilityTreeViewModel utilityTreeVM = new();
         private readonly ListVM listVM;
@@ -85,11 +87,11 @@ namespace RevitDBExplorer.UIComponents.Workspaces
         }
         
 
-        public WorkspaceViewModel(Action<WorkspaceViewModel, SourceOfObjects> openLink, IAmQueryExecutor queryExecutor, Action<string> openRDSWithGivenScript)
+        public WorkspaceViewModel(IMessenger iAmMessenger, IAmQueryExecutor queryExecutor, Action<string> openRDSWithGivenScript)
         {
-            this.openLink = openLink;
+            this.iAmMessenger = new MessengerWithSender(this, iAmMessenger);
             this.openRDSWithGivenScript = openRDSWithGivenScript;
-            listVM = new ListVM(this, queryExecutor, this);
+            listVM = new ListVM(this.iAmMessenger, queryExecutor, this);
             ExplorerTree.SelectedItemChanged += Tree_SelectedItemChanged;
             UtilityTree.SelectedItemChanged += Tree_SelectedItemChanged;
             List.SelectedItemChanged += List_SelectedItemChanged;               
@@ -195,10 +197,7 @@ namespace RevitDBExplorer.UIComponents.Workspaces
             List.SelectedItemChanged -= List_SelectedItemChanged;            
         }
 
-        void IAmWindowOpener.Open(SourceOfObjects sourceOfObjects)
-        {
-            openLink(this, sourceOfObjects);
-        }
+       
         void IAmScriptOpener.Open(string scriptText)
         {
             openRDSWithGivenScript(scriptText);

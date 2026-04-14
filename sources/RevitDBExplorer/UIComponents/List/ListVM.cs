@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
+using CommunityToolkit.Mvvm.Messaging;
 using RevitDBExplorer.Domain;
 using RevitDBExplorer.Domain.DataModel;
 using RevitDBExplorer.Domain.DataModel.Members;
@@ -15,6 +16,7 @@ using RevitDBExplorer.UIComponents.List.ViewModels;
 using RevitDBExplorer.UIComponents.List.WPF;
 using RevitDBExplorer.UIComponents.Trees.Base;
 using RevitDBExplorer.UIComponents.Trees.Base.Items;
+using RevitDBExplorer.UIComponents.Workspaces;
 using RevitDBExplorer.WPF;
 
 // (c) Revit Database Explorer https://github.com/NeVeSpl/RevitDBExplorer/blob/main/license.md
@@ -25,7 +27,7 @@ namespace RevitDBExplorer.UIComponents.List
     {
         private readonly ObservableCollection<DynamicGridViewColumn> columnsFor1;
         private readonly ObservableCollection<DynamicGridViewColumn> columnsFor2;
-        private readonly IAmWindowOpener windowOpener;
+        private readonly IMessenger iAmMessenger;
         private readonly IAmQueryExecutor queryExecutor;
         private readonly IAmScriptOpener scriptOpener;
         private ObservableCollection<IListItem> listItems = new();
@@ -161,9 +163,9 @@ namespace RevitDBExplorer.UIComponents.List
         }
 
 
-        public ListVM(IAmWindowOpener windowOpener, IAmQueryExecutor queryExecutor, IAmScriptOpener scriptOpener)
+        public ListVM(IMessenger iAmMessenger, IAmQueryExecutor queryExecutor, IAmScriptOpener scriptOpener)
         {
-            this.windowOpener = windowOpener;
+            this.iAmMessenger = iAmMessenger;
             this.queryExecutor = queryExecutor;
             this.scriptOpener = scriptOpener;
             columnsFor1 = new ObservableCollection<DynamicGridViewColumn>()
@@ -361,8 +363,8 @@ namespace RevitDBExplorer.UIComponents.List
                         source.ReadFromTheSource(x);
                         return source;
                     });
-
-                    windowOpener?.Open(sourceOfObjects);
+                    
+                    iAmMessenger.Send(new OpenWorkspaceCommand(sourceOfObjects));
                 }
             }
         }
@@ -387,7 +389,7 @@ namespace RevitDBExplorer.UIComponents.List
             if (obj is ListItemForParameter listItem)
             {
                 var source = listItem.CreateSnoopParameter();               
-                windowOpener?.Open(source);
+                iAmMessenger.Send(new OpenWorkspaceCommand(source));
             }
         }
         private void SearchForParameterValue(object obj)
@@ -430,10 +432,7 @@ namespace RevitDBExplorer.UIComponents.List
     }
 
     internal record class ListSelectedItemChangedEventArgs(IListItem OldOne, IListItem NewOne);
-    internal interface IAmWindowOpener
-    {
-        void Open(SourceOfObjects sourceOfObjects);
-    }
+
     internal interface IAmQueryExecutor
     {
         void Query(string query);

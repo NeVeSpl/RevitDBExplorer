@@ -112,6 +112,7 @@
 	<Choose>
 		<When Condition="$(DefineConstants.Contains('R2024_MAX'))">
 			<ItemGroup>
+				<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
 				<PackageReference Include="TrieNet">
 					<Version>1.0.3.26316</Version>
 				</PackageReference>
@@ -149,6 +150,7 @@
 		</When>
 		<When Condition="$(DefineConstants.Contains('R2025_MIN'))">
 			<ItemGroup>
+				<PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
 				<PackageReference Include="TrieNet.Core">
 					<Version>1.0.4</Version>
 				</PackageReference>
