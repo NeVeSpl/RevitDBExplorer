@@ -8,7 +8,7 @@ using RevitDBExplorer.WPF.Controls;
 
 namespace RevitDBExplorer.UIComponents.QueryEditor
 {
-    internal class QueryEditorViewModel : BaseViewModel, IAmQueryExecutor
+    internal class QueryEditorViewModel : BaseViewModel
     {
         private readonly IAutocompleteItemProvider databaseQueryAutocompleteItemProvider = new AutocompleteItemProvider();
         private readonly Action<string> tryQueryDatabase;      
@@ -85,7 +85,7 @@ namespace RevitDBExplorer.UIComponents.QueryEditor
             databaseQuery = "";
             OnPropertyChanged(nameof(DatabaseQuery));
         }
-        void IAmQueryExecutor.Query(string query)
+        public void Query(string query)
         {
             DatabaseQuery = query;
         }

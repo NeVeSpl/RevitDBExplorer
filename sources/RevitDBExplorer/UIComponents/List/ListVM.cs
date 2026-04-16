@@ -28,7 +28,6 @@ namespace RevitDBExplorer.UIComponents.List
         private readonly ObservableCollection<DynamicGridViewColumn> columnsFor1;
         private readonly ObservableCollection<DynamicGridViewColumn> columnsFor2;
         private readonly IMessenger iAmMessenger;
-        private readonly IAmQueryExecutor queryExecutor;
         private readonly IAmScriptOpener scriptOpener;
         private ObservableCollection<IListItem> listItems = new();
         private ObservableCollection<DynamicGridViewColumn> columns = new();
@@ -163,10 +162,9 @@ namespace RevitDBExplorer.UIComponents.List
         }
 
 
-        public ListVM(IMessenger iAmMessenger, IAmQueryExecutor queryExecutor, IAmScriptOpener scriptOpener)
+        public ListVM(IMessenger iAmMessenger, IAmScriptOpener scriptOpener)
         {
-            this.iAmMessenger = iAmMessenger;
-            this.queryExecutor = queryExecutor;
+            this.iAmMessenger = iAmMessenger;          
             this.scriptOpener = scriptOpener;
             columnsFor1 = new ObservableCollection<DynamicGridViewColumn>()
             {
@@ -396,7 +394,7 @@ namespace RevitDBExplorer.UIComponents.List
         {
             if (obj is SnoopableParameter snoopableParameter)
             {
-                queryExecutor.Query(snoopableParameter.GenerateQueryForForParameterValue());
+                iAmMessenger.Send(new RunQueryCommand(snoopableParameter.GenerateQueryForForParameterValue()));               
             }
         }
         private void GenerateCSharpCode(object obj, TemplateInputsKind inputsKind)
@@ -433,10 +431,7 @@ namespace RevitDBExplorer.UIComponents.List
 
     internal record class ListSelectedItemChangedEventArgs(IListItem OldOne, IListItem NewOne);
 
-    internal interface IAmQueryExecutor
-    {
-        void Query(string query);
-    }
+
     internal interface IAmScriptOpener
     {
         void Open(string script);

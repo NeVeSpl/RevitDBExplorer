@@ -22,7 +22,6 @@ namespace RevitDBExplorer.UIComponents.Workspaces
     {
         private readonly IMessenger iAmMessenger;
         private readonly Action<string> openRDSWithGivenScript;
-        private readonly IAmQueryExecutor queryExecutor;
         private readonly ObservableCollection<WorkspaceViewModel> workspaces = new ObservableCollection<WorkspaceViewModel>();
         private WorkspaceViewModel selectedWorkspace;
         private double firstColumnWidth;
@@ -71,11 +70,11 @@ namespace RevitDBExplorer.UIComponents.Workspaces
         }
 
 
-        public WorkspacesViewModel(IMessenger iAmMessenger, IAmQueryExecutor queryExecutor, Action<string> openRDSWithGivenScript)
+        public WorkspacesViewModel(IMessenger iAmMessenger, Action<string> openRDSWithGivenScript)
         {
             this.iAmMessenger = iAmMessenger;
             iAmMessenger.RegisterAll(this);
-            this.queryExecutor = queryExecutor;
+          
             this.openRDSWithGivenScript = openRDSWithGivenScript;
             firstColumnWidth = AppSettings.Default.FirstColumnWidth;                       
         }
@@ -157,7 +156,7 @@ namespace RevitDBExplorer.UIComponents.Workspaces
         }
         private WorkspaceViewModel CreateNewWorkspace()
         {
-            var workspace = new WorkspaceViewModel(iAmMessenger, queryExecutor, openRDSWithGivenScript);
+            var workspace = new WorkspaceViewModel(iAmMessenger, openRDSWithGivenScript);
             workspace.IsActive = false;
             workspace.ListSelectedItemChanged += Workspace_ListSelectedItemChanged;
             workspace.TreeSelectedItemChanged += Workspace_TreeSelectedItemChanged;  

@@ -30,7 +30,7 @@ using RevitExplorer.Visualizations;
 
 namespace RevitDBExplorer
 {
-    internal partial class MainWindow : Window, INotifyPropertyChanged, IRecipient<OpenWindowCommand>
+    internal partial class MainWindow : Window, INotifyPropertyChanged, IRecipient<OpenWindowCommand>, IRecipient<RunQueryCommand>
     {
         private readonly IMessenger iAmMessenger;
         private readonly QueryEditorViewModel queryEditorVM;
@@ -149,7 +149,7 @@ namespace RevitDBExplorer
 
             queryEditorVM = new QueryEditorViewModel(TryQueryDatabase, GenerateScriptForQueryAndOpenRDS);
             queryVisualizationVM = new QueryVisualizationVM();
-            workspacesVM = new WorkspacesViewModel(iAmMessenger, queryEditorVM, OpenRDSWithGivenScript);
+            workspacesVM = new WorkspacesViewModel(iAmMessenger, OpenRDSWithGivenScript);
             visualizationsManagerVM = new VisualizationsManagerVM(rvController);     
 
             InitializeComponent();
@@ -165,7 +165,20 @@ namespace RevitDBExplorer
             globalKeyboardHook.KeyDown += GlobalKeyboardHook_KeyDown;
         }
 
-        
+
+        public void Receive(OpenWindowCommand cmd)
+        {
+            SaveUserSettings();
+            var window = new MainWindow(cmd.sourceOfObjects);
+            window.Owner = this;
+            window.Show();
+        }
+        public void Receive(RunQueryCommand cmd)
+        {
+            queryEditorVM.Query(cmd.query);
+        }
+
+
         private async Task InitializeAsync()
         {
             (IsNewVerAvailable, NewVersionLink) = await VersionChecker.CheckIfNewVersionIsAvailable();
@@ -225,13 +238,7 @@ namespace RevitDBExplorer
         {
             UpdateVisualizations();
         }       
-        public void Receive(OpenWindowCommand cmd)
-        {
-            SaveUserSettings();
-            var window = new MainWindow(cmd.sourceOfObjects);
-            window.Owner = this;
-            window.Show();           
-        }
+        
         private async void TryQueryDatabase(string query)
         {
             Workspaces.Reset();     
@@ -422,4 +429,6 @@ namespace RevitDBExplorer
     }
 
     internal sealed record OpenWindowCommand(SourceOfObjects sourceOfObjects);
+    internal sealed record RunQueryCommand(string query);
+
 }

@@ -87,11 +87,11 @@ namespace RevitDBExplorer.UIComponents.Workspaces
         }
         
 
-        public WorkspaceViewModel(IMessenger iAmMessenger, IAmQueryExecutor queryExecutor, Action<string> openRDSWithGivenScript)
+        public WorkspaceViewModel(IMessenger iAmMessenger, Action<string> openRDSWithGivenScript)
         {
             this.iAmMessenger = new MessengerWithSender(this, iAmMessenger);
             this.openRDSWithGivenScript = openRDSWithGivenScript;
-            listVM = new ListVM(this.iAmMessenger, queryExecutor, this);
+            listVM = new ListVM(this.iAmMessenger, this);
             ExplorerTree.SelectedItemChanged += Tree_SelectedItemChanged;
             UtilityTree.SelectedItemChanged += Tree_SelectedItemChanged;
             List.SelectedItemChanged += List_SelectedItemChanged;               
