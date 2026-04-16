@@ -139,6 +139,10 @@ namespace RevitDBExplorer
             }
             Workspaces.OpenWorkspace(sourceOfObjects);  
         }
+        public MainWindow(string query) : this()
+        {
+            queryEditorVM.Query(query);
+        }
         public MainWindow()
         {
             iAmMessenger = new StrongReferenceMessenger();
@@ -175,7 +179,10 @@ namespace RevitDBExplorer
         }
         public void Receive(RunQueryCommand cmd)
         {
-            queryEditorVM.Query(cmd.query);
+            SaveUserSettings();
+            var window = new MainWindow(cmd.query);
+            new WindowInteropHelper(window).Owner = Application.RevitWindowHandle;
+            window.Show();
         }
         public void Receive(OpenScriptCommand cmd)
         {
