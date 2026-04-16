@@ -18,10 +18,9 @@ namespace RevitDBExplorer.UIComponents.Workspaces
 {
     internal enum RightView { None, List, CommandAndControl, CompareAndPinToolInfo }
 
-    internal class WorkspaceViewModel : BaseViewModel, IAmScriptOpener
+    internal class WorkspaceViewModel : BaseViewModel
     {
-        private readonly IMessenger iAmMessenger;
-        private readonly Action<string> openRDSWithGivenScript;    
+        private readonly IMessenger iAmMessenger;  
         private readonly ExplorerTreeViewModel explorerTreeVM = new();
         private readonly UtilityTreeViewModel utilityTreeVM = new();
         private readonly ListVM listVM;
@@ -87,11 +86,10 @@ namespace RevitDBExplorer.UIComponents.Workspaces
         }
         
 
-        public WorkspaceViewModel(IMessenger iAmMessenger, Action<string> openRDSWithGivenScript)
+        public WorkspaceViewModel(IMessenger iAmMessenger)
         {
             this.iAmMessenger = new MessengerWithSender(this, iAmMessenger);
-            this.openRDSWithGivenScript = openRDSWithGivenScript;
-            listVM = new ListVM(this.iAmMessenger, this);
+            listVM = new ListVM(this.iAmMessenger);
             ExplorerTree.SelectedItemChanged += Tree_SelectedItemChanged;
             UtilityTree.SelectedItemChanged += Tree_SelectedItemChanged;
             List.SelectedItemChanged += List_SelectedItemChanged;               
@@ -197,11 +195,6 @@ namespace RevitDBExplorer.UIComponents.Workspaces
             List.SelectedItemChanged -= List_SelectedItemChanged;            
         }
 
-       
-        void IAmScriptOpener.Open(string scriptText)
-        {
-            openRDSWithGivenScript(scriptText);
-        }
 
 
         public void RefreshTab() => OnPropertyChanged(nameof(InfoAboutSource));

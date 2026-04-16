@@ -30,7 +30,7 @@ using RevitExplorer.Visualizations;
 
 namespace RevitDBExplorer
 {
-    internal partial class MainWindow : Window, INotifyPropertyChanged, IRecipient<OpenWindowCommand>, IRecipient<RunQueryCommand>
+    internal partial class MainWindow : Window, INotifyPropertyChanged, IRecipient<OpenWindowCommand>, IRecipient<RunQueryCommand>, IRecipient<OpenScriptCommand>
     {
         private readonly IMessenger iAmMessenger;
         private readonly QueryEditorViewModel queryEditorVM;
@@ -149,7 +149,7 @@ namespace RevitDBExplorer
 
             queryEditorVM = new QueryEditorViewModel(TryQueryDatabase, GenerateScriptForQueryAndOpenRDS);
             queryVisualizationVM = new QueryVisualizationVM();
-            workspacesVM = new WorkspacesViewModel(iAmMessenger, OpenRDSWithGivenScript);
+            workspacesVM = new WorkspacesViewModel(iAmMessenger);
             visualizationsManagerVM = new VisualizationsManagerVM(rvController);     
 
             InitializeComponent();
@@ -177,7 +177,10 @@ namespace RevitDBExplorer
         {
             queryEditorVM.Query(cmd.query);
         }
-
+        public void Receive(OpenScriptCommand cmd)
+        {
+            OpenRDSWithGivenScript(cmd.scriptText);
+        }
 
         private async Task InitializeAsync()
         {
@@ -430,5 +433,6 @@ namespace RevitDBExplorer
 
     internal sealed record OpenWindowCommand(SourceOfObjects sourceOfObjects);
     internal sealed record RunQueryCommand(string query);
+    internal sealed record OpenScriptCommand(string scriptText);
 
 }

@@ -28,7 +28,6 @@ namespace RevitDBExplorer.UIComponents.List
         private readonly ObservableCollection<DynamicGridViewColumn> columnsFor1;
         private readonly ObservableCollection<DynamicGridViewColumn> columnsFor2;
         private readonly IMessenger iAmMessenger;
-        private readonly IAmScriptOpener scriptOpener;
         private ObservableCollection<IListItem> listItems = new();
         private ObservableCollection<DynamicGridViewColumn> columns = new();
         private IListItem listSelectedItem = null;
@@ -162,10 +161,9 @@ namespace RevitDBExplorer.UIComponents.List
         }
 
 
-        public ListVM(IMessenger iAmMessenger, IAmScriptOpener scriptOpener)
+        public ListVM(IMessenger iAmMessenger)
         {
             this.iAmMessenger = iAmMessenger;          
-            this.scriptOpener = scriptOpener;
             columnsFor1 = new ObservableCollection<DynamicGridViewColumn>()
             {
                 new DynamicGridViewColumn("Name", 38) { Binding ="."},
@@ -401,7 +399,7 @@ namespace RevitDBExplorer.UIComponents.List
         {
             if (obj is SnoopableItem snoopableItem)
             {
-                scriptOpener.Open(snoopableItem.GenerateScript(inputsKind));
+                iAmMessenger.Send(new OpenScriptCommand(snoopableItem.GenerateScript(inputsKind)));
             }
         }
         private void CopyValue(object obj)
@@ -431,9 +429,4 @@ namespace RevitDBExplorer.UIComponents.List
 
     internal record class ListSelectedItemChangedEventArgs(IListItem OldOne, IListItem NewOne);
 
-
-    internal interface IAmScriptOpener
-    {
-        void Open(string script);
-    }
 }
